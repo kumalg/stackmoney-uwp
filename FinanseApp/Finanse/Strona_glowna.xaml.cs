@@ -53,12 +53,13 @@ namespace Finanse
             TitleTextBox.Focus(FocusState.Programmatic);
         }
 
-        private void WydatekButton_Click(string NameValue, string CostValue, DateTimeOffset? DateValue)
+        private void WydatekButton_Click(string NameValue, string CostValue, string CategoryValueItem, DateTimeOffset? DateValue)
         {
             Wydatki.Add(new Wydatek
             {
                 Title = NameValue,
                 Cost = CostValue,
+                Type = CategoryValueItem,
                 Date = DateValue,
             });
         }
@@ -69,6 +70,10 @@ namespace Finanse
 
         private async void NowaOperacja_Click(object sender, RoutedEventArgs e)
         {
+            var ContentDialogItem = new NowaOperacjaContentDialog();
+            var result = await ContentDialogItem.ShowAsync();
+
+            /*
             var btn = sender as Button;
             var dialog = new ContentDialog()
             {
@@ -119,12 +124,12 @@ namespace Finanse
 
             panel.Children.Add(CostValue);
 
+
             var NameValue = new TextBox
             {
                 PlaceholderText = "Nazwa",
                 Margin = new Thickness(0, 10, 0, 10),
             };
-
             panel.Children.Add(NameValue);
 
             var panel3 = new StackPanel { Orientation = Orientation.Horizontal };
@@ -134,22 +139,30 @@ namespace Finanse
                 PlaceholderText = "Data",
                 Margin = new Thickness(0, 10, 0, 10),
             };
-
             panel3.Children.Add(DateValue);
 
-            panel3.Children.Add(new ComboBox
+            var CategoryValue = new ComboBox
             {
                 PlaceholderText = "Kategoria",
                 Margin = new Thickness(10, 10, 0, 10),
-            });
+            };
+            panel3.Children.Add(CategoryValue);
+
+            CategoryValue.Items.Add("Jedzenie");
+            CategoryValue.Items.Add("Transport");
+            CategoryValue.Items.Add("Mieszkanie");
 
             panel.Children.Add(panel3);
 
-            panel.Children.Add(new ComboBox
+            var PayFormValue = new ComboBox
             {
                 PlaceholderText = "Forma płatności",
                 Margin = new Thickness(0, 10, 0, 10),
-            });
+            };
+            PayFormValue.Items.Add("Gotówka");
+            PayFormValue.Items.Add("Karta Visa");
+
+            panel.Children.Add(PayFormValue);
 
             var cb = new CheckBox
             {
@@ -172,7 +185,7 @@ namespace Finanse
             dialog.IsPrimaryButtonEnabled = false;
             dialog.PrimaryButtonClick += delegate
             {
-                WydatekButton_Click(NameValue.Text, CostValue.Text, DateValue.Date);
+                WydatekButton_Click(NameValue.Text, CostValue.Text, CategoryValue.SelectedItem.ToString(), DateValue.Date);
             };
 
             dialog.SecondaryButtonText = "Anuluj";
@@ -186,7 +199,7 @@ namespace Finanse
             if (result == ContentDialogResult.None)
             {
                 btn.Content = "Result: NONE";
-            }
+            }*/
         }
     }
 }

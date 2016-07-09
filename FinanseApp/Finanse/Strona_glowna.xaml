@@ -243,18 +243,26 @@
                         </Grid>
                         <Border MaxWidth="650" BorderBrush="#24ffffff" BorderThickness="1"></Border>
 
-                        <local:Wplyw />
-                        <local:WplywTemplate />
-                        <ListView Name="OperacjeListView"
+                        <local:Wplyw/>
+
+                        <ListBox Name="OperacjeListView"
                                   ItemsSource="{x:Bind Wydatki}"
                                   SelectionMode="Single"
-                                  SelectionChanged="IconsListBox_SelectionChanged">
-                            <ListView.ItemTemplate>
+                                  SelectionChanged="IconsListBox_SelectionChanged"
+                                  MaxWidth="620" BorderThickness="0"
+                                 Background="Transparent">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
                                 <DataTemplate x:DataType="data:Wydatek" >
                                     <local:WydatekTemplate />
                                 </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
 
                     </StackPanel>
                 </ScrollViewer>

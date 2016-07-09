@@ -64,13 +64,14 @@
                     Margin="0,5" />
                     </StackPanel>
 
-                    <ContentDialog x:Name="MyContentDialog"
-                        VerticalAlignment="Stretch"
+                    <ContentDialog x:Name="NowaOperacjaa"
                         Title="Lorem Ipsum"
                         PrimaryButtonText="OK"
                         IsPrimaryButtonEnabled="{Binding IsChecked, ElementName=checkBoxAgree, Mode=OneWay}"
                         SecondaryButtonText="Cancel"
-                        MaxWidth="{Binding ActualWidth, ElementName=pageRoot}">
+                                   FlowDirection="LeftToRight" AllowDrop="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+
+
                         <StackPanel>
                             <TextBlock Text="Aliquam laoreet magna sit amet mauris iaculis ornare. Morbi iaculis augue vel elementum volutpat."
                             TextWrapping="Wrap" />

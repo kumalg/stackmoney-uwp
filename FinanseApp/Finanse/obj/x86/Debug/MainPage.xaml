@@ -43,15 +43,23 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-<!--
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
--->
 
         <!-- Początek Hamburger Menu -->
-        <SplitView x:ConnectionId='3' Name="MySplitView"
+        <Button x:ConnectionId='3' Name="HamburgerButton"
+                Height="48"
+                Width="48"
+                BorderThickness="0"
+                FontFamily="Segoe MDL2 Assets"
+                Content="&#xE700;"
+                FontSize="16"
+                                             
+                Background="{StaticResource BlueColorStyle}"
+                Canvas.ZIndex="3"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Foreground="White"/>
+
+        <SplitView x:ConnectionId='4' Name="MySplitView"
                    Grid.Row="0"
                    DisplayMode="Overlay"
                    OpenPaneLength="250"
@@ -128,19 +136,6 @@
                 <Frame x:ConnectionId='12' Name="AktualnaStrona_Frame"/>
             </SplitView.Content>
         </SplitView>
-        <Button x:ConnectionId='4' Name="HamburgerButton"
-                Height="48"
-                Width="48"
-                BorderThickness="0"
-                FontFamily="Segoe MDL2 Assets"
-                Content="&#xE700;"
-                FontSize="16"
-                                             
-                Background="{StaticResource BlueColorStyle}"
-                Canvas.ZIndex="2"
-                VerticalAlignment="Top"
-                HorizontalAlignment="Left"
-                Foreground="White"/>
     </Grid>
 </Page>
 

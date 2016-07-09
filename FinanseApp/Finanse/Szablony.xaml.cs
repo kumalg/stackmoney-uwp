@@ -88,8 +88,9 @@ namespace Finanse
 
         private async void ButtonShowContentDialog3_Click(object sender, RoutedEventArgs e)
         {
+            var contente = new NowaOperacjaContentDialog();
             var btn = sender as Button;
-            var result = await MyContentDialog.ShowAsync();
+            var result = await contente.ShowAsync();
             btn.Content = "Result: " + result;
         }
     }

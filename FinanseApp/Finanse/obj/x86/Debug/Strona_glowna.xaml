@@ -243,18 +243,26 @@
                         </Grid>
                         <Border MaxWidth="650" BorderBrush="#24ffffff" BorderThickness="1"></Border>
 
-                        <local:Wplyw />
-                        <local:WplywTemplate />
-                        <ListView x:ConnectionId='12' Name="OperacjeListView"
+                        <local:Wplyw/>
+
+                        <ListBox x:ConnectionId='12' Name="OperacjeListView"
                                                                 
                                   SelectionMode="Single"
-                                                                                  >
-                            <ListView.ItemTemplate>
+                                                                                  
+                                  MaxWidth="620" BorderThickness="0"
+                                 Background="Transparent">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
                                 <DataTemplate                           >
                                     <local:WydatekTemplate />
                                 </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
 
                     </StackPanel>
                 </ScrollViewer>

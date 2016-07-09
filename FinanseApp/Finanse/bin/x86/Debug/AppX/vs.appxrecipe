@@ -28,13 +28,13 @@
     <AppXManifest Include="E:\Users\Kamil\Desktop\Programowanie Windows 10 Mobile\UWP\FinanseApp\Finanse\bin\x86\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2016-07-09T10:34:33.668</Modified>
+      <Modified>2016-07-09T12:15:36.509</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="E:\Users\Kamil\Desktop\Programowanie Windows 10 Mobile\UWP\FinanseApp\Finanse\bin\x86\Debug\Finanse.exe">
       <PackagePath>entrypoint\Finanse.exe</PackagePath>
-      <Modified>2016-07-09T10:31:16.668</Modified>
+      <Modified>2016-07-09T12:15:36.018</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Kamil\.nuget\packages\Microsoft.ApplicationInsights\1.0.0\lib\portable-win81+wpa81\Microsoft.ApplicationInsights.dll">
       <PackagePath>Microsoft.ApplicationInsights.dll</PackagePath>
@@ -504,7 +504,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\Users\Kamil\Desktop\Programowanie Windows 10 Mobile\UWP\FinanseApp\Finanse\bin\x86\Debug\Finanse.xr.xml">
       <PackagePath>Finanse.xr.xml</PackagePath>
-      <Modified>2016-07-08T23:31:51.321</Modified>
+      <Modified>2016-07-09T11:49:27.852</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Windows Kits\10\UnionMetadata\Windows.winmd">
       <PackagePath>WinMetadata\Windows.winmd</PackagePath>
@@ -512,11 +512,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\Users\Kamil\Desktop\Programowanie Windows 10 Mobile\UWP\FinanseApp\Finanse\bin\x86\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2016-07-09T10:34:33.559</Modified>
+      <Modified>2016-07-09T12:15:36.401</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\Users\Kamil\Desktop\Programowanie Windows 10 Mobile\UWP\FinanseApp\Finanse\bin\x86\Debug\Core\Finanse.exe">
       <PackagePath>Finanse.exe</PackagePath>
-      <Modified>2016-07-09T10:34:33.666</Modified>
+      <Modified>2016-07-09T12:15:36.507</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

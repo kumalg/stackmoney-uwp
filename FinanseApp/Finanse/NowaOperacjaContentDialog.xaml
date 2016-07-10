@@ -5,6 +5,7 @@
     xmlns:local="using:Finanse"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:Finanse.Elements"
     mc:Ignorable="d"
     Title="Nowa operacja"
     PrimaryButtonText="Dodaj"
@@ -23,21 +24,25 @@
                 <RadioButton Content="Wydatek" />
                 <RadioButton Content="Wpływ" />
             </StackPanel>
-                <TextBox PlaceholderText="Wartość"
+                <TextBox Name="CostValue"
+                         PlaceholderText="Wartość"
                          InputScope="CurrencyAmount"
                          Margin="0,20,0,0"
                          BorderThickness="0,0,0,1"
                          Background="Transparent"/>
-                <TextBox PlaceholderText="Nazwa"
+                <TextBox Name="NameValue"
+                         PlaceholderText="Nazwa"
                          Margin="0,20,0,10"
                          BorderThickness="0,0,0,1"
                          Background="Transparent"/>
-                <CalendarDatePicker PlaceholderText="Data"
+                <CalendarDatePicker Name="DateValue"
+                                    PlaceholderText="Data"
                                     Margin="0,10"
                                     BorderThickness="0,0,0,1"
                                     Background="Transparent"
                                     HorizontalAlignment="Stretch" />
-                <ComboBox PlaceholderText="Kategoria"
+                <ComboBox Name="CategoryValue"
+                          PlaceholderText="Kategoria"
                           Margin="0,10"
                           BorderThickness="0,0,0,1"
                           Background="Transparent"
@@ -54,8 +59,16 @@
                     <ComboBoxItem Content="Gotówka"/>
                     <ComboBoxItem Content="Karta Visa"/>
                 </ComboBox>
-            <CheckBox Content="Zapisz jako szablon"
-                      Margin="0,20,0,0"/>
+
+            <TextBlock Text="Zapisz jako szablon" Margin="0,20,0,0"/>
+            <ToggleSwitch Margin="0,5,0,0">
+                <ToggleSwitch.OffContent>
+                    <TextBlock Text="Nie" />
+                </ToggleSwitch.OffContent>
+                <ToggleSwitch.OnContent>
+                    <TextBlock Text="Tak" />
+                </ToggleSwitch.OnContent>
+            </ToggleSwitch>
         </StackPanel>
     </ScrollViewer>
 </ContentDialog>

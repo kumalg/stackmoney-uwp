@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Finanse</RootNamespace>
     <AssemblyName>Finanse</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
+    <DefaultLanguage>pl-pl</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
@@ -100,7 +100,7 @@
     </Compile>
     <Compile Include="Elements\Wplyw.cs" />
     <Compile Include="Elements\Wydatek.cs" />
-    <Compile Include="Kategorie.xaml.cs">
+    <Compile Include="Views\Kategorie.xaml.cs">
       <DependentUpon>Kategorie.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainPage.xaml.cs">
@@ -109,20 +109,20 @@
     <Compile Include="NowaOperacjaContentDialog.xaml.cs">
       <DependentUpon>NowaOperacjaContentDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PlanowaneWydatki.xaml.cs">
+    <Compile Include="Views\PlanowaneWydatki.xaml.cs">
       <DependentUpon>PlanowaneWydatki.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Strona_glowna.xaml.cs">
+    <Compile Include="Views\Strona_glowna.xaml.cs">
       <DependentUpon>Strona_glowna.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Szablony.xaml.cs">
+    <Compile Include="Views\Szablony.xaml.cs">
       <DependentUpon>Szablony.xaml</DependentUpon>
     </Compile>
     <Compile Include="TabHeader.xaml.cs">
       <DependentUpon>TabHeader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ustawienia.xaml.cs">
+    <Compile Include="Views\Ustawienia.xaml.cs">
       <DependentUpon>Ustawienia.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wplyw.xaml.cs">
@@ -134,7 +134,7 @@
     <Compile Include="WydatekTemplate.xaml.cs">
       <DependentUpon>WydatekTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ZleceniaStale.xaml.cs">
+    <Compile Include="Views\ZleceniaStale.xaml.cs">
       <DependentUpon>ZleceniaStale.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -159,7 +159,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Kategorie.xaml">
+    <Page Include="Views\Kategorie.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -171,11 +171,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PlanowaneWydatki.xaml">
+    <Page Include="Views\PlanowaneWydatki.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Strona_glowna.xaml">
+    <Page Include="Views\Strona_glowna.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -184,7 +184,7 @@
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="Szablony.xaml">
+    <Page Include="Views\Szablony.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -192,7 +192,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Ustawienia.xaml">
+    <Page Include="Views\Ustawienia.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -208,7 +208,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ZleceniaStale.xaml">
+    <Page Include="Views\ZleceniaStale.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

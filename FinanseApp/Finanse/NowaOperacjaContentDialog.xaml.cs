@@ -12,6 +12,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Finanse.Elements;
+using System.Collections.ObjectModel;
 
 // The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -19,9 +21,12 @@ namespace Finanse
 {
     public sealed partial class NowaOperacjaContentDialog : ContentDialog
     {
-        public NowaOperacjaContentDialog()
+        public ObservableCollection<Wydatek> Wydatki;
+
+        public NowaOperacjaContentDialog(ObservableCollection<Wydatek> Wydatki)
         {
             this.InitializeComponent();
+            this.Wydatki = Wydatki;
         }
 
         private void NowaOperacja_AnulujClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -31,7 +36,13 @@ namespace Finanse
 
         private void NowaOperacja_DodajClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-
+            Wydatki.Add(new Wydatek
+            {
+                Title = NameValue.Text,
+                Cost = "- " + CostValue.Text + " zł",
+                Type = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
+                Date = DateValue.Date,
+            });
         }
     }
 }

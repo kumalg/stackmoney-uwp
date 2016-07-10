@@ -13,83 +13,113 @@
             <VisualStateGroup>
                 <VisualState x:Name="HamburgerTight">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0"/>
+                        <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="FakeHamburgerButton.Width" Value="48"/>
+                        <Setter
+                            Target="FakeHamburgerButton.Width"
+                            Value="48" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="HamburgerWide">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="640"/>
+                        <AdaptiveTrigger MinWindowWidth="640" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="FakeHamburgerButton.Width" Value="Auto"/>
+                        <Setter
+                            Target="FakeHamburgerButton.Width"
+                            Value="Auto" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Background="{StaticResource DarkBlueColorStyle}" MinHeight="48">
+        <Grid
+            Background="{StaticResource DarkBlueColorStyle}"
+            MinHeight="48">
+            
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Name="FakeHamburgerButton" Width="48"/>
+            <StackPanel
+                Name="FakeHamburgerButton"
+                Width="48" />
 
-            <TextBlock Text="Kategorie"
-                       Style="{StaticResource PageTitleStyle}"/>
+            <TextBlock
+                Text="Kategorie"
+                Style="{StaticResource PageTitleStyle}" />
         </Grid>
 
         <Pivot Grid.Row="1">
+            
             <PivotItem>
                 <PivotItem.Header>
-                    <TextBlock Text="Ogólne" FontSize="15"/>
+                    <TextBlock
+                        Text="Ogólne"
+                        FontSize="15" />
                 </PivotItem.Header>
                 <TextBlock>YOLOYOLOYOLO</TextBlock>
             </PivotItem>
+            
             <PivotItem>
                 <PivotItem.Header>
-                    <TextBlock Text="Wygląd" FontSize="15"/>
+                    <TextBlock
+                        Text="Wygląd"
+                        FontSize="15" />
                 </PivotItem.Header>
                 <TextBlock>YOLOYOLOYOLO</TextBlock>
             </PivotItem>
+            
             <PivotItem>
                 <PivotItem.Header>
-                    <TextBlock Text="Synchronizacja" FontSize="15"/>
+                    <TextBlock
+                        Text="Synchronizacja"
+                        FontSize="15" />
                 </PivotItem.Header>
                 <TextBlock>YOLOYOLOYOLO</TextBlock>
             </PivotItem>
+            
         </Pivot>
 
-        <CommandBar Name="LowerCommandBar"
-                    Grid.Row="2"
-                    Background="#242424"
-                    Foreground="White"
-                    IsEnabled="True">
-            <AppBarButton Icon="Add"
-                          Label="Nowa operacja"
-                          Foreground="White">
-            </AppBarButton>
-            <AppBarSeparator Foreground="White"/>
-            <AppBarButton Name="LowerCommandBarEditButton"
-                          IsEnabled="False"
-                          Icon="Edit"
-                          Label="Edytuj"
-                          Foreground="White"/>
-            <AppBarButton Name="LowerCommandBarDeleteButton"
-                          IsEnabled="False"
-                          Icon="Delete"
-                          Label="Usuń"
-                          Foreground="White"/>
+        <CommandBar
+            Name="LowerCommandBar"
+            Grid.Row="2"
+            Background="#242424"
+            Foreground="White"
+            IsEnabled="True">
+
+            <AppBarButton
+                Icon="Add"
+                Label="Nowa operacja"
+                Foreground="White" />
+
+            <AppBarSeparator Foreground="White" />
+            
+            <AppBarButton
+                Name="LowerCommandBarEditButton"
+                IsEnabled="False"
+                Icon="Edit"
+                Label="Edytuj"
+                Foreground="White" />
+            
+            <AppBarButton
+                Name="LowerCommandBarDeleteButton"
+                IsEnabled="False"
+                Icon="Delete"
+                Label="Usuń"
+                Foreground="White" />
+            
         </CommandBar>
+        
     </Grid>
+    
 </Page>

@@ -106,7 +106,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NowaOperacjaContentDialog.xaml.cs">
+    <Compile Include="Views\NowaOperacjaContentDialog.xaml.cs">
       <DependentUpon>NowaOperacjaContentDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PlanowaneWydatki.xaml.cs">
@@ -119,19 +119,19 @@
     <Compile Include="Views\Szablony.xaml.cs">
       <DependentUpon>Szablony.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TabHeader.xaml.cs">
-      <DependentUpon>TabHeader.xaml</DependentUpon>
+    <Compile Include="Elements\PivotItemHeaderTemplate.xaml.cs">
+      <DependentUpon>PivotItemHeaderTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Ustawienia.xaml.cs">
       <DependentUpon>Ustawienia.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wplyw.xaml.cs">
-      <DependentUpon>Wplyw.xaml</DependentUpon>
+    <Compile Include="Elements\WplywTem.xaml.cs">
+      <DependentUpon>WplywTem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WplywTemplate.xaml.cs">
+    <Compile Include="Elements\WplywTemplate.xaml.cs">
       <DependentUpon>WplywTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WydatekTemplate.xaml.cs">
+    <Compile Include="Elements\WydatekTemplate.xaml.cs">
       <DependentUpon>WydatekTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ZleceniaStale.xaml.cs">
@@ -167,7 +167,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="NowaOperacjaContentDialog.xaml">
+    <Page Include="Views\NowaOperacjaContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -188,7 +188,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TabHeader.xaml">
+    <Page Include="Elements\PivotItemHeaderTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -196,15 +196,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wplyw.xaml">
+    <Page Include="Elements\WplywTem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Elements\WplywTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WplywTemplate.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WydatekTemplate.xaml">
+    <Page Include="Elements\WydatekTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

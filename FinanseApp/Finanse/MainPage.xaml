@@ -8,21 +8,8 @@
     xmlns:data="using:Finanse.Elements"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <Style TargetType="TextBlock" x:Key="SplitViewIconStyle">
-            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="4,0,0,0"/>
-        </Style>
-        <Style TargetType="TextBlock" x:Key="SplitViewTitleStyle">
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="32,0,0,0"/>
-        </Style>
-    </Page.Resources>
-    
     <Grid Background="{StaticResource GreyColorStyle}">
+        
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState x:Name="HamburgerTight">
@@ -45,96 +32,160 @@
         </VisualStateManager.VisualStateGroups>
 
         <!-- Początek Hamburger Menu -->
-        <Button Name="HamburgerButton"
-                Height="48"
-                Width="48"
-                BorderThickness="0"
-                FontFamily="Segoe MDL2 Assets"
-                Content="&#xE700;"
-                FontSize="16"
-                Click="HamburgerButton_Click"
-                Background="{StaticResource BlueColorStyle}"
-                Canvas.ZIndex="3"
-                VerticalAlignment="Top"
-                HorizontalAlignment="Left"
-                Foreground="White"/>
+        
+        <Button
+            Name="HamburgerButton"
+            Height="48"
+            Width="48"
+            BorderThickness="0"
+            FontFamily="Segoe MDL2 Assets"
+            Content="&#xE700;"
+            FontSize="16"
+            Click="HamburgerButton_Click"
+            Background="{StaticResource BlueColorStyle}"
+            Canvas.ZIndex="3"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+            Foreground="White"/>
 
-        <SplitView Name="MySplitView"
-                   Grid.Row="0"
-                   DisplayMode="Overlay"
-                   OpenPaneLength="250"
-                   CompactPaneLength="48"
-                   HorizontalAlignment="Left"
-                   PaneBackground="Transparent"
-                   Canvas.ZIndex="2">
+        <SplitView 
+            Name="MySplitView"
+            Grid.Row="0"
+            DisplayMode="Overlay"
+            OpenPaneLength="250"
+            CompactPaneLength="48"
+            HorizontalAlignment="Left"
+            PaneBackground="Transparent"
+            Canvas.ZIndex="2">
+            
             <SplitView.Pane>
-                <ListBox Name="IconsListBox"
-                         BorderThickness="0"
-                         SelectionMode="Single"
-                         SelectionChanged="IconsListBox_SelectionChanged"
-                         Foreground="White"
-                         Background="{StaticResource LightGreyTransparentColorStyle}"
-                         SelectedIndex="0">
-                    <ListBoxItem Name="Strona_glowna_ListBoxItem"
-                                 Margin="0,48,0,0"
-                                 Height="48">
+                
+                <ListBox 
+                    Name="IconsListBox"
+                    BorderThickness="0"
+                    SelectionMode="Single"
+                    SelectionChanged="IconsListBox_SelectionChanged"
+                    Foreground="White"
+                    Background="{StaticResource LightGreyTransparentColorStyle}"
+                    SelectedIndex="0">
+                    
+                    <ListBoxItem
+                        Name="Strona_glowna_ListBoxItem"
+                        Margin="0,48,0,0"
+                        Height="48">
+                        
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Style="{StaticResource SplitViewIconStyle}"
-                                       Text="&#xE80F;"/>
-                            <TextBlock Style="{StaticResource SplitViewTitleStyle}"
-                                       Text="Moje finanse" />
+                            
+                            <TextBlock
+                                Style="{StaticResource SplitViewIconStyle}"
+                                Text="&#xE80F;"/>
+                            
+                            <TextBlock
+                                Style="{StaticResource SplitViewTitleStyle}"
+                                Text="Moje finanse" />
+                            
                         </StackPanel>
+                        
                     </ListBoxItem>
-                    <ListBoxItem Name="Kategorie_ListBoxItem"
-                                 Height="48">
+                    
+                    <ListBoxItem
+                        Name="Kategorie_ListBoxItem"
+                        Height="48">
+                        
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Style="{StaticResource SplitViewIconStyle}"
-                                       Text="&#xE71D;"/>
-                            <TextBlock Style="{StaticResource SplitViewTitleStyle}"
-                                       Text="Kategorie" />
+                            
+                            <TextBlock
+                                Style="{StaticResource SplitViewIconStyle}"
+                                Text="&#xE71D;"/>
+                            
+                            <TextBlock
+                                Style="{StaticResource SplitViewTitleStyle}"
+                                Text="Kategorie" />
+                            
                         </StackPanel>
+                        
                     </ListBoxItem>
-                    <ListBoxItem Name="Szablony_ListBoxItem"
-                                 Height="48">
+                    
+                    <ListBoxItem
+                        Name="Szablony_ListBoxItem"
+                        Height="48">
+                        
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Style="{StaticResource SplitViewIconStyle}"
-                                       Text="&#xE74C;"/>
-                            <TextBlock Style="{StaticResource SplitViewTitleStyle}"
-                                       Text="Szablony" />
+                            
+                            <TextBlock
+                                Style="{StaticResource SplitViewIconStyle}"
+                                Text="&#xE74C;"/>
+                            
+                            <TextBlock 
+                                Style="{StaticResource SplitViewTitleStyle}"
+                                Text="Szablony" />
+                            
                         </StackPanel>
+                        
                     </ListBoxItem>
-                    <ListBoxItem Name="ZleceniaStale_ListBoxItem"
-                                 Height="48">
+                    
+                    <ListBoxItem
+                        Name="ZleceniaStale_ListBoxItem"
+                        Height="48">
+                        
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Style="{StaticResource SplitViewIconStyle}"
-                                       Text="&#xE81C;"/>
-                            <TextBlock Style="{StaticResource SplitViewTitleStyle}"
-                                       Text="Zlecenia stałe" />
+                            
+                            <TextBlock
+                                Style="{StaticResource SplitViewIconStyle}"
+                                Text="&#xE81C;"/>
+                            
+                            <TextBlock
+                                Style="{StaticResource SplitViewTitleStyle}"
+                                Text="Zlecenia stałe" />
+                            
                         </StackPanel>
+                        
                     </ListBoxItem>
-                    <ListBoxItem Name="PlanowaneWydatki_ListBoxItem"
-                                 Height="48">
+                    
+                    <ListBoxItem
+                        Name="PlanowaneWydatki_ListBoxItem"
+                        Height="48">
+                        
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Style="{StaticResource SplitViewIconStyle}"
-                                       Text="&#xE823;"/>
-                            <TextBlock Style="{StaticResource SplitViewTitleStyle}"
-                                       Text="Planowane wydatki" />
+                            
+                            <TextBlock
+                                Style="{StaticResource SplitViewIconStyle}"
+                                Text="&#xE823;"/>
+                            
+                            <TextBlock
+                                Style="{StaticResource SplitViewTitleStyle}"
+                                Text="Planowane wydatki" />
+                            
                         </StackPanel>
+                        
                     </ListBoxItem>
-                    <ListBoxItem Name="Ustawienia_ListBoxItem"
-                                 Height="48">
+                    
+                    <ListBoxItem
+                        Name="Ustawienia_ListBoxItem"
+                        Height="48">
+                        
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Style="{StaticResource SplitViewIconStyle}"
-                                       Text="&#xE713;"/>
-                            <TextBlock Style="{StaticResource SplitViewTitleStyle}"
-                                       Text="Ustawienia" />
+                            
+                            <TextBlock
+                                Style="{StaticResource SplitViewIconStyle}"
+                                Text="&#xE713;"/>
+                            
+                            <TextBlock
+                                Style="{StaticResource SplitViewTitleStyle}"
+                                Text="Ustawienia" />
+                            
                         </StackPanel>
+                        
                     </ListBoxItem>
+                    
                 </ListBox>
+                
             </SplitView.Pane>
+            
             <SplitView.Content>
                 <Frame Name="AktualnaStrona_Frame"/>
             </SplitView.Content>
+            
         </SplitView>
     </Grid>
 </Page>

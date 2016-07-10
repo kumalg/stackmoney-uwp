@@ -141,14 +141,14 @@ namespace Finanse.Finanse_XamlTypeInfo
             _typeNameTable[5] = "Finanse.TabHeader";
             _typeNameTable[6] = "String";
             _typeNameTable[7] = "Finanse.Wplyw";
-            _typeNameTable[8] = "Finanse.WplywTemplate";
-            _typeNameTable[9] = "Finanse.Elements.Wplyw";
+            _typeNameTable[8] = "Finanse.WydatekTemplate";
+            _typeNameTable[9] = "Finanse.Elements.Wydatek";
             _typeNameTable[10] = "Object";
-            _typeNameTable[11] = "Finanse.WydatekTemplate";
-            _typeNameTable[12] = "Finanse.Elements.Wydatek";
-            _typeNameTable[13] = "Finanse.Strona_glowna";
-            _typeNameTable[14] = "Finanse.Szablony";
-            _typeNameTable[15] = "Finanse.Ustawienia";
+            _typeNameTable[11] = "Finanse.Strona_glowna";
+            _typeNameTable[12] = "Finanse.Szablony";
+            _typeNameTable[13] = "Finanse.Ustawienia";
+            _typeNameTable[14] = "Finanse.WplywTemplate";
+            _typeNameTable[15] = "Finanse.Elements.Wplyw";
             _typeNameTable[16] = "Finanse.ZleceniaStale";
 
             _typeTable = new global::System.Type[17];
@@ -160,14 +160,14 @@ namespace Finanse.Finanse_XamlTypeInfo
             _typeTable[5] = typeof(global::Finanse.TabHeader);
             _typeTable[6] = typeof(global::System.String);
             _typeTable[7] = typeof(global::Finanse.Wplyw);
-            _typeTable[8] = typeof(global::Finanse.WplywTemplate);
-            _typeTable[9] = typeof(global::Finanse.Elements.Wplyw);
+            _typeTable[8] = typeof(global::Finanse.WydatekTemplate);
+            _typeTable[9] = typeof(global::Finanse.Elements.Wydatek);
             _typeTable[10] = typeof(global::System.Object);
-            _typeTable[11] = typeof(global::Finanse.WydatekTemplate);
-            _typeTable[12] = typeof(global::Finanse.Elements.Wydatek);
-            _typeTable[13] = typeof(global::Finanse.Strona_glowna);
-            _typeTable[14] = typeof(global::Finanse.Szablony);
-            _typeTable[15] = typeof(global::Finanse.Ustawienia);
+            _typeTable[11] = typeof(global::Finanse.Strona_glowna);
+            _typeTable[12] = typeof(global::Finanse.Szablony);
+            _typeTable[13] = typeof(global::Finanse.Ustawienia);
+            _typeTable[14] = typeof(global::Finanse.WplywTemplate);
+            _typeTable[15] = typeof(global::Finanse.Elements.Wplyw);
             _typeTable[16] = typeof(global::Finanse.ZleceniaStale);
         }
 
@@ -208,13 +208,13 @@ namespace Finanse.Finanse_XamlTypeInfo
         private object Activate_4_PlanowaneWydatki() { return new global::Finanse.PlanowaneWydatki(); }
         private object Activate_5_TabHeader() { return new global::Finanse.TabHeader(); }
         private object Activate_7_Wplyw() { return new global::Finanse.Wplyw(); }
-        private object Activate_8_WplywTemplate() { return new global::Finanse.WplywTemplate(); }
-        private object Activate_9_Wplyw() { return new global::Finanse.Elements.Wplyw(); }
-        private object Activate_11_WydatekTemplate() { return new global::Finanse.WydatekTemplate(); }
-        private object Activate_12_Wydatek() { return new global::Finanse.Elements.Wydatek(); }
-        private object Activate_13_Strona_glowna() { return new global::Finanse.Strona_glowna(); }
-        private object Activate_14_Szablony() { return new global::Finanse.Szablony(); }
-        private object Activate_15_Ustawienia() { return new global::Finanse.Ustawienia(); }
+        private object Activate_8_WydatekTemplate() { return new global::Finanse.WydatekTemplate(); }
+        private object Activate_9_Wydatek() { return new global::Finanse.Elements.Wydatek(); }
+        private object Activate_11_Strona_glowna() { return new global::Finanse.Strona_glowna(); }
+        private object Activate_12_Szablony() { return new global::Finanse.Szablony(); }
+        private object Activate_13_Ustawienia() { return new global::Finanse.Ustawienia(); }
+        private object Activate_14_WplywTemplate() { return new global::Finanse.WplywTemplate(); }
+        private object Activate_15_Wplyw() { return new global::Finanse.Elements.Wplyw(); }
         private object Activate_16_ZleceniaStale() { return new global::Finanse.ZleceniaStale(); }
 
         private global::Windows.UI.Xaml.Markup.IXamlType CreateXamlType(int typeIndex)
@@ -276,15 +276,15 @@ namespace Finanse.Finanse_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 8:   //  Finanse.WplywTemplate
+            case 8:   //  Finanse.WydatekTemplate
                 userType = new global::Finanse.Finanse_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.UserControl"));
-                userType.Activator = Activate_8_WplywTemplate;
-                userType.AddMemberName("Wplyw");
+                userType.Activator = Activate_8_WydatekTemplate;
+                userType.AddMemberName("Wydatek");
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 9:   //  Finanse.Elements.Wplyw
+            case 9:   //  Finanse.Elements.Wydatek
                 userType = new global::Finanse.Finanse_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
                 userType.SetIsReturnTypeStub();
                 userType.SetIsLocalType();
@@ -295,38 +295,38 @@ namespace Finanse.Finanse_XamlTypeInfo
                 xamlType = new global::Finanse.Finanse_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 11:   //  Finanse.WydatekTemplate
-                userType = new global::Finanse.Finanse_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.UserControl"));
-                userType.Activator = Activate_11_WydatekTemplate;
-                userType.AddMemberName("Wydatek");
+            case 11:   //  Finanse.Strona_glowna
+                userType = new global::Finanse.Finanse_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.Page"));
+                userType.Activator = Activate_11_Strona_glowna;
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 12:   //  Finanse.Elements.Wydatek
+            case 12:   //  Finanse.Szablony
+                userType = new global::Finanse.Finanse_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.Page"));
+                userType.Activator = Activate_12_Szablony;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 13:   //  Finanse.Ustawienia
+                userType = new global::Finanse.Finanse_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.Page"));
+                userType.Activator = Activate_13_Ustawienia;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 14:   //  Finanse.WplywTemplate
+                userType = new global::Finanse.Finanse_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.UserControl"));
+                userType.Activator = Activate_14_WplywTemplate;
+                userType.AddMemberName("Wplyw");
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 15:   //  Finanse.Elements.Wplyw
                 userType = new global::Finanse.Finanse_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
                 userType.SetIsReturnTypeStub();
-                userType.SetIsLocalType();
-                xamlType = userType;
-                break;
-
-            case 13:   //  Finanse.Strona_glowna
-                userType = new global::Finanse.Finanse_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.Page"));
-                userType.Activator = Activate_13_Strona_glowna;
-                userType.SetIsLocalType();
-                xamlType = userType;
-                break;
-
-            case 14:   //  Finanse.Szablony
-                userType = new global::Finanse.Finanse_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.Page"));
-                userType.Activator = Activate_14_Szablony;
-                userType.SetIsLocalType();
-                xamlType = userType;
-                break;
-
-            case 15:   //  Finanse.Ustawienia
-                userType = new global::Finanse.Finanse_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.Page"));
-                userType.Activator = Activate_15_Ustawienia;
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
@@ -362,15 +362,15 @@ namespace Finanse.Finanse_XamlTypeInfo
             var that = (global::Finanse.TabHeader)instance;
             that.Glyph = (global::System.String)Value;
         }
-        private object get_2_WplywTemplate_Wplyw(object instance)
-        {
-            var that = (global::Finanse.WplywTemplate)instance;
-            return that.Wplyw;
-        }
-        private object get_3_WydatekTemplate_Wydatek(object instance)
+        private object get_2_WydatekTemplate_Wydatek(object instance)
         {
             var that = (global::Finanse.WydatekTemplate)instance;
             return that.Wydatek;
+        }
+        private object get_3_WplywTemplate_Wplyw(object instance)
+        {
+            var that = (global::Finanse.WplywTemplate)instance;
+            return that.Wplyw;
         }
 
         private global::Windows.UI.Xaml.Markup.IXamlMember CreateXamlMember(string longMemberName)
@@ -394,16 +394,16 @@ namespace Finanse.Finanse_XamlTypeInfo
                 xamlMember.Getter = get_1_TabHeader_Glyph;
                 xamlMember.Setter = set_1_TabHeader_Glyph;
                 break;
-            case "Finanse.WplywTemplate.Wplyw":
-                userType = (global::Finanse.Finanse_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Finanse.WplywTemplate");
-                xamlMember = new global::Finanse.Finanse_XamlTypeInfo.XamlMember(this, "Wplyw", "Finanse.Elements.Wplyw");
-                xamlMember.Getter = get_2_WplywTemplate_Wplyw;
-                xamlMember.SetIsReadOnly();
-                break;
             case "Finanse.WydatekTemplate.Wydatek":
                 userType = (global::Finanse.Finanse_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Finanse.WydatekTemplate");
                 xamlMember = new global::Finanse.Finanse_XamlTypeInfo.XamlMember(this, "Wydatek", "Finanse.Elements.Wydatek");
-                xamlMember.Getter = get_3_WydatekTemplate_Wydatek;
+                xamlMember.Getter = get_2_WydatekTemplate_Wydatek;
+                xamlMember.SetIsReadOnly();
+                break;
+            case "Finanse.WplywTemplate.Wplyw":
+                userType = (global::Finanse.Finanse_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Finanse.WplywTemplate");
+                xamlMember = new global::Finanse.Finanse_XamlTypeInfo.XamlMember(this, "Wplyw", "Finanse.Elements.Wplyw");
+                xamlMember.Getter = get_3_WplywTemplate_Wplyw;
                 xamlMember.SetIsReadOnly();
                 break;
             }

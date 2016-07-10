@@ -22,35 +22,25 @@ using System.Collections.ObjectModel;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace Finanse
-{
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    
+namespace Finanse {
+    public sealed partial class MainPage : Page {
 
-    public sealed partial class MainPage : Page
-    {
-        public MainPage()
-        {
+        public MainPage() {
             this.InitializeComponent();
             AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
             StatusBarAndTitleBar();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
             base.OnNavigatedTo(e);
         }
-        
-        private void StatusBarAndTitleBar()
-        {
+
+        private void StatusBarAndTitleBar() {
+
             //PC customization
-            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView"))
-            {
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView")) {
                 var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-                if (titleBar != null)
-                {
+                if (titleBar != null) {
                     titleBar.ButtonBackgroundColor = Color.FromArgb(255, 11, 99, 199);
                     titleBar.ButtonForegroundColor = Colors.White;
                     titleBar.BackgroundColor = Color.FromArgb(255, 11, 99, 199);
@@ -59,12 +49,10 @@ namespace Finanse
             }
 
             //Mobile customization
-            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-            {
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) {
 
                 var statusBar = StatusBar.GetForCurrentView();
-                if (statusBar != null)
-                {
+                if (statusBar != null) {
                     statusBar.BackgroundOpacity = 1;
                     statusBar.BackgroundColor = Color.FromArgb(255, 43, 43, 43);
                     statusBar.ForegroundColor = Colors.White;
@@ -72,42 +60,35 @@ namespace Finanse
             }
         }
 
-        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void HamburgerButton_Click(object sender, RoutedEventArgs e) {
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
         }
 
-        private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (Strona_glowna_ListBoxItem.IsSelected) {
                 AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
-                //TytulStrony.Text = "Moje finanse";
             }
-            else if (Kategorie_ListBoxItem.IsSelected)
-            {
+
+            else if (Kategorie_ListBoxItem.IsSelected) {
                 AktualnaStrona_Frame.Navigate(typeof(Kategorie));
-                //TytulStrony.Text = "Ustawienia";
             }
-            else if (Szablony_ListBoxItem.IsSelected)
-            {
+
+            else if (Szablony_ListBoxItem.IsSelected) {
                 AktualnaStrona_Frame.Navigate(typeof(Szablony));
-                //TytulStrony.Text = "Ustawienia";
             }
-            else if (ZleceniaStale_ListBoxItem.IsSelected)
-            {
+
+            else if (ZleceniaStale_ListBoxItem.IsSelected) {
                 AktualnaStrona_Frame.Navigate(typeof(ZleceniaStale));
-                //TytulStrony.Text = "Ustawienia";
             }
-            else if (PlanowaneWydatki_ListBoxItem.IsSelected)
-            {
+
+            else if (PlanowaneWydatki_ListBoxItem.IsSelected) {
                 AktualnaStrona_Frame.Navigate(typeof(PlanowaneWydatki));
-                //TytulStrony.Text = "Ustawienia";
             }
-            else if (Ustawienia_ListBoxItem.IsSelected)
-            {
+
+            else if (Ustawienia_ListBoxItem.IsSelected) {
                 AktualnaStrona_Frame.Navigate(typeof(Ustawienia));
-                //TytulStrony.Text = "Ustawienia";
             }
+
             if (MySplitView.IsPaneOpen) MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
         }
     }

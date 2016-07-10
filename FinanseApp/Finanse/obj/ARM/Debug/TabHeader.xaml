@@ -6,14 +6,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Width="48" Height="48" IsTabStop="False">
+    Width="48"
+    Height="48"
+    IsTabStop="False">
 
-    <StackPanel >
+    <StackPanel>
         <FontIcon
-                            HorizontalAlignment="Center"
-                            Margin="0,14,0,0"
-                            Glyph="{Binding Glyph}"
-                            FontSize="16" />
+            HorizontalAlignment="Center"
+            Margin="0,14,0,0"
+            Glyph="{Binding Glyph}"
+            FontSize="16" />
         <!--<TextBlock
                             FontFamily="Segoe UI"
                             Text="{Binding Label}"

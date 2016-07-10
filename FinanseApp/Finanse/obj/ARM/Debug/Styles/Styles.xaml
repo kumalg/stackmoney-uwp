@@ -2,6 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <!-- Kolory -->
     <SolidColorBrush x:Key="GreenColorStyle" Color="#3EB93E"/>
 
     <SolidColorBrush x:Key="RedColorStyle" Color="#FF3B3B"/>
@@ -22,9 +23,23 @@
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontSize" Value="14"/>
     </Style>
-    
-    
 
+    <!-- Hamburger Menu - ikona i tekst -->
+    <Style TargetType="TextBlock" x:Key="SplitViewIconStyle">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="4,0,0,0"/>
+    </Style>
+    
+    <Style TargetType="TextBlock" x:Key="SplitViewTitleStyle">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="32,0,0,0"/>
+    </Style>
+
+
+    <!-- Pivot menu -->
     <Style x:Key="PivotStyleDynamicHeader" TargetType="Pivot">
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Padding" Value="0"/>
@@ -249,7 +264,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <!-- KONIEC NIE WIEM PO CO??? -->
 
 </ResourceDictionary>
 

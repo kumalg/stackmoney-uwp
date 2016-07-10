@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Roots >
   <Roots.PropertyPathNames>
-    <RootPropertyPathName Name="IsChecked" />
     <RootPropertyPathName Name="Glyph" />
   </Roots.PropertyPathNames>
   <Roots.RootTypes>
@@ -15,8 +14,6 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Page">
       <RootProperty Name="Content" />
-      <RootProperty Name="Resources" />
-      <RootProperty Name="Foreground" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Grid">
       <RootProperty Name="Background" />
@@ -32,6 +29,7 @@
       <RootProperty Name="Name" />
       <RootProperty Name="Height" />
       <RootProperty Name="Width" />
+      <RootProperty Name="Margin" />
       <RootMethod Name="GetRow" />
       <RootMethod Name="SetRow" />
       <RootMethod Name="GetColumn" />
@@ -94,12 +92,11 @@
       <RootProperty Name="FontSize" />
       <RootProperty Name="Inlines" />
       <RootProperty Name="Style" />
-      <RootProperty Name="FontFamily" />
       <RootProperty Name="Margin" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="FontWeight" />
       <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="TextWrapping" />
+      <RootProperty Name="FontFamily" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Name" />
     </RootType>
@@ -114,15 +111,8 @@
       <RootProperty Name="Children" />
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="HorizontalAlignment" />
     </RootType>
     <RootType FullName="Finanse.Views.Kategorie" />
-    <RootType FullName="Windows.UI.Xaml.FrameworkElement">
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="Margin" />
-      <RootProperty Name="Height" />
-      <RootProperty Name="RequestedTheme" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Button">
       <RootProperty Name="Name" />
       <RootProperty Name="Height" />
@@ -165,9 +155,9 @@
       <RootProperty Name="Background" />
       <RootProperty Name="SelectedIndex" />
       <RootProperty Name="Items" />
-      <RootProperty Name="ItemsSource" />
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="ItemContainerStyle" />
+      <RootProperty Name="ItemsSource" />
       <RootProperty Name="ItemTemplate" />
       <RootEvent Name="SelectionChanged" />
     </RootType>
@@ -187,9 +177,6 @@
       <RootProperty Name="SecondaryButtonText" />
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Content" />
-      <RootProperty Name="IsPrimaryButtonEnabled" />
-      <RootProperty Name="FlowDirection" />
-      <RootProperty Name="AllowDrop" />
       <RootEvent Name="PrimaryButtonClick" />
       <RootEvent Name="SecondaryButtonClick" />
     </RootType>
@@ -207,8 +194,6 @@
       <RootProperty Name="VerticalScrollMode" />
       <RootProperty Name="VerticalContentAlignment" />
       <RootProperty Name="ZoomMode" />
-      <RootMethod Name="GetHorizontalScrollBarVisibility" />
-      <RootMethod Name="SetHorizontalScrollBarVisibility" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TextBox">
       <RootProperty Name="Name" />
@@ -246,7 +231,7 @@
     <RootType FullName="Windows.UI.Xaml.Controls.RadioButton">
       <RootProperty Name="Content" />
     </RootType>
-    <RootType FullName="Finanse.NowaOperacjaContentDialog" />
+    <RootType FullName="Finanse.Views.NowaOperacjaContentDialog" />
     <RootType FullName="Finanse.Views.PlanowaneWydatki" />
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.PivotHeaderItem" />
     <RootType FullName="Windows.UI.Xaml.Controls.Control">
@@ -261,6 +246,12 @@
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="Template" />
       <RootProperty Name="HorizontalContentAlignment" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.FrameworkElement">
+      <RootProperty Name="Height" />
+      <RootProperty Name="RequestedTheme" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Margin" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ControlTemplate">
       <RootProperty Name="TargetType" />
@@ -312,22 +303,23 @@
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="BorderThickness" />
       <RootProperty Name="MaxWidth" />
+      <RootProperty Name="Margin" />
       <RootProperty Name="Background" />
       <RootProperty Name="Child" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.TranslateTransform" />
-    <RootType FullName="Finanse.TabHeader">
+    <RootType FullName="Finanse.Elements.PivotItemHeaderTemplate">
       <RootProperty Name="Label" />
       <RootProperty Name="Glyph" />
     </RootType>
-    <RootType FullName="Finanse.Wplyw" />
     <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.BindExtension" />
     <RootType FullName="Windows.UI.Xaml.DataTemplate">
       <RootProperty Name="Template" />
     </RootType>
-    <RootType FullName="Finanse.WydatekTemplate" />
+    <RootType FullName="Finanse.Elements.WydatekTemplate" />
+    <RootType FullName="Finanse.Elements.WplywTem" />
     <RootType FullName="Finanse.Views.Strona_glowna" />
     <RootType FullName="Windows.UI.Xaml.Media.SolidColorBrush">
       <RootProperty Name="Color" />
@@ -376,13 +368,6 @@
     <RootType FullName="Windows.UI.Xaml.Controls.ItemsPanelTemplate">
       <RootProperty Name="Template" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Data.Binding">
-      <RootProperty Name="ElementName" />
-      <RootProperty Name="Mode" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.CheckBox">
-      <RootProperty Name="Content" />
-    </RootType>
     <RootType FullName="Finanse.Views.Szablony" />
     <RootType FullName="Windows.UI.Xaml.Controls.UserControl">
       <RootProperty Name="Width" />
@@ -390,6 +375,7 @@
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="Content" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Data.Binding" />
     <RootType FullName="Finanse.Views.Ustawienia" />
     <RootType FullName="Windows.UI.Xaml.Controls.RelativePanel">
       <RootProperty Name="Margin" />
@@ -405,7 +391,7 @@
     <RootType FullName="Windows.UI.Xaml.Shapes.Ellipse">
       <RootProperty Name="Fill" />
     </RootType>
-    <RootType FullName="Finanse.WplywTemplate" />
+    <RootType FullName="Finanse.Elements.WplywTemplate" />
     <RootType FullName="Finanse.Views.ZleceniaStale" />
   </Roots.RootTypes>
 </Roots>

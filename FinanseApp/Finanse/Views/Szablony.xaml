@@ -13,84 +13,83 @@
             <VisualStateGroup>
                 <VisualState x:Name="HamburgerTight">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0"/>
+                        <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="FakeHamburgerButton.Width" Value="48"/>
+                        <Setter
+                            Target="FakeHamburgerButton.Width"
+                            Value="48" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="HamburgerWide">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="640"/>
+                        <AdaptiveTrigger MinWindowWidth="640" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="FakeHamburgerButton.Width" Value="Auto"/>
+                        <Setter
+                            Target="FakeHamburgerButton.Width"
+                            Value="Auto" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Background="{StaticResource DarkBlueColorStyle}" MinHeight="48">
+        <Grid
+            Background="{StaticResource DarkBlueColorStyle}"
+            MinHeight="48">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Name="FakeHamburgerButton" Width="48"/>
+            <StackPanel
+                Name="FakeHamburgerButton"
+                Width="48" />
 
-            <TextBlock Text="Szablony"
-                       Style="{StaticResource PageTitleStyle}"/>
+            <TextBlock
+                Text="Szablony"
+                Style="{StaticResource PageTitleStyle}" />
         </Grid>
 
         <Pivot Grid.Row="1">
+            
             <PivotItem>
                 <PivotItem.Header>
-                    <TextBlock Text="Ogólne" FontSize="15"/>
+                    <TextBlock
+                        Text="Ogólne"
+                        FontSize="15" />
                 </PivotItem.Header>
-                <StackPanel>
-                    <StackPanel VerticalAlignment="Center"
-                    HorizontalAlignment="Center">
-                        <Button Content="Dark Theme Content Dialog"
-                    Click="ButtonShowContentDialog1_Click"
-                    Margin="0,5" />
-                    </StackPanel>
-
-                    <ContentDialog x:Name="NowaOperacjaa"
-                        Title="Lorem Ipsum"
-                        PrimaryButtonText="OK"
-                        IsPrimaryButtonEnabled="{Binding IsChecked, ElementName=checkBoxAgree, Mode=OneWay}"
-                        SecondaryButtonText="Cancel"
-                                   FlowDirection="LeftToRight" AllowDrop="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">
-
-
-                        <StackPanel>
-                            <TextBlock Text="Aliquam laoreet magna sit amet mauris iaculis ornare. Morbi iaculis augue vel elementum volutpat."
-                            TextWrapping="Wrap" />
-                            <CheckBox x:Name="checkBoxAgree"
-                            Content="Agree" />
-                        </StackPanel>
-
-                    </ContentDialog>
-                </StackPanel>
+                
             </PivotItem>
+            
             <PivotItem>
                 <PivotItem.Header>
-                    <TextBlock Text="Wygląd" FontSize="15"/>
+                    <TextBlock
+                        Text="Wygląd"
+                        FontSize="15" />
                 </PivotItem.Header>
+                
                 <TextBlock>YOLOYOLOYOLO</TextBlock>
+                
             </PivotItem>
+            
             <PivotItem>
                 <PivotItem.Header>
-                    <TextBlock Text="Synchronizacja" FontSize="15"/>
+                    <TextBlock
+                        Text="Synchronizacja"
+                        FontSize="15" />
                 </PivotItem.Header>
+                
                 <TextBlock>YOLOYOLOYOLO</TextBlock>
+                
             </PivotItem>
+            
         </Pivot>
     </Grid>
 </Page>

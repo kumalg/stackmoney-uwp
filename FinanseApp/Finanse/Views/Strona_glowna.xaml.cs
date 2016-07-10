@@ -17,37 +17,31 @@ using System.Collections.ObjectModel;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace Finanse.Views
-{
-    
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class Strona_glowna : Page
-    {
+namespace Finanse.Views {
+
+    public sealed partial class Strona_glowna : Page {
+
         public ObservableCollection<Wydatek> Wydatki;
 
-        //private ObservableCollection<Wplyw> Wplywy;
+        public Strona_glowna() {
 
-        public Strona_glowna()
-        {
             this.InitializeComponent();
+
             Wydatki = new ObservableCollection<Wydatek>();
-            //Wplywy = new ObservableCollection<Wplyw>();
         }
 
-        private void Wplyw_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-           
-        }
-            
-        private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        private void Wplyw_Tapped(object sender, TappedRoutedEventArgs e) {
+
         }
 
-        private async void NowaOperacja_Click(object sender, RoutedEventArgs e)
-        {
+        private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+        }
+
+        private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
+
             var ContentDialogItem = new NowaOperacjaContentDialog(Wydatki);
+
             var result = await ContentDialogItem.ShowAsync();
         }
     }

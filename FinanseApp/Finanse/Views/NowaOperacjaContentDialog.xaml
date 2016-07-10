@@ -1,0 +1,105 @@
+﻿<ContentDialog
+    x:Class="Finanse.Views.NowaOperacjaContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Finanse"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:Finanse.Elements"
+    mc:Ignorable="d"
+    Title="Nowa operacja"
+    PrimaryButtonText="Dodaj"
+    SecondaryButtonText="Anuluj"
+    PrimaryButtonClick="NowaOperacja_DodajClick"
+    SecondaryButtonClick="NowaOperacja_AnulujClick"
+    RequestedTheme="Dark"
+    >
+
+    <ScrollViewer
+        VerticalScrollBarVisibility="Auto"
+        HorizontalScrollBarVisibility="Disabled"
+        IsTabStop="False">
+
+        <StackPanel>
+
+            <TextBlock
+                Text="Typ operacji"
+                Margin="0,20,0,10" />
+            
+            <StackPanel Orientation="Horizontal">
+                
+                <RadioButton Content="Wydatek" />            
+                <RadioButton Content="Wpływ" />
+                
+            </StackPanel>
+            
+            <TextBox
+                Name="CostValue"
+                PlaceholderText="Wartość"
+                InputScope="CurrencyAmount"
+                Margin="0,20,0,0"
+                BorderThickness="0,0,0,1"
+                Background="Transparent" />
+            
+            <TextBox
+                Name="NameValue"
+                PlaceholderText="Nazwa"
+                Margin="0,20,0,10"
+                BorderThickness="0,0,0,1"
+                Background="Transparent" />
+            
+            <CalendarDatePicker
+                Name="DateValue"
+                PlaceholderText="Data"
+                Margin="0,10"
+                BorderThickness="0,0,0,1"
+                Background="Transparent"
+                HorizontalAlignment="Stretch" />
+            
+            <ComboBox
+                Name="CategoryValue"
+                PlaceholderText="Kategoria"
+                Margin="0,10"
+                BorderThickness="0,0,0,1"
+                Background="Transparent"
+                HorizontalAlignment="Stretch">
+                
+                <ComboBoxItem Content="Jedzenie" />
+                <ComboBoxItem Content="Transport" />
+                <ComboBoxItem Content="Inne" />
+                
+            </ComboBox>
+            
+            <ComboBox
+                PlaceholderText="Forma płatności"
+                Margin="0,10"
+                BorderThickness="0,0,0,1"
+                Background="Transparent"
+                HorizontalAlignment="Stretch">
+                
+                <ComboBoxItem Content="Gotówka" />
+                <ComboBoxItem Content="Karta Visa" />
+                
+            </ComboBox>
+
+            <TextBlock
+                Text="Zapisz jako szablon"
+                Margin="0,20,0,0" />
+            
+            <ToggleSwitch Margin="0,5,0,0">
+                
+                <ToggleSwitch.OffContent>
+                    <TextBlock Text="Nie" />
+                </ToggleSwitch.OffContent>
+                
+                <ToggleSwitch.OnContent>
+                    <TextBlock Text="Tak" />
+                </ToggleSwitch.OnContent>
+                
+            </ToggleSwitch>
+            
+        </StackPanel>
+        
+    </ScrollViewer>
+    
+</ContentDialog>

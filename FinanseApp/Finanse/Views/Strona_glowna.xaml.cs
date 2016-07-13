@@ -32,20 +32,23 @@ namespace Finanse.Views {
 
             Wydatki.Add(new Wydatek {
                 Title = "PKP Intercity",
-                Cost = 17.10F,
-                Category = "Transport"  
+                Cost = 17.10m,
+                Category = "Transport",
+                ExpenseOrIncome = "expense"
             });
 
             Wydatki.Add(new Wydatek {
                 Title = "Biedronka",
-                Cost = 23F,
-                Category = "Jedzenie"
+                Cost = 23m,
+                Category = "Jedzenie",
+                ExpenseOrIncome = "income"
             });
 
             Wydatki.Add(new Wydatek {
                 Title = "Drink Hala",
-                Cost = 7.99F,
-                Category = "Alkohol"
+                Cost = 7.99m,
+                Category = "Alkohol",
+                ExpenseOrIncome = "expense"
             });
 
             OperationCategories.Add(new OperationCategory {

@@ -69,28 +69,30 @@ namespace Finanse.Views {
         private void NowaOperacja_DodajClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
             if (Expense_RadioButton.IsChecked == true) {
+
                 Wydatki.Add(new Wydatek() {
 
                     Title = NameValue.Text,
-                    CostString = MixCostToString(CostLeftValue.Text, CostRightValue.Text),
-                    Cost = float.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
+                    //CostString = MixCostToString(CostLeftValue.Text, CostRightValue.Text),
+                    Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
                     Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
                     Date = DateValue.Date,
+                    ExpenseOrIncome = "expense"
                 });
             }
 
             
 
             else if (Income_RadioButton.IsChecked == true) {
-                /*
-                Incomes.Add(new Wplyw() {
+
+                Wydatki.Add(new Wydatek() {
 
                     Title = NameValue.Text,
-                    CostString = CostValue.Text,
+                    Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
                     Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
                     Date = DateValue.Date,
+                    ExpenseOrIncome = "income"
                 });
-                */
             }
         }
 

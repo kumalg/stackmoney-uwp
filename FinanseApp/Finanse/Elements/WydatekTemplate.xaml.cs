@@ -74,7 +74,14 @@ namespace Finanse.Elements {
             Ellipse_WydatekTemplate.Fill = new SolidColorBrush(GetSolidColorBrush(whichColor).Color);
             Icon_WydatekTemplate.Text = whichIcon;
 
-            Cost_WydatekTemplate.Text = "- " + Wydatek.Cost.ToString("0.00") + " zł";
+            if (Wydatek.ExpenseOrIncome == "expense") {
+                Cost_WydatekTemplate.Text = "- " + Wydatek.Cost.ToString("0.00") + " zł";
+                Cost_WydatekTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
+            }
+            else {
+                Cost_WydatekTemplate.Text = "+ " + Wydatek.Cost.ToString("0.00") + " zł";
+                Cost_WydatekTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"];
+            }
         }
     }
 }

@@ -1,1 +1,0 @@
-E:\Users\Kamil\Desktop\Programowanie Windows 10 Mobile\UWP\FinanseApp\Finanse\Finanse.csproj;x64

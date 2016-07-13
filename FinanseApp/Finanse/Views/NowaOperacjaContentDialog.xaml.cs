@@ -23,7 +23,7 @@ namespace Finanse.Views {
 
         public ObservableCollection<Wydatek> Wydatki;
 
-        public NowaOperacjaContentDialog(ObservableCollection<Wydatek> Wydatki) {
+        public NowaOperacjaContentDialog(ObservableCollection<Wydatek> Wydatki, List<OperationCategory> OperationCategories) {
 
             this.InitializeComponent();
             this.Wydatki = Wydatki;
@@ -39,8 +39,8 @@ namespace Finanse.Views {
             Wydatki.Add(new Wydatek {
 
                 Title = NameValue.Text,
-                Cost = CostValue.Text,
-                Type = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
+                CostString = CostValue.Text,
+                Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
                 Date = DateValue.Date,
             });
         }

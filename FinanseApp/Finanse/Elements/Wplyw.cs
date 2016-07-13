@@ -11,5 +11,6 @@ namespace Finanse.Elements {
         public string Title;
         public string Type;
         public string Cost;
+        public OperationCategory Category = new OperationCategory();
     }
 }

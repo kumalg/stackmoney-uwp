@@ -8,23 +8,31 @@
     mc:Ignorable="d"
     Height="70">
 
-    <Grid MaxWidth="600" Margin="10,0">
-        
+    <Grid
+        MaxWidth="600"
+        Margin="10,0">
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition
+                Width="Auto" />
+            <ColumnDefinition
+                Width="Auto" />
+            <ColumnDefinition
+                Width="*" />
+            <ColumnDefinition
+                Width="Auto" />
         </Grid.ColumnDefinitions>
-        
+
         <Grid
             Name="Ikona"
             Height="50"
             Width="50">
-            
-            <Ellipse Fill="#e64231"/>
-            
+
+            <Ellipse
+                Name="Ellipse" />
+
             <TextBlock
+                Name="Icon"
                 FontFamily="Segoe MDL2 Assets"
                 Text="&#xE14D;"
                 FontSize="24"
@@ -32,34 +40,36 @@
                 HorizontalAlignment="Center"
                 Foreground="White" />
         </Grid>
-        
+
         <StackPanel
             Grid.Column="1"
             VerticalAlignment="Center">
-            
+
             <TextBlock
-                Text="{x:Bind Wydatek.Title}"
+                Name="Titletitle"
                 Margin="20,0,0,0"
                 FontSize="16"
                 Foreground="White" />
-            
+
             <TextBlock
-                Text="{x:Bind Wydatek.Type}"
+                Name="Categoria"
+                Text="{x:Bind Wydatek.Category, Mode = TwoWay}"
                 Margin="20,0,0,0"
                 FontSize="12"
                 Foreground="White" />
-            
+
         </StackPanel>
-        
+
         <TextBlock
-            Name="Koszt"
             Grid.Column="3"
-            Text="{x:Bind Wydatek.Cost}"
             VerticalAlignment="Center"
-            HorizontalAlignment="Right"
             FontWeight="Bold"
-            Foreground="{StaticResource RedColorStyle}" />
-        
+            Foreground="{StaticResource RedColorStyle}">
+            
+            <Run Text="- " />
+            <Run Text="{x:Bind Wydatek.CostString}" />
+            <Run Text=" zł" />
+        </TextBlock>
     </Grid>
-    
+
 </UserControl>

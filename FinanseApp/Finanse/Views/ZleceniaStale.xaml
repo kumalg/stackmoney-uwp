@@ -35,38 +35,25 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Background="{StaticResource DarkBlueColorStyle}" MinHeight="48">
+        <Grid
+            Background="{StaticResource DarkBlueColorStyle}"
+            MinHeight="48">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="*" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Name="FakeHamburgerButton" Width="48"/>
+            <StackPanel
+                Name="FakeHamburgerButton"
+                Width="48" />
 
-            <TextBlock Text="Zlecenia stałe"
-                       Style="{StaticResource PageTitleStyle}"/>
+            <TextBlock
+                Text="Zlecenia stałe"
+                Style="{StaticResource PageTitleStyle}" />
         </Grid>
-
-        <Pivot Grid.Row="1">
-            <PivotItem>
-                <PivotItem.Header>
-                    <TextBlock Text="Ogólne" FontSize="15"/>
-                </PivotItem.Header>
-                <TextBlock>YOLOYOLOYOLO</TextBlock>
-            </PivotItem>
-            <PivotItem>
-                <PivotItem.Header>
-                    <TextBlock Text="Wygląd" FontSize="15"/>
-                </PivotItem.Header>
-                <TextBlock>YOLOYOLOYOLO</TextBlock>
-            </PivotItem>
-            <PivotItem>
-                <PivotItem.Header>
-                    <TextBlock Text="Synchronizacja" FontSize="15"/>
-                </PivotItem.Header>
-                <TextBlock>YOLOYOLOYOLO</TextBlock>
-            </PivotItem>
-        </Pivot>
     </Grid>
 </Page>

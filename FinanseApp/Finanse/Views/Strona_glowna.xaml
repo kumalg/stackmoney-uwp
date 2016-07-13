@@ -96,19 +96,7 @@
                     Label="Nowa operacja"
                     Foreground="White"
                     Click="NowaOperacja_Click" />
-
-                <AppBarButton
-                    Icon="Edit"
-                    Label="Edytuj"
-                    IsEnabled="False"
-                    Foreground="White" />
-
-                <AppBarButton
-                    Icon="Delete"
-                    Label="Usuń"
-                    IsEnabled="False"
-                    Foreground="White" />
-
+                
             </CommandBar>
 
         </Grid>
@@ -413,26 +401,7 @@
                             MaxWidth="650"
                             BorderBrush="#24ffffff"
                             BorderThickness="1"
-                            Margin="0,0,0,5"/>
-
-                        <ListBox
-                            SelectionMode="Single"
-                            MaxWidth="620"
-                            BorderThickness="0"
-                            Background="Transparent">
-                            <ListBox.ItemContainerStyle>
-                                <Style
-                                    TargetType="ListBoxItem">
-                                    <Setter
-                                        Property="HorizontalContentAlignment"
-                                        Value="Stretch" />
-                                    <Setter
-                                        Property="Padding"
-                                        Value="0" />
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                            <data:WplywTem />
-                        </ListBox>
+                            Margin="0,0,0,5" />
 
                         <ListBox
                             Name="OperacjeListView"
@@ -455,11 +424,31 @@
                             </ListBox.ItemContainerStyle>
 
                             <ListBox.ItemTemplate>
-                                <DataTemplate x:DataType="data:Wydatek">
-                                    <data:WydatekTemplate />
+                                <DataTemplate
+                                    x:DataType="data:Wydatek">
+                                    <Grid
+                                        Background="Transparent"
+                                        RightTapped="Grid_RightTapped"
+                                        DragStarting="Grid_DragStarting">
+
+                                        <FlyoutBase.AttachedFlyout>
+                                            <MenuFlyout>
+                                                <MenuFlyoutItem
+                                                    x:Name="EditButton"
+                                                    Text="Edit"
+                                                    Click="EditButton_Click" />
+                                                <MenuFlyoutItem
+                                                    x:Name="DeleteButton"
+                                                    Text="Delete"
+                                                    Click="DeleteButton_Click" />
+                                            </MenuFlyout>
+                                        </FlyoutBase.AttachedFlyout>
+
+                                        <data:WydatekTemplate />
+
+                                    </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
-
                         </ListBox>
 
                     </StackPanel>
@@ -513,23 +502,6 @@
                 Foreground="White"
                 Click="NowaOperacja_Click">
             </AppBarButton>
-
-            <AppBarSeparator
-                Foreground="#7FFFFFFF" />
-
-            <AppBarButton
-                Name="LowerCommandBarEditButton"
-                IsEnabled="False"
-                Icon="Edit"
-                Label="Edytuj"
-                Foreground="White" />
-
-            <AppBarButton
-                Name="LowerCommandBarDeleteButton"
-                IsEnabled="False"
-                Icon="Delete"
-                Label="Usuń"
-                Foreground="White" />
 
         </CommandBar>
 

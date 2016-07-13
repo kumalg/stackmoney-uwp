@@ -50,11 +50,10 @@
 
         <SplitView 
             Name="MySplitView"
-            Grid.Row="0"
             DisplayMode="Overlay"
             OpenPaneLength="250"
             CompactPaneLength="48"
-            HorizontalAlignment="Left"
+            HorizontalAlignment="Stretch"
             PaneBackground="Transparent"
             Canvas.ZIndex="2">
             
@@ -183,7 +182,8 @@
             </SplitView.Pane>
             
             <SplitView.Content>
-                <Frame Name="AktualnaStrona_Frame"/>
+                <Frame
+                    Name="AktualnaStrona_Frame" />
             </SplitView.Content>
             
         </SplitView>

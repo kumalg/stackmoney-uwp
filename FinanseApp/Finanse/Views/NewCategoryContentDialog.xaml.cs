@@ -13,25 +13,23 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
+// The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Finanse.Views {
 
-    public sealed partial class Kategorie : Page {
+    public sealed partial class NewCategoryContentDialog : ContentDialog {
 
-        public Kategorie() {
+        public NewCategoryContentDialog() {
 
             this.InitializeComponent();
         }
 
-        private void AppBarButton_Click(object sender, RoutedEventArgs e) {
+        private void NewCategory_CancelButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
         }
 
-        private async void NewCategory_Click(object sender, RoutedEventArgs e) {
-            var ContentDialogItem = new NewCategoryContentDialog();
+        private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
-            var result = await ContentDialogItem.ShowAsync();
         }
     }
 }

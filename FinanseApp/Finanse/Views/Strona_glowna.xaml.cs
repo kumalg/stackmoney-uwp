@@ -21,13 +21,37 @@ namespace Finanse.Views {
 
     public sealed partial class Strona_glowna : Page {
 
-        public ObservableCollection<Wydatek> Wydatki;
+        public ObservableCollection<Wydatek> Wydatki = new ObservableCollection<Wydatek>();
+
+        public static List<OperationCategory> OperationCategories = new List<OperationCategory>();
 
         public Strona_glowna() {
 
             this.InitializeComponent();
 
-            Wydatki = new ObservableCollection<Wydatek>();
+            Wydatki.Add(new Wydatek {
+                Title = "PKP Intercity",
+                CostString = "17,10",
+                Category = "Transport"  
+            });
+
+            Wydatki.Add(new Wydatek {
+                Title = "Biedronka",
+                CostString = "23,59",
+                Category = "Jedzenie"
+            });
+
+            Wydatki.Add(new Wydatek {
+                Title = "Drink Hala",
+                CostString = "7,99",
+                Category = "Alkohol"
+            });
+
+            OperationCategories.Add(new OperationCategory {
+                Name = "Transport",
+                Color = "Red",
+                Icon = "&#xE700;",
+            });
         }
 
         private void Wplyw_Tapped(object sender, TappedRoutedEventArgs e) {
@@ -40,9 +64,33 @@ namespace Finanse.Views {
 
         private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
 
-            var ContentDialogItem = new NowaOperacjaContentDialog(Wydatki);
+            var ContentDialogItem = new NowaOperacjaContentDialog(Wydatki, OperationCategories);
 
             var result = await ContentDialogItem.ShowAsync();
+        }
+
+        private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
+             FrameworkElement senderElement = sender as FrameworkElement;
+             FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+             flyoutBase.ShowAt(senderElement);
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e) {
+            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+
+            //this datacontext is probably some object of some type T
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e) {
+            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+
+            //this datacontext is probably some object of some type T
+        }
+
+        private void Grid_DragStarting(UIElement sender, DragStartingEventArgs args) {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
         }
     }
 }

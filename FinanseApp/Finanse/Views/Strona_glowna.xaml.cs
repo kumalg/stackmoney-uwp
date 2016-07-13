@@ -32,19 +32,19 @@ namespace Finanse.Views {
 
             Wydatki.Add(new Wydatek {
                 Title = "PKP Intercity",
-                CostString = "17,10",
+                Cost = 17.10F,
                 Category = "Transport"  
             });
 
             Wydatki.Add(new Wydatek {
                 Title = "Biedronka",
-                CostString = "23,59",
+                Cost = 23F,
                 Category = "Jedzenie"
             });
 
             Wydatki.Add(new Wydatek {
                 Title = "Drink Hala",
-                CostString = "7,99",
+                Cost = 7.99F,
                 Category = "Alkohol"
             });
 

@@ -27,22 +27,88 @@
                 Margin="0,20,0,10" />
             
             <StackPanel Orientation="Horizontal">
-                
-                <RadioButton Content="Wydatek" />            
-                <RadioButton Content="Wpływ" />
-                
+
+                <RadioButton
+                    Name="Expense_RadioButton"
+                    Content="Wydatek"
+                    GroupName="OperationType_RadioButtons"
+                    Checked="RadioButton_Checked" />
+                <RadioButton
+                    Name="Income_RadioButton"
+                    Content="Wpływ"
+                    GroupName="OperationType_RadioButtons"
+                    Checked="RadioButton_Checked"/>
+
             </StackPanel>
-            
-            <TextBox
-                Name="CostValue"
-                PlaceholderText="Wartość"
-                InputScope="CurrencyAmount"
-                Margin="0,20,0,0"
-                BorderThickness="0,0,0,1"
-                Background="Transparent" />
-            
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="auto" />
+                    <ColumnDefinition
+                        Width="auto" />
+                    <ColumnDefinition
+                        Width="auto" />
+                </Grid.ColumnDefinitions>
+                
+                <TextBox
+                    Name="CostValue"
+                    TextChanged="TextChanged"
+                    PlaceholderText="Wartość"
+                    InputScope="CurrencyAmount"
+                    Margin="0,20,0,0"
+                    BorderThickness="0,0,0,1"
+                    Background="Transparent"
+                    GotFocus="CostValue_GotFocus"/>
+                <TextBox
+                    Name="CostLeftValue"
+                    TextChanged="SetCost"
+                    Visibility="Collapsed"
+                    TextAlignment="Right"
+                    InputScope="CurrencyAmount"
+                    Margin="0,20,0,0"
+                    BorderThickness="0,0,0,1"
+                    Background="Transparent"
+                    KeyDown="CostValue_KeyDown"
+                    GotFocus="CostLeftValue_GotFocus"
+                    LostFocus="Amount_LostFocus" />
+                <TextBlock
+                    Name="DotValue"
+                    Visibility="Collapsed"
+                    Text="," 
+                    Grid.Column="1"
+                    VerticalAlignment="Bottom"
+                    Margin="5,20,5,0" />
+                <TextBox
+                    Visibility="Collapsed"
+                    TextChanged="SetCost"
+                    Width="30"
+                    PlaceholderText="00"
+                    MaxLength="2"
+                    Name="CostRightValue"
+                    Grid.Column="2"
+                    InputScope="CurrencyAmount"
+                    Margin="0,20,0,0"
+                    BorderThickness="0,0,0,1"
+                    Background="Transparent"
+                    KeyDown="CostValue_KeyDown"
+                    GotFocus="CostRightValue_GotFocus"
+                    LostFocus="Amount_LostFocus" />
+                <TextBlock
+                    Name="CurrencyValue"
+                    Visibility="Collapsed"
+                    Text="zł"
+                    Grid.Column="3"
+                    VerticalAlignment="Bottom"
+                    Margin="10,20,0,0" />
+
+            </Grid>
+
             <TextBox
                 Name="NameValue"
+                TextChanged="TextChanged"
                 PlaceholderText="Nazwa"
                 Margin="0,20,0,10"
                 BorderThickness="0,0,0,1"
@@ -50,6 +116,7 @@
             
             <CalendarDatePicker
                 Name="DateValue"
+                DateChanged="DateValue_DateChanged"
                 PlaceholderText="Data"
                 Margin="0,10"
                 BorderThickness="0,0,0,1"
@@ -58,6 +125,7 @@
 
             <ComboBox
                 Name="CategoryValue"
+                SelectionChanged="ComboBox_SelectionChanged"
                 PlaceholderText="Kategoria"
                 Margin="0,10"
                 BorderThickness="0,0,0,1"
@@ -66,6 +134,8 @@
             </ComboBox>
             
             <ComboBox
+                Name="PayFormValue"
+                SelectionChanged="ComboBox_SelectionChanged"
                 PlaceholderText="Forma płatności"
                 Margin="0,10"
                 BorderThickness="0,0,0,1"

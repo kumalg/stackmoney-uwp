@@ -38,7 +38,7 @@ namespace Finanse.Elements {
             OperationCategories.Add(new OperationCategory {
                 Name = "Transport",
                 Color = "#FF0b63c7",
-                Icon = "",
+                Icon = "\uE806",
             });
 
             OperationCategories.Add(new OperationCategory {
@@ -50,7 +50,7 @@ namespace Finanse.Elements {
             OperationCategories.Add(new OperationCategory {
                 Name = "Alkohol",
                 Color = "#FF138b99",
-                Icon = "",
+                Icon = "\uE94C",
             });
 
             this.DataContextChanged += (s, e) => Bindings.Update();            
@@ -73,6 +73,8 @@ namespace Finanse.Elements {
 
             Ellipse_WydatekTemplate.Fill = new SolidColorBrush(GetSolidColorBrush(whichColor).Color);
             Icon_WydatekTemplate.Text = whichIcon;
+
+            Cost_WydatekTemplate.Text = "- " + Wydatek.Cost.ToString("0.00") + " zł";
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Finanse.Elements {
         public string Title;
         public string Category;
         public string CostString;
+        public float Cost;
         public DateTimeOffset? Date;
     }
 }

@@ -23,11 +23,25 @@ namespace Finanse.Views {
 
         public ObservableCollection<Wydatek> Wydatki;
 
+        public List<OperationCategory> OperationCategories;
+
         public NowaOperacjaContentDialog(ObservableCollection<Wydatek> Wydatki, List<OperationCategory> OperationCategories) {
 
             this.InitializeComponent();
             this.Wydatki = Wydatki;
+            this.OperationCategories = OperationCategories;
             DateValue.MaxDate = DateTime.Today;
+
+            CategoryValue.Items.Add(new ComboBoxItem {
+                Content = OperationCategories[0].Name,
+            });
+            CategoryValue.Items.Add(new ComboBoxItem {
+                Content = OperationCategories[1].Name,
+            });
+            CategoryValue.Items.Add(new ComboBoxItem {
+                Content = OperationCategories[2].Name,
+            });
+
         }
 
         private void NowaOperacja_AnulujClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
@@ -36,7 +50,7 @@ namespace Finanse.Views {
 
         private void NowaOperacja_DodajClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
-            Wydatki.Add(new Wydatek {
+            Wydatki.Add(new Wydatek() {
 
                 Title = NameValue.Text,
                 CostString = CostValue.Text,

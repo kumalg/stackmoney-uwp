@@ -30,44 +30,32 @@ namespace Finanse.Elements {
                 return this.DataContext as Elements.Wydatek;
             }
         }
-        
+
         public WydatekTemplate() {
 
             this.InitializeComponent();
-
+            
             OperationCategories.Add(new OperationCategory {
                 Name = "Transport",
-                Color = "#FF7F00FF",
-                Icon = "&#xE700;",
+                Color = "#FF0b63c7",
+                Icon = "",
             });
 
             OperationCategories.Add(new OperationCategory {
                 Name = "Jedzenie",
-                Color = "#FF7F22FF",
-                Icon = "&#xE700;",
+                Color = "#FF5bc70b",
+                Icon = "",
             });
 
             OperationCategories.Add(new OperationCategory {
                 Name = "Alkohol",
-                Color = "#FF7F2222",
-                Icon = "&#xE700;",
+                Color = "#FF138b99",
+                Icon = "",
             });
-            
-            this.DataContextChanged += (s, e) => Bindings.Update();
-            
-            Titletitle.Text = Categoria.Text + " yyy coo";
-            /*
-            string yolox;
-            if (yoloff == null || yoloff == "") {
-                yolox = "Red";
-            }
-            else
-                yolox = "Green";
 
-            var whichColor = OperationCategories.Find(item => item.Name == yolox).Color;
-
-            Ellipse.Fill = new SolidColorBrush(GetSolidColorBrush(whichColor).Color);*/
+            this.DataContextChanged += (s, e) => Bindings.Update();            
         }
+        
 
         public SolidColorBrush GetSolidColorBrush(string hex) {
             hex = hex.Replace("#", string.Empty);
@@ -77,6 +65,14 @@ namespace Finanse.Elements {
             byte b = (byte)(Convert.ToUInt32(hex.Substring(6, 2), 16));
             SolidColorBrush myBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(a, r, g, b));
             return myBrush;
+        }
+
+        public void Category_WydatekTemplate_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
+            var whichColor = OperationCategories.Find(item => item.Name == Category_WydatekTemplate.Text).Color;
+            var whichIcon = OperationCategories.Find(item => item.Name == Category_WydatekTemplate.Text).Icon;
+
+            Ellipse_WydatekTemplate.Fill = new SolidColorBrush(GetSolidColorBrush(whichColor).Color);
+            Icon_WydatekTemplate.Text = whichIcon;
         }
     }
 }

@@ -12,9 +12,11 @@
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
-                <VisualState x:Name="HamburgerTight">
+                <VisualState
+                    x:Name="HamburgerTight">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
+                        <AdaptiveTrigger
+                            MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter
@@ -28,9 +30,11 @@
                             Value="48" />
                     </VisualState.Setters>
                 </VisualState>
-                <VisualState x:Name="HamburgerWide">
+                <VisualState
+                    x:Name="HamburgerWide">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="640" />
+                        <AdaptiveTrigger
+                            MinWindowWidth="640" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter
@@ -413,7 +417,8 @@
                             Background="Transparent">
 
                             <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
+                                <Style
+                                    TargetType="ListBoxItem">
                                     <Setter
                                         Property="HorizontalContentAlignment"
                                         Value="Stretch" />

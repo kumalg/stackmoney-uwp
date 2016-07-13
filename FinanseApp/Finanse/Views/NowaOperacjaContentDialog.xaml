@@ -55,7 +55,7 @@
                 BorderThickness="0,0,0,1"
                 Background="Transparent"
                 HorizontalAlignment="Stretch" />
-            
+
             <ComboBox
                 Name="CategoryValue"
                 PlaceholderText="Kategoria"
@@ -63,11 +63,6 @@
                 BorderThickness="0,0,0,1"
                 Background="Transparent"
                 HorizontalAlignment="Stretch">
-                
-                <ComboBoxItem Content="Jedzenie" />
-                <ComboBoxItem Content="Transport" />
-                <ComboBoxItem Content="Inne" />
-                
             </ComboBox>
             
             <ComboBox

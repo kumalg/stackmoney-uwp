@@ -24,17 +24,15 @@
         </Grid.ColumnDefinitions>
 
         <Grid
-            Name="Ikona"
             Height="50"
             Width="50">
 
             <Ellipse
-                Name="Ellipse" />
+                Name="Ellipse_WydatekTemplate" />
 
             <TextBlock
-                Name="Icon"
+                Name="Icon_WydatekTemplate"
                 FontFamily="Segoe MDL2 Assets"
-                Text="&#xE14D;"
                 FontSize="24"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
@@ -46,14 +44,15 @@
             VerticalAlignment="Center">
 
             <TextBlock
-                Name="Titletitle"
+                Text="{x:Bind Wydatek.Title}"
                 Margin="20,0,0,0"
                 FontSize="16"
                 Foreground="White" />
 
             <TextBlock
-                Name="Categoria"
-                Text="{x:Bind Wydatek.Category, Mode = TwoWay}"
+                Name="Category_WydatekTemplate"
+                Text="{x:Bind Wydatek.Category}"
+                DataContextChanged="Category_WydatekTemplate_DataContextChanged"
                 Margin="20,0,0,0"
                 FontSize="12"
                 Foreground="White" />

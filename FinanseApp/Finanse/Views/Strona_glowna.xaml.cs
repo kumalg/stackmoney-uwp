@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -49,8 +50,20 @@ namespace Finanse.Views {
 
             OperationCategories.Add(new OperationCategory {
                 Name = "Transport",
-                Color = "Red",
-                Icon = "&#xE700;",
+                Color = "#FF0b63c7",
+                Icon = "",
+            });
+
+            OperationCategories.Add(new OperationCategory {
+                Name = "Jedzenie",
+                Color = "#FF5bc70b",
+                Icon = "",
+            });
+
+            OperationCategories.Add(new OperationCategory {
+                Name = "Alkohol",
+                Color = "#FF138b99",
+                Icon = "",
             });
         }
 

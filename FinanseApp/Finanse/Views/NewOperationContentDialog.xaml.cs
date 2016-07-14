@@ -19,16 +19,16 @@ using System.Collections.ObjectModel;
 
 namespace Finanse.Views {
 
-    public sealed partial class NowaOperacjaContentDialog : ContentDialog {
+    public sealed partial class NewOperationContentDialog : ContentDialog {
 
-        public ObservableCollection<Wydatek> Wydatki;
+        public ObservableCollection<Operation> Wydatki;
 
         public List<OperationCategory> OperationCategories;
 
-        private TextBox focusedControlRight;
-        private TextBox focusedControlLeft;
+        private bool focusedCostLeftValue = true;
+        private bool focusedCostRightValue = true;
 
-        public NowaOperacjaContentDialog(ObservableCollection<Wydatek> Wydatki, List<OperationCategory> OperationCategories) {
+        public NewOperationContentDialog(ObservableCollection<Operation> Wydatki, List<OperationCategory> OperationCategories) {
 
             this.InitializeComponent();
 
@@ -64,16 +64,17 @@ namespace Finanse.Views {
 
                 IsPrimaryButtonEnabled = true;
             }
+            else
+                IsPrimaryButtonEnabled = false;
         }
 
         private void NowaOperacja_DodajClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
             if (Expense_RadioButton.IsChecked == true) {
 
-                Wydatki.Add(new Wydatek() {
+                Wydatki.Add(new Operation() {
 
                     Title = NameValue.Text,
-                    //CostString = MixCostToString(CostLeftValue.Text, CostRightValue.Text),
                     Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
                     Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
                     Date = DateValue.Date,
@@ -81,11 +82,9 @@ namespace Finanse.Views {
                 });
             }
 
-            
-
             else if (Income_RadioButton.IsChecked == true) {
 
-                Wydatki.Add(new Wydatek() {
+                Wydatki.Add(new Operation() {
 
                     Title = NameValue.Text,
                     Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
@@ -124,45 +123,19 @@ namespace Finanse.Views {
                     return;
                 }
             }
-            sender = "yy";
             e.Handled = true;
         }
 
-        private void CostValue_GotFocus(object sender, RoutedEventArgs e) {
-            CostValue.Visibility = Visibility.Collapsed;
-
-            CostLeftValue.Visibility = Visibility.Visible;
-            DotValue.Visibility = Visibility.Visible;
-            CostRightValue.Visibility = Visibility.Visible;
-            CurrencyValue.Visibility = Visibility.Visible;
-        }
-
-        private void CostRightValue_LostFocus(object sender, RoutedEventArgs e) {
-
-        }
-
-        private void Amount_LostFocus(object sender, RoutedEventArgs e) {
-            if (focusedControlRight != null && focusedControlLeft != null) {
-                CostValue.Visibility = Visibility.Visible;
-
-                CostLeftValue.Visibility = Visibility.Collapsed;
-                DotValue.Visibility = Visibility.Collapsed;
-                CostRightValue.Visibility = Visibility.Collapsed;
-                CurrencyValue.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void CostRightValue_GotFocus(object sender, RoutedEventArgs e) {
-            focusedControlRight = (TextBox)sender;
-        }
-
-        private void CostLeftValue_GotFocus(object sender, RoutedEventArgs e) {
-            focusedControlLeft = (TextBox)sender;
-        }
-
         private void SetCost(object sender, TextChangedEventArgs e) {
-
-            CostValue.Text = MixCostToString(CostLeftValue.Text, CostRightValue.Text) + " zł";
+            /*
+            if (!((CostLeftValue.Text == "0" || CostLeftValue.Text == "") && (CostRightValue.Text == "" || CostRightValue.Text == "0" || CostRightValue.Text == "00")))
+                CostValue.Text = MixCostToString(CostLeftValue.Text, CostRightValue.Text) + " zł";
+            else {
+                CostValue.Text = "";
+                CostLeftValue.Text = "";
+                CostRightValue.Text = "";
+            }
+                */
 
             SetNowaOperacjaButton();
         }
@@ -173,12 +146,106 @@ namespace Finanse.Views {
             outputCost = FirstCost;
             if (SecondCost.Length == 0)
                 outputCost += ",00";
-            else if (SecondCost.Length == 1)
+            else if (SecondCost.Length == 1) {
                 outputCost += "," + SecondCost + "0";
+            }
+                
             else
                 outputCost += "," + SecondCost;
 
             return outputCost;
+        }
+
+
+        private void CostValue_GotFocus(object sender, RoutedEventArgs e) {
+            CostValue.Visibility = Visibility.Collapsed;
+
+            CostLeftValue.Visibility = Visibility.Visible;
+            DotValue.Visibility = Visibility.Visible;
+            CostRightValue.Visibility = Visibility.Visible;
+            CurrencyValue.Visibility = Visibility.Visible;
+
+            CostLeftValue.Focus(FocusState.Programmatic);
+        }
+
+
+        private void CostLeftValue_GotFocus(object sender, RoutedEventArgs e) {
+            focusedCostLeftValue = true;
+        }
+
+        private void CostRightValue_GotFocus(object sender, RoutedEventArgs e) {
+            focusedCostRightValue = true;
+        }
+
+
+        private void CostLeftValue_LostFocus(object sender, RoutedEventArgs e) {
+            focusedCostLeftValue = false;
+
+            if (!((CostLeftValue.Text == "0" || CostLeftValue.Text == "") && (CostRightValue.Text == "" || CostRightValue.Text == "0" || CostRightValue.Text == "00")))
+                CostValue.Text = MixCostToString(CostLeftValue.Text, CostRightValue.Text) + " zł";
+            else {
+                CostValue.Text = "";
+                CostLeftValue.Text = "";
+                CostRightValue.Text = "";
+            }
+        }
+
+        private void CostRightValue_LostFocus(object sender, RoutedEventArgs e) {
+            focusedCostRightValue = false;
+
+            if (!(
+                (CostLeftValue.Text == "0" 
+                || CostLeftValue.Text == "") 
+                && 
+                (CostRightValue.Text == "" 
+                || CostRightValue.Text == "0" 
+                || CostRightValue.Text == "00"))
+                ) {
+
+                CostValue.Text = MixCostToString(CostLeftValue.Text, CostRightValue.Text) + " zł";
+                if (CostRightValue.Text.Length == 1)
+                    CostRightValue.Text += "0";
+                }
+                
+            else {
+                CostValue.Text = "";
+                CostLeftValue.Text = "";
+                CostRightValue.Text = "";
+            }
+        }
+
+
+        private void Expense_RadioButton_GotFocus(object sender, RoutedEventArgs e) {
+            if (focusedCostLeftValue == false || focusedCostRightValue == false) {
+                CostValue.Visibility = Visibility.Visible;
+
+                CostLeftValue.Visibility = Visibility.Collapsed;
+                DotValue.Visibility = Visibility.Collapsed;
+                CostRightValue.Visibility = Visibility.Collapsed;
+                CurrencyValue.Visibility = Visibility.Collapsed;
+
+                focusedCostLeftValue = true;
+                focusedCostRightValue = true;
+            }
+        }
+
+        private void DateValue_Opened(object sender, object e) {
+
+            if (focusedCostLeftValue == false || focusedCostRightValue == false) {
+                CostValue.Visibility = Visibility.Visible;
+
+                CostLeftValue.Visibility = Visibility.Collapsed;
+                DotValue.Visibility = Visibility.Collapsed;
+                CostRightValue.Visibility = Visibility.Collapsed;
+                CurrencyValue.Visibility = Visibility.Collapsed;
+
+                focusedCostLeftValue = true;
+                focusedCostRightValue = true;
+            }
+        }
+
+        private void DateValue_Closed(object sender, object e) {
+            DateValue.Focus(FocusState.Programmatic);
         }
     }
 }

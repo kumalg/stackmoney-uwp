@@ -392,6 +392,7 @@
                                 Margin="10,0,0,5" />
 
                             <TextBlock
+                                Name="SumText"
                                 Text="+ 231,99 zł"
                                 Grid.Column="2"
                                 Foreground="{StaticResource GreenColorStyle}"
@@ -409,7 +410,7 @@
 
                         <ListBox
                             Name="OperacjeListView"
-                            ItemsSource="{x:Bind Wydatki}"
+                            ItemsSource="{x:Bind Operations}"
                             SelectionMode="Single"
                             SelectionChanged="IconsListBox_SelectionChanged"
                             MaxWidth="620"
@@ -430,7 +431,7 @@
 
                             <ListBox.ItemTemplate>
                                 <DataTemplate
-                                    x:DataType="data:Wydatek">
+                                    x:DataType="data:Operation">
                                     <Grid
                                         Background="Transparent"
                                         RightTapped="Grid_RightTapped"
@@ -449,7 +450,7 @@
                                             </MenuFlyout>
                                         </FlyoutBase.AttachedFlyout>
 
-                                        <data:WydatekTemplate />
+                                        <data:OperationTemplate />
 
                                     </Grid>
                                 </DataTemplate>

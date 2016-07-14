@@ -1,0 +1,185 @@
+﻿<ContentDialog
+    x:Class="Finanse.Views.NewOperationContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Finanse"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:Finanse.Elements"
+    mc:Ignorable="d"
+    Title="Nowa operacja"
+    PrimaryButtonText="Dodaj"
+    SecondaryButtonText="Anuluj"
+    PrimaryButtonClick="NowaOperacja_DodajClick"
+    SecondaryButtonClick="NowaOperacja_AnulujClick"
+    RequestedTheme="Dark">
+
+    <ScrollViewer
+        VerticalScrollBarVisibility="Auto"
+        HorizontalScrollBarVisibility="Disabled"
+        IsTabStop="False">
+
+        <StackPanel>
+
+            <TextBlock
+                Text="Typ operacji"
+                Margin="0,20,0,10" />
+
+            <StackPanel
+                Orientation="Horizontal">
+
+                <RadioButton
+                    Name="Expense_RadioButton"
+                    Content="Wydatek"
+                    GroupName="OperationType_RadioButtons"
+                    Checked="RadioButton_Checked"
+                    GotFocus="Expense_RadioButton_GotFocus" />
+                <RadioButton
+                    Name="Income_RadioButton"
+                    Content="Wpływ"
+                    GroupName="OperationType_RadioButtons"
+                    Checked="RadioButton_Checked"
+                    GotFocus="Expense_RadioButton_GotFocus" />
+
+            </StackPanel>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="auto" />
+                    <ColumnDefinition
+                        Width="auto" />
+                    <ColumnDefinition
+                        Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBox
+                    Name="CostValue"
+                    TextChanged="TextChanged"
+                    PlaceholderText="Wartość"
+                    InputScope="CurrencyAmount"
+                    Margin="0,20,0,0"
+                    BorderThickness="0,0,0,1"
+                    Background="Transparent"
+                    GotFocus="CostValue_GotFocus" />
+                <TextBox
+                    Name="CostLeftValue"
+                    TextChanged="SetCost"
+                    Visibility="Collapsed"
+                    TextAlignment="Right"
+                    InputScope="CurrencyAmount"
+                    Margin="0,20,0,0"
+                    BorderThickness="0,0,0,1"
+                    Background="Transparent"
+                    KeyDown="CostValue_KeyDown"
+                    GotFocus="CostLeftValue_GotFocus"
+                    LostFocus="CostLeftValue_LostFocus"
+                    AcceptsReturn="True"
+                    AllowDrop="True" />
+                <TextBlock
+                    Name="DotValue"
+                    Visibility="Collapsed"
+                    Text=","
+                    Grid.Column="1"
+                    VerticalAlignment="Bottom"
+                    Margin="5,20,5,0" />
+                <TextBox
+                    Visibility="Collapsed"
+                    TextChanged="SetCost"
+                    Width="30"
+                    PlaceholderText="00"
+                    MaxLength="2"
+                    Name="CostRightValue"
+                    Grid.Column="2"
+                    InputScope="CurrencyAmount"
+                    Margin="0,20,0,0"
+                    BorderThickness="0,0,0,1"
+                    Background="Transparent"
+                    KeyDown="CostValue_KeyDown"
+                    GotFocus="CostRightValue_GotFocus"
+                    LostFocus="CostRightValue_LostFocus" />
+                <TextBlock
+                    Name="CurrencyValue"
+                    Visibility="Collapsed"
+                    Text="zł"
+                    Grid.Column="3"
+                    VerticalAlignment="Bottom"
+                    Margin="10,20,0,0" />
+
+            </Grid>
+
+            <TextBox
+                Name="NameValue"
+                TextChanged="TextChanged"
+                PlaceholderText="Nazwa"
+                Margin="0,20,0,10"
+                BorderThickness="0,0,0,1"
+                Background="Transparent"
+                GotFocus="Expense_RadioButton_GotFocus" />
+
+            <CalendarDatePicker
+                Name="DateValue"
+                DateChanged="DateValue_DateChanged"
+                PlaceholderText="Data"
+                Margin="0,10"
+                BorderThickness="0,0,0,1"
+                Background="Transparent"
+                HorizontalAlignment="Stretch"
+                GotFocus="Expense_RadioButton_GotFocus"
+                Opened="DateValue_Opened"
+                Closed="DateValue_Closed" />
+
+            <ComboBox
+                Name="CategoryValue"
+                SelectionChanged="ComboBox_SelectionChanged"
+                PlaceholderText="Kategoria"
+                Margin="0,10"
+                BorderThickness="0,0,0,1"
+                Background="Transparent"
+                HorizontalAlignment="Stretch"
+                GotFocus="Expense_RadioButton_GotFocus">
+            </ComboBox>
+
+            <ComboBox
+                Name="PayFormValue"
+                SelectionChanged="ComboBox_SelectionChanged"
+                PlaceholderText="Forma płatności"
+                Margin="0,10"
+                BorderThickness="0,0,0,1"
+                Background="Transparent"
+                HorizontalAlignment="Stretch">
+
+                <ComboBoxItem
+                    Content="Gotówka" />
+                <ComboBoxItem
+                    Content="Karta Visa" />
+
+            </ComboBox>
+
+            <TextBlock
+                Text="Zapisz jako szablon"
+                Margin="0,20,0,0"
+                GotFocus="Expense_RadioButton_GotFocus" />
+
+            <ToggleSwitch
+                Margin="0,5,0,0">
+
+                <ToggleSwitch.OffContent>
+                    <TextBlock
+                        Text="Nie" />
+                </ToggleSwitch.OffContent>
+
+                <ToggleSwitch.OnContent>
+                    <TextBlock
+                        Text="Tak" />
+                </ToggleSwitch.OnContent>
+
+            </ToggleSwitch>
+
+        </StackPanel>
+
+    </ScrollViewer>
+
+</ContentDialog>

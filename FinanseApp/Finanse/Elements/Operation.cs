@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Finanse.Elements {
 
-    public class Wydatek {
+    public class Operation {
 
         public string Title;
         public string Category;
-        public string CostString;
         public decimal Cost;
         public DateTimeOffset? Date;
         public string ExpenseOrIncome;

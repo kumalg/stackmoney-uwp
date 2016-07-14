@@ -99,8 +99,10 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Elements\OperationCategory.cs" />
-    <Compile Include="Elements\Wplyw.cs" />
-    <Compile Include="Elements\Wydatek.cs" />
+    <Compile Include="Elements\Operation.cs" />
+    <Compile Include="Elements\WplywTem.xaml.cs">
+      <DependentUpon>WplywTem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Kategorie.xaml.cs">
       <DependentUpon>Kategorie.xaml</DependentUpon>
     </Compile>
@@ -110,8 +112,8 @@
     <Compile Include="Views\NewCategoryContentDialog.xaml.cs">
       <DependentUpon>NewCategoryContentDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NowaOperacjaContentDialog.xaml.cs">
-      <DependentUpon>NowaOperacjaContentDialog.xaml</DependentUpon>
+    <Compile Include="Views\NewOperationContentDialog.xaml.cs">
+      <DependentUpon>NewOperationContentDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PlanowaneWydatki.xaml.cs">
       <DependentUpon>PlanowaneWydatki.xaml</DependentUpon>
@@ -129,14 +131,8 @@
     <Compile Include="Views\Ustawienia.xaml.cs">
       <DependentUpon>Ustawienia.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Elements\WplywTem.xaml.cs">
-      <DependentUpon>WplywTem.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Elements\WplywTemplate.xaml.cs">
-      <DependentUpon>WplywTemplate.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Elements\WydatekTemplate.xaml.cs">
-      <DependentUpon>WydatekTemplate.xaml</DependentUpon>
+    <Compile Include="Elements\OperationTemplate.xaml.cs">
+      <DependentUpon>OperationTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ZleceniaStale.xaml.cs">
       <DependentUpon>ZleceniaStale.xaml</DependentUpon>
@@ -163,6 +159,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Elements\WplywTem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Kategorie.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -175,7 +175,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\NowaOperacjaContentDialog.xaml">
+    <Page Include="Views\NewOperationContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -204,15 +204,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Elements\WplywTem.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Elements\WplywTemplate.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Elements\WydatekTemplate.xaml">
+    <Page Include="Elements\OperationTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

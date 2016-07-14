@@ -21,7 +21,7 @@ namespace Finanse {
 
     sealed partial class App : Application {
 
-        public ObservableCollection<Wydatek> Wydatki = new ObservableCollection<Wydatek>();
+       // public ObservableCollection<Operation> Wydatki = new ObservableCollection<Operation>();
 
         public App() {
             Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(

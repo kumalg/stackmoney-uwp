@@ -20,21 +20,27 @@ using System.Reflection;
 
 namespace Finanse.Elements {
 
-    public sealed partial class WydatekTemplate : UserControl {
+    public sealed partial class OperationTemplate : UserControl {
 
-        public static List<OperationCategory> OperationCategories = new List<OperationCategory>();
+        private List<OperationCategory> OperationCategories = new List<OperationCategory>();
         
-        public Elements.Wydatek Wydatek {
+        private Elements.Operation Operation {
 
             get {
-                return this.DataContext as Elements.Wydatek;
+                return this.DataContext as Elements.Operation;
             }
         }
 
-        public WydatekTemplate() {
+        public OperationTemplate() {
 
             this.InitializeComponent();
             
+            /*
+             
+            Jedzenie / Rozrywka / Samochód / Dom / Odzież / Elektronika / Zdrowie i uroda / Alkohol / Transport
+
+             */
+                      
             OperationCategories.Add(new OperationCategory {
                 Name = "Transport",
                 Color = "#FF0b63c7",
@@ -67,20 +73,20 @@ namespace Finanse.Elements {
             return myBrush;
         }
 
-        public void Category_WydatekTemplate_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
-            var whichColor = OperationCategories.Find(item => item.Name == Category_WydatekTemplate.Text).Color;
-            var whichIcon = OperationCategories.Find(item => item.Name == Category_WydatekTemplate.Text).Icon;
+        public void Category_OperationTemplate_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
+            var whichColor = OperationCategories.Find(item => item.Name == Category_OperationTemplate.Text).Color;
+            var whichIcon = OperationCategories.Find(item => item.Name == Category_OperationTemplate.Text).Icon;
 
-            Ellipse_WydatekTemplate.Fill = new SolidColorBrush(GetSolidColorBrush(whichColor).Color);
-            Icon_WydatekTemplate.Text = whichIcon;
+            Ellipse_OperationTemplate.Fill = new SolidColorBrush(GetSolidColorBrush(whichColor).Color);
+            Icon_OperationTemplate.Text = whichIcon;
 
-            if (Wydatek.ExpenseOrIncome == "expense") {
-                Cost_WydatekTemplate.Text = "- " + Wydatek.Cost.ToString("0.00") + " zł";
-                Cost_WydatekTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
+            if (Operation.ExpenseOrIncome == "expense") {
+                Cost_OperationTemplate.Text = "- " + Operation.Cost.ToString("0.00") + " zł";
+                Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
             }
             else {
-                Cost_WydatekTemplate.Text = "+ " + Wydatek.Cost.ToString("0.00") + " zł";
-                Cost_WydatekTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"];
+                Cost_OperationTemplate.Text = "+ " + Operation.Cost.ToString("0.00") + " zł";
+                Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"];
             }
         }
     }

@@ -22,29 +22,29 @@ namespace Finanse.Views {
 
     public sealed partial class Strona_glowna : Page {
 
-        public ObservableCollection<Wydatek> Wydatki = new ObservableCollection<Wydatek>();
+        public ObservableCollection<Operation> Operations = new ObservableCollection<Operation>();
 
-        public static List<OperationCategory> OperationCategories = new List<OperationCategory>();
+        public List<OperationCategory> OperationCategories = new List<OperationCategory>();
 
         public Strona_glowna() {
 
             this.InitializeComponent();
 
-            Wydatki.Add(new Wydatek {
+            Operations.Add(new Operation {
                 Title = "PKP Intercity",
                 Cost = 17.10m,
                 Category = "Transport",
                 ExpenseOrIncome = "expense"
             });
 
-            Wydatki.Add(new Wydatek {
+            Operations.Add(new Operation {
                 Title = "Biedronka",
                 Cost = 23m,
                 Category = "Jedzenie",
                 ExpenseOrIncome = "income"
             });
 
-            Wydatki.Add(new Wydatek {
+            Operations.Add(new Operation {
                 Title = "Drink Hala",
                 Cost = 7.99m,
                 Category = "Alkohol",
@@ -80,7 +80,7 @@ namespace Finanse.Views {
 
         private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
 
-            var ContentDialogItem = new NowaOperacjaContentDialog(Wydatki, OperationCategories);
+            var ContentDialogItem = new NewOperationContentDialog(Operations, OperationCategories);
 
             var result = await ContentDialogItem.ShowAsync();
         }

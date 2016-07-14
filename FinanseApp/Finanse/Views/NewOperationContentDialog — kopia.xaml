@@ -1,5 +1,5 @@
 ﻿<ContentDialog
-    x:Class="Finanse.Views.NowaOperacjaContentDialog"
+    x:Class="Finanse.Views.NewOperationContentDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Finanse"
@@ -73,7 +73,9 @@
                     Background="Transparent"
                     KeyDown="CostValue_KeyDown"
                     GotFocus="CostLeftValue_GotFocus"
-                    LostFocus="Amount_LostFocus" />
+                    LostFocus="CostLeftValue_LostFocus"
+                    AcceptsReturn="True"
+                    AllowDrop="True" />
                 <TextBlock
                     Name="DotValue"
                     Visibility="Collapsed"
@@ -95,7 +97,7 @@
                     Background="Transparent"
                     KeyDown="CostValue_KeyDown"
                     GotFocus="CostRightValue_GotFocus"
-                    LostFocus="Amount_LostFocus" />
+                    LostFocus="CostRightValue_LostFocus" />
                 <TextBlock
                     Name="CurrencyValue"
                     Visibility="Collapsed"

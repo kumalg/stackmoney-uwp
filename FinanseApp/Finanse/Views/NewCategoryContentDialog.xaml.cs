@@ -31,5 +31,16 @@ namespace Finanse.Views {
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
         }
+
+        private void RadioButtonColor_Checked(object sender, RoutedEventArgs e) {
+            var button = sender as RadioButton;
+            CategoryCircle.Fill = button.Background;
+        }
+
+        private void RadioButtonIcon_Checked(object sender, RoutedEventArgs e) {
+            var button = sender as RadioButton;
+            CategoryIcon.Text = button.Content.ToString();
+            CategoryIcon.FontFamily = button.FontFamily;
+        }
     }
 }

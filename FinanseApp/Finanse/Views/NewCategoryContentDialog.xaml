@@ -26,76 +26,161 @@
                 BorderThickness="0,0,0,1"
                 Background="Transparent" />
 
-            <Grid>
-                
+            <Grid Margin="0,20,0,0">
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition
                         Width="Auto" />
                     <ColumnDefinition
                         Width="*" />
                 </Grid.ColumnDefinitions>
-                
+
                 <Grid
                     Name="Ikona"
                     Height="70"
                     Width="70">
 
                     <Ellipse
-                        Fill="#FF6E4ABC" />
+                        Name="CategoryCircle"
+                        Fill="{StaticResource GreenColorStyle}"/>
 
                     <TextBlock
-                        FontFamily="FontAwesome"
-                        Text=""
+                        Name="CategoryIcon"
+                        FontFamily="Segoe MDL2 Assets"
+                        Text="&#xE804;"
                         FontSize="34"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Foreground="White" />
                 </Grid>
 
-                <StackPanel Grid.Column="1" Margin="30,0,0,0">
-                    <ComboBox
-                        Name="IconValue"
-                        PlaceholderText="Ikona"
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="30,0,0,0">
+
+                    <Button
+                        Content="Kolor"
                         Margin="0,10"
                         BorderThickness="0,0,0,1"
                         Background="Transparent"
-                        HorizontalAlignment="Stretch">
+                        HorizontalAlignment="Stretch"
+                        Style="{StaticResource ButtonWithBottomBorder}">
+                        <Button.Flyout>
+                            <Flyout>
+                                <GridView
+                                    x:Name="ColorBaseList"
+                                    Padding="0"
+                                    ItemsSource="{StaticResource ColorBase}"
+                                    ItemContainerStyle="{StaticResource GridViewItemStyle1}">
 
-                        <ComboBoxItem
-                            Content="Jedzenie" />
-                        <ComboBoxItem
-                            Content="Transport" />
-                        <ComboBoxItem
-                            Content="Inne" />
+                                    <GridView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapGrid
+                                                MaximumRowsOrColumns="3"
+                                                Orientation="Horizontal"
+                                                HorizontalChildrenAlignment="Stretch"
+                                                VerticalChildrenAlignment="Stretch">
+                                            </WrapGrid>
+                                        </ItemsPanelTemplate>
+                                    </GridView.ItemsPanel>
 
-                    </ComboBox>
+                                    <GridView.ItemTemplate>
+                                        <DataTemplate
+                                            x:DataType="SolidColorBrush">
+                                            <Grid
+                                                Width="36"
+                                                Height="36">
+                                                <RadioButton
+                                                    x:Name="RadioButtonColor"
+                                                    Style="{StaticResource ColorRadioButton}"
+                                                    Background="{Binding Value}"
+                                                    GroupName="ColorRadioButtons"
+                                                    Checked="RadioButtonColor_Checked" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GridView.ItemTemplate>
+                                    
+                                </GridView>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
 
-                    <ComboBox
-                        Name="ColorValue"
-                        PlaceholderText="Kolor"
+                    <Button
+                        Content="Ikona"
                         Margin="0,10"
                         BorderThickness="0,0,0,1"
                         Background="Transparent"
-                        HorizontalAlignment="Stretch">
+                        HorizontalAlignment="Stretch"
+                        Style="{StaticResource ButtonWithBottomBorder}">
+                        <Button.Flyout>
+                            <Flyout>
+                                <GridView
+                                    x:Name="IconBaseList"
+                                    Padding="0"
+                                    ItemsSource="{StaticResource IconBase}"
+                                    ItemContainerStyle="{StaticResource GridViewItemStyle1}">
 
-                        <ComboBoxItem
-                            Content="Jedzenie" />
-                        <ComboBoxItem
-                            Content="Transport" />
-                        <ComboBoxItem
-                            Content="Inne" />
+                                    <GridView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapGrid
+                                                MaximumRowsOrColumns="4"
+                                                Orientation="Horizontal"
+                                                HorizontalChildrenAlignment="Stretch"
+                                                VerticalChildrenAlignment="Stretch">
+                                            </WrapGrid>
+                                        </ItemsPanelTemplate>
+                                    </GridView.ItemsPanel>
 
-                    </ComboBox>
+                                    <GridView.ItemTemplate>
+                                        <DataTemplate
+                                            x:DataType="TextBlock">
+                                            <Grid
+                                                Width="36"
+                                                Height="36">
+
+                                                <RadioButton
+                                                    x:Name="RadioButtonIcon"
+                                                    Style="{StaticResource IconRadioButton}"
+                                                    FontFamily="{Binding Value.FontFamily}"
+                                                    FontSize="20"
+                                                    Foreground="White"
+                                                    Background="{StaticResource LightGreyTransparentColorStyle}"
+                                                    Content="{Binding Value.Text}"
+                                                    GroupName="IconRadioButtons"
+                                                    Checked="RadioButtonIcon_Checked" />
+
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GridView.ItemTemplate>
+
+                                </GridView>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
                 </StackPanel>
-                
+
             </Grid>
 
+            <ComboBox
+                PlaceholderText="Kategoria nadrzędna"
+                Margin="0,30,0,10"
+                BorderThickness="0,0,0,1"
+                Background="Transparent"
+                HorizontalAlignment="Stretch">
+
+                <ComboBoxItem
+                    Content="Transport" />
+                <ComboBoxItem
+                    Content="Jedzenie" />
+            </ComboBox>
+
             <TextBlock
-                    Text="Pokazuj w wydatkach"
-                    Margin="0,20,0,0" />
+                Text="Pokazuj w wydatkach"
+                Margin="0,20,0,0" />
 
             <ToggleSwitch
-                Margin="0,5,0,0">
+                Margin="0,5,0,0"
+                IsOn="True">
 
                 <ToggleSwitch.OffContent>
                     <TextBlock
@@ -109,12 +194,13 @@
 
             </ToggleSwitch>
 
-                <TextBlock
-                    Text="Pokazuj we wpływach"
-                    Margin="0,20,0,0" />
+            <TextBlock
+                Text="Pokazuj we wpływach"
+                Margin="0,20,0,0" />
 
             <ToggleSwitch
-                Margin="0,5,0,0">
+                Margin="0,5,0,0"
+                IsOn="True">
 
                 <ToggleSwitch.OffContent>
                     <TextBlock
@@ -131,5 +217,6 @@
         </StackPanel>
 
     </ScrollViewer>
-    
+
+
 </ContentDialog>

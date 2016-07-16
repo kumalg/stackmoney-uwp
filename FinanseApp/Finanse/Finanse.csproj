@@ -100,9 +100,13 @@
     </Compile>
     <Compile Include="Elements\OperationCategory.cs" />
     <Compile Include="Elements\Operation.cs" />
+    <Compile Include="Elements\OperationCategoryTemplate.xaml.cs">
+      <DependentUpon>OperationCategoryTemplate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Elements\WplywTem.xaml.cs">
       <DependentUpon>WplywTem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Styles\ColorBase.cs" />
     <Compile Include="Views\Kategorie.xaml.cs">
       <DependentUpon>Kategorie.xaml</DependentUpon>
     </Compile>
@@ -145,6 +149,8 @@
     <None Include="Finanse_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\angle.png" />
+    <Content Include="Assets\angle.svg" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -159,6 +165,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Elements\OperationCategoryTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Elements\WplywTem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

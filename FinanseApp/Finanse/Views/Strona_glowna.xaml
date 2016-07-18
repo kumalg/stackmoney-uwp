@@ -151,6 +151,8 @@
                                 TargetType="PivotHeaderItem">
                                 <Grid
                                     x:Name="Grid"
+                                    Margin="10,0"
+                                    Width="48"
                                     Background="{TemplateBinding Background}">
                                     <Grid.Resources>
                                         <Style
@@ -194,16 +196,17 @@
                                         </Style>
                                     </Grid.Resources>
                                     <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup x:Name="SelectionStates">
+                                        <VisualStateGroup
+                                            x:Name="SelectionStates">
                                             <VisualStateGroup.Transitions>
                                                 <VisualTransition
                                                     From="Unselected"
                                                     To="UnselectedLocked"
-                                                    GeneratedDuration="0:0:0.33" />
+                                                    GeneratedDuration="0:0:1" />
                                                 <VisualTransition
                                                     From="UnselectedLocked"
                                                     To="Unselected"
-                                                    GeneratedDuration="0:0:0.33" />
+                                                    GeneratedDuration="0:0:1" />
                                             </VisualStateGroup.Transitions>
                                             <VisualState
                                                 x:Name="Disabled">
@@ -225,12 +228,12 @@
                                                     <DoubleAnimation
                                                         Storyboard.TargetName="ContentPresenterTranslateTransform"
                                                         Storyboard.TargetProperty="X"
-                                                        Duration="0"
+                                                        Duration="0:0:1"
                                                         To="{ThemeResource PivotHeaderItemLockedTranslation}" />
                                                     <DoubleAnimation
                                                         Storyboard.TargetName="ContentPresenter"
                                                         Storyboard.TargetProperty="(UIElement.Opacity)"
-                                                        Duration="0"
+                                                        Duration="0:0:1"
                                                         To="0" />
                                                 </Storyboard>
                                             </VisualState>
@@ -298,7 +301,8 @@
                                                     </ObjectAnimationUsingKeyFrames>
                                                 </Storyboard>
                                             </VisualState>
-                                            <VisualState x:Name="UnselectedPressed">
+                                            <VisualState
+                                                x:Name="UnselectedPressed">
                                                 <Storyboard>
                                                     <ObjectAnimationUsingKeyFrames
                                                         Storyboard.TargetName="ContentPresenter"
@@ -316,7 +320,8 @@
                                                     </ObjectAnimationUsingKeyFrames>
                                                 </Storyboard>
                                             </VisualState>
-                                            <VisualState x:Name="SelectedPressed">
+                                            <VisualState
+                                                x:Name="SelectedPressed">
                                                 <Storyboard>
                                                     <ObjectAnimationUsingKeyFrames
                                                         Storyboard.TargetName="ContentPresenter"
@@ -338,14 +343,12 @@
                                     </VisualStateManager.VisualStateGroups>
                                     <Border
                                         x:Name="Border"
-                                        Width="48"
-                                        BorderBrush="Transparent"
                                         BorderThickness="0,0,0,4" />
                                     <ContentPresenter
                                         x:Name="ContentPresenter"
                                         Content="{TemplateBinding Content}"
                                         ContentTemplate="{TemplateBinding ContentTemplate}"
-                                        Margin="{TemplateBinding Padding}"
+                                        Margin="0"
                                         FontSize="{TemplateBinding FontSize}"
                                         FontFamily="{TemplateBinding FontFamily}"
                                         FontWeight="{TemplateBinding FontWeight}"

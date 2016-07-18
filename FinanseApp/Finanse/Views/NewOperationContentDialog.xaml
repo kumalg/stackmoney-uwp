@@ -1,4 +1,5 @@
 ﻿<ContentDialog
+    Style="{StaticResource MyContentDialog}"
     x:Class="Finanse.Views.NewOperationContentDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,180 +8,434 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:Finanse.Elements"
     mc:Ignorable="d"
+    Background="{StaticResource GreyTransparentColorStyle}"
     Title="Nowa operacja"
     PrimaryButtonText="Dodaj"
     SecondaryButtonText="Anuluj"
     PrimaryButtonClick="NowaOperacja_DodajClick"
     SecondaryButtonClick="NowaOperacja_AnulujClick"
     RequestedTheme="Dark">
+    
+    <ContentDialog.Resources>
+        <Style
+            x:Key="CalendarDatePickerStyle1"
+            TargetType="CalendarDatePicker">
+            <Setter
+                Property="Foreground"
+                Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+            <Setter
+                Property="Background"
+                Value="{ThemeResource SystemControlBackgroundAltMediumLowBrush}" />
+            <Setter
+                Property="BorderBrush"
+                Value="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" />
+            <Setter
+                Property="BorderThickness"
+                Value="{ThemeResource CalendarDatePickerBorderThemeThickness}" />
+            <Setter
+                Property="HorizontalAlignment"
+                Value="Left" />
+            <Setter
+                Property="VerticalAlignment"
+                Value="Center" />
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="CalendarDatePicker">
+                        <Grid
+                            x:Name="Root">
+                            <FlyoutBase.AttachedFlyout>
+                                <Flyout
+                                    Placement="Bottom">
+                                    <Flyout.FlyoutPresenterStyle>
+                                        <Style
+                                            TargetType="FlyoutPresenter">
+                                            <Setter
+                                                Property="Padding"
+                                                Value="0" />
+                                            <Setter
+                                                Property="BorderThickness"
+                                                Value="0" />
+                                            <Setter
+                                                Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate
+                                                        TargetType="FlyoutPresenter">
+                                                        <ContentPresenter
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            Background="{TemplateBinding Background}"
+                                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                            ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                            Content="{TemplateBinding Content}"
+                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                            Margin="{TemplateBinding Padding}"
+                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Flyout.FlyoutPresenterStyle>
+                                    <CalendarView
+                                        x:Name="CalendarView"
+                                        CalendarIdentifier="{TemplateBinding CalendarIdentifier}"
+                                        DisplayMode="{TemplateBinding DisplayMode}"
+                                        DayOfWeekFormat="{TemplateBinding DayOfWeekFormat}"
+                                        FirstDayOfWeek="Monday"
+                                        IsTodayHighlighted="False"
+                                        IsGroupLabelVisible="{TemplateBinding IsGroupLabelVisible}"
+                                        IsOutOfScopeEnabled="{TemplateBinding IsOutOfScopeEnabled}"
+                                        MinDate="{TemplateBinding MinDate}"
+                                        MaxDate="{TemplateBinding MaxDate}"
+                                        Style="{TemplateBinding CalendarViewStyle}"
+                                        Background="{StaticResource DarkBlueColorStyle}"
+                                        CalendarItemBackground="Transparent"
+                                        CalendarItemForeground="White"
+                                        Foreground="#CCFFFFFF"
+                                        HoverBorderBrush="#66E5E5E5"
+                                        OutOfScopeForeground="#4FFFFFFF"
+                                        OutOfScopeBackground="Transparent"
+                                        TodayForeground="{StaticResource BlueColorStyle}"
+                                        FontWeight="Normal"
+                                        FontSize="10"
+                                        DayItemFontSize="15"/>
+                                </Flyout>
+                            </FlyoutBase.AttachedFlyout>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="32" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition
+                                    Height="Auto" />
+                                <RowDefinition
+                                    Height="32" />
+                            </Grid.RowDefinitions>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup
+                                    x:Name="CommonStates">
+                                    <VisualState
+                                        x:Name="Normal" />
+                                    <VisualState
+                                        x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="BorderBrush"
+                                                Storyboard.TargetName="Background">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlHighlightBaseMediumBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Background"
+                                                Storyboard.TargetName="Background">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlPageBackgroundAltMediumBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Background"
+                                                Storyboard.TargetName="Background">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="BorderBrush"
+                                                Storyboard.TargetName="Background">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlHighlightBaseMediumLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Background"
+                                                Storyboard.TargetName="Background">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="BorderBrush"
+                                                Storyboard.TargetName="Background">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlDisabledBaseLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Foreground"
+                                                Storyboard.TargetName="HeaderContentPresenter">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Foreground"
+                                                Storyboard.TargetName="DateText">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Foreground"
+                                                Storyboard.TargetName="CalendarGlyph">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup
+                                    x:Name="FocusStates">
+                                    <VisualState
+                                        x:Name="Unfocused" />
+                                    <VisualState
+                                        x:Name="PointerFocused" />
+                                    <VisualState
+                                        x:Name="Focused">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Background"
+                                                Storyboard.TargetName="Background">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlHighlightListAccentLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup
+                                    x:Name="SelectionStates">
+                                    <VisualState
+                                        x:Name="Unselected" />
+                                    <VisualState
+                                        x:Name="Selected">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Foreground"
+                                                Storyboard.TargetName="DateText">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter
+                                x:Name="HeaderContentPresenter"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                Content="{TemplateBinding Header}"
+                                Margin="{ThemeResource ComboBoxHeaderThemeMargin}"
+                                Visibility="Collapsed"
+                                x:DeferLoadStrategy="Lazy" />
+                            <Border
+                                x:Name="Background"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                Grid.ColumnSpan="2"
+                                Grid.Row="1" />
+                            <TextBlock
+                                x:Name="DateText"
+                                Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                FontSize="15"
+                                HorizontalAlignment="Left"
+                                Padding="12, 0, 0, 2"
+                                Grid.Row="1"
+                                Text="{TemplateBinding PlaceholderText}"
+                                VerticalAlignment="Center" />
+                            <FontIcon
+                                x:Name="CalendarGlyph"
+                                Grid.Column="1"
+                                Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                                FontSize="16"
+                                FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                Glyph="&#xE787;"
+                                HorizontalAlignment="Center"
+                                Grid.Row="1"
+                                VerticalAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ContentDialog.Resources>
 
-    <ScrollViewer
-        VerticalScrollBarVisibility="Auto"
-        HorizontalScrollBarVisibility="Disabled"
-        IsTabStop="False">
+    <StackPanel>
 
-        <StackPanel>
+        <TextBlock
+            Text="Typ operacji"
+            Margin="0,20,0,10" />
 
-            <TextBlock
-                Text="Typ operacji"
-                Margin="0,20,0,10" />
+        <StackPanel
+            Orientation="Horizontal">
 
-            <StackPanel
-                Orientation="Horizontal">
-
-                <RadioButton
-                    Name="Expense_RadioButton"
-                    Content="Wydatek"
-                    GroupName="OperationType_RadioButtons"
-                    Checked="RadioButton_Checked"
-                    GotFocus="Expense_RadioButton_GotFocus" />
-                <RadioButton
-                    Name="Income_RadioButton"
-                    Content="Wpływ"
-                    GroupName="OperationType_RadioButtons"
-                    Checked="RadioButton_Checked"
-                    GotFocus="Expense_RadioButton_GotFocus" />
-
-            </StackPanel>
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="*" />
-                    <ColumnDefinition
-                        Width="auto" />
-                    <ColumnDefinition
-                        Width="auto" />
-                    <ColumnDefinition
-                        Width="auto" />
-                </Grid.ColumnDefinitions>
-
-                <TextBox
-                    Name="CostValue"
-                    TextChanged="TextChanged"
-                    PlaceholderText="Wartość"
-                    InputScope="CurrencyAmount"
-                    Margin="0,20,0,0"
-                    BorderThickness="0,0,0,1"
-                    Background="Transparent"
-                    GotFocus="CostValue_GotFocus"
-                     />
-                <TextBox
-                    Name="CostLeftValue"
-                    TextChanged="SetCost"
-                    Visibility="Collapsed"
-                    TextAlignment="Right"
-                    InputScope="CurrencyAmount"
-                    Margin="0,20,0,0"
-                    BorderThickness="0,0,0,1"
-                    Background="Transparent"
-                    KeyDown="CostValue_KeyDown"
-                    GotFocus="CostLeftValue_GotFocus"
-                    LostFocus="CostLeftValue_LostFocus"
-                    AcceptsReturn="True"
-                    AllowDrop="True" />
-                <TextBlock
-                    Name="DotValue"
-                    Visibility="Collapsed"
-                    Text=","
-                    Grid.Column="1"
-                    VerticalAlignment="Bottom"
-                    Margin="5,20,5,0" />
-                <TextBox
-                    Visibility="Collapsed"
-                    TextChanged="SetCost"
-                    Width="30"
-                    PlaceholderText="00"
-                    MaxLength="2"
-                    Name="CostRightValue"
-                    Grid.Column="2"
-                    InputScope="CurrencyAmount"
-                    Margin="0,20,0,0"
-                    BorderThickness="0,0,0,1"
-                    Background="Transparent"
-                    KeyDown="CostValue_KeyDown"
-                    GotFocus="CostRightValue_GotFocus"
-                    LostFocus="CostRightValue_LostFocus" />
-                <TextBlock
-                    Name="CurrencyValue"
-                    Visibility="Collapsed"
-                    Text="zł"
-                    Grid.Column="3"
-                    VerticalAlignment="Bottom"
-                    Margin="10,20,0,0" />
-
-            </Grid>
-
-            <TextBox
-                Name="NameValue"
-                TextChanged="TextChanged"
-                PlaceholderText="Nazwa"
-                Margin="0,20,0,10"
-                BorderThickness="0,0,0,1"
-                Background="Transparent"
+            <RadioButton
+                Name="Expense_RadioButton"
+                Content="Wydatek"
+                GroupName="OperationType_RadioButtons"
+                Checked="RadioButton_Checked"
                 GotFocus="Expense_RadioButton_GotFocus" />
-
-            <CalendarDatePicker
-                Name="DateValue"
-                DateChanged="DateValue_DateChanged"
-                PlaceholderText="Data"
-                Margin="0,10"
-                BorderThickness="0,0,0,1"
-                Background="Transparent"
-                HorizontalAlignment="Stretch"
-                GotFocus="Expense_RadioButton_GotFocus"
-                Opened="DateValue_Opened"
-                Closed="DateValue_Closed" />
-
-            <ComboBox
-                Name="CategoryValue"
-                SelectionChanged="ComboBox_SelectionChanged"
-                PlaceholderText="Kategoria"
-                Margin="0,10"
-                BorderThickness="0,0,0,1"
-                Background="Transparent"
-                HorizontalAlignment="Stretch"
-                GotFocus="Expense_RadioButton_GotFocus">
-            </ComboBox>
-
-            <ComboBox
-                Name="PayFormValue"
-                SelectionChanged="ComboBox_SelectionChanged"
-                PlaceholderText="Forma płatności"
-                Margin="0,10"
-                BorderThickness="0,0,0,1"
-                Background="Transparent"
-                HorizontalAlignment="Stretch">
-
-                <ComboBoxItem
-                    Content="Gotówka" />
-                <ComboBoxItem
-                    Content="Karta Visa" />
-
-            </ComboBox>
-
-            <TextBlock
-                Text="Zapisz jako szablon"
-                Margin="0,20,0,0"
+            <RadioButton
+                Name="Income_RadioButton"
+                Content="Wpływ"
+                GroupName="OperationType_RadioButtons"
+                Checked="RadioButton_Checked"
                 GotFocus="Expense_RadioButton_GotFocus" />
-
-            <ToggleSwitch
-                Margin="0,5,0,0">
-
-                <ToggleSwitch.OffContent>
-                    <TextBlock
-                        Text="Nie" />
-                </ToggleSwitch.OffContent>
-
-                <ToggleSwitch.OnContent>
-                    <TextBlock
-                        Text="Tak" />
-                </ToggleSwitch.OnContent>
-
-            </ToggleSwitch>
 
         </StackPanel>
 
-    </ScrollViewer>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="auto" />
+                <ColumnDefinition
+                    Width="auto" />
+                <ColumnDefinition
+                    Width="auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox
+                Name="CostValue"
+                TextChanged="TextChanged"
+                PlaceholderText="Wartość"
+                InputScope="CurrencyAmount"
+                Margin="0,20,0,0"
+                BorderThickness="0,0,0,1"
+                Background="Transparent"
+                GotFocus="CostValue_GotFocus" />
+            <TextBox
+                Name="CostLeftValue"
+                TextChanged="SetCost"
+                Visibility="Collapsed"
+                TextAlignment="Right"
+                InputScope="CurrencyAmount"
+                Margin="0,20,0,0"
+                BorderThickness="0,0,0,1"
+                Background="Transparent"
+                KeyDown="CostValue_KeyDown"
+                GotFocus="CostLeftValue_GotFocus"
+                LostFocus="CostLeftValue_LostFocus"
+                AcceptsReturn="True"
+                AllowDrop="True" />
+            <TextBlock
+                Name="DotValue"
+                Visibility="Collapsed"
+                Text=","
+                Grid.Column="1"
+                VerticalAlignment="Bottom"
+                Margin="5,20,5,0" />
+            <TextBox
+                Visibility="Collapsed"
+                TextChanged="SetCost"
+                Width="30"
+                PlaceholderText="00"
+                MaxLength="2"
+                Name="CostRightValue"
+                Grid.Column="2"
+                InputScope="CurrencyAmount"
+                Margin="0,20,0,0"
+                BorderThickness="0,0,0,1"
+                Background="Transparent"
+                KeyDown="CostValue_KeyDown"
+                GotFocus="CostRightValue_GotFocus"
+                LostFocus="CostRightValue_LostFocus" />
+            <TextBlock
+                Name="CurrencyValue"
+                Visibility="Collapsed"
+                Text="zł"
+                Grid.Column="3"
+                VerticalAlignment="Bottom"
+                Margin="10,20,0,0" />
+
+        </Grid>
+
+        <TextBox
+            Name="NameValue"
+            TextChanged="TextChanged"
+            PlaceholderText="Nazwa"
+            Margin="0,20,0,10"
+            BorderThickness="0,0,0,1"
+            Background="Transparent"
+            GotFocus="Expense_RadioButton_GotFocus" />
+
+        <CalendarDatePicker
+            Name="DateValue"
+            DateChanged="DateValue_DateChanged"
+            PlaceholderText="Data"
+            Margin="0,10"
+            BorderThickness="0,0,0,1"
+            Background="Transparent"
+            HorizontalAlignment="Stretch"
+            GotFocus="Expense_RadioButton_GotFocus"
+            Opened="DateValue_Opened"
+            Closed="DateValue_Closed"
+            IsTodayHighlighted="False"
+            Style="{StaticResource CalendarDatePickerStyle1}" />
+
+        <ComboBox
+            Name="CategoryValue"
+            SelectionChanged="ComboBox_SelectionChanged"
+            PlaceholderText="Kategoria"
+            Margin="0,10"
+            BorderThickness="0,0,0,1"
+            Background="Transparent"
+            HorizontalAlignment="Stretch"
+            GotFocus="Expense_RadioButton_GotFocus">
+        </ComboBox>
+
+        <ComboBox
+            Name="PayFormValue"
+            SelectionChanged="ComboBox_SelectionChanged"
+            PlaceholderText="Forma płatności"
+            Margin="0,10"
+            BorderThickness="0,0,0,1"
+            Background="Transparent"
+            HorizontalAlignment="Stretch">
+
+            <ComboBoxItem
+                Content="Gotówka" />
+            <ComboBoxItem
+                Content="Karta Visa" />
+
+        </ComboBox>
+
+        <TextBlock
+            Text="Zapisz jako szablon"
+            Margin="0,20,0,0"
+            GotFocus="Expense_RadioButton_GotFocus" />
+
+        <ToggleSwitch
+            Margin="0,5,0,0">
+
+            <ToggleSwitch.OffContent>
+                <TextBlock
+                    Text="Nie" />
+            </ToggleSwitch.OffContent>
+
+            <ToggleSwitch.OnContent>
+                <TextBlock
+                    Text="Tak" />
+            </ToggleSwitch.OnContent>
+
+        </ToggleSwitch>
+
+    </StackPanel>
 
 </ContentDialog>

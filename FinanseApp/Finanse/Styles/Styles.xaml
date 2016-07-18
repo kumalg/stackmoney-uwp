@@ -1,4 +1,4 @@
-﻿    <ResourceDictionary
+﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Finanse.Styles"
@@ -6,7 +6,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <!-- Kolory -->
+    <!--*****************************************
+    KOLORY W APLIKACJI
+    ******************************************-->
     <SolidColorBrush x:Key="GreenColorStyle" Color="#3EB93E"/>
 
     <SolidColorBrush x:Key="RedColorStyle" Color="#FF3B3B"/>
@@ -15,35 +17,93 @@
     <SolidColorBrush x:Key="BlueColorStyle" Color="#0B63C7"/>
 
     <SolidColorBrush x:Key="GreyColorStyle" Color="#2B2B2B"/>
+    <SolidColorBrush x:Key="GreyTransparentColorStyle" Color="#2B2B2B" Opacity="0.8" />
+    
     <SolidColorBrush x:Key="LightGreyTransparentColorStyle" Color="#E5353535"/>
     <SolidColorBrush x:Key="DarkGreyColorStyle" Color="#2B2B2B"/>
 
-    <ResourceDictionary x:Key="ColorBase">
-        <SolidColorBrush x:Key="100" Color="#2a7fdf" />
-        <SolidColorBrush x:Key="200" Color="#0b63c7" />
-	    <SolidColorBrush x:Key="300" Color="#0a4e9b" />
-        
-	    <SolidColorBrush x:Key="400" Color="#06d9aa" />
-	    <SolidColorBrush x:Key="500" Color="#14a988" />
-	    <SolidColorBrush x:Key="600" Color="#138b99" />
-        
-	    <SolidColorBrush x:Key="700" Color="#29eb6d" />
-	    <SolidColorBrush x:Key="800" Color="#06d950" />
-	    <SolidColorBrush x:Key="900" Color="#0f993f" />
-        
-	    <SolidColorBrush x:Key="1000" Color="#3fd726" />
-	    <SolidColorBrush x:Key="1100" Color="#18ad00" />
-	    <SolidColorBrush x:Key="1200" Color="#218311" />
-    </ResourceDictionary>
     
-    <ResourceDictionary x:Key="IconBase">
-        <TextBlock x:Key="Pad" Text="&#xE7FC;" FontFamily="Segoe MDL2 Assets" />
-        <TextBlock x:Key="Home" Text="&#xEA8A;" FontFamily="Segoe MDL2 Assets" />
-        <TextBlock x:Key="Bus2" Text="&#xEB47;" FontFamily="Segoe MDL2 Assets" />
-        <TextBlock x:Key="Car" Text="&#xE804;" FontFamily="Segoe MDL2 Assets" />
+    <!--*****************************************
+    BAZA KOLORÓW DO KATEGORII
+    ******************************************-->
+    <ResourceDictionary x:Key="ColorBase">
+        <SolidColorBrush x:Name="Blue1" x:Key="a" Color="#2a7fdf" />
+        <SolidColorBrush x:Name="Blue2" x:Key="b" Color="#0b63c7" />
+	    <SolidColorBrush x:Name="Blue3" x:Key="c" Color="#0a4e9b" />
+        
+	    <SolidColorBrush x:Name="Cyan1" x:Key="d" Color="#06d9aa" />
+	    <SolidColorBrush x:Name="Cyan2" x:Key="e" Color="#14a988" />
+	    <SolidColorBrush x:Name="Cyan3" x:Key="f" Color="#138b99" />
+        
+	    <SolidColorBrush x:Name="CyanXGreen1" x:Key="g" Color="#29eb6d" />
+	    <SolidColorBrush x:Name="CyanXGreen2" x:Key="h" Color="#06d950" />
+	    <SolidColorBrush x:Name="CyanXGreen3" x:Key="i" Color="#0f993f" />
+        
+	    <SolidColorBrush x:Name="Green1" x:Key="j" Color="#3fd726" />
+	    <SolidColorBrush x:Name="Green2" x:Key="k" Color="#18ad00" />
+	    <SolidColorBrush x:Name="Green3" x:Key="l" Color="#218311" />
+
+	    <SolidColorBrush x:Name="Lime1" x:Key="m" Color="#a1ea23" />
+	    <SolidColorBrush x:Name="Lime2" x:Key="n" Color="#8cd906" />
+	    <SolidColorBrush x:Name="Lime3" x:Key="o" Color="#71a812" />
+        
+	    <SolidColorBrush x:Name="Yellow1" x:Key="p" Color="#eae03e" />
+	    <SolidColorBrush x:Name="Yellow2" x:Key="r" Color="#d9cd06" />
+	    <SolidColorBrush x:Name="Yellow3" x:Key="s" Color="#c2a900" />
+        
+	    <SolidColorBrush x:Name="Orange1" x:Key="t" Color="#f79f48" />
+	    <SolidColorBrush x:Name="Orange2" x:Key="u" Color="#ef7700" />
+	    <SolidColorBrush x:Name="Orange3" x:Key="v" Color="#ac5601" />
+
+	    <SolidColorBrush x:Name="Red1" x:Key="wa" Color="#f14d4d" />
+	    <SolidColorBrush x:Name="Red2" x:Key="wb" Color="#ea2626" />
+	    <SolidColorBrush x:Name="Red3" x:Key="wc" Color="#a22222" />
+
+	    <SolidColorBrush x:Name="Pink1" x:Key="wd" Color="#f04fad" />
+	    <SolidColorBrush x:Name="Pink2" x:Key="we" Color="#d90682" />
+	    <SolidColorBrush x:Name="Pink3" x:Key="wf" Color="#a21467" />
+        
+	    <SolidColorBrush x:Name="Violet1" x:Key="wg" Color="#b759f2" />
+	    <SolidColorBrush x:Name="Violet2" x:Key="wh" Color="#8706d9" />
+	    <SolidColorBrush x:Name="Violet3" x:Key="wi" Color="#6c1a9d" />
+        
+	    <SolidColorBrush x:Name="VioletXBlue1" x:Key="wj" Color="#673ee6" />
+	    <SolidColorBrush x:Name="VioletXBlue2" x:Key="wk" Color="#471ad6" />
+	    <SolidColorBrush x:Name="VioletXBlue3" x:Key="wl" Color="#3a1d95" />
     </ResourceDictionary>
 
-    <!-- Górny pasek (ciemny niebieski) -->
+    
+    <!--*****************************************
+    BAZA IKON DO KATEGORII
+    ******************************************-->
+    <ResourceDictionary x:Key="IconBase">
+        <TextBlock x:Key="Pad" Text="&#xE7FC;" FontFamily="Segoe MDL2 Assets" />
+        <TextBlock x:Key="Keyboard" Text="&#xE087;" FontFamily="Segoe MDL2 Assets" />
+        
+        <TextBlock x:Key="Home" Text="&#xEA8A;" FontFamily="Segoe MDL2 Assets" />
+        <TextBlock x:Key="Home2" Text="&#xE10F;" FontFamily="Segoe MDL2 Assets" />
+
+        <TextBlock x:Key="Bus2" Text="&#xEB47;" FontFamily="Segoe MDL2 Assets" />
+        <TextBlock x:Key="Car" Text="&#xE804;" FontFamily="Segoe MDL2 Assets" />
+        
+        <TextBlock x:Key="Star" Text="&#xE00A;" FontFamily="Segoe MDL2 Assets" />
+        
+        <TextBlock x:Key="Heart1" Text="&#xE006;" FontFamily="Segoe MDL2 Assets" />
+        <TextBlock x:Key="Heart2" Text="&#xE007;" FontFamily="Segoe MDL2 Assets" />
+        <TextBlock x:Key="Heart3" Text="&#xE00B;" FontFamily="Segoe MDL2 Assets" />
+        
+        <TextBlock x:Key="Pen" Text="&#xE104;" FontFamily="Segoe MDL2 Assets" />
+        <TextBlock x:Key="Bin" Text="&#xE107;" FontFamily="Segoe MDL2 Assets" />
+
+        <TextBlock x:Key="Camera" Text="&#xE114;" FontFamily="Segoe MDL2 Assets" />
+        <TextBlock x:Key="Camera2" Text="&#xE12D;" FontFamily="Segoe MDL2 Assets" />
+        <TextBlock x:Key="VideoCamera" Text="&#xE116;" FontFamily="Segoe MDL2 Assets" />
+    </ResourceDictionary>
+
+
+    <!--*****************************************
+    GÓRNY PASEK (CIEMNY NIEBIESKI)
+    ******************************************-->
     <Style TargetType="TextBlock" x:Key="PageTitleStyle">
         <Setter Property="Grid.Column" Value="1"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -53,7 +113,10 @@
         <Setter Property="FontSize" Value="14"/>
     </Style>
 
-    <!-- Hamburger Menu - ikona i tekst -->
+
+    <!--*****************************************
+    HAMBURGER MENU (IKONA I TYTUŁ)
+    ******************************************-->
     <Style TargetType="TextBlock" x:Key="SplitViewIconStyle">
         <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
         <Setter Property="FontSize" Value="16"/>
@@ -68,7 +131,9 @@
     </Style>
 
 
-    <!-- Pivot menu -->
+    <!--*****************************************
+    PUVOT MENU
+    ******************************************-->
     <Style
         x:Key="PivotStyleDynamicHeader"
         TargetType="Pivot">
@@ -545,9 +610,12 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
- <!-- COLOR RADIO BUTTON -->
 
+
+
+    <!--*****************************************
+    RADIO BUTTON KOLORÓW
+    ******************************************-->
     <Style
         x:Key="ColorRadioButton"
         TargetType="RadioButton">
@@ -662,8 +730,11 @@
         </Setter>
     </Style>
 
-    <!-- ICON RADIO BUTTON -->
 
+
+    <!--*****************************************
+    RADIO BUTTON IKON
+    ******************************************-->
     <Style
         x:Key="IconRadioButton"
         TargetType="RadioButton">
@@ -791,8 +862,11 @@
         </Setter>
     </Style>
 
-    <!-- ButtonWithBottomBorder -->
-    
+
+
+    <!--*****************************************
+    PRZYCISK Z DOLNĄ KRAWĘDZIĄ
+    ******************************************-->
     <Style
         x:Key="ButtonWithBottomBorder"
         TargetType="Button">
@@ -931,8 +1005,11 @@
         </Setter>
     </Style>
 
-    <!-- GridViewItemStyle1 -->
     
+    
+    <!--*****************************************
+    GridViewItemStyle1
+    ******************************************-->
     <Style
         x:Key="GridViewItemStyle1"
         TargetType="GridViewItem">
@@ -1004,9 +1081,269 @@
         </Setter>
     </Style>
     
-    <!-- ICON RADIO BUTTON -->
     
-    
+    <!-- ***************************** -->
 
+
+
+    <Style
+        x:Key="MyContentDialog"
+        TargetType="ContentDialog" >
+        <Setter
+            Property="Foreground"
+            Value="{ThemeResource SystemControlPageTextBaseHighBrush}" />
+        <Setter
+            Property="Background"
+            Value="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}" />
+        <Setter
+            Property="HorizontalAlignment"
+            Value="Center" />
+        <Setter
+            Property="VerticalAlignment"
+            Value="Top" />
+        <Setter
+            Property="IsTabStop"
+            Value="False" />
+        <Setter
+            Property="MaxHeight"
+            Value="{ThemeResource ContentDialogMaxHeight}" />
+        <Setter
+            Property="MinHeight"
+            Value="{ThemeResource ContentDialogMinHeight}" />
+        <Setter
+            Property="MaxWidth"
+            Value="{ThemeResource ContentDialogMaxWidth}" />
+        <Setter
+            Property="MinWidth"
+            Value="{ThemeResource ContentDialogMinWidth}" />
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="ContentDialog">
+                    <Border
+                        x:Name="Container">
+                        <Grid
+                            x:Name="LayoutRoot">
+                            <Grid.RowDefinitions>
+                                <RowDefinition
+                                    Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Border
+                                x:Name="BackgroundElement"
+                                Background="{TemplateBinding Background}"
+                                FlowDirection="{TemplateBinding FlowDirection}"
+                                BorderThickness="0"
+                                BorderBrush="{ThemeResource SystemControlForegroundAccentBrush}"
+                                MaxWidth="{TemplateBinding MaxWidth}"
+                                MaxHeight="{TemplateBinding MaxHeight}"
+                                MinWidth="{TemplateBinding MinWidth}"
+                                MinHeight="{TemplateBinding MinHeight}">
+                                
+                                <Grid
+                                    x:Name="DialogSpace"
+                                    VerticalAlignment="Stretch">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition
+                                            Height="Auto" />
+                                        <RowDefinition
+                                            Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <ScrollViewer
+                                        x:Name="ContentScrollViewer"
+                                        VerticalScrollBarVisibility="Visible"
+                                        VerticalScrollMode="Enabled">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition
+                                                    Height="48" />
+                                                <RowDefinition
+                                                    Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <Grid Background="{StaticResource DarkBlueColorStyle}">
+                                                <ContentControl
+                                                    x:Name="Title"
+                                                    Margin="20,0,0,0"
+                                                    Content="{TemplateBinding Title}"
+                                                    ContentTemplate="{TemplateBinding TitleTemplate}"
+                                                    FontSize="15"
+                                                    FontFamily="XamlAutoFontFamily"
+                                                    FontWeight="SemiBold"
+                                                    Foreground="{TemplateBinding Foreground}"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    IsTabStop="False"
+                                                    MaxHeight="{ThemeResource ContentDialogTitleMaxHeight}">
+                                                    <ContentControl.Template>
+                                                        <ControlTemplate
+                                                            TargetType="ContentControl">
+                                                            <ContentPresenter
+                                                                Content="{TemplateBinding Content}"
+                                                                MaxLines="2"
+                                                                TextWrapping="Wrap"
+                                                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                Margin="{TemplateBinding Padding}"
+                                                                ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                                        </ControlTemplate>
+                                                    </ContentControl.Template>
+                                                </ContentControl>
+                                            </Grid>
+                                            <ContentPresenter
+                                                x:Name="Content"
+                                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                Content="{TemplateBinding Content}"
+                                                FontSize="{ThemeResource ControlContentThemeFontSize}"
+                                                FontFamily="{ThemeResource ContentControlThemeFontFamily}"
+                                                Margin="{ThemeResource ContentDialogContentMargin}"
+                                                Foreground="{TemplateBinding Foreground}"
+                                                Grid.Row="1"
+                                                TextWrapping="Wrap" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                    <Grid
+                                        x:Name="CommandSpace"
+                                        Grid.Row="1"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Bottom">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <Border
+                                            x:Name="Button1Host"
+                                            Margin="{ThemeResource ContentDialogButton1HostMargin}"
+                                            MinWidth="{ThemeResource ContentDialogButtonMinWidth}"
+                                            MaxWidth="{ThemeResource ContentDialogButtonMaxWidth}"
+                                            Height="{ThemeResource ContentDialogButtonHeight}"
+                                            HorizontalAlignment="Stretch" />
+                                        <Border
+                                            x:Name="Button2Host"
+                                            Margin="{ThemeResource ContentDialogButton2HostMargin}"
+                                            MinWidth="{ThemeResource ContentDialogButtonMinWidth}"
+                                            MaxWidth="{ThemeResource ContentDialogButtonMaxWidth}"
+                                            Height="{ThemeResource ContentDialogButtonHeight}"
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Stretch" />
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style
+        x:Key="FullScreenContentDialogStyle"
+        TargetType="ContentDialog">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="ContentDialog">
+                    <Border
+                        x:Name="Container">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup
+                                x:Name="Orientation">
+                                <VisualState
+                                    x:Name="Portrait" />
+                                <VisualState
+                                    x:Name="Landscape">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames
+                                            Storyboard.TargetProperty="Width"
+                                            Storyboard.TargetName="ContentPanel"
+                                            EnableDependentAnimation="True">
+                                            <DiscreteObjectKeyFrame
+                                                KeyTime="0"
+                                                Value="{ThemeResource ContentDialogContentLandscapeWidth}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames
+                                            Storyboard.TargetProperty="HorizontalAlignment"
+                                            Storyboard.TargetName="ContentPanel">
+                                            <DiscreteObjectKeyFrame
+                                                KeyTime="0"
+                                                Value="Left" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid
+                            x:Name="LayoutRoot">
+                            <Grid.RowDefinitions>
+                                <RowDefinition
+                                    Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Border
+                                x:Name="BackgroundElement"
+                                Background="{TemplateBinding Background}"
+                                FlowDirection="LeftToRight">
+                                <Border
+                                    FlowDirection="{TemplateBinding FlowDirection}">
+                                    <Grid
+                                        x:Name="ContentPanel">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition
+                                                Height="Auto"
+                                                MinHeight="{ThemeResource ContentDialogTitleMinHeight}" />
+                                            <RowDefinition
+                                                Height="*"
+                                                MinHeight="{ThemeResource ContentDialogContentMinHeight}" />
+                                            <RowDefinition
+                                                Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition
+                                                Width="*" />
+                                            <ColumnDefinition
+                                                Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <ContentControl
+                                            x:Name="Title"
+                                            Margin="{ThemeResource ContentDialogTitleMargin}"
+                                            Content="{TemplateBinding Title}"
+                                            ContentTemplate="{TemplateBinding TitleTemplate}"
+                                            FontSize="{StaticResource TextStyleExtraLargeFontSize}"
+                                            FontFamily="{ThemeResource PhoneFontFamilyNormal}"
+                                            FontWeight="SemiBold"
+                                            Grid.ColumnSpan="2" />
+                                        <ContentPresenter
+                                            x:Name="Content"
+                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                            Content="{TemplateBinding Content}"
+                                            FontSize="{StaticResource TextStyleLargeFontSize}"
+                                            FontFamily="{ThemeResource PhoneFontFamilyNormal}"
+                                            Margin="{ThemeResource ContentDialogContentMargin}"
+                                            Grid.Row="1"
+                                            Grid.ColumnSpan="2" />
+                                        <Border
+                                            x:Name="Button1Host"
+                                            Padding="{ThemeResource ContentDialogButton1HostPadding}"
+                                            Grid.Row="2" />
+                                        <Border
+                                            x:Name="Button2Host"
+                                            Padding="{ThemeResource ContentDialogButton2HostPadding}"
+                                            Grid.Row="2"
+                                            Grid.Column="1" />
+                                    </Grid>
+                                </Border>
+                            </Border>
+                        </Grid >
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>

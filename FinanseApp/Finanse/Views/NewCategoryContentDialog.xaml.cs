@@ -39,7 +39,7 @@ namespace Finanse.Views {
 
         private void RadioButtonIcon_Checked(object sender, RoutedEventArgs e) {
             var button = sender as RadioButton;
-            CategoryIcon.Text = button.Content.ToString();
+            CategoryIcon.Glyph = button.Content.ToString();
             CategoryIcon.FontFamily = button.FontFamily;
         }
     }

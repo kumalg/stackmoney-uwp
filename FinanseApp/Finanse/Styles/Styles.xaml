@@ -1155,8 +1155,7 @@
                                     </Grid.RowDefinitions>
                                     <ScrollViewer
                                         x:Name="ContentScrollViewer"
-                                        VerticalScrollBarVisibility="Visible"
-                                        VerticalScrollMode="Enabled">
+                                        VerticalScrollBarVisibility="Auto">
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition
@@ -1345,5 +1344,121 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+    
+    
+    <!-- EXPADNDER VIEW -->
+<!--
+    <Style
+        x:Key="MyExpanderPanel"
+        TargetType="ExpandPanel">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="ExpandPanel">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup
+                                x:Name="ViewStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition
+                                        GeneratedDuration="0:0:0.3">
+                                        <VisualTransition.GeneratedEasingFunction>
+                                            <CircleEase
+                                                EasingMode="EaseOut" />
+                                        </VisualTransition.GeneratedEasingFunction>
+                                    </VisualTransition>
+                                </VisualStateGroup.Transitions>
+                                <VisualState
+                                    x:Name="Expanded">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="RotateButtonTransform"
+                                            Storyboard.TargetProperty="Angle"
+                                            To="180"
+                                            Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState
+                                    x:Name="Collapsed">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="RotateButtonTransform"
+                                            Storyboard.TargetProperty="Angle"
+                                            To="0"
+                                            Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Background="{TemplateBinding Background}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="Auto" />
+                                    <RowDefinition
+                                        Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid
+                                    Margin="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition
+                                            Width="*" />
+                                        <ColumnDefinition
+                                            Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter
+                                        Grid.Column="0"
+                                        VerticalAlignment="Center"
+                                        Content="{TemplateBinding HeaderContent}"
+                                        FontSize="16" />
+                                    <ToggleButton
+                                        Grid.Column="1"
+                                        RenderTransformOrigin="0.5,0.5"
+                                        x:Name="ExpandCollapseButton">
+                                        <ToggleButton.Template>
+                                            <ControlTemplate>
+                                                <Grid>
+                                                    <Ellipse
+                                                        Width="50"
+                                                        Height="50"
+                                                        Fill="{ThemeResource ToggleSwitchCurtainBackgroundThemeBrush}" />
+                                                    <Path
+                                                        RenderTransformOrigin="0.5,0.5"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Data="M2,3L9,10 16,3"
+                                                        Stroke="{ThemeResource ToggleButtonCheckedForegroundThemeBrush}"
+                                                        StrokeThickness="4" />
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </ToggleButton.Template>
+                                        <ToggleButton.RenderTransform>
+                                            <RotateTransform
+                                                x:Name="RotateButtonTransform" />
+                                        </ToggleButton.RenderTransform>
+                                    </ToggleButton>
+                                </Grid>
+                                <Grid
+                                    Grid.Row="1"
+                                    x:Name="Content">
+                                    <ContentPresenter
+                                        Background="Red"
+                                        Margin="5"
+                                        Content="{TemplateBinding Content}"
+                                        x:Name="Content2">
+                                    </ContentPresenter>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+-->
 </ResourceDictionary>

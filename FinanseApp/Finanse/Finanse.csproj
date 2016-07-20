@@ -98,8 +98,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Elements\ExpandPanel.cs" />
     <Compile Include="Elements\OperationCategory.cs" />
     <Compile Include="Elements\Operation.cs" />
+    <Compile Include="Elements\OperationSubCategoryTemplate.xaml.cs">
+      <DependentUpon>OperationSubCategoryTemplate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Elements\OperationCategoryTemplate.xaml.cs">
       <DependentUpon>OperationCategoryTemplate.xaml</DependentUpon>
     </Compile>
@@ -165,11 +169,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Elements\OperationSubCategoryTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Elements\OperationCategoryTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Elements\WplywTem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

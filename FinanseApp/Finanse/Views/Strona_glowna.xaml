@@ -66,7 +66,8 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <StackPanel
@@ -86,22 +87,22 @@
                 FontWeight="Bold"
                 FontSize="14" />
 
-            <CommandBar
+            <StackPanel
                 Name="UpperCommandBar"
-                Grid.Column="4"
-                Background="{StaticResource DarkBlueColorStyle}"
-                Foreground="White">
+                Orientation="Horizontal"
+                Grid.Column="4">
 
                 <AppBarSeparator
                     Foreground="#7FFFFFFF" />
 
                 <AppBarButton
                     Icon="Add"
+                    IsCompact="True"
                     Label="Nowa operacja"
                     Foreground="White"
                     Click="NowaOperacja_Click" />
                 
-            </CommandBar>
+            </StackPanel>
 
         </Grid>
 
@@ -412,6 +413,7 @@
                             Margin="0,0,0,5" />
 
                         <ListBox
+                            ScrollViewer.VerticalScrollMode="Disabled"
                             Name="OperacjeListView"
                             ItemsSource="{x:Bind Operations}"
                             SelectionMode="Single"

@@ -8,7 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="Transparent">
+    <Grid
+        Background="Transparent">
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
@@ -52,20 +53,27 @@
         </VisualStateManager.VisualStateGroups>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid
             Background="{StaticResource DarkBlueColorStyle}"
             MinHeight="48">
-            
+
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <StackPanel
@@ -78,223 +86,100 @@
                 Style="{StaticResource PageTitleStyle}" />
 
 
-            <CommandBar
+            <AppBarButton
                 Name="UpperCommandBar"
                 Grid.Column="3"
-                Background="{StaticResource DarkBlueColorStyle}"
-                Foreground="White">
-
-                <AppBarButton
-                    Icon="Add"
-                    Label="Nowa kategoria"
-                    Foreground="White"
-                    Click="NewCategory_Click" />
-
-            </CommandBar>
+                IsCompact="True"
+                Icon="Add"
+                Label="Nowa kategoria"
+                Foreground="White"
+                Click="NewCategory_Click" />
         </Grid>
 
         <ScrollViewer
             Grid.Row="1"
             VerticalScrollBarVisibility="Auto"
             HorizontalScrollBarVisibility="Disabled">
+
             <StackPanel>
 
-                <ScrollViewer
-                    VerticalScrollBarVisibility="Auto"
-                    HorizontalScrollBarVisibility="Disabled">
-  
-                    <StackPanel
-                        Margin="20,20,20,0">
+                <ListView
+                    Margin="20,20,20,0"
+                    ScrollViewer.VerticalScrollMode="Disabled"
+                    Name="OperacjeListView"
+                    ItemsSource="{x:Bind OperationCategories}"
+                    SelectionMode="None"
+                    MaxWidth="620"
+                    BorderThickness="0"
+                    Background="Transparent">
 
-                        <Grid
-                            MaxWidth="620">
+                    <ListView.ItemContainerStyle>
+                        <Style
+                            TargetType="ListViewItem">
+                            <Setter
+                                Property="HorizontalContentAlignment"
+                                Value="Stretch" />
+                            <Setter
+                                Property="Padding"
+                                Value="0" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
 
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition
-                                    Width="Auto" />
-                                <ColumnDefinition
-                                    Width="*" />
-                                <ColumnDefinition
-                                    Width="Auto" />
-                            </Grid.ColumnDefinitions>
+                    <ListView.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="data:OperationCategory">
+                            <data:ExpandPanel>
 
-                            <TextBlock
-                                Text="7/6/2016"
-                                Grid.Column="0"
-                                Foreground="#7FFFFFFF"
-                                FontSize="14"
-                                Margin="10,0,0,5" />
+                                <data:ExpandPanel.HeaderContent>
 
-                            <TextBlock
-                                Name="SumText"
-                                Text="+ 231,99 zł"
-                                Grid.Column="2"
-                                Foreground="{StaticResource GreenColorStyle}"
-                                FontSize="14"
-                                FontWeight="Bold"
-                                Margin="0,0,10,5" />
-
-                        </Grid>
-
-                        <Border
-                            MaxWidth="650"
-                            BorderBrush="#24ffffff"
-                            BorderThickness="1"
-                            Margin="0,0,0,5" />
-
-                        <ListBox
-                            Name="OperacjeListView"
-                            ItemsSource="{x:Bind OperationCategories}"
-                            SelectionMode="Single"
-                            SelectionChanged="IconsListBox_SelectionChanged"
-                            MaxWidth="620"
-                            BorderThickness="0"
-                            Background="Transparent">
-
-                            <ListBox.ItemContainerStyle>
-                                <Style
-                                    TargetType="ListBoxItem">
-                                    <Setter
-                                        Property="HorizontalContentAlignment"
-                                        Value="Stretch" />
-                                    <Setter
-                                        Property="Padding"
-                                        Value="0" />
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-
-                            <ListBox.ItemTemplate>
-                                <DataTemplate
-                                    x:DataType="data:OperationCategory">
                                     <Grid
-                                        Background="Transparent"
-                                        RightTapped="Grid_RightTapped"
-                                        DragStarting="Grid_DragStarting">
+                                        Background="Transparent">
 
-                                        <FlyoutBase.AttachedFlyout>
-                                            <MenuFlyout>
-                                                <MenuFlyoutItem
-                                                    x:Name="EditButton"
-                                                    Text="Edit"
-                                                    Click="EditButton_Click" />
-                                                <MenuFlyoutItem
-                                                    x:Name="DeleteButton"
-                                                    Text="Delete"
-                                                    Click="DeleteButton_Click" />
-                                            </MenuFlyout>
-                                        </FlyoutBase.AttachedFlyout>
-
-                                        <data:OperationCategoryTemplate />
+                                        <data:OperationCategoryTemplate
+                                            Loading="OperationCategoryTemplate_Loading" />
 
                                     </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                                </data:ExpandPanel.HeaderContent>
 
-                    </StackPanel>
+                                <data:ExpandPanel.Content>
+                                    <ListView
+                                        ScrollViewer.VerticalScrollMode="Disabled"
+                                        Name="SubOperacjeListView"
+                                        ItemsSource="{Binding OperationSubCategories}"
+                                        MaxWidth="620"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        SelectionMode="None"
+                                        DataContextChanged="SubOperacjeListView_DataContextChanged"
+                                        Loading="SubOperacjeListView_Loading">
 
-                </ScrollViewer>
+                                        <ListView.ItemContainerStyle>
+                                            <Style
+                                                TargetType="ListViewItem">
+                                                <Setter
+                                                    Property="HorizontalContentAlignment"
+                                                    Value="Stretch" />
+                                                <Setter
+                                                    Property="Padding"
+                                                    Value="0" />
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
 
-                <StackPanel
-                    Margin="20,20,20,0">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate
+                                                x:DataType="data:OperationCategory">
+                                                <data:OperationSubCategoryTemplate />
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </data:ExpandPanel.Content>
 
-                    <Grid
-                        MaxWidth="620">
+                            </data:ExpandPanel>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="Auto" />
-                            <ColumnDefinition
-                                Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock
-                            Text="Wydatki"
-                            Foreground="#7FFFFFFF"
-                            FontSize="14"
-                            Margin="10,0,0,5" />
-
-                    </Grid>
-
-                    <Border
-                        MaxWidth="650"
-                        BorderBrush="#24ffffff"
-                        BorderThickness="1"
-                        Margin="0,0,0,5" />
-
-                    <ListBox
-                        SelectionMode="Single"
-                        MaxWidth="620"
-                        BorderThickness="0"
-                        Background="Transparent">
-                        <ListBox.ItemContainerStyle>
-                            <Style
-                                TargetType="ListBoxItem">
-                                <Setter
-                                    Property="HorizontalContentAlignment"
-                                    Value="Stretch" />
-                                <Setter
-                                    Property="Padding"
-                                    Value="0" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <data:WplywTem />
-                        <data:WplywTem />
-                        <data:WplywTem />
-                    </ListBox>
-                </StackPanel>
-
-                <StackPanel
-                    Margin="20,20,20,0">
-
-                    <Grid
-                        MaxWidth="620">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="Auto" />
-                            <ColumnDefinition
-                                Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock
-                            Text="Wpływy"
-                            Foreground="#7FFFFFFF"
-                            FontSize="14"
-                            Margin="10,0,0,5" />
-
-                    </Grid>
-
-                    <Border
-                        MaxWidth="650"
-                        BorderBrush="#24ffffff"
-                        BorderThickness="1"
-                        Margin="0,0,0,5" />
-
-                    <ListBox
-                        SelectionMode="Single"
-                        MaxWidth="620"
-                        BorderThickness="0"
-                        Background="Transparent">
-                        <ListBox.ItemContainerStyle>
-                            <Style
-                                TargetType="ListBoxItem">
-                                <Setter
-                                    Property="HorizontalContentAlignment"
-                                    Value="Stretch" />
-                                <Setter
-                                    Property="Padding"
-                                    Value="0" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <data:WplywTem />
-                        <data:WplywTem />
-                        <data:WplywTem />
-                    </ListBox>
-                </StackPanel>
-
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackPanel>
-
         </ScrollViewer>
 
 
@@ -308,11 +193,11 @@
             <AppBarButton
                 Icon="Add"
                 Label="Nowa kategoria"
-                Foreground="White" 
-                Click="NewCategory_Click"/>
+                Foreground="White"
+                Click="NewCategory_Click" />
 
         </CommandBar>
-        
+
     </Grid>
-    
+
 </Page>

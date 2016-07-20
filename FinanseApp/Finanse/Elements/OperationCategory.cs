@@ -12,6 +12,7 @@ namespace Finanse.Elements {
         public string Color;//kolor #
         public string Icon;//ikona
         public bool IsSubcategory;
+        public string BossCategory;
         public bool VisibleInIncomes;
         public bool VisibleInExpenses;
     }

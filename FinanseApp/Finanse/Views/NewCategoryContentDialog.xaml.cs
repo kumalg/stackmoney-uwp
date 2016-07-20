@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Finanse.Elements;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -19,9 +21,15 @@ namespace Finanse.Views {
 
     public sealed partial class NewCategoryContentDialog : ContentDialog {
 
-        public NewCategoryContentDialog() {
+        ObservableCollection<OperationCategory> OperationCategories;
+        ObservableCollection<OperationCategory> OperationSubCategories;
+
+        public NewCategoryContentDialog(ObservableCollection<OperationCategory> OperationCategories, ObservableCollection<OperationCategory> OperationSubCategories) {
 
             this.InitializeComponent();
+
+            this.OperationCategories = OperationCategories;
+            this.OperationSubCategories = OperationSubCategories;
         }
 
         private void NewCategory_CancelButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
@@ -30,6 +38,24 @@ namespace Finanse.Views {
 
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
+            if (CategoryValue.SelectedIndex != -1) {
+                OperationSubCategories.Add(new OperationCategory() {
+
+                    Name = "Gowno",
+                    Color = "#234567",
+                    Icon = "\uE700",
+                    BossCategory = "Transport"
+                });
+            }
+            else {
+                OperationCategories.Add(new OperationCategory() {
+
+                    Name = "Gowno",
+                    Color = "#234567",
+                    Icon = "\uE700",
+
+                });
+            }
         }
 
         private void RadioButtonColor_Checked(object sender, RoutedEventArgs e) {
@@ -41,6 +67,10 @@ namespace Finanse.Views {
             var button = sender as RadioButton;
             CategoryIcon.Glyph = button.Content.ToString();
             CategoryIcon.FontFamily = button.FontFamily;
+        }
+
+        private void ComboBox_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
+
         }
     }
 }

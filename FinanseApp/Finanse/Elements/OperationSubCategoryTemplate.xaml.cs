@@ -20,7 +20,7 @@ using System.Reflection;
 
 namespace Finanse.Elements {
 
-    public sealed partial class OperationCategoryTemplate : UserControl {
+    public sealed partial class OperationSubCategoryTemplate : UserControl {
       
         private Elements.OperationCategory OperationCategory {
 
@@ -29,11 +29,20 @@ namespace Finanse.Elements {
             }
         }
 
-        public OperationCategoryTemplate() {
+        public OperationSubCategoryTemplate() {
 
             this.InitializeComponent();
 
             this.DataContextChanged += (s, e) => Bindings.Update();            
+        }
+
+        private void Ellipse_OperationTemplate_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
+                SubCategorySymbol.Visibility = Visibility.Visible;
+                Ellipse_OperationTemplate.Width = 40;
+                Ellipse_OperationTemplate.Height = 40;
+                EllipseGrid.Width = 40;
+                EllipseGrid.Height = 40;
+                Icon_OperationTemplate.FontSize = 18;
         }
     }
 }

@@ -9,7 +9,8 @@
 
     <Grid
         MaxWidth="600"
-        Margin="10,10">
+        Margin="0,5"
+        Background="Transparent">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition

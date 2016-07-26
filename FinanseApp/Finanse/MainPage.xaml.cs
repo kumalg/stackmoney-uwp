@@ -28,68 +28,50 @@ namespace Finanse {
         public MainPage() {
             this.InitializeComponent();
             AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
-            StatusBarAndTitleBar();
+            Strona_glowna_ListBoxItem.IsChecked = true;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             base.OnNavigatedTo(e);
         }
 
-        private void StatusBarAndTitleBar() {
-
-            //PC customization
-            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView")) {
-                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-                if (titleBar != null) {
-                    titleBar.ButtonBackgroundColor = Color.FromArgb(255, 11, 99, 199);
-                    titleBar.ButtonForegroundColor = Colors.White;
-                    titleBar.BackgroundColor = Color.FromArgb(255, 11, 99, 199);
-                    titleBar.ForegroundColor = Colors.White;
-                }
-            }
-
-            //Mobile customization
-            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) {
-
-                var statusBar = StatusBar.GetForCurrentView();
-                if (statusBar != null) {
-                    statusBar.BackgroundOpacity = 1;
-                    statusBar.BackgroundColor = Color.FromArgb(255, 43, 43, 43);
-                    statusBar.ForegroundColor = Colors.White;
-                }
-            }
-        }
-
         private void HamburgerButton_Click(object sender, RoutedEventArgs e) {
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
         }
 
-        private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (Strona_glowna_ListBoxItem.IsSelected) {
-                AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
-            }
+        private void Strona_glowna_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
+            AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
+            ClosingPane();
+        }
 
-            else if (Kategorie_ListBoxItem.IsSelected) {
-                AktualnaStrona_Frame.Navigate(typeof(Kategorie));
-            }
+        private void Kategorie_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
+            AktualnaStrona_Frame.Navigate(typeof(Kategorie));
+            ClosingPane();
+        }
 
-            else if (Szablony_ListBoxItem.IsSelected) {
-                AktualnaStrona_Frame.Navigate(typeof(Szablony));
-            }
+        private void Szablony_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
+            AktualnaStrona_Frame.Navigate(typeof(Szablony));
+            ClosingPane();
+        }
 
-            else if (ZleceniaStale_ListBoxItem.IsSelected) {
-                AktualnaStrona_Frame.Navigate(typeof(ZleceniaStale));
-            }
+        private void ZleceniaStale_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
+            AktualnaStrona_Frame.Navigate(typeof(ZleceniaStale));
+            ClosingPane();
+        }
 
-            else if (PlanowaneWydatki_ListBoxItem.IsSelected) {
-                AktualnaStrona_Frame.Navigate(typeof(PlanowaneWydatki));
-            }
+        private void PlanowaneWydatki_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
+            AktualnaStrona_Frame.Navigate(typeof(PlanowaneWydatki));
+            ClosingPane();
+        }
 
-            else if (Ustawienia_ListBoxItem.IsSelected) {
-                AktualnaStrona_Frame.Navigate(typeof(Ustawienia));
-            }
+        private void Ustawienia_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
+            AktualnaStrona_Frame.Navigate(typeof(Ustawienia));
+            ClosingPane();
+        }
 
-            if (MySplitView.IsPaneOpen) MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
+        private void ClosingPane() {
+            if (MySplitView.IsPaneOpen)
+                MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
         }
     }
 }

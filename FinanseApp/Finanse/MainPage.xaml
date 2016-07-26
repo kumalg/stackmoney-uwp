@@ -7,32 +7,352 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:Finanse.Elements"
     mc:Ignorable="d">
+    <Page.Resources>
+        <Style
+            x:Key="HamburgerRadioButton"
+            TargetType="RadioButton">
+            <Setter
+                Property="Background"
+                Value="Transparent" />
+            <Setter
+                Property="Foreground"
+                Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+            <Setter
+                Property="Padding"
+                Value="8,6,0,0" />
+            <Setter
+                Property="HorizontalAlignment"
+                Value="Stretch" />
+            <Setter
+                Property="VerticalAlignment"
+                Value="Center" />
+            <Setter
+                Property="HorizontalContentAlignment"
+                Value="Left" />
+            <Setter
+                Property="VerticalContentAlignment"
+                Value="Top" />
+            <Setter
+                Property="FontFamily"
+                Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter
+                Property="FontSize"
+                Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter
+                Property="MinWidth"
+                Value="120" />
+            <Setter
+                Property="UseSystemFocusVisuals"
+                Value="True" />
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="RadioButton">
+                        <Grid
+                            x:Name="HamburgerRadioButtonGrid"
+                            HorizontalAlignment="Stretch"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="48" />
+                                <ColumnDefinition
+                                    Width="*" />
+                            </Grid.ColumnDefinitions>
 
-    <Grid Background="{StaticResource GreyColorStyle}">
-        
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup
+                                    x:Name="CommonStates">
+                                    <VisualState
+                                        x:Name="Normal">
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="PointerOver">
+                                        <VisualState.Setters>
+                                            <Setter
+                                                Target="HamburgerRadioButtonGrid.(Panel.Background)"
+                                                Value="{StaticResource GreyColorStyle}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Pressed">
+                                        <VisualState.Setters>
+                                            <Setter
+                                                Target="HamburgerRadioButtonGrid.(Panel.Background)"
+                                                Value="{StaticResource BlueColorStyle}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup
+                                    x:Name="CheckStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition
+                                            From="Checked"
+                                            GeneratedDuration="0:0:0.2"
+                                            To="Unchecked">
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="HamburgerIcon"
+                                                    To="White"
+                                                    Duration="0:0:0.2"
+                                                    Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
+                                                <DoubleAnimation
+                                                    Duration="0:0:0.2"
+                                                    To="0"
+                                                    Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                    Storyboard.TargetName="HoverBorder" />
+                                            </Storyboard>
+                                        </VisualTransition>
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState
+                                        x:Name="Checked">
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="HamburgerIcon"
+                                                To="#FF1482FF"
+                                                Duration="0:0:0.2"
+                                                Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
+                                            <DoubleAnimation
+                                                Duration="0:0:0.2"
+                                                To="1"
+                                                Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                Storyboard.TargetName="HoverBorder"
+                                                d:IsOptimized="True" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Unchecked">
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Duration="0"
+                                                To="0"
+                                                Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                Storyboard.TargetName="HoverBorder"
+                                                d:IsOptimized="True" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Indeterminate" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <Grid
+                                Height="48"
+                                VerticalAlignment="Top">
+                                <StackPanel
+                                    x:Name="HoverBorder"
+                                    Width="3"
+                                    Height="24"
+                                    HorizontalAlignment="Left"
+                                    Background="#FF1482FF" />
+                                <ContentPresenter
+                                    x:Name="HamburgerIcon"
+                                    Content="{TemplateBinding Tag}"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center" />
+                            </Grid>
+                            <ContentPresenter
+                                x:Name="ContentPresenter"
+                                AutomationProperties.AccessibilityView="Raw"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                ContentTransitions="{TemplateBinding ContentTransitions}"
+                                Content="{TemplateBinding Content}"
+                                Grid.Column="1"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                TextWrapping="Wrap"
+                                VerticalAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style
+            x:Key="HamburgerButtonStyle"
+            TargetType="Button">
+            <Setter
+                Property="Background"
+                Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+            <Setter
+                Property="Foreground"
+                Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+            <Setter
+                Property="BorderBrush"
+                Value="{ThemeResource SystemControlForegroundTransparentBrush}" />
+            <Setter
+                Property="BorderThickness"
+                Value="{ThemeResource ButtonBorderThemeThickness}" />
+            <Setter
+                Property="Padding"
+                Value="8,4,8,4" />
+            <Setter
+                Property="HorizontalAlignment"
+                Value="Left" />
+            <Setter
+                Property="VerticalAlignment"
+                Value="Center" />
+            <Setter
+                Property="FontFamily"
+                Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter
+                Property="FontWeight"
+                Value="Normal" />
+            <Setter
+                Property="FontSize"
+                Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter
+                Property="UseSystemFocusVisuals"
+                Value="True" />
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="Button">
+                        <Grid
+                            x:Name="RootGrid"
+                            Background="{TemplateBinding Background}">
+                            <!--
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup
+                                    x:Name="CommonStates">
+                                    <VisualState
+                                        x:Name="Normal">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation
+                                                Storyboard.TargetName="RootGrid" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="BorderBrush"
+                                                Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlHighlightBaseMediumLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Foreground"
+                                                Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlHighlightBaseHighBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerUpThemeAnimation
+                                                Storyboard.TargetName="RootGrid" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Background"
+                                                Storyboard.TargetName="RootGrid">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="BorderBrush"
+                                                Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlHighlightTransparentBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Foreground"
+                                                Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlHighlightBaseHighBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerDownThemeAnimation
+                                                Storyboard.TargetName="RootGrid" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Background"
+                                                Storyboard.TargetName="RootGrid">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Foreground"
+                                                Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="BorderBrush"
+                                                Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlDisabledTransparentBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            -->
+                            <ContentPresenter
+                                x:Name="ContentPresenter"
+                                AutomationProperties.AccessibilityView="Raw"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                ContentTransitions="{TemplateBinding ContentTransitions}"
+                                Content="{TemplateBinding Content}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Padding="{TemplateBinding Padding}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid
+        Background="{StaticResource GreyColorStyle}">
+
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
-                <VisualState x:Name="HamburgerTight">
+                <VisualState
+                    x:Name="HamburgerTight">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0"/>
+                        <AdaptiveTrigger
+                            MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="MySplitView.DisplayMode" Value="Overlay"/>
+                        <Setter
+                            Target="MySplitView.DisplayMode"
+                            Value="Overlay" />
                     </VisualState.Setters>
                 </VisualState>
-                <VisualState x:Name="HamburgerWide">
+                <VisualState
+                    x:Name="HamburgerWide">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="640"/>
+                        <AdaptiveTrigger
+                            MinWindowWidth="640" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="MySplitView.DisplayMode" Value="CompactOverlay"/>
+                        <Setter
+                            Target="MySplitView.DisplayMode"
+                            Value="CompactOverlay" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
         <!-- Początek Hamburger Menu -->
-        
+
         <Button
             Name="HamburgerButton"
             Height="48"
@@ -46,9 +366,11 @@
             Canvas.ZIndex="3"
             VerticalAlignment="Top"
             HorizontalAlignment="Left"
-            Foreground="White"/>
+            Foreground="White"
+            ClickMode="Press"
+            Style="{StaticResource HamburgerButtonStyle}" />
 
-        <SplitView 
+        <SplitView
             Name="MySplitView"
             DisplayMode="Overlay"
             OpenPaneLength="250"
@@ -56,136 +378,126 @@
             HorizontalAlignment="Stretch"
             PaneBackground="Transparent"
             Canvas.ZIndex="2">
-            
+
             <SplitView.Pane>
-                
-                <ListBox 
-                    Name="IconsListBox"
-                    BorderThickness="0"
-                    SelectionMode="Single"
-                    SelectionChanged="IconsListBox_SelectionChanged"
-                    Foreground="White"
-                    Background="{StaticResource LightGreyTransparentColorStyle}"
-                    SelectedIndex="0">
-                    
-                    <ListBoxItem
-                        Name="Strona_glowna_ListBoxItem"
-                        Margin="0,48,0,0"
-                        Height="48">
-                        
-                        <StackPanel Orientation="Horizontal">
-                            
-                            <TextBlock
-                                Style="{StaticResource SplitViewIconStyle}"
-                                Text="&#xE80F;"/>
-                            
-                            <TextBlock
-                                Style="{StaticResource SplitViewTitleStyle}"
-                                Text="Moje finanse" />
-                            
-                        </StackPanel>
-                        
-                    </ListBoxItem>
-                    
-                    <ListBoxItem
-                        Name="Kategorie_ListBoxItem"
-                        Height="48">
-                        
-                        <StackPanel Orientation="Horizontal">
-                            
-                            <TextBlock
-                                Style="{StaticResource SplitViewIconStyle}"
-                                Text="&#xE71D;"/>
-                            
-                            <TextBlock
-                                Style="{StaticResource SplitViewTitleStyle}"
-                                Text="Kategorie" />
-                            
-                        </StackPanel>
-                        
-                    </ListBoxItem>
-                    
-                    <ListBoxItem
-                        Name="Szablony_ListBoxItem"
-                        Height="48">
-                        
-                        <StackPanel Orientation="Horizontal">
-                            
-                            <TextBlock
-                                Style="{StaticResource SplitViewIconStyle}"
-                                Text="&#xE74C;"/>
-                            
-                            <TextBlock 
-                                Style="{StaticResource SplitViewTitleStyle}"
-                                Text="Szablony" />
-                            
-                        </StackPanel>
-                        
-                    </ListBoxItem>
-                    
-                    <ListBoxItem
-                        Name="ZleceniaStale_ListBoxItem"
-                        Height="48">
-                        
-                        <StackPanel Orientation="Horizontal">
-                            
-                            <TextBlock
-                                Style="{StaticResource SplitViewIconStyle}"
-                                Text="&#xE81C;"/>
-                            
-                            <TextBlock
-                                Style="{StaticResource SplitViewTitleStyle}"
-                                Text="Zlecenia stałe" />
-                            
-                        </StackPanel>
-                        
-                    </ListBoxItem>
-                    
-                    <ListBoxItem
-                        Name="PlanowaneWydatki_ListBoxItem"
-                        Height="48">
-                        
-                        <StackPanel Orientation="Horizontal">
-                            
-                            <TextBlock
-                                Style="{StaticResource SplitViewIconStyle}"
-                                Text="&#xE823;"/>
-                            
-                            <TextBlock
-                                Style="{StaticResource SplitViewTitleStyle}"
-                                Text="Planowane wydatki" />
-                            
-                        </StackPanel>
-                        
-                    </ListBoxItem>
-                    
-                    <ListBoxItem
+
+                <Grid
+                    Background="{StaticResource LightGreyTransparentColorStyle}">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="48" />
+                        <RowDefinition
+                            Height="Auto" />
+                        <RowDefinition
+                            Height="*" />
+                        <RowDefinition
+                            Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Background="{StaticResource BlueColorStyle}"
+                        Margin="48,0,0,0">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontWeight="Bold"
+                            FontSize="15">
+                            Kumalg Finanse
+                        </TextBlock>
+                    </Grid>
+
+                    <StackPanel
+                        Grid.Row="1">
+
+                        <RadioButton
+                            Name="Strona_glowna_ListBoxItem"
+                            GroupName="HamburgerRadioButtons"
+                            Style="{StaticResource HamburgerRadioButton}"
+                            Content="Moje finanse"
+                            Checked="Strona_glowna_ListBoxItem_Checked">
+                            <RadioButton.Tag>
+                                <TextBlock
+                                    Style="{StaticResource SplitViewIconStyle}"
+                                    Text="&#xE10F;" />
+                            </RadioButton.Tag>
+                        </RadioButton>
+
+                        <RadioButton
+                            Name="Kategorie_ListBoxItem"
+                            GroupName="HamburgerRadioButtons"
+                            Style="{StaticResource HamburgerRadioButton}"
+                            Content="Kategorie"
+                            Checked="Kategorie_ListBoxItem_Checked">
+                            <RadioButton.Tag>
+                                <TextBlock
+                                    Style="{StaticResource SplitViewIconStyle}"
+                                    Text="&#xE71D;" />
+                            </RadioButton.Tag>
+                        </RadioButton>
+
+                        <RadioButton
+                            Name="Szablony_ListBoxItem"
+                            GroupName="HamburgerRadioButtons"
+                            Style="{StaticResource HamburgerRadioButton}"
+                            Content="Szablony"
+                            Checked="Szablony_ListBoxItem_Checked">
+                            <RadioButton.Tag>
+                                <TextBlock
+                                    Style="{StaticResource SplitViewIconStyle}"
+                                    Text="&#xE74C;" />
+                            </RadioButton.Tag>
+                        </RadioButton>
+
+                        <RadioButton
+                            Name="ZleceniaStale_ListBoxItem"
+                            GroupName="HamburgerRadioButtons"
+                            Style="{StaticResource HamburgerRadioButton}"
+                            Content="Zlecenia stałe"
+                            Checked="ZleceniaStale_ListBoxItem_Checked">
+                            <RadioButton.Tag>
+                                <TextBlock
+                                    Style="{StaticResource SplitViewIconStyle}"
+                                    Text="&#xE81C;" />
+                            </RadioButton.Tag>
+                        </RadioButton>
+
+                        <RadioButton
+                            Name="PlanowaneWydatki_ListBoxItem"
+                            GroupName="HamburgerRadioButtons"
+                            Style="{StaticResource HamburgerRadioButton}"
+                            Content="Planowane wydatki"
+                            Checked="PlanowaneWydatki_ListBoxItem_Checked">
+                            <RadioButton.Tag>
+                                <TextBlock
+                                    Style="{StaticResource SplitViewIconStyle}"
+                                    Text="&#xE823;" />
+                            </RadioButton.Tag>
+                        </RadioButton>
+
+                    </StackPanel>
+
+
+                    <RadioButton
+                        Grid.Row="3"
+                        GroupName="HamburgerRadioButtons"
                         Name="Ustawienia_ListBoxItem"
-                        Height="48">
-                        
-                        <StackPanel Orientation="Horizontal">
-                            
+                        Style="{StaticResource HamburgerRadioButton}"
+                        Content="Ustawienia"
+                        Checked="Ustawienia_ListBoxItem_Checked">
+                        <RadioButton.Tag>
                             <TextBlock
                                 Style="{StaticResource SplitViewIconStyle}"
-                                Text="&#xE713;"/>
-                            
-                            <TextBlock
-                                Style="{StaticResource SplitViewTitleStyle}"
-                                Text="Ustawienia" />
-                            
-                        </StackPanel>
-                        
-                    </ListBoxItem>
-                    
-                </ListBox>
-                
+                                Text="&#xE713;" />
+                        </RadioButton.Tag>
+                    </RadioButton>
+                </Grid>
             </SplitView.Pane>
-            
+
             <SplitView.Content>
                 <Frame
                     Name="AktualnaStrona_Frame" />
             </SplitView.Content>
-            
+
         </SplitView>
     </Grid>
 </Page>

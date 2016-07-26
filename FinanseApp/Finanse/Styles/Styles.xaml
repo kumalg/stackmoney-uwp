@@ -17,6 +17,7 @@
     <SolidColorBrush x:Key="BlueColorStyle" Color="#0B63C7"/>
 
     <SolidColorBrush x:Key="GreyColorStyle" Color="#2B2B2B"/>
+    <Color x:Key="Grey2ColorStyle">#2B2B2B</Color>
     <SolidColorBrush x:Key="GreyTransparentColorStyle" Color="#2B2B2B" Opacity="0.8" />
     
     <SolidColorBrush x:Key="LightGreyTransparentColorStyle" Color="#E5353535"/>
@@ -119,15 +120,15 @@
     ******************************************-->
     <Style TargetType="TextBlock" x:Key="SplitViewIconStyle">
         <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
-        <Setter Property="FontSize" Value="16"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="4,0,0,0"/>
+        <Setter
+            Property="FontSize"
+            Value="16" />
     </Style>
     
     <Style TargetType="TextBlock" x:Key="SplitViewTitleStyle">
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="32,0,0,0"/>
+        <Setter Property="Margin" Value="16,0,0,0"/>
     </Style>
 
 

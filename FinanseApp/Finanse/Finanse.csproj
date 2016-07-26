@@ -110,7 +110,6 @@
     <Compile Include="Elements\WplywTem.xaml.cs">
       <DependentUpon>WplywTem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Styles\ColorBase.cs" />
     <Compile Include="Views\Kategorie.xaml.cs">
       <DependentUpon>Kategorie.xaml</DependentUpon>
     </Compile>

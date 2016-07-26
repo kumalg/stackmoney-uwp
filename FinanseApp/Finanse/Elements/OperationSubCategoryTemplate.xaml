@@ -26,20 +26,19 @@
             Width="50"
             Height="40">
             <Ellipse
-                Width="5"
-                Height="5"
+                Width="8"
+                Height="8"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
-                Fill="Gray"
-                Margin="0,0,0,1.5"/>
-            <StackPanel
-                VerticalAlignment="Top"
+                Fill="Gray"/>
+            <Border
+                VerticalAlignment="Center"
                 HorizontalAlignment="Right"
-                Margin="0,4,10,0"
+                Margin="0,0,10,0"
+                CornerRadius="0.75"
                 Width="16"
-                Height="16"
                 BorderBrush="Gray"
-                BorderThickness="1.5,0,0,1.5" />
+                BorderThickness="1.5" />
         </Grid>
 
         <Grid

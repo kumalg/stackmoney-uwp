@@ -6,10 +6,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <!--*****************************************
-    KOLORY W APLIKACJI
-    ******************************************-->
-    <SolidColorBrush x:Key="GreenColorStyle" Color="#3EB93E"/>
+    
+    <!--
+        <SolidColorBrush x:Key="GreenColorStyle" Color="#3EB93E"/>
 
     <SolidColorBrush x:Key="RedColorStyle" Color="#FF3B3B"/>
 
@@ -21,6 +20,22 @@
     
     <SolidColorBrush x:Key="LightGreyTransparentColorStyle" Color="#E5353535"/>
     <SolidColorBrush x:Key="DarkGreyColorStyle" Color="#2B2B2B"/>
+    -->
+    <!--*****************************************
+    KOLORY W APLIKACJI
+    ******************************************-->
+    <SolidColorBrush x:Key="GreenColorStyle" Color="#3EB93E"/>
+
+    <SolidColorBrush x:Key="RedColorStyle" Color="#FF3B3B"/>
+
+    <SolidColorBrush x:Key="DarkBlueColorStyle" Color="#01948a"/>
+    <SolidColorBrush x:Key="BlueColorStyle" Color="#01b6ad"/>
+
+    <SolidColorBrush x:Key="GreyColorStyle" Color="#272733" />
+    <SolidColorBrush x:Key="GreyTransparentColorStyle" Color="#272733" Opacity="0.8" />
+    
+    <SolidColorBrush x:Key="LightGreyTransparentColorStyle" Color="#E52e2f43"/>
+    <SolidColorBrush x:Key="DarkGreyColorStyle" Color="#21212b"/>
 
     
     <!--*****************************************
@@ -227,7 +242,7 @@
                                     <Storyboard>
                                         <ColorAnimation
                                             Storyboard.TargetName="HamburgerIcon"
-                                            To="#FF1482FF"
+                                            To="#FF01b6ad"
                                             Duration="0:0:0.2"
                                             Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
                                         <DoubleAnimation
@@ -262,7 +277,7 @@
                                 Width="3"
                                 Height="24"
                                 HorizontalAlignment="Left"
-                                Background="#FF1482FF" />
+                                Background="#FF01b6ad" />
                             <ContentPresenter
                                 x:Name="HamburgerIcon"
                                 Content="{TemplateBinding Tag}"

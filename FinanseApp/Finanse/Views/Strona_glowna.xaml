@@ -95,7 +95,7 @@
                                         <Storyboard>
                                             <ColorAnimation
                                                 Storyboard.TargetName="ContentPresenter"
-                                                To="#FF1482FF"
+                                                To="#FF01b6ad"
                                                 Duration="0:0:0.2"
                                                 Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
                                             <DoubleAnimation
@@ -527,7 +527,7 @@
                                                         x:Name="HeaderClipperGeometry" />
                                                 </ContentControl.Clip>
                                                 <Grid
-                                                    Background="#FF242424">
+                                                    Background="{StaticResource DarkGreyColorStyle}">
                                                     <PivotHeaderPanel
                                                         x:Name="StaticHeader"
                                                         Visibility="Collapsed" 
@@ -1259,7 +1259,7 @@
         <CommandBar
             Name="LowerCommandBar"
             Grid.Row="2"
-            Background="#242424"
+            Background="{StaticResource DarkGreyColorStyle}"
             Foreground="White">
 
             <AppBarButton

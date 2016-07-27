@@ -26,69 +26,67 @@ namespace Finanse.Views {
         private int i = 0;
         private int BossCategoryIndex = -1;
 
+        public OperationCategory operationCategoryItem;
+        public OperationSubCategory operationSubCategoryItem;
+
         public Kategorie() {
 
-            OperationCategories.Add(new OperationCategory {
+            operationCategoryItem = new OperationCategory {
                 Name = "Transport",
                 Color = "#FF0b63c7",
                 Icon = "\uE806",
-                IsSubcategory = false
-            });
+            };
 
-            OperationSubCategories.Add(new OperationCategory {
+
+            operationSubCategoryItem = new OperationSubCategory {
                 Name = "Samochód",
                 Color = "#FF0b63c7",
-                Icon = "\uEA5E",
-                IsSubcategory = true,
-                BossCategory = "Transport"
-            });
+                Icon = "\uEA5E"
+            };
+            operationCategoryItem.addSubCategory(operationSubCategoryItem);
 
-            OperationSubCategories.Add(new OperationCategory {
+            operationSubCategoryItem = new OperationSubCategory {
                 Name = "Taxi",
                 Color = "#FF23be32",
-                Icon = "\uEC81",
-                IsSubcategory = true,
-                BossCategory = "Transport"
-            });
+                Icon = "\uEC81"
+            };
+            operationCategoryItem.addSubCategory(operationSubCategoryItem);
 
-            OperationSubCategories.Add(new OperationCategory {
+            operationSubCategoryItem = new OperationSubCategory {
                 Name = "Autobus",
                 Color = "#FFe78c33",
-                Icon = "\uE806",
-                IsSubcategory = true,
-                BossCategory = "Transport"
-            });
+                Icon = "\uE806"
+            };
+            operationCategoryItem.addSubCategory(operationSubCategoryItem);
 
-            OperationCategories.Add(new OperationCategory {
+            OperationCategories.Add(operationCategoryItem);
+
+
+
+            operationCategoryItem = new OperationCategory {
                 Name = "Jedzenie",
                 Color = "#FF5bc70b",
                 Icon = "",
                 IsSubcategory = false
-            });
+            };
 
-            OperationSubCategories.Add(new OperationCategory {
-                Name = "McDonald's",
-                Color = "#FFd9cd06",
-                Icon = "\uEB50",
-                IsSubcategory = true,
-                BossCategory = "Jedzenie"
-            });
 
-            OperationSubCategories.Add(new OperationCategory {
+            operationSubCategoryItem = new OperationSubCategory {
                 Name = "Pasibus",
                 Color = "#FF3fd826",
-                Icon = "\uE700",
-                IsSubcategory = true,
-                BossCategory = "Jedzenie"
-            });
+                Icon = "\uE700"
+            };
+            operationCategoryItem.addSubCategory(operationSubCategoryItem);
 
-            OperationSubCategories.Add(new OperationCategory {
+            operationSubCategoryItem = new OperationSubCategory {
                 Name = "Biedronka",
                 Color = "#FFea2626",
-                Icon = "\uE1D2",
-                IsSubcategory = true,
-                BossCategory = "Jedzenie"
-            });
+                Icon = "\uE1D2"
+            };
+            operationCategoryItem.addSubCategory(operationSubCategoryItem);
+
+            OperationCategories.Add(operationCategoryItem);
+
 
             OperationCategories.Add(new OperationCategory {
                 Name = "Alkohol",

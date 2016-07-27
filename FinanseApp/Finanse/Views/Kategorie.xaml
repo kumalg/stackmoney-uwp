@@ -139,52 +139,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate
                             x:DataType="data:OperationCategory">
-                            <data:ExpandPanel>
-
-                                <data:ExpandPanel.HeaderContent>
-
-                                    <data:OperationCategoryTemplate
-                                        Padding="0"
-                                        Margin="0"
-                                        Loading="OperationCategoryTemplate_Loading" />
-
-                                </data:ExpandPanel.HeaderContent>
-
-                                <data:ExpandPanel.Content>
-                                    <ListView
-                                        ScrollViewer.VerticalScrollMode="Disabled"
-                                        Name="SubOperacjeListView"
-                                        ItemsSource="{Binding OperationSubCategories}"
-                                        MaxWidth="620"
-                                        BorderThickness="0"
-                                        Background="Transparent"
-                                        SelectionMode="None"
-                                        DataContextChanged="SubOperacjeListView_DataContextChanged"
-                                        Loading="SubOperacjeListView_Loading">
-
-                                        <ListView.ItemContainerStyle>
-                                            <Style
-                                                TargetType="ListViewItem">
-                                                <Setter
-                                                    Property="HorizontalContentAlignment"
-                                                    Value="Stretch" />
-                                                <Setter
-                                                    Property="Padding"
-                                                    Value="0" />
-                                            </Style>
-                                        </ListView.ItemContainerStyle>
-
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate
-                                                x:DataType="data:OperationCategory">
-                                                <data:OperationSubCategoryTemplate />
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                </data:ExpandPanel.Content>
-
-                            </data:ExpandPanel>
-
+                            <data:OperationCategoryTemplate />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

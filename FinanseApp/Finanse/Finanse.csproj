@@ -101,6 +101,7 @@
     <Compile Include="Elements\ExpandPanel.cs" />
     <Compile Include="Elements\OperationCategory.cs" />
     <Compile Include="Elements\Operation.cs" />
+    <Compile Include="Elements\OperationSubCategory.cs" />
     <Compile Include="Elements\OperationSubCategoryTemplate.xaml.cs">
       <DependentUpon>OperationSubCategoryTemplate.xaml</DependentUpon>
     </Compile>
@@ -110,6 +111,7 @@
     <Compile Include="Elements\WplywTem.xaml.cs">
       <DependentUpon>WplywTem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model.cs" />
     <Compile Include="Views\Kategorie.xaml.cs">
       <DependentUpon>Kategorie.xaml</DependentUpon>
     </Compile>

@@ -24,6 +24,8 @@ namespace Finanse.Views {
         ObservableCollection<OperationCategory> OperationCategories;
         ObservableCollection<OperationCategory> OperationSubCategories;
 
+        public OperationSubCategory coo;
+
         public NewCategoryContentDialog(ObservableCollection<OperationCategory> OperationCategories, ObservableCollection<OperationCategory> OperationSubCategories) {
 
             this.InitializeComponent();
@@ -39,21 +41,19 @@ namespace Finanse.Views {
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
             if (CategoryValue.SelectedIndex != -1) {
-                OperationSubCategories.Add(new OperationCategory() {
-
-                    Name = "Gowno",
-                    Color = "#234567",
-                    Icon = "\uE700",
-                    BossCategory = "Transport"
-                });
+                coo = new OperationSubCategory {
+                    Name = NameValue.Text,
+                    Color = "#FF121212",
+                    Icon = CategoryIcon.Glyph,
+                };
+                OperationCategories[1].addSubCategory(coo);
             }
+
             else {
                 OperationCategories.Add(new OperationCategory() {
-
-                    Name = "Gowno",
-                    Color = "#234567",
-                    Icon = "\uE700",
-
+                    Name = NameValue.Text,
+                    Color = "#FF121212",
+                    Icon = CategoryIcon.Glyph,
                 });
             }
         }

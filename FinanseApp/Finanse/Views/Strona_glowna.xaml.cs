@@ -28,8 +28,10 @@ namespace Finanse.Views {
         SQLite.Net.SQLiteConnection conn;
 
         public ObservableCollection<Operation> Operations = new ObservableCollection<Operation>();
-
         public List<OperationCategory> OperationCategories = new List<OperationCategory>();
+
+        public OperationCategory operationCategoryItem;
+        public OperationSubCategory operationSubCategoryItem;
 
         public Strona_glowna() {
 
@@ -38,31 +40,12 @@ namespace Finanse.Views {
             path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
             conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
             conn.CreateTable<Operation>();
-            /*
-            var s = conn.Insert(new Operation() {
-                Title = "PKP IntercitySQL",
-                Cost = 17.10m,
-                Category = "Transport",
-                ExpenseOrIncome = "expense"
-            });
+            conn.CreateTable<OperationCategory>();
+            conn.CreateTable<OperationSubCategory>();
 
-            var es = conn.Insert(new Operation() {
-                Title = "BiedronkaSQL",
-                Cost = 23m,
-                Category = "Jedzenie",
-                ExpenseOrIncome = "income"
-            });
+            var queryOperation = conn.Table<Operation>();
 
-            var esy = conn.Insert(new Operation() {
-                Title = "Drink HalaSQL",
-                Cost = 7.99m,
-                Category = "Alkohol",
-                ExpenseOrIncome = "expense"
-            });
-            */
-            var query = conn.Table<Operation>();
-
-            foreach (var message in query) {
+            foreach (var message in queryOperation) {
                 Operations.Add(new Operation {
                     Title = message.Title,
                     Cost = message.Cost,
@@ -70,49 +53,29 @@ namespace Finanse.Views {
                     ExpenseOrIncome = message.ExpenseOrIncome
                 });
             }
-            /*
-            Operations.Add(new Operation {
-                Title = "PKP Intercity",
-                Cost = 17.10m,
-                Category = "Transport",
-                ExpenseOrIncome = "expense"
-            });
 
-            Operations.Add(new Operation {
-                Title = "Biedronka",
-                Cost = 23m,
-                Category = "Jedzenie",
-                ExpenseOrIncome = "income"
-            });
+            var queryOperationCategory = conn.Table<OperationCategory>();
+            var queryOperationSubCategory = conn.Table<OperationSubCategory>();
 
-            Operations.Add(new Operation {
-                Title = "Drink Hala",
-                Cost = 7.99m,
-                Category = "Alkohol",
-                ExpenseOrIncome = "expense"
-            });
-            */
-            OperationCategories.Add(new OperationCategory {
-                Name = "Transport",
-                Color = "#FF0b63c7",
-                Icon = "",
-            });
+            foreach (var message in queryOperationCategory) {
+                operationCategoryItem = new OperationCategory {
+                    Name = message.Name,
+                    Color = message.Color,
+                    Icon = message.Icon,
+                };
 
-            OperationCategories.Add(new OperationCategory {
-                Name = "Jedzenie",
-                Color = "#FF5bc70b",
-                Icon = "",
-            });
-
-            OperationCategories.Add(new OperationCategory {
-                Name = "Alkohol",
-                Color = "#FF138b99",
-                Icon = "",
-            });
-        }
-
-        private void Wplyw_Tapped(object sender, TappedRoutedEventArgs e) {
-
+                foreach (var submessage in queryOperationSubCategory) {
+                    if (submessage.BossCategory == message.Name) {
+                        operationSubCategoryItem = new OperationSubCategory {
+                            Name = submessage.Name,
+                            Color = submessage.Color,
+                            Icon = submessage.Icon,
+                        };
+                        operationCategoryItem.addSubCategory(operationSubCategoryItem);
+                    }
+                }
+                OperationCategories.Add(operationCategoryItem);
+            }
         }
 
         private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {

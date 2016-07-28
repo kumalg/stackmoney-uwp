@@ -1106,11 +1106,6 @@
         </Pivot>
 -->
 
-        <RadioButton
-            Grid.Row="1"
-            Style="{StaticResource PivotRadioButtonStyle}">&#xE700;
-        </RadioButton>
-
         <Pivot
             Grid.Row="1"
             Style="{StaticResource PivotStyle1}">

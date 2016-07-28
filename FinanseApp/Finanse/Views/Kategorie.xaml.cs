@@ -26,8 +26,6 @@ namespace Finanse.Views {
 
         public ObservableCollection<OperationCategory> OperationCategories = new ObservableCollection<OperationCategory>();
         public ObservableCollection<OperationCategory> OperationSubCategories = new ObservableCollection<OperationCategory>();
-        private int i = 0;
-        private int BossCategoryIndex = -1;
 
         public OperationCategory operationCategoryItem;
         public OperationSubCategory operationSubCategoryItem;
@@ -38,132 +36,38 @@ namespace Finanse.Views {
 
             path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
             conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
+
             conn.CreateTable<OperationCategory>();
             conn.CreateTable<OperationSubCategory>();
 
-            operationCategoryItem = new OperationCategory {
-                Name = "Transport",
-                Color = "#FF0b63c7",
-                Icon = "\uE806",
-            };
+            var queryOperationCategory = conn.Table<OperationCategory>();
+            var queryOperationSubCategory = conn.Table<OperationSubCategory>();
 
+            foreach (var message in queryOperationCategory) {
+                operationCategoryItem = new OperationCategory {
+                    Name = message.Name,
+                    Color = message.Color,
+                    Icon = message.Icon,
+                };
 
-            operationSubCategoryItem = new OperationSubCategory {
-                Name = "Samochód",
-                Color = "#FF0b63c7",
-                Icon = "\uEA5E"
-            };
-            operationCategoryItem.addSubCategory(operationSubCategoryItem);
-
-            operationSubCategoryItem = new OperationSubCategory {
-                Name = "Taxi",
-                Color = "#FF23be32",
-                Icon = "\uEC81"
-            };
-            operationCategoryItem.addSubCategory(operationSubCategoryItem);
-
-            operationSubCategoryItem = new OperationSubCategory {
-                Name = "Autobus",
-                Color = "#FFe78c33",
-                Icon = "\uE806"
-            };
-            operationCategoryItem.addSubCategory(operationSubCategoryItem);
-
-            OperationCategories.Add(operationCategoryItem);
-
-            var s = conn.Insert(operationCategoryItem);
-
-
-            operationCategoryItem = new OperationCategory {
-                Name = "Jedzenie",
-                Color = "#FF5bc70b",
-                Icon = "",
-                IsSubcategory = false
-            };
-
-
-            operationSubCategoryItem = new OperationSubCategory {
-                Name = "Pasibus",
-                Color = "#FF3fd826",
-                Icon = "\uE700"
-            };
-            operationCategoryItem.addSubCategory(operationSubCategoryItem);
-
-            operationSubCategoryItem = new OperationSubCategory {
-                Name = "Biedronka",
-                Color = "#FFea2626",
-                Icon = "\uE1D2"
-            };
-            operationCategoryItem.addSubCategory(operationSubCategoryItem);
-
-            OperationCategories.Add(operationCategoryItem);
-
-
-            OperationCategories.Add(new OperationCategory {
-                Name = "Alkohol",
-                Color = "#FF138b99",
-                Icon = "\uE94C",
-                IsSubcategory = false
-            });
-        }
-
-        private void AppBarButton_Click(object sender, RoutedEventArgs e) {
-
+                foreach (var submessage in queryOperationSubCategory) {
+                    if (submessage.BossCategory == message.Name) {
+                        operationSubCategoryItem = new OperationSubCategory {
+                            Name = submessage.Name,
+                            Color = submessage.Color,
+                            Icon = submessage.Icon,
+                        };
+                        operationCategoryItem.addSubCategory(operationSubCategoryItem);
+                    }
+                }
+                OperationCategories.Add(operationCategoryItem);
+            }
         }
 
         private async void NewCategory_Click(object sender, RoutedEventArgs e) {
-            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, OperationSubCategories);
+            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, OperationSubCategories, conn);
 
             var result = await ContentDialogItem.ShowAsync();
-        }
-
-        private void EditButton_Click(object sender, RoutedEventArgs e) {
-
-        }
-
-        private void DeleteButton_Click(object sender, RoutedEventArgs e) {
-
-        }
-
-        private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
-
-        }
-
-        private void Grid_DragStarting(UIElement sender, DragStartingEventArgs args) {
-
-        }
-
-        private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-
-        }
-
-        public void SubOperacjeListView_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
-
-        }
-        
-        private void SubOperacjeListView_Loading(FrameworkElement sender, object args) {
-            if (i >= OperationCategories.Count)
-                i = 0;
-
-            ListView SubOperacjeListView = sender as ListView;
-            List<OperationCategory> elements = new List<OperationCategory>();
-            ObservableCollection<OperationCategory> bossCategories = (ObservableCollection<OperationCategory>)OperacjeListView.ItemsSource;
-
-            foreach (OperationCategory element in OperationSubCategories) {
-                if (element.BossCategory == bossCategories[BossCategoryIndex].Name)
-                    elements.Add(element);
-            }
-            if (elements.Count != 0)
-                SubOperacjeListView.ItemsSource = elements;
-            i++;
-        }
-        
-        private void OperacjeListView_Loading(FrameworkElement sender, object args) {
-            BossCategoryIndex++;
-        }
-
-        private void OperationCategoryTemplate_Loading(FrameworkElement sender, object args) {
-            BossCategoryIndex++;
         }
     }
 }

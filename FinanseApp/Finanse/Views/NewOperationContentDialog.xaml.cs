@@ -43,14 +43,15 @@ namespace Finanse.Views {
             DateValue.MaxDate = DateTime.Today;
 
             /* DODAWANIE KATEGORII DO COMBOBOX'A */
-            foreach (OperationCategory OperationCategories_ComboBox in OperationCategories) {
+            foreach (OperationCategory OperationCategories_ComboBox in conn.Table<OperationCategory>()) {
 
-                CategoryValue.Items.Add(new ComboBoxItem {
-                    Content = OperationCategories_ComboBox.Name
-                });
+                if (OperationCategories_ComboBox.VisibleInExpenses && OperationCategories_ComboBox.VisibleInIncomes) {
+                    CategoryValue.Items.Add(new ComboBoxItem {
+                        Content = OperationCategories_ComboBox.Name
+                    });
+                }
             }
-
-
+            SubCategoryValue.IsEnabled = false;
         }
 
         private void NowaOperacja_AnulujClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
@@ -116,12 +117,58 @@ namespace Finanse.Views {
             SetNowaOperacjaButton();
         }
 
-        private void RadioButton_Checked(object sender, RoutedEventArgs e) {
+        private void ExpenseRadioButton_Checked(object sender, RoutedEventArgs e) {
             SetNowaOperacjaButton();
+
+            CategoryValue.Items.Clear();
+            foreach (OperationCategory OperationCategories_ComboBox in conn.Table<OperationCategory>()) {
+
+                if (OperationCategories_ComboBox.VisibleInExpenses) {
+                    CategoryValue.Items.Add(new ComboBoxItem {
+                        Content = OperationCategories_ComboBox.Name
+                    });
+                }
+            }
+            SubCategoryValue.IsEnabled = false;
+        }
+
+        private void IncomeRadioButton_Checked(object sender, RoutedEventArgs e) {
+            SetNowaOperacjaButton();
+
+            CategoryValue.Items.Clear();
+            foreach (OperationCategory OperationCategories_ComboBox in conn.Table<OperationCategory>()) {
+
+                if (OperationCategories_ComboBox.VisibleInIncomes) {
+                    CategoryValue.Items.Add(new ComboBoxItem {
+                        Content = OperationCategories_ComboBox.Name
+                    });
+                }
+            }
+            SubCategoryValue.IsEnabled = false;
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             SetNowaOperacjaButton();
+
+            SubCategoryValue.Items.Clear();
+            if (CategoryValue.SelectedValue != null) {
+                foreach (OperationSubCategory OperationSubCategories_ComboBox in conn.Table<OperationSubCategory>()) {
+
+                    if (OperationSubCategories_ComboBox.BossCategory == ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString()) {
+                        SubCategoryValue.Items.Add(new ComboBoxItem {
+                            Content = OperationSubCategories_ComboBox.Name
+                        });
+                    }
+                }
+                if (SubCategoryValue.Items.Count == 0)
+                    SubCategoryValue.IsEnabled = false;
+                else {
+                    SubCategoryValue.IsEnabled = true;
+                    SubCategoryValue.Items.Add(new ComboBoxItem {
+                        Content = "Brak"
+                    });
+                }
+            }
         }
 
         private void DateValue_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args) {

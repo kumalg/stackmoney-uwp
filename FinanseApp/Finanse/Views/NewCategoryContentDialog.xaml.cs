@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -24,36 +25,60 @@ namespace Finanse.Views {
         ObservableCollection<OperationCategory> OperationCategories;
         ObservableCollection<OperationCategory> OperationSubCategories;
 
-        public OperationSubCategory coo;
+        SQLite.Net.SQLiteConnection conn;
 
-        public NewCategoryContentDialog(ObservableCollection<OperationCategory> OperationCategories, ObservableCollection<OperationCategory> OperationSubCategories) {
+        public OperationSubCategory newOperationSubCategoryItem;
+
+        public NewCategoryContentDialog(ObservableCollection<OperationCategory> OperationCategories, ObservableCollection<OperationCategory> OperationSubCategories, SQLite.Net.SQLiteConnection conn) {
 
             this.InitializeComponent();
 
             this.OperationCategories = OperationCategories;
             this.OperationSubCategories = OperationSubCategories;
-        }
+            this.conn = conn;
 
-        private void NewCategory_CancelButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
+            /* DODAWANIE KATEGORII DO COMBOBOX'A */
+            foreach (OperationCategory OperationCategories_ComboBox in OperationCategories) {
 
+                CategoryValue.Items.Add(new ComboBoxItem {
+                    Content = OperationCategories_ComboBox.Name
+                });
+            }
         }
 
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
             if (CategoryValue.SelectedIndex != -1) {
-                coo = new OperationSubCategory {
+                newOperationSubCategoryItem = new OperationSubCategory {
                     Name = NameValue.Text,
-                    Color = "#FF121212",
+                    Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
                     Icon = CategoryIcon.Glyph,
+                    BossCategory = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
+                    VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
+                    VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                 };
-                OperationCategories[1].addSubCategory(coo);
+                foreach (var message in conn.Table<OperationCategory>()) {
+                    if (message.Name == newOperationSubCategoryItem.BossCategory) {
+                        conn.Insert(newOperationSubCategoryItem);
+                    }
+                }
+                OperationCategories.Single(x => x.Name == ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString()).addSubCategory(newOperationSubCategoryItem);
             }
 
             else {
                 OperationCategories.Add(new OperationCategory() {
                     Name = NameValue.Text,
-                    Color = "#FF121212",
+                    Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
                     Icon = CategoryIcon.Glyph,
+                    VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
+                    VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
+                });
+                conn.Insert(new OperationCategory() {
+                    Name = NameValue.Text,
+                    Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
+                    Icon = CategoryIcon.Glyph,
+                    VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
+                    VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                 });
             }
         }
@@ -67,10 +92,6 @@ namespace Finanse.Views {
             var button = sender as RadioButton;
             CategoryIcon.Glyph = button.Content.ToString();
             CategoryIcon.FontFamily = button.FontFamily;
-        }
-
-        private void ComboBox_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
-
         }
     }
 }

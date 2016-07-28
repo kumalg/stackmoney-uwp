@@ -99,6 +99,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Elements\ExpandPanel.cs" />
+    <Compile Include="Elements\Functions.cs" />
     <Compile Include="Elements\OperationCategory.cs" />
     <Compile Include="Elements\Operation.cs" />
     <Compile Include="Elements\OperationSubCategory.cs" />

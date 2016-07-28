@@ -23,7 +23,13 @@ namespace Finanse.Elements {
     public sealed partial class OperationTemplate : UserControl {
 
         private List<OperationCategory> OperationCategories = new List<OperationCategory>();
-        
+
+        string path;
+        SQLite.Net.SQLiteConnection conn;
+
+        public OperationCategory operationCategoryItem;
+        public OperationSubCategory operationSubCategoryItem;
+
         private Elements.Operation Operation {
 
             get {
@@ -34,13 +40,39 @@ namespace Finanse.Elements {
         public OperationTemplate() {
 
             this.InitializeComponent();
-            
+
+            path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
+            conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
+
+            var queryOperationCategory = conn.Table<OperationCategory>();
+            var queryOperationSubCategory = conn.Table<OperationSubCategory>();
+
+            foreach (var message in queryOperationCategory) {
+                operationCategoryItem = new OperationCategory {
+                    Name = message.Name,
+                    Color = message.Color,
+                    Icon = message.Icon,
+                };
+
+                foreach (var submessage in queryOperationSubCategory) {
+                    if (submessage.BossCategory == message.Name) {
+                        operationSubCategoryItem = new OperationSubCategory {
+                            Name = submessage.Name,
+                            Color = submessage.Color,
+                            Icon = submessage.Icon,
+                        };
+                        operationCategoryItem.addSubCategory(operationSubCategoryItem);
+                    }
+                }
+                OperationCategories.Add(operationCategoryItem);
+            }
+
             /*
              
             Jedzenie / Rozrywka / Samochód / Dom / Odzież / Elektronika / Zdrowie i uroda / Alkohol / Transport
 
              */
-                      
+             /*
             OperationCategories.Add(new OperationCategory {
                 Name = "Transport",
                 Color = "#FF0b63c7",
@@ -57,7 +89,7 @@ namespace Finanse.Elements {
                 Name = "Alkohol",
                 Color = "#FF138b99",
                 Icon = "\uE94C",
-            });
+            });*/
 
             this.DataContextChanged += (s, e) => Bindings.Update();            
         }

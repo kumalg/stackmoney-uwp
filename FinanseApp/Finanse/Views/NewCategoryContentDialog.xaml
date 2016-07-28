@@ -11,8 +11,7 @@
     Background="{StaticResource GreyTransparentColorStyle}"
     PrimaryButtonText="Dodaj"
     SecondaryButtonText="Anuluj"
-    PrimaryButtonClick="NewCategory_AddButtonClick"
-    SecondaryButtonClick="NewCategory_CancelButtonClick">
+    PrimaryButtonClick="NewCategory_AddButtonClick">
 
     <StackPanel>
 
@@ -166,13 +165,7 @@
             Margin="0,30,0,10"
             BorderThickness="0,0,0,1"
             Background="Transparent"
-            HorizontalAlignment="Stretch"
-            DataContextChanged="ComboBox_DataContextChanged">
-
-            <ComboBoxItem
-                Content="Transport" />
-            <ComboBoxItem
-                Content="Jedzenie" />
+            HorizontalAlignment="Stretch">
         </ComboBox>
 
         <TextBlock
@@ -180,6 +173,7 @@
             Margin="0,20,0,0" />
 
         <ToggleSwitch
+            Name="VisibleInExpensesToggleButton"
             Margin="0,5,0,0"
             IsOn="True">
 
@@ -200,6 +194,7 @@
             Margin="0,20,0,0" />
 
         <ToggleSwitch
+            Name="VisibleInIncomesToggleButton"
             Margin="0,5,0,0"
             IsOn="True">
 

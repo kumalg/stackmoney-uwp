@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media;
 
 namespace Finanse.Elements {
 
@@ -24,9 +26,5 @@ namespace Finanse.Elements {
         public void addSubCategory(OperationSubCategory subCategory) {
             subCategories.Add(subCategory);
         }
-
-        //pierdolondo
-        public bool IsSubcategory { get; set; } 
-        public string BossCategory { get; set; } 
     }
 }

@@ -288,13 +288,13 @@
                 Name="Expense_RadioButton"
                 Content="Wydatek"
                 GroupName="OperationType_RadioButtons"
-                Checked="RadioButton_Checked"
+                Checked="ExpenseRadioButton_Checked"
                 GotFocus="Expense_RadioButton_GotFocus" />
             <RadioButton
                 Name="Income_RadioButton"
                 Content="Wpływ"
                 GroupName="OperationType_RadioButtons"
-                Checked="RadioButton_Checked"
+                Checked="IncomeRadioButton_Checked"
                 GotFocus="Expense_RadioButton_GotFocus" />
 
         </StackPanel>
@@ -393,6 +393,16 @@
             Name="CategoryValue"
             SelectionChanged="ComboBox_SelectionChanged"
             PlaceholderText="Kategoria"
+            Margin="0,10"
+            BorderThickness="0,0,0,1"
+            Background="Transparent"
+            HorizontalAlignment="Stretch"
+            GotFocus="Expense_RadioButton_GotFocus">
+        </ComboBox>
+
+        <ComboBox
+            Name="SubCategoryValue"
+            PlaceholderText="Podkategoria"
             Margin="0,10"
             BorderThickness="0,0,0,1"
             Background="Transparent"

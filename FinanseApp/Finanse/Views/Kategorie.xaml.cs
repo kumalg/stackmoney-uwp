@@ -21,6 +21,9 @@ namespace Finanse.Views {
 
     public sealed partial class Kategorie : Page {
 
+        string path;
+        SQLite.Net.SQLiteConnection conn;
+
         public ObservableCollection<OperationCategory> OperationCategories = new ObservableCollection<OperationCategory>();
         public ObservableCollection<OperationCategory> OperationSubCategories = new ObservableCollection<OperationCategory>();
         private int i = 0;
@@ -30,6 +33,13 @@ namespace Finanse.Views {
         public OperationSubCategory operationSubCategoryItem;
 
         public Kategorie() {
+
+            this.InitializeComponent();
+
+            path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
+            conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
+            conn.CreateTable<OperationCategory>();
+            conn.CreateTable<OperationSubCategory>();
 
             operationCategoryItem = new OperationCategory {
                 Name = "Transport",
@@ -61,6 +71,7 @@ namespace Finanse.Views {
 
             OperationCategories.Add(operationCategoryItem);
 
+            var s = conn.Insert(operationCategoryItem);
 
 
             operationCategoryItem = new OperationCategory {
@@ -94,8 +105,6 @@ namespace Finanse.Views {
                 Icon = "\uE94C",
                 IsSubcategory = false
             });
-
-            this.InitializeComponent();
         }
 
         private void AppBarButton_Click(object sender, RoutedEventArgs e) {

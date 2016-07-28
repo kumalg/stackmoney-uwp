@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SQLite.Net.Attributes;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +10,13 @@ namespace Finanse.Elements {
 
     public class Operation {
 
-        public string Title;
-        public string Category;
-        public decimal Cost;
-        public DateTimeOffset? Date;
-        public string ExpenseOrIncome;
+        [PrimaryKey, AutoIncrement]
+
+        public int Id { get; set; } 
+        public string Title { get; set; } 
+        public string Category { get; set; } 
+        public decimal Cost { get; set; } 
+        public DateTimeOffset? Date { get; set; } 
+        public string ExpenseOrIncome { get; set; } 
     }
 }

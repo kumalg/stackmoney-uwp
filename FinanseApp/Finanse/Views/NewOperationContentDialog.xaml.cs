@@ -21,21 +21,24 @@ namespace Finanse.Views {
 
     public sealed partial class NewOperationContentDialog : ContentDialog {
 
-        public ObservableCollection<Operation> Wydatki;
+        public ObservableCollection<Operation> Operations;
 
         public List<OperationCategory> OperationCategories;
+
+        SQLite.Net.SQLiteConnection conn;
 
         private bool focusedCostLeftValue = true;
         private bool focusedCostRightValue = true;
 
-        public NewOperationContentDialog(ObservableCollection<Operation> Wydatki, List<OperationCategory> OperationCategories) {
+        public NewOperationContentDialog(ObservableCollection<Operation> Operations, List<OperationCategory> OperationCategories, SQLite.Net.SQLiteConnection conn) {
 
             this.InitializeComponent();
 
             IsPrimaryButtonEnabled = false;
 
-            this.Wydatki = Wydatki;
+            this.Operations = Operations;
             this.OperationCategories = OperationCategories;
+            this.conn = conn;
 
             DateValue.MaxDate = DateTime.Today;
 
@@ -72,8 +75,15 @@ namespace Finanse.Views {
 
             if (Expense_RadioButton.IsChecked == true) {
 
-                Wydatki.Add(new Operation() {
+                Operations.Add(new Operation {
+                    Title = NameValue.Text,
+                    Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
+                    Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
+                    Date = DateValue.Date,
+                    ExpenseOrIncome = "expense"
+                });
 
+                var s = conn.Insert(new Operation() {
                     Title = NameValue.Text,
                     Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
                     Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
@@ -84,8 +94,15 @@ namespace Finanse.Views {
 
             else if (Income_RadioButton.IsChecked == true) {
 
-                Wydatki.Add(new Operation() {
+                Operations.Add(new Operation {
+                    Title = NameValue.Text,
+                    Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
+                    Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
+                    Date = DateValue.Date,
+                    ExpenseOrIncome = "income"
+                });
 
+                var s = conn.Insert(new Operation() {
                     Title = NameValue.Text,
                     Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
                     Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),

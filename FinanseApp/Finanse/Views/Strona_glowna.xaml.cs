@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SQLite.Net.Attributes;
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,6 +24,9 @@ namespace Finanse.Views {
 
     public sealed partial class Strona_glowna : Page {
 
+        string path;
+        SQLite.Net.SQLiteConnection conn;
+
         public ObservableCollection<Operation> Operations = new ObservableCollection<Operation>();
 
         public List<OperationCategory> OperationCategories = new List<OperationCategory>();
@@ -30,6 +35,42 @@ namespace Finanse.Views {
 
             this.InitializeComponent();
 
+            path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
+            conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
+            conn.CreateTable<Operation>();
+            /*
+            var s = conn.Insert(new Operation() {
+                Title = "PKP IntercitySQL",
+                Cost = 17.10m,
+                Category = "Transport",
+                ExpenseOrIncome = "expense"
+            });
+
+            var es = conn.Insert(new Operation() {
+                Title = "BiedronkaSQL",
+                Cost = 23m,
+                Category = "Jedzenie",
+                ExpenseOrIncome = "income"
+            });
+
+            var esy = conn.Insert(new Operation() {
+                Title = "Drink HalaSQL",
+                Cost = 7.99m,
+                Category = "Alkohol",
+                ExpenseOrIncome = "expense"
+            });
+            */
+            var query = conn.Table<Operation>();
+
+            foreach (var message in query) {
+                Operations.Add(new Operation {
+                    Title = message.Title,
+                    Cost = message.Cost,
+                    Category = message.Category,
+                    ExpenseOrIncome = message.ExpenseOrIncome
+                });
+            }
+            /*
             Operations.Add(new Operation {
                 Title = "PKP Intercity",
                 Cost = 17.10m,
@@ -50,7 +91,7 @@ namespace Finanse.Views {
                 Category = "Alkohol",
                 ExpenseOrIncome = "expense"
             });
-
+            */
             OperationCategories.Add(new OperationCategory {
                 Name = "Transport",
                 Color = "#FF0b63c7",
@@ -80,7 +121,7 @@ namespace Finanse.Views {
 
         private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
 
-            var ContentDialogItem = new NewOperationContentDialog(Operations, OperationCategories);
+            var ContentDialogItem = new NewOperationContentDialog(Operations, OperationCategories, conn);
 
             var result = await ContentDialogItem.ShowAsync();
         }

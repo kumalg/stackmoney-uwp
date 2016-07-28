@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite.Net.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,11 +10,14 @@ namespace Finanse.Elements {
 
     public class OperationCategory {
 
-        public string Name;
-        public string Color;//kolor #
-        public string Icon;//ikona
-        public bool VisibleInIncomes;
-        public bool VisibleInExpenses;
+        [PrimaryKey, AutoIncrement]
+
+        public int Id { get; set; } 
+        public string Name  { get; set; } 
+        public string Color { get; set; } 
+        public string Icon { get; set; } 
+        public bool VisibleInIncomes { get; set; } 
+        public bool VisibleInExpenses { get; set; }
 
         public ObservableCollection<OperationSubCategory> subCategories = new ObservableCollection<OperationSubCategory>();
 
@@ -22,7 +26,7 @@ namespace Finanse.Elements {
         }
 
         //pierdolondo
-        public bool IsSubcategory;
-        public string BossCategory;
+        public bool IsSubcategory { get; set; } 
+        public string BossCategory { get; set; } 
     }
 }

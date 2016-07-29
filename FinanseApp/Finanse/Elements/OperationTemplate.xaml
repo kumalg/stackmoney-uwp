@@ -16,8 +16,6 @@
             <ColumnDefinition
                 Width="Auto" />
             <ColumnDefinition
-                Width="Auto" />
-            <ColumnDefinition
                 Width="*" />
             <ColumnDefinition
                 Width="Auto" />
@@ -45,23 +43,33 @@
 
             <TextBlock
                 Text="{x:Bind Operation.Title}"
+                TextWrapping="Wrap"
                 Margin="20,0,0,0"
                 FontSize="16"
                 Foreground="White" />
 
-            <TextBlock
-                Name="Category_OperationTemplate"
-                Text="{x:Bind Operation.Category}"
-                DataContextChanged="Category_OperationTemplate_DataContextChanged"
-                Margin="20,0,0,0"
-                FontSize="12"
-                Foreground="White" />
+            <StackPanel
+                Orientation="Horizontal"
+                Opacity="0.4">
+                <TextBlock
+                    Name="Category_OperationTemplate"
+                    Text="{x:Bind Operation.Category}"
+                    DataContextChanged="Category_OperationTemplate_DataContextChanged"
+                    Margin="20,0,0,0"
+                    FontWeight="Bold"
+                    FontSize="12"
+                    Foreground="White" />
+                <TextBlock
+                    Name="SubCategory_OperationTemplate"
+                    FontSize="12"
+                    Foreground="White" />
+            </StackPanel>
 
         </StackPanel>
 
         <TextBlock
             Name="Cost_OperationTemplate"
-            Grid.Column="3"
+            Grid.Column="2"
             VerticalAlignment="Center"
             FontWeight="Bold"
             Foreground="{StaticResource RedColorStyle}" />

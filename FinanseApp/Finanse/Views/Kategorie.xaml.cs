@@ -37,27 +37,12 @@ namespace Finanse.Views {
             path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
             conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
 
-            conn.CreateTable<OperationCategory>();
-            conn.CreateTable<OperationSubCategory>();
+            foreach (var message in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
+                operationCategoryItem = message;
 
-            var queryOperationCategory = conn.Table<OperationCategory>();
-            var queryOperationSubCategory = conn.Table<OperationSubCategory>();
-
-            foreach (var message in queryOperationCategory) {
-                operationCategoryItem = new OperationCategory {
-                    Name = message.Name,
-                    Color = message.Color,
-                    Icon = message.Icon,
-                };
-
-                foreach (var submessage in queryOperationSubCategory) {
+                foreach (var submessage in conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory ORDER BY Name ASC")) {
                     if (submessage.BossCategory == message.Name) {
-                        operationSubCategoryItem = new OperationSubCategory {
-                            Name = submessage.Name,
-                            Color = submessage.Color,
-                            Icon = submessage.Icon,
-                        };
-                        operationCategoryItem.addSubCategory(operationSubCategoryItem);
+                        operationCategoryItem.addSubCategory(submessage);
                     }
                 }
                 OperationCategories.Add(operationCategoryItem);

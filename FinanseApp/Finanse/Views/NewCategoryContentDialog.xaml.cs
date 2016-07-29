@@ -93,5 +93,29 @@ namespace Finanse.Views {
             CategoryIcon.Glyph = button.Content.ToString();
             CategoryIcon.FontFamily = button.FontFamily;
         }
+
+        private void NameValue_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (CategoryValue.SelectedIndex == -1) {
+                foreach (var message in conn.Table<OperationCategory>()) {
+                    if (message.Name == NameValue.Text) {
+                        NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
+                        break;
+                    }
+                    else
+                        NameValue.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
+                }
+            }
+            else {
+                foreach (var message in conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE BossCategory == '" + ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString() + "'")) {
+                    if (message.Name == NameValue.Text) {
+                        NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
+                        break;
+                    }
+                    else
+                        NameValue.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
+                }
+            } 
+        }
     }
 }

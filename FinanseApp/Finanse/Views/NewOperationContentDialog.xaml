@@ -407,12 +407,13 @@
             BorderThickness="0,0,0,1"
             Background="Transparent"
             HorizontalAlignment="Stretch"
-            GotFocus="Expense_RadioButton_GotFocus">
+            GotFocus="Expense_RadioButton_GotFocus"
+            SelectionChanged="SubCategoryValue_SelectionChanged">
         </ComboBox>
 
         <ComboBox
             Name="PayFormValue"
-            SelectionChanged="ComboBox_SelectionChanged"
+            SelectionChanged="PayFormValue_SelectionChanged"
             PlaceholderText="Forma płatności"
             Margin="0,10"
             BorderThickness="0,0,0,1"

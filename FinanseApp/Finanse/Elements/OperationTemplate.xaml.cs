@@ -27,9 +27,6 @@ namespace Finanse.Elements {
         string path;
         SQLite.Net.SQLiteConnection conn;
 
-        public OperationCategory operationCategoryItem;
-        public OperationSubCategory operationSubCategoryItem;
-
         private Elements.Operation Operation {
 
             get {
@@ -41,55 +38,21 @@ namespace Finanse.Elements {
 
             this.InitializeComponent();
 
+            OperationCategory operationCategoryItem;
+
             path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
             conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
 
-            var queryOperationCategory = conn.Table<OperationCategory>();
-            var queryOperationSubCategory = conn.Table<OperationSubCategory>();
+            foreach (var message in conn.Table<OperationCategory>()) {
+                operationCategoryItem = message;
 
-            foreach (var message in queryOperationCategory) {
-                operationCategoryItem = new OperationCategory {
-                    Name = message.Name,
-                    Color = message.Color,
-                    Icon = message.Icon,
-                };
-
-                foreach (var submessage in queryOperationSubCategory) {
+                foreach (var submessage in conn.Table<OperationSubCategory>()) {
                     if (submessage.BossCategory == message.Name) {
-                        operationSubCategoryItem = new OperationSubCategory {
-                            Name = submessage.Name,
-                            Color = submessage.Color,
-                            Icon = submessage.Icon,
-                        };
-                        operationCategoryItem.addSubCategory(operationSubCategoryItem);
+                        operationCategoryItem.addSubCategory(submessage);
                     }
                 }
                 OperationCategories.Add(operationCategoryItem);
             }
-
-            /*
-             
-            Jedzenie / Rozrywka / Samochód / Dom / Odzież / Elektronika / Zdrowie i uroda / Alkohol / Transport
-
-             */
-             /*
-            OperationCategories.Add(new OperationCategory {
-                Name = "Transport",
-                Color = "#FF0b63c7",
-                Icon = "\uE806",
-            });
-
-            OperationCategories.Add(new OperationCategory {
-                Name = "Jedzenie",
-                Color = "#FF5bc70b",
-                Icon = "",
-            });
-
-            OperationCategories.Add(new OperationCategory {
-                Name = "Alkohol",
-                Color = "#FF138b99",
-                Icon = "\uE94C",
-            });*/
 
             this.DataContextChanged += (s, e) => Bindings.Update();            
         }
@@ -106,12 +69,27 @@ namespace Finanse.Elements {
         }
 
         public void Category_OperationTemplate_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
-            var whichColor = OperationCategories.Find(item => item.Name == Category_OperationTemplate.Text).Color;
-            var whichIcon = OperationCategories.Find(item => item.Name == Category_OperationTemplate.Text).Icon;
+
+            /* WYGLĄD KOŁA Z KATEGORIĄ */
+            string whichColor = null;
+            string whichIcon = null;
+            OperationCategory whichCat = null;
+
+            if (Operation.SubCategory == null) {
+                whichColor = OperationCategories.Find(item => item.Name == Operation.Category).Color;
+                whichIcon = OperationCategories.Find(item => item.Name == Operation.Category).Icon;
+            }
+            else {
+                whichCat = OperationCategories.Find(item => item.Name == Operation.Category);
+
+                whichColor = whichCat.subCategories.Single(item => item.Name == Operation.SubCategory).Color;
+                whichIcon = whichCat.subCategories.Single(item => item.Name == Operation.SubCategory).Icon;
+            }
 
             Ellipse_OperationTemplate.Fill = new SolidColorBrush(GetSolidColorBrush(whichColor).Color);
             Icon_OperationTemplate.Text = whichIcon;
 
+            /* WYGLĄD KOSZTU (CZERWONY Z MINUSEM CZY ZIELONY Z PLUSEM) */
             if (Operation.ExpenseOrIncome == "expense") {
                 Cost_OperationTemplate.Text = "- " + Operation.Cost.ToString("0.00") + " zł";
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
@@ -120,6 +98,10 @@ namespace Finanse.Elements {
                 Cost_OperationTemplate.Text = "+ " + Operation.Cost.ToString("0.00") + " zł";
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"];
             }
+
+            /* CZY WYŚWIETLAĆ PODKATEGORIĘ */
+            if (Operation.SubCategory != null)
+                SubCategory_OperationTemplate.Text = "  /  " + Operation.SubCategory;
         }
     }
 }

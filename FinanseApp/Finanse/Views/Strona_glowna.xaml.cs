@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Finanse.Elements;
 using System.Collections.ObjectModel;
+using SQLite.Net.Platform.WinRT;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -39,39 +40,21 @@ namespace Finanse.Views {
 
             path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
             conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
+
             conn.CreateTable<Operation>();
             conn.CreateTable<OperationCategory>();
             conn.CreateTable<OperationSubCategory>();
 
-            var queryOperation = conn.Table<Operation>();
-
-            foreach (var message in queryOperation) {
-                Operations.Add(new Operation {
-                    Title = message.Title,
-                    Cost = message.Cost,
-                    Category = message.Category,
-                    ExpenseOrIncome = message.ExpenseOrIncome
-                });
+            foreach (var message in conn.Table<Operation>()) {
+                Operations.Add(message);
             }
 
-            var queryOperationCategory = conn.Table<OperationCategory>();
-            var queryOperationSubCategory = conn.Table<OperationSubCategory>();
+            foreach (var message in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
+                operationCategoryItem = message;
 
-            foreach (var message in queryOperationCategory) {
-                operationCategoryItem = new OperationCategory {
-                    Name = message.Name,
-                    Color = message.Color,
-                    Icon = message.Icon,
-                };
-
-                foreach (var submessage in queryOperationSubCategory) {
+                foreach (var submessage in conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory ORDER BY Name ASC")) {
                     if (submessage.BossCategory == message.Name) {
-                        operationSubCategoryItem = new OperationSubCategory {
-                            Name = submessage.Name,
-                            Color = submessage.Color,
-                            Icon = submessage.Icon,
-                        };
-                        operationCategoryItem.addSubCategory(operationSubCategoryItem);
+                        operationCategoryItem.addSubCategory(submessage);
                     }
                 }
                 OperationCategories.Add(operationCategoryItem);
@@ -84,7 +67,7 @@ namespace Finanse.Views {
 
         private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
 
-            var ContentDialogItem = new NewOperationContentDialog(Operations, OperationCategories, conn);
+            var ContentDialogItem = new NewOperationContentDialog(Operations, conn);
 
             var result = await ContentDialogItem.ShowAsync();
         }

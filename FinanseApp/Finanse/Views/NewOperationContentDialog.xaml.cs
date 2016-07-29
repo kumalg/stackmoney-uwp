@@ -30,20 +30,19 @@ namespace Finanse.Views {
         private bool focusedCostLeftValue = true;
         private bool focusedCostRightValue = true;
 
-        public NewOperationContentDialog(ObservableCollection<Operation> Operations, List<OperationCategory> OperationCategories, SQLite.Net.SQLiteConnection conn) {
+        public NewOperationContentDialog(ObservableCollection<Operation> Operations, SQLite.Net.SQLiteConnection conn) {
 
             this.InitializeComponent();
 
             IsPrimaryButtonEnabled = false;
 
             this.Operations = Operations;
-            this.OperationCategories = OperationCategories;
             this.conn = conn;
 
             DateValue.MaxDate = DateTime.Today;
 
             /* DODAWANIE KATEGORII DO COMBOBOX'A */
-            foreach (OperationCategory OperationCategories_ComboBox in conn.Table<OperationCategory>()) {
+            foreach (OperationCategory OperationCategories_ComboBox in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
 
                 if (OperationCategories_ComboBox.VisibleInExpenses && OperationCategories_ComboBox.VisibleInIncomes) {
                     CategoryValue.Items.Add(new ComboBoxItem {
@@ -74,20 +73,27 @@ namespace Finanse.Views {
 
         private void NowaOperacja_DodajClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
+            string subCategoryString = null;
+
+            if (SubCategoryValue.SelectedIndex != -1)
+                subCategoryString = ((ComboBoxItem)SubCategoryValue.SelectedItem).Content.ToString();
+
             if (Expense_RadioButton.IsChecked == true) {
 
                 Operations.Add(new Operation {
                     Title = NameValue.Text,
                     Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
                     Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
+                    SubCategory = subCategoryString,
                     Date = DateValue.Date,
                     ExpenseOrIncome = "expense"
                 });
 
-                var s = conn.Insert(new Operation() {
+                conn.Insert(new Operation() {
                     Title = NameValue.Text,
                     Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
                     Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
+                    SubCategory = subCategoryString,
                     Date = DateValue.Date,
                     ExpenseOrIncome = "expense"
                 });
@@ -99,14 +105,16 @@ namespace Finanse.Views {
                     Title = NameValue.Text,
                     Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
                     Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
+                    SubCategory = subCategoryString,
                     Date = DateValue.Date,
                     ExpenseOrIncome = "income"
                 });
 
-                var s = conn.Insert(new Operation() {
+                conn.Insert(new Operation() {
                     Title = NameValue.Text,
                     Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
                     Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
+                    SubCategory = subCategoryString,
                     Date = DateValue.Date,
                     ExpenseOrIncome = "income"
                 });
@@ -121,7 +129,7 @@ namespace Finanse.Views {
             SetNowaOperacjaButton();
 
             CategoryValue.Items.Clear();
-            foreach (OperationCategory OperationCategories_ComboBox in conn.Table<OperationCategory>()) {
+            foreach (OperationCategory OperationCategories_ComboBox in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
 
                 if (OperationCategories_ComboBox.VisibleInExpenses) {
                     CategoryValue.Items.Add(new ComboBoxItem {
@@ -136,7 +144,7 @@ namespace Finanse.Views {
             SetNowaOperacjaButton();
 
             CategoryValue.Items.Clear();
-            foreach (OperationCategory OperationCategories_ComboBox in conn.Table<OperationCategory>()) {
+            foreach (OperationCategory OperationCategories_ComboBox in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
 
                 if (OperationCategories_ComboBox.VisibleInIncomes) {
                     CategoryValue.Items.Add(new ComboBoxItem {
@@ -152,7 +160,7 @@ namespace Finanse.Views {
 
             SubCategoryValue.Items.Clear();
             if (CategoryValue.SelectedValue != null) {
-                foreach (OperationSubCategory OperationSubCategories_ComboBox in conn.Table<OperationSubCategory>()) {
+                foreach (OperationSubCategory OperationSubCategories_ComboBox in conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory ORDER BY Name ASC")) {
 
                     if (OperationSubCategories_ComboBox.BossCategory == ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString()) {
                         SubCategoryValue.Items.Add(new ComboBoxItem {
@@ -310,6 +318,17 @@ namespace Finanse.Views {
 
         private void DateValue_Closed(object sender, object e) {
             DateValue.Focus(FocusState.Programmatic);
+        }
+
+        private void PayFormValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            SetNowaOperacjaButton();
+        }
+
+        private void SubCategoryValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            //ComboBox jaki = sender as ComboBox;
+            /*
+            if (((ComboBoxItem)jaki.SelectedItem).Content.ToString() == "Brak")
+                SubCategoryValue.SelectedIndex = -1;*/
         }
     }
 }

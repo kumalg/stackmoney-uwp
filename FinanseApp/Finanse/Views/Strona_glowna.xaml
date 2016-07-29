@@ -95,7 +95,7 @@
                                         <Storyboard>
                                             <ColorAnimation
                                                 Storyboard.TargetName="ContentPresenter"
-                                                To="#FF01b6ad"
+                                                To="{Binding Source={StaticResource AccentColorStyle},Path=Color}"
                                                 Duration="0:0:0.2"
                                                 Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
                                             <DoubleAnimation
@@ -132,7 +132,7 @@
                                 <StackPanel
                                     x:Name="HoverBorder"
                                     VerticalAlignment="Bottom"
-                                    Background="{StaticResource BlueColorStyle}"
+                                    Background="{StaticResource AccentColorStyle}"
                                     Height="4"
                                     RenderTransformOrigin="0.5,1">
                                     <StackPanel.RenderTransform>
@@ -658,7 +658,7 @@
         </Grid.RowDefinitions>
 
         <Grid
-            Background="{StaticResource DarkBlueColorStyle}"
+            Background="{StaticResource AccentDarkColorStyle}"
             MinHeight="48">
 
             <Grid.ColumnDefinitions>
@@ -686,7 +686,7 @@
                 Grid.Column="3"
                 VerticalAlignment="Center"
                 Text="+ 549,59 zł"
-                Foreground="{StaticResource GreenColorStyle}"
+                Foreground="{StaticResource AccentTextColorStyle}"
                 Margin="0,0,16,0"
                 FontWeight="Bold"
                 FontSize="14" />
@@ -697,13 +697,14 @@
                 Grid.Column="4">
 
                 <AppBarSeparator
-                    Foreground="#7FFFFFFF" />
+                    Foreground="{StaticResource AccentTextColorStyle}" 
+                    Opacity="0.4"/>
 
                 <AppBarButton
                     Icon="Add"
                     IsCompact="True"
                     Label="Nowa operacja"
-                    Foreground="White"
+                    Foreground="{StaticResource AccentTextColorStyle}"
                     Click="NowaOperacja_Click" />
 
             </StackPanel>

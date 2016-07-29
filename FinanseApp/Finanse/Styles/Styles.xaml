@@ -24,6 +24,13 @@
     <!--*****************************************
     KOLORY W APLIKACJI
     ******************************************-->
+    <SolidColorBrush x:Key="AccentDarkColorStyle" Color="#1fb851"/>
+    <SolidColorBrush x:Key="AccentColorStyle" Color="#23d05f"/>
+    <SolidColorBrush x:Key="AccentLightColorStyle" Color="#01948a"/>
+
+    <SolidColorBrush x:Key="AccentTextColorStyle" Color="#2d2e41"/>
+    
+    
     <SolidColorBrush x:Key="GreenColorStyle" Color="#3EB93E"/>
 
     <SolidColorBrush x:Key="RedColorStyle" Color="#FF3B3B"/>
@@ -122,7 +129,7 @@
     <Style TargetType="TextBlock" x:Key="PageTitleStyle">
         <Setter Property="Grid.Column" Value="1"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Foreground" Value="{StaticResource AccentTextColorStyle}"/>
         <Setter Property="Margin" Value="16,0,0,0"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontSize" Value="14"/>
@@ -212,7 +219,7 @@
                                     <VisualState.Setters>
                                         <Setter
                                             Target="HamburgerRadioButtonGrid.(Panel.Background)"
-                                            Value="{StaticResource BlueColorStyle}" />
+                                            Value="{StaticResource AccentColorStyle}" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
@@ -242,7 +249,7 @@
                                     <Storyboard>
                                         <ColorAnimation
                                             Storyboard.TargetName="HamburgerIcon"
-                                            To="#FF01b6ad"
+                                            To="{Binding Source={StaticResource AccentColorStyle},Path=Color}"
                                             Duration="0:0:0.2"
                                             Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
                                         <DoubleAnimation
@@ -277,7 +284,7 @@
                                 Width="3"
                                 Height="24"
                                 HorizontalAlignment="Left"
-                                Background="#FF01b6ad" />
+                                Background="{StaticResource AccentColorStyle}" />
                             <ContentPresenter
                                 x:Name="HamburgerIcon"
                                 Content="{TemplateBinding Tag}"
@@ -1332,7 +1339,7 @@
                                                 <RowDefinition
                                                     Height="Auto" />
                                             </Grid.RowDefinitions>
-                                            <Grid Background="{StaticResource DarkBlueColorStyle}">
+                                            <Grid Background="{StaticResource AccentDarkColorStyle}">
                                                 <ContentControl
                                                     x:Name="Title"
                                                     Margin="20,0,0,0"
@@ -1341,7 +1348,7 @@
                                                     FontSize="15"
                                                     FontFamily="XamlAutoFontFamily"
                                                     FontWeight="SemiBold"
-                                                    Foreground="{TemplateBinding Foreground}"
+                                                    Foreground="{StaticResource AccentTextColorStyle}"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
                                                     IsTabStop="False"

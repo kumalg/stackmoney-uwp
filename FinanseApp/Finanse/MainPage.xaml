@@ -202,11 +202,11 @@
             Content="&#xE700;"
             FontSize="16"
             Click="HamburgerButton_Click"
-            Background="{StaticResource BlueColorStyle}"
+            Background="{StaticResource AccentColorStyle}"
             Canvas.ZIndex="3"
             VerticalAlignment="Top"
             HorizontalAlignment="Left"
-            Foreground="White"
+            Foreground="{StaticResource AccentTextColorStyle}"
             ClickMode="Press"
             Style="{StaticResource HamburgerButtonStyle}" />
 
@@ -236,10 +236,11 @@
                     </Grid.RowDefinitions>
 
                     <Grid
-                        Background="{StaticResource BlueColorStyle}"
+                        Background="{StaticResource AccentColorStyle}"
                         Margin="48,0,0,0">
                         <TextBlock
                             VerticalAlignment="Center"
+                            Foreground="{StaticResource AccentTextColorStyle}"
                             FontWeight="Bold"
                             FontSize="15">
                             Kumalg Finanse

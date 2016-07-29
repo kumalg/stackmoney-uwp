@@ -29,10 +29,36 @@ namespace Finanse {
             this.InitializeComponent();
             AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
             Strona_glowna_ListBoxItem.IsChecked = true;
+
+            StatusBarAndTitleBar();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             base.OnNavigatedTo(e);
+        }
+
+        private void StatusBarAndTitleBar() {
+            //PC customization
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView")) {
+                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+                if (titleBar != null) {
+                    titleBar.ButtonBackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentColorStyle"] as SolidColorBrush).Color;
+                    titleBar.ButtonForegroundColor = ((SolidColorBrush)Application.Current.Resources["AccentTextColorStyle"] as SolidColorBrush).Color;
+                    titleBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentColorStyle"] as SolidColorBrush).Color;
+                    titleBar.ForegroundColor = ((SolidColorBrush)Application.Current.Resources["AccentTextColorStyle"] as SolidColorBrush).Color;
+                }
+            }
+
+            //Mobile customization
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) {
+
+                var statusBar = StatusBar.GetForCurrentView();
+                if (statusBar != null) {
+                    statusBar.BackgroundOpacity = 1;
+                    statusBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources["GreyColorStyle"] as SolidColorBrush).Color;
+                    statusBar.ForegroundColor = Colors.White;
+                }
+            }
         }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e) {

@@ -158,6 +158,7 @@
                                 </FlyoutBase.AttachedFlyout>
 
                                 <data:OperationCategoryTemplate />
+
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>

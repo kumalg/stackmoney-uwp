@@ -401,11 +401,13 @@
         </ComboBox>
 
         <TextBlock
+            Name="SaveAsAssetTitle"
             Text="Zapisz jako szablon"
             Margin="0,20,0,0"
             GotFocus="Expense_RadioButton_GotFocus" />
 
         <ToggleSwitch
+            Name="SaveAsAssetToggle"
             Style="{StaticResource ToggleSwitchStyle1}"
             Margin="0,5,0,0">
 

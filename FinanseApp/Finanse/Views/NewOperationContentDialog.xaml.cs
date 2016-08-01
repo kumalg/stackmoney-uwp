@@ -30,7 +30,8 @@ namespace Finanse.Views {
         private bool focusedCostLeftValue = true;
         private bool focusedCostRightValue = true;
 
-        public NewOperationContentDialog(ObservableCollection<Operation> Operations, SQLite.Net.SQLiteConnection conn) {
+        public NewOperationContentDialog(ObservableCollection<Operation> Operations, SQLite.Net.SQLiteConnection conn,
+            string editedTitle, int editedId, decimal editedCost, DateTimeOffset? editedDate, string editedCategory, string editedSubCategory, string editedExpenseOrIncome) {
 
             this.InitializeComponent();
 
@@ -50,7 +51,36 @@ namespace Finanse.Views {
                     });
                 }
             }
-            SubCategoryValue.IsEnabled = false;
+
+            if (editedId != -1) {
+                Title = "Edycja operacji";
+                PrimaryButtonText = "Zapisz";
+                SaveAsAssetTitle.Visibility = Visibility.Collapsed;
+                SaveAsAssetToggle.Visibility = Visibility.Collapsed;
+
+                if (editedExpenseOrIncome == "expense") {
+                    Expense_RadioButton.IsChecked = true;
+                }
+                else
+                    Income_RadioButton.IsChecked = true;
+
+                NameValue.Text = editedTitle;
+                DateValue.Date = editedDate;
+
+                string editedLeftCost = "12";
+                string editedRightCost = "1";
+
+                CostValue.Text = MixCostToString(editedLeftCost, editedRightCost) + " zł";
+                CostLeftValue.Text = editedLeftCost;
+                CostRightValue.Text = editedRightCost;
+
+                CategoryValue.SelectedIndex = 2;
+                SubCategoryValue.SelectedIndex = 1;
+              
+            }
+
+            else
+                SubCategoryValue.IsEnabled = false;
         }
 
         private void NowaOperacja_AnulujClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {

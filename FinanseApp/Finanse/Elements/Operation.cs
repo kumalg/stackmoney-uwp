@@ -19,5 +19,6 @@ namespace Finanse.Elements {
         public decimal Cost { get; set; } 
         public DateTimeOffset? Date { get; set; } 
         public string ExpenseOrIncome { get; set; } 
+        public string PayForm { get; set; } 
     }
 }

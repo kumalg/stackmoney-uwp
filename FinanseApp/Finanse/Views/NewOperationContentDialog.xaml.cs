@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Finanse.Elements;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 
 // The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -27,11 +28,13 @@ namespace Finanse.Views {
 
         SQLite.Net.SQLiteConnection conn;
 
-        private bool focusedCostLeftValue = true;
-        private bool focusedCostRightValue = true;
+        int editedId;
+        string acceptedCostValue;
+        int whereIsSelection;
+        bool isUnfocused = true;
 
         public NewOperationContentDialog(ObservableCollection<Operation> Operations, SQLite.Net.SQLiteConnection conn,
-            string editedTitle, int editedId, decimal editedCost, DateTimeOffset? editedDate, string editedCategory, string editedSubCategory, string editedExpenseOrIncome) {
+            string editedTitle, int editedId, decimal editedCost, DateTimeOffset? editedDate, string editedCategory, string editedSubCategory, string editedExpenseOrIncome, string editedPayForm) {
 
             this.InitializeComponent();
 
@@ -39,6 +42,7 @@ namespace Finanse.Views {
 
             this.Operations = Operations;
             this.conn = conn;
+            this.editedId = editedId;
 
             DateValue.MaxDate = DateTime.Today;
 
@@ -67,16 +71,7 @@ namespace Finanse.Views {
                 NameValue.Text = editedTitle;
                 DateValue.Date = editedDate;
 
-                string editedLeftCost = "12";
-                string editedRightCost = "1";
-
-                CostValue.Text = MixCostToString(editedLeftCost, editedRightCost) + " zł";
-                CostLeftValue.Text = editedLeftCost;
-                CostRightValue.Text = editedRightCost;
-
-                CategoryValue.SelectedIndex = 2;
-                SubCategoryValue.SelectedIndex = 1;
-              
+                CostValue.Text = String.Format("{0:c}", editedCost);   
             }
 
             else
@@ -108,46 +103,33 @@ namespace Finanse.Views {
             if (SubCategoryValue.SelectedIndex != -1)
                 subCategoryString = ((ComboBoxItem)SubCategoryValue.SelectedItem).Content.ToString();
 
-            if (Expense_RadioButton.IsChecked == true) {
+            Operation item = new Operation {
+                Title = NameValue.Text,
+                Cost = decimal.Parse(CostValue.Text.Replace(" zł", "")),
+                Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
+                SubCategory = subCategoryString,
+                Date = DateValue.Date,
+                PayForm = ((ComboBoxItem)PayFormValue.SelectedItem).Content.ToString(),
+            };
 
-                Operations.Add(new Operation {
-                    Title = NameValue.Text,
-                    Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
-                    Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
-                    SubCategory = subCategoryString,
-                    Date = DateValue.Date,
-                    ExpenseOrIncome = "expense"
-                });
+            // WYDATEK CZY WPŁYW
+            if (Expense_RadioButton.IsChecked == true)
+                item.ExpenseOrIncome = "expense";
+            else if (Income_RadioButton.IsChecked == true)
+                item.ExpenseOrIncome = "income";
 
-                conn.Insert(new Operation() {
-                    Title = NameValue.Text,
-                    Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
-                    Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
-                    SubCategory = subCategoryString,
-                    Date = DateValue.Date,
-                    ExpenseOrIncome = "expense"
-                });
+            // DODAWANIE
+            if (editedId == -1) {
+                Operations.Add(item);
+                conn.Insert(item);
             }
 
-            else if (Income_RadioButton.IsChecked == true) {
+            // EDYTOWANIE
+            else {
+                item.Id = Operations.Single(id => id.Id == editedId).Id;
 
-                Operations.Add(new Operation {
-                    Title = NameValue.Text,
-                    Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
-                    Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
-                    SubCategory = subCategoryString,
-                    Date = DateValue.Date,
-                    ExpenseOrIncome = "income"
-                });
-
-                conn.Insert(new Operation() {
-                    Title = NameValue.Text,
-                    Cost = decimal.Parse(MixCostToString(CostLeftValue.Text, CostRightValue.Text)),
-                    Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
-                    SubCategory = subCategoryString,
-                    Date = DateValue.Date,
-                    ExpenseOrIncome = "income"
-                });
+                Operations[Operations.IndexOf(Operations.Single(id => id.Id == editedId))] = item;
+                conn.Update(item);
             }
         }
 
@@ -214,136 +196,18 @@ namespace Finanse.Views {
         }
 
         private void CostValue_KeyDown(object sender, KeyRoutedEventArgs e) {
+            //e.Handled = !char.IsDigit((char)e.Key);
 
-            if (e.Key.ToString().Equals("Back")) {
-                e.Handled = false;
-                return;
-            }
+            /*
             for (int i = 0; i < 10; i++) {
                 if (e.Key.ToString() == string.Format("Number{0}", i)) {
                     e.Handled = false;
                     return;
                 }
             }
-            e.Handled = true;
-        }
-
-        private void SetCost(object sender, TextChangedEventArgs e) {
-            /*
-            if (!((CostLeftValue.Text == "0" || CostLeftValue.Text == "") && (CostRightValue.Text == "" || CostRightValue.Text == "0" || CostRightValue.Text == "00")))
-                CostValue.Text = MixCostToString(CostLeftValue.Text, CostRightValue.Text) + " zł";
-            else {
-                CostValue.Text = "";
-                CostLeftValue.Text = "";
-                CostRightValue.Text = "";
-            }
-                */
-
-            SetNowaOperacjaButton();
-        }
-
-        public string MixCostToString(string FirstCost, string SecondCost) {
-            string outputCost;
-
-            outputCost = FirstCost;
-            if (SecondCost.Length == 0)
-                outputCost += ",00";
-            else if (SecondCost.Length == 1) {
-                outputCost += "," + SecondCost + "0";
-            }
-                
-            else
-                outputCost += "," + SecondCost;
-
-            return outputCost;
-        }
-
-
-        private void CostValue_GotFocus(object sender, RoutedEventArgs e) {
-            CostValue.Visibility = Visibility.Collapsed;
-
-            CostLeftValue.Visibility = Visibility.Visible;
-            DotValue.Visibility = Visibility.Visible;
-            CostRightValue.Visibility = Visibility.Visible;
-            CurrencyValue.Visibility = Visibility.Visible;
-
-            CostLeftValue.Focus(FocusState.Programmatic);
-        }
-
-
-        private void CostLeftValue_GotFocus(object sender, RoutedEventArgs e) {
-            focusedCostLeftValue = true;
-        }
-
-        private void CostRightValue_GotFocus(object sender, RoutedEventArgs e) {
-            focusedCostRightValue = true;
-        }
-
-
-        private void CostLeftValue_LostFocus(object sender, RoutedEventArgs e) {
-            focusedCostLeftValue = false;
-
-            if (!((CostLeftValue.Text == "0" || CostLeftValue.Text == "") && (CostRightValue.Text == "" || CostRightValue.Text == "0" || CostRightValue.Text == "00")))
-                CostValue.Text = MixCostToString(CostLeftValue.Text, CostRightValue.Text) + " zł";
-            else {
-                CostValue.Text = "";
-                CostLeftValue.Text = "";
-                CostRightValue.Text = "";
-            }
-        }
-
-        private void CostRightValue_LostFocus(object sender, RoutedEventArgs e) {
-            focusedCostRightValue = false;
-
-            if (!(
-                (CostLeftValue.Text == "0" 
-                || CostLeftValue.Text == "") 
-                && 
-                (CostRightValue.Text == "" 
-                || CostRightValue.Text == "0" 
-                || CostRightValue.Text == "00"))
-                ) {
-
-                CostValue.Text = MixCostToString(CostLeftValue.Text, CostRightValue.Text) + " zł";
-                if (CostRightValue.Text.Length == 1)
-                    CostRightValue.Text += "0";
-                }
-                
-            else {
-                CostValue.Text = "";
-                CostLeftValue.Text = "";
-                CostRightValue.Text = "";
-            }
-        }
-
-
-        private void Expense_RadioButton_GotFocus(object sender, RoutedEventArgs e) {
-            if (focusedCostLeftValue == false || focusedCostRightValue == false) {
-                CostValue.Visibility = Visibility.Visible;
-
-                CostLeftValue.Visibility = Visibility.Collapsed;
-                DotValue.Visibility = Visibility.Collapsed;
-                CostRightValue.Visibility = Visibility.Collapsed;
-                CurrencyValue.Visibility = Visibility.Collapsed;
-
-                focusedCostLeftValue = true;
-                focusedCostRightValue = true;
-            }
-        }
-
-        private void DateValue_Opened(object sender, object e) {
-
-            if (focusedCostLeftValue == false || focusedCostRightValue == false) {
-                CostValue.Visibility = Visibility.Visible;
-
-                CostLeftValue.Visibility = Visibility.Collapsed;
-                DotValue.Visibility = Visibility.Collapsed;
-                CostRightValue.Visibility = Visibility.Collapsed;
-                CurrencyValue.Visibility = Visibility.Collapsed;
-
-                focusedCostLeftValue = true;
-                focusedCostRightValue = true;
-            }
+            if (Regex.IsMatch(CostValue.Text, @"\,\d\d")) {
+                e.Handled = true;
+            }*/
         }
 
         private void DateValue_Closed(object sender, object e) {
@@ -358,6 +222,60 @@ namespace Finanse.Views {
 
             if (SubCategoryValue.SelectedIndex == 0)
                 SubCategoryValue.SelectedIndex--;
+        }
+
+        private void CostValue_GotFocus(object sender, RoutedEventArgs e) {
+            isUnfocused = false;
+
+            if (CostValue.Text != "") {
+                CostValue.Text = CostValue.Text.Replace(" zł", "");
+                CostValue.SelectionStart = CostValue.Text.Length;
+            }
+        }
+
+        private void CostValue_LostFocus(object sender, RoutedEventArgs e) {
+            isUnfocused = true;
+
+            if(CostValue.Text != "")
+                CostValue.Text = String.Format("{0:c}", decimal.Parse(CostValue.Text));
+        }
+
+        private void CostValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
+
+            if (CostValue.Text == "")
+                return;
+
+            if (isUnfocused)
+                return;
+
+            if (CostValue.Text.Any(c => !char.IsDigit(c))) {
+                foreach (char letter in CostValue.Text)
+                    if (!char.IsDigit(letter) && letter != ',') {
+                        CostValue.Text = acceptedCostValue;
+                        CostValue.SelectionStart = whereIsSelection;
+                    }
+
+                if (CostValue.Text.Count(c => c == ',') > 1) {
+                    CostValue.Text = acceptedCostValue;
+                    CostValue.SelectionStart = whereIsSelection;
+                }
+
+                if (CostValue.Text.Count(c => c == ',') == 1) {
+
+                    int charactersAfterComma = CostValue.Text.Length - CostValue.Text.IndexOf(",") - 1;
+
+                    if (charactersAfterComma > 2) {
+                        CostValue.Text = acceptedCostValue;
+                        CostValue.SelectionStart = whereIsSelection;
+                    }
+                }
+            }
+            acceptedCostValue = CostValue.Text;
+            whereIsSelection = CostValue.SelectionStart;
+        }
+
+        private void CostValue_SelectionChanged(object sender, RoutedEventArgs e) {
+            whereIsSelection = CostValue.SelectionStart;
         }
     }
 }

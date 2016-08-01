@@ -67,7 +67,7 @@ namespace Finanse.Views {
 
         private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
 
-            var ContentDialogItem = new NewOperationContentDialog(Operations, conn, null, -1, -1, null, null, null, null);
+            var ContentDialogItem = new NewOperationContentDialog(Operations, conn, null, -1, -1, null, null, null, null, null);
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -84,7 +84,7 @@ namespace Finanse.Views {
             Operation thisOperation = (Operation)datacontext;
 
             var ContentDialogItem = new NewOperationContentDialog(Operations, conn, thisOperation.Title, thisOperation.Id, thisOperation.Cost, 
-                thisOperation.Date, thisOperation.Category, thisOperation.SubCategory, thisOperation.ExpenseOrIncome);
+                thisOperation.Date, thisOperation.Category, thisOperation.SubCategory, thisOperation.ExpenseOrIncome, thisOperation.PayForm);
 
             var result = await ContentDialogItem.ShowAsync();
             //this datacontext is probably some object of some type T

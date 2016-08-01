@@ -278,84 +278,35 @@
                 Name="Expense_RadioButton"
                 Content="Wydatek"
                 GroupName="OperationType_RadioButtons"
-                Checked="ExpenseRadioButton_Checked"
-                GotFocus="Expense_RadioButton_GotFocus" />
+                Checked="ExpenseRadioButton_Checked"/>
             <RadioButton
                 Name="Income_RadioButton"
                 Content="Wpływ"
                 GroupName="OperationType_RadioButtons"
-                Checked="IncomeRadioButton_Checked"
-                GotFocus="Expense_RadioButton_GotFocus" />
+                Checked="IncomeRadioButton_Checked"/>
 
         </StackPanel>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="auto" />
-            </Grid.ColumnDefinitions>
 
-            <TextBox
-                Name="CostValue"
-                Style="{StaticResource TextBoxStyle1}"
-                TextChanged="TextChanged"
-                PlaceholderText="Wartość"
-                InputScope="CurrencyAmount"
-                Margin="0,20,0,0"
-                GotFocus="CostValue_GotFocus" />
-            <TextBox
-                Name="CostLeftValue"
-                Style="{StaticResource TextBoxStyle1}"
-                TextChanged="SetCost"
-                Visibility="Collapsed"
-                TextAlignment="Right"
-                InputScope="CurrencyAmount"
-                Margin="0,20,0,0"
-                KeyDown="CostValue_KeyDown"
-                GotFocus="CostLeftValue_GotFocus"
-                LostFocus="CostLeftValue_LostFocus"
-                AcceptsReturn="True"
-                AllowDrop="True" />
-            <TextBlock
-                Name="DotValue"
-                Visibility="Collapsed"
-                Text=","
-                Grid.Column="1"
-                VerticalAlignment="Bottom"
-                Margin="5,20,5,0" />
-            <TextBox
-                Name="CostRightValue"
-                Style="{StaticResource TextBoxStyle1}"
-                Visibility="Collapsed"
-                TextChanged="SetCost"
-                Width="30"
-                PlaceholderText="00"
-                MaxLength="2"
-                Grid.Column="2"
-                InputScope="CurrencyAmount"
-                Margin="0,20,0,0"
-                KeyDown="CostValue_KeyDown"
-                GotFocus="CostRightValue_GotFocus"
-                LostFocus="CostRightValue_LostFocus" />
-            <TextBlock
-                Name="CurrencyValue"
-                Visibility="Collapsed"
-                Text="zł"
-                Grid.Column="3"
-                VerticalAlignment="Bottom"
-                Margin="10,20,0,0" />
-
-        </Grid>
+        <TextBox
+            Name="CostValue"
+            Style="{StaticResource TextBoxStyle1}"
+            TextChanged="TextChanged"
+            KeyDown="CostValue_KeyDown"
+            PlaceholderText="Wartość"
+            InputScope="CurrencyAmount"
+            Margin="0,20,0,0"
+            GotFocus="CostValue_GotFocus"
+            LostFocus="CostValue_LostFocus"
+            TextChanging="CostValue_TextChanging"
+            SelectionChanged="CostValue_SelectionChanged" />
 
         <TextBox
             Name="NameValue"
             Style="{StaticResource TextBoxStyle1}"
             TextChanged="TextChanged"
             PlaceholderText="Nazwa"
-            Margin="0,20,0,10"
-            GotFocus="Expense_RadioButton_GotFocus" />
+            Margin="0,20,0,10"/>
 
         <CalendarDatePicker
             Name="DateValue"
@@ -364,8 +315,6 @@
             PlaceholderText="Data"
             Margin="0,10"
             HorizontalAlignment="Stretch"
-            GotFocus="Expense_RadioButton_GotFocus"
-            Opened="DateValue_Opened"
             Closed="DateValue_Closed"
             IsTodayHighlighted="False" />
 
@@ -375,8 +324,7 @@
             SelectionChanged="ComboBox_SelectionChanged"
             PlaceholderText="Kategoria"
             Margin="0,10"
-            HorizontalAlignment="Stretch"
-            GotFocus="Expense_RadioButton_GotFocus" />
+            HorizontalAlignment="Stretch"/>
 
         <ComboBox
             Name="SubCategoryValue"
@@ -384,7 +332,6 @@
             PlaceholderText="Podkategoria"
             Margin="0,10"
             HorizontalAlignment="Stretch"
-            GotFocus="Expense_RadioButton_GotFocus"
             SelectionChanged="SubCategoryValue_SelectionChanged" />
 
         <ComboBox
@@ -403,8 +350,7 @@
         <TextBlock
             Name="SaveAsAssetTitle"
             Text="Zapisz jako szablon"
-            Margin="0,20,0,0"
-            GotFocus="Expense_RadioButton_GotFocus" />
+            Margin="0,20,0,0" />
 
         <ToggleSwitch
             Name="SaveAsAssetToggle"

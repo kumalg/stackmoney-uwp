@@ -37,13 +37,26 @@ namespace Finanse.Views {
             this.OperationSubCategories = OperationSubCategories;
             this.conn = conn;
 
+            SetPrimaryButtonEnabled();
+
             /* DODAWANIE KATEGORII DO COMBOBOX'A */
+            CategoryValue.Items.Add(new ComboBoxItem {
+                Content = "Brak"
+            });
             foreach (OperationCategory OperationCategories_ComboBox in OperationCategories) {
 
                 CategoryValue.Items.Add(new ComboBoxItem {
                     Content = OperationCategories_ComboBox.Name
                 });
             }
+        }
+
+        private void SetPrimaryButtonEnabled() {
+            if (NameValue.Text != "") {
+                IsPrimaryButtonEnabled = true;
+            }
+            else
+                IsPrimaryButtonEnabled = false;
         }
 
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
@@ -96,26 +109,84 @@ namespace Finanse.Views {
 
         private void NameValue_TextChanged(object sender, TextChangedEventArgs e) {
 
+            TextBox NamVal = sender as TextBox;
+
+            string selectedCategory = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString();
+
             if (CategoryValue.SelectedIndex == -1) {
                 foreach (var message in conn.Table<OperationCategory>()) {
-                    if (message.Name == NameValue.Text) {
+                    if (message.Name == NamVal.Text) {
                         NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
                         break;
                     }
-                    else
+                    else {
                         NameValue.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
+                        SetPrimaryButtonEnabled();
+                    }
                 }
             }
             else {
-                foreach (var message in conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE BossCategory == '" + ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString() + "'")) {
-                    if (message.Name == NameValue.Text) {
+                foreach (var message in conn.Table<OperationSubCategory>().Where(subCategory => subCategory.BossCategory == selectedCategory)) {
+                    // conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE BossCategory == '" + ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString() + "'")
+                    if (message.Name == NamVal.Text) {
                         NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
                         break;
                     }
-                    else
+                    else {
                         NameValue.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
+                        SetPrimaryButtonEnabled();
+                    }
                 }
-            } 
+            }
+        }
+
+        private void NameValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
+
+            SetPrimaryButtonEnabled();
+
+            if (CategoryValue.SelectedIndex == -1) {
+                foreach (var message in conn.Table<OperationCategory>()) {
+                    if (message.Name.ToLower() == NameValue.Text.ToLower()) {
+                        NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
+                        IsPrimaryButtonEnabled = false;
+                        break;
+                    }
+                    else {
+                        NameValue.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
+                        SetPrimaryButtonEnabled();
+                    }
+                }
+            }
+            else {
+                string selectedCategory = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString().ToLower();
+                foreach (var message in conn.Table<OperationSubCategory>().Where(subCategory => subCategory.BossCategory.ToLower() == selectedCategory)) {
+                    if (message.Name.ToLower() == NameValue.Text.ToLower()) {
+                        NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
+                        IsPrimaryButtonEnabled = false;
+                        break;
+                    }
+                    else {
+                        NameValue.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
+                        SetPrimaryButtonEnabled();
+                    }
+                }
+            }
+        }
+
+        private void VisibleInExpensesToggleButton_Toggled(object sender, RoutedEventArgs e) {
+            if (!VisibleInExpensesToggleButton.IsOn && !VisibleInIncomesToggleButton.IsOn)
+                VisibleInIncomesToggleButton.IsOn = true;
+        }
+
+        private void VisibleInIncomesToggleButton_Toggled(object sender, RoutedEventArgs e) {
+            if (!VisibleInExpensesToggleButton.IsOn && !VisibleInIncomesToggleButton.IsOn)
+                VisibleInExpensesToggleButton.IsOn = true;
+        }
+
+        private void CategoryValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            if (CategoryValue.SelectedIndex == 0)
+                CategoryValue.SelectedIndex--;
         }
     }
 }

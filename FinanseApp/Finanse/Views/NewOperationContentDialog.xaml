@@ -15,7 +15,7 @@
     PrimaryButtonClick="NowaOperacja_DodajClick"
     SecondaryButtonClick="NowaOperacja_AnulujClick"
     RequestedTheme="Dark">
-    
+
     <ContentDialog.Resources>
         <Style
             x:Key="CalendarDatePickerStyle1"
@@ -25,13 +25,13 @@
                 Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
             <Setter
                 Property="Background"
-                Value="{ThemeResource SystemControlBackgroundAltMediumLowBrush}" />
+                Value="Transparent" />
             <Setter
                 Property="BorderBrush"
                 Value="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" />
             <Setter
                 Property="BorderThickness"
-                Value="{ThemeResource CalendarDatePickerBorderThemeThickness}" />
+                Value="0,0,0,1" />
             <Setter
                 Property="HorizontalAlignment"
                 Value="Left" />
@@ -99,7 +99,7 @@
                                         TodayForeground="{StaticResource AccentColorStyle}"
                                         FontWeight="Normal"
                                         FontSize="10"
-                                        DayItemFontSize="15"/>
+                                        DayItemFontSize="15" />
                                 </Flyout>
                             </FlyoutBase.AttachedFlyout>
                             <Grid.ColumnDefinitions>
@@ -127,14 +127,7 @@
                                                 Storyboard.TargetName="Background">
                                                 <DiscreteObjectKeyFrame
                                                     KeyTime="0"
-                                                    Value="{ThemeResource SystemControlHighlightBaseMediumBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Background"
-                                                Storyboard.TargetName="Background">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="{ThemeResource SystemControlPageBackgroundAltMediumBrush}" />
+                                                    Value="White" />
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
@@ -153,7 +146,7 @@
                                                 Storyboard.TargetName="Background">
                                                 <DiscreteObjectKeyFrame
                                                     KeyTime="0"
-                                                    Value="{ThemeResource SystemControlHighlightBaseMediumLowBrush}" />
+                                                    Value="White" />
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
@@ -198,14 +191,10 @@
                                         </Storyboard>
                                     </VisualState>
                                 </VisualStateGroup>
-                                <VisualStateGroup
-                                    x:Name="FocusStates">
-                                    <VisualState
-                                        x:Name="Unfocused" />
-                                    <VisualState
-                                        x:Name="PointerFocused" />
-                                    <VisualState
-                                        x:Name="Focused">
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Unfocused" />
+                                    <VisualState x:Name="PointerFocused" />
+                                    <VisualState x:Name="Focused">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames
                                                 Storyboard.TargetProperty="Background"
@@ -275,11 +264,12 @@
         </Style>
     </ContentDialog.Resources>
 
-    <StackPanel>
+    <StackPanel
+        Margin="0,20">
 
         <TextBlock
             Text="Typ operacji"
-            Margin="0,20,0,10" />
+            Margin="0,0,0,10" />
 
         <StackPanel
             Orientation="Horizontal">
@@ -301,34 +291,28 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition
-                    Width="*" />
-                <ColumnDefinition
-                    Width="auto" />
-                <ColumnDefinition
-                    Width="auto" />
-                <ColumnDefinition
-                    Width="auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
             <TextBox
                 Name="CostValue"
+                Style="{StaticResource TextBoxStyle1}"
                 TextChanged="TextChanged"
                 PlaceholderText="Wartość"
                 InputScope="CurrencyAmount"
                 Margin="0,20,0,0"
-                BorderThickness="0,0,0,1"
-                Background="Transparent"
                 GotFocus="CostValue_GotFocus" />
             <TextBox
                 Name="CostLeftValue"
+                Style="{StaticResource TextBoxStyle1}"
                 TextChanged="SetCost"
                 Visibility="Collapsed"
                 TextAlignment="Right"
                 InputScope="CurrencyAmount"
                 Margin="0,20,0,0"
-                BorderThickness="0,0,0,1"
-                Background="Transparent"
                 KeyDown="CostValue_KeyDown"
                 GotFocus="CostLeftValue_GotFocus"
                 LostFocus="CostLeftValue_LostFocus"
@@ -342,17 +326,16 @@
                 VerticalAlignment="Bottom"
                 Margin="5,20,5,0" />
             <TextBox
+                Name="CostRightValue"
+                Style="{StaticResource TextBoxStyle1}"
                 Visibility="Collapsed"
                 TextChanged="SetCost"
                 Width="30"
                 PlaceholderText="00"
                 MaxLength="2"
-                Name="CostRightValue"
                 Grid.Column="2"
                 InputScope="CurrencyAmount"
                 Margin="0,20,0,0"
-                BorderThickness="0,0,0,1"
-                Background="Transparent"
                 KeyDown="CostValue_KeyDown"
                 GotFocus="CostRightValue_GotFocus"
                 LostFocus="CostRightValue_LostFocus" />
@@ -368,62 +351,52 @@
 
         <TextBox
             Name="NameValue"
+            Style="{StaticResource TextBoxStyle1}"
             TextChanged="TextChanged"
             PlaceholderText="Nazwa"
             Margin="0,20,0,10"
-            BorderThickness="0,0,0,1"
-            Background="Transparent"
             GotFocus="Expense_RadioButton_GotFocus" />
 
         <CalendarDatePicker
             Name="DateValue"
+            Style="{StaticResource CalendarDatePickerStyle1}"
             DateChanged="DateValue_DateChanged"
             PlaceholderText="Data"
             Margin="0,10"
-            BorderThickness="0,0,0,1"
-            Background="Transparent"
             HorizontalAlignment="Stretch"
             GotFocus="Expense_RadioButton_GotFocus"
             Opened="DateValue_Opened"
             Closed="DateValue_Closed"
-            IsTodayHighlighted="False"
-            Style="{StaticResource CalendarDatePickerStyle1}" />
+            IsTodayHighlighted="False" />
 
         <ComboBox
             Name="CategoryValue"
+            Style="{StaticResource ComboBoxStyle1}"
             SelectionChanged="ComboBox_SelectionChanged"
             PlaceholderText="Kategoria"
             Margin="0,10"
-            BorderThickness="0,0,0,1"
-            Background="Transparent"
             HorizontalAlignment="Stretch"
-            GotFocus="Expense_RadioButton_GotFocus">
-        </ComboBox>
+            GotFocus="Expense_RadioButton_GotFocus" />
 
         <ComboBox
             Name="SubCategoryValue"
+            Style="{StaticResource ComboBoxStyle1}"
             PlaceholderText="Podkategoria"
             Margin="0,10"
-            BorderThickness="0,0,0,1"
-            Background="Transparent"
             HorizontalAlignment="Stretch"
             GotFocus="Expense_RadioButton_GotFocus"
-            SelectionChanged="SubCategoryValue_SelectionChanged">
-        </ComboBox>
+            SelectionChanged="SubCategoryValue_SelectionChanged" />
 
         <ComboBox
             Name="PayFormValue"
+            Style="{StaticResource ComboBoxStyle1}"
             SelectionChanged="PayFormValue_SelectionChanged"
             PlaceholderText="Forma płatności"
             Margin="0,10"
-            BorderThickness="0,0,0,1"
-            Background="Transparent"
             HorizontalAlignment="Stretch">
 
-            <ComboBoxItem
-                Content="Gotówka" />
-            <ComboBoxItem
-                Content="Karta Visa" />
+            <ComboBoxItem Content="Gotówka" />
+            <ComboBoxItem Content="Karta Visa" />
 
         </ComboBox>
 
@@ -433,16 +406,15 @@
             GotFocus="Expense_RadioButton_GotFocus" />
 
         <ToggleSwitch
+            Style="{StaticResource ToggleSwitchStyle1}"
             Margin="0,5,0,0">
 
             <ToggleSwitch.OffContent>
-                <TextBlock
-                    Text="Nie" />
+                Nie
             </ToggleSwitch.OffContent>
 
             <ToggleSwitch.OnContent>
-                <TextBlock
-                    Text="Tak" />
+                Tak
             </ToggleSwitch.OnContent>
 
         </ToggleSwitch>

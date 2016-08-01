@@ -13,24 +13,21 @@
     SecondaryButtonText="Anuluj"
     PrimaryButtonClick="NewCategory_AddButtonClick">
 
-    <StackPanel>
+    <StackPanel
+        Margin="0,20">
 
         <TextBox
             Name="NameValue"
-            TextChanged="NameValue_TextChanged"
+            Style="{StaticResource TextBoxStyle1}"
             PlaceholderText="Nazwa"
-            Margin="0,20,0,10"
-            BorderThickness="0,0,0,1"
-            Background="Transparent" />
+            TextChanging="NameValue_TextChanging" />
 
         <Grid
-            Margin="0,20,0,0">
+            Margin="0,30,0,0">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition
-                    Width="Auto" />
-                <ColumnDefinition
-                    Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Grid
@@ -57,17 +54,15 @@
                 Margin="30,0,0,0">
 
                 <Button
+                    Style="{StaticResource ButtonWithBottomBorder}"
                     Content="Kolor"
                     Margin="0,10"
-                    BorderThickness="0,0,0,1"
-                    Background="Transparent"
-                    HorizontalAlignment="Stretch"
-                    Style="{StaticResource ButtonWithBottomBorder}">
+                    HorizontalAlignment="Stretch">
                     <Button.Flyout>
                         <Flyout>
                             <GridView
+                                Name="ColorBaseList"
                                 MaxHeight="300"
-                                x:Name="ColorBaseList"
                                 Padding="0"
                                 ItemsSource="{StaticResource ColorBase}"
                                 ItemContainerStyle="{StaticResource GridViewItemStyle1}">
@@ -78,8 +73,7 @@
                                             MaximumRowsOrColumns="3"
                                             Orientation="Horizontal"
                                             HorizontalChildrenAlignment="Stretch"
-                                            VerticalChildrenAlignment="Stretch">
-                                        </WrapGrid>
+                                            VerticalChildrenAlignment="Stretch" />
                                     </ItemsPanelTemplate>
                                 </GridView.ItemsPanel>
 
@@ -105,16 +99,14 @@
                 </Button>
 
                 <Button
+                    Style="{StaticResource ButtonWithBottomBorder}"
                     Content="Ikona"
                     Margin="0,10"
-                    BorderThickness="0,0,0,1"
-                    Background="Transparent"
-                    HorizontalAlignment="Stretch"
-                    Style="{StaticResource ButtonWithBottomBorder}">
+                    HorizontalAlignment="Stretch">
                     <Button.Flyout>
                         <Flyout>
                             <GridView
-                                x:Name="IconBaseList"
+                                Name="IconBaseList"
                                 Padding="0"
                                 ItemsSource="{StaticResource IconBase}"
                                 ItemContainerStyle="{StaticResource GridViewItemStyle1}">
@@ -125,8 +117,7 @@
                                             MaximumRowsOrColumns="3"
                                             Orientation="Horizontal"
                                             HorizontalChildrenAlignment="Stretch"
-                                            VerticalChildrenAlignment="Stretch">
-                                        </WrapGrid>
+                                            VerticalChildrenAlignment="Stretch" />
                                     </ItemsPanelTemplate>
                                 </GridView.ItemsPanel>
 
@@ -162,12 +153,11 @@
 
         <ComboBox
             Name="CategoryValue"
+            Style="{StaticResource ComboBoxStyle1}"
             PlaceholderText="Kategoria nadrzędna"
             Margin="0,30,0,10"
-            BorderThickness="0,0,0,1"
-            Background="Transparent"
-            HorizontalAlignment="Stretch">
-        </ComboBox>
+            HorizontalAlignment="Stretch"
+            SelectionChanged="CategoryValue_SelectionChanged" />
 
         <TextBlock
             Text="Pokazuj w wydatkach"
@@ -175,19 +165,19 @@
 
         <ToggleSwitch
             Name="VisibleInExpensesToggleButton"
+            Style="{StaticResource ToggleSwitchStyle1}"
             Margin="0,5,0,0"
-            IsOn="True">
+            IsOn="True"
+            Toggled="VisibleInExpensesToggleButton_Toggled">
 
             <ToggleSwitch.OffContent>
-                <TextBlock
-                    Text="Nie" />
+                Nie
             </ToggleSwitch.OffContent>
 
             <ToggleSwitch.OnContent>
-                <TextBlock
-                    Text="Tak" />
+                Tak
             </ToggleSwitch.OnContent>
-
+            
         </ToggleSwitch>
 
         <TextBlock
@@ -196,19 +186,19 @@
 
         <ToggleSwitch
             Name="VisibleInIncomesToggleButton"
+            Style="{StaticResource ToggleSwitchStyle1}"
             Margin="0,5,0,0"
-            IsOn="True">
+            IsOn="True"
+            Toggled="VisibleInIncomesToggleButton_Toggled">
 
             <ToggleSwitch.OffContent>
-                <TextBlock
-                    Text="Nie" />
+                Nie
             </ToggleSwitch.OffContent>
 
             <ToggleSwitch.OnContent>
-                <TextBlock
-                    Text="Tak" />
+                Tak
             </ToggleSwitch.OnContent>
-
+            
         </ToggleSwitch>
 
     </StackPanel>

@@ -1111,7 +1111,8 @@
             Grid.Row="1"
             Style="{StaticResource PivotStyle1}">
 
-            <PivotItem>
+            <PivotItem
+                GotFocus="PivotItem_GotFocus">
                 <PivotItem.Header>
                     <RadioButton
                         GroupName="PivotStronaGlowna"

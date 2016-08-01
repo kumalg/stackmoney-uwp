@@ -7,32 +7,43 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="Transparent">
+    <Grid
+        Background="Transparent">
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
-                <VisualState x:Name="HamburgerTight">
+                <VisualState
+                    x:Name="HamburgerTight">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0"/>
+                        <AdaptiveTrigger
+                            MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="FakeHamburgerButton.Width" Value="48"/>
+                        <Setter
+                            Target="FakeHamburgerButton.Width"
+                            Value="48" />
                     </VisualState.Setters>
                 </VisualState>
-                <VisualState x:Name="HamburgerWide">
+                <VisualState
+                    x:Name="HamburgerWide">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="640"/>
+                        <AdaptiveTrigger
+                            MinWindowWidth="640" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="FakeHamburgerButton.Width" Value="Auto"/>
+                        <Setter
+                            Target="FakeHamburgerButton.Width"
+                            Value="Auto" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
         </Grid.RowDefinitions>
 
         <Grid
@@ -55,5 +66,6 @@
                 Text="Zlecenia stałe"
                 Style="{StaticResource PageTitleStyle}" />
         </Grid>
+
     </Grid>
 </Page>

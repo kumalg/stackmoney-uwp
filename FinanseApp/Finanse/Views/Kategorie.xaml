@@ -139,7 +139,26 @@
                     <ListView.ItemTemplate>
                         <DataTemplate
                             x:DataType="data:OperationCategory">
-                            <data:OperationCategoryTemplate />
+                            <Grid
+                                Background="Transparent"
+                                RightTapped="Grid_RightTapped"
+                                DragStarting="Grid_DragStarting">
+
+                                <FlyoutBase.AttachedFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem
+                                            x:Name="EditButton"
+                                            Text="Edit"
+                                            Click="EditButton_Click" />
+                                        <MenuFlyoutItem
+                                            x:Name="DeleteButton"
+                                            Text="Delete"
+                                            Click="DeleteButton_Click" />
+                                    </MenuFlyout>
+                                </FlyoutBase.AttachedFlyout>
+
+                                <data:OperationCategoryTemplate />
+                            </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

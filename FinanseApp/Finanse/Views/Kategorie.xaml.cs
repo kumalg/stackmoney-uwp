@@ -37,10 +37,10 @@ namespace Finanse.Views {
             path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
             conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
 
-            foreach (var message in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
+            foreach (var message in conn.Table<OperationCategory>().OrderBy(category => category.Name)) {
                 operationCategoryItem = message;
 
-                foreach (var submessage in conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory ORDER BY Name ASC")) {
+                foreach (var submessage in conn.Table<OperationSubCategory>().OrderBy(subCategory => subCategory.Name)) {
                     if (submessage.BossCategory == message.Name) {
                         operationCategoryItem.addSubCategory(submessage);
                     }
@@ -53,6 +53,24 @@ namespace Finanse.Views {
             var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, OperationSubCategories, conn);
 
             var result = await ContentDialogItem.ShowAsync();
+        }
+
+        private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
+        }
+
+        private void Grid_DragStarting(UIElement sender, DragStartingEventArgs args) {
+
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e) {
+
         }
     }
 }

@@ -87,6 +87,8 @@ namespace Finanse.Views {
         private void DeleteButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
+            Operations.Remove((Operation)datacontext);
+            conn.Delete((Operation)datacontext);
             //this datacontext is probably some object of some type T
         }
 
@@ -94,6 +96,9 @@ namespace Finanse.Views {
             FrameworkElement senderElement = sender as FrameworkElement;
             FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
             flyoutBase.ShowAt(senderElement);
+        }
+
+        private void PivotItem_GotFocus(object sender, RoutedEventArgs e) {
         }
     }
 }

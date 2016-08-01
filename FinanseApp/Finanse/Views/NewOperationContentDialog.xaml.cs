@@ -163,6 +163,10 @@ namespace Finanse.Views {
                 foreach (OperationSubCategory OperationSubCategories_ComboBox in conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory ORDER BY Name ASC")) {
 
                     if (OperationSubCategories_ComboBox.BossCategory == ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString()) {
+                        if (SubCategoryValue.Items.Count == 0)
+                            SubCategoryValue.Items.Add(new ComboBoxItem {
+                            Content = "Brak"
+                        });
                         SubCategoryValue.Items.Add(new ComboBoxItem {
                             Content = OperationSubCategories_ComboBox.Name
                         });
@@ -170,12 +174,8 @@ namespace Finanse.Views {
                 }
                 if (SubCategoryValue.Items.Count == 0)
                     SubCategoryValue.IsEnabled = false;
-                else {
+                else
                     SubCategoryValue.IsEnabled = true;
-                    SubCategoryValue.Items.Add(new ComboBoxItem {
-                        Content = "Brak"
-                    });
-                }
             }
         }
 
@@ -325,10 +325,9 @@ namespace Finanse.Views {
         }
 
         private void SubCategoryValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            //ComboBox jaki = sender as ComboBox;
-            /*
-            if (((ComboBoxItem)jaki.SelectedItem).Content.ToString() == "Brak")
-                SubCategoryValue.SelectedIndex = -1;*/
+
+            if (SubCategoryValue.SelectedIndex == 0)
+                SubCategoryValue.SelectedIndex--;
         }
     }
 }

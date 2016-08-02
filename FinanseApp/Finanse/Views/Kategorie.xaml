@@ -140,24 +140,128 @@
                         <DataTemplate
                             x:DataType="data:OperationCategory">
                             <Grid
-                                Background="Transparent"
-                                RightTapped="Grid_RightTapped"
-                                DragStarting="Grid_DragStarting">
+                                Background="Transparent">
 
-                                <FlyoutBase.AttachedFlyout>
-                                    <MenuFlyout>
-                                        <MenuFlyoutItem
-                                            x:Name="EditButton"
-                                            Text="Edit"
-                                            Click="EditButton_Click" />
-                                        <MenuFlyoutItem
-                                            x:Name="DeleteButton"
-                                            Text="Delete"
-                                            Click="DeleteButton_Click" />
-                                    </MenuFlyout>
-                                </FlyoutBase.AttachedFlyout>
+                                <StackPanel>
 
-                                <data:OperationCategoryTemplate />
+                                    <data:ExpandPanel>
+
+
+                                        <data:ExpandPanel.HeaderContent>
+
+                                            <Grid
+                                                MaxWidth="600"
+                                                Margin="0,5"
+                                                Background="Transparent"
+                                                RightTapped="ExpandPanel_RightTapped">
+
+                                                <FlyoutBase.AttachedFlyout>
+                                                    <MenuFlyout>
+                                                        <MenuFlyoutItem
+                                                            x:Name="EditCatButton"
+                                                            Text="Edytuj"
+                                                            Click="EditCat_Click" />
+                                                        <MenuFlyoutItem
+                                                            x:Name="DeleteCatButton"
+                                                            Text="Usuń"
+                                                            Click="DeleteCat_Click" />
+                                                    </MenuFlyout>
+                                                </FlyoutBase.AttachedFlyout>
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition
+                                                        Width="Auto" />
+                                                    <ColumnDefinition
+                                                        Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Grid
+                                                    Name="EllipseGrid"
+                                                    Grid.Column="0"
+                                                    Height="50"
+                                                    Width="50">
+
+                                                    <Ellipse
+                                                        Name="Ellipse_OperationTemplate"
+                                                        Fill="{x:Bind Color}" />
+
+                                                    <TextBlock
+                                                        Name="Icon_OperationTemplate"
+                                                        FontFamily="Segoe MDL2 Assets"
+                                                        FontSize="24"
+                                                        Text="{x:Bind Icon}"
+                                                        VerticalAlignment="Center"
+                                                        HorizontalAlignment="Center"
+                                                        Foreground="White" />
+                                                </Grid>
+
+                                                <TextBlock
+                                                    Name="Category_OperationCategoryTemplate"
+                                                    Grid.Column="1"
+                                                    VerticalAlignment="Center"
+                                                    Text="{x:Bind Name}"
+                                                    Margin="20,0,0,0"
+                                                    FontSize="16"
+                                                    Foreground="White" />
+                                            </Grid>
+
+                                        </data:ExpandPanel.HeaderContent>
+
+
+                                        <data:ExpandPanel.Content>
+
+                                            <ListView
+                                                ScrollViewer.VerticalScrollMode="Disabled"
+                                                Name="SubOperacjeListView"
+                                                ItemsSource="{x:Bind subCategories}"
+                                                MaxWidth="620"
+                                                BorderThickness="0"
+                                                Background="Transparent"
+                                                SelectionMode="None">
+
+                                                <ListView.ItemContainerStyle>
+                                                    <Style
+                                                        TargetType="ListViewItem">
+                                                        <Setter
+                                                            Property="HorizontalContentAlignment"
+                                                            Value="Stretch" />
+                                                        <Setter
+                                                            Property="Padding"
+                                                            Value="0" />
+                                                    </Style>
+                                                </ListView.ItemContainerStyle>
+
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate
+                                                        x:DataType="data:OperationSubCategory">
+                                                        <Grid
+                                                            RightTapped="Grid_RightTapped">
+
+                                                            <FlyoutBase.AttachedFlyout>
+                                                                <MenuFlyout>
+                                                                    <MenuFlyoutItem
+                                                                        x:Name="EditSubCatButton"
+                                                                        Text="Edytuj"
+                                                                        Click="EditSubCat_Click" />
+                                                                    <MenuFlyoutItem
+                                                                        x:Name="DeleteSubCatButton"
+                                                                        Text="Usuń"
+                                                                        Click="DeleteSubCat_Click" />
+                                                                </MenuFlyout>
+                                                            </FlyoutBase.AttachedFlyout>
+
+                                                            <data:OperationSubCategoryTemplate />
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+
+                                        </data:ExpandPanel.Content>
+
+
+                                    </data:ExpandPanel>
+
+                                </StackPanel>
 
                             </Grid>
                         </DataTemplate>

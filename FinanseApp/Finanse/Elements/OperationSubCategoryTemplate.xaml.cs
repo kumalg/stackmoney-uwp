@@ -22,10 +22,10 @@ namespace Finanse.Elements {
 
     public sealed partial class OperationSubCategoryTemplate : UserControl {
       
-        private Elements.OperationCategory OperationCategory {
+        private Elements.OperationSubCategory OperationSubCategory {
 
             get {
-                return this.DataContext as Elements.OperationCategory;
+                return this.DataContext as Elements.OperationSubCategory;
             }
         }
 

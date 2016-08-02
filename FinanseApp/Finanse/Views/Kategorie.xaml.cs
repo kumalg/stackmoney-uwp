@@ -65,12 +65,32 @@ namespace Finanse.Views {
 
         }
 
-        private void EditButton_Click(object sender, RoutedEventArgs e) {
+        private void EditCat_Click(object sender, RoutedEventArgs e) {
 
         }
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e) {
+        private void EditSubCat_Click(object sender, RoutedEventArgs e) {
 
+        }
+
+        private void DeleteCat_Click(object sender, RoutedEventArgs e) {
+            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+
+            OperationCategories.Remove((OperationCategory)datacontext);
+            conn.Delete((OperationCategory)datacontext);
+        }
+
+        private void ExpandPanel_RightTapped(object sender, RightTappedRoutedEventArgs e) {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
+        }
+
+        private void DeleteSubCat_Click(object sender, RoutedEventArgs e) {
+            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+
+            //OperationCategories.Remove((OperationCategory)datacontext);
+            conn.Delete((OperationSubCategory)datacontext);
         }
     }
 }

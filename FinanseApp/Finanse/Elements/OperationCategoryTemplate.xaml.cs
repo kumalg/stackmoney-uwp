@@ -35,5 +35,25 @@ namespace Finanse.Elements {
 
             this.DataContextChanged += (s, e) => Bindings.Update();            
         }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void ExpandPanel_RightTapped(object sender, RightTappedRoutedEventArgs e) {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
+        }
+
+        private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
+        }
     }
 }

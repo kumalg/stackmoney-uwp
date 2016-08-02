@@ -31,7 +31,7 @@
                 Height="8"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
-                Fill="Gray"/>
+                Fill="Gray" />
             <Border
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right"
@@ -49,14 +49,13 @@
             Width="40">
 
             <Ellipse
-                Name="Ellipse_OperationTemplate" 
-                Fill="{x:Bind OperationCategory.Color}"
-                DataContextChanged="Ellipse_OperationTemplate_DataContextChanged"/>
+                Name="Ellipse_OperationTemplate"
+                Fill="{x:Bind OperationSubCategory.Color}" />
 
             <TextBlock
                 Name="Icon_OperationTemplate"
                 FontFamily="Segoe MDL2 Assets"
-                Text="{x:Bind OperationCategory.Icon}"
+                Text="{x:Bind OperationSubCategory.Icon}"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
                 Foreground="White" />
@@ -65,7 +64,7 @@
         <TextBlock
             Grid.Column="2"
             VerticalAlignment="Center"
-            Text="{x:Bind OperationCategory.Name}"
+            Text="{x:Bind OperationSubCategory.Name}"
             Margin="20,0,0,0"
             FontSize="16"
             Foreground="White" />

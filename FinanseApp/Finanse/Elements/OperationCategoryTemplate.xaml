@@ -18,7 +18,21 @@
                 <Grid
                     MaxWidth="600"
                     Margin="0,5"
-                    Background="Transparent">
+                    Background="Transparent"
+                    RightTapped="ExpandPanel_RightTapped">
+
+                    <FlyoutBase.AttachedFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem
+                                x:Name="EditButton"
+                                Text="Edity"
+                                Click="EditButton_Click" />
+                            <MenuFlyoutItem
+                                x:Name="DeleteButton"
+                                Text="Deletey"
+                                Click="DeleteButton_Click" />
+                        </MenuFlyout>
+                    </FlyoutBase.AttachedFlyout>
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition
@@ -88,7 +102,21 @@
                             x:DataType="data:OperationSubCategory">
                             <Grid
                                 MaxWidth="600"
-                                Margin="10,10">
+                                Margin="10,10"
+                                RightTapped="Grid_RightTapped">
+
+                                <FlyoutBase.AttachedFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem
+                                            x:Name="EditButton"
+                                            Text="WOLOOO"
+                                            Click="EditButton_Click" />
+                                        <MenuFlyoutItem
+                                            x:Name="DeleteButton"
+                                            Text="DFRffrfy"
+                                            Click="DeleteButton_Click" />
+                                    </MenuFlyout>
+                                </FlyoutBase.AttachedFlyout>
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition

@@ -24,17 +24,17 @@ namespace Finanse.Views {
 
         public ObservableCollection<Operation> Operations;
 
-        public List<OperationCategory> OperationCategories;
-
         SQLite.Net.SQLiteConnection conn;
 
         int editedId;
-        string acceptedCostValue;
+
+        string acceptedCostValue = "";
         int whereIsSelection;
+
         bool isUnfocused = true;
 
         public NewOperationContentDialog(ObservableCollection<Operation> Operations, SQLite.Net.SQLiteConnection conn,
-            string editedTitle, int editedId, decimal editedCost, DateTimeOffset? editedDate, string editedCategory, string editedSubCategory, string editedExpenseOrIncome, string editedPayForm) {
+            string editedTitle, int editedId, decimal editedCost, DateTimeOffset? editedDate, int editedCategoryId, int editedSubCategoryId, string editedExpenseOrIncome, string editedPayForm) {
 
             this.InitializeComponent();
 
@@ -51,7 +51,8 @@ namespace Finanse.Views {
 
                 if (OperationCategories_ComboBox.VisibleInExpenses && OperationCategories_ComboBox.VisibleInIncomes) {
                     CategoryValue.Items.Add(new ComboBoxItem {
-                        Content = OperationCategories_ComboBox.Name
+                        Content = OperationCategories_ComboBox.Name,
+                        Tag = OperationCategories_ComboBox.Id
                     });
                 }
             }
@@ -71,15 +72,22 @@ namespace Finanse.Views {
                 NameValue.Text = editedTitle;
                 DateValue.Date = editedDate;
 
+                if(CategoryValue.Items.OfType<ComboBoxItem>().Any(i => (int)i.Tag == editedCategoryId))
+                    CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(i => (int)i.Tag == editedCategoryId);
+
+                if (conn.Table<OperationSubCategory>().Any(i => i.OperationCategoryId == editedSubCategoryId)) {
+                    OperationSubCategory subCatItem = conn.Table<OperationSubCategory>().Single(i => i.OperationCategoryId == editedSubCategoryId);
+                    SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
+                }
+
+                if(PayFormValue.Items.OfType<ComboBoxItem>().Any(i => i.Content.ToString() == editedPayForm))
+                    PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().Single(i => i.Content.ToString() == editedPayForm);
+
                 CostValue.Text = String.Format("{0:c}", editedCost);   
             }
 
             else
                 SubCategoryValue.IsEnabled = false;
-        }
-
-        private void NowaOperacja_AnulujClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-
         }
 
         private void SetNowaOperacjaButton() {
@@ -98,16 +106,16 @@ namespace Finanse.Views {
 
         private void NowaOperacja_DodajClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
-            string subCategoryString = null;
+            int subCategoryInt = -1;
 
             if (SubCategoryValue.SelectedIndex != -1)
-                subCategoryString = ((ComboBoxItem)SubCategoryValue.SelectedItem).Content.ToString();
+                subCategoryInt = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
 
             Operation item = new Operation {
                 Title = NameValue.Text,
                 Cost = decimal.Parse(CostValue.Text.Replace(" zł", "")),
-                Category = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
-                SubCategory = subCategoryString,
+                CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
+                SubCategoryId = subCategoryInt,
                 Date = DateValue.Date,
                 PayForm = ((ComboBoxItem)PayFormValue.SelectedItem).Content.ToString(),
             };
@@ -120,7 +128,7 @@ namespace Finanse.Views {
 
             // DODAWANIE
             if (editedId == -1) {
-                Operations.Add(item);
+                Operations.Insert(0,item);
                 conn.Insert(item);
             }
 
@@ -140,12 +148,15 @@ namespace Finanse.Views {
         private void ExpenseRadioButton_Checked(object sender, RoutedEventArgs e) {
             SetNowaOperacjaButton();
 
+           // int idOfSelectedCategory = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
+
             CategoryValue.Items.Clear();
             foreach (OperationCategory OperationCategories_ComboBox in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
 
                 if (OperationCategories_ComboBox.VisibleInExpenses) {
                     CategoryValue.Items.Add(new ComboBoxItem {
-                        Content = OperationCategories_ComboBox.Name
+                        Content = OperationCategories_ComboBox.Name,
+                        Tag = OperationCategories_ComboBox.Id
                     });
                 }
             }
@@ -160,27 +171,40 @@ namespace Finanse.Views {
 
                 if (OperationCategories_ComboBox.VisibleInIncomes) {
                     CategoryValue.Items.Add(new ComboBoxItem {
-                        Content = OperationCategories_ComboBox.Name
+                        Content = OperationCategories_ComboBox.Name,
+                        Tag = OperationCategories_ComboBox.Id
                     });
                 }
             }
             SubCategoryValue.IsEnabled = false;
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            SetNowaOperacjaButton();
+        private void SetCategoryComboBoxItems() {
+            CategoryValue.Items.Clear();
+            foreach (OperationCategory OperationCategories_ComboBox in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
 
+                if (OperationCategories_ComboBox.VisibleInExpenses) {
+                    CategoryValue.Items.Add(new ComboBoxItem {
+                        Content = OperationCategories_ComboBox.Name,
+                        Tag = OperationCategories_ComboBox.Id
+                    });
+                }
+            }
+            SubCategoryValue.IsEnabled = false;
+        }
+        private void SetSubCategoryComboBoxItems() {
             SubCategoryValue.Items.Clear();
-            if (CategoryValue.SelectedValue != null) {
+            if (CategoryValue.SelectedIndex != -1) {
                 foreach (OperationSubCategory OperationSubCategories_ComboBox in conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory ORDER BY Name ASC")) {
 
-                    if (OperationSubCategories_ComboBox.BossCategory == ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString()) {
+                    if (OperationSubCategories_ComboBox.BossCategoryId == (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag) {
                         if (SubCategoryValue.Items.Count == 0)
                             SubCategoryValue.Items.Add(new ComboBoxItem {
-                            Content = "Brak"
-                        });
+                                Content = "Brak",
+                            });
                         SubCategoryValue.Items.Add(new ComboBoxItem {
-                            Content = OperationSubCategories_ComboBox.Name
+                            Content = OperationSubCategories_ComboBox.Name,
+                            Tag = OperationSubCategories_ComboBox.OperationCategoryId
                         });
                     }
                 }
@@ -191,23 +215,14 @@ namespace Finanse.Views {
             }
         }
 
-        private void DateValue_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args) {
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             SetNowaOperacjaButton();
+
+            SetSubCategoryComboBoxItems();
         }
 
-        private void CostValue_KeyDown(object sender, KeyRoutedEventArgs e) {
-            //e.Handled = !char.IsDigit((char)e.Key);
-
-            /*
-            for (int i = 0; i < 10; i++) {
-                if (e.Key.ToString() == string.Format("Number{0}", i)) {
-                    e.Handled = false;
-                    return;
-                }
-            }
-            if (Regex.IsMatch(CostValue.Text, @"\,\d\d")) {
-                e.Handled = true;
-            }*/
+        private void DateValue_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args) {
+            SetNowaOperacjaButton();
         }
 
         private void DateValue_Closed(object sender, object e) {

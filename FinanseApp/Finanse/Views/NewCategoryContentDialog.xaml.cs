@@ -46,7 +46,8 @@ namespace Finanse.Views {
             foreach (OperationCategory OperationCategories_ComboBox in OperationCategories) {
 
                 CategoryValue.Items.Add(new ComboBoxItem {
-                    Content = OperationCategories_ComboBox.Name
+                    Content = OperationCategories_ComboBox.Name,
+                    Tag = OperationCategories_ComboBox.Id
                 });
             }
         }
@@ -66,20 +67,20 @@ namespace Finanse.Views {
                     Name = NameValue.Text,
                     Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
                     Icon = CategoryIcon.Glyph,
-                    BossCategory = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString(),
+                    BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
                     VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                     VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                 };
                 foreach (var message in conn.Table<OperationCategory>()) {
-                    if (message.Name == newOperationSubCategoryItem.BossCategory) {
+                    if (message.Id == newOperationSubCategoryItem.BossCategoryId) {
                         conn.Insert(newOperationSubCategoryItem);
                     }
                 }
-                OperationCategories.Single(x => x.Name == ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString()).addSubCategory(newOperationSubCategoryItem);
+                OperationCategories.Single(x => x.Id == (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag).addSubCategory(newOperationSubCategoryItem);
             }
 
             else {
-                OperationCategories.Add(new OperationCategory() {
+                OperationCategories.Insert(0, new OperationCategory() {
                     Name = NameValue.Text,
                     Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
                     Icon = CategoryIcon.Glyph,
@@ -111,7 +112,7 @@ namespace Finanse.Views {
 
             TextBox NamVal = sender as TextBox;
 
-            string selectedCategory = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString();
+            int selectedCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
 
             if (CategoryValue.SelectedIndex == -1) {
                 foreach (var message in conn.Table<OperationCategory>()) {
@@ -126,7 +127,7 @@ namespace Finanse.Views {
                 }
             }
             else {
-                foreach (var message in conn.Table<OperationSubCategory>().Where(subCategory => subCategory.BossCategory == selectedCategory)) {
+                foreach (var message in conn.Table<OperationSubCategory>().Where(subCategory => subCategory.BossCategoryId == selectedCategoryId)) {
                     // conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE BossCategory == '" + ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString() + "'")
                     if (message.Name == NamVal.Text) {
                         NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
@@ -158,8 +159,9 @@ namespace Finanse.Views {
                 }
             }
             else {
-                string selectedCategory = ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString().ToLower();
-                foreach (var message in conn.Table<OperationSubCategory>().Where(subCategory => subCategory.BossCategory.ToLower() == selectedCategory)) {
+                int selectedCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
+
+                foreach (var message in conn.Table<OperationSubCategory>().Where(subCategory => subCategory.BossCategoryId == selectedCategoryId)) {
                     if (message.Name.ToLower() == NameValue.Text.ToLower()) {
                         NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
                         IsPrimaryButtonEnabled = false;

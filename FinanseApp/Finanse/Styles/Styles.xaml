@@ -10,8 +10,14 @@
     <SolidColorBrush x:Key="DarkBlueColorStyle" Color="#0A4E9B"/>
     <SolidColorBrush x:Key="BlueColorStyle" Color="#0B63C7"/>
     -->
-    
-    
+    <SolidColorBrush
+        x:Key="DefaultEllipseColor"
+        Color="#2e2f43" />
+    <TextBlock
+        x:Key="DefaultEllipseIcon"
+        Text="&#xE170;"
+        FontFamily="Segoe MDL2 Assets" />
+
     <!--*****************************************
     KOLORY W APLIKACJI
     ******************************************-->

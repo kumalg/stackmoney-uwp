@@ -22,10 +22,8 @@ namespace Finanse.Elements {
 
     public sealed partial class OperationTemplate : UserControl {
 
-        private List<OperationCategory> OperationCategories = new List<OperationCategory>();
-
-        string path;
-        SQLite.Net.SQLiteConnection conn;
+        private string path;
+        private SQLite.Net.SQLiteConnection conn;
 
         private Elements.Operation Operation {
 
@@ -38,27 +36,14 @@ namespace Finanse.Elements {
 
             this.InitializeComponent();
 
-            OperationCategory operationCategoryItem;
-
             path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
             conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
-
-            foreach (var message in conn.Table<OperationCategory>()) {
-                operationCategoryItem = message;
-
-                foreach (var submessage in conn.Table<OperationSubCategory>()) {
-                    if (submessage.BossCategory == message.Name) {
-                        operationCategoryItem.addSubCategory(submessage);
-                    }
-                }
-                OperationCategories.Add(operationCategoryItem);
-            }
 
             this.DataContextChanged += (s, e) => Bindings.Update();            
         }
         
 
-        public SolidColorBrush GetSolidColorBrush(string hex) {
+        private SolidColorBrush GetSolidColorBrush(string hex) {
             hex = hex.Replace("#", string.Empty);
             byte a = (byte)(Convert.ToUInt32(hex.Substring(0, 2), 16));
             byte r = (byte)(Convert.ToUInt32(hex.Substring(2, 2), 16));
@@ -68,22 +53,27 @@ namespace Finanse.Elements {
             return myBrush;
         }
 
-        public void Category_OperationTemplate_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
+        public void Operation_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
 
             /* WYGLĄD KOŁA Z KATEGORIĄ */
-            string whichColor = null;
-            string whichIcon = null;
-            OperationCategory whichCat = null;
+            string whichColor = ((SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"]).Color.ToString();
+            string whichIcon = ((TextBlock)Application.Current.Resources["DefaultEllipseIcon"]).Text;
 
-            if (Operation.SubCategory == null) {
-                whichColor = OperationCategories.Find(item => item.Name == Operation.Category).Color;
-                whichIcon = OperationCategories.Find(item => item.Name == Operation.Category).Icon;
+            if (Operation.SubCategoryId == -1) {
+                if (conn.Table<OperationCategory>().Any(item => item.Id == Operation.CategoryId)) {
+                    whichColor = conn.Table<OperationCategory>().Single(item => item.Id == Operation.CategoryId).Color;
+                    whichIcon = conn.Table<OperationCategory>().Single(item => item.Id == Operation.CategoryId).Icon;
+                }
+                else
+                    Icon_OperationTemplate.Opacity = 0.2;
             }
             else {
-                whichCat = OperationCategories.Find(item => item.Name == Operation.Category);
-
-                whichColor = whichCat.subCategories.Single(item => item.Name == Operation.SubCategory).Color;
-                whichIcon = whichCat.subCategories.Single(item => item.Name == Operation.SubCategory).Icon;
+                if (conn.Table<OperationSubCategory>().Any(item => item.OperationCategoryId == Operation.SubCategoryId)) {
+                    whichColor = conn.Table<OperationSubCategory>().Single(item => item.OperationCategoryId == Operation.SubCategoryId).Color;
+                    whichIcon = conn.Table<OperationSubCategory>().Single(item => item.OperationCategoryId == Operation.SubCategoryId).Icon;
+                }
+                else
+                    Icon_OperationTemplate.Opacity = 0.2;
             }
 
             Ellipse_OperationTemplate.Fill = new SolidColorBrush(GetSolidColorBrush(whichColor).Color);
@@ -91,17 +81,25 @@ namespace Finanse.Elements {
 
             /* WYGLĄD KOSZTU (CZERWONY Z MINUSEM CZY ZIELONY Z PLUSEM) */
             if (Operation.ExpenseOrIncome == "expense") {
-                Cost_OperationTemplate.Text = "- " + Operation.Cost.ToString("0.00") + " zł";
+                Cost_OperationTemplate.Text = "- " + String.Format("{0:c}", Operation.Cost);
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
             }
             else {
-                Cost_OperationTemplate.Text = "+ " + Operation.Cost.ToString("0.00") + " zł";
+                Cost_OperationTemplate.Text = "+ " + String.Format("{0:c}", Operation.Cost);
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"];
             }
 
-            /* CZY WYŚWIETLAĆ PODKATEGORIĘ */
-            if (Operation.SubCategory != null)
-                SubCategory_OperationTemplate.Text = "  /  " + Operation.SubCategory;
+            /* TYTUŁ KATEGORII */
+            if (conn.Table<OperationCategory>().Any(cat => cat.Id == Operation.CategoryId)) {
+
+                Category_OperationTemplate.Text = conn.Table<OperationCategory>().Single(cat => cat.Id == Operation.CategoryId).Name;
+
+                /* CZY WYŚWIETLAĆ PODKATEGORIĘ */
+                if (Operation.SubCategoryId != -1)
+                    SubCategory_OperationTemplate.Text = "  /  " + conn.Table<OperationSubCategory>().Single(subcat => subcat.OperationCategoryId == Operation.SubCategoryId).Name;
+            }
+            else
+                Category_OperationTemplate.Text = "Nie odnaleziono wskazanej kategorii";
         }
     }
 }

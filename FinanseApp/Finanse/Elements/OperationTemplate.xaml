@@ -9,6 +9,7 @@
     Height="70">
 
     <Grid
+        DataContextChanged="Operation_DataContextChanged"
         MaxWidth="600"
         Margin="10,0">
 
@@ -53,8 +54,6 @@
                 Opacity="0.4">
                 <TextBlock
                     Name="Category_OperationTemplate"
-                    Text="{x:Bind Operation.Category}"
-                    DataContextChanged="Category_OperationTemplate_DataContextChanged"
                     Margin="20,0,0,0"
                     FontWeight="Bold"
                     FontSize="12"

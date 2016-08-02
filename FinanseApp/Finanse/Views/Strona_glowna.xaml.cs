@@ -28,11 +28,7 @@ namespace Finanse.Views {
         string path;
         SQLite.Net.SQLiteConnection conn;
 
-        public ObservableCollection<Operation> Operations = new ObservableCollection<Operation>();
-        public List<OperationCategory> OperationCategories = new List<OperationCategory>();
-
-        public OperationCategory operationCategoryItem;
-        public OperationSubCategory operationSubCategoryItem;
+        public ObservableCollection<Operation> Operations;
 
         public Strona_glowna() {
 
@@ -45,20 +41,7 @@ namespace Finanse.Views {
             conn.CreateTable<OperationCategory>();
             conn.CreateTable<OperationSubCategory>();
 
-            foreach (var message in conn.Table<Operation>()) {
-                Operations.Add(message);
-            }
-
-            foreach (var message in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
-                operationCategoryItem = message;
-
-                foreach (var submessage in conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory ORDER BY Name ASC")) {
-                    if (submessage.BossCategory == message.Name) {
-                        operationCategoryItem.addSubCategory(submessage);
-                    }
-                }
-                OperationCategories.Add(operationCategoryItem);
-            }
+            Operations = new ObservableCollection<Operation>(conn.Table<Operation>().OrderByDescending(o=>o.Id));
         }
 
         private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -67,7 +50,7 @@ namespace Finanse.Views {
 
         private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
 
-            var ContentDialogItem = new NewOperationContentDialog(Operations, conn, null, -1, -1, null, null, null, null, null);
+            var ContentDialogItem = new NewOperationContentDialog(Operations, conn, null, -1, -1, null, -1, -1, null, null);
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -84,7 +67,7 @@ namespace Finanse.Views {
             Operation thisOperation = (Operation)datacontext;
 
             var ContentDialogItem = new NewOperationContentDialog(Operations, conn, thisOperation.Title, thisOperation.Id, thisOperation.Cost, 
-                thisOperation.Date, thisOperation.Category, thisOperation.SubCategory, thisOperation.ExpenseOrIncome, thisOperation.PayForm);
+                thisOperation.Date, thisOperation.CategoryId, thisOperation.SubCategoryId, thisOperation.ExpenseOrIncome, thisOperation.PayForm);
 
             var result = await ContentDialogItem.ShowAsync();
             //this datacontext is probably some object of some type T

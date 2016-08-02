@@ -41,7 +41,7 @@ namespace Finanse.Views {
                 operationCategoryItem = message;
 
                 foreach (var submessage in conn.Table<OperationSubCategory>().OrderBy(subCategory => subCategory.Name)) {
-                    if (submessage.BossCategory == message.Name) {
+                    if (submessage.BossCategoryId == message.Id) {
                         operationCategoryItem.addSubCategory(submessage);
                     }
                 }
@@ -89,7 +89,11 @@ namespace Finanse.Views {
         private void DeleteSubCat_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            //OperationCategories.Remove((OperationCategory)datacontext);
+            OperationSubCategory subCatItem= (OperationSubCategory)datacontext;
+            OperationCategory BossCatItem = OperationCategories.Single(c => c.Id == subCatItem.BossCategoryId);
+
+            BossCatItem.subCategories.Remove(subCatItem);
+
             conn.Delete((OperationSubCategory)datacontext);
         }
     }

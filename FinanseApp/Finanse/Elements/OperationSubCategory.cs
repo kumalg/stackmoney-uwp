@@ -15,7 +15,7 @@ namespace Finanse.Elements {
         public string Name  { get; set; } 
         public string Color { get; set; } 
         public string Icon { get; set; } 
-        public string BossCategory { get; set; } 
+        public int BossCategoryId { get; set; } 
         public bool VisibleInIncomes { get; set; } 
         public bool VisibleInExpenses { get; set; } 
     }

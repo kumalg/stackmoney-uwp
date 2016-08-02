@@ -24,7 +24,7 @@ namespace Finanse.Elements {
         public ObservableCollection<OperationSubCategory> subCategories = new ObservableCollection<OperationSubCategory>();
 
         public void addSubCategory(OperationSubCategory subCategory) {
-            subCategories.Add(subCategory);
+            subCategories.Insert(0, subCategory);
         }
     }
 }

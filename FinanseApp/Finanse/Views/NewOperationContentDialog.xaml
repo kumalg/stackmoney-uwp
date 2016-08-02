@@ -13,7 +13,6 @@
     PrimaryButtonText="Dodaj"
     SecondaryButtonText="Anuluj"
     PrimaryButtonClick="NowaOperacja_DodajClick"
-    SecondaryButtonClick="NowaOperacja_AnulujClick"
     RequestedTheme="Dark">
 
     <ContentDialog.Resources>
@@ -287,26 +286,24 @@
 
         </StackPanel>
 
-
-        <TextBox
-            Name="CostValue"
-            Style="{StaticResource TextBoxStyle1}"
-            TextChanged="TextChanged"
-            KeyDown="CostValue_KeyDown"
-            PlaceholderText="Wartość"
-            InputScope="CurrencyAmount"
-            Margin="0,20,0,0"
-            GotFocus="CostValue_GotFocus"
-            LostFocus="CostValue_LostFocus"
-            TextChanging="CostValue_TextChanging"
-            SelectionChanged="CostValue_SelectionChanged" />
-
         <TextBox
             Name="NameValue"
             Style="{StaticResource TextBoxStyle1}"
             TextChanged="TextChanged"
             PlaceholderText="Nazwa"
-            Margin="0,20,0,10"/>
+            Margin="0,20,0,0" />
+
+        <TextBox
+            Name="CostValue"
+            Style="{StaticResource TextBoxStyle1}"
+            TextChanged="TextChanged"
+            PlaceholderText="Wartość"
+            InputScope="CurrencyAmount"
+            Margin="0,20,0,10"
+            GotFocus="CostValue_GotFocus"
+            LostFocus="CostValue_LostFocus"
+            TextChanging="CostValue_TextChanging"
+            SelectionChanged="CostValue_SelectionChanged" />
 
         <CalendarDatePicker
             Name="DateValue"
@@ -322,6 +319,7 @@
             Name="CategoryValue"
             Style="{StaticResource ComboBoxStyle1}"
             SelectionChanged="ComboBox_SelectionChanged"
+            SelectedValuePath="ID"
             PlaceholderText="Kategoria"
             Margin="0,10"
             HorizontalAlignment="Stretch"/>

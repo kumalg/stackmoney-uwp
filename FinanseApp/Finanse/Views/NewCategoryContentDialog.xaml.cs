@@ -23,7 +23,6 @@ namespace Finanse.Views {
     public sealed partial class NewCategoryContentDialog : ContentDialog {
 
         ObservableCollection<OperationCategory> OperationCategories;
-        ObservableCollection<OperationCategory> OperationSubCategories;
 
         SQLite.Net.SQLiteConnection conn;
 
@@ -37,12 +36,11 @@ namespace Finanse.Views {
         public int editedId;
         public int editedBossCategoryId;
 
-        public NewCategoryContentDialog(ObservableCollection<OperationCategory> OperationCategories, ObservableCollection<OperationCategory> OperationSubCategories, SQLite.Net.SQLiteConnection conn, OperationCategory editedCategory, int editedBossCategoryId) {
+        public NewCategoryContentDialog(ObservableCollection<OperationCategory> OperationCategories, SQLite.Net.SQLiteConnection conn, OperationCategory editedCategory, int editedBossCategoryId) {
 
             this.InitializeComponent();
 
             this.OperationCategories = OperationCategories;
-            this.OperationSubCategories = OperationSubCategories;
             this.conn = conn;
             this.editedCategory = editedCategory;
             editedId = editedCategory.Id;
@@ -80,6 +78,7 @@ namespace Finanse.Views {
                         CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == catItem.Name);
                     }
                 }
+                SetPrimaryButtonEnabled();
             }
         }
 
@@ -135,25 +134,55 @@ namespace Finanse.Views {
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
-
-                    ObservableCollection<OperationSubCategory> subCategories = OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedBossCategoryId))].subCategories;
-
-                    subCategories[subCategories.IndexOf(subCategories.Single(c => c.OperationCategoryId == editedCategory.Id))] = editedOperationSubCategoryItem;
-
-                    OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedBossCategoryId))].subCategories = subCategories;
-
                     conn.Update(editedOperationSubCategoryItem);
+
+                    if (editedBossCategoryId == (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag) {
+                        ObservableCollection<OperationSubCategory> subCategories = OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedBossCategoryId))].subCategories;
+
+                        subCategories[subCategories.IndexOf(subCategories.Single(c => c.OperationCategoryId == editedCategory.Id))] = editedOperationSubCategoryItem;
+
+                        OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedBossCategoryId))].subCategories = subCategories;
+                    }
+
+                    else
+                        RefreshOperationCategoriesList();
                 }
                 else if (editedBossCategoryId != -1 && CategoryValue.SelectedIndex == -1) {
                     // subkategoria która zostala kategorią
+                    editedOperationSubCategoryItem = new OperationSubCategory {
+                        OperationCategoryId = editedCategory.Id,
+                    };
+                    editedOperationCategoryItem = new OperationCategory {
+                        Name = NameValue.Text,
+                        Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
+                        Icon = CategoryIcon.Glyph,
+                        VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
+                        VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
+                    };
+
+                    conn.Delete(editedOperationSubCategoryItem);
+                    conn.Insert(editedOperationCategoryItem);
+                    RefreshOperationCategoriesList();
                 }
                 else if (editedBossCategoryId == -1 && CategoryValue.SelectedIndex != -1) {
                     // kategoria która została subkategorią
+                    editedOperationSubCategoryItem = new OperationSubCategory {
+                        Name = NameValue.Text,
+                        Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
+                        Icon = CategoryIcon.Glyph,
+                        BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
+                        VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
+                        VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
+                    };
+
+                    conn.Delete(editedCategory);
+                    conn.Insert(editedOperationSubCategoryItem);
+                    RefreshOperationCategoriesList();
                 }
                 else if (editedBossCategoryId == -1 && CategoryValue.SelectedIndex == -1) {
                     // kategoria która dalej jest kategorią
 
-                    newOperationCategoryItem = new OperationCategory {
+                    editedOperationCategoryItem = new OperationCategory {
                         Id = editedCategory.Id,
                         Name = NameValue.Text,
                         Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
@@ -162,9 +191,8 @@ namespace Finanse.Views {
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
 
-                    OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedCategory.Id))] = newOperationCategoryItem;
-
-                    conn.Update(newOperationCategoryItem);
+                    OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedCategory.Id))] = editedOperationCategoryItem;
+                    conn.Update(editedOperationCategoryItem);
                 }
 
             }
@@ -271,6 +299,20 @@ namespace Finanse.Views {
             byte b = (byte)(Convert.ToUInt32(hex.Substring(6, 2), 16));
             SolidColorBrush myBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(a, r, g, b));
             return myBrush;
+        }
+
+        private void RefreshOperationCategoriesList() {
+            OperationCategories.Clear();
+            foreach (var message in conn.Table<OperationCategory>().OrderBy(category => category.Name)) {
+                OperationCategory operationCategoryItem = message;
+
+                foreach (var submessage in conn.Table<OperationSubCategory>().OrderByDescending(subCategory => subCategory.Name)) {
+                    if (submessage.BossCategoryId == message.Id) {
+                        operationCategoryItem.addSubCategory(submessage);
+                    }
+                }
+                OperationCategories.Add(operationCategoryItem);
+            }
         }
     }
 }

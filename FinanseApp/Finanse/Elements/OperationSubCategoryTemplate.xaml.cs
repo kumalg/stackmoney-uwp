@@ -35,14 +35,5 @@ namespace Finanse.Elements {
 
             this.DataContextChanged += (s, e) => Bindings.Update();            
         }
-
-        private void Ellipse_OperationTemplate_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
-                SubCategorySymbol.Visibility = Visibility.Visible;
-                Ellipse_OperationTemplate.Width = 40;
-                Ellipse_OperationTemplate.Height = 40;
-                EllipseGrid.Width = 40;
-                EllipseGrid.Height = 40;
-                Icon_OperationTemplate.FontSize = 18;
-        }
     }
 }

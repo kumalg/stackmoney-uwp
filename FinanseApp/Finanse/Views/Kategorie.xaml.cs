@@ -25,7 +25,6 @@ namespace Finanse.Views {
         SQLite.Net.SQLiteConnection conn;
 
         public ObservableCollection<OperationCategory> OperationCategories = new ObservableCollection<OperationCategory>();
-        public ObservableCollection<OperationCategory> OperationSubCategories = new ObservableCollection<OperationCategory>();
 
         public OperationCategory operationCategoryItem;
         public OperationSubCategory operationSubCategoryItem;
@@ -40,7 +39,7 @@ namespace Finanse.Views {
             foreach (var message in conn.Table<OperationCategory>().OrderBy(category => category.Name)) {
                 operationCategoryItem = message;
 
-                foreach (var submessage in conn.Table<OperationSubCategory>().OrderBy(subCategory => subCategory.Name)) {
+                foreach (var submessage in conn.Table<OperationSubCategory>().OrderByDescending(subCategory => subCategory.Name)) {
                     if (submessage.BossCategoryId == message.Id) {
                         operationCategoryItem.addSubCategory(submessage);
                     }
@@ -50,7 +49,7 @@ namespace Finanse.Views {
         }
 
         private async void NewCategory_Click(object sender, RoutedEventArgs e) {
-            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, OperationSubCategories, conn, new OperationCategory {Id = -1 }, -1);
+            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, conn, new OperationCategory {Id = -1 }, -1);
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -70,7 +69,7 @@ namespace Finanse.Views {
 
             OperationCategory thisCategory = (OperationCategory)datacontext;
 
-            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, OperationSubCategories, conn, thisCategory, -1);
+            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, conn, thisCategory, -1);
 
             var result = await ContentDialogItem.ShowAsync();
             //this datacontext is probably some object of some type T
@@ -89,7 +88,7 @@ namespace Finanse.Views {
                 VisibleInIncomes = thisSubCategory.VisibleInIncomes
             };
 
-            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, OperationSubCategories, conn, thisCategory, thisSubCategory.BossCategoryId);
+            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, conn, thisCategory, thisSubCategory.BossCategoryId);
 
             var result = await ContentDialogItem.ShowAsync();
             //this datacontext is probably some object of some type T

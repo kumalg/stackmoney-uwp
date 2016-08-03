@@ -46,16 +46,9 @@ namespace Finanse.Views {
 
             DateValue.MaxDate = DateTime.Today;
 
-            /* DODAWANIE KATEGORII DO COMBOBOX'A */
-            foreach (OperationCategory OperationCategories_ComboBox in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
+            Expense_RadioButton.IsChecked = true;
 
-                if (OperationCategories_ComboBox.VisibleInExpenses && OperationCategories_ComboBox.VisibleInIncomes) {
-                    CategoryValue.Items.Add(new ComboBoxItem {
-                        Content = OperationCategories_ComboBox.Name,
-                        Tag = OperationCategories_ComboBox.Id
-                    });
-                }
-            }
+            SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
 
             if (editedId != -1) {
                 Title = "Edycja operacji";
@@ -145,69 +138,86 @@ namespace Finanse.Views {
             SetNowaOperacjaButton();
         }
 
-        private void ExpenseRadioButton_Checked(object sender, RoutedEventArgs e) {
+        private void TypeOfOperationRadioButton_Checked(object sender, RoutedEventArgs e) {
             SetNowaOperacjaButton();
 
-           // int idOfSelectedCategory = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
-
-            CategoryValue.Items.Clear();
-            foreach (OperationCategory OperationCategories_ComboBox in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
-
-                if (OperationCategories_ComboBox.VisibleInExpenses) {
-                    CategoryValue.Items.Add(new ComboBoxItem {
-                        Content = OperationCategories_ComboBox.Name,
-                        Tag = OperationCategories_ComboBox.Id
-                    });
-                }
-            }
-            SubCategoryValue.IsEnabled = false;
-        }
-
-        private void IncomeRadioButton_Checked(object sender, RoutedEventArgs e) {
-            SetNowaOperacjaButton();
-
-            CategoryValue.Items.Clear();
-            foreach (OperationCategory OperationCategories_ComboBox in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
-
-                if (OperationCategories_ComboBox.VisibleInIncomes) {
-                    CategoryValue.Items.Add(new ComboBoxItem {
-                        Content = OperationCategories_ComboBox.Name,
-                        Tag = OperationCategories_ComboBox.Id
-                    });
-                }
-            }
-            SubCategoryValue.IsEnabled = false;
-        }
-
-        private void SetCategoryComboBoxItems() {
-            CategoryValue.Items.Clear();
-            foreach (OperationCategory OperationCategories_ComboBox in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
-
-                if (OperationCategories_ComboBox.VisibleInExpenses) {
-                    CategoryValue.Items.Add(new ComboBoxItem {
-                        Content = OperationCategories_ComboBox.Name,
-                        Tag = OperationCategories_ComboBox.Id
-                    });
-                }
-            }
-            SubCategoryValue.IsEnabled = false;
-        }
-        private void SetSubCategoryComboBoxItems() {
-            SubCategoryValue.Items.Clear();
             if (CategoryValue.SelectedIndex != -1) {
-                foreach (OperationSubCategory OperationSubCategories_ComboBox in conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory ORDER BY Name ASC")) {
+                int idOfSelectedCategory = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
+                int idOfSelectedSubCategory = -1;
 
-                    if (OperationSubCategories_ComboBox.BossCategoryId == (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag) {
-                        if (SubCategoryValue.Items.Count == 0)
-                            SubCategoryValue.Items.Add(new ComboBoxItem {
-                                Content = "Brak",
-                            });
-                        SubCategoryValue.Items.Add(new ComboBoxItem {
-                            Content = OperationSubCategories_ComboBox.Name,
-                            Tag = OperationSubCategories_ComboBox.OperationCategoryId
-                        });
+                if (SubCategoryValue.SelectedIndex != -1)
+                    idOfSelectedSubCategory = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
+
+                SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
+
+                if (CategoryValue.Items.OfType<ComboBoxItem>().Any(i => (int)i.Tag == idOfSelectedCategory))
+                    CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(i => (int)i.Tag == idOfSelectedCategory);
+
+                else
+                    SubCategoryValue.IsEnabled = false;
+
+                if (idOfSelectedSubCategory != -1) {
+                    if (SubCategoryValue.Items.OfType<OperationSubCategory>().Any(i => i.OperationCategoryId == idOfSelectedSubCategory)) {
+                        OperationSubCategory subCatItem = conn.Table<OperationSubCategory>().Single(i => i.OperationCategoryId == idOfSelectedSubCategory);
+                        SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
                     }
                 }
+            }
+
+            else {
+                SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
+                SubCategoryValue.IsEnabled = false;
+            }
+        }
+
+        private void SetCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
+
+            CategoryValue.Items.Clear();
+
+            foreach (OperationCategory catItem in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
+
+                if ((catItem.VisibleInExpenses && inExpenses) 
+                    || (catItem.VisibleInIncomes && inIncomes)) {
+
+                    CategoryValue.Items.Add(new ComboBoxItem {
+                        Content = catItem.Name,
+                        Tag = catItem.Id
+                    });
+
+                }
+
+            }
+
+        }
+
+        private void SetSubCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
+
+            SubCategoryValue.Items.Clear();
+
+            if (CategoryValue.SelectedIndex != -1) {
+
+                foreach (OperationSubCategory subCatItem in conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory ORDER BY Name ASC")) {
+
+                    if (subCatItem.BossCategoryId == (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag) {
+
+                        if ((subCatItem.VisibleInExpenses && inExpenses)
+                            || (subCatItem.VisibleInIncomes && inIncomes)) {
+
+                            if (SubCategoryValue.Items.Count == 0)
+                                SubCategoryValue.Items.Add(new ComboBoxItem {
+                                    Content = "Brak",
+                                });
+                            SubCategoryValue.Items.Add(new ComboBoxItem {
+                                Content = subCatItem.Name,
+                                Tag = subCatItem.OperationCategoryId
+                            });
+
+                        }
+
+                    }
+
+                }
+
                 if (SubCategoryValue.Items.Count == 0)
                     SubCategoryValue.IsEnabled = false;
                 else
@@ -218,7 +228,7 @@ namespace Finanse.Views {
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             SetNowaOperacjaButton();
 
-            SetSubCategoryComboBoxItems();
+            SetSubCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
         }
 
         private void DateValue_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args) {

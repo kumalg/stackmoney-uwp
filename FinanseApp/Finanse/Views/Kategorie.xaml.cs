@@ -50,7 +50,7 @@ namespace Finanse.Views {
         }
 
         private async void NewCategory_Click(object sender, RoutedEventArgs e) {
-            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, OperationSubCategories, conn);
+            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, OperationSubCategories, conn, new OperationCategory {Id = -1 }, -1);
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -65,12 +65,34 @@ namespace Finanse.Views {
 
         }
 
-        private void EditCat_Click(object sender, RoutedEventArgs e) {
+        private async void EditCat_Click(object sender, RoutedEventArgs e) {
+            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
+            OperationCategory thisCategory = (OperationCategory)datacontext;
+
+            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, OperationSubCategories, conn, thisCategory, -1);
+
+            var result = await ContentDialogItem.ShowAsync();
+            //this datacontext is probably some object of some type T
         }
 
-        private void EditSubCat_Click(object sender, RoutedEventArgs e) {
+        private async void EditSubCat_Click(object sender, RoutedEventArgs e) {
+            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
+            OperationSubCategory thisSubCategory = (OperationSubCategory)datacontext;
+            OperationCategory thisCategory = new OperationCategory {
+                Id = thisSubCategory.OperationCategoryId,
+                Name = thisSubCategory.Name,
+                Color = thisSubCategory.Color,
+                Icon = thisSubCategory.Icon,
+                VisibleInExpenses = thisSubCategory.VisibleInExpenses,
+                VisibleInIncomes = thisSubCategory.VisibleInIncomes
+            };
+
+            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, OperationSubCategories, conn, thisCategory, thisSubCategory.BossCategoryId);
+
+            var result = await ContentDialogItem.ShowAsync();
+            //this datacontext is probably some object of some type T
         }
 
         private void DeleteCat_Click(object sender, RoutedEventArgs e) {

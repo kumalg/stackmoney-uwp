@@ -28,14 +28,25 @@ namespace Finanse.Views {
         SQLite.Net.SQLiteConnection conn;
 
         public OperationSubCategory newOperationSubCategoryItem;
+        public OperationCategory newOperationCategoryItem;
 
-        public NewCategoryContentDialog(ObservableCollection<OperationCategory> OperationCategories, ObservableCollection<OperationCategory> OperationSubCategories, SQLite.Net.SQLiteConnection conn) {
+        public OperationSubCategory editedOperationSubCategoryItem;
+        public OperationCategory editedOperationCategoryItem;
+
+        public OperationCategory editedCategory;
+        public int editedId;
+        public int editedBossCategoryId;
+
+        public NewCategoryContentDialog(ObservableCollection<OperationCategory> OperationCategories, ObservableCollection<OperationCategory> OperationSubCategories, SQLite.Net.SQLiteConnection conn, OperationCategory editedCategory, int editedBossCategoryId) {
 
             this.InitializeComponent();
 
             this.OperationCategories = OperationCategories;
             this.OperationSubCategories = OperationSubCategories;
             this.conn = conn;
+            this.editedCategory = editedCategory;
+            editedId = editedCategory.Id;
+            this.editedBossCategoryId = editedBossCategoryId;
 
             SetPrimaryButtonEnabled();
 
@@ -50,6 +61,26 @@ namespace Finanse.Views {
                     Tag = OperationCategories_ComboBox.Id
                 });
             }
+
+            if (editedCategory.Id != -1) {
+                Title = "Edycja kategorii";
+                PrimaryButtonText = "Zapisz";
+
+                NameValue.Text = editedCategory.Name;
+
+                CategoryIcon.Glyph = editedCategory.Icon;
+                CategoryCircle.Fill = GetSolidColorBrush(editedCategory.Color);
+
+                VisibleInExpensesToggleButton.IsOn = editedCategory.VisibleInExpenses;
+                VisibleInIncomesToggleButton.IsOn = editedCategory.VisibleInIncomes;
+
+                if (editedBossCategoryId != -1) {
+                    if (conn.Table<OperationCategory>().Any(i => i.Id == editedBossCategoryId)) {
+                        OperationCategory catItem = conn.Table<OperationCategory>().Single(i => i.Id == editedBossCategoryId);
+                        CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == catItem.Name);
+                    }
+                }
+            }
         }
 
         private void SetPrimaryButtonEnabled() {
@@ -62,38 +93,80 @@ namespace Finanse.Views {
 
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
-            if (CategoryValue.SelectedIndex != -1) {
-                newOperationSubCategoryItem = new OperationSubCategory {
-                    Name = NameValue.Text,
-                    Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                    Icon = CategoryIcon.Glyph,
-                    BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
-                    VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
-                    VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
-                };
-                foreach (var message in conn.Table<OperationCategory>()) {
-                    if (message.Id == newOperationSubCategoryItem.BossCategoryId) {
-                        conn.Insert(newOperationSubCategoryItem);
-                    }
-                }
-                OperationCategories.Single(x => x.Id == (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag).addSubCategory(newOperationSubCategoryItem);
-            }
+            if (editedId == -1) {
+                if (CategoryValue.SelectedIndex != -1) {
+                    newOperationSubCategoryItem = new OperationSubCategory {
+                        Name = NameValue.Text,
+                        Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
+                        Icon = CategoryIcon.Glyph,
+                        BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
+                        VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
+                        VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
+                    };
 
+                    conn.Insert(newOperationSubCategoryItem);
+                    OperationCategories.Single(x => x.Id == (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag).addSubCategory(newOperationSubCategoryItem);
+                }
+
+                else {
+                    newOperationCategoryItem = new OperationCategory {
+                        Name = NameValue.Text,
+                        Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
+                        Icon = CategoryIcon.Glyph,
+                        VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
+                        VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
+                    };
+
+                    OperationCategories.Insert(0, newOperationCategoryItem);
+                    conn.Insert(newOperationCategoryItem);
+                }
+            }
             else {
-                OperationCategories.Insert(0, new OperationCategory() {
-                    Name = NameValue.Text,
-                    Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                    Icon = CategoryIcon.Glyph,
-                    VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
-                    VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
-                });
-                conn.Insert(new OperationCategory() {
-                    Name = NameValue.Text,
-                    Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                    Icon = CategoryIcon.Glyph,
-                    VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
-                    VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
-                });
+
+                if (editedBossCategoryId != -1 && CategoryValue.SelectedIndex != -1) {
+                    // subkategoria która dalej jest subkategorią
+
+                    editedOperationSubCategoryItem = new OperationSubCategory {
+                        OperationCategoryId = editedCategory.Id,
+                        Name = NameValue.Text,
+                        Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
+                        Icon = CategoryIcon.Glyph,
+                        BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
+                        VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
+                        VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
+                    };
+
+                    ObservableCollection<OperationSubCategory> subCategories = OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedBossCategoryId))].subCategories;
+
+                    subCategories[subCategories.IndexOf(subCategories.Single(c => c.OperationCategoryId == editedCategory.Id))] = editedOperationSubCategoryItem;
+
+                    OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedBossCategoryId))].subCategories = subCategories;
+
+                    conn.Update(editedOperationSubCategoryItem);
+                }
+                else if (editedBossCategoryId != -1 && CategoryValue.SelectedIndex == -1) {
+                    // subkategoria która zostala kategorią
+                }
+                else if (editedBossCategoryId == -1 && CategoryValue.SelectedIndex != -1) {
+                    // kategoria która została subkategorią
+                }
+                else if (editedBossCategoryId == -1 && CategoryValue.SelectedIndex == -1) {
+                    // kategoria która dalej jest kategorią
+
+                    newOperationCategoryItem = new OperationCategory {
+                        Id = editedCategory.Id,
+                        Name = NameValue.Text,
+                        Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
+                        Icon = CategoryIcon.Glyph,
+                        VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
+                        VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
+                    };
+
+                    OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedCategory.Id))] = newOperationCategoryItem;
+
+                    conn.Update(newOperationCategoryItem);
+                }
+
             }
         }
 
@@ -128,7 +201,7 @@ namespace Finanse.Views {
             }
             else {
                 foreach (var message in conn.Table<OperationSubCategory>().Where(subCategory => subCategory.BossCategoryId == selectedCategoryId)) {
-                    // conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE BossCategory == '" + ((ComboBoxItem)CategoryValue.SelectedItem).Content.ToString() + "'")
+
                     if (message.Name == NamVal.Text) {
                         NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
                         break;
@@ -189,6 +262,15 @@ namespace Finanse.Views {
 
             if (CategoryValue.SelectedIndex == 0)
                 CategoryValue.SelectedIndex--;
+        }
+        private SolidColorBrush GetSolidColorBrush(string hex) {
+            hex = hex.Replace("#", string.Empty);
+            byte a = (byte)(Convert.ToUInt32(hex.Substring(0, 2), 16));
+            byte r = (byte)(Convert.ToUInt32(hex.Substring(2, 2), 16));
+            byte g = (byte)(Convert.ToUInt32(hex.Substring(4, 2), 16));
+            byte b = (byte)(Convert.ToUInt32(hex.Substring(6, 2), 16));
+            SolidColorBrush myBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(a, r, g, b));
+            return myBrush;
         }
     }
 }

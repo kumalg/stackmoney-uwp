@@ -277,12 +277,12 @@
                 Name="Expense_RadioButton"
                 Content="Wydatek"
                 GroupName="OperationType_RadioButtons"
-                Checked="ExpenseRadioButton_Checked"/>
+                Checked="TypeOfOperationRadioButton_Checked"/>
             <RadioButton
                 Name="Income_RadioButton"
                 Content="Wpływ"
                 GroupName="OperationType_RadioButtons"
-                Checked="IncomeRadioButton_Checked"/>
+                Checked="TypeOfOperationRadioButton_Checked"/>
 
         </StackPanel>
 

@@ -23,12 +23,21 @@ using SQLite.Net.Platform.WinRT;
 
 namespace Finanse.Views {
 
+
     public sealed partial class Strona_glowna : Page {
 
         string path;
         SQLite.Net.SQLiteConnection conn;
 
         public ObservableCollection<Operation> Operations;
+
+        public string DateToString(DateTimeOffset? Date) {
+            string dateString;
+
+            dateString = String.Format("{0:ddMMyyyy}", Date);
+
+            return dateString;
+        }
 
         public Strona_glowna() {
 
@@ -41,11 +50,12 @@ namespace Finanse.Views {
             conn.CreateTable<OperationCategory>();
             conn.CreateTable<OperationSubCategory>();
 
-            Operations = new ObservableCollection<Operation>(conn.Table<Operation>().OrderByDescending(o=>o.Id));
-        }
+            Operations = new ObservableCollection<Operation>(conn.Table<Operation>().OrderByDescending(o=>o.Date));
 
-        private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-
+            var groups = from c in Operations
+                         group c by DateToString(c.Date);
+            //Set the grouped data to CollectionViewSource
+            this.cvs.Source = groups;
         }
 
         private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
@@ -73,11 +83,15 @@ namespace Finanse.Views {
             //this datacontext is probably some object of some type T
         }
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e) {
+        private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            Operations.Remove((Operation)datacontext);
-            conn.Delete((Operation)datacontext);
+            var ContentDialogItem = new Delete_ContentDialog(Operations, conn, (Operation)datacontext);
+
+            var result = await ContentDialogItem.ShowAsync();
+
+            //Operations.Remove((Operation)datacontext);
+            //conn.Delete((Operation)datacontext);
             //this datacontext is probably some object of some type T
         }
 

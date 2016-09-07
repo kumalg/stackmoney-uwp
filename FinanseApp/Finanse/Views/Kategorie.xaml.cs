@@ -94,11 +94,12 @@ namespace Finanse.Views {
             //this datacontext is probably some object of some type T
         }
 
-        private void DeleteCat_Click(object sender, RoutedEventArgs e) {
+        private async void DeleteCat_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            OperationCategories.Remove((OperationCategory)datacontext);
-            conn.Delete((OperationCategory)datacontext);
+            var ContentDialogItem = new DeleteCategory_ContentDialog(OperationCategories, conn, (OperationCategory)datacontext, null);
+
+            var result = await ContentDialogItem.ShowAsync();
         }
 
         private void ExpandPanel_RightTapped(object sender, RightTappedRoutedEventArgs e) {
@@ -107,15 +108,12 @@ namespace Finanse.Views {
             flyoutBase.ShowAt(senderElement);
         }
 
-        private void DeleteSubCat_Click(object sender, RoutedEventArgs e) {
+        private async void DeleteSubCat_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            OperationSubCategory subCatItem= (OperationSubCategory)datacontext;
-            OperationCategory BossCatItem = OperationCategories.Single(c => c.Id == subCatItem.BossCategoryId);
+            var ContentDialogItem = new DeleteCategory_ContentDialog(OperationCategories, conn, null, (OperationSubCategory)datacontext);
 
-            BossCatItem.subCategories.Remove(subCatItem);
-
-            conn.Delete((OperationSubCategory)datacontext);
+            var result = await ContentDialogItem.ShowAsync();
         }
     }
 }

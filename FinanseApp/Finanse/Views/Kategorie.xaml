@@ -142,7 +142,7 @@
                             <Grid
                                 Background="Transparent">
 
-                                <StackPanel>
+                                <StackPanel Margin="0,10">
 
                                     <data:ExpandPanel>
 
@@ -151,7 +151,7 @@
 
                                             <Grid
                                                 MaxWidth="600"
-                                                Margin="0,5"
+                                                Margin="10,10,10,10"
                                                 Background="Transparent"
                                                 RightTapped="ExpandPanel_RightTapped">
 

@@ -8,6 +8,13 @@
     xmlns:data="using:Finanse.Elements"
     mc:Ignorable="d">
     <Page.Resources>
+        <!--Use a collection view source for content that presents a list of items that can be grouped or sorted.-->
+        <CollectionViewSource
+            x:Key="cvs"
+            x:Name="cvs"
+            IsSourceGrouped="True">
+        </CollectionViewSource>
+
         <Style
             x:Key="PivotRadioButtonStyle"
             TargetType="RadioButton">
@@ -1128,48 +1135,11 @@
                     <StackPanel
                         Margin="20,20,20,0">
 
-                        <Grid
-                            MaxWidth="620">
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition
-                                    Width="Auto" />
-                                <ColumnDefinition
-                                    Width="*" />
-                                <ColumnDefinition
-                                    Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock
-                                Text="7/6/2016"
-                                Grid.Column="0"
-                                Foreground="#7FFFFFFF"
-                                FontSize="14"
-                                Margin="10,0,0,5" />
-
-                            <TextBlock
-                                Name="SumText"
-                                Text="+ 231,99 zł"
-                                Grid.Column="2"
-                                Foreground="{StaticResource GreenColorStyle}"
-                                FontSize="14"
-                                FontWeight="Bold"
-                                Margin="0,0,10,5" />
-
-                        </Grid>
-
-                        <Border
-                            MaxWidth="650"
-                            BorderBrush="#24ffffff"
-                            BorderThickness="1"
-                            Margin="0,0,0,5" />
-
                         <ListBox
                             ScrollViewer.VerticalScrollMode="Disabled"
                             Name="OperacjeListView"
-                            ItemsSource="{x:Bind Operations}"
+                            ItemsSource="{Binding Source={StaticResource cvs}}"
                             SelectionMode="Single"
-                            SelectionChanged="IconsListBox_SelectionChanged"
                             MaxWidth="620"
                             BorderThickness="0"
                             Background="Transparent">
@@ -1198,11 +1168,11 @@
                                             <MenuFlyout>
                                                 <MenuFlyoutItem
                                                     x:Name="EditButton"
-                                                    Text="Edit"
+                                                    Text="Edytuj"
                                                     Click="EditButton_Click" />
                                                 <MenuFlyoutItem
                                                     x:Name="DeleteButton"
-                                                    Text="Delete"
+                                                    Text="Usuń"
                                                     Click="DeleteButton_Click" />
                                             </MenuFlyout>
                                         </FlyoutBase.AttachedFlyout>
@@ -1212,6 +1182,51 @@
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
+                            
+                            <ListBox.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+
+                                                <Grid
+                                                    RelativePanel.AlignLeftWithPanel="True"
+                                                    RelativePanel.AlignRightWithPanel="True"
+                                                    BorderBrush="#24ffffff"
+                                                    BorderThickness="0,0,0,1"
+                                                    Margin="0,20,0,5"
+                                                    MaxWidth="620">
+                                                    
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition
+                                                            Width="Auto" />
+                                                        <ColumnDefinition
+                                                            Width="*" />
+                                                        <ColumnDefinition
+                                                            Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBlock
+                                                        Grid.Column="0"
+                                                        Text="21/5/2016"
+                                                        Foreground="#7FFFFFFF"
+                                                        FontSize="14"
+                                                        Margin="10,0,0,5" />
+
+                                                    <TextBlock
+                                                        Grid.Column="2"
+                                                        Name="SumText"
+                                                        HorizontalAlignment="Right"
+                                                        Text="222"
+                                                        Foreground="{StaticResource GreenColorStyle}"
+                                                        FontSize="14"
+                                                        FontWeight="Bold"
+                                                        Margin="0,0,10,5" />
+                                                </Grid>
+
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListBox.GroupStyle>
                         </ListBox>
 
                     </StackPanel>

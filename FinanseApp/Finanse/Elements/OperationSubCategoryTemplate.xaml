@@ -26,12 +26,14 @@
             Visibility="Visible"
             Width="50"
             Height="40">
+
             <Ellipse
                 Width="8"
                 Height="8"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
                 Fill="Gray" />
+            <!--
             <Border
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right"
@@ -39,7 +41,7 @@
                 CornerRadius="0.75"
                 Width="16"
                 BorderBrush="Gray"
-                BorderThickness="1.5" />
+                BorderThickness="1.5" />-->
         </Grid>
 
         <Grid

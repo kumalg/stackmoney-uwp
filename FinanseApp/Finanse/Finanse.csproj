@@ -98,6 +98,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Elements\DeleteCategory_ContentDialog.xaml.cs">
+      <DependentUpon>DeleteCategory_ContentDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Elements\Delete_ContentDialog.xaml.cs">
+      <DependentUpon>Delete_ContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Elements\ExpandPanel.cs" />
     <Compile Include="Elements\Functions.cs" />
     <Compile Include="Elements\OperationCategory.cs" />
@@ -170,6 +176,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Elements\DeleteCategory_ContentDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Elements\Delete_ContentDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Elements\OperationSubCategoryTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

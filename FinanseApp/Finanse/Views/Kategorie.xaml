@@ -63,7 +63,7 @@
 
         <Grid
             Background="{StaticResource AccentDarkColorStyle}"
-            MinHeight="48">
+            Height="48">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition

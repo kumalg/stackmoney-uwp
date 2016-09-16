@@ -14,7 +14,7 @@
     PrimaryButtonClick="NewCategory_AddButtonClick">
 
     <StackPanel
-        Margin="0,20">
+        Margin="20,20">
 
         <TextBox
             Name="NameValue"
@@ -147,6 +147,11 @@
                         </Flyout>
                     </Button.Flyout>
                 </Button>
+
+                <TextBox
+                    Name="Icon2Value"
+                    Style="{StaticResource TextBoxStyle1}"
+                    PlaceholderText="Nazwa" />
             </StackPanel>
 
         </Grid>

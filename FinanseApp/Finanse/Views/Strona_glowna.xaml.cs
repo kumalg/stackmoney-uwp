@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Navigation;
 using Finanse.Elements;
 using System.Collections.ObjectModel;
 using SQLite.Net.Platform.WinRT;
+using System.Globalization;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -30,6 +31,10 @@ namespace Finanse.Views {
         SQLite.Net.SQLiteConnection conn;
 
         public ObservableCollection<Operation> Operations;
+
+        bool isSelectionChanged = false;
+
+        decimal actualMoney;
 
         public string DateToString(DateTimeOffset? Date) {
             string dateString;
@@ -49,18 +54,37 @@ namespace Finanse.Views {
             conn.CreateTable<Operation>();
             conn.CreateTable<OperationCategory>();
             conn.CreateTable<OperationSubCategory>();
+            conn.CreateTable<Settings>();
+
+            Settings defaultSettings = new Settings {
+                CultureInfoName = "en-US"
+            };
+
+            if(!conn.Table<Settings>().Any())
+                conn.Insert(defaultSettings);
+
+            Settings settings = conn.Table<Settings>().ElementAt(0);
 
             Operations = new ObservableCollection<Operation>(conn.Table<Operation>().OrderByDescending(o=>o.Date));
 
+            foreach (var operation in Operations) {
+                if (operation.isExpense)
+                    actualMoney -= operation.Cost;
+                else
+                    actualMoney += operation.Cost;
+            }
+            ActualMoneyBar.Text = actualMoney.ToString("C", new CultureInfo(settings.CultureInfoName));
+            /*
             var groups = from c in Operations
                          group c by DateToString(c.Date);
             //Set the grouped data to CollectionViewSource
-            this.cvs.Source = groups;
+            this.cvs.Source = groups;*/
+            ContactsCVS.Source = Operation.GetOperationsGrouped();
         }
 
         private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
 
-            var ContentDialogItem = new NewOperationContentDialog(Operations, conn, null, -1, -1, null, -1, -1, null, null);
+            var ContentDialogItem = new NewOperationContentDialog(Operations, conn, null);
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -76,8 +100,7 @@ namespace Finanse.Views {
 
             Operation thisOperation = (Operation)datacontext;
 
-            var ContentDialogItem = new NewOperationContentDialog(Operations, conn, thisOperation.Title, thisOperation.Id, thisOperation.Cost, 
-                thisOperation.Date, thisOperation.CategoryId, thisOperation.SubCategoryId, thisOperation.ExpenseOrIncome, thisOperation.PayForm);
+            var ContentDialogItem = new NewOperationContentDialog(Operations, conn, thisOperation);
 
             var result = await ContentDialogItem.ShowAsync();
             //this datacontext is probably some object of some type T
@@ -102,6 +125,22 @@ namespace Finanse.Views {
         }
 
         private void PivotItem_GotFocus(object sender, RoutedEventArgs e) {
+        }
+
+        private async void OperacjeListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            
+            if (OperacjeListView.SelectedIndex != -1 && isSelectionChanged) {
+                Operation thisOperation = (Operation)OperacjeListView.SelectedItem;
+
+                var ContentDialogItem = new OperationDetailsContentDialog(Operations, conn, thisOperation);
+                OperacjeListView.SelectedIndex = -1;
+                var result = await ContentDialogItem.ShowAsync();
+            }
+        }
+
+        private void ListView_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
+            OperacjeListView.SelectedIndex = -1;
+            isSelectionChanged = true;
         }
     }
 }

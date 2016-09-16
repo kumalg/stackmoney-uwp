@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Navigation;
 using Finanse.Elements;
 using Finanse.Views;
 using System.Collections.ObjectModel;
+using Windows.Graphics.Display;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -30,14 +31,32 @@ namespace Finanse {
             AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
             Strona_glowna_ListBoxItem.IsChecked = true;
 
-            StatusBarAndTitleBar();
+            DisplayInformation info = DisplayInformation.GetForCurrentView();
+
+            whichOrientation(info);
+            //StatusBarAndTitleBar("GreyColorStyle");
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             base.OnNavigatedTo(e);
         }
 
-        private void StatusBarAndTitleBar() {
+        private void Page_Loaded(object sender, RoutedEventArgs e) {
+            DisplayInformation.GetForCurrentView().OrientationChanged += MainPage_OrientationChanged;
+        }
+
+        private void whichOrientation(DisplayInformation info) {
+            if (info.CurrentOrientation == DisplayOrientations.Landscape || info.CurrentOrientation == DisplayOrientations.LandscapeFlipped)
+                StatusBarAndTitleBar("GreyColorStyle", "White");
+            else
+                StatusBarAndTitleBar("AccentColorStyle", "AccentTextColorStyle");
+        }
+
+        private void MainPage_OrientationChanged(DisplayInformation info, object args) {
+            whichOrientation(info);
+        }
+
+        private void StatusBarAndTitleBar(string statusBarBackgroundColor, string statusBarForegroundColor) {
             //PC customization
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView")) {
                 var titleBar = ApplicationView.GetForCurrentView().TitleBar;
@@ -55,8 +74,11 @@ namespace Finanse {
                 var statusBar = StatusBar.GetForCurrentView();
                 if (statusBar != null) {
                     statusBar.BackgroundOpacity = 1;
-                    statusBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources["GreyColorStyle"] as SolidColorBrush).Color;
-                    statusBar.ForegroundColor = Colors.White;
+                    statusBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources[statusBarBackgroundColor] as SolidColorBrush).Color;
+                    if (statusBarForegroundColor == "White")
+                        statusBar.ForegroundColor = Colors.White;
+                    else
+                        statusBar.ForegroundColor = ((SolidColorBrush)Application.Current.Resources[statusBarForegroundColor] as SolidColorBrush).Color;
                 }
             }
         }
@@ -98,6 +120,10 @@ namespace Finanse {
         private void ClosingPane() {
             if (MySplitView.IsPaneOpen)
                 MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
+        }
+
+        private void Strona_glowna_ListBoxItem_Click(object sender, RoutedEventArgs e) {
+            ClosingPane();
         }
     }
 }

@@ -97,7 +97,8 @@ namespace Finanse.Views {
                     newOperationSubCategoryItem = new OperationSubCategory {
                         Name = NameValue.Text,
                         Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                        Icon = CategoryIcon.Glyph,
+                        //Icon = CategoryIcon.Glyph,
+                        Icon = Icon2Value.Text,
                         BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
@@ -111,7 +112,8 @@ namespace Finanse.Views {
                     newOperationCategoryItem = new OperationCategory {
                         Name = NameValue.Text,
                         Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                        Icon = CategoryIcon.Glyph,
+                        //Icon = CategoryIcon.Glyph,
+                        Icon = Icon2Value.Text,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
@@ -129,7 +131,8 @@ namespace Finanse.Views {
                         OperationCategoryId = editedCategory.Id,
                         Name = NameValue.Text,
                         Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                        Icon = CategoryIcon.Glyph,
+                        //Icon = CategoryIcon.Glyph,
+                        Icon = Icon2Value.Text,
                         BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
@@ -155,7 +158,8 @@ namespace Finanse.Views {
                     editedOperationCategoryItem = new OperationCategory {
                         Name = NameValue.Text,
                         Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                        Icon = CategoryIcon.Glyph,
+                        //Icon = CategoryIcon.Glyph,
+                        Icon = Icon2Value.Text,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
@@ -169,7 +173,8 @@ namespace Finanse.Views {
                     editedOperationSubCategoryItem = new OperationSubCategory {
                         Name = NameValue.Text,
                         Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                        Icon = CategoryIcon.Glyph,
+                        //Icon = CategoryIcon.Glyph,
+                        Icon = Icon2Value.Text,
                         BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
@@ -186,7 +191,8 @@ namespace Finanse.Views {
                         Id = editedCategory.Id,
                         Name = NameValue.Text,
                         Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                        Icon = CategoryIcon.Glyph,
+                        //Icon = CategoryIcon.Glyph,
+                        Icon = Icon2Value.Text,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };

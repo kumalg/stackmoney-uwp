@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:Finanse.Elements"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loaded="Page_Loaded">
     <Page.Resources>
         <Style
             x:Key="HamburgerButtonStyle"
@@ -255,7 +256,8 @@
                             GroupName="HamburgerRadioButtons"
                             Style="{StaticResource HamburgerRadioButton}"
                             Content="Moje finanse"
-                            Checked="Strona_glowna_ListBoxItem_Checked">
+                            Checked="Strona_glowna_ListBoxItem_Checked"
+                            Click="Strona_glowna_ListBoxItem_Click">
                             <RadioButton.Tag>
                                 <TextBlock
                                     Style="{StaticResource SplitViewIconStyle}"
@@ -268,7 +270,8 @@
                             GroupName="HamburgerRadioButtons"
                             Style="{StaticResource HamburgerRadioButton}"
                             Content="Kategorie"
-                            Checked="Kategorie_ListBoxItem_Checked">
+                            Checked="Kategorie_ListBoxItem_Checked"
+                            Click="Strona_glowna_ListBoxItem_Click">
                             <RadioButton.Tag>
                                 <TextBlock
                                     Style="{StaticResource SplitViewIconStyle}"
@@ -281,7 +284,8 @@
                             GroupName="HamburgerRadioButtons"
                             Style="{StaticResource HamburgerRadioButton}"
                             Content="Szablony"
-                            Checked="Szablony_ListBoxItem_Checked">
+                            Checked="Szablony_ListBoxItem_Checked"
+                            Click="Strona_glowna_ListBoxItem_Click">
                             <RadioButton.Tag>
                                 <TextBlock
                                     Style="{StaticResource SplitViewIconStyle}"
@@ -294,7 +298,8 @@
                             GroupName="HamburgerRadioButtons"
                             Style="{StaticResource HamburgerRadioButton}"
                             Content="Zlecenia stałe"
-                            Checked="ZleceniaStale_ListBoxItem_Checked">
+                            Checked="ZleceniaStale_ListBoxItem_Checked"
+                            Click="Strona_glowna_ListBoxItem_Click">
                             <RadioButton.Tag>
                                 <TextBlock
                                     Style="{StaticResource SplitViewIconStyle}"
@@ -307,7 +312,8 @@
                             GroupName="HamburgerRadioButtons"
                             Style="{StaticResource HamburgerRadioButton}"
                             Content="Planowane wydatki"
-                            Checked="PlanowaneWydatki_ListBoxItem_Checked">
+                            Checked="PlanowaneWydatki_ListBoxItem_Checked"
+                            Click="Strona_glowna_ListBoxItem_Click">
                             <RadioButton.Tag>
                                 <TextBlock
                                     Style="{StaticResource SplitViewIconStyle}"
@@ -324,7 +330,8 @@
                         Name="Ustawienia_ListBoxItem"
                         Style="{StaticResource HamburgerRadioButton}"
                         Content="Ustawienia"
-                        Checked="Ustawienia_ListBoxItem_Checked">
+                        Checked="Ustawienia_ListBoxItem_Checked"
+                        Click="Strona_glowna_ListBoxItem_Click">
                         <RadioButton.Tag>
                             <TextBlock
                                 Style="{StaticResource SplitViewIconStyle}"

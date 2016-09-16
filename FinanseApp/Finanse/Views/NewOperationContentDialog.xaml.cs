@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Navigation;
 using Finanse.Elements;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 // The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -23,18 +24,18 @@ namespace Finanse.Views {
     public sealed partial class NewOperationContentDialog : ContentDialog {
 
         public ObservableCollection<Operation> Operations;
+        Operation editedOperation;
 
         SQLite.Net.SQLiteConnection conn;
 
-        int editedId;
+        Settings settings;
 
         string acceptedCostValue = "";
         int whereIsSelection;
 
         bool isUnfocused = true;
 
-        public NewOperationContentDialog(ObservableCollection<Operation> Operations, SQLite.Net.SQLiteConnection conn,
-            string editedTitle, int editedId, decimal editedCost, DateTimeOffset? editedDate, int editedCategoryId, int editedSubCategoryId, string editedExpenseOrIncome, string editedPayForm) {
+        public NewOperationContentDialog(ObservableCollection<Operation> Operations, SQLite.Net.SQLiteConnection conn, Operation editedOperation) {
 
             this.InitializeComponent();
 
@@ -42,7 +43,9 @@ namespace Finanse.Views {
 
             this.Operations = Operations;
             this.conn = conn;
-            this.editedId = editedId;
+            this.editedOperation = editedOperation;
+
+            settings = conn.Table<Settings>().ElementAt(0);
 
             DateValue.MaxDate = DateTime.Today;
 
@@ -50,37 +53,43 @@ namespace Finanse.Views {
 
             SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
 
-            if (editedId != -1) {
+            if (editedOperation != null) {
                 Title = "Edycja operacji";
                 PrimaryButtonText = "Zapisz";
                 SaveAsAssetTitle.Visibility = Visibility.Collapsed;
                 SaveAsAssetToggle.Visibility = Visibility.Collapsed;
 
-                if (editedExpenseOrIncome == "expense") {
+                if (editedOperation.isExpense) {
                     Expense_RadioButton.IsChecked = true;
                 }
                 else
                     Income_RadioButton.IsChecked = true;
 
-                NameValue.Text = editedTitle;
-                DateValue.Date = editedDate;
+                NameValue.Text = editedOperation.Title;
+                DateValue.Date = editedOperation.Date;
 
-                if(CategoryValue.Items.OfType<ComboBoxItem>().Any(i => (int)i.Tag == editedCategoryId))
-                    CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(i => (int)i.Tag == editedCategoryId);
+                if (CategoryValue.Items.OfType<ComboBoxItem>().Any(i => (int)i.Tag == editedOperation.CategoryId))
+                    CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(i => (int)i.Tag == editedOperation.CategoryId);
 
-                if (conn.Table<OperationSubCategory>().Any(i => i.OperationCategoryId == editedSubCategoryId)) {
-                    OperationSubCategory subCatItem = conn.Table<OperationSubCategory>().Single(i => i.OperationCategoryId == editedSubCategoryId);
+                if (conn.Table<OperationSubCategory>().Any(i => i.OperationCategoryId == editedOperation.SubCategoryId)) {
+                    OperationSubCategory subCatItem = conn.Table<OperationSubCategory>().Single(i => i.OperationCategoryId == editedOperation.SubCategoryId);
                     SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
                 }
 
-                if(PayFormValue.Items.OfType<ComboBoxItem>().Any(i => i.Content.ToString() == editedPayForm))
-                    PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().Single(i => i.Content.ToString() == editedPayForm);
+                if (PayFormValue.Items.OfType<ComboBoxItem>().Any(i => i.Content.ToString() == editedOperation.PayForm))
+                    PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().Single(i => i.Content.ToString() == editedOperation.PayForm);
 
-                CostValue.Text = String.Format("{0:c}", editedCost);   
+                CostValue.Text = editedOperation.Cost.ToString("C", new CultureInfo(settings.CultureInfoName));
+                acceptedCostValue = editedOperation.Cost.ToString();
+
+                if (editedOperation.MoreInfo != null)
+                    MoreInfoValue.Text = editedOperation.MoreInfo;
             }
 
-            else
+            else {
                 SubCategoryValue.IsEnabled = false;
+                DateValue.Date = DateTime.Today;
+            }
         }
 
         private void SetNowaOperacjaButton() {
@@ -106,30 +115,33 @@ namespace Finanse.Views {
 
             Operation item = new Operation {
                 Title = NameValue.Text,
-                Cost = decimal.Parse(CostValue.Text.Replace(" zł", "")),
+                Cost = decimal.Parse(acceptedCostValue),//decimal.Parse(CostValue.Text.Replace(" zł", "")),
                 CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
                 SubCategoryId = subCategoryInt,
                 Date = DateValue.Date,
                 PayForm = ((ComboBoxItem)PayFormValue.SelectedItem).Content.ToString(),
+                //MoreInfo = MoreInfoValue.Text
             };
+            if (MoreInfoValue.Text != "")
+                item.MoreInfo = MoreInfoValue.Text;
 
             // WYDATEK CZY WPŁYW
             if (Expense_RadioButton.IsChecked == true)
-                item.ExpenseOrIncome = "expense";
-            else if (Income_RadioButton.IsChecked == true)
-                item.ExpenseOrIncome = "income";
+                item.isExpense = true;
+            else
+                item.isExpense = false;
 
             // DODAWANIE
-            if (editedId == -1) {
+            if (editedOperation == null) {
                 Operations.Insert(0,item);
                 conn.Insert(item);
             }
 
             // EDYTOWANIE
             else {
-                item.Id = Operations.Single(id => id.Id == editedId).Id;
+                item.Id = Operations.Single(id => id.Id == editedOperation.Id).Id;
 
-                Operations[Operations.IndexOf(Operations.Single(id => id.Id == editedId))] = item;
+                Operations[Operations.IndexOf(Operations.Single(id => id.Id == editedOperation.Id))] = item;
                 conn.Update(item);
             }
         }
@@ -253,7 +265,7 @@ namespace Finanse.Views {
             isUnfocused = false;
 
             if (CostValue.Text != "") {
-                CostValue.Text = CostValue.Text.Replace(" zł", "");
+                CostValue.Text = acceptedCostValue;//CostValue.Text.Replace(" zł", "");
                 CostValue.SelectionStart = CostValue.Text.Length;
             }
         }
@@ -262,7 +274,7 @@ namespace Finanse.Views {
             isUnfocused = true;
 
             if(CostValue.Text != "")
-                CostValue.Text = String.Format("{0:c}", decimal.Parse(CostValue.Text));
+                CostValue.Text = decimal.Parse(CostValue.Text).ToString("C", new CultureInfo(settings.CultureInfoName));
         }
 
         private void CostValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {

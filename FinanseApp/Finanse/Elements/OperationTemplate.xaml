@@ -9,9 +9,9 @@
     Height="70">
 
     <Grid
-        DataContextChanged="Operation_DataContextChanged"
         MaxWidth="600"
-        Margin="10,0">
+        Margin="10,0"
+        DataContextChanged="Operation_DataContextChanged">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition
@@ -31,7 +31,7 @@
 
             <TextBlock
                 Name="Icon_OperationTemplate"
-                FontFamily="Segoe MDL2 Assets"
+                FontFamily="Segoe UI"
                 FontSize="24"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
@@ -40,12 +40,13 @@
 
         <StackPanel
             Grid.Column="1"
-            VerticalAlignment="Center">
+            VerticalAlignment="Center"
+            Margin="10,0,0,0">
 
             <TextBlock
+                Name="Title_OperationTemplate"
                 Text="{x:Bind Operation.Title}"
                 TextWrapping="Wrap"
-                Margin="20,0,0,0"
                 FontSize="16"
                 Foreground="White" />
 
@@ -54,7 +55,6 @@
                 Opacity="0.4">
                 <TextBlock
                     Name="Category_OperationTemplate"
-                    Margin="20,0,0,0"
                     FontWeight="Bold"
                     FontSize="12"
                     Foreground="White" />

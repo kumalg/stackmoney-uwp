@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Finanse.Views;
 using System.Reflection;
+using System.Globalization;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -24,6 +25,7 @@ namespace Finanse.Elements {
 
         private string path;
         private SQLite.Net.SQLiteConnection conn;
+        private Settings settings;
 
         private Elements.Operation Operation {
 
@@ -39,7 +41,10 @@ namespace Finanse.Elements {
             path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
             conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
 
-            this.DataContextChanged += (s, e) => Bindings.Update();            
+            settings = conn.Table<Settings>().ElementAt(0);
+
+            this.DataContextChanged += (s, e) => Bindings.Update();
+
         }
         
 
@@ -59,35 +64,46 @@ namespace Finanse.Elements {
             string whichColor = ((SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"]).Color.ToString();
             string whichIcon = ((TextBlock)Application.Current.Resources["DefaultEllipseIcon"]).Text;
 
-            if (Operation.SubCategoryId == -1) {
-                if (conn.Table<OperationCategory>().Any(item => item.Id == Operation.CategoryId)) {
-                    whichColor = conn.Table<OperationCategory>().Single(item => item.Id == Operation.CategoryId).Color;
-                    whichIcon = conn.Table<OperationCategory>().Single(item => item.Id == Operation.CategoryId).Icon;
-                }
-                else
-                    Icon_OperationTemplate.Opacity = 0.2;
-            }
-            else {
-                if (conn.Table<OperationSubCategory>().Any(item => item.OperationCategoryId == Operation.SubCategoryId)) {
-                    whichColor = conn.Table<OperationSubCategory>().Single(item => item.OperationCategoryId == Operation.SubCategoryId).Color;
-                    whichIcon = conn.Table<OperationSubCategory>().Single(item => item.OperationCategoryId == Operation.SubCategoryId).Icon;
-                }
-                else
-                    Icon_OperationTemplate.Opacity = 0.2;
+            /* BO PIERDOLI ŻE NULL WCHODZI */
+            if (Operation == null)
+                return;
+
+            /* WCHODZI IKONKA KATEGORII */
+            if (conn.Table<OperationCategory>().Any(item => item.Id == Operation.CategoryId)) {
+
+                whichColor = conn.Table<OperationCategory>().Single(item => item.Id == Operation.CategoryId).Color;
+                whichIcon = conn.Table<OperationCategory>().Single(item => item.Id == Operation.CategoryId).Icon;
             }
 
+            /* GDY NIE WEJDZIE */
+            else
+                Icon_OperationTemplate.Opacity = 0.2;
+
+            /* PRÓBUJE WEJŚC IKONKA SUBKATEGORII */
+            if (conn.Table<OperationSubCategory>().Any(item => item.OperationCategoryId == Operation.SubCategoryId)) {
+
+                Icon_OperationTemplate.Opacity = 1;
+                whichColor = conn.Table<OperationSubCategory>().Single(item => item.OperationCategoryId == Operation.SubCategoryId).Color;
+                whichIcon = conn.Table<OperationSubCategory>().Single(item => item.OperationCategoryId == Operation.SubCategoryId).Icon;
+            }
+
+            /* GOTOWA IKONKA DO ZAPISANIA */
             Ellipse_OperationTemplate.Fill = new SolidColorBrush(GetSolidColorBrush(whichColor).Color);
             Icon_OperationTemplate.Text = whichIcon;
 
             /* WYGLĄD KOSZTU (CZERWONY Z MINUSEM CZY ZIELONY Z PLUSEM) */
-            if (Operation.ExpenseOrIncome == "expense") {
-                Cost_OperationTemplate.Text = "- " + String.Format("{0:c}", Operation.Cost);
+            if (Operation.isExpense) {
+
+                Cost_OperationTemplate.Text = (-Operation.Cost).ToString("C", new CultureInfo(settings.CultureInfoName));
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
             }
+
             else {
-                Cost_OperationTemplate.Text = "+ " + String.Format("{0:c}", Operation.Cost);
+
+                Cost_OperationTemplate.Text = Operation.Cost.ToString("C", new CultureInfo(settings.CultureInfoName));
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"];
             }
+
 
             /* TYTUŁ KATEGORII */
             if (conn.Table<OperationCategory>().Any(cat => cat.Id == Operation.CategoryId)) {
@@ -95,9 +111,10 @@ namespace Finanse.Elements {
                 Category_OperationTemplate.Text = conn.Table<OperationCategory>().Single(cat => cat.Id == Operation.CategoryId).Name;
 
                 /* CZY WYŚWIETLAĆ PODKATEGORIĘ */
-                if (Operation.SubCategoryId != -1)
+                if (Operation.SubCategoryId != -1 && conn.Table<OperationSubCategory>().Any(subcat => subcat.OperationCategoryId == Operation.SubCategoryId))
                     SubCategory_OperationTemplate.Text = "  /  " + conn.Table<OperationSubCategory>().Single(subcat => subcat.OperationCategoryId == Operation.SubCategoryId).Name;
             }
+
             else
                 Category_OperationTemplate.Text = "Nie odnaleziono wskazanej kategorii";
         }

@@ -264,7 +264,7 @@
     </ContentDialog.Resources>
 
     <StackPanel
-        Margin="0,20">
+        Margin="20,20">
 
         <TextBlock
             Text="Typ operacji"
@@ -344,6 +344,16 @@
             <ComboBoxItem Content="Karta Visa" />
 
         </ComboBox>
+       
+        <TextBox
+            Name="MoreInfoValue"
+            MaxWidth="{ThemeResource ContentDialogMinWidth}"
+            TextWrapping="Wrap"
+            BorderThickness="1"
+            PlaceholderText="Więcej informacji"
+            Style="{StaticResource TextBoxStyle1}"
+            Height="100"
+            Margin="0,10" />
 
         <TextBlock
             Name="SaveAsAssetTitle"

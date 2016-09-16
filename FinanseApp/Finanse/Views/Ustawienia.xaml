@@ -93,6 +93,15 @@
 
                     </ComboBox>
 
+                    <ComboBox
+                        Name="CurrencyValue"
+                        Style="{StaticResource ComboBoxStyle1}"
+                        SelectionChanged="ComboBox_SelectionChanged"
+                        SelectedValuePath="ID"
+                        PlaceholderText="Waluta"
+                        Margin="0,10"
+                        HorizontalAlignment="Stretch" />
+
                     <TextBlock
                     Text="Pokazuj w wydatkach"
                     Margin="0,20,0,0" />

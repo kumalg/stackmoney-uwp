@@ -117,6 +117,11 @@ namespace Finanse {
             ClosingPane();
         }
 
+        private void Konta_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
+            AktualnaStrona_Frame.Navigate(typeof(Konta));
+            ClosingPane();
+        }
+
         private void ClosingPane() {
             if (MySplitView.IsPaneOpen)
                 MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;

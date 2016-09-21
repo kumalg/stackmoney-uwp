@@ -156,15 +156,27 @@
                                                 RightTapped="ExpandPanel_RightTapped">
 
                                                 <FlyoutBase.AttachedFlyout>
-                                                    <MenuFlyout>
+                                                    <MenuFlyout
+                                                        MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
                                                         <MenuFlyoutItem
                                                             x:Name="EditCatButton"
+                                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                                            Tag="&#xE104;"
                                                             Text="Edytuj"
                                                             Click="EditCat_Click" />
                                                         <MenuFlyoutItem
                                                             x:Name="DeleteCatButton"
+                                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                                            Tag="&#xE107;"
                                                             Text="Usuń"
                                                             Click="DeleteCat_Click" />
+                                                        <MenuFlyoutSeparator />
+                                                        <MenuFlyoutItem
+                                                            x:Name="AddSubCatButton"
+                                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                                            Tag="&#xE109;"
+                                                            Text="Dodaj podkategorię"
+                                                            Click="AddSubCat_Click" />
                                                     </MenuFlyout>
                                                 </FlyoutBase.AttachedFlyout>
 
@@ -187,7 +199,7 @@
 
                                                     <TextBlock
                                                         Name="Icon_OperationTemplate"
-                                                        FontFamily="Segoe MDL2 Assets"
+                                                        FontFamily="Segoe UI"
                                                         FontSize="24"
                                                         Text="{x:Bind Icon}"
                                                         VerticalAlignment="Center"
@@ -238,13 +250,18 @@
                                                             RightTapped="Grid_RightTapped">
 
                                                             <FlyoutBase.AttachedFlyout>
-                                                                <MenuFlyout>
+                                                                <MenuFlyout
+                                                                    MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
                                                                     <MenuFlyoutItem
                                                                         x:Name="EditSubCatButton"
+                                                                        Style="{StaticResource MyMenuFlyoutItem}"
+                                                                        Tag="&#xE104;"
                                                                         Text="Edytuj"
                                                                         Click="EditSubCat_Click" />
                                                                     <MenuFlyoutItem
                                                                         x:Name="DeleteSubCatButton"
+                                                                        Style="{StaticResource MyMenuFlyoutItem}"
+                                                                        Tag="&#xE107;"
                                                                         Text="Usuń"
                                                                         Click="DeleteSubCat_Click" />
                                                                 </MenuFlyout>
@@ -257,7 +274,6 @@
                                             </ListView>
 
                                         </data:ExpandPanel.Content>
-
 
                                     </data:ExpandPanel>
 

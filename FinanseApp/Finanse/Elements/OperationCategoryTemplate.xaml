@@ -53,7 +53,7 @@
 
                         <TextBlock
                             Name="Icon_OperationTemplate"
-                            FontFamily="Segoe MDL2 Assets"
+                            FontFamily="Segoe UI"
                             FontSize="24"
                             Text="{x:Bind OperationCategory.Icon}"
                             VerticalAlignment="Center"

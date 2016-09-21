@@ -115,5 +115,9 @@ namespace Finanse.Views {
 
             var result = await ContentDialogItem.ShowAsync();
         }
+
+        private void AddSubCat_Click(object sender, RoutedEventArgs e) {
+
+        }
     }
 }

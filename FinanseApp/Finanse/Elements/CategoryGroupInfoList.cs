@@ -8,11 +8,10 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace Finanse.Elements {
-    public class GroupInfoList : List<object> {
+    public class CategoryGroupInfoList : List<object> {
         public object Key { get; set; }
-        public string dayNum { get; set; }
-        public string day { get; set; }
-        public string month { get; set; }
-        public string cost{ get; set; }
+        public string cost { get; set; }
+        public string icon { get; set; }
+        public string color { get; set; }
     }
 }

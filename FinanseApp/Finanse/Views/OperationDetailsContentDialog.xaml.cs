@@ -53,7 +53,7 @@ namespace Finanse.Views {
             }
             CostValue.Text = editedOperation.Cost.ToString("C", new CultureInfo(settings.CultureInfoName));
 
-            DateValue.Text = String.Format("{0:dddd, dd MMMM yyyy}", editedOperation.Date);
+            DateValue.Text = String.Format("{0:dddd, dd MMMM yyyy}", ((DateTimeOffset)editedOperation.Date).LocalDateTime);
 
             if (conn.Table<OperationCategory>().Any(i => i.Id == editedOperation.CategoryId))
                 CategoryValue.Text = conn.Table<OperationCategory>().Single(i => i.Id == editedOperation.CategoryId).Name;

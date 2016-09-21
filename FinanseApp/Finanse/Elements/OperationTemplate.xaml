@@ -67,6 +67,7 @@
         </StackPanel>
 
         <TextBlock
+            FontSize="13"
             Name="Cost_OperationTemplate"
             Grid.Column="2"
             VerticalAlignment="Center"

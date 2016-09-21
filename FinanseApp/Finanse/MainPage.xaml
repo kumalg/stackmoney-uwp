@@ -289,7 +289,21 @@
                             <RadioButton.Tag>
                                 <TextBlock
                                     Style="{StaticResource SplitViewIconStyle}"
-                                    Text="&#xE74C;" />
+                                    Text="&#xE8C8;" />
+                            </RadioButton.Tag>
+                        </RadioButton>
+
+                        <RadioButton
+                            Name="Konta_ListBoxItem"
+                            GroupName="HamburgerRadioButtons"
+                            Style="{StaticResource HamburgerRadioButton}"
+                            Content="Formy płatności"
+                            Checked="Konta_ListBoxItem_Checked"
+                            Click="Strona_glowna_ListBoxItem_Click">
+                            <RadioButton.Tag>
+                                <TextBlock
+                                    Style="{StaticResource SplitViewIconStyle}"
+                                    Text="&#xE963;" />
                             </RadioButton.Tag>
                         </RadioButton>
 

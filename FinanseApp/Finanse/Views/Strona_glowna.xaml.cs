@@ -19,6 +19,8 @@ using Finanse.Elements;
 using System.Collections.ObjectModel;
 using SQLite.Net.Platform.WinRT;
 using System.Globalization;
+using Windows.Graphics.Display;
+using Windows.Foundation.Metadata;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -31,6 +33,7 @@ namespace Finanse.Views {
         SQLite.Net.SQLiteConnection conn;
 
         public ObservableCollection<Operation> Operations;
+        ObservableCollection<OperationCategory> OperationCategories;
 
         bool isSelectionChanged = false;
 
@@ -56,16 +59,15 @@ namespace Finanse.Views {
             conn.CreateTable<OperationSubCategory>();
             conn.CreateTable<Settings>();
 
-            Settings defaultSettings = new Settings {
-                CultureInfoName = "en-US"
-            };
-
             if(!conn.Table<Settings>().Any())
-                conn.Insert(defaultSettings);
+                conn.Insert(new Settings {
+                    CultureInfoName = "en-US"
+                });
 
             Settings settings = conn.Table<Settings>().ElementAt(0);
 
             Operations = new ObservableCollection<Operation>(conn.Table<Operation>().OrderByDescending(o=>o.Date));
+            OperationCategories = new ObservableCollection<OperationCategory>(conn.Table<OperationCategory>().OrderBy(o => o.Name));
 
             foreach (var operation in Operations) {
                 if (operation.isExpense)
@@ -79,7 +81,8 @@ namespace Finanse.Views {
                          group c by DateToString(c.Date);
             //Set the grouped data to CollectionViewSource
             this.cvs.Source = groups;*/
-            ContactsCVS.Source = Operation.GetOperationsGrouped();
+            ContactsCVS.Source = Operation.GetOperationsGrouped(conn, Operations);
+            CategorizedCVS.Source = Operation.GetOperationsByCategoryGrouped(conn, Operations, OperationCategories);
         }
 
         private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
@@ -93,6 +96,16 @@ namespace Finanse.Views {
              FrameworkElement senderElement = sender as FrameworkElement;
              FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
              flyoutBase.ShowAt(senderElement);
+        }
+
+        private async void DetailsButton_Click(object sender, RoutedEventArgs e) {
+            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+
+            Operation thisOperation = (Operation)datacontext;
+
+            var ContentDialogItem = new OperationDetailsContentDialog(Operations, conn, thisOperation);
+
+            var result = await ContentDialogItem.ShowAsync();
         }
 
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
@@ -128,12 +141,13 @@ namespace Finanse.Views {
         }
 
         private async void OperacjeListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            ListView listView = sender as ListView;
             
-            if (OperacjeListView.SelectedIndex != -1 && isSelectionChanged) {
-                Operation thisOperation = (Operation)OperacjeListView.SelectedItem;
+            if (listView.SelectedIndex != -1 && isSelectionChanged) {
+                Operation thisOperation = (Operation)listView.SelectedItem;
 
                 var ContentDialogItem = new OperationDetailsContentDialog(Operations, conn, thisOperation);
-                OperacjeListView.SelectedIndex = -1;
+                listView.SelectedIndex = -1;
                 var result = await ContentDialogItem.ShowAsync();
             }
         }
@@ -141,6 +155,28 @@ namespace Finanse.Views {
         private void ListView_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
             OperacjeListView.SelectedIndex = -1;
             isSelectionChanged = true;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e) {
+            DisplayInformation.GetForCurrentView().OrientationChanged += MainPage_OrientationChanged;
+        }
+
+        private void MainPage_OrientationChanged(DisplayInformation info, object args) {
+
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) {
+
+                if (info.CurrentOrientation == DisplayOrientations.Landscape || info.CurrentOrientation == DisplayOrientations.LandscapeFlipped) {
+                    FakeHamburgerButton.Width = 0;
+                    UpperCommandBar.Visibility = Visibility.Visible;
+                    LowerCommandBar.Visibility = Visibility.Collapsed;
+                }
+
+                else {
+                    UpperCommandBar.Visibility = Visibility.Collapsed;
+                    LowerCommandBar.Visibility = Visibility.Visible;
+                    FakeHamburgerButton.Width = 48;
+                }
+            }
         }
     }
 }

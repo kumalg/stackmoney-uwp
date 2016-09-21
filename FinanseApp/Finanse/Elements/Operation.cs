@@ -8,6 +8,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace Finanse.Elements {
 
@@ -21,41 +24,22 @@ namespace Finanse.Elements {
         public int SubCategoryId { get; set; } 
         public decimal Cost { get; set; } 
         public DateTimeOffset? Date { get; set; } 
-        public string ExpenseOrIncome { get; set; } 
         public bool isExpense { get; set; } 
         public string PayForm { get; set; }
         public string MoreInfo { get; set; }
 
-        public string DateToString(DateTimeOffset? Date) {
-            string dateString;
+        public static ObservableCollection<GroupInfoList> GetOperationsGrouped(SQLite.Net.SQLiteConnection conn, ObservableCollection<Operation> Operations) {
 
-            dateString = String.Format("{0:yyyy/MM/dd}", Date);
-
-            return dateString;
-        }
-
-        /*
-        public string GetIconColor(string myString) {
-            myString = "yolo";
-            char[] foo = myString.ToCharArray();
-            Array.Reverse(foo);
-            return new string(foo);
-        }
-        */
-
-        public static ObservableCollection<GroupInfoList> GetOperationsGrouped() {
             ObservableCollection<GroupInfoList> groups = new ObservableCollection<GroupInfoList>();
 
-            string path;
-            SQLite.Net.SQLiteConnection conn;
-
-            path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
-            conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
+            GroupInfoList info;
+            decimal sumCost = 0;
+            DateTimeOffset? dt;
 
             Settings settings = conn.Table<Settings>().ElementAt(0);
 
-            var query = from item in conn.Table<Operation>()
-                        group item by String.Format("{0:yyyy/MM/dd}", item.Date) into g
+            var query = from item in Operations
+                        group item by String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)item.Date).LocalDateTime) into g
                         orderby g.Key descending
                         select new {
                             GroupName = g.Key,
@@ -63,10 +47,74 @@ namespace Finanse.Elements {
                         };
 
             foreach (var g in query) {
-                GroupInfoList info = new GroupInfoList();
+                info = new GroupInfoList();
                 info.Key = g.GroupName;
 
-                decimal sumCost = 0;
+                dt = Convert.ToDateTime(g.GroupName);
+
+                info.dayNum = String.Format("{0:dd}", dt);
+                info.day = String.Format("{0:dddd}", dt);
+                info.month = String.Format("{0:MMMM yyyy}", dt);
+
+                sumCost = 0;
+
+                foreach (var item in g.Items) {
+                    info.Add(item);
+                    if (item.isExpense)
+                        sumCost -= item.Cost;
+                    else
+                        sumCost += item.Cost;
+                }
+                info.cost = sumCost.ToString("C", new CultureInfo(settings.CultureInfoName));
+                groups.Add(info);
+            }
+
+            return groups;
+        }
+
+
+        public static ObservableCollection<CategoryGroupInfoList> GetOperationsByCategoryGrouped(SQLite.Net.SQLiteConnection conn, ObservableCollection<Operation> Operations, ObservableCollection<OperationCategory> OperationCategories) {
+
+            ObservableCollection<CategoryGroupInfoList> groups = new ObservableCollection<CategoryGroupInfoList>();
+
+            string categoryName;
+            string categoryIcon;
+            string categoryColor;
+
+            CategoryGroupInfoList info;
+            decimal sumCost = 0;
+
+            Settings settings = conn.Table<Settings>().ElementAt(0);
+
+            var query = from item in Operations
+                        group item by item.CategoryId into g
+                        orderby g.Key descending
+                        select new {
+                            GroupName = g.Key,
+                            Items = g
+                        };
+
+            foreach (var g in query) {
+                info = new CategoryGroupInfoList();
+
+                categoryName = "Bez nazwy";
+                categoryIcon = ((TextBlock)Application.Current.Resources["DefaultEllipseIcon"]).Text;
+                categoryColor = ((SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"]).Color.ToString();
+
+                foreach (OperationCategory item in OperationCategories) {
+                    if (item.Id == g.GroupName) {
+                        categoryName = item.Name;
+                        categoryIcon = item.Icon;
+                        categoryColor = item.Color;
+                        break;
+                    }
+                }
+
+                info.Key = categoryName;
+                info.icon = categoryIcon;
+                info.color = categoryColor;
+
+                sumCost = 0;
 
                 foreach (var item in g.Items) {
                     info.Add(item);

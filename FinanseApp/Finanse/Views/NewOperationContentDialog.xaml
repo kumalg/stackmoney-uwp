@@ -266,33 +266,6 @@
         <Style
             TargetType="ContentDialog">
             <Setter
-                Property="Foreground"
-                Value="{ThemeResource SystemControlPageTextBaseHighBrush}" />
-            <Setter
-                Property="Background"
-                Value="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}" />
-            <Setter
-                Property="HorizontalAlignment"
-                Value="Center" />
-            <Setter
-                Property="VerticalAlignment"
-                Value="Top" />
-            <Setter
-                Property="IsTabStop"
-                Value="False" />
-            <Setter
-                Property="MaxHeight"
-                Value="{ThemeResource ContentDialogMaxHeight}" />
-            <Setter
-                Property="MinHeight"
-                Value="{ThemeResource ContentDialogMinHeight}" />
-            <Setter
-                Property="MaxWidth"
-                Value="{ThemeResource ContentDialogMinWidth}" />
-            <Setter
-                Property="MinWidth"
-                Value="{ThemeResource ContentDialogMinWidth}" />
-            <Setter
                 Property="Template">
                 <Setter.Value>
                     <ControlTemplate
@@ -315,7 +288,7 @@
                                     FlowDirection="{TemplateBinding FlowDirection}"
                                     BorderThickness="0"
                                     BorderBrush="{ThemeResource SystemControlForegroundAccentBrush}"
-                                    MaxWidth="{TemplateBinding MaxWidth}"
+                                    MaxWidth="{TemplateBinding MinWidth}"
                                     MaxHeight="{TemplateBinding MaxHeight}"
                                     MinWidth="{TemplateBinding MinWidth}"
                                     MinHeight="{TemplateBinding MinHeight}">
@@ -379,11 +352,14 @@
                                                         </ContentControl.Template>
                                                     </ContentControl>
                                                     <Button
+                                                        x:Name="UsePatternButton"
                                                         Style="{StaticResource ButtonStyle1}"
                                                         ToolTipService.ToolTip="Użyj szablonu"
                                                         Grid.Column="2"
                                                         Width="48"
-                                                        Height="48">&#xE8C8;
+                                                        Height="48"
+                                                        Click="UsePatternButton_Click"
+                                                        Loading="UsePatternButton_Loading">&#xE8C8;
                                                     </Button>
                                                 </Grid>
                                                 <ContentPresenter
@@ -512,10 +488,6 @@
             PlaceholderText="Forma płatności"
             Margin="0,10"
             HorizontalAlignment="Stretch">
-
-            <ComboBoxItem Content="Gotówka" />
-            <ComboBoxItem Content="Karta Visa" />
-
         </ComboBox>
        
         <TextBox

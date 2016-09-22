@@ -29,6 +29,8 @@ namespace Finanse.Views {
 
     public sealed partial class Strona_glowna : Page {
 
+        public ObservableCollection<GroupInfoList> Opy;
+
         string path;
         SQLite.Net.SQLiteConnection conn;
 
@@ -39,14 +41,6 @@ namespace Finanse.Views {
 
         decimal actualMoney;
 
-        public string DateToString(DateTimeOffset? Date) {
-            string dateString;
-
-            dateString = String.Format("{0:ddMMyyyy}", Date);
-
-            return dateString;
-        }
-
         public Strona_glowna() {
 
             this.InitializeComponent();
@@ -54,7 +48,9 @@ namespace Finanse.Views {
             path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
             conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
 
+            conn.CreateTable<MoneyAccount>();
             conn.CreateTable<Operation>();
+            conn.CreateTable<OperationPattern>();
             conn.CreateTable<OperationCategory>();
             conn.CreateTable<OperationSubCategory>();
             conn.CreateTable<Settings>();
@@ -64,9 +60,30 @@ namespace Finanse.Views {
                     CultureInfoName = "en-US"
                 });
 
+            if (!conn.Table<MoneyAccount>().Any()) {
+                conn.Insert(new MoneyAccount {
+                    Name = "Gotówka"
+                });
+                conn.Insert(new MoneyAccount {
+                    Name = "Karta VISA"
+                });
+            }
+
             Settings settings = conn.Table<Settings>().ElementAt(0);
 
-            Operations = new ObservableCollection<Operation>(conn.Table<Operation>().OrderByDescending(o=>o.Date));
+            Operations = new ObservableCollection<Operation>(conn.Table<Operation>().OrderByDescending(o => o.Date));
+            Operations.Insert(0, new Operation {
+                Title = "SSS",
+                Date = DateTime.Today,
+                CategoryId = 1,
+                SubCategoryId = 1,
+                Cost = (decimal)20.99,
+                isExpense = true,
+                Id = 300,
+                MoneyAccountId = 1,
+                MoreInfo = "dupa",
+                PayForm = "Visa"
+            });
             OperationCategories = new ObservableCollection<OperationCategory>(conn.Table<OperationCategory>().OrderBy(o => o.Name));
 
             foreach (var operation in Operations) {
@@ -81,13 +98,15 @@ namespace Finanse.Views {
                          group c by DateToString(c.Date);
             //Set the grouped data to CollectionViewSource
             this.cvs.Source = groups;*/
-            ContactsCVS.Source = Operation.GetOperationsGrouped(conn, Operations);
+            Opy = Operation.GetOperationsGrouped(conn, Operations);
+            ContactsCVS.Source = Opy;
+            //ContactsCVS.Source = Operation.GetOperationsGrouped(conn, Operations);
             CategorizedCVS.Source = Operation.GetOperationsByCategoryGrouped(conn, Operations, OperationCategories);
         }
 
         private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
 
-            var ContentDialogItem = new NewOperationContentDialog(Operations, conn, null);
+            var ContentDialogItem = new NewOperationContentDialog(conn, null, "");
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -113,7 +132,7 @@ namespace Finanse.Views {
 
             Operation thisOperation = (Operation)datacontext;
 
-            var ContentDialogItem = new NewOperationContentDialog(Operations, conn, thisOperation);
+            var ContentDialogItem = new NewOperationContentDialog(conn, thisOperation, "edit");
 
             var result = await ContentDialogItem.ShowAsync();
             //this datacontext is probably some object of some type T
@@ -177,6 +196,25 @@ namespace Finanse.Views {
                     FakeHamburgerButton.Width = 48;
                 }
             }
+        }
+
+        private void PreviousMonth_Click(object sender, RoutedEventArgs e) {
+            Operations.Insert(0, new Operation {
+                Title = "SSS",
+                Date = DateTime.Today,
+                CategoryId = 1,
+                SubCategoryId = 1,
+                Cost = (decimal)20.99,
+                isExpense = true,
+                Id = 300,
+                MoneyAccountId = 1,
+                MoreInfo = "dupa",
+                PayForm = "Visa"
+            });
+
+            Opy = Operation.GetOperationsGrouped(conn, Operations);
+
+            ContactsCVS = new CollectionViewSource() { IsSourceGrouped = true, Source = Opy };
         }
     }
 }

@@ -14,19 +14,9 @@ using Windows.UI.Xaml.Media;
 
 namespace Finanse.Elements {
 
-    public class Operation {
+    public class Operation : OperationPattern {
 
-        [PrimaryKey, AutoIncrement]
-
-        public int Id { get; set; } 
-        public string Title { get; set; } 
-        public int CategoryId { get; set; } 
-        public int SubCategoryId { get; set; } 
-        public decimal Cost { get; set; } 
         public DateTimeOffset? Date { get; set; } 
-        public bool isExpense { get; set; } 
-        public string PayForm { get; set; }
-        public string MoreInfo { get; set; }
 
         public static ObservableCollection<GroupInfoList> GetOperationsGrouped(SQLite.Net.SQLiteConnection conn, ObservableCollection<Operation> Operations) {
 

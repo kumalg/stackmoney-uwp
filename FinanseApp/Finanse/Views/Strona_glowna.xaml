@@ -587,7 +587,7 @@
                 Icon="Previous"
                 Label="Poprzedni miesiąc"
                 Foreground="White"
-                Click="NowaOperacja_Click">
+                Click="PreviousMonth_Click">
             </AppBarButton>
 
             <AppBarButton
@@ -596,6 +596,8 @@
                 Foreground="White"
                 Click="NowaOperacja_Click">
             </AppBarButton>
+
+            <AppBarSeparator />
 
             <AppBarButton
                 Icon="Add"

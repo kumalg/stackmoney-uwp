@@ -23,27 +23,27 @@ namespace Finanse.Views {
 
     public sealed partial class NewOperationContentDialog : ContentDialog {
 
-        public ObservableCollection<Operation> Operations;
         Operation editedOperation;
 
         SQLite.Net.SQLiteConnection conn;
 
         Settings settings;
 
+        string whichOptions;
         string acceptedCostValue = "";
         int whereIsSelection;
 
         bool isUnfocused = true;
 
-        public NewOperationContentDialog(ObservableCollection<Operation> Operations, SQLite.Net.SQLiteConnection conn, Operation editedOperation) {
+        public NewOperationContentDialog(SQLite.Net.SQLiteConnection conn, Operation editedOperation, string whichOptions) {
 
             this.InitializeComponent();
 
             IsPrimaryButtonEnabled = false;
 
-            this.Operations = Operations;
             this.conn = conn;
             this.editedOperation = editedOperation;
+            this.whichOptions = whichOptions;
 
             settings = conn.Table<Settings>().ElementAt(0);
 
@@ -53,42 +53,41 @@ namespace Finanse.Views {
 
             SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
 
-            if (editedOperation != null) {
-                Title = "Edycja operacji";
-                PrimaryButtonText = "Zapisz";
-                SaveAsAssetTitle.Visibility = Visibility.Collapsed;
-                SaveAsAssetToggle.Visibility = Visibility.Collapsed;
+            foreach (MoneyAccount account in conn.Table<MoneyAccount>()) {
 
-                if (editedOperation.isExpense) {
-                    Expense_RadioButton.IsChecked = true;
-                }
-                else
-                    Income_RadioButton.IsChecked = true;
-
-                NameValue.Text = editedOperation.Title;
-                DateValue.Date = editedOperation.Date;
-
-                if (CategoryValue.Items.OfType<ComboBoxItem>().Any(i => (int)i.Tag == editedOperation.CategoryId))
-                    CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(i => (int)i.Tag == editedOperation.CategoryId);
-
-                if (conn.Table<OperationSubCategory>().Any(i => i.OperationCategoryId == editedOperation.SubCategoryId)) {
-                    OperationSubCategory subCatItem = conn.Table<OperationSubCategory>().Single(i => i.OperationCategoryId == editedOperation.SubCategoryId);
-                    SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
-                }
-
-                if (PayFormValue.Items.OfType<ComboBoxItem>().Any(i => i.Content.ToString() == editedOperation.PayForm))
-                    PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().Single(i => i.Content.ToString() == editedOperation.PayForm);
-
-                CostValue.Text = editedOperation.Cost.ToString("C", new CultureInfo(settings.CultureInfoName));
-                acceptedCostValue = editedOperation.Cost.ToString();
-
-                if (editedOperation.MoreInfo != null)
-                    MoreInfoValue.Text = editedOperation.MoreInfo;
+                PayFormValue.Items.Add(new ComboBoxItem {
+                    Content = account.Name,
+                    Tag = account.Id
+                });
             }
 
-            else {
-                SubCategoryValue.IsEnabled = false;
-                DateValue.Date = DateTime.Today;
+            switch (whichOptions) {
+
+                case "edit": {
+
+                        Title = "Edycja operacji";
+                        PrimaryButtonText = "Zapisz";
+                        SaveAsAssetTitle.Visibility = Visibility.Collapsed;
+                        SaveAsAssetToggle.Visibility = Visibility.Collapsed;
+
+                        EditAndPatternSetters();
+                        DateValue.Date = editedOperation.Date;
+                        break;
+                    };
+
+                case "pattern": {
+
+                        EditAndPatternSetters();
+                        DateValue.Date = DateTime.Today;
+                        break;
+                    };
+
+                default: {
+
+                        SubCategoryValue.IsEnabled = false;
+                        DateValue.Date = DateTime.Today;
+                        break;
+                    };
             }
         }
 
@@ -106,6 +105,45 @@ namespace Finanse.Views {
                 IsPrimaryButtonEnabled = false;
         }
 
+        private void EditAndPatternSetters() {
+
+            if (editedOperation.isExpense) {
+                Expense_RadioButton.IsChecked = true;
+            }
+            else
+                Income_RadioButton.IsChecked = true;
+
+            NameValue.Text = editedOperation.Title;
+
+            foreach (var item in CategoryValue.Items.OfType<ComboBoxItem>()) {
+                if ((int)item.Tag == editedOperation.CategoryId) {
+                    CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(i => (int)i.Tag == editedOperation.CategoryId);
+                    break;
+                }
+            }
+
+            foreach (var item in conn.Table<OperationSubCategory>()) {
+                if (item.OperationCategoryId == editedOperation.SubCategoryId) {
+                    OperationSubCategory subCatItem = conn.Table<OperationSubCategory>().Single(i => i.OperationCategoryId == editedOperation.SubCategoryId);
+                    SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
+                    break;
+                }
+            }
+
+            foreach (var item in conn.Table<MoneyAccount>()) {
+                if (item.Id == editedOperation.MoneyAccountId) {
+                    PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().Single(i => (int)i.Tag == editedOperation.MoneyAccountId);
+                    break;
+                }
+            }
+
+            CostValue.Text = editedOperation.Cost.ToString("C", new CultureInfo(settings.CultureInfoName));
+            acceptedCostValue = editedOperation.Cost.ToString();
+
+            if (editedOperation.MoreInfo != null)
+                MoreInfoValue.Text = editedOperation.MoreInfo;
+        }
+
         private void NowaOperacja_DodajClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
             int subCategoryInt = -1;
@@ -115,12 +153,12 @@ namespace Finanse.Views {
 
             Operation item = new Operation {
                 Title = NameValue.Text,
-                Cost = decimal.Parse(acceptedCostValue),//decimal.Parse(CostValue.Text.Replace(" zł", "")),
+                Cost = decimal.Parse(acceptedCostValue),
                 CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
                 SubCategoryId = subCategoryInt,
                 Date = DateValue.Date,
                 PayForm = ((ComboBoxItem)PayFormValue.SelectedItem).Content.ToString(),
-                //MoreInfo = MoreInfoValue.Text
+                MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
             };
             if (MoreInfoValue.Text != "")
                 item.MoreInfo = MoreInfoValue.Text;
@@ -133,15 +171,29 @@ namespace Finanse.Views {
 
             // DODAWANIE
             if (editedOperation == null) {
-                Operations.Insert(0,item);
                 conn.Insert(item);
+
+                if (SaveAsAssetToggle.IsOn) {
+                    OperationPattern itemPattern = new OperationPattern {
+                        Title = NameValue.Text,
+                        Cost = decimal.Parse(acceptedCostValue),
+                        CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
+                        SubCategoryId = subCategoryInt,
+                        PayForm = ((ComboBoxItem)PayFormValue.SelectedItem).Content.ToString(),
+                    };
+                    if (MoreInfoValue.Text != "")
+                        itemPattern.MoreInfo = MoreInfoValue.Text;
+                    if (Expense_RadioButton.IsChecked == true)
+                        itemPattern.isExpense = true;
+                    else
+                        itemPattern.isExpense = false;
+                    conn.Insert(itemPattern);
+                }
             }
 
             // EDYTOWANIE
             else {
-                item.Id = Operations.Single(id => id.Id == editedOperation.Id).Id;
-
-                Operations[Operations.IndexOf(Operations.Single(id => id.Id == editedOperation.Id))] = item;
+                item.Id = editedOperation.Id;
                 conn.Update(item);
             }
         }
@@ -313,6 +365,21 @@ namespace Finanse.Views {
 
         private void CostValue_SelectionChanged(object sender, RoutedEventArgs e) {
             whereIsSelection = CostValue.SelectionStart;
+        }
+
+        private async void UsePatternButton_Click(object sender, RoutedEventArgs e) {
+            Hide();
+
+            var ContentDialogItem = new OperationPatternsContentDialog(conn);
+
+            var result = await ContentDialogItem.ShowAsync();
+        }
+
+        private void UsePatternButton_Loading(FrameworkElement sender, object args) {
+            Button yco = sender as Button;
+
+            if (whichOptions == "edit")
+                yco.Visibility = Visibility.Collapsed;
         }
     }
 }

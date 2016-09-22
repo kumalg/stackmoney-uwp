@@ -33,8 +33,6 @@ namespace Finanse.Views {
 
             this.InitializeComponent();
 
-            IsPrimaryButtonEnabled = false;
-
             this.Operations = Operations;
             this.conn = conn;
             this.editedOperation = editedOperation;
@@ -51,48 +49,48 @@ namespace Finanse.Views {
                 CostValue.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"] as SolidColorBrush;
                 CostValueIcon.Glyph = "";
             }
+
             CostValue.Text = editedOperation.Cost.ToString("C", new CultureInfo(settings.CultureInfoName));
 
-            DateValue.Text = String.Format("{0:dddd, dd MMMM yyyy}", ((DateTimeOffset)editedOperation.Date).LocalDateTime);
+            if (editedOperation.Date != null)
+                DateValue.Text = String.Format("{0:dddd, dd MMMM yyyy}", ((DateTimeOffset)editedOperation.Date).LocalDateTime);
 
-            if (conn.Table<OperationCategory>().Any(i => i.Id == editedOperation.CategoryId))
-                CategoryValue.Text = conn.Table<OperationCategory>().Single(i => i.Id == editedOperation.CategoryId).Name;
-            else
-                CategoryValuePanel.Visibility = Visibility.Collapsed;
-
-            if (conn.Table<OperationSubCategory>().Any(i => i.OperationCategoryId == editedOperation.SubCategoryId)) {
-                SubCategoryValue.Text = conn.Table<OperationSubCategory>().Single(i => i.OperationCategoryId == editedOperation.SubCategoryId).Name;
+            /* KATEGORIA */
+            CategoryValuePanel.Visibility = Visibility.Collapsed;
+            foreach (OperationCategory item in conn.Table<OperationCategory>()) {
+                if (item.Id == editedOperation.CategoryId) {
+                    CategoryValue.Text = item.Name;
+                    CategoryValuePanel.Visibility = Visibility.Visible;
+                    break;
+                }
             }
-            else
-                SubCategoryValuePanel.Visibility = Visibility.Collapsed;
 
-            PayForm.Text = editedOperation.PayForm;
+            /* PODKATEGORIA */
+            SubCategoryValuePanel.Visibility = Visibility.Collapsed;
+            foreach (OperationSubCategory item in conn.Table<OperationSubCategory>()) {
+                if (item.OperationCategoryId == editedOperation.SubCategoryId) {
+                    SubCategoryValue.Text = item.Name;
+                    SubCategoryValuePanel.Visibility = Visibility.Visible;
+                    break;
+                }
+            }
 
+            /* FORMA PŁATNOŚCI */
+            PayFormPanel.Visibility = Visibility.Collapsed;
+            foreach (MoneyAccount item in conn.Table<MoneyAccount>()) {
+                if (item.Id == editedOperation.MoneyAccountId) {
+                    PayForm.Text = item.Name;
+                    PayFormPanel.Visibility = Visibility.Visible;
+                    break;
+                }
+            }
+
+            /* WIĘCEJ INFORMACJI */
             if (editedOperation.MoreInfo != null) {
                 MoreInfo.Text = editedOperation.MoreInfo;
             }
             else
                 MoreInfoPanel.Visibility = Visibility.Collapsed;
-
-            IsPrimaryButtonEnabled = true;
-            IsSecondaryButtonEnabled = true;
-        }
-
-        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-
-        }
-
-        private void ExitButton_Click(object sender, RoutedEventArgs e) {
-            Hide();
-        }
-
-        private async void EditButton_Click(object sender, RoutedEventArgs e) {
-
-            Hide();
-
-            var ContentDialogItem = new NewOperationContentDialog(Operations, conn, editedOperation);
-
-            var result = await ContentDialogItem.ShowAsync();
         }
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
@@ -107,14 +105,7 @@ namespace Finanse.Views {
         private async void EditButton_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
             Hide();
 
-            var ContentDialogItem = new NewOperationContentDialog(Operations, conn, editedOperation);
-
-            var result = await ContentDialogItem.ShowAsync();
-        }
-        private async void DeleteButton_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-            Hide();
-
-            var ContentDialogItem = new Delete_ContentDialog(Operations, conn, editedOperation);
+            var ContentDialogItem = new NewOperationContentDialog(conn, editedOperation, "edit");
 
             var result = await ContentDialogItem.ShowAsync();
         }

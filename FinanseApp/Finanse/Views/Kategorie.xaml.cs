@@ -116,8 +116,10 @@ namespace Finanse.Views {
             var result = await ContentDialogItem.ShowAsync();
         }
 
-        private void AddSubCat_Click(object sender, RoutedEventArgs e) {
+        private async void AddSubCat_Click(object sender, RoutedEventArgs e) {
+            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, conn, new OperationCategory { Id = -1 }, -1);
 
+            var result = await ContentDialogItem.ShowAsync();
         }
     }
 }

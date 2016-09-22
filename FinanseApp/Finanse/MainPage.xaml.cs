@@ -49,7 +49,7 @@ namespace Finanse {
             if (info.CurrentOrientation == DisplayOrientations.Landscape || info.CurrentOrientation == DisplayOrientations.LandscapeFlipped)
                 StatusBarAndTitleBar("GreyColorStyle", "White");
             else
-                StatusBarAndTitleBar("AccentColorStyle", "AccentTextColorStyle");
+                StatusBarAndTitleBar("AccentDarkColorStyle", "AccentTextColorStyle");
         }
 
         private void MainPage_OrientationChanged(DisplayInformation info, object args) {
@@ -61,10 +61,11 @@ namespace Finanse {
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView")) {
                 var titleBar = ApplicationView.GetForCurrentView().TitleBar;
                 if (titleBar != null) {
-                    titleBar.ButtonBackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentColorStyle"] as SolidColorBrush).Color;
-                    titleBar.ButtonForegroundColor = ((SolidColorBrush)Application.Current.Resources["AccentTextColorStyle"] as SolidColorBrush).Color;
-                    titleBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentColorStyle"] as SolidColorBrush).Color;
-                    titleBar.ForegroundColor = ((SolidColorBrush)Application.Current.Resources["AccentTextColorStyle"] as SolidColorBrush).Color;
+                    titleBar.ButtonBackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentDarkColorStyle"] as SolidColorBrush).Color;
+                    titleBar.ButtonForegroundColor = Colors.White;
+
+                    titleBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentDarkColorStyle"] as SolidColorBrush).Color;
+                    titleBar.ForegroundColor = Colors.White;
                 }
             }
 
@@ -85,6 +86,9 @@ namespace Finanse {
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e) {
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
+            if (MySplitView.IsPaneOpen) {
+                PageFillWhenPaneIsOpen.Visibility = Visibility.Visible;
+            }
         }
 
         private void Strona_glowna_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
@@ -129,6 +133,10 @@ namespace Finanse {
 
         private void Strona_glowna_ListBoxItem_Click(object sender, RoutedEventArgs e) {
             ClosingPane();
+        }
+
+        private void MySplitView_PaneClosing(SplitView sender, SplitViewPaneClosingEventArgs args) {
+            PageFillWhenPaneIsOpen.Visibility = Visibility.Collapsed;
         }
     }
 }

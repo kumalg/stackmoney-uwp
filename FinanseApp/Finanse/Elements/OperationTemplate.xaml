@@ -26,8 +26,10 @@
             Height="50"
             Width="50">
 
-            <Ellipse
-                Name="Ellipse_OperationTemplate" />
+            <Rectangle
+                RadiusX="5"
+                RadiusY="5"
+                Name="Ellipse_OperationTemplate"  />
 
             <TextBlock
                 Name="Icon_OperationTemplate"

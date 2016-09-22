@@ -8,25 +8,13 @@
     <!--
     <SolidColorBrush x:Key="DarkBlueColorStyle" Color="#0A4E9B"/>
     <SolidColorBrush x:Key="BlueColorStyle" Color="#0B63C7"/>
-    -->
-    <SolidColorBrush
-        x:Key="DefaultEllipseColor"
-        Color="#2e2f43" />
-   
-    <TextBlock
-        x:Key="DefaultEllipseIcon"
-        Text="🏴"
-        FontFamily="Segoe UI" />
-
-    <!--*****************************************
-    KOLORY W APLIKACJI
-    ******************************************-->
-    <SolidColorBrush x:Key="AccentDarkColorStyle" Color="#1fb851"/>
+    
+        <SolidColorBrush x:Key="AccentDarkColorStyle" Color="#1fb851"/>
     <SolidColorBrush x:Key="AccentColorStyle" Color="#23d05f"/>
     <SolidColorBrush x:Key="AccentLightColorStyle" Color="#01948a"/>
-
+    
     <SolidColorBrush x:Key="AccentTextColorStyle" Color="#2d2e41"/>
-    <SolidColorBrush x:Key="AccentTextBackgroundColorStyle" Color="#2d2e41" Opacity="0.2"/>
+        <SolidColorBrush x:Key="AccentTextBackgroundColorStyle" Color="#2d2e41" Opacity="0.2"/>
     
     <SolidColorBrush x:Key="DisabledColorStyle" Color="White" Opacity="0.2"/>
     
@@ -44,6 +32,44 @@
     <SolidColorBrush x:Key="LightGreyTransparentColorStyle" Color="#E52e2f43"/>
     <SolidColorBrush x:Key="DarkGreyColorStyle" Color="#21212b"/>
     <SolidColorBrush x:Key="DarkGreyTransparentColorStyle" Color="#21212b" Opacity="0.8"/>
+    -->
+    <SolidColorBrush
+        x:Key="DefaultEllipseColor"
+        Color="#2e2f43" />
+   
+    <TextBlock
+        x:Key="DefaultEllipseIcon"
+        Text="🏴"
+        FontFamily="Segoe UI" />
+
+    <!--*****************************************
+    KOLORY W APLIKACJI
+    ******************************************-->
+    <SolidColorBrush x:Key="AccentDarkColorStyle" Color="#067c37"/>
+    <SolidColorBrush x:Key="AccentColorStyle" Color="#078b3e"/>
+    <SolidColorBrush x:Key="AccentLightColorStyle" Color="Red"/>
+
+    <SolidColorBrush x:Key="AccentTextColorStyle" Color="White" />
+    <SolidColorBrush x:Key="AccentTransparentTextColorStyle" Color="#a6ffffff" />
+    <SolidColorBrush x:Key="AccentTextBackgroundColorStyle" Color="#2d2e41" Opacity="0.2"/>
+    
+    <SolidColorBrush x:Key="DisabledColorStyle" Color="White" Opacity="0.2"/>
+    
+    
+    <SolidColorBrush x:Key="GreenColorStyle" Color="#3EB93E"/>
+
+    <SolidColorBrush x:Key="RedColorStyle" Color="#FF3B3B"/>
+
+    <SolidColorBrush x:Key="DarkBlueColorStyle" Color="#01948a"/>
+    <SolidColorBrush x:Key="BlueColorStyle" Color="#01b6ad"/>
+
+    <SolidColorBrush x:Key="GreyColorStyle" Color="#272727" />
+    <SolidColorBrush x:Key="GreyTransparentColorStyle" Color="#272727" Opacity="0.8" />
+    
+    <SolidColorBrush x:Key="LightGreyTransparentColorStyle" Color="#2d2d2d" Opacity="0.8"/>
+    
+    <SolidColorBrush x:Key="DarkGreyColorStyle" Color="#1f1f1f"/>
+    <SolidColorBrush x:Key="DarkGreyTransparentColorStyle" Color="#1f1f1f" Opacity="0.8"/>
 
     
     <!--*****************************************
@@ -237,7 +263,7 @@
                                         <Storyboard>
                                             <ColorAnimation
                                                 Storyboard.TargetName="HamburgerIcon"
-                                                To="White"
+                                                To="{Binding Source={StaticResource AccentTransparentTextColorStyle},Path=Color}"
                                                 Duration="0:0:0.2"
                                                 Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
                                             <DoubleAnimation
@@ -289,18 +315,19 @@
                                 Height="24"
                                 HorizontalAlignment="Left"
                                 Background="{StaticResource AccentColorStyle}" />
-                            <ContentPresenter
+                            <FontIcon
                                 x:Name="HamburgerIcon"
-                                Content="{TemplateBinding Tag}"
+                                FontSize="16"
+                                Foreground="{StaticResource AccentTransparentTextColorStyle}"
+                                Glyph="{TemplateBinding Tag}"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center" />
                         </Grid>
-                        <ContentPresenter
+                        <TextBlock
+                            FontSize="14"
                             x:Name="ContentPresenter"
                             AutomationProperties.AccessibilityView="Raw"
-                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                            ContentTransitions="{TemplateBinding ContentTransitions}"
-                            Content="{TemplateBinding Content}"
+                            Text="{TemplateBinding Content}"
                             Grid.Column="1"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             TextWrapping="Wrap"
@@ -1346,7 +1373,7 @@
                                                 <RowDefinition
                                                     Height="Auto" />
                                             </Grid.RowDefinitions>
-                                            <Grid Background="{StaticResource AccentDarkColorStyle}">
+                                            <Grid Background="{StaticResource AccentColorStyle}">
                                                 <ContentControl
                                                     x:Name="Title"
                                                     Margin="20,0,0,0"
@@ -1506,7 +1533,7 @@
                                                     Height="Auto" />
                                             </Grid.RowDefinitions>
                                             <Grid
-                                                Background="{StaticResource AccentDarkColorStyle}">
+                                                Background="{StaticResource AccentColorStyle}">
 
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition
@@ -3872,7 +3899,7 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <StackPanel
-                            Orientation="Horizontal" Margin="5,2">
+                            Orientation="Horizontal" Margin="4,2">
                             <!--
                             <SymbolIcon
                                 Margin="0,0,12,0"
@@ -3880,7 +3907,7 @@
                             -->
                             <FontIcon
                                 FontSize="13"
-                                Margin="0,0,12,0"
+                                Margin="0,0,16,0"
                                 Glyph="{TemplateBinding Tag}" />
                             <TextBlock
                                 x:Name="TextBlock"

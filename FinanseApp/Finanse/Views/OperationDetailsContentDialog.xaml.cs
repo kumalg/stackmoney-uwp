@@ -29,15 +29,21 @@ namespace Finanse.Views {
 
         Operation editedOperation;
 
-        public OperationDetailsContentDialog(ObservableCollection<Operation> Operations, SQLite.Net.SQLiteConnection conn, Operation editedOperation) {
+        string whichOption;
+
+        public OperationDetailsContentDialog(ObservableCollection<Operation> Operations, SQLite.Net.SQLiteConnection conn, Operation editedOperation, string whichOption) {
 
             this.InitializeComponent();
 
             this.Operations = Operations;
             this.conn = conn;
             this.editedOperation = editedOperation;
+            this.whichOption = whichOption;
 
             Settings settings = conn.Table<Settings>().ElementAt(0);
+
+            if (whichOption == "pattern")
+                Title = "Szczegóły szablonu";
 
             NameValue.Text = editedOperation.Title;
 
@@ -52,8 +58,11 @@ namespace Finanse.Views {
 
             CostValue.Text = editedOperation.Cost.ToString("C", new CultureInfo(settings.CultureInfoName));
 
-            if (editedOperation.Date != null)
+            DateValuePanel.Visibility = Visibility.Collapsed;
+            if (editedOperation.Date != null && whichOption != "pattern") {
                 DateValue.Text = String.Format("{0:dddd, dd MMMM yyyy}", ((DateTimeOffset)editedOperation.Date).LocalDateTime);
+                DateValuePanel.Visibility = Visibility.Visible;
+            }
 
             /* KATEGORIA */
             CategoryValuePanel.Visibility = Visibility.Collapsed;
@@ -97,15 +106,29 @@ namespace Finanse.Views {
 
             Hide();
 
-            var ContentDialogItem = new Delete_ContentDialog(Operations, conn, editedOperation);
+            var ContentDialogItem = new Delete_ContentDialog(Operations, conn, editedOperation, whichOption);
 
             var result = await ContentDialogItem.ShowAsync();
         }
 
         private async void EditButton_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
+
             Hide();
 
-            var ContentDialogItem = new NewOperationContentDialog(conn, editedOperation, "edit");
+            string whichOptionLocal;
+
+            switch (whichOption) {
+                case "pattern": {
+                        whichOptionLocal = "editpattern";
+                        break;
+                    }
+                default: {
+                        whichOptionLocal = "edit";
+                        break;
+                    }
+            }
+
+            var ContentDialogItem = new NewOperationContentDialog(conn, editedOperation, whichOptionLocal);
 
             var result = await ContentDialogItem.ShowAsync();
         }

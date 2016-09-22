@@ -62,12 +62,21 @@
                         <Setter
                             Target="UpperCommandBar.Visibility"
                             Value="Visible" />
+
+                        <Setter
+                            Target="UpperPrevMonth.Visibility"
+                            Value="Collapsed" />
+                        <Setter
+                            Target="UpperNextMonth.Visibility"
+                            Value="Collapsed" />
+                        <!--
                         <Setter
                             Target="UpperPrevMonth.Visibility"
                             Value="Visible" />
                         <Setter
                             Target="UpperNextMonth.Visibility"
                             Value="Visible" />
+                        -->
                         <Setter
                             Target="LowerCommandBar.Visibility"
                             Value="Collapsed" />
@@ -88,7 +97,7 @@
 
         
         <Grid
-            Background="{StaticResource AccentDarkColorStyle}"
+            Background="{StaticResource AccentColorStyle}"
             Height="48">
 
             <Grid.ColumnDefinitions>
@@ -108,7 +117,7 @@
                 Name="FakeHamburgerButton"
                 Width="48" />
 
-            <StackPanel Orientation="Horizontal" Margin="16,0,0,0"
+            <StackPanel Orientation="Horizontal"
                         Grid.Column="1">
                 <FontIcon
                     Name="UpperPrevMonth"
@@ -117,7 +126,7 @@
                     Margin="0,0,10,0"
                     Foreground="{StaticResource AccentTextColorStyle}" />
                 <TextBlock
-                    Text="Moje finanse"
+                    Text="Wrzesień"
                     Style="{StaticResource PageTitleStyle}" 
                     Margin="0"/>
                 <FontIcon
@@ -491,7 +500,9 @@
                                                     Orientation="Horizontal"
                                                     Margin="20,0,0,5">
                                                     <Grid Width="30" Height="30">
-                                                        <Ellipse
+                                                        <Rectangle
+                                                            RadiusX="3"
+                                                            RadiusY="3"
                                                             Fill="{x:Bind color}" />
                                                         <FontIcon
                                                             Grid.Column="0"
@@ -543,7 +554,9 @@
                                         <Grid
                                             Width="50"
                                             Height="50">
-                                            <Ellipse
+                                            <Rectangle
+                                                RadiusX="5"
+                                                RadiusY="5"
                                                 Fill="{Binding Group.color}" />
                                             <FontIcon
                                                 Grid.Column="0"
@@ -584,14 +597,14 @@
             Foreground="White">
 
             <AppBarButton
-                Icon="Previous"
+                Icon="Back"
                 Label="Poprzedni miesiąc"
                 Foreground="White"
                 Click="PreviousMonth_Click">
             </AppBarButton>
 
             <AppBarButton
-                Icon="Next"
+                Icon="Forward"
                 Label="Nastepny miesiąc"
                 Foreground="White"
                 Click="NowaOperacja_Click">

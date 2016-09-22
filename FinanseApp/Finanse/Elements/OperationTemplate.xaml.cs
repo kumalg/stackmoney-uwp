@@ -69,22 +69,24 @@ namespace Finanse.Elements {
                 return;
 
             /* WCHODZI IKONKA KATEGORII */
-            if (conn.Table<OperationCategory>().Any(item => item.Id == Operation.CategoryId)) {
-
-                whichColor = conn.Table<OperationCategory>().Single(item => item.Id == Operation.CategoryId).Color;
-                whichIcon = conn.Table<OperationCategory>().Single(item => item.Id == Operation.CategoryId).Icon;
+            Icon_OperationTemplate.Opacity = 0.2;
+            foreach (OperationCategory item in conn.Table<OperationCategory>()) {
+                if (item.Id == Operation.CategoryId) {
+                    Icon_OperationTemplate.Opacity = 1;
+                    whichColor = item.Color;
+                    whichIcon = item.Icon;
+                    break;
+                }
             }
 
-            /* GDY NIE WEJDZIE */
-            else
-                Icon_OperationTemplate.Opacity = 0.2;
-
             /* PRÓBUJE WEJŚC IKONKA SUBKATEGORII */
-            if (conn.Table<OperationSubCategory>().Any(item => item.OperationCategoryId == Operation.SubCategoryId)) {
-
-                Icon_OperationTemplate.Opacity = 1;
-                whichColor = conn.Table<OperationSubCategory>().Single(item => item.OperationCategoryId == Operation.SubCategoryId).Color;
-                whichIcon = conn.Table<OperationSubCategory>().Single(item => item.OperationCategoryId == Operation.SubCategoryId).Icon;
+            foreach (OperationSubCategory item in conn.Table<OperationSubCategory>()) {
+                if (item.OperationCategoryId == Operation.SubCategoryId) {
+                    Icon_OperationTemplate.Opacity = 1;
+                    whichColor = item.Color;
+                    whichIcon = item.Icon;
+                    break;
+                }
             }
 
             /* GOTOWA IKONKA DO ZAPISANIA */
@@ -104,19 +106,27 @@ namespace Finanse.Elements {
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"];
             }
 
+            /* WYGLĄD KATEGORII */
+            Category_OperationTemplate.Text = "Nie odnaleziono wskazanej kategorii";
+            foreach (OperationCategory item in conn.Table<OperationCategory>()) {
 
-            /* TYTUŁ KATEGORII */
-            if (conn.Table<OperationCategory>().Any(cat => cat.Id == Operation.CategoryId)) {
+                if (item.Id == Operation.CategoryId) {
 
-                Category_OperationTemplate.Text = conn.Table<OperationCategory>().Single(cat => cat.Id == Operation.CategoryId).Name;
+                    Category_OperationTemplate.Text = item.Name;
 
-                /* CZY WYŚWIETLAĆ PODKATEGORIĘ */
-                if (Operation.SubCategoryId != -1 && conn.Table<OperationSubCategory>().Any(subcat => subcat.OperationCategoryId == Operation.SubCategoryId))
-                    SubCategory_OperationTemplate.Text = "  /  " + conn.Table<OperationSubCategory>().Single(subcat => subcat.OperationCategoryId == Operation.SubCategoryId).Name;
+                    if (Operation.SubCategoryId == -1)
+                        break;
+
+                    foreach (OperationSubCategory subItem in conn.Table<OperationSubCategory>()) {
+                        if (subItem.OperationCategoryId == Operation.SubCategoryId) {
+                            SubCategory_OperationTemplate.Text = "  /  " + subItem.Name;
+                            break;
+                        }
+                    }
+
+                    break;
+                }
             }
-
-            else
-                Category_OperationTemplate.Text = "Nie odnaleziono wskazanej kategorii";
         }
     }
 }

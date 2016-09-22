@@ -18,22 +18,45 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Finanse.Elements {
     public sealed partial class Delete_ContentDialog : ContentDialog {
+
         ObservableCollection<Operation> Operations;
         SQLite.Net.SQLiteConnection conn;
         Operation operation;
-        public Delete_ContentDialog(ObservableCollection<Operation> Operations, SQLite.Net.SQLiteConnection conn, Operation operation) {
+        string whichOption;
+        public Delete_ContentDialog(ObservableCollection<Operation> Operations, SQLite.Net.SQLiteConnection conn, Operation operation, string whichOption) {
+
             this.InitializeComponent();
             this.Operations = Operations;
             this.conn = conn;
             this.operation = operation;
+            this.whichOption = whichOption;
         }
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-            Operations.Remove(operation);
-            conn.Delete(operation);
-        }
 
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
+            switch (whichOption) {
+                case "pattern": {
+                        Operations.Remove(operation);
+
+                        conn.Delete(new OperationPattern {
+                            Title = operation.Title,
+                            Cost = operation.Cost,
+                            CategoryId = operation.CategoryId,
+                            SubCategoryId = operation.SubCategoryId,
+                            Id = operation.Id,
+                            isExpense = operation.isExpense,
+                            MoreInfo = operation.MoreInfo,
+                            MoneyAccountId = operation.MoneyAccountId
+                        });
+
+                        break;
+                    }
+                default: {
+                        Operations.Remove(operation);
+                        conn.Delete(operation);
+                        break;
+                    }
+            }
         }
     }
 }

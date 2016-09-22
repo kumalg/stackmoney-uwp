@@ -1,5 +1,6 @@
 ﻿<ContentDialog
     Style="{StaticResource MyContentDialog}"
+    MaxWidth="620"
     x:Class="Finanse.Views.OperationPatternsContentDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

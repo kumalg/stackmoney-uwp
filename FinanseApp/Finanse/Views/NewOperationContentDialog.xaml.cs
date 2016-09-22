@@ -75,6 +75,18 @@ namespace Finanse.Views {
                         break;
                     };
 
+                case "editpattern": {
+
+                        Title = "Edycja szablonu";
+                        PrimaryButtonText = "Zapisz";
+                        SaveAsAssetTitle.Visibility = Visibility.Collapsed;
+                        SaveAsAssetToggle.Visibility = Visibility.Collapsed;
+
+                        EditAndPatternSetters();
+                        DateValue.Visibility = Visibility.Collapsed;
+                        break;
+                    };
+
                 case "pattern": {
 
                         EditAndPatternSetters();
@@ -95,7 +107,7 @@ namespace Finanse.Views {
             if (CostValue.Text != ""
                 && NameValue.Text != ""
                 && (Income_RadioButton.IsChecked == true || Expense_RadioButton.IsChecked == true)
-                && DateValue.Date != null
+                //&& DateValue.Date != null
                 && CategoryValue.SelectedItem != null
                 && PayFormValue.SelectedItem != null) {
 
@@ -169,32 +181,51 @@ namespace Finanse.Views {
             else
                 item.isExpense = false;
 
-            // DODAWANIE
-            if (editedOperation == null) {
-                conn.Insert(item);
+            switch (whichOptions) {
+                case "edit": {
+                        item.Id = editedOperation.Id;
+                        conn.Update(item);
+                        break;
+                    }
+                case "editpattern": {
+                        OperationPattern itemPattern = new OperationPattern {
+                            Id = editedOperation.Id,
+                            Title = NameValue.Text,
+                            Cost = decimal.Parse(acceptedCostValue),
+                            CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
+                            SubCategoryId = subCategoryInt,
+                            MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
+                        };
+                        if (MoreInfoValue.Text != "")
+                            itemPattern.MoreInfo = MoreInfoValue.Text;
+                        if (Expense_RadioButton.IsChecked == true)
+                            itemPattern.isExpense = true;
+                        else
+                            itemPattern.isExpense = false;
+                        conn.Update(itemPattern);
+                        break;
+                    }
+                default: {
+                        conn.Insert(item);
 
-                if (SaveAsAssetToggle.IsOn) {
-                    OperationPattern itemPattern = new OperationPattern {
-                        Title = NameValue.Text,
-                        Cost = decimal.Parse(acceptedCostValue),
-                        CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
-                        SubCategoryId = subCategoryInt,
-                        PayForm = ((ComboBoxItem)PayFormValue.SelectedItem).Content.ToString(),
-                    };
-                    if (MoreInfoValue.Text != "")
-                        itemPattern.MoreInfo = MoreInfoValue.Text;
-                    if (Expense_RadioButton.IsChecked == true)
-                        itemPattern.isExpense = true;
-                    else
-                        itemPattern.isExpense = false;
-                    conn.Insert(itemPattern);
-                }
-            }
-
-            // EDYTOWANIE
-            else {
-                item.Id = editedOperation.Id;
-                conn.Update(item);
+                        if (SaveAsAssetToggle.IsOn) {
+                            OperationPattern itemPattern = new OperationPattern {
+                                Title = NameValue.Text,
+                                Cost = decimal.Parse(acceptedCostValue),
+                                CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
+                                SubCategoryId = subCategoryInt,
+                                MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
+                            };
+                            if (MoreInfoValue.Text != "")
+                                itemPattern.MoreInfo = MoreInfoValue.Text;
+                            if (Expense_RadioButton.IsChecked == true)
+                                itemPattern.isExpense = true;
+                            else
+                                itemPattern.isExpense = false;
+                            conn.Insert(itemPattern);
+                        }
+                        break;
+                    }
             }
         }
 
@@ -296,7 +327,9 @@ namespace Finanse.Views {
         }
 
         private void DateValue_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args) {
-            SetNowaOperacjaButton();
+            //SetNowaOperacjaButton();
+            if (DateValue.Date == null)
+                DateValue.Date = DateTime.Today;
         }
 
         private void DateValue_Closed(object sender, object e) {

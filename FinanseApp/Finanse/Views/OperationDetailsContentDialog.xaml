@@ -187,6 +187,7 @@
         </StackPanel>
 
         <StackPanel
+            Name="DateValuePanel"
             Orientation="Horizontal"
             Margin="0,15,0,0">
             <FontIcon

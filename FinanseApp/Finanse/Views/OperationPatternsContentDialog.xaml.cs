@@ -39,7 +39,7 @@ namespace Finanse.Views {
                     Id = item.Id,
                     isExpense = item.isExpense,
                     MoreInfo = item.MoreInfo,
-                    PayForm = item.MoreInfo,
+                    MoneyAccountId = item.MoneyAccountId
                 });
             }
         }

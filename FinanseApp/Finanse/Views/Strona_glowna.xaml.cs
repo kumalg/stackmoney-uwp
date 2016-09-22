@@ -72,18 +72,7 @@ namespace Finanse.Views {
             Settings settings = conn.Table<Settings>().ElementAt(0);
 
             Operations = new ObservableCollection<Operation>(conn.Table<Operation>().OrderByDescending(o => o.Date));
-            Operations.Insert(0, new Operation {
-                Title = "SSS",
-                Date = DateTime.Today,
-                CategoryId = 1,
-                SubCategoryId = 1,
-                Cost = (decimal)20.99,
-                isExpense = true,
-                Id = 300,
-                MoneyAccountId = 1,
-                MoreInfo = "dupa",
-                PayForm = "Visa"
-            });
+
             OperationCategories = new ObservableCollection<OperationCategory>(conn.Table<OperationCategory>().OrderBy(o => o.Name));
 
             foreach (var operation in Operations) {
@@ -120,9 +109,7 @@ namespace Finanse.Views {
         private async void DetailsButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            Operation thisOperation = (Operation)datacontext;
-
-            var ContentDialogItem = new OperationDetailsContentDialog(Operations, conn, thisOperation);
+            var ContentDialogItem = new OperationDetailsContentDialog(Operations, conn, (Operation)datacontext, "");
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -130,9 +117,7 @@ namespace Finanse.Views {
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            Operation thisOperation = (Operation)datacontext;
-
-            var ContentDialogItem = new NewOperationContentDialog(conn, thisOperation, "edit");
+            var ContentDialogItem = new NewOperationContentDialog(conn, (Operation)datacontext, "edit");
 
             var result = await ContentDialogItem.ShowAsync();
             //this datacontext is probably some object of some type T
@@ -141,7 +126,7 @@ namespace Finanse.Views {
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new Delete_ContentDialog(Operations, conn, (Operation)datacontext);
+            var ContentDialogItem = new Delete_ContentDialog(Operations, conn, (Operation)datacontext,"");
 
             var result = await ContentDialogItem.ShowAsync();
 
@@ -165,7 +150,7 @@ namespace Finanse.Views {
             if (listView.SelectedIndex != -1 && isSelectionChanged) {
                 Operation thisOperation = (Operation)listView.SelectedItem;
 
-                var ContentDialogItem = new OperationDetailsContentDialog(Operations, conn, thisOperation);
+                var ContentDialogItem = new OperationDetailsContentDialog(Operations, conn, thisOperation, "");
                 listView.SelectedIndex = -1;
                 var result = await ContentDialogItem.ShowAsync();
             }

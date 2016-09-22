@@ -10,6 +10,5 @@
     Title="Czy chcesz usunąć operację?"
     PrimaryButtonText="Tak"
     SecondaryButtonText="Anuluj"
-    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
 </ContentDialog>

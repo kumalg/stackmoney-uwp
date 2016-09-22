@@ -62,7 +62,7 @@
         </Grid.RowDefinitions>
 
         <Grid
-            Background="{StaticResource AccentDarkColorStyle}"
+            Background="{StaticResource AccentColorStyle}"
             Height="48">
 
             <Grid.ColumnDefinitions>
@@ -193,7 +193,9 @@
                                                     Height="50"
                                                     Width="50">
 
-                                                    <Ellipse
+                                                    <Rectangle
+                                                        RadiusX="5"
+                                                        RadiusY="5"
                                                         Name="Ellipse_OperationTemplate"
                                                         Fill="{x:Bind Color}" />
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Finanse.DataAccessLayer;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -19,15 +20,12 @@ using Windows.UI.Xaml.Navigation;
 namespace Finanse.Elements {
     public sealed partial class Delete_ContentDialog : ContentDialog {
 
-        ObservableCollection<Operation> Operations;
-        SQLite.Net.SQLiteConnection conn;
         Operation operation;
         string whichOption;
-        public Delete_ContentDialog(ObservableCollection<Operation> Operations, SQLite.Net.SQLiteConnection conn, Operation operation, string whichOption) {
+        public Delete_ContentDialog(Operation operation, string whichOption) {
 
             this.InitializeComponent();
-            this.Operations = Operations;
-            this.conn = conn;
+
             this.operation = operation;
             this.whichOption = whichOption;
         }
@@ -36,9 +34,9 @@ namespace Finanse.Elements {
 
             switch (whichOption) {
                 case "pattern": {
-                        Operations.Remove(operation);
+                        //Operations.Remove(operation);
 
-                        conn.Delete(new OperationPattern {
+                        Dal.DeletePattern(new OperationPattern {
                             Title = operation.Title,
                             Cost = operation.Cost,
                             CategoryId = operation.CategoryId,
@@ -52,8 +50,8 @@ namespace Finanse.Elements {
                         break;
                     }
                 default: {
-                        Operations.Remove(operation);
-                        conn.Delete(operation);
+                        //Operations.Remove(operation);
+                        Dal.DeleteOperation(operation);
                         break;
                     }
             }

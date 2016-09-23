@@ -28,7 +28,7 @@ namespace Finanse {
 
         public MainPage() {
             this.InitializeComponent();
-            AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
+            //AktualnaStrona_Frame.Navigate(typeof(Konta));
             Strona_glowna_ListBoxItem.IsChecked = true;
 
             DisplayInformation info = DisplayInformation.GetForCurrentView();

@@ -66,6 +66,9 @@
     <SolidColorBrush x:Key="GreyColorStyle" Color="#272727" />
     <SolidColorBrush x:Key="GreyTransparentColorStyle" Color="#272727" Opacity="0.8" />
     
+    <SolidColorBrush x:Key="White10%" Color="White" Opacity="0.02"/>
+    <SolidColorBrush x:Key="White20%" Color="White" Opacity="0.05"/>
+    
     <SolidColorBrush x:Key="LightGreyTransparentColorStyle" Color="#2d2d2d" Opacity="0.8"/>
     
     <SolidColorBrush x:Key="DarkGreyColorStyle" Color="#1f1f1f"/>

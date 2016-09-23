@@ -1,4 +1,5 @@
-﻿using Finanse.Elements;
+﻿using Finanse.DataAccessLayer;
+using Finanse.Elements;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,15 +37,13 @@ namespace Finanse.Views {
             path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
             conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
 
-            foreach (var message in conn.Table<OperationCategory>().OrderBy(category => category.Name)) {
-                operationCategoryItem = message;
+            foreach (var message in Dal.GetAllCategories()) {
 
-                foreach (var submessage in conn.Table<OperationSubCategory>().OrderByDescending(subCategory => subCategory.Name)) {
-                    if (submessage.BossCategoryId == message.Id) {
-                        operationCategoryItem.addSubCategory(submessage);
-                    }
+                foreach (var submessage in Dal.GetOperationSubCategoryByBossId(message.Id)) {
+                        message.addSubCategory(submessage);
                 }
-                OperationCategories.Add(operationCategoryItem);
+
+                OperationCategories.Add(message);
             }
         }
 

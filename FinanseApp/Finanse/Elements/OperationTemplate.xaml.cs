@@ -16,16 +16,13 @@ using Windows.UI.Xaml.Navigation;
 using Finanse.Views;
 using System.Reflection;
 using System.Globalization;
+using Finanse.DataAccessLayer;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace Finanse.Elements {
 
     public sealed partial class OperationTemplate : UserControl {
-
-        private string path;
-        private SQLite.Net.SQLiteConnection conn;
-        private Settings settings;
 
         private Elements.Operation Operation {
 
@@ -37,16 +34,8 @@ namespace Finanse.Elements {
         public OperationTemplate() {
 
             this.InitializeComponent();
-
-            path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
-            conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
-
-            settings = conn.Table<Settings>().ElementAt(0);
-
             this.DataContextChanged += (s, e) => Bindings.Update();
-
         }
-        
 
         private SolidColorBrush GetSolidColorBrush(string hex) {
             hex = hex.Replace("#", string.Empty);
@@ -60,33 +49,32 @@ namespace Finanse.Elements {
 
         public void Operation_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
 
+            Settings settings = Dal.GetSettings();
+
             /* WYGLĄD KOŁA Z KATEGORIĄ */
             string whichColor = ((SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"]).Color.ToString();
             string whichIcon = ((TextBlock)Application.Current.Resources["DefaultEllipseIcon"]).Text;
+            Icon_OperationTemplate.Opacity = 0.2;
 
             /* BO PIERDOLI ŻE NULL WCHODZI */
             if (Operation == null)
                 return;
 
+            OperationCategory cat = Dal.GetOperationCategoryById(Operation.CategoryId);
+            OperationSubCategory subCat = Dal.GetOperationSubCategoryById(Operation.SubCategoryId);
+
             /* WCHODZI IKONKA KATEGORII */
-            Icon_OperationTemplate.Opacity = 0.2;
-            foreach (OperationCategory item in conn.Table<OperationCategory>()) {
-                if (item.Id == Operation.CategoryId) {
-                    Icon_OperationTemplate.Opacity = 1;
-                    whichColor = item.Color;
-                    whichIcon = item.Icon;
-                    break;
-                }
+            if (cat != null) {
+                Icon_OperationTemplate.Opacity = 1;
+                whichColor = cat.Color;
+                whichIcon = cat.Icon;
             }
 
             /* PRÓBUJE WEJŚC IKONKA SUBKATEGORII */
-            foreach (OperationSubCategory item in conn.Table<OperationSubCategory>()) {
-                if (item.OperationCategoryId == Operation.SubCategoryId) {
-                    Icon_OperationTemplate.Opacity = 1;
-                    whichColor = item.Color;
-                    whichIcon = item.Icon;
-                    break;
-                }
+            if (subCat != null) {
+                Icon_OperationTemplate.Opacity = 1;
+                whichColor = subCat.Color;
+                whichIcon = subCat.Icon;
             }
 
             /* GOTOWA IKONKA DO ZAPISANIA */
@@ -106,27 +94,12 @@ namespace Finanse.Elements {
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"];
             }
 
-            /* WYGLĄD KATEGORII */
+            /* WYGLĄD NAZWY KATEGORII */
             Category_OperationTemplate.Text = "Nie odnaleziono wskazanej kategorii";
-            foreach (OperationCategory item in conn.Table<OperationCategory>()) {
-
-                if (item.Id == Operation.CategoryId) {
-
-                    Category_OperationTemplate.Text = item.Name;
-
-                    if (Operation.SubCategoryId == -1)
-                        break;
-
-                    foreach (OperationSubCategory subItem in conn.Table<OperationSubCategory>()) {
-                        if (subItem.OperationCategoryId == Operation.SubCategoryId) {
-                            SubCategory_OperationTemplate.Text = "  /  " + subItem.Name;
-                            break;
-                        }
-                    }
-
-                    break;
-                }
-            }
+            if(cat != null)
+                Category_OperationTemplate.Text = cat.Name;
+            if (subCat != null)
+                SubCategory_OperationTemplate.Text = "  /  " + subCat.Name;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Finanse.Elements;
+﻿using Finanse.DataAccessLayer;
+using Finanse.Elements;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,17 +25,11 @@ namespace Finanse.Views {
 
         public ObservableCollection<Operation> OperationPatterns = new ObservableCollection<Operation>();
 
-        string path;
-        SQLite.Net.SQLiteConnection conn;
-
         public Szablony() {
 
             this.InitializeComponent();
 
-            path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
-            conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
-
-            foreach (OperationPattern item in conn.Table<OperationPattern>()) {
+            foreach (OperationPattern item in Dal.GetAllPatterns()) {
                 OperationPatterns.Add(new Operation {
                     Title = item.Title,
                     Cost = item.Cost,
@@ -63,7 +58,7 @@ namespace Finanse.Views {
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new Delete_ContentDialog(OperationPatterns, conn, (Operation)datacontext,"pattern");
+            var ContentDialogItem = new Delete_ContentDialog((Operation)datacontext,"pattern");
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -71,7 +66,7 @@ namespace Finanse.Views {
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new NewOperationContentDialog(conn, (Operation)datacontext, "editpattern");
+            var ContentDialogItem = new NewOperationContentDialog((Operation)datacontext, "editpattern");
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -79,7 +74,7 @@ namespace Finanse.Views {
         private async void DetailsButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new OperationDetailsContentDialog(OperationPatterns, conn, (Operation)datacontext, "pattern");
+            var ContentDialogItem = new OperationDetailsContentDialog((Operation)datacontext, "pattern");
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -90,7 +85,7 @@ namespace Finanse.Views {
             if (listView.SelectedIndex != -1) {
                 Operation thisOperation = (Operation)listView.SelectedItem;
 
-                var ContentDialogItem = new OperationDetailsContentDialog(OperationPatterns, conn, thisOperation, "pattern");
+                var ContentDialogItem = new OperationDetailsContentDialog(thisOperation, "pattern");
                 listView.SelectedIndex = -1;
                 var result = await ContentDialogItem.ShowAsync();
             }

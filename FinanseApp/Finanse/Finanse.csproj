@@ -98,6 +98,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataAccessLayer\Dal.cs" />
+    <Compile Include="DataAccessLayer\DebugTraceListener.cs" />
     <Compile Include="Elements\DeleteCategory_ContentDialog.xaml.cs">
       <DependentUpon>DeleteCategory_ContentDialog.xaml</DependentUpon>
     </Compile>

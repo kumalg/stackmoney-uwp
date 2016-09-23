@@ -16,6 +16,7 @@ using Finanse.Elements;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using Finanse.DataAccessLayer;
 
 // The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -25,7 +26,8 @@ namespace Finanse.Views {
 
         Operation editedOperation;
 
-        SQLite.Net.SQLiteConnection conn;
+        //string path;
+        //SQLite.Net.SQLiteConnection conn;
 
         Settings settings;
 
@@ -35,17 +37,16 @@ namespace Finanse.Views {
 
         bool isUnfocused = true;
 
-        public NewOperationContentDialog(SQLite.Net.SQLiteConnection conn, Operation editedOperation, string whichOptions) {
+        public NewOperationContentDialog(Operation editedOperation, string whichOptions) {
 
             this.InitializeComponent();
 
-            IsPrimaryButtonEnabled = false;
-
-            this.conn = conn;
             this.editedOperation = editedOperation;
             this.whichOptions = whichOptions;
 
-            settings = conn.Table<Settings>().ElementAt(0);
+            IsPrimaryButtonEnabled = false;
+
+            settings = Dal.GetSettings();
 
             DateValue.MaxDate = DateTime.Today;
 
@@ -53,7 +54,7 @@ namespace Finanse.Views {
 
             SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
 
-            foreach (MoneyAccount account in conn.Table<MoneyAccount>()) {
+            foreach (MoneyAccount account in Dal.GetAllMoneyAccounts()) {
 
                 PayFormValue.Items.Add(new ComboBoxItem {
                     Content = account.Name,
@@ -127,27 +128,9 @@ namespace Finanse.Views {
 
             NameValue.Text = editedOperation.Title;
 
-            foreach (var item in CategoryValue.Items.OfType<ComboBoxItem>()) {
-                if ((int)item.Tag == editedOperation.CategoryId) {
-                    CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(i => (int)i.Tag == editedOperation.CategoryId);
-                    break;
-                }
-            }
-
-            foreach (var item in conn.Table<OperationSubCategory>()) {
-                if (item.OperationCategoryId == editedOperation.SubCategoryId) {
-                    OperationSubCategory subCatItem = conn.Table<OperationSubCategory>().Single(i => i.OperationCategoryId == editedOperation.SubCategoryId);
-                    SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
-                    break;
-                }
-            }
-
-            foreach (var item in conn.Table<MoneyAccount>()) {
-                if (item.Id == editedOperation.MoneyAccountId) {
-                    PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().Single(i => (int)i.Tag == editedOperation.MoneyAccountId);
-                    break;
-                }
-            }
+            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == editedOperation.CategoryId);
+            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == editedOperation.SubCategoryId);
+            PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == editedOperation.MoneyAccountId);
 
             CostValue.Text = editedOperation.Cost.ToString("C", new CultureInfo(settings.CultureInfoName));
             acceptedCostValue = editedOperation.Cost.ToString();
@@ -164,6 +147,7 @@ namespace Finanse.Views {
                 subCategoryInt = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
 
             Operation item = new Operation {
+                Id = 0,
                 Title = NameValue.Text,
                 Cost = decimal.Parse(acceptedCostValue),
                 CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
@@ -184,7 +168,7 @@ namespace Finanse.Views {
             switch (whichOptions) {
                 case "edit": {
                         item.Id = editedOperation.Id;
-                        conn.Update(item);
+                        Dal.SaveOperation(item);
                         break;
                     }
                 case "editpattern": {
@@ -202,14 +186,15 @@ namespace Finanse.Views {
                             itemPattern.isExpense = true;
                         else
                             itemPattern.isExpense = false;
-                        conn.Update(itemPattern);
+                        Dal.SaveOperationPattern(itemPattern);
                         break;
                     }
                 default: {
-                        conn.Insert(item);
+                        Dal.SaveOperation(item);
 
                         if (SaveAsAssetToggle.IsOn) {
                             OperationPattern itemPattern = new OperationPattern {
+                                Id = 0,
                                 Title = NameValue.Text,
                                 Cost = decimal.Parse(acceptedCostValue),
                                 CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
@@ -222,7 +207,7 @@ namespace Finanse.Views {
                                 itemPattern.isExpense = true;
                             else
                                 itemPattern.isExpense = false;
-                            conn.Insert(itemPattern);
+                            Dal.SaveOperationPattern(itemPattern);
                         }
                         break;
                     }
@@ -253,7 +238,7 @@ namespace Finanse.Views {
 
                 if (idOfSelectedSubCategory != -1) {
                     if (SubCategoryValue.Items.OfType<OperationSubCategory>().Any(i => i.OperationCategoryId == idOfSelectedSubCategory)) {
-                        OperationSubCategory subCatItem = conn.Table<OperationSubCategory>().Single(i => i.OperationCategoryId == idOfSelectedSubCategory);
+                        OperationSubCategory subCatItem = Dal.GetOperationSubCategoryById(idOfSelectedSubCategory);
                         SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
                     }
                 }
@@ -269,7 +254,7 @@ namespace Finanse.Views {
 
             CategoryValue.Items.Clear();
 
-            foreach (OperationCategory catItem in conn.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name ASC")) {
+            foreach (OperationCategory catItem in Dal.GetAllCategories()) {
 
                 if ((catItem.VisibleInExpenses && inExpenses) 
                     || (catItem.VisibleInIncomes && inIncomes)) {
@@ -291,23 +276,20 @@ namespace Finanse.Views {
 
             if (CategoryValue.SelectedIndex != -1) {
 
-                foreach (OperationSubCategory subCatItem in conn.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory ORDER BY Name ASC")) {
+                foreach (OperationSubCategory subCatItem in Dal.GetOperationSubCategoryByBossId((int)((ComboBoxItem)CategoryValue.SelectedItem).Tag)) {
 
-                    if (subCatItem.BossCategoryId == (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag) {
+                    if ((subCatItem.VisibleInExpenses && inExpenses)
+                        || (subCatItem.VisibleInIncomes && inIncomes)) {
 
-                        if ((subCatItem.VisibleInExpenses && inExpenses)
-                            || (subCatItem.VisibleInIncomes && inIncomes)) {
-
-                            if (SubCategoryValue.Items.Count == 0)
-                                SubCategoryValue.Items.Add(new ComboBoxItem {
-                                    Content = "Brak",
-                                });
+                        if (SubCategoryValue.Items.Count == 0)
                             SubCategoryValue.Items.Add(new ComboBoxItem {
-                                Content = subCatItem.Name,
-                                Tag = subCatItem.OperationCategoryId
+                                Content = "Brak",
+                                Tag = -1,
                             });
-
-                        }
+                        SubCategoryValue.Items.Add(new ComboBoxItem {
+                            Content = subCatItem.Name,
+                            Tag = subCatItem.OperationCategoryId
+                        });
 
                     }
 
@@ -327,7 +309,6 @@ namespace Finanse.Views {
         }
 
         private void DateValue_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args) {
-            //SetNowaOperacjaButton();
             if (DateValue.Date == null)
                 DateValue.Date = DateTime.Today;
         }
@@ -350,7 +331,7 @@ namespace Finanse.Views {
             isUnfocused = false;
 
             if (CostValue.Text != "") {
-                CostValue.Text = acceptedCostValue;//CostValue.Text.Replace(" zł", "");
+                CostValue.Text = acceptedCostValue;
                 CostValue.SelectionStart = CostValue.Text.Length;
             }
         }
@@ -403,7 +384,7 @@ namespace Finanse.Views {
         private async void UsePatternButton_Click(object sender, RoutedEventArgs e) {
             Hide();
 
-            var ContentDialogItem = new OperationPatternsContentDialog(conn);
+            var ContentDialogItem = new OperationPatternsContentDialog();
 
             var result = await ContentDialogItem.ShowAsync();
         }

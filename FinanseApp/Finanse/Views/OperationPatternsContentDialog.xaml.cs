@@ -1,4 +1,5 @@
-﻿using Finanse.Elements;
+﻿using Finanse.DataAccessLayer;
+using Finanse.Elements;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,14 +24,12 @@ namespace Finanse.Views {
     public sealed partial class OperationPatternsContentDialog : ContentDialog {
 
         public List<Operation> OperationPatterns = new List<Operation>();
-        SQLite.Net.SQLiteConnection conn;
 
-        public OperationPatternsContentDialog(SQLite.Net.SQLiteConnection conn) {
+        public OperationPatternsContentDialog() {
 
             this.InitializeComponent();
-            this.conn = conn;
 
-            foreach (OperationPattern item in conn.Table<OperationPattern>()) {
+            foreach (OperationPattern item in Dal.GetAllPatterns()) {
                 OperationPatterns.Add(new Operation {
                     Title = item.Title,
                     Cost = item.Cost,
@@ -49,7 +48,7 @@ namespace Finanse.Views {
 
             Operation thisOperation = (Operation)OperationPatternsListView.SelectedItem;
 
-            var ContentDialogItem = new NewOperationContentDialog(conn, thisOperation, "pattern");
+            var ContentDialogItem = new NewOperationContentDialog(thisOperation, "pattern");
 
             var result = await ContentDialogItem.ShowAsync();
         }

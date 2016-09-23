@@ -16,6 +16,7 @@ using Finanse.Elements;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using Finanse.DataAccessLayer;
 
 // The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -23,24 +24,17 @@ namespace Finanse.Views {
 
     public sealed partial class OperationDetailsContentDialog : ContentDialog {
 
-        public ObservableCollection<Operation> Operations;
-
-        SQLite.Net.SQLiteConnection conn;
-
         Operation editedOperation;
-
         string whichOption;
 
-        public OperationDetailsContentDialog(ObservableCollection<Operation> Operations, SQLite.Net.SQLiteConnection conn, Operation editedOperation, string whichOption) {
+        public OperationDetailsContentDialog(Operation editedOperation, string whichOption) {
 
             this.InitializeComponent();
 
-            this.Operations = Operations;
-            this.conn = conn;
             this.editedOperation = editedOperation;
             this.whichOption = whichOption;
 
-            Settings settings = conn.Table<Settings>().ElementAt(0);
+            Settings settings = Dal.GetSettings();
 
             if (whichOption == "pattern")
                 Title = "Szczegóły szablonu";
@@ -64,34 +58,29 @@ namespace Finanse.Views {
                 DateValuePanel.Visibility = Visibility.Visible;
             }
 
+            OperationCategory cat = Dal.GetOperationCategoryById(editedOperation.CategoryId);
+            OperationSubCategory subCat = Dal.GetOperationSubCategoryById(editedOperation.SubCategoryId);
+            MoneyAccount account = Dal.GetMoneyAccountById(editedOperation.MoneyAccountId);
+
             /* KATEGORIA */
             CategoryValuePanel.Visibility = Visibility.Collapsed;
-            foreach (OperationCategory item in conn.Table<OperationCategory>()) {
-                if (item.Id == editedOperation.CategoryId) {
-                    CategoryValue.Text = item.Name;
-                    CategoryValuePanel.Visibility = Visibility.Visible;
-                    break;
-                }
+            if (cat != null) {
+                CategoryValue.Text = cat.Name;
+                CategoryValuePanel.Visibility = Visibility.Visible;
             }
 
             /* PODKATEGORIA */
             SubCategoryValuePanel.Visibility = Visibility.Collapsed;
-            foreach (OperationSubCategory item in conn.Table<OperationSubCategory>()) {
-                if (item.OperationCategoryId == editedOperation.SubCategoryId) {
-                    SubCategoryValue.Text = item.Name;
-                    SubCategoryValuePanel.Visibility = Visibility.Visible;
-                    break;
-                }
+            if (subCat != null) {
+                SubCategoryValue.Text = subCat.Name;
+                SubCategoryValuePanel.Visibility = Visibility.Visible;
             }
 
             /* FORMA PŁATNOŚCI */
             PayFormPanel.Visibility = Visibility.Collapsed;
-            foreach (MoneyAccount item in conn.Table<MoneyAccount>()) {
-                if (item.Id == editedOperation.MoneyAccountId) {
-                    PayForm.Text = item.Name;
-                    PayFormPanel.Visibility = Visibility.Visible;
-                    break;
-                }
+            if (account != null) {
+                PayForm.Text = account.Name;
+                PayFormPanel.Visibility = Visibility.Visible;
             }
 
             /* WIĘCEJ INFORMACJI */
@@ -106,7 +95,7 @@ namespace Finanse.Views {
 
             Hide();
 
-            var ContentDialogItem = new Delete_ContentDialog(Operations, conn, editedOperation, whichOption);
+            var ContentDialogItem = new Delete_ContentDialog(editedOperation, whichOption);
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -128,7 +117,7 @@ namespace Finanse.Views {
                     }
             }
 
-            var ContentDialogItem = new NewOperationContentDialog(conn, editedOperation, whichOptionLocal);
+            var ContentDialogItem = new NewOperationContentDialog(editedOperation, whichOptionLocal);
 
             var result = await ContentDialogItem.ShowAsync();
         }

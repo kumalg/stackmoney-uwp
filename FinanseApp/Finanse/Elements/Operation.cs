@@ -1,4 +1,5 @@
-﻿using SQLite.Net.Attributes;
+﻿using Finanse.DataAccessLayer;
+using SQLite.Net.Attributes;
 
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Finanse.Elements {
 
         public DateTimeOffset? Date { get; set; } 
 
-        public static ObservableCollection<GroupInfoList> GetOperationsGrouped(SQLite.Net.SQLiteConnection conn, ObservableCollection<Operation> Operations) {
+        public static ObservableCollection<GroupInfoList> GetOperationsGrouped() {
 
             ObservableCollection<GroupInfoList> groups = new ObservableCollection<GroupInfoList>();
 
@@ -26,9 +27,9 @@ namespace Finanse.Elements {
             decimal sumCost = 0;
             DateTimeOffset? dt;
 
-            Settings settings = conn.Table<Settings>().ElementAt(0);
+            Settings settings = Dal.GetSettings();
 
-            var query = from item in Operations
+            var query = from item in Dal.GetAllPersons()
                         group item by String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)item.Date).LocalDateTime) into g
                         orderby g.Key descending
                         select new {
@@ -63,7 +64,7 @@ namespace Finanse.Elements {
         }
 
 
-        public static ObservableCollection<CategoryGroupInfoList> GetOperationsByCategoryGrouped(SQLite.Net.SQLiteConnection conn, ObservableCollection<Operation> Operations, ObservableCollection<OperationCategory> OperationCategories) {
+        public static ObservableCollection<CategoryGroupInfoList> GetOperationsByCategoryGrouped() {
 
             ObservableCollection<CategoryGroupInfoList> groups = new ObservableCollection<CategoryGroupInfoList>();
 
@@ -74,9 +75,9 @@ namespace Finanse.Elements {
             CategoryGroupInfoList info;
             decimal sumCost = 0;
 
-            Settings settings = conn.Table<Settings>().ElementAt(0);
+            Settings settings = Dal.GetSettings();
 
-            var query = from item in Operations
+            var query = from item in Dal.GetAllPersons()
                         group item by item.CategoryId into g
                         orderby g.Key descending
                         select new {
@@ -91,7 +92,7 @@ namespace Finanse.Elements {
                 categoryIcon = ((TextBlock)Application.Current.Resources["DefaultEllipseIcon"]).Text;
                 categoryColor = ((SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"]).Color.ToString();
 
-                foreach (OperationCategory item in OperationCategories) {
+                foreach (OperationCategory item in Dal.GetAllCategories()) {
                     if (item.Id == g.GroupName) {
                         categoryName = item.Name;
                         categoryIcon = item.Icon;

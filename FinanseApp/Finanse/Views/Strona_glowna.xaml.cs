@@ -21,6 +21,7 @@ using SQLite.Net.Platform.WinRT;
 using System.Globalization;
 using Windows.Graphics.Display;
 using Windows.Foundation.Metadata;
+using Finanse.DataAccessLayer;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -29,13 +30,18 @@ namespace Finanse.Views {
 
     public sealed partial class Strona_glowna : Page {
 
-        public ObservableCollection<GroupInfoList> Opy;
+        //public ObservableCollection<GroupInfoList> Opy;
 
-        string path;
-        SQLite.Net.SQLiteConnection conn;
+        //string path;
+        //SQLite.Net.SQLiteConnection conn;
 
-        public ObservableCollection<Operation> Operations;
-        ObservableCollection<OperationCategory> OperationCategories;
+        //public ObservableCollection<Operation> Operations;
+        //ObservableCollection<OperationCategory> OperationCategories;
+
+        public static ObservableCollection<GroupInfoList> _source;
+
+        public ObservableCollection<GroupInfoList> Operations;
+        public ObservableCollection<CategoryGroupInfoList> OperationsByCategory;
 
         bool isSelectionChanged = false;
 
@@ -45,57 +51,34 @@ namespace Finanse.Views {
 
             this.InitializeComponent();
 
-            path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
-            conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
+            //path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
+            //conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
 
-            conn.CreateTable<MoneyAccount>();
-            conn.CreateTable<Operation>();
-            conn.CreateTable<OperationPattern>();
-            conn.CreateTable<OperationCategory>();
-            conn.CreateTable<OperationSubCategory>();
-            conn.CreateTable<Settings>();
+            Dal.CreateDB();
+            Settings settings = Dal.GetSettings();
 
-            if(!conn.Table<Settings>().Any())
-                conn.Insert(new Settings {
-                    CultureInfoName = "en-US"
-                });
-
-            if (!conn.Table<MoneyAccount>().Any()) {
-                conn.Insert(new MoneyAccount {
-                    Name = "Gotówka"
-                });
-                conn.Insert(new MoneyAccount {
-                    Name = "Karta VISA"
-                });
-            }
-
-            Settings settings = conn.Table<Settings>().ElementAt(0);
-
-            Operations = new ObservableCollection<Operation>(conn.Table<Operation>().OrderByDescending(o => o.Date));
-
-            OperationCategories = new ObservableCollection<OperationCategory>(conn.Table<OperationCategory>().OrderBy(o => o.Name));
-
-            foreach (var operation in Operations) {
+            foreach (var operation in Dal.GetAllPersons()) {
                 if (operation.isExpense)
                     actualMoney -= operation.Cost;
                 else
                     actualMoney += operation.Cost;
             }
             ActualMoneyBar.Text = actualMoney.ToString("C", new CultureInfo(settings.CultureInfoName));
-            /*
-            var groups = from c in Operations
-                         group c by DateToString(c.Date);
-            //Set the grouped data to CollectionViewSource
-            this.cvs.Source = groups;*/
-            Opy = Operation.GetOperationsGrouped(conn, Operations);
-            ContactsCVS.Source = Opy;
-            //ContactsCVS.Source = Operation.GetOperationsGrouped(conn, Operations);
-            CategorizedCVS.Source = Operation.GetOperationsByCategoryGrouped(conn, Operations, OperationCategories);
+
+
+            Operations = Operation.GetOperationsGrouped();
+            OperationsByCategory = Operation.GetOperationsByCategoryGrouped();
+
+            _source = Operation.GetOperationsGrouped();
+
+            ContactsCVS.Source = _source;
+            CategorizedCVS.Source = Operation.GetOperationsByCategoryGrouped();
+
         }
 
         private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
 
-            var ContentDialogItem = new NewOperationContentDialog(conn, null, "");
+            var ContentDialogItem = new NewOperationContentDialog(null, "");
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -109,7 +92,7 @@ namespace Finanse.Views {
         private async void DetailsButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new OperationDetailsContentDialog(Operations, conn, (Operation)datacontext, "");
+            var ContentDialogItem = new OperationDetailsContentDialog((Operation)datacontext, "");
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -117,7 +100,7 @@ namespace Finanse.Views {
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new NewOperationContentDialog(conn, (Operation)datacontext, "edit");
+            var ContentDialogItem = new NewOperationContentDialog((Operation)datacontext, "edit");
 
             var result = await ContentDialogItem.ShowAsync();
             //this datacontext is probably some object of some type T
@@ -126,7 +109,7 @@ namespace Finanse.Views {
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new Delete_ContentDialog(Operations, conn, (Operation)datacontext,"");
+            var ContentDialogItem = new Delete_ContentDialog((Operation)datacontext,"");
 
             var result = await ContentDialogItem.ShowAsync();
 
@@ -150,7 +133,7 @@ namespace Finanse.Views {
             if (listView.SelectedIndex != -1 && isSelectionChanged) {
                 Operation thisOperation = (Operation)listView.SelectedItem;
 
-                var ContentDialogItem = new OperationDetailsContentDialog(Operations, conn, thisOperation, "");
+                var ContentDialogItem = new OperationDetailsContentDialog(thisOperation, "");
                 listView.SelectedIndex = -1;
                 var result = await ContentDialogItem.ShowAsync();
             }
@@ -184,22 +167,22 @@ namespace Finanse.Views {
         }
 
         private void PreviousMonth_Click(object sender, RoutedEventArgs e) {
-            Operations.Insert(0, new Operation {
-                Title = "SSS",
-                Date = DateTime.Today,
+
+            Operation operation = new Operation {
+                Title = "Test",
                 CategoryId = 1,
                 SubCategoryId = 1,
                 Cost = (decimal)20.99,
+                Date = DateTime.Today,
+                Id = 0,
                 isExpense = true,
-                Id = 300,
-                MoneyAccountId = 1,
-                MoreInfo = "dupa",
-                PayForm = "Visa"
-            });
+                MoneyAccountId = 2,
+                MoreInfo = "Yolo"
+            };
 
-            Opy = Operation.GetOperationsGrouped(conn, Operations);
+            GroupInfoList group = _source.Single(i => i.Key.ToString() == String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)operation.Date).LocalDateTime));
 
-            ContactsCVS = new CollectionViewSource() { IsSourceGrouped = true, Source = Opy };
+            group.Add(operation);
         }
     }
 }

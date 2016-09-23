@@ -285,8 +285,7 @@
                                         </Style>
                                     </GroupStyle.HeaderContainerStyle>
                                     <GroupStyle.HeaderTemplate>
-                                        <DataTemplate
-                                            x:DataType="data:GroupInfoList">
+                                        <DataTemplate >
 
                                             <Grid
                                                 CornerRadius="5,5,0,0"
@@ -309,7 +308,7 @@
                                                     Orientation="Horizontal"
                                                     Margin="10,5,0,5">
                                                     <TextBlock
-                                                        Text="{x:Bind dayNum}"
+                                                        Text="{Binding dayNum}"
                                                         FontSize="30"
                                                         FontWeight="SemiLight"
                                                         VerticalAlignment="Center" />
@@ -317,10 +316,10 @@
                                                         VerticalAlignment="Center"
                                                         Margin="10,0,0,0">
                                                         <TextBlock
-                                                            Text="{x:Bind day}"
+                                                            Text="{Binding day}"
                                                             FontSize="12" />
                                                         <TextBlock
-                                                            Text="{x:Bind month}"
+                                                            Text="{Binding month}"
                                                             FontSize="12"
                                                             Opacity="0.4" />
                                                     </StackPanel>
@@ -331,7 +330,7 @@
                                                     Grid.Column="2"
                                                     Name="SumText"
                                                     HorizontalAlignment="Right"
-                                                    Text="{x:Bind cost}"
+                                                    Text="{Binding cost}"
                                                     Foreground="#7FFFFFFF"
                                                     FontSize="16"
                                                     Margin="30,0,10,5" />
@@ -604,15 +603,13 @@
             <AppBarButton
                 Icon="Back"
                 Label="Poprzedni miesiąc"
-                Foreground="White"
-                Click="PreviousMonth_Click">
+                Foreground="White">
             </AppBarButton>
 
             <AppBarButton
                 Icon="Forward"
                 Label="Nastepny miesiąc"
-                Foreground="White"
-                Click="NowaOperacja_Click">
+                Foreground="White">
             </AppBarButton>
 
             <AppBarSeparator />

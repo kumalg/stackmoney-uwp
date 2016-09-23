@@ -18,7 +18,7 @@ namespace Finanse.Elements {
     public class Operation : OperationPattern {
 
         public DateTimeOffset? Date { get; set; } 
-
+        /*
         public static ObservableCollection<GroupInfoList> GetOperationsGrouped() {
 
             ObservableCollection<GroupInfoList> groups = new ObservableCollection<GroupInfoList>();
@@ -62,7 +62,7 @@ namespace Finanse.Elements {
 
             return groups;
         }
-
+        */
 
         public static ObservableCollection<CategoryGroupInfoList> GetOperationsByCategoryGrouped() {
 

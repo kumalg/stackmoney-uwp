@@ -28,6 +28,7 @@ namespace Finanse.Views {
 
         //string path;
         //SQLite.Net.SQLiteConnection conn;
+        private readonly ObservableCollection<GroupInfoList<Operation>> _source;
 
         Settings settings;
 
@@ -37,12 +38,13 @@ namespace Finanse.Views {
 
         bool isUnfocused = true;
 
-        public NewOperationContentDialog(Operation editedOperation, string whichOptions) {
+        public NewOperationContentDialog(ObservableCollection<GroupInfoList<Operation>> _source, Operation editedOperation, string whichOptions) {
 
             this.InitializeComponent();
 
             this.editedOperation = editedOperation;
             this.whichOptions = whichOptions;
+            this._source = _source;
 
             IsPrimaryButtonEnabled = false;
 
@@ -191,6 +193,37 @@ namespace Finanse.Views {
                     }
                 default: {
                         Dal.SaveOperation(item);
+
+                        GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key.ToString() == String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)item.Date).LocalDateTime));
+                        if (group == null) {
+
+                            GroupInfoList<Operation> newGroup = new GroupInfoList<Operation> {
+                                Key = String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)item.Date).LocalDateTime),
+                                dayNum = String.Format("{0:dd}", item.Date),
+                                day = String.Format("{0:dddd}", item.Date),
+                                month = String.Format("{0:MMMM yyyy}", item.Date),
+                            };
+
+                            bool check = true;
+                            int i = 0;
+                            newGroup.Insert(0, item);
+                            while (check) {
+                                if (Convert.ToDateTime(_source[i].Key) > Convert.ToDateTime(newGroup.Key))
+                                    i++;
+                                else
+                                    check = false;
+                            }
+                            _source.Insert(i, newGroup);
+                        }
+                        else {
+                            if (item.isExpense)
+                                group.decimalCost -= item.Cost;
+                            else
+                                group.decimalCost += item.Cost;
+
+                            group.cost = group.decimalCost.ToString("C", new CultureInfo(Dal.GetSettings().CultureInfoName));
+                            group.Insert(0, item);
+                        }
 
                         if (SaveAsAssetToggle.IsOn) {
                             OperationPattern itemPattern = new OperationPattern {

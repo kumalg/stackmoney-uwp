@@ -30,18 +30,8 @@ namespace Finanse.Views {
 
     public sealed partial class Strona_glowna : Page {
 
-        //public ObservableCollection<GroupInfoList> Opy;
-
-        //string path;
-        //SQLite.Net.SQLiteConnection conn;
-
-        //public ObservableCollection<Operation> Operations;
-        //ObservableCollection<OperationCategory> OperationCategories;
-
-        public static ObservableCollection<GroupInfoList> _source;
-
-        public ObservableCollection<GroupInfoList> Operations;
-        public ObservableCollection<CategoryGroupInfoList> OperationsByCategory;
+        private readonly ObservableCollection<GroupInfoList<Operation>> _source;
+        Settings settings = Dal.GetSettings();
 
         bool isSelectionChanged = false;
 
@@ -51,34 +41,23 @@ namespace Finanse.Views {
 
             this.InitializeComponent();
 
-            //path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
-            //conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
-
             Dal.CreateDB();
-            Settings settings = Dal.GetSettings();
 
-            foreach (var operation in Dal.GetAllPersons()) {
-                if (operation.isExpense)
-                    actualMoney -= operation.Cost;
-                else
-                    actualMoney += operation.Cost;
+            _source = (new StoreData()).GetGroupsByDay();
+            ContactsCVS.Source = _source;
+
+            foreach (var group in _source) {
+                actualMoney += group.decimalCost;
             }
             ActualMoneyBar.Text = actualMoney.ToString("C", new CultureInfo(settings.CultureInfoName));
 
-
-            Operations = Operation.GetOperationsGrouped();
-            OperationsByCategory = Operation.GetOperationsByCategoryGrouped();
-
-            _source = Operation.GetOperationsGrouped();
-
-            ContactsCVS.Source = _source;
             CategorizedCVS.Source = Operation.GetOperationsByCategoryGrouped();
 
         }
 
         private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
 
-            var ContentDialogItem = new NewOperationContentDialog(null, "");
+            var ContentDialogItem = new NewOperationContentDialog(_source, null, "");
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -100,7 +79,7 @@ namespace Finanse.Views {
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new NewOperationContentDialog((Operation)datacontext, "edit");
+            var ContentDialogItem = new NewOperationContentDialog(_source, (Operation)datacontext, "edit");
 
             var result = await ContentDialogItem.ShowAsync();
             //this datacontext is probably some object of some type T
@@ -109,7 +88,7 @@ namespace Finanse.Views {
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new Delete_ContentDialog((Operation)datacontext,"");
+            var ContentDialogItem = new Delete_ContentDialog(_source, (Operation)datacontext,"");
 
             var result = await ContentDialogItem.ShowAsync();
 
@@ -164,25 +143,6 @@ namespace Finanse.Views {
                     FakeHamburgerButton.Width = 48;
                 }
             }
-        }
-
-        private void PreviousMonth_Click(object sender, RoutedEventArgs e) {
-
-            Operation operation = new Operation {
-                Title = "Test",
-                CategoryId = 1,
-                SubCategoryId = 1,
-                Cost = (decimal)20.99,
-                Date = DateTime.Today,
-                Id = 0,
-                isExpense = true,
-                MoneyAccountId = 2,
-                MoreInfo = "Yolo"
-            };
-
-            GroupInfoList group = _source.Single(i => i.Key.ToString() == String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)operation.Date).LocalDateTime));
-
-            group.Add(operation);
         }
     }
 }

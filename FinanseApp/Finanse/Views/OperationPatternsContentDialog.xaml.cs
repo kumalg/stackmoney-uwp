@@ -48,7 +48,7 @@ namespace Finanse.Views {
 
             Operation thisOperation = (Operation)OperationPatternsListView.SelectedItem;
 
-            var ContentDialogItem = new NewOperationContentDialog(thisOperation, "pattern");
+            var ContentDialogItem = new NewOperationContentDialog(null, thisOperation, "pattern");
 
             var result = await ContentDialogItem.ShowAsync();
         }

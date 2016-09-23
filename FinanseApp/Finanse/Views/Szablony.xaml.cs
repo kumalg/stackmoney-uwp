@@ -58,7 +58,7 @@ namespace Finanse.Views {
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new Delete_ContentDialog((Operation)datacontext,"pattern");
+            var ContentDialogItem = new Delete_ContentDialog(null, (Operation)datacontext,"pattern");
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -66,7 +66,7 @@ namespace Finanse.Views {
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new NewOperationContentDialog((Operation)datacontext, "editpattern");
+            var ContentDialogItem = new NewOperationContentDialog(null, (Operation)datacontext, "editpattern");
 
             var result = await ContentDialogItem.ShowAsync();
         }

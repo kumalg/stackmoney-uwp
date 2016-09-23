@@ -95,7 +95,7 @@ namespace Finanse.Views {
 
             Hide();
 
-            var ContentDialogItem = new Delete_ContentDialog(editedOperation, whichOption);
+            var ContentDialogItem = new Delete_ContentDialog(null, editedOperation, whichOption);
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -117,7 +117,7 @@ namespace Finanse.Views {
                     }
             }
 
-            var ContentDialogItem = new NewOperationContentDialog(editedOperation, whichOptionLocal);
+            var ContentDialogItem = new NewOperationContentDialog(null, editedOperation, whichOptionLocal);
 
             var result = await ContentDialogItem.ShowAsync();
         }

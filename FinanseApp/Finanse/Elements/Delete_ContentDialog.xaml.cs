@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -22,10 +23,12 @@ namespace Finanse.Elements {
 
         Operation operation;
         string whichOption;
-        public Delete_ContentDialog(Operation operation, string whichOption) {
+        ObservableCollection<GroupInfoList<Operation>> _source;
+        public Delete_ContentDialog(ObservableCollection<GroupInfoList<Operation>> _source, Operation operation, string whichOption) {
 
             this.InitializeComponent();
 
+            this._source = _source;
             this.operation = operation;
             this.whichOption = whichOption;
         }
@@ -50,6 +53,18 @@ namespace Finanse.Elements {
                         break;
                     }
                 default: {
+                        GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key.ToString() == String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)operation.Date).LocalDateTime));
+                        if (group.Count == 1)
+                            _source.Remove(group);
+                        else {
+                            if (operation.isExpense)
+                                group.decimalCost += operation.Cost;
+                            else
+                                group.decimalCost -= operation.Cost;
+
+                            group.cost = group.decimalCost.ToString("C", new CultureInfo(Dal.GetSettings().CultureInfoName));
+                            group.Remove(operation);
+                        }
                         //Operations.Remove(operation);
                         Dal.DeleteOperation(operation);
                         break;

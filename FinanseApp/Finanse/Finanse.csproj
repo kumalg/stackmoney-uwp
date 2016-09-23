@@ -110,6 +110,7 @@
     <Compile Include="Elements\Functions.cs" />
     <Compile Include="Elements\CategoryGroupInfoList.cs" />
     <Compile Include="Elements\GroupInfoList.cs" />
+    <Compile Include="Elements\ItemCollection.cs" />
     <Compile Include="Elements\MoneyAccount.cs" />
     <Compile Include="Elements\OperationPattern.cs" />
     <Compile Include="Elements\OperationCategory.cs" />
@@ -125,6 +126,7 @@
       <DependentUpon>PivotHeader.xaml</DependentUpon>
     </Compile>
     <Compile Include="Elements\Settings.cs" />
+    <Compile Include="Elements\StoreData.cs" />
     <Compile Include="Views\Kategorie.xaml.cs">
       <DependentUpon>Kategorie.xaml</DependentUpon>
     </Compile>

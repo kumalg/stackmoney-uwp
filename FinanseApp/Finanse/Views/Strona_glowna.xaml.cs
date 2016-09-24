@@ -31,7 +31,6 @@ namespace Finanse.Views {
     public sealed partial class Strona_glowna : Page {
 
         private readonly ObservableCollection<GroupInfoList<Operation>> _source;
-        Settings settings = Dal.GetSettings();
 
         bool isSelectionChanged = false;
 
@@ -42,6 +41,7 @@ namespace Finanse.Views {
             this.InitializeComponent();
 
             Dal.CreateDB();
+            Settings.SetSettings();
 
             _source = (new StoreData()).GetGroupsByDay();
             ContactsCVS.Source = _source;
@@ -49,7 +49,7 @@ namespace Finanse.Views {
             foreach (var group in _source) {
                 actualMoney += group.decimalCost;
             }
-            ActualMoneyBar.Text = actualMoney.ToString("C", new CultureInfo(settings.CultureInfoName));
+            ActualMoneyBar.Text = actualMoney.ToString("C", Settings.GetActualCurrency());
 
             CategorizedCVS.Source = Operation.GetOperationsByCategoryGrouped();
 
@@ -91,10 +91,6 @@ namespace Finanse.Views {
             var ContentDialogItem = new Delete_ContentDialog(_source, (Operation)datacontext,"");
 
             var result = await ContentDialogItem.ShowAsync();
-
-            //Operations.Remove((Operation)datacontext);
-            //conn.Delete((Operation)datacontext);
-            //this datacontext is probably some object of some type T
         }
 
         private void Grid_DragStarting(UIElement sender, DragStartingEventArgs args) {

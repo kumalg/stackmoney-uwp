@@ -48,7 +48,7 @@
                 Fill="{x:Bind OperationSubCategory.Color}" />
 
             <TextBlock
-                Name="Icon_OperationTemplate"
+                x:Name="Icon_OperationTemplate"
                 FontFamily="Segoe UI"
                 Text="{x:Bind OperationSubCategory.Icon}"
                 VerticalAlignment="Center"

@@ -200,13 +200,13 @@
                                                         Fill="{x:Bind Color}" />
 
                                                     <TextBlock
-                                                        Name="Icon_OperationTemplate"
-                                                        FontFamily="Segoe UI"
+                                                        x:Name="Icon_OperationTemplate"
                                                         FontSize="24"
                                                         Text="{x:Bind Icon}"
                                                         VerticalAlignment="Center"
                                                         HorizontalAlignment="Center"
-                                                        Foreground="White" />
+                                                        Foreground="White"
+                                                        DataContextChanged="Icon_OperationTemplate_DataContextChanged" />
                                                 </Grid>
 
                                                 <TextBlock

@@ -49,8 +49,6 @@ namespace Finanse.Elements {
 
         public void Operation_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
 
-            Settings settings = Dal.GetSettings();
-
             /* WYGLĄD KOŁA Z KATEGORIĄ */
             string whichColor = ((SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"]).Color.ToString();
             string whichIcon = ((TextBlock)Application.Current.Resources["DefaultEllipseIcon"]).Text;
@@ -80,17 +78,18 @@ namespace Finanse.Elements {
             /* GOTOWA IKONKA DO ZAPISANIA */
             Ellipse_OperationTemplate.Fill = new SolidColorBrush(GetSolidColorBrush(whichColor).Color);
             Icon_OperationTemplate.Text = whichIcon;
+            Icon_OperationTemplate.FontFamily = new FontFamily(Settings.GetActualIconStyle());
 
             /* WYGLĄD KOSZTU (CZERWONY Z MINUSEM CZY ZIELONY Z PLUSEM) */
             if (Operation.isExpense) {
 
-                Cost_OperationTemplate.Text = (-Operation.Cost).ToString("C", new CultureInfo(settings.CultureInfoName));
+                Cost_OperationTemplate.Text = (-Operation.Cost).ToString("C", Settings.GetActualCurrency());
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
             }
 
             else {
 
-                Cost_OperationTemplate.Text = Operation.Cost.ToString("C", new CultureInfo(settings.CultureInfoName));
+                Cost_OperationTemplate.Text = Operation.Cost.ToString("C", Settings.GetActualCurrency());
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"];
             }
 

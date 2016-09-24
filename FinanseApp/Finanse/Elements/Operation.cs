@@ -75,7 +75,7 @@ namespace Finanse.Elements {
             CategoryGroupInfoList info;
             decimal sumCost = 0;
 
-            Settings settings = Dal.GetSettings();
+            //Settings settings = Dal.GetSettings();
 
             var query = from item in Dal.GetAllPersons()
                         group item by item.CategoryId into g
@@ -114,7 +114,7 @@ namespace Finanse.Elements {
                     else
                         sumCost += item.Cost;
                 }
-                info.cost = sumCost.ToString("C", new CultureInfo(settings.CultureInfoName));
+                info.cost = sumCost.ToString("C", Settings.GetActualCurrency());
                 groups.Add(info);
             }
 

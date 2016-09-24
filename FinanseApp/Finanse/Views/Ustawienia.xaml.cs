@@ -21,32 +21,34 @@ namespace Finanse.Views {
 
     public sealed partial class Ustawienia : Page {
 
-        string path;
-        SQLite.Net.SQLiteConnection conn;
-
         public Ustawienia() {
 
             this.InitializeComponent();
 
-            path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
-            conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
-
-            foreach (CultureInfo item in conn.Table<Settings>().ElementAt(0).GetCurrencyValues()) {
+            foreach (CultureInfo item in Settings.GetAllCurrencies()) {
 
                 CurrencyValue.Items.Add(new ComboBoxItem {
                     Content = item.DisplayName,
                     Tag = item.Name
                 });
             }
+
+            foreach (string item in Settings.GetAllFonts()) {
+
+                IconValue.Items.Add(new ComboBoxItem {
+                    Content = item
+                });
+            }
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            Settings settings = conn.Table<Settings>().ElementAt(0);
-            settings.CultureInfoName = (string)((ComboBoxItem)CurrencyValue.SelectedItem).Tag;
 
-            conn.DeleteAll<Settings>();
-            conn.CreateTable<Settings>();
-            conn.Insert(settings);
+            Settings.SetActualCurrency((string)((ComboBoxItem)CurrencyValue.SelectedItem).Tag);
+        }
+
+        private void IconValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            Settings.SetActualIconStyle(((ComboBoxItem)IconValue.SelectedItem).Content.ToString());
         }
     }
 }

@@ -120,5 +120,11 @@ namespace Finanse.Views {
 
             var result = await ContentDialogItem.ShowAsync();
         }
+
+        private void Icon_OperationTemplate_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
+            TextBlock yco = sender as TextBlock;
+
+            yco.FontFamily = new FontFamily(Settings.GetActualIconStyle());
+        }
     }
 }

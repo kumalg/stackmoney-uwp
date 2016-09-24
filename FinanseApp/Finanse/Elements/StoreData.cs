@@ -28,8 +28,6 @@ namespace Finanse.Elements {
             decimal sumCost = 0;
             DateTimeOffset? dt;
 
-            Settings settings = Dal.GetSettings();
-
             var query = from item in Dal.GetAllPersons()
                         group item by String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)item.Date).LocalDateTime) into g
                         orderby g.Key descending
@@ -58,7 +56,7 @@ namespace Finanse.Elements {
                         sumCost += item.Cost;
                 }
                 info.decimalCost = sumCost;
-                info.cost = sumCost.ToString("C", new CultureInfo(settings.CultureInfoName));
+                info.cost = sumCost.ToString("C", Settings.GetActualCurrency());
                 groups.Add(info);
             }
 

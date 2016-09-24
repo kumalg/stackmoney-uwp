@@ -438,21 +438,20 @@
         <TextBox
             Name="NameValue"
             Style="{StaticResource TextBoxStyle1}"
-            TextChanged="TextChanged"
             PlaceholderText="Nazwa"
             Margin="0,20,0,0" />
 
         <TextBox
             Name="CostValue"
             Style="{StaticResource TextBoxStyle1}"
-            TextChanged="TextChanged"
             PlaceholderText="Wartość"
             InputScope="CurrencyAmount"
             Margin="0,20,0,10"
             GotFocus="CostValue_GotFocus"
             LostFocus="CostValue_LostFocus"
             TextChanging="CostValue_TextChanging"
-            SelectionChanged="CostValue_SelectionChanged" />
+            SelectionChanged="CostValue_SelectionChanged"
+            TextChanged="CostValue_TextChanged" />
 
         <CalendarDatePicker
             Name="DateValue"
@@ -484,7 +483,6 @@
         <ComboBox
             Name="PayFormValue"
             Style="{StaticResource ComboBoxStyle1}"
-            SelectionChanged="PayFormValue_SelectionChanged"
             PlaceholderText="Forma płatności"
             Margin="0,10"
             HorizontalAlignment="Stretch">

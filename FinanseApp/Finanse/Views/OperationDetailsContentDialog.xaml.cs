@@ -34,8 +34,6 @@ namespace Finanse.Views {
             this.editedOperation = editedOperation;
             this.whichOption = whichOption;
 
-            Settings settings = Dal.GetSettings();
-
             if (whichOption == "pattern")
                 Title = "Szczegóły szablonu";
 
@@ -50,7 +48,7 @@ namespace Finanse.Views {
                 CostValueIcon.Glyph = "";
             }
 
-            CostValue.Text = editedOperation.Cost.ToString("C", new CultureInfo(settings.CultureInfoName));
+            CostValue.Text = editedOperation.Cost.ToString("C", Settings.GetActualCurrency());
 
             DateValuePanel.Visibility = Visibility.Collapsed;
             if (editedOperation.Date != null && whichOption != "pattern") {
@@ -84,7 +82,7 @@ namespace Finanse.Views {
             }
 
             /* WIĘCEJ INFORMACJI */
-            if (editedOperation.MoreInfo != null) {
+            if (editedOperation.MoreInfo != string.Empty) {
                 MoreInfo.Text = editedOperation.MoreInfo;
             }
             else

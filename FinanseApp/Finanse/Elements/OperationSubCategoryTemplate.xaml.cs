@@ -33,7 +33,9 @@ namespace Finanse.Elements {
 
             this.InitializeComponent();
 
-            this.DataContextChanged += (s, e) => Bindings.Update();            
+            this.DataContextChanged += (s, e) => Bindings.Update();       
+            
+            Icon_OperationTemplate.FontFamily = new FontFamily(Settings.GetActualIconStyle());
         }
     }
 }

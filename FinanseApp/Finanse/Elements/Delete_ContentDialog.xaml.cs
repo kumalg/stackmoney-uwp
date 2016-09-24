@@ -62,7 +62,7 @@ namespace Finanse.Elements {
                             else
                                 group.decimalCost -= operation.Cost;
 
-                            group.cost = group.decimalCost.ToString("C", new CultureInfo(Dal.GetSettings().CultureInfoName));
+                            group.cost = group.decimalCost.ToString("C", Settings.GetActualCurrency());
                             group.Remove(operation);
                         }
                         //Operations.Remove(operation);

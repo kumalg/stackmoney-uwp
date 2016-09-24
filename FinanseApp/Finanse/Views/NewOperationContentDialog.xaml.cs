@@ -26,11 +26,7 @@ namespace Finanse.Views {
 
         Operation editedOperation;
 
-        //string path;
-        //SQLite.Net.SQLiteConnection conn;
         private readonly ObservableCollection<GroupInfoList<Operation>> _source;
-
-        Settings settings;
 
         string whichOptions;
         string acceptedCostValue = "";
@@ -47,8 +43,6 @@ namespace Finanse.Views {
             this._source = _source;
 
             IsPrimaryButtonEnabled = false;
-
-            settings = Dal.GetSettings();
 
             DateValue.MaxDate = DateTime.Today;
 
@@ -101,18 +95,17 @@ namespace Finanse.Views {
 
                         SubCategoryValue.IsEnabled = false;
                         DateValue.Date = DateTime.Today;
+
+                        if (PayFormValue.Items.Count > 0)
+                            PayFormValue.SelectedIndex = 0;
+
                         break;
                     };
             }
         }
 
         private void SetNowaOperacjaButton() {
-            if (CostValue.Text != ""
-                && NameValue.Text != ""
-                && (Income_RadioButton.IsChecked == true || Expense_RadioButton.IsChecked == true)
-                //&& DateValue.Date != null
-                && CategoryValue.SelectedItem != null
-                && PayFormValue.SelectedItem != null) {
+            if (CostValue.Text != "") {
 
                 IsPrimaryButtonEnabled = true;
             }
@@ -134,7 +127,7 @@ namespace Finanse.Views {
             SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == editedOperation.SubCategoryId);
             PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == editedOperation.MoneyAccountId);
 
-            CostValue.Text = editedOperation.Cost.ToString("C", new CultureInfo(settings.CultureInfoName));
+            CostValue.Text = editedOperation.Cost.ToString("C", Settings.GetActualCurrency());
             acceptedCostValue = editedOperation.Cost.ToString();
 
             if (editedOperation.MoreInfo != null)
@@ -143,103 +136,78 @@ namespace Finanse.Views {
 
         private void NowaOperacja_DodajClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
-            int subCategoryInt = -1;
+            int subCategoryId = -1;
 
             if (SubCategoryValue.SelectedIndex != -1)
-                subCategoryInt = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
+                subCategoryId = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
 
             Operation item = new Operation {
                 Id = 0,
                 Title = NameValue.Text,
+                isExpense = (bool)Expense_RadioButton.IsChecked,
                 Cost = decimal.Parse(acceptedCostValue),
                 CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
-                SubCategoryId = subCategoryInt,
+                SubCategoryId = subCategoryId,
                 Date = DateValue.Date,
-                PayForm = ((ComboBoxItem)PayFormValue.SelectedItem).Content.ToString(),
+                MoreInfo = MoreInfoValue.Text,
                 MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
             };
-            if (MoreInfoValue.Text != "")
-                item.MoreInfo = MoreInfoValue.Text;
-
-            // WYDATEK CZY WPŁYW
-            if (Expense_RadioButton.IsChecked == true)
-                item.isExpense = true;
-            else
-                item.isExpense = false;
 
             switch (whichOptions) {
                 case "edit": {
                         item.Id = editedOperation.Id;
+
+                        GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key.ToString() == String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)editedOperation.Date).LocalDateTime));
+
+                        if (item.Date == editedOperation.Date) {
+                            group[group.IndexOf(group.Single(i => i.Id == item.Id))] = item;
+                        }
+                        else {
+                            if (group.Count == 1)
+                                _source.Remove(group);
+                            else
+                                group.Remove(group.Single(i => i.Id == item.Id));
+
+                            AddOperationToList(item);
+                        }
+
                         Dal.SaveOperation(item);
+
                         break;
                     }
                 case "editpattern": {
                         OperationPattern itemPattern = new OperationPattern {
                             Id = editedOperation.Id,
                             Title = NameValue.Text,
+                            isExpense = (bool)Expense_RadioButton.IsChecked,
                             Cost = decimal.Parse(acceptedCostValue),
                             CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
-                            SubCategoryId = subCategoryInt,
+                            SubCategoryId = subCategoryId,
+                            MoreInfo = MoreInfoValue.Text,
                             MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
                         };
-                        if (MoreInfoValue.Text != "")
-                            itemPattern.MoreInfo = MoreInfoValue.Text;
-                        if (Expense_RadioButton.IsChecked == true)
-                            itemPattern.isExpense = true;
-                        else
-                            itemPattern.isExpense = false;
+
                         Dal.SaveOperationPattern(itemPattern);
                         break;
                     }
                 default: {
+
+                        AddOperationToList(item);
+
                         Dal.SaveOperation(item);
-
-                        GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key.ToString() == String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)item.Date).LocalDateTime));
-                        if (group == null) {
-
-                            GroupInfoList<Operation> newGroup = new GroupInfoList<Operation> {
-                                Key = String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)item.Date).LocalDateTime),
-                                dayNum = String.Format("{0:dd}", item.Date),
-                                day = String.Format("{0:dddd}", item.Date),
-                                month = String.Format("{0:MMMM yyyy}", item.Date),
-                            };
-
-                            bool check = true;
-                            int i = 0;
-                            newGroup.Insert(0, item);
-                            while (check) {
-                                if (Convert.ToDateTime(_source[i].Key) > Convert.ToDateTime(newGroup.Key))
-                                    i++;
-                                else
-                                    check = false;
-                            }
-                            _source.Insert(i, newGroup);
-                        }
-                        else {
-                            if (item.isExpense)
-                                group.decimalCost -= item.Cost;
-                            else
-                                group.decimalCost += item.Cost;
-
-                            group.cost = group.decimalCost.ToString("C", new CultureInfo(Dal.GetSettings().CultureInfoName));
-                            group.Insert(0, item);
-                        }
 
                         if (SaveAsAssetToggle.IsOn) {
                             OperationPattern itemPattern = new OperationPattern {
                                 Id = 0,
                                 Title = NameValue.Text,
                                 Cost = decimal.Parse(acceptedCostValue),
+                                isExpense = (bool)Expense_RadioButton.IsChecked,
                                 CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
-                                SubCategoryId = subCategoryInt,
+                                SubCategoryId = subCategoryId,
+                                MoreInfo = MoreInfoValue.Text,
                                 MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
                             };
-                            if (MoreInfoValue.Text != "")
-                                itemPattern.MoreInfo = MoreInfoValue.Text;
-                            if (Expense_RadioButton.IsChecked == true)
-                                itemPattern.isExpense = true;
-                            else
-                                itemPattern.isExpense = false;
+
                             Dal.SaveOperationPattern(itemPattern);
                         }
                         break;
@@ -247,12 +215,35 @@ namespace Finanse.Views {
             }
         }
 
-        private void TextChanged(object sender, TextChangedEventArgs e) {
-            SetNowaOperacjaButton();
+        private void AddOperationToList(Operation item) {
+            GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key.ToString() == String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)item.Date).LocalDateTime));
+            if (group == null) {
+
+                GroupInfoList<Operation> newGroup = new GroupInfoList<Operation> {
+                    Key = String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)item.Date).LocalDateTime),
+                    dayNum = String.Format("{0:dd}", item.Date),
+                    day = String.Format("{0:dddd}", item.Date),
+                    month = String.Format("{0:MMMM yyyy}", item.Date),
+                };
+
+                bool check = true;
+                int i = 0;
+                newGroup.Insert(0, item);
+                while (check) {
+                    if (Convert.ToDateTime(_source[i].Key) > Convert.ToDateTime(newGroup.Key))
+                        i++;
+                    else
+                        check = false;
+                }
+                _source.Insert(i, newGroup);
+            }
+            else {
+
+                group.Insert(0, item);
+            }
         }
 
         private void TypeOfOperationRadioButton_Checked(object sender, RoutedEventArgs e) {
-            SetNowaOperacjaButton();
 
             if (CategoryValue.SelectedIndex != -1) {
                 int idOfSelectedCategory = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
@@ -336,7 +327,6 @@ namespace Finanse.Views {
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            SetNowaOperacjaButton();
 
             SetSubCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
         }
@@ -348,10 +338,6 @@ namespace Finanse.Views {
 
         private void DateValue_Closed(object sender, object e) {
             DateValue.Focus(FocusState.Programmatic);
-        }
-
-        private void PayFormValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            SetNowaOperacjaButton();
         }
 
         private void SubCategoryValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -373,7 +359,7 @@ namespace Finanse.Views {
             isUnfocused = true;
 
             if(CostValue.Text != "")
-                CostValue.Text = decimal.Parse(CostValue.Text).ToString("C", new CultureInfo(settings.CultureInfoName));
+                CostValue.Text = decimal.Parse(CostValue.Text).ToString("C", Settings.GetActualCurrency());
         }
 
         private void CostValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
@@ -427,6 +413,10 @@ namespace Finanse.Views {
 
             if (whichOptions == "edit")
                 yco.Visibility = Visibility.Collapsed;
+        }
+
+        private void CostValue_TextChanged(object sender, TextChangedEventArgs e) {
+            SetNowaOperacjaButton();
         }
     }
 }

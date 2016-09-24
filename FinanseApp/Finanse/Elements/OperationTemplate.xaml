@@ -33,7 +33,6 @@
 
             <TextBlock
                 Name="Icon_OperationTemplate"
-                FontFamily="Segoe UI"
                 FontSize="24"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"

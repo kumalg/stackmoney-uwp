@@ -5,6 +5,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -109,7 +110,7 @@
                 db.Execute("DELETE FROM Person WHERE Id = ?", person.Id);
             }
         }
-
+        /*
         public static Settings GetSettings() {
             Settings settings;
 
@@ -123,7 +124,7 @@
 
             return settings;
         }
-
+        */
         /* GET ALL */
 
         public static List<OperationCategory> GetAllCategories() {

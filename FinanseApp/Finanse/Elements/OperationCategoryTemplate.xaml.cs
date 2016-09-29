@@ -13,7 +13,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Finanse.Views;
+using Finanse.Pages;
+using Finanse.Elements;
+using Finanse.Models;
 using System.Reflection;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
@@ -22,10 +24,10 @@ namespace Finanse.Elements {
 
     public sealed partial class OperationCategoryTemplate : UserControl {
       
-        private Elements.OperationCategory OperationCategory {
+        private Models.OperationCategory OperationCategory {
 
             get {
-                return this.DataContext as Elements.OperationCategory;
+                return this.DataContext as Models.OperationCategory;
             }
         }
 

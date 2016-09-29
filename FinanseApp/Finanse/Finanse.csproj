@@ -101,22 +101,22 @@
     </Compile>
     <Compile Include="DataAccessLayer\Dal.cs" />
     <Compile Include="DataAccessLayer\DebugTraceListener.cs" />
-    <Compile Include="Elements\DeleteCategory_ContentDialog.xaml.cs">
+    <Compile Include="Dialogs\DeleteCategory_ContentDialog.xaml.cs">
       <DependentUpon>DeleteCategory_ContentDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Elements\Delete_ContentDialog.xaml.cs">
+    <Compile Include="Dialogs\Delete_ContentDialog.xaml.cs">
       <DependentUpon>Delete_ContentDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Elements\ExpandPanel.cs" />
-    <Compile Include="Elements\Functions.cs" />
-    <Compile Include="Elements\CategoryGroupInfoList.cs" />
-    <Compile Include="Elements\GroupInfoList.cs" />
-    <Compile Include="Elements\ItemCollection.cs" />
-    <Compile Include="Elements\MoneyAccount.cs" />
-    <Compile Include="Elements\OperationPattern.cs" />
-    <Compile Include="Elements\OperationCategory.cs" />
-    <Compile Include="Elements\Operation.cs" />
-    <Compile Include="Elements\OperationSubCategory.cs" />
+    <Compile Include="Models\ExpandPanel.cs" />
+    <Compile Include="Models\Functions.cs" />
+    <Compile Include="Models\CategoryGroupInfoList.cs" />
+    <Compile Include="Models\GroupInfoList.cs" />
+    <Compile Include="Models\ItemCollection.cs" />
+    <Compile Include="Models\MoneyAccount.cs" />
+    <Compile Include="Models\OperationPattern.cs" />
+    <Compile Include="Models\OperationCategory.cs" />
+    <Compile Include="Models\Operation.cs" />
+    <Compile Include="Models\OperationSubCategory.cs" />
     <Compile Include="Elements\OperationSubCategoryTemplate.xaml.cs">
       <DependentUpon>OperationSubCategoryTemplate.xaml</DependentUpon>
     </Compile>
@@ -126,49 +126,49 @@
     <Compile Include="Elements\PivotHeader.xaml.cs">
       <DependentUpon>PivotHeader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Elements\Settings.cs" />
-    <Compile Include="Elements\StoreData.cs" />
-    <Compile Include="Views\Kategorie.xaml.cs">
+    <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\StoreData.cs" />
+    <Compile Include="Pages\Kategorie.xaml.cs">
       <DependentUpon>Kategorie.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\OperationPatternsContentDialog.xaml.cs">
+    <Compile Include="Dialogs\OperationPatternsContentDialog.xaml.cs">
       <DependentUpon>OperationPatternsContentDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NewCategoryContentDialog.xaml.cs">
+    <Compile Include="Dialogs\NewCategoryContentDialog.xaml.cs">
       <DependentUpon>NewCategoryContentDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\OperationDetailsContentDialog.xaml.cs">
+    <Compile Include="Dialogs\OperationDetailsContentDialog.xaml.cs">
       <DependentUpon>OperationDetailsContentDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NewOperationContentDialog.xaml.cs">
+    <Compile Include="Dialogs\NewOperationContentDialog.xaml.cs">
       <DependentUpon>NewOperationContentDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PlanowaneWydatki.xaml.cs">
+    <Compile Include="Pages\PlanowaneWydatki.xaml.cs">
       <DependentUpon>PlanowaneWydatki.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\Strona_glowna.xaml.cs">
+    <Compile Include="Pages\Strona_glowna.xaml.cs">
       <DependentUpon>Strona_glowna.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Konta.xaml.cs">
+    <Compile Include="Pages\Konta.xaml.cs">
       <DependentUpon>Konta.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Szablony.xaml.cs">
+    <Compile Include="Pages\Szablony.xaml.cs">
       <DependentUpon>Szablony.xaml</DependentUpon>
     </Compile>
     <Compile Include="Elements\PivotItemHeaderTemplate.xaml.cs">
       <DependentUpon>PivotItemHeaderTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Ustawienia.xaml.cs">
+    <Compile Include="Pages\Ustawienia.xaml.cs">
       <DependentUpon>Ustawienia.xaml</DependentUpon>
     </Compile>
     <Compile Include="Elements\OperationTemplate.xaml.cs">
       <DependentUpon>OperationTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ZleceniaStale.xaml.cs">
+    <Compile Include="Pages\ZleceniaStale.xaml.cs">
       <DependentUpon>ZleceniaStale.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -195,11 +195,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Elements\DeleteCategory_ContentDialog.xaml">
+    <Page Include="Dialogs\DeleteCategory_ContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Elements\Delete_ContentDialog.xaml">
+    <Page Include="Dialogs\Delete_ContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -219,7 +219,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Kategorie.xaml">
+    <Page Include="Pages\Kategorie.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -227,27 +227,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\OperationPatternsContentDialog.xaml">
+    <Page Include="Dialogs\OperationPatternsContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NewCategoryContentDialog.xaml">
+    <Page Include="Dialogs\NewCategoryContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\OperationDetailsContentDialog.xaml">
+    <Page Include="Dialogs\OperationDetailsContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NewOperationContentDialog.xaml">
+    <Page Include="Dialogs\NewOperationContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PlanowaneWydatki.xaml">
+    <Page Include="Pages\PlanowaneWydatki.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Strona_glowna.xaml">
+    <Page Include="Pages\Strona_glowna.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -256,11 +256,11 @@
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="Views\Konta.xaml">
+    <Page Include="Pages\Konta.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Szablony.xaml">
+    <Page Include="Pages\Szablony.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -268,7 +268,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Ustawienia.xaml">
+    <Page Include="Pages\Ustawienia.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -276,7 +276,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ZleceniaStale.xaml">
+    <Page Include="Pages\ZleceniaStale.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -292,9 +292,7 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dialogs\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

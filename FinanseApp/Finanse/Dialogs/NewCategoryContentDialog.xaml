@@ -1,0 +1,211 @@
+﻿<ContentDialog
+    Style="{StaticResource MyContentDialog}"
+    x:Class="Finanse.Dialogs.NewCategoryContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Finanse.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Nowa kategoria"
+    Background="{StaticResource GreyTransparentColorStyle}"
+    PrimaryButtonText="Dodaj"
+    SecondaryButtonText="Anuluj"
+    PrimaryButtonClick="NewCategory_AddButtonClick">
+
+    <StackPanel
+        Margin="20,20">
+
+        <TextBox
+            Name="NameValue"
+            Style="{StaticResource TextBoxStyle1}"
+            PlaceholderText="Nazwa"
+            TextChanging="NameValue_TextChanging" />
+
+        <Grid
+            Margin="0,30,0,0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid
+                Name="Ikona"
+                Height="70"
+                Width="70">
+
+                <Ellipse
+                    Name="CategoryCircle"
+                    Fill="{StaticResource GreenColorStyle}" />
+
+                <FontIcon
+                    Name="CategoryIcon"
+                    FontFamily="Segoe MDL2 Assets"
+                    Glyph="&#xE804;"
+                    FontSize="34"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Foreground="White" />
+            </Grid>
+
+            <StackPanel
+                Grid.Column="1"
+                Margin="30,0,0,0">
+
+                <Button
+                    Style="{StaticResource ButtonWithBottomBorder}"
+                    Content="Kolor"
+                    Margin="0,10"
+                    HorizontalAlignment="Stretch">
+                    <Button.Flyout>
+                        <Flyout>
+                            <GridView
+                                Name="ColorBaseList"
+                                MaxHeight="300"
+                                Padding="0"
+                                ItemsSource="{StaticResource ColorBase}"
+                                ItemContainerStyle="{StaticResource GridViewItemStyle1}">
+
+                                <GridView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapGrid
+                                            MaximumRowsOrColumns="3"
+                                            Orientation="Horizontal"
+                                            HorizontalChildrenAlignment="Stretch"
+                                            VerticalChildrenAlignment="Stretch" />
+                                    </ItemsPanelTemplate>
+                                </GridView.ItemsPanel>
+
+                                <GridView.ItemTemplate>
+                                    <DataTemplate
+                                        x:DataType="SolidColorBrush">
+                                        <Grid
+                                            Width="36"
+                                            Height="36">
+                                            <RadioButton
+                                                x:Name="RadioButtonColor"
+                                                Style="{StaticResource ColorRadioButton}"
+                                                Background="{Binding Value}"
+                                                GroupName="ColorRadioButtons"
+                                                Checked="RadioButtonColor_Checked" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </GridView.ItemTemplate>
+
+                            </GridView>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+
+                <Button
+                    Style="{StaticResource ButtonWithBottomBorder}"
+                    Content="Ikona"
+                    Margin="0,10"
+                    HorizontalAlignment="Stretch">
+                    <Button.Flyout>
+                        <Flyout>
+                            <GridView
+                                Name="IconBaseList"
+                                Padding="0"
+                                ItemsSource="{StaticResource IconBase}"
+                                ItemContainerStyle="{StaticResource GridViewItemStyle1}">
+
+                                <GridView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapGrid
+                                            MaximumRowsOrColumns="3"
+                                            Orientation="Horizontal"
+                                            HorizontalChildrenAlignment="Stretch"
+                                            VerticalChildrenAlignment="Stretch" />
+                                    </ItemsPanelTemplate>
+                                </GridView.ItemsPanel>
+
+                                <GridView.ItemTemplate>
+                                    <DataTemplate
+                                        x:DataType="TextBlock">
+                                        <Grid
+                                            Width="36"
+                                            Height="36">
+
+                                            <RadioButton
+                                                x:Name="RadioButtonIcon"
+                                                Style="{StaticResource IconRadioButton}"
+                                                FontFamily="{Binding Value.FontFamily}"
+                                                FontSize="20"
+                                                Foreground="White"
+                                                Background="{StaticResource LightGreyTransparentColorStyle}"
+                                                Content="{Binding Value.Text}"
+                                                GroupName="IconRadioButtons"
+                                                Checked="RadioButtonIcon_Checked" />
+
+                                        </Grid>
+                                    </DataTemplate>
+                                </GridView.ItemTemplate>
+
+                            </GridView>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+
+                <TextBox
+                    Name="Icon2Value"
+                    Style="{StaticResource TextBoxStyle1}"
+                    PlaceholderText="Nazwa" />
+            </StackPanel>
+
+        </Grid>
+
+        <ComboBox
+            Name="CategoryValue"
+            Style="{StaticResource ComboBoxStyle1}"
+            PlaceholderText="Kategoria nadrzędna"
+            Margin="0,30,0,10"
+            HorizontalAlignment="Stretch"
+            SelectionChanged="CategoryValue_SelectionChanged" />
+
+        <TextBlock
+            Text="Pokazuj w wydatkach"
+            Margin="0,20,0,0" />
+
+        <ToggleSwitch
+            Name="VisibleInExpensesToggleButton"
+            Style="{StaticResource ToggleSwitchStyle1}"
+            Margin="0,5,0,0"
+            IsOn="True"
+            Toggled="VisibleInExpensesToggleButton_Toggled">
+
+            <ToggleSwitch.OffContent>
+                Nie
+            </ToggleSwitch.OffContent>
+
+            <ToggleSwitch.OnContent>
+                Tak
+            </ToggleSwitch.OnContent>
+            
+        </ToggleSwitch>
+
+        <TextBlock
+            Text="Pokazuj we wpływach"
+            Margin="0,20,0,0" />
+
+        <ToggleSwitch
+            Name="VisibleInIncomesToggleButton"
+            Style="{StaticResource ToggleSwitchStyle1}"
+            Margin="0,5,0,0"
+            IsOn="True"
+            Toggled="VisibleInIncomesToggleButton_Toggled">
+
+            <ToggleSwitch.OffContent>
+                Nie
+            </ToggleSwitch.OffContent>
+
+            <ToggleSwitch.OnContent>
+                Tak
+            </ToggleSwitch.OnContent>
+            
+        </ToggleSwitch>
+
+    </StackPanel>
+
+</ContentDialog>

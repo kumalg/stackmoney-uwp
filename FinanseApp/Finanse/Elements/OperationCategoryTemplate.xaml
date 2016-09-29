@@ -4,16 +4,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Finanse"
     xmlns:data="using:Finanse.Elements"
+    xmlns:models="using:Finanse.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
     <StackPanel>
 
-        <data:ExpandPanel>
+        <models:ExpandPanel>
 
 
-            <data:ExpandPanel.HeaderContent>
+            <models:ExpandPanel.HeaderContent>
 
                 <Grid
                     MaxWidth="600"
@@ -71,10 +72,10 @@
                         Foreground="White" />
                 </Grid>
 
-            </data:ExpandPanel.HeaderContent>
+            </models:ExpandPanel.HeaderContent>
 
 
-            <data:ExpandPanel.Content>
+            <models:ExpandPanel.Content>
 
                 <ListView
                     ScrollViewer.VerticalScrollMode="Disabled"
@@ -99,7 +100,7 @@
 
                     <ListView.ItemTemplate>
                         <DataTemplate
-                            x:DataType="data:OperationSubCategory">
+                            x:DataType="models:OperationSubCategory">
                             <Grid
                                 MaxWidth="600"
                                 Margin="10,10"
@@ -173,10 +174,10 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-            </data:ExpandPanel.Content>
+            </models:ExpandPanel.Content>
 
 
-        </data:ExpandPanel>
+        </models:ExpandPanel>
 
     </StackPanel>
 

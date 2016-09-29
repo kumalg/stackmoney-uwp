@@ -1,0 +1,283 @@
+﻿<ContentDialog
+    x:Class="Finanse.Dialogs.OperationDetailsContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Finanse"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:Finanse.Elements"
+    mc:Ignorable="d"
+    Background="{StaticResource GreyTransparentColorStyle}"
+    Title="Szczegóły operacji"
+    PrimaryButtonText="Edytuj"
+    SecondaryButtonText="Wyjdź"
+    PrimaryButtonClick="EditButton_Click"
+    RequestedTheme="Dark">
+    <ContentDialog.Resources>
+        <Style
+            x:Key="DetailsIconStyle"
+            TargetType="FontIcon">
+            <Setter
+                Property="Opacity"
+                Value="0.5" />
+        </Style>
+    </ContentDialog.Resources>
+
+    <ContentDialog.Style>
+        <Style
+            TargetType="ContentDialog">
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="ContentDialog">
+                        <Border
+                            x:Name="Container">
+                            <Grid
+                                x:Name="LayoutRoot">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Border
+                                    x:Name="BackgroundElement"
+                                    Background="{TemplateBinding Background}"
+                                    FlowDirection="{TemplateBinding FlowDirection}"
+                                    BorderThickness="0"
+                                    BorderBrush="{ThemeResource SystemControlForegroundAccentBrush}"
+                                    MaxWidth="{TemplateBinding MinWidth}"
+                                    MaxHeight="{TemplateBinding MaxHeight}"
+                                    MinWidth="{TemplateBinding MinWidth}"
+                                    MinHeight="{TemplateBinding MinHeight}">
+
+                                    <Grid
+                                        x:Name="DialogSpace"
+                                        VerticalAlignment="Stretch"
+                                        Padding="0,0,0,20">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition
+                                                Height="Auto" />
+                                            <RowDefinition
+                                                Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <ScrollViewer
+                                            x:Name="ContentScrollViewer"
+                                            VerticalScrollBarVisibility="Auto">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition
+                                                        Height="48" />
+                                                    <RowDefinition
+                                                        Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Grid
+                                                    Background="{StaticResource AccentDarkColorStyle}">
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition
+                                                            Width="*" />
+                                                        <ColumnDefinition
+                                                            Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <ContentControl
+                                                        x:Name="Title"
+                                                        Margin="20,0,0,0"
+                                                        Content="{TemplateBinding Title}"
+                                                        ContentTemplate="{TemplateBinding TitleTemplate}"
+                                                        FontSize="15"
+                                                        FontFamily="XamlAutoFontFamily"
+                                                        FontWeight="SemiBold"
+                                                        Foreground="{StaticResource AccentTextColorStyle}"
+                                                        HorizontalAlignment="Left"
+                                                        VerticalAlignment="Center"
+                                                        IsTabStop="False"
+                                                        MaxHeight="{ThemeResource ContentDialogTitleMaxHeight}">
+                                                        <ContentControl.Template>
+                                                            <ControlTemplate
+                                                                TargetType="ContentControl">
+                                                                <ContentPresenter
+                                                                    Content="{TemplateBinding Content}"
+                                                                    MaxLines="2"
+                                                                    TextWrapping="Wrap"
+                                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                    Margin="{TemplateBinding Padding}"
+                                                                    ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                                            </ControlTemplate>
+                                                        </ContentControl.Template>
+                                                    </ContentControl>
+                                                    <Button
+                                                        Style="{StaticResource ButtonStyle1}"
+                                                        ToolTipService.ToolTip="Usuń operację"
+                                                        Grid.Column="2"
+                                                        Width="48"
+                                                        Height="48"
+                                                        Click="DeleteButton_Click">&#xE107;
+                                                    </Button>
+                                                </Grid>
+                                                <ContentPresenter
+                                                    x:Name="Content"
+                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                    Content="{TemplateBinding Content}"
+                                                    FontSize="{ThemeResource ControlContentThemeFontSize}"
+                                                    FontFamily="{ThemeResource ContentControlThemeFontFamily}"
+                                                    Margin="{ThemeResource ContentDialogContentMargin}"
+                                                    Foreground="{TemplateBinding Foreground}"
+                                                    Grid.Row="1"
+                                                    TextWrapping="Wrap" />
+                                            </Grid>
+                                        </ScrollViewer>
+                                        <Grid
+                                            Margin="20,0"
+                                            x:Name="CommandSpace"
+                                            Grid.Row="1"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Bottom">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border
+                                                x:Name="Button1Host"
+                                                Margin="{ThemeResource ContentDialogButton1HostMargin}"
+                                                MinWidth="{ThemeResource ContentDialogButtonMinWidth}"
+                                                MaxWidth="{ThemeResource ContentDialogButtonMaxWidth}"
+                                                Height="{ThemeResource ContentDialogButtonHeight}"
+                                                HorizontalAlignment="Stretch" />
+                                            <Border
+                                                x:Name="Button2Host"
+                                                Margin="{ThemeResource ContentDialogButton2HostMargin}"
+                                                MinWidth="{ThemeResource ContentDialogButtonMinWidth}"
+                                                MaxWidth="{ThemeResource ContentDialogButtonMaxWidth}"
+                                                Height="{ThemeResource ContentDialogButtonHeight}"
+                                                Grid.Column="1"
+                                                HorizontalAlignment="Stretch" />
+
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ContentDialog.Style>
+
+    <StackPanel
+        Margin="20,20">
+
+        <TextBlock
+            Name="NameValue"
+            TextWrapping="Wrap"
+            Text="Zwrot podatku"
+            FontSize="22" />
+
+        <StackPanel
+            Orientation="Horizontal"
+            Margin="0,15,0,0">
+            <FontIcon
+                Name="CostValueIcon"
+                Glyph=""
+                Style="{StaticResource DetailsIconStyle}" />
+            <TextBlock
+                Name="CostValue"
+                FontSize="18"
+                FontWeight="Bold"
+                Foreground="{StaticResource GreenColorStyle}"
+                Text="20,99 zł"
+                Margin="20,0" />
+        </StackPanel>
+
+        <StackPanel
+            Name="DateValuePanel"
+            Orientation="Horizontal"
+            Margin="0,15,0,0">
+            <FontIcon
+                Style="{StaticResource DetailsIconStyle}"
+                Glyph="" />
+            <TextBlock
+                Name="DateValue"
+                Text="2016.08.10"
+                Margin="20,0" />
+        </StackPanel>
+
+        <StackPanel
+            Name="CategoryValuePanel"
+            Margin="0,15,0,0">
+            <StackPanel
+                Orientation="Horizontal">
+                <FontIcon
+                    Style="{StaticResource DetailsIconStyle}"
+                    Glyph="&#xE71D;" />
+                <TextBlock
+                    Name="CategoryValue"
+                    Text="Jedzenie"
+                    Margin="20,0" />
+            </StackPanel>
+            <StackPanel
+                Name="SubCategoryValuePanel"
+                Margin="40,5,0,0"
+                Orientation="Horizontal">
+                <FontIcon
+                    Style="{StaticResource DetailsIconStyle}"
+                    Glyph="" />
+                <TextBlock
+                    Name="SubCategoryValue"
+                    Margin="5,0"
+                    Text="Biedronka" />
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel
+            Name="PayFormPanel"
+            Orientation="Horizontal"
+            Margin="0,15,0,0">
+            <FontIcon
+                Style="{StaticResource DetailsIconStyle}"
+                FontFamily="/Assets/FontAwesome.ttf#FontAwesome"
+                Glyph="" />
+            <TextBlock
+                Name="PayForm"
+                Text="Gotówka"
+                Margin="20,0" />
+        </StackPanel>
+
+        <StackPanel
+            Name="MoreInfoPanel">
+            <Border
+                Margin="0,20"
+                BorderThickness="0,0,0,1"
+                BorderBrush="#24ffffff" />
+            <Grid
+                VerticalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="Auto" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <FontIcon
+                    Style="{StaticResource DetailsIconStyle}"
+                    Glyph="&#xEA55;"
+                    VerticalAlignment="Top" />
+                <TextBlock
+                    Grid.Column="1"
+                    Name="MoreInfo"
+                    TextWrapping="Wrap"
+                    Text="Więcej informacji"
+                    Margin="20,0" />
+            </Grid>
+        </StackPanel>
+
+    </StackPanel>
+
+</ContentDialog>

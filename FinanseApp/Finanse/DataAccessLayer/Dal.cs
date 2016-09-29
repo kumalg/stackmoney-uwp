@@ -1,5 +1,6 @@
 ﻿namespace Finanse.DataAccessLayer {
     using Elements;
+    using Models;
     using SQLite.Net;
     using SQLite.Net.Platform.WinRT;
     using System;

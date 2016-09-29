@@ -13,10 +13,11 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Finanse.Views;
+using Finanse.Pages;
 using System.Reflection;
 using System.Globalization;
 using Finanse.DataAccessLayer;
+using Finanse.Models;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -24,10 +25,10 @@ namespace Finanse.Elements {
 
     public sealed partial class OperationTemplate : UserControl {
 
-        private Elements.Operation Operation {
+        private Models.Operation Operation {
 
             get {
-                return this.DataContext as Elements.Operation;
+                return this.DataContext as Models.Operation;
             }
         }
 

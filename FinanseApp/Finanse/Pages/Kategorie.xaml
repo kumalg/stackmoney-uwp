@@ -1,0 +1,310 @@
+﻿<Page
+    x:Class="Finanse.Pages.Kategorie"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Finanse"
+    xmlns:models="using:Finanse.Models"
+    xmlns:data="using:Finanse.Elements"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    
+    <Grid
+        Background="Transparent">
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState
+                    x:Name="HamburgerTight">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger
+                            MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter
+                            Target="UpperCommandBar.Visibility"
+                            Value="Collapsed" />
+                        <Setter
+                            Target="LowerCommandBar.Visibility"
+                            Value="Visible" />
+                        <Setter
+                            Target="FakeHamburgerButton.Width"
+                            Value="48" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState
+                    x:Name="HamburgerWide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger
+                            MinWindowWidth="540" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter
+                            Target="FakeHamburgerButton.Width"
+                            Value="Auto" />
+                        <Setter
+                            Target="UpperCommandBar.Visibility"
+                            Value="Visible" />
+                        <Setter
+                            Target="LowerCommandBar.Visibility"
+                            Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid
+            Background="{StaticResource AccentColorStyle}"
+            Height="48">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel
+                Name="FakeHamburgerButton"
+                Width="48" />
+
+            <TextBlock
+                Grid.Column="1"
+                Text="Kategorie"
+                Style="{StaticResource PageTitleStyle}" />
+
+
+            <AppBarButton
+                Name="UpperCommandBar"
+                Grid.Column="3"
+                IsCompact="True"
+                Icon="Add"
+                Label="Nowa kategoria"
+                Foreground="White"
+                Click="NewCategory_Click" />
+        </Grid>
+
+        <ScrollViewer
+            Grid.Row="1"
+            VerticalScrollBarVisibility="Auto"
+            HorizontalScrollBarVisibility="Disabled">
+
+            <StackPanel>
+
+                <ListView
+                    Margin="20,20,20,0"
+                    ScrollViewer.VerticalScrollMode="Disabled"
+                    Name="OperacjeListView"
+                    ItemsSource="{x:Bind OperationCategories}"
+                    SelectionMode="None"
+                    MaxWidth="620"
+                    BorderThickness="0"
+                    Background="Transparent">
+
+                    <ListView.ItemContainerStyle>
+                        <Style
+                            TargetType="ListViewItem">
+                            <Setter
+                                Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate
+                                        TargetType="ListViewItem">
+                                        <ListViewItemPresenter
+                                            PointerOverBackground="Transparent"
+                                            PressedBackground="Transparent" />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter
+                                Property="HorizontalContentAlignment"
+                                Value="Stretch" />
+                            <Setter
+                                Property="Padding"
+                                Value="0" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="models:OperationCategory">
+                            <Grid
+                                Background="Transparent">
+
+                                <StackPanel Margin="0,10">
+
+                                    <models:ExpandPanel>
+
+
+                                        <models:ExpandPanel.HeaderContent>
+
+                                            <Grid
+                                                MaxWidth="600"
+                                                Margin="10,10,10,10"
+                                                Background="Transparent"
+                                                RightTapped="ExpandPanel_RightTapped">
+
+                                                <FlyoutBase.AttachedFlyout>
+                                                    <MenuFlyout
+                                                        MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
+                                                        <MenuFlyoutItem
+                                                            x:Name="EditCatButton"
+                                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                                            Tag="&#xE104;"
+                                                            Text="Edytuj"
+                                                            Click="EditCat_Click" />
+                                                        <MenuFlyoutItem
+                                                            x:Name="DeleteCatButton"
+                                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                                            Tag="&#xE107;"
+                                                            Text="Usuń"
+                                                            Click="DeleteCat_Click" />
+                                                        <MenuFlyoutSeparator />
+                                                        <MenuFlyoutItem
+                                                            x:Name="AddSubCatButton"
+                                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                                            Tag="&#xE109;"
+                                                            Text="Dodaj podkategorię"
+                                                            Click="AddSubCat_Click" />
+                                                    </MenuFlyout>
+                                                </FlyoutBase.AttachedFlyout>
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition
+                                                        Width="Auto" />
+                                                    <ColumnDefinition
+                                                        Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Grid
+                                                    Name="EllipseGrid"
+                                                    Grid.Column="0"
+                                                    Height="50"
+                                                    Width="50">
+
+                                                    <Rectangle
+                                                        RadiusX="5"
+                                                        RadiusY="5"
+                                                        Name="Ellipse_OperationTemplate"
+                                                        Fill="{x:Bind Color}" />
+
+                                                    <TextBlock
+                                                        x:Name="Icon_OperationTemplate"
+                                                        FontSize="24"
+                                                        Text="{x:Bind Icon}"
+                                                        VerticalAlignment="Center"
+                                                        HorizontalAlignment="Center"
+                                                        Foreground="White"
+                                                        DataContextChanged="Icon_OperationTemplate_DataContextChanged" />
+                                                </Grid>
+
+                                                <TextBlock
+                                                    Name="Category_OperationCategoryTemplate"
+                                                    Grid.Column="1"
+                                                    VerticalAlignment="Center"
+                                                    Text="{x:Bind Name}"
+                                                    Margin="20,0,0,0"
+                                                    FontSize="16"
+                                                    Foreground="White" />
+                                            </Grid>
+
+                                        </models:ExpandPanel.HeaderContent>
+
+
+                                        <models:ExpandPanel.Content>
+
+                                            <ListView
+                                                ScrollViewer.VerticalScrollMode="Disabled"
+                                                Name="SubOperacjeListView"
+                                                ItemsSource="{x:Bind subCategories}"
+                                                MaxWidth="620"
+                                                BorderThickness="0"
+                                                Background="Transparent"
+                                                SelectionMode="None">
+
+                                                <ListView.ItemContainerStyle>
+                                                    <Style
+                                                        TargetType="ListViewItem">
+                                                        <Setter
+                                                            Property="HorizontalContentAlignment"
+                                                            Value="Stretch" />
+                                                        <Setter
+                                                            Property="Padding"
+                                                            Value="0" />
+                                                    </Style>
+                                                </ListView.ItemContainerStyle>
+
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate
+                                                        x:DataType="models:OperationSubCategory">
+                                                        <Grid
+                                                            RightTapped="Grid_RightTapped">
+
+                                                            <FlyoutBase.AttachedFlyout>
+                                                                <MenuFlyout
+                                                                    MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
+                                                                    <MenuFlyoutItem
+                                                                        x:Name="EditSubCatButton"
+                                                                        Style="{StaticResource MyMenuFlyoutItem}"
+                                                                        Tag="&#xE104;"
+                                                                        Text="Edytuj"
+                                                                        Click="EditSubCat_Click" />
+                                                                    <MenuFlyoutItem
+                                                                        x:Name="DeleteSubCatButton"
+                                                                        Style="{StaticResource MyMenuFlyoutItem}"
+                                                                        Tag="&#xE107;"
+                                                                        Text="Usuń"
+                                                                        Click="DeleteSubCat_Click" />
+                                                                </MenuFlyout>
+                                                            </FlyoutBase.AttachedFlyout>
+
+                                                            <data:OperationSubCategoryTemplate />
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+
+                                        </models:ExpandPanel.Content>
+
+                                    </models:ExpandPanel>
+
+                                </StackPanel>
+
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </ScrollViewer>
+
+
+        <CommandBar
+            Name="LowerCommandBar"
+            Grid.Row="2"
+            Background="#242424"
+            Foreground="White"
+            IsEnabled="True">
+
+            <AppBarButton
+                Icon="Add"
+                Label="Nowa kategoria"
+                Foreground="White"
+                Click="NewCategory_Click" />
+
+        </CommandBar>
+
+    </Grid>
+
+</Page>

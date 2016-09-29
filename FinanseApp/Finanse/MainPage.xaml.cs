@@ -17,7 +17,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Finanse.Elements;
-using Finanse.Views;
+using Finanse.Pages;
 using System.Collections.ObjectModel;
 using Windows.Graphics.Display;
 

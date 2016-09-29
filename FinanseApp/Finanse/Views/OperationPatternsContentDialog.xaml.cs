@@ -24,10 +24,12 @@ namespace Finanse.Views {
     public sealed partial class OperationPatternsContentDialog : ContentDialog {
 
         public List<Operation> OperationPatterns = new List<Operation>();
+        ObservableCollection<GroupInfoList<Operation>> _source;
 
-        public OperationPatternsContentDialog() {
+        public OperationPatternsContentDialog(ObservableCollection<GroupInfoList<Operation>> _source) {
 
             this.InitializeComponent();
+            this._source = _source;
 
             foreach (OperationPattern item in Dal.GetAllPatterns()) {
                 OperationPatterns.Add(new Operation {
@@ -48,7 +50,7 @@ namespace Finanse.Views {
 
             Operation thisOperation = (Operation)OperationPatternsListView.SelectedItem;
 
-            var ContentDialogItem = new NewOperationContentDialog(null, thisOperation, "pattern");
+            var ContentDialogItem = new NewOperationContentDialog(_source, thisOperation, "pattern");
 
             var result = await ContentDialogItem.ShowAsync();
         }

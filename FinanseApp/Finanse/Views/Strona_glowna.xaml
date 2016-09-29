@@ -6,8 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:Finanse.Elements"
-    mc:Ignorable="d"
-    Loaded="Page_Loaded">
+    mc:Ignorable="d">
     
     <Page.Resources>
         <!--Use a collection view source for content that presents a list of items that can be grouped or sorted.-->
@@ -54,7 +53,7 @@
                     x:Name="HamburgerWide">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger
-                            MinWindowWidth="640" />
+                            MinWindowWidth="540" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter
@@ -78,6 +77,18 @@
                             Target="UpperNextMonth.Visibility"
                             Value="Visible" />
                         -->
+                        <Setter
+                            Target="OperacjeListView.Padding"
+                            Value="0,-10,0,0" />
+                        <Setter
+                            Target="OperacjeListViewCategorized.Padding"
+                            Value="0,-10,0,0" />
+                        <Setter
+                            Target="OperacjeListViewGroup.Padding"
+                            Value="0" />
+                        <Setter
+                            Target="OperacjeListViewCategorizedGroup.Padding"
+                            Value="0" />
                         <Setter
                             Target="LowerCommandBar.Visibility"
                             Value="Collapsed" />
@@ -127,6 +138,7 @@
                     Margin="0,0,10,0"
                     Foreground="{StaticResource AccentTextColorStyle}" />
                 <TextBlock
+                    x:Name="ActualMonthText"
                     Text="Wrzesień"
                     Style="{StaticResource PageTitleStyle}" 
                     Margin="0"/>
@@ -138,15 +150,52 @@
                     Foreground="{StaticResource AccentTextColorStyle}" />
             </StackPanel>
 
-            <TextBlock
-                Name="ActualMoneyBar"
+            <StackPanel
+                Orientation="Horizontal"
                 Grid.Column="3"
-                VerticalAlignment="Center"
-                Foreground="{StaticResource AccentTextColorStyle}"
-                Margin="0,0,16,0"
-                FontWeight="Bold"
-                FontSize="14" />
-
+                VerticalAlignment="Center">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Name="ActualMoneyBar"
+                    Foreground="{StaticResource AccentTextColorStyle}"
+                    FontWeight="Bold"
+                    FontSize="14" />
+                <Button
+                    Margin="11,0"
+                    Padding="5"
+                    Background="Transparent"
+                    VerticalAlignment="Center">
+                    <Button.Content>
+                        <FontIcon
+                            Opacity="0.5"
+                            FontSize="13"
+                            Glyph="" />
+                    </Button.Content>
+                    <Button.Flyout>
+                        <MenuFlyout
+                            Placement="Bottom">
+                            <MenuFlyout.MenuFlyoutPresenterStyle>
+                                <Style
+                                    TargetType="MenuFlyoutPresenter">
+                                    <Setter
+                                        Property="BorderThickness"
+                                        Value="0" />
+                                    <Setter
+                                        Property="Background"
+                                        Value="{StaticResource AccentColorStyle}" />
+                                </Style>
+                            </MenuFlyout.MenuFlyoutPresenterStyle>
+                            <ToggleMenuFlyoutItem
+                                Text="Wszystko" />
+                            <ToggleMenuFlyoutItem
+                                Text="Gotówka" />
+                            <ToggleMenuFlyoutItem
+                                Text="Karta Visa" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+            </StackPanel>
+            
             <StackPanel
                 Name="UpperCommandBar"
                 Orientation="Horizontal"
@@ -166,8 +215,7 @@
 
             </StackPanel>
         </Grid>
-        
-        
+       
         <Pivot
             Grid.Row="1"
             Grid.RowSpan="2"
@@ -180,16 +228,18 @@
             </Pivot.Resources>
 
             <PivotItem
+                Margin="0"
                 GotFocus="PivotItem_GotFocus">
                 <PivotItem.Header>
                     <data:PivotHeader
                         Label="Wszystkie operacje"
-                        Glyph="&#xE2AD;" />
+                        Glyph="" />
                 </PivotItem.Header>
 
                 <SemanticZoom>
                     <SemanticZoom.ZoomedInView>
                         <ListView
+                            Padding="0,-10,0,48"
                             Name="OperacjeListView"
                             ItemsSource="{Binding Source={StaticResource ContactsCVS}, Mode=TwoWay}"
                             SelectionMode="Single"
@@ -251,7 +301,7 @@
 
                                         </FlyoutBase.AttachedFlyout>
                                         <StackPanel
-                                            Background="{StaticResource White10%}">
+                                            Background="Transparent">
                                             <data:OperationTemplate />
                                         </StackPanel>
 
@@ -272,7 +322,7 @@
 
                                                         <ContentPresenter
                                                             x:Name="ContentPresenter"
-                                                            Margin="0,10,0,0"
+                                                            Padding="0,15,0,0"
                                                             Content="{TemplateBinding Content}"
                                                             ContentTemplate="{TemplateBinding ContentTemplate}"
                                                             ContentTransitions="{TemplateBinding ContentTransitions}"
@@ -285,14 +335,13 @@
                                         </Style>
                                     </GroupStyle.HeaderContainerStyle>
                                     <GroupStyle.HeaderTemplate>
-                                        <DataTemplate >
+                                        <DataTemplate>
 
                                             <Grid
                                                 CornerRadius="5,5,0,0"
-                                                Background="{StaticResource White20%}"
-                                                BorderBrush="#24ffffff"
-                                                BorderThickness="0,0,0,0"
-                                                Margin="0,5,0,0"
+                                                Background="Transparent"
+                                                BorderBrush="{StaticResource White20%}"
+                                                BorderThickness="0,0,0,1"
                                                 MaxWidth="620">
 
                                                 <Grid.ColumnDefinitions>
@@ -306,22 +355,28 @@
 
                                                 <StackPanel
                                                     Orientation="Horizontal"
-                                                    Margin="10,5,0,5">
-                                                    <TextBlock
-                                                        Text="{Binding dayNum}"
-                                                        FontSize="30"
-                                                        FontWeight="SemiLight"
-                                                        VerticalAlignment="Center" />
+                                                    Margin="16,0,0,5">
+                                                    <StackPanel
+                                                        Width="48">
+                                                        <TextBlock
+                                                            Text="{Binding dayNum}"
+                                                            FontSize="30"
+                                                            Opacity="0.8"
+                                                            FontWeight="SemiLight"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center" />
+                                                    </StackPanel>
                                                     <StackPanel
                                                         VerticalAlignment="Center"
-                                                        Margin="10,0,0,0">
+                                                        Margin="16,0,0,0">
                                                         <TextBlock
+                                                            Opacity="0.8"
                                                             Text="{Binding day}"
                                                             FontSize="12" />
                                                         <TextBlock
                                                             Text="{Binding month}"
                                                             FontSize="12"
-                                                            Opacity="0.4" />
+                                                            Opacity="0.5" />
                                                     </StackPanel>
                                                 </StackPanel>
                                                 
@@ -331,9 +386,10 @@
                                                     Name="SumText"
                                                     HorizontalAlignment="Right"
                                                     Text="{Binding cost}"
-                                                    Foreground="#7FFFFFFF"
-                                                    FontSize="16"
-                                                    Margin="30,0,10,5" />
+                                                    FontWeight="Bold"
+                                                    Opacity="0.5"
+                                                    FontSize="13"
+                                                    Margin="16,0" />
                                             </Grid>
 
                                         </DataTemplate>
@@ -345,6 +401,8 @@
 
                     <SemanticZoom.ZoomedOutView>
                         <ListView
+                            Name="OperacjeListViewGroup"
+                            Padding="0,0,0,48"
                             ItemsSource="{x:Bind ContactsCVS.View.CollectionGroups}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
@@ -380,15 +438,17 @@
 
             </PivotItem>
 
-            <PivotItem>
+            <PivotItem
+                Margin="0">
                 <PivotItem.Header>
                     <data:PivotHeader
                         Label="Skategoryzowane operacje"
-                        Glyph="&#xE179;" />
+                        Glyph="" />
                 </PivotItem.Header>
                 <SemanticZoom>
                     <SemanticZoom.ZoomedInView>
                         <ListView
+                            Padding="0,-10,0,48"
                             Name="OperacjeListViewCategorized"
                             ItemsSource="{x:Bind CategorizedCVS.View}"
                             SelectionMode="Single"
@@ -458,6 +518,13 @@
 
                             <ListView.GroupStyle>
                                 <GroupStyle>
+                                    <GroupStyle.Panel>
+                                        <ItemsPanelTemplate>
+                                            <ItemsStackPanel
+                                                Margin="0"
+                                                GroupPadding="0" />
+                                        </ItemsPanelTemplate>
+                                    </GroupStyle.Panel>
                                     <GroupStyle.HeaderContainerStyle>
                                         <Style
                                             TargetType="ListViewHeaderItem">
@@ -469,7 +536,8 @@
 
                                                         <ContentPresenter
                                                             x:Name="ContentPresenter"
-                                                            Margin="0,10,0,0"
+                                                            Margin="0"
+                                                            Padding="0"
                                                             Content="{TemplateBinding Content}"
                                                             ContentTemplate="{TemplateBinding ContentTemplate}"
                                                             ContentTransitions="{TemplateBinding ContentTransitions}"
@@ -482,56 +550,61 @@
                                         </Style>
                                     </GroupStyle.HeaderContainerStyle>
                                     <GroupStyle.HeaderTemplate>
-                                        <DataTemplate
-                                            x:DataType="data:CategoryGroupInfoList">
+                                        <DataTemplate>
 
                                             <Grid
-                                                BorderBrush="#24ffffff"
+                                                Background="Transparent"
+                                                BorderBrush="#353535"
                                                 BorderThickness="0,0,0,1"
-                                                Margin="0,20,0,5"
-                                                MaxWidth="620">
+                                                MaxWidth="620"
+                                                Margin="0,20,0,0">
+                                                <Grid
+                                                    Margin="0,5"
+                                                    MaxWidth="620">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition
+                                                            Width="Auto" />
+                                                        <ColumnDefinition
+                                                            Width="*" />
+                                                        <ColumnDefinition
+                                                            Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
 
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition
-                                                        Width="Auto" />
-                                                    <ColumnDefinition
-                                                        Width="*" />
-                                                    <ColumnDefinition
-                                                        Width="Auto" />
-                                                </Grid.ColumnDefinitions>
+                                                    <StackPanel
+                                                        Orientation="Horizontal"
+                                                        Margin="15,0">
+                                                        <Grid
+                                                            Width="50"
+                                                            Height="30">
+                                                            <FontIcon
+                                                                Grid.Column="0"
+                                                                Opacity="0.5"
+                                                                FontFamily="{Binding iconStyle}"
+                                                                Glyph="{Binding icon}"
+                                                                FontSize="16" />
+                                                        </Grid>
 
-                                                <StackPanel
-                                                    Orientation="Horizontal"
-                                                    Margin="20,0,0,5">
-                                                    <Grid Width="30" Height="30">
-                                                        <Rectangle
-                                                            RadiusX="3"
-                                                            RadiusY="3"
-                                                            Fill="{x:Bind color}" />
-                                                        <FontIcon
-                                                            Grid.Column="0"
-                                                            FontFamily="Segoe UI"
-                                                            Glyph="{x:Bind icon}"
-                                                            FontSize="16"/>
-                                                    </Grid>
+                                                        <TextBlock
+                                                            Opacity="0.5"
+                                                            Margin="15,0"
+                                                            VerticalAlignment="Center"
+                                                            Text="{Binding Key}"
+                                                            FontSize="13" />
+
+                                                    </StackPanel>
 
                                                     <TextBlock
-                                                        Margin="20,0"
                                                         VerticalAlignment="Center"
-                                                        Text="{x:Bind Key}"
-                                                        FontSize="13"/>
+                                                        Grid.Column="2"
+                                                        Name="SumText"
+                                                        HorizontalAlignment="Right"
+                                                        Text="{Binding cost}"
+                                                        Opacity="0.5"
+                                                        FontWeight="Bold"
+                                                        FontSize="13"
+                                                        Margin="16,0" />
+                                                </Grid>
 
-                                                </StackPanel>
-
-                                                <TextBlock
-                                                    VerticalAlignment="Center"
-                                                    Grid.Column="2"
-                                                    Name="SumText"
-                                                    HorizontalAlignment="Right"
-                                                    Text="{x:Bind cost}"
-                                                    Foreground="#7FFFFFFF"
-                                                    FontSize="16"
-                                                    Margin="30,0,10,5" />
                                             </Grid>
 
                                         </DataTemplate>
@@ -543,6 +616,8 @@
 
                     <SemanticZoom.ZoomedOutView>
                         <ListView
+                            Name="OperacjeListViewCategorizedGroup"
+                            Padding="0,0,0,48"
                             ItemsSource="{x:Bind CategorizedCVS.View.CollectionGroups}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
@@ -586,10 +661,13 @@
             <PivotItem>
                 <PivotItem.Header>
                     <data:PivotHeader
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
+                        Width="Auto"
                         Label="Statystyki"
-                        Glyph="&#xE1E9;" />
+                        Glyph="" />
                 </PivotItem.Header>
-                gggg
+gggg
             </PivotItem>
             
         </Pivot>
@@ -601,15 +679,19 @@
             Foreground="White">
 
             <AppBarButton
+                x:Name="PrevMonthButton"
                 Icon="Back"
                 Label="Poprzedni miesiąc"
-                Foreground="White">
+                Foreground="White"
+                Click="PreviousMonthButton_Click">
             </AppBarButton>
 
             <AppBarButton
+                x:Name="NextMonthButton"
                 Icon="Forward"
                 Label="Nastepny miesiąc"
-                Foreground="White">
+                Foreground="White"
+                Click="NextMonthButton_Click">
             </AppBarButton>
 
             <AppBarSeparator />

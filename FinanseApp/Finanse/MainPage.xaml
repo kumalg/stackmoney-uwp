@@ -163,7 +163,7 @@
                     x:Name="HamburgerWide">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger
-                            MinWindowWidth="640" />
+                            MinWindowWidth="540" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter

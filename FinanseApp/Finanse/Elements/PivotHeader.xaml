@@ -73,9 +73,11 @@
             Orientation="Horizontal"
             x:Name="RelativePanel">
 
+            
             <FontIcon
                 Width="48"
                 x:Name="Icon"
+                FontFamily="{StaticResource FontAwesome}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Glyph="{Binding Glyph}"

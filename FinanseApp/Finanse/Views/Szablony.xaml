@@ -24,7 +24,7 @@
                 </VisualState>
                 <VisualState x:Name="HamburgerWide">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="640" />
+                        <AdaptiveTrigger MinWindowWidth="540" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter

@@ -6,11 +6,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Height="70">
+    Height="68">
 
     <Grid
         MaxWidth="600"
-        Margin="10,0"
+        Margin="16,0"
         DataContextChanged="Operation_DataContextChanged">
 
         <Grid.ColumnDefinitions>
@@ -18,19 +18,31 @@
                 Width="Auto" />
             <ColumnDefinition
                 Width="*" />
-            <ColumnDefinition
-                Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <Grid
-            Height="50"
-            Width="50">
+            Height="48"
+            Width="48">
 
+            <Ellipse
+                Fill="{StaticResource AccentColorStyle}"
+                Name="Ellipse_OperationTemplate">
+            </Ellipse>
+            <Ellipse
+                Name="MoneyAccountEllipse"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Stroke="{StaticResource GreyColorStyle}"
+                StrokeThickness="4"
+                Fill="{StaticResource RedColorStyle}"
+                Width="14"
+                Height="14" />
+            <!--
             <Rectangle
                 RadiusX="5"
                 RadiusY="5"
                 Name="Ellipse_OperationTemplate"  />
-
+-->
             <TextBlock
                 Name="Icon_OperationTemplate"
                 FontSize="24"
@@ -38,42 +50,53 @@
                 HorizontalAlignment="Center"
                 Foreground="White" />
         </Grid>
-
-        <StackPanel
+        <Border
+            Margin="16,0,0,0"
             Grid.Column="1"
-            VerticalAlignment="Center"
-            Margin="10,0,0,0">
+            BorderBrush="{StaticResource White20%}"
+            BorderThickness="0,0,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    VerticalAlignment="Center">
 
-            <TextBlock
-                Name="Title_OperationTemplate"
-                Text="{x:Bind Operation.Title}"
-                TextWrapping="Wrap"
-                FontSize="16"
-                Foreground="White" />
+                    <TextBlock
+                        Name="Title_OperationTemplate"
+                        Text="{x:Bind Operation.Title}"
+                        TextWrapping="Wrap"
+                        FontSize="16"
+                        Foreground="White" />
 
-            <StackPanel
-                Orientation="Horizontal"
-                Opacity="0.4">
+                    <StackPanel
+                        Visibility="Collapsed"
+                        Orientation="Horizontal"
+                        Opacity="0.4">
+                        <TextBlock
+                            Name="Category_OperationTemplate"
+                            FontWeight="Bold"
+                            FontSize="12"
+                            Foreground="White" />
+                        <TextBlock
+                            Name="SubCategory_OperationTemplate"
+                            FontSize="12"
+                            Foreground="White" />
+                    </StackPanel>
+
+                </StackPanel>
                 <TextBlock
-                    Name="Category_OperationTemplate"
+                    FontSize="13"
+                    Grid.Column="1"
+                    Name="Cost_OperationTemplate"
+                    VerticalAlignment="Center"
                     FontWeight="Bold"
-                    FontSize="12"
-                    Foreground="White" />
-                <TextBlock
-                    Name="SubCategory_OperationTemplate"
-                    FontSize="12"
-                    Foreground="White" />
-            </StackPanel>
-
-        </StackPanel>
-
-        <TextBlock
-            FontSize="13"
-            Name="Cost_OperationTemplate"
-            Grid.Column="2"
-            VerticalAlignment="Center"
-            FontWeight="Bold"
-            Foreground="{StaticResource RedColorStyle}" />
+                    Foreground="{StaticResource RedColorStyle}" />
+            </Grid>
+        </Border>
     </Grid>
 
 </UserControl>

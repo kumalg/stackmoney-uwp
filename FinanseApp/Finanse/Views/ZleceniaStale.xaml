@@ -28,7 +28,7 @@
                     x:Name="HamburgerWide">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger
-                            MinWindowWidth="640" />
+                            MinWindowWidth="540" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter
@@ -47,8 +47,8 @@
         </Grid.RowDefinitions>
 
         <Grid
-            Background="{StaticResource AccentDarkColorStyle}"
-            MinHeight="48">
+            Background="{StaticResource AccentColorStyle}"
+            Height="48">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
                     Width="Auto" />

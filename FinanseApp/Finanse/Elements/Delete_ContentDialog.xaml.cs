@@ -53,7 +53,7 @@ namespace Finanse.Elements {
                         break;
                     }
                 default: {
-                        GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key.ToString() == String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)operation.Date).LocalDateTime));
+                        GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key.ToString() == operation.Date);
                         if (group.Count == 1)
                             _source.Remove(group);
                         else {

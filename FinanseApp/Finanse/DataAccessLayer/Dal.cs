@@ -40,7 +40,19 @@
                 db.CreateTable<OperationCategory>();
                 db.CreateTable<OperationSubCategory>();
                 db.CreateTable<Settings>();
-
+/*
+                db.DeleteAll<MoneyAccount>();
+                db.Insert(new MoneyAccount {
+                    Id = 1,
+                    Name = "Gotówka",
+                    Color = "#FFcfd8dc",
+                });
+                db.Insert(new MoneyAccount {
+                    Id = 2,
+                    Name = "Karta VISA",
+                    Color = "#FF00e676",
+                });
+                */
                 if (!db.Table<Settings>().Any())
                     db.Insert(new Settings {
                         CultureInfoName = "en-US"
@@ -143,7 +155,20 @@
             return models;
         }
 
-        public static List<Operation> GetAllPersons() {
+        public static Operation GetEldestOperation() {
+            Operation eldest;
+
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                eldest = db.Table<Operation>().Aggregate((c1, c2) => Convert.ToDateTime(c1.Date) < Convert.ToDateTime(c2.Date) ? c1 : c2);
+            }
+
+            return eldest;
+        }
+
+        public static List<Operation> GetAllOperations(int month, int year) {
             List<Operation> models;
 
             // Create a new connection
@@ -151,8 +176,10 @@
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                models = (from p in db.Table<Operation>()
-                           select p).ToList();
+                string date = year.ToString() + "." + month.ToString("00");
+
+                models = (from p in db.Table<Operation>().ToList().Where(i=>i.Date.Substring(0,7) == date.ToString())
+                          select p).ToList();
             }
 
             return models;

@@ -13,6 +13,15 @@
     SecondaryButtonText="Wyjdź"
     PrimaryButtonClick="EditButton_Click"
     RequestedTheme="Dark">
+    <ContentDialog.Resources>
+        <Style
+            x:Key="DetailsIconStyle"
+            TargetType="FontIcon">
+            <Setter
+                Property="Opacity"
+                Value="0.5" />
+        </Style>
+    </ContentDialog.Resources>
 
     <ContentDialog.Style>
         <Style
@@ -176,7 +185,8 @@
             Margin="0,15,0,0">
             <FontIcon
                 Name="CostValueIcon"
-                Glyph="" />
+                Glyph=""
+                Style="{StaticResource DetailsIconStyle}" />
             <TextBlock
                 Name="CostValue"
                 FontSize="18"
@@ -191,6 +201,7 @@
             Orientation="Horizontal"
             Margin="0,15,0,0">
             <FontIcon
+                Style="{StaticResource DetailsIconStyle}"
                 Glyph="" />
             <TextBlock
                 Name="DateValue"
@@ -204,6 +215,7 @@
             <StackPanel
                 Orientation="Horizontal">
                 <FontIcon
+                    Style="{StaticResource DetailsIconStyle}"
                     Glyph="&#xE71D;" />
                 <TextBlock
                     Name="CategoryValue"
@@ -215,6 +227,7 @@
                 Margin="40,5,0,0"
                 Orientation="Horizontal">
                 <FontIcon
+                    Style="{StaticResource DetailsIconStyle}"
                     Glyph="" />
                 <TextBlock
                     Name="SubCategoryValue"
@@ -228,7 +241,9 @@
             Orientation="Horizontal"
             Margin="0,15,0,0">
             <FontIcon
-                Glyph="&#xE963;" />
+                Style="{StaticResource DetailsIconStyle}"
+                FontFamily="/Assets/FontAwesome.ttf#FontAwesome"
+                Glyph="" />
             <TextBlock
                 Name="PayForm"
                 Text="Gotówka"
@@ -251,6 +266,7 @@
                 </Grid.ColumnDefinitions>
 
                 <FontIcon
+                    Style="{StaticResource DetailsIconStyle}"
                     Glyph="&#xEA55;"
                     VerticalAlignment="Top" />
                 <TextBlock

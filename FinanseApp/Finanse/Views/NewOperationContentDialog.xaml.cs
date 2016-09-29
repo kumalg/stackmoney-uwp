@@ -68,7 +68,7 @@ namespace Finanse.Views {
                         SaveAsAssetToggle.Visibility = Visibility.Collapsed;
 
                         EditAndPatternSetters();
-                        DateValue.Date = editedOperation.Date;
+                        DateValue.Date = Convert.ToDateTime(editedOperation.Date);
                         break;
                     };
 
@@ -88,6 +88,10 @@ namespace Finanse.Views {
 
                         EditAndPatternSetters();
                         DateValue.Date = DateTime.Today;
+
+                        if (PayFormValue.Items.Count > 0)
+                            PayFormValue.SelectedIndex = 0;
+
                         break;
                     };
 
@@ -148,7 +152,7 @@ namespace Finanse.Views {
                 Cost = decimal.Parse(acceptedCostValue),
                 CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
                 SubCategoryId = subCategoryId,
-                Date = DateValue.Date,
+                Date = String.Format("{0:yyyy/MM/dd}", DateValue.Date),
                 MoreInfo = MoreInfoValue.Text,
                 MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
             };
@@ -157,7 +161,7 @@ namespace Finanse.Views {
                 case "edit": {
                         item.Id = editedOperation.Id;
 
-                        GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key.ToString() == String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)editedOperation.Date).LocalDateTime));
+                        GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key == editedOperation.Date);
 
                         if (item.Date == editedOperation.Date) {
                             group[group.IndexOf(group.Single(i => i.Id == item.Id))] = item;
@@ -216,24 +220,30 @@ namespace Finanse.Views {
         }
 
         private void AddOperationToList(Operation item) {
-            GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key.ToString() == String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)item.Date).LocalDateTime));
+
+            GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key == item.Date);
             if (group == null) {
 
+                DateTime date = Convert.ToDateTime(item.Date);
+
                 GroupInfoList<Operation> newGroup = new GroupInfoList<Operation> {
-                    Key = String.Format("{0:yyyy/MM/dd}", ((DateTimeOffset)item.Date).LocalDateTime),
-                    dayNum = String.Format("{0:dd}", item.Date),
-                    day = String.Format("{0:dddd}", item.Date),
-                    month = String.Format("{0:MMMM yyyy}", item.Date),
+                    Key = item.Date,
+                    dayNum = String.Format("{0:dd}", date),
+                    day = String.Format("{0:dddd}", date),
+                    month = String.Format("{0:MMMM yyyy}", date),
                 };
 
-                bool check = true;
                 int i = 0;
-                newGroup.Insert(0, item);
-                while (check) {
-                    if (Convert.ToDateTime(_source[i].Key) > Convert.ToDateTime(newGroup.Key))
-                        i++;
-                    else
-                        check = false;
+
+                if (_source.Count != 0) {
+                    bool check = true;
+                    newGroup.Insert(0, item);
+                    while (check) {
+                        if (Convert.ToDateTime(_source[i].Key) > Convert.ToDateTime(newGroup.Key))
+                            i++;
+                        else
+                            check = false;
+                    }
                 }
                 _source.Insert(i, newGroup);
             }
@@ -403,7 +413,7 @@ namespace Finanse.Views {
         private async void UsePatternButton_Click(object sender, RoutedEventArgs e) {
             Hide();
 
-            var ContentDialogItem = new OperationPatternsContentDialog();
+            var ContentDialogItem = new OperationPatternsContentDialog(_source);
 
             var result = await ContentDialogItem.ShowAsync();
         }

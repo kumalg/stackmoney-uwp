@@ -33,12 +33,15 @@ namespace Finanse.Views {
                 });
             }
 
-            foreach (string item in Settings.GetAllFonts()) {
-
-                IconValue.Items.Add(new ComboBoxItem {
-                    Content = item
-                });
+            if (Settings.GetActualIconStyle() == "Segoe UI") {
+                ColorIcon_RadioButton.IsChecked = true;
             }
+            else
+                MonoIcon_RadioButton.IsChecked = true;
+
+            Calendar.MaxDate = DateTime.Today;
+            Calendar.MinDate = Convert.ToDateTime("2016.05.10");
+
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -46,9 +49,9 @@ namespace Finanse.Views {
             Settings.SetActualCurrency((string)((ComboBoxItem)CurrencyValue.SelectedItem).Tag);
         }
 
-        private void IconValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private void IconStyleRadioButton_Checked(object sender, RoutedEventArgs e) {
 
-            Settings.SetActualIconStyle(((ComboBoxItem)IconValue.SelectedItem).Content.ToString());
+            Settings.SetActualIconStyle(((RadioButton)sender).Tag.ToString());
         }
     }
 }

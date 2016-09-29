@@ -50,7 +50,6 @@ namespace Finanse.Elements {
         public int SubCategoryId { get; set; } 
         public decimal Cost { get; set; } 
         public bool isExpense { get; set; } 
-        public string PayForm { get; set; }
         public int MoneyAccountId { get; set; }
         public string MoreInfo {
             get {

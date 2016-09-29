@@ -52,7 +52,7 @@ namespace Finanse.Views {
 
             DateValuePanel.Visibility = Visibility.Collapsed;
             if (editedOperation.Date != null && whichOption != "pattern") {
-                DateValue.Text = String.Format("{0:dddd, dd MMMM yyyy}", ((DateTimeOffset)editedOperation.Date).LocalDateTime);
+                DateValue.Text = String.Format("{0:dddd, dd MMMM yyyy}", Convert.ToDateTime(editedOperation.Date));
                 DateValuePanel.Visibility = Visibility.Visible;
             }
 
@@ -82,7 +82,7 @@ namespace Finanse.Views {
             }
 
             /* WIĘCEJ INFORMACJI */
-            if (editedOperation.MoreInfo != string.Empty) {
+            if (!String.IsNullOrEmpty(editedOperation.MoreInfo)) {
                 MoreInfo.Text = editedOperation.MoreInfo;
             }
             else

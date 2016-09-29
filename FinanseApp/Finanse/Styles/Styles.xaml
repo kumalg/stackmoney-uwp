@@ -42,6 +42,9 @@
         Text="🏴"
         FontFamily="Segoe UI" />
 
+    <FontFamily
+        x:Key="FontAwesome">/Assets/Fonts/FontAwesome.ttf#FontAwesome</FontFamily>
+
     <!--*****************************************
     KOLORY W APLIKACJI
     ******************************************-->
@@ -63,25 +66,24 @@
     <SolidColorBrush x:Key="DarkBlueColorStyle" Color="#01948a"/>
     <SolidColorBrush x:Key="BlueColorStyle" Color="#01b6ad"/>
 
-    <SolidColorBrush x:Key="GreyColorStyle" Color="#272727" />
-    <SolidColorBrush x:Key="GreyTransparentColorStyle" Color="#272727" Opacity="0.8" />
+    <SolidColorBrush x:Key="GreyColorStyle" Color="#23232e" />
+    <SolidColorBrush x:Key="GreyTransparentColorStyle" Color="#23232e" Opacity="0.8" />
     
     <SolidColorBrush x:Key="White10%" Color="White" Opacity="0.02"/>
     <SolidColorBrush x:Key="White20%" Color="White" Opacity="0.05"/>
     
-    <SolidColorBrush x:Key="LightGreyTransparentColorStyle" Color="#2d2d2d" Opacity="0.8"/>
+    <SolidColorBrush x:Key="LightGreyTransparentColorStyle" Color="#2c2c3b" Opacity="0.8"/>
     
-    <SolidColorBrush x:Key="DarkGreyColorStyle" Color="#1f1f1f"/>
-    <SolidColorBrush x:Key="DarkGreyTransparentColorStyle" Color="#1f1f1f" Opacity="0.8"/>
+    <SolidColorBrush x:Key="DarkGreyColorStyle" Color="#202029"/>
+    <SolidColorBrush x:Key="DarkGreyTransparentColorStyle" Color="#202029" Opacity="0.8"/>
 
-    
     <!--*****************************************
     BAZA KOLORÓW DO KATEGORII
     ******************************************-->
     <ResourceDictionary x:Key="ColorBase">
-        <SolidColorBrush x:Name="Blue1" x:Key="a" Color="#2a7fdf" />
-        <SolidColorBrush x:Name="Blue2" x:Key="b" Color="#0b63c7" />
-	    <SolidColorBrush x:Name="Blue3" x:Key="c" Color="#0a4e9b" />
+        <SolidColorBrush x:Name="Blue1" x:Key="a" Color="#02b0e7" />
+        <SolidColorBrush x:Name="Blue2" x:Key="b" Color="#018dcc" />
+	    <SolidColorBrush x:Name="Blue3" x:Key="c" Color="#016890" />
         
 	    <SolidColorBrush x:Name="Cyan1" x:Key="d" Color="#06d9aa" />
 	    <SolidColorBrush x:Name="Cyan2" x:Key="e" Color="#14a988" />
@@ -107,13 +109,13 @@
 	    <SolidColorBrush x:Name="Orange2" x:Key="u" Color="#ef7700" />
 	    <SolidColorBrush x:Name="Orange3" x:Key="v" Color="#ac5601" />
 
-	    <SolidColorBrush x:Name="Red1" x:Key="wa" Color="#f14d4d" />
-	    <SolidColorBrush x:Name="Red2" x:Key="wb" Color="#ea2626" />
-	    <SolidColorBrush x:Name="Red3" x:Key="wc" Color="#a22222" />
+	    <SolidColorBrush x:Name="Red1" x:Key="wa" Color="#e04967" />
+	    <SolidColorBrush x:Name="Red2" x:Key="wb" Color="#c2324a" />
+	    <SolidColorBrush x:Name="Red3" x:Key="wc" Color="#882b3d" />
 
-	    <SolidColorBrush x:Name="Pink1" x:Key="wd" Color="#f04fad" />
-	    <SolidColorBrush x:Name="Pink2" x:Key="we" Color="#d90682" />
-	    <SolidColorBrush x:Name="Pink3" x:Key="wf" Color="#a21467" />
+	    <SolidColorBrush x:Name="Pink1" x:Key="wd" Color="#b952c2" />
+	    <SolidColorBrush x:Name="Pink2" x:Key="we" Color="#96399f" />
+	    <SolidColorBrush x:Name="Pink3" x:Key="wf" Color="#6e3173" />
         
 	    <SolidColorBrush x:Name="Violet1" x:Key="wg" Color="#b759f2" />
 	    <SolidColorBrush x:Name="Violet2" x:Key="wh" Color="#8706d9" />
@@ -163,7 +165,8 @@
         <Setter Property="Grid.Column" Value="1"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="{StaticResource AccentTextColorStyle}"/>
-        <Setter Property="Margin" Value="16,0,0,0"/>
+        <!--<Setter Property="Margin" Value="16,0,0,0"/>-->
+        <Setter Property="Margin" Value="0"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontSize" Value="14"/>
     </Style>
@@ -3383,7 +3386,7 @@
                     <Grid
                         x:Name="Grid"
                         Background="{TemplateBinding Background}"
-                        Margin="5,0">
+                        Margin="24,0">
 
                         <Grid.Resources>
 
@@ -3470,6 +3473,11 @@
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)"
                                             To="0"
                                             Duration="0" />
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="Border"
+                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)"
+                                            To="0"
+                                            Duration="0" />
                                     </Storyboard>
                                 </VisualState>
 
@@ -3494,6 +3502,11 @@
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)"
                                             To="1"
                                             Duration="0" />
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="Border"
+                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)"
+                                            To="1"
+                                            Duration="0" />
 
                                     </Storyboard>
 
@@ -3512,6 +3525,11 @@
                                         <DoubleAnimation
                                             Storyboard.TargetName="Border"
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)"
+                                            To="0"
+                                            Duration="0" />
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="Border"
+                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)"
                                             To="0"
                                             Duration="0" />
 
@@ -3535,6 +3553,11 @@
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)"
                                             To="1"
                                             Duration="0" />
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="Border"
+                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)"
+                                            To="1"
+                                            Duration="0" />
 
                                     </Storyboard>
 
@@ -3555,6 +3578,11 @@
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)"
                                             To="0"
                                             Duration="0" />
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="Border"
+                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)"
+                                            To="0"
+                                            Duration="0" />
 
                                     </Storyboard>
 
@@ -3568,9 +3596,26 @@
                             </VisualStateGroup>
 
                         </VisualStateManager.VisualStateGroups>
-
                         <StackPanel
-                            x:Name="Border"
+                            Width="48"
+                            HorizontalAlignment="Left">
+                            <Ellipse
+                                x:Name="Border"
+                                Fill="{StaticResource AccentColorStyle}"
+                                Width="10"
+                                Height="10"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Center"
+                                Margin="0,-5,0,0"
+                                RenderTransformOrigin="0.5,0.5">
+                                <Ellipse.RenderTransform>
+                                    <CompositeTransform />
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                        </StackPanel>
+                        <StackPanel
+                            Visibility="Collapsed"
+                            x:Name="BorderEllipse_Hover"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Left"
                             Width="48"
@@ -3602,7 +3647,6 @@
                             </ContentPresenter.RenderTransform>
 
                         </ContentPresenter>
-
                     </Grid>
 
                 </ControlTemplate>

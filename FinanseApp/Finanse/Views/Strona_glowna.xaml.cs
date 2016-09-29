@@ -30,28 +30,38 @@ namespace Finanse.Views {
 
     public sealed partial class Strona_glowna : Page {
 
-        private readonly ObservableCollection<GroupInfoList<Operation>> _source;
+        private ObservableCollection<GroupInfoList<Operation>> _source;
+        private ObservableCollection<CategoryGroupInfoList<Operation>> _sourceByCategory;
+        private FontFamily iconStyle = new FontFamily(Settings.GetActualIconStyle());
 
         bool isSelectionChanged = false;
 
         decimal actualMoney;
+        int actualMonth;
+        int actualYear;
 
         public Strona_glowna() {
 
             this.InitializeComponent();
 
             Dal.CreateDB();
-            Settings.SetSettings();
 
-            _source = (new StoreData()).GetGroupsByDay();
+            actualMonth = DateTime.Today.Month;
+            actualYear = DateTime.Today.Year;
+            NextMonthButton.IsEnabled = false;
+
+            _source = (new StoreData()).GetGroupsByDay(actualMonth, actualYear);
+            _sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
+
             ContactsCVS.Source = _source;
+            CategorizedCVS.Source = _sourceByCategory;
 
             foreach (var group in _source) {
                 actualMoney += group.decimalCost;
             }
             ActualMoneyBar.Text = actualMoney.ToString("C", Settings.GetActualCurrency());
 
-            CategorizedCVS.Source = Operation.GetOperationsByCategoryGrouped();
+          //  CategorizedCVS.Source = Operation.GetOperationsByCategoryGrouped();
 
         }
 
@@ -119,26 +129,82 @@ namespace Finanse.Views {
             isSelectionChanged = true;
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e) {
-            DisplayInformation.GetForCurrentView().OrientationChanged += MainPage_OrientationChanged;
+        private void PreviousMonthButton_Click(object sender, RoutedEventArgs e) {
+            _source.Clear();
+            _sourceByCategory.Clear();
+            ObservableCollection<GroupInfoList<Operation>> source;
+            ObservableCollection<CategoryGroupInfoList<Operation>> sourceByCategory;
+            if (actualMonth > 1) {
+                source = (new StoreData()).GetGroupsByDay(--actualMonth, actualYear);
+                sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
+            }
+            else {
+                actualMonth = 12;
+                source = (new StoreData()).GetGroupsByDay(actualMonth, --actualYear);
+                sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
+            }
+
+            ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
+            if (actualYear != DateTime.Today.Year)
+                ActualMonthText.Text += " " + actualYear.ToString();
+
+            foreach (var s in source) {
+                _source.Add(s);
+            };
+            foreach (var s in sourceByCategory) {
+                _sourceByCategory.Add(s);
+            };
+
+            SetNextMonthButtonEnabling();
+            SetPreviousMonthButtonEnabling();
         }
 
-        private void MainPage_OrientationChanged(DisplayInformation info, object args) {
-
-            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) {
-
-                if (info.CurrentOrientation == DisplayOrientations.Landscape || info.CurrentOrientation == DisplayOrientations.LandscapeFlipped) {
-                    FakeHamburgerButton.Width = 0;
-                    UpperCommandBar.Visibility = Visibility.Visible;
-                    LowerCommandBar.Visibility = Visibility.Collapsed;
-                }
-
-                else {
-                    UpperCommandBar.Visibility = Visibility.Collapsed;
-                    LowerCommandBar.Visibility = Visibility.Visible;
-                    FakeHamburgerButton.Width = 48;
-                }
+        private void NextMonthButton_Click(object sender, RoutedEventArgs e) {
+            _source.Clear();
+            _sourceByCategory.Clear();
+            ObservableCollection<GroupInfoList<Operation>> source;
+            ObservableCollection<CategoryGroupInfoList<Operation>> sourceByCategory;
+            if (actualMonth < 12) {
+                source = (new StoreData()).GetGroupsByDay(++actualMonth, actualYear);
+                sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
             }
+            else {
+                actualMonth = 1;
+                source = (new StoreData()).GetGroupsByDay(actualMonth, ++actualYear);
+                sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
+            }
+
+            ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
+            if (actualYear != DateTime.Today.Year)
+                ActualMonthText.Text += " " + actualYear.ToString();
+
+            foreach (var s in source) {
+                _source.Add(s);
+            };
+            foreach (var s in sourceByCategory) {
+                _sourceByCategory.Add(s);
+            };
+
+            SetNextMonthButtonEnabling();
+            SetPreviousMonthButtonEnabling();
+        }
+
+        private void SetNextMonthButtonEnabling() {
+
+            if (DateTime.Today.Year == actualYear && DateTime.Today.Month == actualMonth)
+                NextMonthButton.IsEnabled = false;
+            else
+                NextMonthButton.IsEnabled = true;
+        }
+        private void SetPreviousMonthButtonEnabling() {
+
+            string eldestYear = Dal.GetEldestOperation().Date.Substring(0, 4);
+            string eldestMonth = Dal.GetEldestOperation().Date.Substring(5, 2);
+
+            if (eldestMonth == actualMonth.ToString("00") && eldestYear == actualYear.ToString())
+                PrevMonthButton.IsEnabled = false;
+            else
+                PrevMonthButton.IsEnabled = true;
         }
     }
 }

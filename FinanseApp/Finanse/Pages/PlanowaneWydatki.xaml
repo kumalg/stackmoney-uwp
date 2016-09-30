@@ -565,7 +565,43 @@
             </PivotItem>
 
         </Pivot>
-
+        
+        <StackPanel
+            Grid.Row="1"
+            VerticalAlignment="Bottom"
+            Background="{ThemeResource Background-1Transparent}">
+            <CommandBar
+                HorizontalAlignment="Center"
+                Background="Transparent"
+                OverflowButtonVisibility="Visible">
+                <AppBarToggleButton
+                    Label="Operacje"
+                    Icon="Calendar" />
+                <AppBarToggleButton
+                    Label="Kategorie"
+                    Icon="Tag" />
+                <AppBarToggleButton
+                    Label="Dodaj operację"
+                    Icon="Add" />
+                <AppBarToggleButton
+                    Label="Statystyki"
+                    Icon="ZeroBars" />
+                <CommandBar.SecondaryCommands>
+                    <AppBarButton
+                        Icon="Copy"
+                        Label="Szablony" />
+                    <AppBarButton
+                        Icon="RepeatAll"
+                        Label="Zlecenia stałe" />
+                    <AppBarButton
+                        Icon="PreviewLink"
+                        Label="Konta" />
+                    <AppBarButton
+                        Icon="Setting"
+                        Label="Ustawienia" />
+                </CommandBar.SecondaryCommands>
+            </CommandBar>
+        </StackPanel>
     </Grid>
 
 </Page>

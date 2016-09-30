@@ -32,7 +32,7 @@
                 Name="MoneyAccountEllipse"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Stroke="{StaticResource GreyColorStyle}"
+                Stroke="{ThemeResource Background}"
                 StrokeThickness="4"
                 Fill="{StaticResource RedColorStyle}"
                 Width="14"
@@ -68,9 +68,9 @@
                     <TextBlock
                         Name="Title_OperationTemplate"
                         Text="{x:Bind Operation.Title}"
+                        Foreground="{ThemeResource Text}"
                         TextWrapping="Wrap"
-                        FontSize="16"
-                        Foreground="White" />
+                        FontSize="16" />
 
                     <StackPanel
                         Visibility="Collapsed"

@@ -40,6 +40,11 @@ namespace Finanse.Pages {
             else
                 MonoIcon_RadioButton.IsChecked = true;
 
+            if (Settings.GetTheme() == ApplicationTheme.Dark)
+                ThemeToggle.IsOn = true;
+            else
+                ThemeToggle.IsOn = false;
+
             Calendar.MaxDate = DateTime.Today;
             Calendar.MinDate = Convert.ToDateTime("2016.05.10");
 
@@ -53,6 +58,15 @@ namespace Finanse.Pages {
         private void IconStyleRadioButton_Checked(object sender, RoutedEventArgs e) {
 
             Settings.SetActualIconStyle(((RadioButton)sender).Tag.ToString());
+        }
+
+        private void ThemeToggle_Toggled(object sender, RoutedEventArgs e) {
+            if (ThemeToggle.IsOn) {
+                Settings.SetTheme(1);
+            }
+            else {
+                Settings.SetTheme(0);
+            }
         }
     }
 }

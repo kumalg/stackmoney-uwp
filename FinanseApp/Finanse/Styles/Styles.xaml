@@ -45,6 +45,41 @@
     <FontFamily
         x:Key="FontAwesome">/Assets/Fonts/FontAwesome.ttf#FontAwesome</FontFamily>
 
+
+    <FontFamily
+        x:Key="Rubik-Black">/Assets/Fonts/Rubik/Rubik-Black.ttf#Rubik</FontFamily>
+    <FontFamily
+        x:Key="Rubik-BlackItalic">/Assets/Fonts/Rubik/Rubik-BlackItalic.ttf#Rubik</FontFamily>
+    <FontFamily
+        x:Key="Rubik-Bold">/Assets/Fonts/Rubik/Rubik-Bold.ttf#Rubik</FontFamily>
+    <FontFamily
+        x:Key="Rubik-BoldItalic">/Assets/Fonts/Rubik/Rubik-BoldItalic.ttf#Rubik</FontFamily>
+    <FontFamily
+        x:Key="Rubik-Itaic">/Assets/Fonts/Rubik/Rubik-Itaic.ttf#Rubik</FontFamily>
+    <FontFamily
+        x:Key="Rubik-Light">/Assets/Fonts/Rubik/Rubik-Light.ttf#Rubik</FontFamily>
+    <FontFamily
+        x:Key="Rubik-LightItalic">/Assets/Fonts/Rubik/Rubik-LightItalic.ttf#Rubik</FontFamily>
+    <FontFamily
+        x:Key="Rubik-Medium">/Assets/Fonts/Rubik/Rubik-Medium.ttf#Rubik</FontFamily>
+    <FontFamily
+        x:Key="Rubik-MediumItalic">/Assets/Fonts/Rubik/Rubik-MediumItali.ttf#Rubik</FontFamily>
+    <FontFamily
+        x:Key="Rubik-Regular">/Assets/Fonts/Rubik/Rubik-Regular.ttf#Rubik</FontFamily>
+
+
+    <FontFamily
+        x:Key="Poppins-Bold">/Assets/Fonts/Poppins/Poppins-Bold.ttf#Poppins</FontFamily>
+    <FontFamily
+        x:Key="Poppins-Light">/Assets/Fonts/Poppins/Poppins-Light.ttf#Poppins</FontFamily>
+    <FontFamily
+        x:Key="Poppins-Medium">/Assets/Fonts/Poppins/Poppins-Medium.ttf#Poppins</FontFamily>
+    <FontFamily
+        x:Key="Poppins-Regular">/Assets/Fonts/Poppins/Poppins-Regular.ttf#Poppins</FontFamily>
+    <FontFamily
+        x:Key="Poppins-SemiBold">/Assets/Fonts/Poppins/Poppins-SemiBold.ttf#Poppins</FontFamily>
+
+
     <!--*****************************************
     KOLORY W APLIKACJI
     ******************************************-->
@@ -164,7 +199,7 @@
     <Style TargetType="TextBlock" x:Key="PageTitleStyle">
         <Setter Property="Grid.Column" Value="1"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Foreground" Value="{StaticResource AccentTextColorStyle}"/>
+        <Setter Property="Foreground" Value="{ThemeResource AccentText}"/>
         <!--<Setter Property="Margin" Value="16,0,0,0"/>-->
         <Setter Property="Margin" Value="0"/>
         <Setter Property="FontWeight" Value="Bold"/>
@@ -247,7 +282,7 @@
                                     <VisualState.Setters>
                                         <Setter
                                             Target="HamburgerRadioButtonGrid.(Panel.Background)"
-                                            Value="{StaticResource GreyColorStyle}" />
+                                            Value="{ThemeResource Background}" />
                                     </VisualState.Setters>
                                 </VisualState>
                                 <VisualState
@@ -255,7 +290,7 @@
                                     <VisualState.Setters>
                                         <Setter
                                             Target="HamburgerRadioButtonGrid.(Panel.Background)"
-                                            Value="{StaticResource AccentColorStyle}" />
+                                            Value="{ThemeResource AccentColor}" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
@@ -269,7 +304,7 @@
                                         <Storyboard>
                                             <ColorAnimation
                                                 Storyboard.TargetName="HamburgerIcon"
-                                                To="{Binding Source={StaticResource AccentTransparentTextColorStyle},Path=Color}"
+                                                To="{Binding Source={ThemeResource Text-1},Path=Color}"
                                                 Duration="0:0:0.2"
                                                 Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
                                             <DoubleAnimation
@@ -285,7 +320,7 @@
                                     <Storyboard>
                                         <ColorAnimation
                                             Storyboard.TargetName="HamburgerIcon"
-                                            To="{Binding Source={StaticResource AccentColorStyle},Path=Color}"
+                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
                                             Duration="0:0:0.2"
                                             Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
                                         <DoubleAnimation
@@ -320,11 +355,11 @@
                                 Width="3"
                                 Height="24"
                                 HorizontalAlignment="Left"
-                                Background="{StaticResource AccentColorStyle}" />
+                                Background="{ThemeResource AccentColor}" />
                             <FontIcon
                                 x:Name="HamburgerIcon"
                                 FontSize="16"
-                                Foreground="{StaticResource AccentTransparentTextColorStyle}"
+                                Foreground="{ThemeResource Text-1}"
                                 Glyph="{TemplateBinding Tag}"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center" />
@@ -335,6 +370,7 @@
                             AutomationProperties.AccessibilityView="Raw"
                             Text="{TemplateBinding Content}"
                             Grid.Column="1"
+                            Foreground="{ThemeResource Text}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             TextWrapping="Wrap"
                             VerticalAlignment="Center" />
@@ -3296,7 +3332,7 @@
                                                     x:Name="HeaderClipperGeometry" />
                                             </ContentControl.Clip>
                                             <Grid
-                                                Background="{StaticResource DarkGreyColorStyle}">
+                                                Background="{ThemeResource Background-1}">
                                                 <PivotHeaderPanel
                                                     x:Name="StaticHeader"
                                                     Visibility="Collapsed"
@@ -3465,7 +3501,7 @@
                                     <Storyboard>
                                         <ColorAnimation
                                             Storyboard.TargetName="ContentPresenter"
-                                            To="#a7a7a7"
+                                            To="{Binding Source={StaticResource Text-2},Path=Color}"
                                             Duration="0"
                                             Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
                                         <DoubleAnimation
@@ -3493,7 +3529,7 @@
 
                                         <ColorAnimation
                                             Storyboard.TargetName="ContentPresenter"
-                                            To="{Binding Source={StaticResource AccentColorStyle},Path=Color}"
+                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
                                             Duration="0"
                                             Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
 
@@ -3519,7 +3555,7 @@
 
                                         <ColorAnimation
                                             Storyboard.TargetName="ContentPresenter"
-                                            To="{Binding Source={StaticResource AccentColorStyle},Path=Color}"
+                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
                                             Duration="0"
                                             Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
                                         <DoubleAnimation
@@ -3544,7 +3580,7 @@
 
                                         <ColorAnimation
                                             Storyboard.TargetName="ContentPresenter"
-                                            To="{Binding Source={StaticResource AccentColorStyle},Path=Color}"
+                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
                                             Duration="0"
                                             Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
 
@@ -3570,7 +3606,7 @@
 
                                         <ColorAnimation
                                             Storyboard.TargetName="ContentPresenter"
-                                            To="#a7a7a7"
+                                            To="{Binding Source={ThemeResource Text-2},Path=Color}"
                                             Duration="0"
                                             Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
                                         <DoubleAnimation
@@ -3601,7 +3637,7 @@
                             HorizontalAlignment="Left">
                             <Ellipse
                                 x:Name="Border"
-                                Fill="{StaticResource AccentColorStyle}"
+                                Fill="{ThemeResource AccentColor}"
                                 Width="10"
                                 Height="10"
                                 VerticalAlignment="Top"
@@ -3981,4 +4017,54 @@
             Value="{StaticResource DarkGreyTransparentColorStyle}" />
     </Style>
 
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="AccentColor+1" Color="#119f4c" />
+            <SolidColorBrush x:Key="AccentColor" Color="#078b3e" />
+            <SolidColorBrush x:Key="AccentColor-1" Color="#067c37" />
+
+            <SolidColorBrush x:Key="AccentText" Color="#bce3cc" />
+            <SolidColorBrush x:Key="AccentText-1" Color="#66bc8a" />
+            <SolidColorBrush x:Key="AccentText-2" Color="#329d5e" />
+            
+            <SolidColorBrush x:Key="Background+2" Color="#282e39" />
+            <SolidColorBrush x:Key="Background+1" Color="#242830" />
+            <SolidColorBrush x:Key="Background" Color="#202329" />
+            <SolidColorBrush x:Key="Background-1" Color="#1b1d21" />
+            <SolidColorBrush x:Key="Background-2" Color="#17181b" />
+            
+            <SolidColorBrush x:Key="Background+1Transparent" Color="#242830" Opacity="0.8" />
+            <SolidColorBrush x:Key="Background-1Transparent" Color="#1b1d21" Opacity="0.8" />
+
+            <SolidColorBrush x:Key="Text+max" Color="White" />
+            <SolidColorBrush x:Key="Text" Color="#b9c4da" />
+            <SolidColorBrush x:Key="Text-1" Color="#7c8493" />
+            <SolidColorBrush x:Key="Text-2" Color="#4c525c" />
+        </ResourceDictionary>
+        
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="AccentColor+1" Color="#119f4c" />
+            <SolidColorBrush x:Key="AccentColor" Color="#078b3e" />
+            <SolidColorBrush x:Key="AccentColor-1" Color="#067c37" />
+
+            <SolidColorBrush x:Key="AccentText" Color="#bce3cc" />
+            <SolidColorBrush x:Key="AccentText-1" Color="#66bc8a" />
+            <SolidColorBrush x:Key="AccentText-2" Color="#329d5e" />
+            
+            <SolidColorBrush x:Key="Background+2" Color="#eaeef6" />
+            <SolidColorBrush x:Key="Background+1" Color="#e0e5ee" />
+            <SolidColorBrush x:Key="Background" Color="#d2d8e4" />
+            <SolidColorBrush x:Key="Background-1" Color="#bfc7d7" />
+            <SolidColorBrush x:Key="Background-2" Color="#aab5c9" />
+            
+            <SolidColorBrush x:Key="Background+1Transparent" Color="#e0e5ee" Opacity="0.8" />
+            <SolidColorBrush x:Key="Background-1Transparent" Color="#bfc7d7" Opacity="0.8" />
+
+            <SolidColorBrush x:Key="Text+max" Color="Black" />
+            <SolidColorBrush x:Key="Text" Color="#455471" />
+            <SolidColorBrush x:Key="Text-1" Color="#798499" />
+            <SolidColorBrush x:Key="Text-2" Color="#a3abbb" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+    
 </ResourceDictionary>

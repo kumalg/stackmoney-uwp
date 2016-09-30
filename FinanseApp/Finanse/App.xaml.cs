@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Finanse.Elements;
 using System.Collections.ObjectModel;
+using Finanse.Models;
 
 namespace Finanse {
 
@@ -29,6 +30,9 @@ namespace Finanse {
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            Settings.SetSettings();
+            this.RequestedTheme = Settings.GetTheme();
         }
 
         /// <summary>
@@ -43,7 +47,7 @@ namespace Finanse {
             // just ensure that the window is active
             if (rootFrame == null) {
                 // Create a Frame to act as the navigation context and navigate to the first page
-                rootFrame = new Frame();
+                rootFrame = new ThemeAwareFrame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 

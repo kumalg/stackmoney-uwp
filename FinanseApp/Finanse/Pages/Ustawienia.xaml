@@ -118,6 +118,23 @@
                         GroupName="IconStyle_RadioButtons"
                         Checked="IconStyleRadioButton_Checked" />
 
+                    <ToggleSwitch
+                        
+                        Name="ThemeToggle"
+                        Style="{StaticResource ToggleSwitchStyle1}"
+                        Margin="0,5,0,0"
+                        Toggled="ThemeToggle_Toggled">
+
+                        <ToggleSwitch.OffContent>
+                            Jasny
+                        </ToggleSwitch.OffContent>
+
+                        <ToggleSwitch.OnContent>
+                            Ciemny
+                        </ToggleSwitch.OnContent>
+
+                    </ToggleSwitch>
+
                     <CalendarView
                         x:Name="Calendar"
                         FirstDayOfWeek="Monday"

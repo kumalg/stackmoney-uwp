@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using Windows.UI.Xaml;
 
 namespace Finanse.Models {
 
@@ -41,6 +42,9 @@ namespace Finanse.Models {
 
             if (localSettings.Values["iconStyle"] == null)
                 localSettings.Values["iconStyle"] = "Segoe UI Symbol";
+
+            if (localSettings.Values["Theme"] == null)
+                localSettings.Values["Theme"] = 1;
         }
 
         public static CultureInfo GetActualCurrency() {
@@ -59,6 +63,24 @@ namespace Finanse.Models {
             return value;
         }
 
+        public static ApplicationTheme GetTheme() {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            ApplicationTheme actualTheme;
+
+            if ((int)localSettings.Values["Theme"] == 1)
+                actualTheme = ApplicationTheme.Dark;
+            else
+                actualTheme = ApplicationTheme.Light;
+
+            return actualTheme;
+        }
+
+        public static void SetTheme(int i) {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            localSettings.Values["Theme"] = i;
+        }
         public static void SetActualCurrency(string currency) {
 
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;

@@ -20,6 +20,7 @@ using Finanse.Elements;
 using Finanse.Pages;
 using System.Collections.ObjectModel;
 using Windows.Graphics.Display;
+using Finanse.Models;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -85,6 +86,7 @@ namespace Finanse {
         }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e) {
+
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
             if (MySplitView.IsPaneOpen) {
                 PageFillWhenPaneIsOpen.Visibility = Visibility.Visible;
@@ -137,6 +139,17 @@ namespace Finanse {
 
         private void MySplitView_PaneClosing(SplitView sender, SplitViewPaneClosingEventArgs args) {
             PageFillWhenPaneIsOpen.Visibility = Visibility.Collapsed;
+        }
+
+        private void ThemeToggle_Toggled(object sender, RoutedEventArgs e) {
+            if (ThemeToggle.IsOn) {
+                (Frame as ThemeAwareFrame).AppTheme = ElementTheme.Dark;
+                Settings.SetTheme(1);
+            }
+            else {
+                (Frame as ThemeAwareFrame).AppTheme = ElementTheme.Light;
+                Settings.SetTheme(0);
+            }
         }
     }
 }

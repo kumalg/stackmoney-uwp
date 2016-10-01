@@ -45,7 +45,6 @@
     <FontFamily
         x:Key="FontAwesome">/Assets/Fonts/FontAwesome.ttf#FontAwesome</FontFamily>
 
-
     <FontFamily
         x:Key="Rubik-Black">/Assets/Fonts/Rubik/Rubik-Black.ttf#Rubik</FontFamily>
     <FontFamily

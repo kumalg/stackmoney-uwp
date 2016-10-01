@@ -8,438 +8,1166 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+
     <Page.Resources>
+
+        <!-- Default style for Windows.UI.Xaml.Controls.CommandBar -->
         <Style
-            x:Key="PivotStyle1"
-            TargetType="Pivot">
+            x:Key="lala"
+            TargetType="CommandBar">
             <Setter
-                Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <Grid />
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>
+                Property="Background"
+                Value="{ThemeResource CommandBarBackground}" />
+            <Setter
+                Property="Foreground"
+                Value="{ThemeResource CommandBarForeground}" />
+            <Setter
+                Property="IsTabStop"
+                Value="False" />
+            <Setter
+                Property="VerticalAlignment"
+                Value="Top" />
+            <Setter
+                Property="HorizontalAlignment"
+                Value="Stretch" />
+            <Setter
+                Property="HorizontalContentAlignment"
+                Value="Left" />
+            <Setter
+                Property="VerticalContentAlignment"
+                Value="Top" />
+            <Setter
+                Property="ClosedDisplayMode"
+                Value="Compact" />
             <Setter
                 Property="Template">
                 <Setter.Value>
                     <ControlTemplate
-                        TargetType="Pivot">
+                        TargetType="CommandBar">
                         <Grid
-                            x:Name="RootElement"
-                            Background="{TemplateBinding Background}"
-                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                            x:Name="LayoutRoot">
                             <Grid.Resources>
-                                <Style
-                                    x:Key="BaseContentControlStyle"
-                                    TargetType="ContentControl">
-                                    <Setter
-                                        Property="FontFamily"
-                                        Value="XamlAutoFontFamily" />
-                                    <Setter
-                                        Property="FontWeight"
-                                        Value="SemiBold" />
-                                    <Setter
-                                        Property="FontSize"
-                                        Value="15" />
-                                    <Setter
-                                        Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate
-                                                TargetType="ContentControl">
-                                                <ContentPresenter
-                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                    ContentTransitions="{TemplateBinding ContentTransitions}"
-                                                    Content="{TemplateBinding Content}"
-                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                    Margin="{TemplateBinding Padding}"
-                                                    OpticalMarginAlignment="TrimSideBearings"
-                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                                <Style
-                                    x:Key="TitleContentControlStyle"
-                                    BasedOn="{StaticResource BaseContentControlStyle}"
-                                    TargetType="ContentControl">
-                                    <Setter
-                                        Property="FontFamily"
-                                        Value="{ThemeResource PivotTitleFontFamily}" />
-                                    <Setter
-                                        Property="FontWeight"
-                                        Value="{ThemeResource PivotTitleThemeFontWeight}" />
-                                    <Setter
-                                        Property="FontSize"
-                                        Value="{ThemeResource PivotTitleFontSize}" />
-                                </Style>
+                                <Storyboard
+                                    x:Key="OverlayOpeningAnimation">
+                                    <DoubleAnimationUsingKeyFrames
+                                        Storyboard.TargetProperty="Opacity">
+                                        <DiscreteDoubleKeyFrame
+                                            KeyTime="0:0:0"
+                                            Value="0" />
+                                        <SplineDoubleKeyFrame
+                                            KeyTime="0:0:0.467"
+                                            KeySpline="0.1,0.9 0.2,1.0"
+                                            Value="1" />
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard
+                                    x:Key="OverlayClosingAnimation">
+                                    <DoubleAnimationUsingKeyFrames
+                                        Storyboard.TargetProperty="Opacity">
+                                        <DiscreteDoubleKeyFrame
+                                            KeyTime="0:0:0"
+                                            Value="1" />
+                                        <SplineDoubleKeyFrame
+                                            KeyTime="0:0:0.167"
+                                            KeySpline="0.2,0 0,1"
+                                            Value="0" />
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
                             </Grid.Resources>
-                            <Grid.RowDefinitions>
-                                <RowDefinition
-                                    Height="Auto" />
-                                <RowDefinition
-                                    Height="*" />
-                            </Grid.RowDefinitions>
+
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup
-                                    x:Name="Orientation">
+                                    x:Name="CommonStates">
                                     <VisualState
-                                        x:Name="Portrait">
+                                        x:Name="Normal" />
+                                    <VisualState
+                                        x:Name="Disabled">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Margin"
-                                                Storyboard.TargetName="TitleContentControl">
+                                                Storyboard.TargetName="EllipsisIcon"
+                                                Storyboard.TargetProperty="Foreground">
                                                 <DiscreteObjectKeyFrame
                                                     KeyTime="0"
-                                                    Value="{ThemeResource PivotPortraitThemePadding}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState
-                                        x:Name="Landscape">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Margin"
-                                                Storyboard.TargetName="TitleContentControl">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="{ThemeResource PivotLandscapeThemePadding}" />
+                                                    Value="{ThemeResource CommandBarEllipsisIconForegroundDisabled}" />
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
                                 </VisualStateGroup>
                                 <VisualStateGroup
-                                    x:Name="NavigationButtonsVisibility">
+                                    x:Name="DisplayModeStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition
+                                            From="CompactClosed"
+                                            To="CompactOpenUp"
+                                            GeneratedDuration="0:0:0.467">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="MoreButton"
+                                                    Storyboard.TargetProperty="VerticalAlignment">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="Stretch" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="HighContrastBorder"
+                                                    Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="Visible" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowContentRootClip"
+                                                    Storyboard.TargetProperty="Rect">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentClipRect}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowContentRootTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="SecondaryItemsControl"
+                                                    Storyboard.TargetProperty="IsEnabled">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="True" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowPopupOffsetTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="1" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="ContentTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="0" />
+                                                    <SplineDoubleKeyFrame
+                                                        KeyTime="0:0:0.467"
+                                                        KeySpline="0.1,0.9 0.2,1.0"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowContentTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHeight}" />
+                                                    <SplineDoubleKeyFrame
+                                                        KeyTime="0:0:0.467"
+                                                        KeySpline="0.1,0.9 0.2,1.0"
+                                                        Value="0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualTransition>
+                                        <VisualTransition
+                                            From="CompactOpenUp"
+                                            To="CompactClosed"
+                                            GeneratedDuration="0:0:0.167">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="MoreButton"
+                                                    Storyboard.TargetProperty="VerticalAlignment">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="Stretch" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="HighContrastBorder"
+                                                    Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="Visible" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowContentRootClip"
+                                                    Storyboard.TargetProperty="Rect">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentClipRect}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowContentRootTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="SecondaryItemsControl"
+                                                    Storyboard.TargetProperty="IsEnabled">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="True" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowPopupOffsetTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="1" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="ContentTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
+                                                    <SplineDoubleKeyFrame
+                                                        KeyTime="0:0:0.167"
+                                                        KeySpline="0.2,0 0,1"
+                                                        Value="0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowContentTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="0" />
+                                                    <SplineDoubleKeyFrame
+                                                        KeyTime="0:0:0.167"
+                                                        KeySpline="0.2,0 0,1"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHeight}" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualTransition>
+                                        <VisualTransition
+                                            From="CompactClosed"
+                                            To="CompactOpenDown"
+                                            GeneratedDuration="0:0:0.467">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="MoreButton"
+                                                    Storyboard.TargetProperty="VerticalAlignment">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="Stretch" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="HighContrastBorder"
+                                                    Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="Visible" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowContentRootClip"
+                                                    Storyboard.TargetProperty="Rect">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentClipRect}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="SecondaryItemsControl"
+                                                    Storyboard.TargetProperty="IsEnabled">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="True" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowPopupOffsetTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="-1" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="ClipGeometryTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
+                                                    <SplineDoubleKeyFrame
+                                                        KeyTime="0:0:0.467"
+                                                        KeySpline="0.1,0.9 0.2,1.0"
+                                                        Value="0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowContentRootTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="{ThemeResource AppBarThemeCompactHeight}" />
+                                                    <SplineDoubleKeyFrame
+                                                        KeyTime="0:0:0.467"
+                                                        KeySpline="0.1,0.9 0.2,1.0"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.ContentHeight}" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowContentTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
+                                                    <SplineDoubleKeyFrame
+                                                        KeyTime="0:0:0.467"
+                                                        KeySpline="0.1,0.9 0.2,1.0"
+                                                        Value="0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualTransition>
+                                        <VisualTransition
+                                            From="CompactOpenDown"
+                                            To="CompactClosed"
+                                            GeneratedDuration="0:0:0.167">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="MoreButton"
+                                                    Storyboard.TargetProperty="VerticalAlignment">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="Stretch" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="HighContrastBorder"
+                                                    Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="Visible" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowContentRootClip"
+                                                    Storyboard.TargetProperty="Rect">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentClipRect}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="SecondaryItemsControl"
+                                                    Storyboard.TargetProperty="IsEnabled">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="True" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowPopupOffsetTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteObjectKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="-1" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="ClipGeometryTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="0" />
+                                                    <SplineDoubleKeyFrame
+                                                        KeyTime="0:0:0.167"
+                                                        KeySpline="0.2,0 0,1"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowContentRootTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.ContentHeight}" />
+                                                    <SplineDoubleKeyFrame
+                                                        KeyTime="0:0:0.167"
+                                                        KeySpline="0.2,0 0,1"
+                                                        Value="{ThemeResource AppBarThemeCompactHeight}" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="OverflowContentTransform"
+                                                    Storyboard.TargetProperty="Y">
+                                                    <DiscreteDoubleKeyFrame
+                                                        KeyTime="0:0:0"
+                                                        Value="0" />
+                                                    <SplineDoubleKeyFrame
+                                                        KeyTime="0:0:0.167"
+                                                        KeySpline="0.2,0 0,1"
+                                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualTransition>
+
+                                    </VisualStateGroup.Transitions>
                                     <VisualState
-                                        x:Name="NavigationButtonsHidden" />
+                                        x:Name="CompactClosed" />
                                     <VisualState
-                                        x:Name="NavigationButtonsVisible">
+                                        x:Name="CompactOpenUp">
                                         <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames
+                                                Storyboard.TargetName="ContentTransform"
+                                                Storyboard.TargetProperty="Y">
+                                                <DiscreteDoubleKeyFrame
+                                                    KeyTime="0:0:0"
+                                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
+                                            </DoubleAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Opacity"
-                                                Storyboard.TargetName="NextButton">
+                                                Storyboard.TargetName="MoreButton"
+                                                Storyboard.TargetProperty="VerticalAlignment">
                                                 <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="1" />
+                                                    KeyTime="0:0:0"
+                                                    Value="Stretch" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="IsEnabled"
-                                                Storyboard.TargetName="NextButton">
+                                                Storyboard.TargetName="HighContrastBorder"
+                                                Storyboard.TargetProperty="Visibility">
                                                 <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="True" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Opacity"
-                                                Storyboard.TargetName="PreviousButton">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="1" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="IsEnabled"
-                                                Storyboard.TargetName="PreviousButton">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="True" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                                <VisualStateGroup
-                                    x:Name="HeaderStates">
-                                    <VisualState
-                                        x:Name="HeaderDynamic" />
-                                    <VisualState
-                                        x:Name="HeaderStatic">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Visibility"
-                                                Storyboard.TargetName="Header">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="Collapsed" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Visibility"
-                                                Storyboard.TargetName="StaticHeader">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
+                                                    KeyTime="0:0:0"
                                                     Value="Visible" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="OverflowContentRootClip"
+                                                Storyboard.TargetProperty="Rect">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0:0:0"
+                                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentClipRect}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames
+                                                Storyboard.TargetName="OverflowContentRootTransform"
+                                                Storyboard.TargetProperty="Y">
+                                                <DiscreteDoubleKeyFrame
+                                                    KeyTime="0:0:0"
+                                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="SecondaryItemsControl"
+                                                Storyboard.TargetProperty="IsEnabled">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0:0:0"
+                                                    Value="True" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="CompactOpenDown">
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames
+                                                Storyboard.TargetName="ClipGeometryTransform"
+                                                Storyboard.TargetProperty="Y">
+                                                <DiscreteDoubleKeyFrame
+                                                    KeyTime="0:0:0"
+                                                    Value="0" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="MoreButton"
+                                                Storyboard.TargetProperty="VerticalAlignment">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0:0:0"
+                                                    Value="Stretch" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="HighContrastBorder"
+                                                Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0:0:0"
+                                                    Value="Visible" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="OverflowContentRootClip"
+                                                Storyboard.TargetProperty="Rect">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0:0:0"
+                                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentClipRect}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames
+                                                Storyboard.TargetName="OverflowContentRootTransform"
+                                                Storyboard.TargetProperty="Y">
+                                                <DiscreteDoubleKeyFrame
+                                                    KeyTime="0:0:0"
+                                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.ContentHeight}" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="SecondaryItemsControl"
+                                                Storyboard.TargetProperty="IsEnabled">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0:0:0"
+                                                    Value="True" />
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
-                            <ContentControl
-                                x:Name="TitleContentControl"
-                                ContentTemplate="{TemplateBinding TitleTemplate}"
-                                Content="{TemplateBinding Title}"
-                                IsTabStop="False"
-                                Margin="{StaticResource PivotPortraitThemePadding}"
-                                Style="{StaticResource TitleContentControlStyle}"
-                                Visibility="Collapsed" />
+                            <Grid.Clip>
+                                <RectangleGeometry
+                                    Rect="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.ClipRect}">
+                                    <RectangleGeometry.Transform>
+                                        <TranslateTransform
+                                            x:Name="ClipGeometryTransform"
+                                            Y="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
+                                    </RectangleGeometry.Transform>
+                                </RectangleGeometry>
+                            </Grid.Clip>
                             <Grid
-                                Grid.Row="1">
-                                <Grid.Resources>
-                                    <ControlTemplate
-                                        x:Key="NextTemplate"
-                                        TargetType="Button">
-                                        <Border
-                                            x:Name="Root"
-                                            BorderBrush="{ThemeResource SystemControlForegroundTransparentBrush}"
-                                            BorderThickness="{ThemeResource PivotNavButtonBorderThemeThickness}"
-                                            Background="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}">
-                                            <VisualStateManager.VisualStateGroups>
-                                                <VisualStateGroup
-                                                    x:Name="CommonStates">
-                                                    <VisualState
-                                                        x:Name="Normal" />
-                                                    <VisualState
-                                                        x:Name="PointerOver">
-                                                        <Storyboard>
-                                                            <ObjectAnimationUsingKeyFrames
-                                                                Storyboard.TargetProperty="Background"
-                                                                Storyboard.TargetName="Root">
-                                                                <DiscreteObjectKeyFrame
-                                                                    KeyTime="0"
-                                                                    Value="{ThemeResource SystemControlHighlightBaseMediumBrush}" />
-                                                            </ObjectAnimationUsingKeyFrames>
-                                                            <ObjectAnimationUsingKeyFrames
-                                                                Storyboard.TargetProperty="Foreground"
-                                                                Storyboard.TargetName="Arrow">
-                                                                <DiscreteObjectKeyFrame
-                                                                    KeyTime="0"
-                                                                    Value="{ThemeResource SystemControlHighlightAltAltMediumHighBrush}" />
-                                                            </ObjectAnimationUsingKeyFrames>
-                                                        </Storyboard>
-                                                    </VisualState>
-                                                    <VisualState
-                                                        x:Name="Pressed">
-                                                        <Storyboard>
-                                                            <ObjectAnimationUsingKeyFrames
-                                                                Storyboard.TargetProperty="Background"
-                                                                Storyboard.TargetName="Root">
-                                                                <DiscreteObjectKeyFrame
-                                                                    KeyTime="0"
-                                                                    Value="{ThemeResource SystemControlHighlightBaseMediumHighBrush}" />
-                                                            </ObjectAnimationUsingKeyFrames>
-                                                            <ObjectAnimationUsingKeyFrames
-                                                                Storyboard.TargetProperty="Foreground"
-                                                                Storyboard.TargetName="Arrow">
-                                                                <DiscreteObjectKeyFrame
-                                                                    KeyTime="0"
-                                                                    Value="{ThemeResource SystemControlHighlightAltAltMediumHighBrush}" />
-                                                            </ObjectAnimationUsingKeyFrames>
-                                                        </Storyboard>
-                                                    </VisualState>
-                                                </VisualStateGroup>
-                                            </VisualStateManager.VisualStateGroups>
-                                            <FontIcon
-                                                x:Name="Arrow"
-                                                Foreground="{ThemeResource SystemControlForegroundAltMediumHighBrush}"
-                                                FontSize="12"
-                                                FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                                Glyph="&#xE0E3;"
-                                                HorizontalAlignment="Center"
-                                                MirroredWhenRightToLeft="True"
-                                                UseLayoutRounding="False"
-                                                VerticalAlignment="Center" />
-                                        </Border>
-                                    </ControlTemplate>
-                                    <ControlTemplate
-                                        x:Key="PreviousTemplate"
-                                        TargetType="Button">
-                                        <Border
-                                            x:Name="Root"
-                                            BorderBrush="{ThemeResource SystemControlForegroundTransparentBrush}"
-                                            BorderThickness="{ThemeResource PivotNavButtonBorderThemeThickness}"
-                                            Background="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}">
-                                            <VisualStateManager.VisualStateGroups>
-                                                <VisualStateGroup
-                                                    x:Name="CommonStates">
-                                                    <VisualState
-                                                        x:Name="Normal" />
-                                                    <VisualState
-                                                        x:Name="PointerOver">
-                                                        <Storyboard>
-                                                            <ObjectAnimationUsingKeyFrames
-                                                                Storyboard.TargetProperty="Background"
-                                                                Storyboard.TargetName="Root">
-                                                                <DiscreteObjectKeyFrame
-                                                                    KeyTime="0"
-                                                                    Value="{ThemeResource SystemControlHighlightBaseMediumBrush}" />
-                                                            </ObjectAnimationUsingKeyFrames>
-                                                            <ObjectAnimationUsingKeyFrames
-                                                                Storyboard.TargetProperty="Foreground"
-                                                                Storyboard.TargetName="Arrow">
-                                                                <DiscreteObjectKeyFrame
-                                                                    KeyTime="0"
-                                                                    Value="{ThemeResource SystemControlHighlightAltAltMediumHighBrush}" />
-                                                            </ObjectAnimationUsingKeyFrames>
-                                                        </Storyboard>
-                                                    </VisualState>
-                                                    <VisualState
-                                                        x:Name="Pressed">
-                                                        <Storyboard>
-                                                            <ObjectAnimationUsingKeyFrames
-                                                                Storyboard.TargetProperty="Background"
-                                                                Storyboard.TargetName="Root">
-                                                                <DiscreteObjectKeyFrame
-                                                                    KeyTime="0"
-                                                                    Value="{ThemeResource SystemControlHighlightBaseMediumHighBrush}" />
-                                                            </ObjectAnimationUsingKeyFrames>
-                                                            <ObjectAnimationUsingKeyFrames
-                                                                Storyboard.TargetProperty="Foreground"
-                                                                Storyboard.TargetName="Arrow">
-                                                                <DiscreteObjectKeyFrame
-                                                                    KeyTime="0"
-                                                                    Value="{ThemeResource SystemControlHighlightAltAltMediumHighBrush}" />
-                                                            </ObjectAnimationUsingKeyFrames>
-                                                        </Storyboard>
-                                                    </VisualState>
-                                                </VisualStateGroup>
-                                            </VisualStateManager.VisualStateGroups>
-                                            <FontIcon
-                                                x:Name="Arrow"
-                                                Foreground="{ThemeResource SystemControlForegroundAltMediumHighBrush}"
-                                                FontSize="12"
-                                                FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                                Glyph="&#xE0E2;"
-                                                HorizontalAlignment="Center"
-                                                MirroredWhenRightToLeft="True"
-                                                UseLayoutRounding="False"
-                                                VerticalAlignment="Center" />
-                                        </Border>
-                                    </ControlTemplate>
-                                </Grid.Resources>
-                                <ScrollViewer
-                                    x:Name="ScrollViewer"
-                                    BringIntoViewOnFocusChange="False"
-                                    HorizontalSnapPointsAlignment="Center"
-                                    HorizontalSnapPointsType="MandatorySingle"
-                                    HorizontalScrollBarVisibility="Hidden"
-                                    Margin="{TemplateBinding Padding}"
-                                    Template="{StaticResource ScrollViewerScrollBarlessTemplate}"
-                                    VerticalSnapPointsType="None"
-                                    VerticalScrollBarVisibility="Disabled"
-                                    VerticalScrollMode="Disabled"
-                                    VerticalContentAlignment="Stretch"
-                                    ZoomMode="Disabled">
-                                    <PivotPanel
-                                        x:Name="Panel"
-                                        VerticalAlignment="Stretch">
-                                        <Grid
-                                            x:Name="PivotLayoutElement">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition
-                                                    Width="Auto" />
-                                                <ColumnDefinition
-                                                    Width="*" />
-                                                <ColumnDefinition
-                                                    Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition
-                                                    Height="Auto" />
-                                                <RowDefinition
-                                                    Height="*" />
-                                            </Grid.RowDefinitions>
-                                            <Grid.RenderTransform>
-                                                <CompositeTransform
-                                                    x:Name="PivotLayoutElementTranslateTransform" />
-                                            </Grid.RenderTransform>
-                                            <ContentPresenter
-                                                x:Name="LeftHeaderPresenter"
-                                                ContentTemplate="{TemplateBinding LeftHeaderTemplate}"
-                                                Content="{TemplateBinding LeftHeader}"
-                                                HorizontalAlignment="Stretch"
-                                                VerticalAlignment="Stretch" />
-                                            <ContentControl
-                                                x:Name="HeaderClipper"
-                                                Grid.Column="1"
-                                                HorizontalContentAlignment="Stretch"
-                                                UseSystemFocusVisuals="True">
-                                                <ContentControl.Clip>
-                                                    <RectangleGeometry
-                                                        x:Name="HeaderClipperGeometry" />
-                                                </ContentControl.Clip>
-                                                <Grid
-                                                    Background="Transparent">
-                                                    <PivotHeaderPanel
-                                                        x:Name="StaticHeader"
-                                                        Visibility="Collapsed" />
-                                                    <PivotHeaderPanel
-                                                        x:Name="Header">
-                                                        <PivotHeaderPanel.RenderTransform>
-                                                            <TransformGroup>
-                                                                <CompositeTransform
-                                                                    x:Name="HeaderTranslateTransform" />
-                                                                <CompositeTransform
-                                                                    x:Name="HeaderOffsetTranslateTransform" />
-                                                            </TransformGroup>
-                                                        </PivotHeaderPanel.RenderTransform>
-                                                    </PivotHeaderPanel>
-                                                </Grid>
-                                            </ContentControl>
-                                            <Button
-                                                x:Name="PreviousButton"
-                                                Background="Transparent"
-                                                Grid.Column="1"
-                                                HorizontalAlignment="Left"
-                                                Height="36"
-                                                IsTabStop="False"
-                                                IsEnabled="False"
-                                                Margin="{ThemeResource PivotNavButtonMargin}"
-                                                Opacity="0"
-                                                Template="{StaticResource PreviousTemplate}"
-                                                UseSystemFocusVisuals="False"
-                                                VerticalAlignment="Top"
-                                                Width="20" />
-                                            <Button
-                                                x:Name="NextButton"
-                                                Background="Transparent"
-                                                Grid.Column="1"
-                                                HorizontalAlignment="Right"
-                                                Height="36"
-                                                IsTabStop="False"
-                                                IsEnabled="False"
-                                                Margin="{ThemeResource PivotNavButtonMargin}"
-                                                Opacity="0"
-                                                Template="{StaticResource NextTemplate}"
-                                                UseSystemFocusVisuals="False"
-                                                VerticalAlignment="Top"
-                                                Width="20" />
-                                            <ContentPresenter
-                                                x:Name="RightHeaderPresenter"
-                                                ContentTemplate="{TemplateBinding RightHeaderTemplate}"
-                                                Content="{TemplateBinding RightHeader}"
-                                                Grid.Column="2"
-                                                HorizontalAlignment="Stretch"
-                                                VerticalAlignment="Stretch" />
-                                            <ItemsPresenter
-                                                x:Name="PivotItemPresenter"
-                                                Grid.ColumnSpan="3"
-                                                Grid.Row="1">
-                                                <ItemsPresenter.RenderTransform>
-                                                    <TransformGroup>
-                                                        <TranslateTransform
-                                                            x:Name="ItemsPresenterTranslateTransform" />
-                                                        <CompositeTransform
-                                                            x:Name="ItemsPresenterCompositeTransform" />
-                                                    </TransformGroup>
-                                                </ItemsPresenter.RenderTransform>
-                                            </ItemsPresenter>
-                                        </Grid>
-                                    </PivotPanel>
-                                </ScrollViewer>
+                                x:Name="ContentRoot"
+                                VerticalAlignment="Bottom"
+                                Margin="{TemplateBinding Padding}"
+                                Height="{TemplateBinding Height}"
+                                MinHeight="{ThemeResource AppBarThemeCompactHeight}"
+                                Background="{TemplateBinding Background}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="*" />
+                                    <ColumnDefinition
+                                        Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RenderTransform>
+                                    <TranslateTransform
+                                        x:Name="ContentTransform" />
+                                </Grid.RenderTransform>
+
+                                <!-- Use a ContentControl rather than a ContentPresenter so that IsEnabled can be set to false
+                                     in the Minimal/HiddenClosed states to remove it from being a tab-stop candidate. -->
+                                <ContentControl
+                                    x:Name="ContentControl"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    ContentTransitions="{TemplateBinding ContentTransitions}"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    IsTabStop="False" />
+
+                                <ItemsControl
+                                    x:Name="PrimaryItemsControl"
+                                    HorizontalAlignment="Stretch"
+                                    MinHeight="{ThemeResource AppBarThemeCompactHeight}"
+                                    IsTabStop="False">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+
+                                <Button
+                                    HorizontalAlignment="Left"
+                                    HorizontalContentAlignment="Center"
+                                    Width="55"
+                                    x:Name="MoreButton"
+                                    Foreground="{ThemeResource Text-2}"
+                                    Style="{StaticResource EllipsisButton}"
+                                    Margin="0"
+                                    Padding="0,24,0,0"
+                                    MinHeight="{ThemeResource AppBarThemeCompactHeight}"
+                                    VerticalAlignment="Top"
+                                    Grid.Column="1"
+                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.EffectiveOverflowButtonVisibility}">
+                                    <FontIcon
+                                        x:Name="EllipsisIcon"
+                                        VerticalAlignment="Center"
+                                        FontFamily="{StaticResource FontAwesome}"
+                                        FontSize="16"
+                                        Glyph=""
+                                        Height="{ThemeResource AppBarExpandButtonCircleDiameter}" />
+                                </Button>
+                                <Popup
+                                    x:Name="OverflowPopup">
+                                    <Popup.RenderTransform>
+                                        <TranslateTransform
+                                            x:Name="OverflowPopupOffsetTransform" />
+                                    </Popup.RenderTransform>
+                                    <Grid
+                                        BorderBrush="{ThemeResource AccentColor}"
+                                        BorderThickness="0,0,0,0"
+                                        x:Name="OverflowContentRoot"
+                                        MinWidth="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentMinWidth}"
+                                        MaxWidth="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentMaxWidth}"
+                                        MaxHeight="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentMaxHeight}">
+                                        <Grid.Clip>
+                                            <RectangleGeometry
+                                                x:Name="OverflowContentRootClip" />
+                                        </Grid.Clip>
+                                        <Grid.RenderTransform>
+                                            <TranslateTransform
+                                                x:Name="OverflowContentRootTransform"
+                                                X="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHorizontalOffset}" />
+                                        </Grid.RenderTransform>
+                                        <CommandBarOverflowPresenter
+                                            BorderBrush="Transparent"
+                                            BorderThickness="0"
+                                            Background="{ThemeResource Background-1Transparent}"
+                                            x:Name="SecondaryItemsControl"
+                                            Style="{TemplateBinding CommandBarOverflowPresenterStyle}"
+                                            IsEnabled="False"
+                                            IsTabStop="False">
+                                            <CommandBarOverflowPresenter.RenderTransform>
+                                                <TranslateTransform
+                                                    x:Name="OverflowContentTransform" />
+                                            </CommandBarOverflowPresenter.RenderTransform>
+                                            <CommandBarOverflowPresenter.ItemContainerStyle>
+                                                <Style
+                                                    TargetType="FrameworkElement">
+                                                    <Setter
+                                                        Property="HorizontalAlignment"
+                                                        Value="Stretch" />
+                                                    <Setter
+                                                        Property="Width"
+                                                        Value="NaN" />
+                                                </Style>
+                                            </CommandBarOverflowPresenter.ItemContainerStyle>
+                                        </CommandBarOverflowPresenter>
+                                    </Grid>
+                                </Popup>
+                                <Rectangle
+                                    x:Name="HighContrastBorder"
+                                    x:DeferLoadStrategy="Lazy"
+                                    Grid.ColumnSpan="2"
+                                    Visibility="Collapsed"
+                                    VerticalAlignment="Stretch"
+                                    Stroke="{ThemeResource AccentColor}"
+                                    StrokeThickness="0" />
                             </Grid>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style
+            x:Key="MyAppBarToggleButton"
+            TargetType="AppBarToggleButton">
+            <Setter
+                Property="Background"
+                Value="{ThemeResource AppBarToggleButtonBackground}" />
+            <Setter
+                Property="Foreground"
+                Value="{ThemeResource AppBarToggleButtonForeground}" />
+            <Setter
+                Property="BorderBrush"
+                Value="{ThemeResource AppBarToggleButtonBorderBrush}" />
+            <Setter
+                Property="HorizontalAlignment"
+                Value="Stretch" />
+            <Setter
+                Property="VerticalAlignment"
+                Value="Top" />
+            <Setter
+                Property="FontFamily"
+                Value="Segoe MDL2 Assets" />
+            <Setter
+                Property="FontWeight"
+                Value="Normal" />
+            <Setter
+                Property="FontSize"
+                Value="16" />
+            <Setter
+                Property="Width"
+                Value="Auto" />
+            <Setter
+                Property="UseSystemFocusVisuals"
+                Value="False" />
+            <Setter
+                Property="AllowFocusOnInteraction"
+                Value="True" />
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="AppBarToggleButton">
+                        <Grid
+                            x:Name="Root"
+                            MinWidth="{TemplateBinding MinWidth}"
+                            MaxWidth="{TemplateBinding MaxWidth}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid.Resources>
+                                <Style
+                                    x:Name="LabelOnRightStyle"
+                                    TargetType="AppBarToggleButton">
+                                    <Setter
+                                        Property="Width"
+                                        Value="NaN" />
+                                </Style>
+                            </Grid.Resources>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup
+                                    x:Name="ApplicationViewStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition
+                                            GeneratedDuration="0:0:0.2" />
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState
+                                        x:Name="FullSize" />
+                                    <VisualState
+                                        x:Name="Compact">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="TextLabel"
+                                                Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="Collapsed" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="LabelOnRight">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="Content"
+                                                Storyboard.TargetProperty="Margin">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="12,14,0,14" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="ContentRoot"
+                                                Storyboard.TargetProperty="MinHeight">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource AppBarThemeCompactHeight}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="TextLabel"
+                                                Storyboard.TargetProperty="(Grid.Row)">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="0" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="TextLabel"
+                                                Storyboard.TargetProperty="(Grid.Column)">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="1" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="TextLabel"
+                                                Storyboard.TargetProperty="TextAlignment">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="Left" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="TextLabel"
+                                                Storyboard.TargetProperty="Margin">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="8,15,12,17" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="LabelCollapsed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="ContentRoot"
+                                                Storyboard.TargetProperty="MinHeight">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource AppBarThemeCompactHeight}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetName="TextLabel"
+                                                Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="Collapsed" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup
+                                    x:Name="CommonStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition
+                                            GeneratedDuration="0:0:0.2" />
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState
+                                        x:Name="Normal">
+                                        <Storyboard>
+
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="Content"
+                                                To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+
+                                            <ColorAnimation
+                                                Storyboard.TargetName="TextLabel"
+                                                To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Pressed">
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="Content"
+                                                To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+
+                                            <ColorAnimation
+                                                Storyboard.TargetName="TextLabel"
+                                                To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Disabled">
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="Content"
+                                                To="{Binding Source={ThemeResource Text-2},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+
+                                            <ColorAnimation
+                                                Storyboard.TargetName="TextLabel"
+                                                To="{Binding Source={ThemeResource Text-2},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Checked">
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="Content"
+                                                To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+
+                                            <ColorAnimation
+                                                Storyboard.TargetName="TextLabel"
+                                                To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Hover"
+                                                Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)"
+                                                To="1"
+                                                Duration="0" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Hover"
+                                                Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)"
+                                                To="1"
+                                                Duration="0" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="CheckedPressed">
+                                        <Storyboard>
+
+                                            <ColorAnimation
+                                                Storyboard.TargetName="Content"
+                                                To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+
+                                            <ColorAnimation
+                                                Storyboard.TargetName="TextLabel"
+                                                To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="CheckedDisabled">
+                                        <Storyboard>
+
+                                            <ColorAnimation
+                                                Storyboard.TargetName="Content"
+                                                To="{Binding Source={ThemeResource AccentColor-1},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+
+                                            <ColorAnimation
+                                                Storyboard.TargetName="TextLabel"
+                                                To="{Binding Source={ThemeResource AccentColor-1},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Rectangle
+                                x:Name="CheckedHighlightBackground"
+                                Fill="{ThemeResource AppBarToggleButtonBackgroundChecked}"
+                                Opacity="0" />
+                            <Rectangle
+                                x:Name="AccentOverlayBackground"
+                                Fill="{ThemeResource AppBarToggleButtonBackgroundHighLightOverlay}" />
+                            <Grid
+                                x:Name="ContentRoot"
+                                MinHeight="{ThemeResource AppBarThemeMinHeight}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="*" />
+                                    <ColumnDefinition
+                                        Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="Auto" />
+                                    <RowDefinition
+                                        Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Ellipse
+                                    x:Name="Hover"
+                                    VerticalAlignment="Top"
+                                    Margin="0,-5,0,0"
+                                    Width="10"
+                                    Height="10"
+                                    Fill="{ThemeResource AccentColor}"
+                                    RenderTransformOrigin="0.5,0.5">
+                                    <Ellipse.RenderTransform>
+                                        <CompositeTransform
+                                            ScaleX="0"
+                                            ScaleY="0" />
+                                    </Ellipse.RenderTransform>
+                                    <Ellipse.Clip>
+                                        <RectangleGeometry
+                                            Rect="0,5,10,5" />
+                                    </Ellipse.Clip>
+                                </Ellipse>
+                                <FontIcon
+                                    x:Name="Content"
+                                    Height="20"
+                                    Margin="0,14,0,4"
+                                    Glyph="{TemplateBinding Content}"
+                                    FontFamily="{TemplateBinding FontFamily}"
+                                    FontSize="{TemplateBinding FontSize}"
+                                    Foreground="{ThemeResource Text-2}"
+                                    HorizontalAlignment="Stretch"
+                                    AutomationProperties.AccessibilityView="Raw" />
+                                <TextBlock
+                                    x:Name="TextLabel"
+                                    Grid.Row="1"
+                                    Text="{TemplateBinding Label}"
+                                    Foreground="{ThemeResource Text-1}"
+                                    FontSize="12"
+                                    FontFamily="Segoe UI"
+                                    TextAlignment="Center"
+                                    TextWrapping="Wrap"
+                                    Margin="2,0,2,6" />
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style
+            x:Key="MyAppBarRadioButton"
+            TargetType="RadioButton">
+            <Setter
+                Property="Background"
+                Value="{ThemeResource RadioButtonBackground}" />
+            <Setter
+                Property="Foreground"
+                Value="{ThemeResource RadioButtonForeground}" />
+            <Setter
+                Property="BorderBrush"
+                Value="{ThemeResource RadioButtonBorderBrush}" />
+            <Setter
+                Property="Padding"
+                Value="8,6,0,0" />
+            <Setter
+                Property="HorizontalAlignment"
+                Value="Center" />
+            <Setter
+                Property="VerticalAlignment"
+                Value="Top" />
+            <Setter
+                Property="HorizontalContentAlignment"
+                Value="Center" />
+            <Setter
+                Property="VerticalContentAlignment"
+                Value="Top" />
+            <Setter
+                Property="FontFamily"
+                Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter
+                Property="FontSize"
+                Value="16" />
+            <Setter
+                Property="MinWidth"
+                Value="55" />
+            <Setter
+                Property="UseSystemFocusVisuals"
+                Value="True" />
+            <Setter
+                Property="FocusVisualMargin"
+                Value="-7,-3,-7,-3" />
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="RadioButton">
+                        <Grid
+                            x:Name="RootGrid"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup
+                                    x:Name="CommonStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition
+                                            GeneratedDuration="0:0:0.2" />
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState
+                                        x:Name="Normal" />
+                                    <VisualState
+                                        x:Name="PointerOver">
+                                        <Storyboard>
+
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Pressed">
+                                        <Storyboard>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Disabled">
+                                        <Storyboard>
+
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup
+                                    x:Name="CheckStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition
+                                            GeneratedDuration="0:0:0.2" />
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState
+                                        x:Name="Checked">
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="Content"
+                                                To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+
+                                            <ColorAnimation
+                                                Storyboard.TargetName="TextLabel"
+                                                To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Hover"
+                                                Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)"
+                                                To="1"
+                                                Duration="0" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Hover"
+                                                Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)"
+                                                To="1"
+                                                Duration="0" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Unchecked">
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="Content"
+                                                To="{Binding Source={ThemeResource Text-2},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+
+                                            <ColorAnimation
+                                                Storyboard.TargetName="TextLabel"
+                                                To="{Binding Source={ThemeResource Text-1},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Hover"
+                                                Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)"
+                                                To="0"
+                                                Duration="0" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Hover"
+                                                Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)"
+                                                To="0"
+                                                Duration="0" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Indeterminate" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <Grid
+                                x:Name="ContentRoot"
+                                MinHeight="{ThemeResource AppBarThemeMinHeight}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="*" />
+                                    <ColumnDefinition
+                                        Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="Auto" />
+                                    <RowDefinition
+                                        Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Ellipse
+                                    x:Name="Hover"
+                                    VerticalAlignment="Top"
+                                    Margin="0,-5,0,0"
+                                    Width="10"
+                                    Height="10"
+                                    Fill="{ThemeResource AccentColor}"
+                                    RenderTransformOrigin="0.5,0.5">
+                                    <Ellipse.RenderTransform>
+                                        <CompositeTransform
+                                            ScaleX="0"
+                                            ScaleY="0" />
+                                    </Ellipse.RenderTransform>
+                                    <Ellipse.Clip>
+                                        <RectangleGeometry
+                                            Rect="0,5,10,5" />
+                                    </Ellipse.Clip>
+                                </Ellipse>
+                                <FontIcon
+                                    x:Name="Content"
+                                    Height="20"
+                                    Margin="0,14,0,4"
+                                    Glyph="{TemplateBinding Tag}"
+                                    FontFamily="{TemplateBinding FontFamily}"
+                                    FontSize="{TemplateBinding FontSize}"
+                                    Foreground="{ThemeResource Text-2}"
+                                    HorizontalAlignment="Stretch"
+                                    AutomationProperties.AccessibilityView="Raw" />
+                                <TextBlock
+                                    x:Name="TextLabel"
+                                    Grid.Row="1"
+                                    Text="{TemplateBinding Content}"
+                                    Foreground="{ThemeResource Text-1}"
+                                    FontSize="12"
+                                    FontFamily="Segoe UI"
+                                    TextAlignment="Center"
+                                    TextWrapping="Wrap"
+                                    Margin="2,0,2,6" />
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <CollectionViewSource
+            x:Name="ContactsCVS"
+            IsSourceGrouped="True" />
+
     </Page.Resources>
 
     <Grid
@@ -504,104 +1232,348 @@
 
         </Grid>
 
-        <Pivot
-            Grid.Row="1"
-            Style="{StaticResource PivotStyle1}">
+        <SemanticZoom
+            Grid.Row="1">
+            <SemanticZoom.ZoomedInView>
+                <ListView
+                    Padding="0,-10,0,48"
+                    Name="OperacjeListView"
+                    ItemsSource="{Binding Source={StaticResource ContactsCVS}, Mode=TwoWay}"
+                    SelectionMode="Single"
+                    BorderThickness="0"
+                    Background="Transparent"
+                    SelectionChanged="OperacjeListView_SelectionChanged">
 
-            <PivotItem>
-                <PivotItem.Header>
-                    <TextBlock
-                        Text="Ogólne"
-                        FontSize="15" />
-                </PivotItem.Header>
+                    <ListView.ItemContainerStyle>
+                        <Style
+                            TargetType="ListViewItem">
+                            <Setter
+                                Property="HorizontalContentAlignment"
+                                Value="Stretch" />
+                            <Setter
+                                Property="Padding"
+                                Value="0" />
+                            <Setter
+                                Property="MaxWidth"
+                                Value="620" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
 
-                <Grid
-                    Width="300"
-                    Height="300">
-                    <models:ExpandPanel
-                        HeaderContent="Expander">
-                        <models:ExpandPanel.Content>
-                            <StackPanel>
-                                <Button
-                                    Margin="4"
-                                    Padding="4"
-                                    Content="Button One" />
-                                <Button
-                                    Margin="4"
-                                    Padding="4"
-                                    Content="Button Two" />
-                                <Button
-                                    Margin="4"
-                                    Padding="4"
-                                    Content="Button Three" />
-                                <Button
-                                    Margin="4"
-                                    Padding="4"
-                                    Content="Button Four" />
+                    <ListView.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="models:Operation">
+
+                            <Grid
+                                Background="Transparent"
+                                RightTapped="Grid_RightTapped"
+                                DragStarting="Grid_DragStarting">
+
+                                <FlyoutBase.AttachedFlyout>
+
+                                    <MenuFlyout
+                                        MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
+
+                                        <MenuFlyoutItem
+                                            x:Name="DetailsButton"
+                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                            Tag="&#xEA55;"
+                                            Text="Szczegóły"
+                                            Click="DetailsButton_Click" />
+
+                                        <MenuFlyoutItem
+                                            x:Name="EditButton"
+                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                            Tag="&#xE104;"
+                                            Text="Edytuj"
+                                            Click="EditButton_Click" />
+
+                                        <MenuFlyoutItem
+                                            x:Name="DeleteButton"
+                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                            Tag="&#xE107;"
+                                            Text="Usuń"
+                                            Click="DeleteButton_Click" />
+
+                                    </MenuFlyout>
+
+                                </FlyoutBase.AttachedFlyout>
+                                <StackPanel
+                                    Background="Transparent">
+                                    <data:OperationTemplate />
+                                </StackPanel>
+
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+                    <ListView.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderContainerStyle>
+                                <Style
+                                    TargetType="ListViewHeaderItem">
+                                    <Setter
+                                        Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate
+                                                TargetType="ListViewHeaderItem">
+
+                                                <ContentPresenter
+                                                    x:Name="ContentPresenter"
+                                                    Padding="0,15,0,0"
+                                                    Content="{TemplateBinding Content}"
+                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                    ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                    HorizontalContentAlignment="Stretch"
+                                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.HeaderContainerStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+
+                                    <Grid
+                                        Background="Transparent"
+                                        MaxWidth="620">
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition
+                                                Width="Auto" />
+                                            <ColumnDefinition
+                                                Width="*" />
+                                            <ColumnDefinition
+                                                Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel
+                                            Orientation="Horizontal"
+                                            Margin="16,0,0,5">
+                                            <StackPanel
+                                                Width="48">
+                                                <TextBlock
+                                                    Text="{Binding dayNum}"
+                                                    FontSize="30"
+                                                    Foreground="{ThemeResource Text-1}"
+                                                    FontWeight="SemiLight"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+                                            </StackPanel>
+                                            <StackPanel
+                                                VerticalAlignment="Center"
+                                                Margin="16,0,0,0">
+                                                <TextBlock
+                                                    Foreground="{ThemeResource Text-1}"
+                                                    Text="{Binding day}"
+                                                    FontSize="12" />
+                                                <TextBlock
+                                                    Text="{Binding month}"
+                                                    FontSize="12"
+                                                    Foreground="{ThemeResource Text-2}" />
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            Grid.Column="2"
+                                            Name="SumText"
+                                            HorizontalAlignment="Right"
+                                            Text="{Binding cost}"
+                                            FontWeight="Bold"
+                                            Foreground="{ThemeResource Text-1}"
+                                            FontSize="13"
+                                            Margin="16,0" />
+
+                                        <Border
+                                            Grid.ColumnSpan="3"
+                                            Opacity="0.3"
+                                            BorderBrush="{ThemeResource Text-2}"
+                                            BorderThickness="0,0,0,1" />
+                                    </Grid>
+
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+                </ListView>
+            </SemanticZoom.ZoomedInView>
+
+            <SemanticZoom.ZoomedOutView>
+                <ListView
+                    Name="OperacjeListViewGroup"
+                    Padding="0,0,0,48"
+                    ItemsSource="{x:Bind ContactsCVS.View.CollectionGroups}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    SelectionMode="Single"
+                    DataContextChanged="ListView_DataContextChanged">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel
+                                Orientation="Horizontal"
+                                Margin="0,10">
+                                <TextBlock
+                                    Text="{Binding Group.dayNum}"
+                                    FontSize="30"
+                                    FontWeight="SemiLight"
+                                    VerticalAlignment="Center" />
+                                <StackPanel
+                                    VerticalAlignment="Center"
+                                    Margin="10,0,0,0">
+                                    <TextBlock
+                                        Text="{Binding Group.day}"
+                                        FontSize="12" />
+                                    <TextBlock
+                                        Text="{Binding Group.month}"
+                                        FontSize="12"
+                                        Opacity="0.4" />
+                                </StackPanel>
                             </StackPanel>
-                        </models:ExpandPanel.Content>
-                    </models:ExpandPanel>
-                </Grid>
-            </PivotItem>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </SemanticZoom.ZoomedOutView>
+        </SemanticZoom>
 
-            <PivotItem>
-                <PivotItem.Header>
-                    <TextBlock
-                        Text="Wygląd"
-                        FontSize="15" />
-                </PivotItem.Header>
-
-                <TextBlock>YOLOYOLOYOLO</TextBlock>
-            </PivotItem>
-
-            <PivotItem>
-                <PivotItem.Header>
-                    <TextBlock
-                        Text="Synchronizacja"
-                        FontSize="15" />
-                </PivotItem.Header>
-
-                <TextBlock>YOLOYOLOYOLO</TextBlock>
-            </PivotItem>
-
-        </Pivot>
-        
-        <StackPanel
-            Grid.Row="1"
+        <CommandBar
+            x:Name="CommandBar"
             VerticalAlignment="Bottom"
-            Background="{ThemeResource Background-1Transparent}">
-            <CommandBar
-                HorizontalAlignment="Center"
-                Background="Transparent"
-                OverflowButtonVisibility="Visible">
-                <AppBarToggleButton
-                    Label="Operacje"
-                    Icon="Calendar" />
-                <AppBarToggleButton
-                    Label="Kategorie"
-                    Icon="Tag" />
-                <AppBarToggleButton
-                    Label="Dodaj operację"
-                    Icon="Add" />
-                <AppBarToggleButton
-                    Label="Statystyki"
-                    Icon="ZeroBars" />
-                <CommandBar.SecondaryCommands>
-                    <AppBarButton
-                        Icon="Copy"
-                        Label="Szablony" />
-                    <AppBarButton
-                        Icon="RepeatAll"
-                        Label="Zlecenia stałe" />
-                    <AppBarButton
-                        Icon="PreviewLink"
-                        Label="Konta" />
-                    <AppBarButton
-                        Icon="Setting"
-                        Label="Ustawienia" />
-                </CommandBar.SecondaryCommands>
-            </CommandBar>
-        </StackPanel>
+            Style="{StaticResource lala}"
+            Grid.Row="1"
+            Background="{ThemeResource Background-1}"
+            OverflowButtonVisibility="Collapsed">
+            <CommandBar.Content>
+                <Grid
+                   HorizontalAlignment="Stretch" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="55" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="55" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="55" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="55" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="55" />
+                        <ColumnDefinition
+                            Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <RadioButton
+                        GroupName="MenuButtons"
+                        x:Name="OperationsAppBarRadioButton"
+                        Height="40"
+                        Style="{StaticResource MyAppBarRadioButton}"
+                        Grid.Column="1"
+                        Content="Operacje"
+                        FontFamily="{StaticResource FontAwesome}"
+                        Tag=""/>
+                    <RadioButton
+                        GroupName="MenuButtons"
+                        x:Name="CategoriesAppBarRadioButton"
+                        Height="40"
+                        Style="{StaticResource MyAppBarRadioButton}"
+                        Grid.Column="3"
+                        Content="Kategorie"
+                        FontFamily="{StaticResource FontAwesome}"
+                        Tag="" />
+                    <RadioButton
+                        x:Name="AddNewOperationAppBarRadioButton"
+                        Height="40"
+                        Style="{StaticResource MyAppBarRadioButton}"
+                        Grid.Column="5"
+                        FontSize="22"
+                        Content="Dodaj operację"
+                        FontFamily="Segoe MDL2 Assets"
+                        Tag=""
+                        Click="AddNewOperationAppBarRadioButton_Click" />
+                    <RadioButton
+                        GroupName="MenuButtons"
+                        x:Name="StatisticsAppBarRadioButton"
+                        Height="40"
+                        Style="{StaticResource MyAppBarRadioButton}"
+                        Grid.Column="7"
+                        Content="Statystyki"
+                        FontFamily="{StaticResource FontAwesome}"
+                        Tag="" />
+                    <RadioButton
+                        x:Name="MoreAppBarRadioButton"
+                        Style="{StaticResource MyAppBarRadioButton}"
+                        Grid.Column="9"
+                        FontFamily="{StaticResource FontAwesome}"
+                        Tag=""
+                        Click="RadioButton_Click" />
+                </Grid>
+            </CommandBar.Content>
+                
+            <!--
+            <AppBarToggleButton
+                x:Name="OperationsCommandBarButton"
+                Style="{StaticResource MyAppBarToggleButton}"
+                HorizontalAlignment="Stretch"
+                Width="Auto"
+                Grid.Column="1"
+                Label="Operacje"
+                FontFamily="{StaticResource FontAwesome}"
+                Content=""
+                Checked="AppBarToggleButton_Checked"
+                Click="OperationsCommandBarButton_Click" />
+            <AppBarToggleButton
+                x:Name="CategoriesCommandBarButton"
+                Style="{StaticResource MyAppBarToggleButton}"
+                HorizontalAlignment="Stretch"
+                Width="Auto"
+                Grid.Column="3"
+                Label="Kategorie"
+                FontFamily="{StaticResource FontAwesome}"
+                Content=""
+                Checked="AppBarToggleButton_Checked" />
+            <AppBarToggleButton
+                x:Name="AddCommndBarButton"
+                Style="{StaticResource MyAppBarToggleButton}"
+                HorizontalAlignment="Stretch"
+                Width="Auto"
+                Grid.Column="5"
+                Label="Dodaj operację"
+                Content=""
+                FontSize="22"
+                Checked="AppBarToggleButton_Checked" />
+            <AppBarToggleButton
+                x:Name="StatisticCommandBarButton"
+                Style="{StaticResource MyAppBarToggleButton}"
+                HorizontalAlignment="Stretch"
+                Width="Auto"
+                Grid.Column="7"
+                Label="Statystyki"
+                FontFamily="{StaticResource FontAwesome}"
+                Content=""
+                Checked="AppBarToggleButton_Checked" />-->
+            <CommandBar.SecondaryCommands>
+                <AppBarButton
+                    Icon="Copy"
+                    Label="Szablony" />
+                <AppBarButton
+                    Icon="RepeatAll"
+                    Label="Zlecenia stałe" />
+                <AppBarButton
+                    Icon="PreviewLink"
+                    Label="Konta" />
+                <AppBarButton
+                    Icon="Setting"
+                    Label="Ustawienia" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
     </Grid>
 
 </Page>

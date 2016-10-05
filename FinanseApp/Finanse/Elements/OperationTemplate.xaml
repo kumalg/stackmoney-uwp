@@ -25,11 +25,12 @@
             Width="48">
 
             <Ellipse
-                Fill="{StaticResource AccentColorStyle}"
+                Fill="{StaticResource Background+2}"
                 Name="Ellipse_OperationTemplate">
             </Ellipse>
             <Ellipse
                 Name="MoneyAccountEllipse"
+                Visibility="Collapsed"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Stroke="{ThemeResource Background}"
@@ -43,9 +44,11 @@
                 RadiusY="5"
                 Name="Ellipse_OperationTemplate"  />
 -->
-            <TextBlock
+            <FontIcon
                 Name="Icon_OperationTemplate"
                 FontSize="24"
+                Glyph="{Binding Source={StaticResource DefaultEllipseIcon}, Path=Text}"
+                FontFamily="Segoe UI Symbol"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
                 Foreground="White" />

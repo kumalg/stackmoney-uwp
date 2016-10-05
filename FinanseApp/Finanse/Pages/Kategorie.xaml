@@ -12,89 +12,41 @@
     <Grid
         Background="Transparent">
 
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState
-                    x:Name="HamburgerTight">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                            MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter
-                            Target="UpperCommandBar.Visibility"
-                            Value="Collapsed" />
-                        <Setter
-                            Target="LowerCommandBar.Visibility"
-                            Value="Visible" />
-                        <Setter
-                            Target="FakeHamburgerButton.Width"
-                            Value="48" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState
-                    x:Name="HamburgerWide">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                            MinWindowWidth="540" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter
-                            Target="FakeHamburgerButton.Width"
-                            Value="Auto" />
-                        <Setter
-                            Target="UpperCommandBar.Visibility"
-                            Value="Visible" />
-                        <Setter
-                            Target="LowerCommandBar.Visibility"
-                            Value="Collapsed" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-
         <Grid.RowDefinitions>
             <RowDefinition
                 Height="Auto" />
             <RowDefinition
                 Height="*" />
-            <RowDefinition
-                Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid
-            Background="{StaticResource AccentColorStyle}"
+            Background="{ThemeResource AccentColor}"
             Height="48">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition
-                    Width="Auto" />
-                <ColumnDefinition
-                    Width="Auto" />
                 <ColumnDefinition
                     Width="*" />
                 <ColumnDefinition
                     Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel
-                Name="FakeHamburgerButton"
-                Width="48" />
-
             <TextBlock
-                Grid.Column="1"
+                Margin="16,0"
+                Grid.Column="0"
                 Text="Kategorie"
                 Style="{StaticResource PageTitleStyle}" />
 
-
-            <AppBarButton
-                Name="UpperCommandBar"
-                Grid.Column="3"
-                IsCompact="True"
-                Icon="Add"
-                Label="Nowa kategoria"
-                Foreground="White"
-                Click="NewCategory_Click" />
+            <Button
+                Background="Transparent"
+                Width="48"
+                Height="48"
+                Grid.Column="1"
+                Click="NewCategory_Click">
+                <FontIcon
+                    FontSize="24"
+                    Foreground="{ThemeResource AccentText}"
+                    Glyph="" />
+            </Button>
         </Grid>
 
         <ScrollViewer
@@ -143,7 +95,8 @@
                             <Grid
                                 Background="Transparent">
 
-                                <StackPanel Margin="0,10">
+                                <StackPanel
+                                    Margin="0,10">
 
                                     <models:ExpandPanel>
 
@@ -194,12 +147,16 @@
                                                     Height="50"
                                                     Width="50">
 
+                                                    <Ellipse
+                                                        Name="Ellipse_OperationTemplate"
+                                                        Fill="{x:Bind Color}" />
+                                                    <!--
                                                     <Rectangle
                                                         RadiusX="5"
                                                         RadiusY="5"
                                                         Name="Ellipse_OperationTemplate"
                                                         Fill="{x:Bind Color}" />
-
+-->
                                                     <TextBlock
                                                         x:Name="Icon_OperationTemplate"
                                                         FontSize="24"
@@ -217,7 +174,7 @@
                                                     Text="{x:Bind Name}"
                                                     Margin="20,0,0,0"
                                                     FontSize="16"
-                                                    Foreground="White" />
+                                                    Foreground="{ThemeResource Text}" />
                                             </Grid>
 
                                         </models:ExpandPanel.HeaderContent>
@@ -288,22 +245,6 @@
                 </ListView>
             </StackPanel>
         </ScrollViewer>
-
-
-        <CommandBar
-            Name="LowerCommandBar"
-            Grid.Row="2"
-            Background="#242424"
-            Foreground="White"
-            IsEnabled="True">
-
-            <AppBarButton
-                Icon="Add"
-                Label="Nowa kategoria"
-                Foreground="White"
-                Click="NewCategory_Click" />
-
-        </CommandBar>
 
     </Grid>
 

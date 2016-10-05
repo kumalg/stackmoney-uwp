@@ -10,35 +10,6 @@
     <Grid
         Background="Transparent">
 
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState
-                    x:Name="HamburgerTight">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                            MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter
-                            Target="FakeHamburgerButton.Width"
-                            Value="48" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState
-                    x:Name="HamburgerWide">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                            MinWindowWidth="540" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter
-                            Target="FakeHamburgerButton.Width"
-                            Value="Auto" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-
         <Grid.RowDefinitions>
             <RowDefinition
                 Height="Auto" />
@@ -47,20 +18,8 @@
         </Grid.RowDefinitions>
 
         <Grid
-            Background="{StaticResource AccentColorStyle}"
+            Background="{ThemeResource AccentColor}"
             Height="48">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition
-                    Width="Auto" />
-                <ColumnDefinition
-                    Width="Auto" />
-                <ColumnDefinition
-                    Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <StackPanel
-                Name="FakeHamburgerButton"
-                Width="48" />
 
             <TextBlock
                 Text="Zlecenia stałe"

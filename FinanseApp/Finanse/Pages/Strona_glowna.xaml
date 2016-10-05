@@ -18,12 +18,15 @@
         <CollectionViewSource
             x:Name="CategorizedCVS"
             IsSourceGrouped="True" />
-      
+
+        <local:EmptyOrFullSelector
+            x:Key="GroupEmptyOrFullSelector" />
+
     </Page.Resources>
 
     <Grid
         Background="Transparent">
-
+<!--
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState
@@ -70,14 +73,6 @@
                         <Setter
                             Target="UpperNextMonth.Visibility"
                             Value="Collapsed" />
-                        <!--
-                        <Setter
-                            Target="UpperPrevMonth.Visibility"
-                            Value="Visible" />
-                        <Setter
-                            Target="UpperNextMonth.Visibility"
-                            Value="Visible" />
-                        -->
                         <Setter
                             Target="OperacjeListView.Padding"
                             Value="0,-10,0,0" />
@@ -97,115 +92,55 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-
+-->
         
         <Grid.RowDefinitions>
             <RowDefinition
                 Height="Auto" />
             <RowDefinition
                 Height="*" />
-            <RowDefinition
-                Height="Auto" />
         </Grid.RowDefinitions>
-
         
         <Grid
-            Background="{StaticResource AccentColorStyle}"
+            Background="{ThemeResource AccentColor}"
             Height="48">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
                     Width="Auto" />
                 <ColumnDefinition
-                    Width="Auto" />
-                <ColumnDefinition
                     Width="*" />
-                <ColumnDefinition
-                    Width="Auto" />
                 <ColumnDefinition
                     Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel
-                Name="FakeHamburgerButton"
-                Width="48" />
+            <AppBarButton
+                x:Name="PrevMonthButton"
+                Icon="Back"
+                Width="48"
+                Foreground="{ThemeResource AccentText}"
+                Click="PreviousMonthButton_Click" />
 
-            <StackPanel Orientation="Horizontal"
-                        Grid.Column="1">
-                <FontIcon
-                    Name="UpperPrevMonth"
-                    Glyph=""
-                    FontSize="15"
-                    Margin="0,0,10,0"
-                    Foreground="{ThemeResource AccentText}" />
-                <TextBlock
-                    x:Name="ActualMonthText"
-                    Text="Wrzesień"
-                    Style="{StaticResource PageTitleStyle}" 
-                    Margin="0"/>
-                <FontIcon
-                    Name="UpperNextMonth"
-                    Glyph=""
-                    FontSize="15"
-                    Margin="10,0,0,0"
-                    Foreground="{ThemeResource AccentText}" />
-            </StackPanel>
+            <TextBlock
+                HorizontalAlignment="Center"
+                Grid.Column="1"
+                x:Name="ActualMonthText"
+                Text="Wrzesień"
+                Style="{StaticResource PageTitleStyle}"
+                Margin="0" />
 
-            <StackPanel
-                Orientation="Horizontal"
-                Grid.Column="3"
-                VerticalAlignment="Center">
-                <TextBlock
-                    VerticalAlignment="Center"
-                    Name="ActualMoneyBar"
-                    Foreground="{ThemeResource AccentText}"
-                    FontWeight="Bold"
-                    FontSize="14" />
-                <Button
-                    Margin="11,0"
-                    Padding="5"
-                    Background="Transparent"
-                    VerticalAlignment="Center">
-                    <Button.Content>
-                        <FontIcon
-                            Opacity="0.5"
-                            FontSize="13"
-                            Glyph="" />
-                    </Button.Content>
-                    <Button.Flyout>
-                        <MenuFlyout
-                            Placement="Bottom">
-                            <MenuFlyout.MenuFlyoutPresenterStyle>
-                                <Style
-                                    TargetType="MenuFlyoutPresenter">
-                                    <Setter
-                                        Property="BorderThickness"
-                                        Value="0" />
-                                    <Setter
-                                        Property="Background"
-                                        Value="{ThemeResource AccentColor}" />
-                                </Style>
-                            </MenuFlyout.MenuFlyoutPresenterStyle>
-                            <ToggleMenuFlyoutItem
-                                Text="Wszystko" />
-                            <ToggleMenuFlyoutItem
-                                Text="Gotówka" />
-                            <ToggleMenuFlyoutItem
-                                Text="Karta Visa" />
-                        </MenuFlyout>
-                    </Button.Flyout>
-                </Button>
-            </StackPanel>
-            
+            <AppBarButton
+                Grid.Column="2"
+                Width="48"
+                x:Name="NextMonthButton"
+                Icon="Forward"
+                Foreground="{ThemeResource AccentText}"
+                Click="NextMonthButton_Click" />
+            <!--
             <StackPanel
                 Name="UpperCommandBar"
                 Orientation="Horizontal"
-                Grid.Column="4">
-
-                <AppBarSeparator
-                    IsCompact="True"
-                    Foreground="{ThemeResource AccentText}"
-                    Opacity="0.4" />
+                Grid.Column="2">
 
                 <AppBarButton
                     Icon="Add"
@@ -215,8 +150,59 @@
                     Click="NowaOperacja_Click" />
 
             </StackPanel>
+            -->
         </Grid>
-       
+        
+        <StackPanel
+            Height="48"
+            Orientation="Horizontal"
+            Grid.Row="1"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Right"
+            Canvas.ZIndex="1">
+            <TextBlock
+                VerticalAlignment="Center"
+                Name="ActualMoneyBar"
+                Foreground="{ThemeResource Text-1}"
+                FontWeight="Bold"
+                FontSize="14" />
+            <Button
+                Margin="11,0"
+                Padding="5"
+                Background="Transparent"
+                VerticalAlignment="Center">
+                <Button.Content>
+                    <FontIcon
+                        Foreground="{ThemeResource Text-1}"
+                        Opacity="0.5"
+                        FontSize="13"
+                        Glyph="" />
+                </Button.Content>
+                <Button.Flyout>
+                    <MenuFlyout
+                        Placement="Bottom">
+                        <MenuFlyout.MenuFlyoutPresenterStyle>
+                            <Style
+                                TargetType="MenuFlyoutPresenter">
+                                <Setter
+                                    Property="BorderThickness"
+                                    Value="0" />
+                                <Setter
+                                    Property="Background"
+                                    Value="{ThemeResource Background-1Transparent}" />
+                            </Style>
+                        </MenuFlyout.MenuFlyoutPresenterStyle>
+                        <ToggleMenuFlyoutItem
+                            Text="Wszystko" />
+                        <ToggleMenuFlyoutItem
+                            Text="Gotówka" />
+                        <ToggleMenuFlyoutItem
+                            Text="Karta Visa" />
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+        </StackPanel>
+        
         <Pivot
             Grid.Row="1"
             Grid.RowSpan="2"
@@ -233,14 +219,14 @@
                 GotFocus="PivotItem_GotFocus">
                 <PivotItem.Header>
                     <data:PivotHeader
-                        Label="Wszystkie operacje"
+                        Label="Operacje wg. daty"
                         Glyph="" />
                 </PivotItem.Header>
 
                 <SemanticZoom>
                     <SemanticZoom.ZoomedInView>
                         <ListView
-                            Padding="0,-10,0,48"
+                            Padding="0,-10,0,0"
                             Name="OperacjeListView"
                             ItemsSource="{Binding Source={StaticResource ContactsCVS}, Mode=TwoWay}"
                             SelectionMode="Single"
@@ -311,7 +297,8 @@
                             </ListView.ItemTemplate>
 
                             <ListView.GroupStyle>
-                                <GroupStyle>
+                                <GroupStyle
+                                    HidesIfEmpty="True">
                                     <GroupStyle.HeaderContainerStyle>
                                         <Style
                                             TargetType="ListViewHeaderItem">
@@ -374,10 +361,10 @@
                                                         <TextBlock
                                                             Text="{Binding month}"
                                                             FontSize="12"
-                                                            Foreground="{ThemeResource Text-2}"/>
+                                                            Foreground="{ThemeResource Text-2}" />
                                                     </StackPanel>
                                                 </StackPanel>
-                                                
+
                                                 <TextBlock
                                                     VerticalAlignment="Center"
                                                     Grid.Column="2"
@@ -404,17 +391,32 @@
                     </SemanticZoom.ZoomedInView>
 
                     <SemanticZoom.ZoomedOutView>
-                        <ListView
+                        <GridView
                             Name="OperacjeListViewGroup"
-                            Padding="0,0,0,48"
                             ItemsSource="{x:Bind ContactsCVS.View.CollectionGroups}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            SelectionMode="Single"
+                            SelectionMode="None"
+                            ItemTemplateSelector="{StaticResource GroupEmptyOrFullSelector}"
                             DataContextChanged="ListView_DataContextChanged">
-                            <ListView.ItemTemplate>
+                            <GridView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapGrid
+                                        MaximumRowsOrColumns="7"
+                                        Orientation="Horizontal"
+                                        HorizontalChildrenAlignment="Center"
+                                        VerticalChildrenAlignment="Center">
+                                    </WrapGrid>
+                                </ItemsPanelTemplate>
+                            </GridView.ItemsPanel>
+                            <GridView.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel
+                                    <TextBlock
+                                        Text="{Binding Group.dayNum}"
+                                        FontSize="30"
+                                        FontWeight="SemiLight"
+                                        VerticalAlignment="Center" />
+                                    <!--<StackPanel
                                         Orientation="Horizontal"
                                         Margin="0,10">
                                         <TextBlock
@@ -433,10 +435,10 @@
                                                 FontSize="12"
                                                 Opacity="0.4" />
                                         </StackPanel>
-                                    </StackPanel>
+                                    </StackPanel>-->
                                 </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                            </GridView.ItemTemplate>
+                        </GridView>
                     </SemanticZoom.ZoomedOutView>
                 </SemanticZoom>
 
@@ -446,7 +448,7 @@
                 Margin="0">
                 <PivotItem.Header>
                     <data:PivotHeader
-                        Label="Skategoryzowane operacje"
+                        Label="Operacje wg. kategorii"
                         Glyph="" />
                 </PivotItem.Header>
                 <SemanticZoom>
@@ -662,52 +664,7 @@
                 </SemanticZoom>
             </PivotItem>
 
-            <PivotItem>
-                <PivotItem.Header>
-                    <data:PivotHeader
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch"
-                        Width="Auto"
-                        Label="Statystyki"
-                        Glyph="" />
-                </PivotItem.Header>
-gggg
-            </PivotItem>
-            
         </Pivot>
-
-        <CommandBar
-            Name="LowerCommandBar"
-            Grid.Row="2"
-            Background="{ThemeResource Background-1Transparent}"
-            Foreground="{ThemeResource Text}">
-
-            <AppBarButton
-                x:Name="PrevMonthButton"
-                Icon="Back"
-                Label="Poprzedni miesiąc"
-                Foreground="White"
-                Click="PreviousMonthButton_Click">
-            </AppBarButton>
-
-            <AppBarButton
-                x:Name="NextMonthButton"
-                Icon="Forward"
-                Label="Nastepny miesiąc"
-                Foreground="White"
-                Click="NextMonthButton_Click">
-            </AppBarButton>
-
-            <AppBarSeparator />
-
-            <AppBarButton
-                Icon="Add"
-                Label="Nowa operacja"
-                Foreground="White"
-                Click="NowaOperacja_Click">
-            </AppBarButton>
-
-        </CommandBar>
 
     </Grid>
 

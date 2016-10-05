@@ -82,47 +82,6 @@
             }
         }
 
-        public static void DeletePattern(OperationPattern person) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                // Object model:
-                //db.Delete(person);
-
-                // SQL Syntax:
-                db.Execute("DELETE FROM OperationPattern WHERE Id = ?", person.Id);
-            }
-        }
-
-        public static void DeleteOperation(Operation person) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                // Object model:
-                //db.Delete(person);
-
-                // SQL Syntax:
-                db.Execute("DELETE FROM Operation WHERE Id = ?", person.Id);
-            }
-        }
-
-        public static void DeletePerson(Operation person) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                // Object model:
-                //db.Delete(person);
-
-                // SQL Syntax:
-                db.Execute("DELETE FROM Person WHERE Id = ?", person.Id);
-            }
-        }
         /*
         public static Settings GetSettings() {
             Settings settings;
@@ -138,6 +97,20 @@
             return settings;
         }
         */
+
+        public static Operation GetEldestOperation() {
+            Operation eldest;
+
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                eldest = db.Table<Operation>().Aggregate((c1, c2) => Convert.ToDateTime(c1.Date) < Convert.ToDateTime(c2.Date) ? c1 : c2);
+            }
+
+            return eldest;
+        }
+
         /* GET ALL */
 
         public static List<OperationCategory> GetAllCategories() {
@@ -154,19 +127,6 @@
             }
 
             return models;
-        }
-
-        public static Operation GetEldestOperation() {
-            Operation eldest;
-
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                eldest = db.Table<Operation>().Aggregate((c1, c2) => Convert.ToDateTime(c1.Date) < Convert.ToDateTime(c2.Date) ? c1 : c2);
-            }
-
-            return eldest;
         }
 
         public static List<Operation> GetAllOperations(int month, int year) {
@@ -254,7 +214,7 @@
             }
         }
 
-        public static List<OperationSubCategory> GetOperationSubCategoryByBossId(int Id) {
+        public static List<OperationSubCategory> GetOperationSubCategoriesByBossId(int Id) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -273,18 +233,6 @@
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
                 OperationCategory m = (from p in db.Table<OperationCategory>()
-                               where p.Id == Id
-                               select p).FirstOrDefault();
-                return m;
-            }
-        }
-
-        public static Operation GetPersonById(int Id) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-                Operation m = (from p in db.Table<Operation>()
                                where p.Id == Id
                                select p).FirstOrDefault();
                 return m;
@@ -327,20 +275,33 @@
             }
         }
 
-        public static void SavePerson(Operation person) {
+        /* DELETE */
+
+        public static void DeletePattern(OperationPattern operationPattern) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                if (person.Id == 0) {
-                    // New
-                    db.Insert(person);
-                }
-                else {
-                    // Update
-                    db.Update(person);
-                }
+                // Object model:
+                //db.Delete(person);
+
+                // SQL Syntax:
+                db.Execute("DELETE FROM OperationPattern WHERE Id = ?", operationPattern.Id);
+            }
+        }
+
+        public static void DeleteOperation(Operation operation) {
+            // Create a new connection
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                // Object model:
+                //db.Delete(person);
+
+                // SQL Syntax:
+                db.Execute("DELETE FROM Operation WHERE Id = ?", operation.Id);
             }
         }
     }

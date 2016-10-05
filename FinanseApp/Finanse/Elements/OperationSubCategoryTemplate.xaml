@@ -33,7 +33,7 @@
                 Height="8"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
-                Fill="Gray" />
+                Fill="{ThemeResource Text-2}" />
         </Grid>
 
         <Grid
@@ -41,13 +41,18 @@
             Grid.Column="1"
             Height="40"
             Width="40">
-
+            
+            <Ellipse
+                Name="Ellipse_OperationTemplate"
+                Fill="{x:Bind OperationSubCategory.Color}" />
+            
+            <!--
             <Rectangle
                 RadiusX="5"
                 RadiusY="5"
                 Name="Ellipse_OperationTemplate"
                 Fill="{x:Bind OperationSubCategory.Color}" />
-
+-->
             <TextBlock
                 x:Name="Icon_OperationTemplate"
                 FontFamily="Segoe UI"
@@ -63,7 +68,7 @@
             Text="{x:Bind OperationSubCategory.Name}"
             Margin="20,0,0,0"
             FontSize="16"
-            Foreground="White" />
+            Foreground="{ThemeResource Text}" />
     </Grid>
 
 </UserControl>

@@ -311,7 +311,7 @@ namespace Finanse.Dialogs {
 
             if (CategoryValue.SelectedIndex != -1) {
 
-                foreach (OperationSubCategory subCatItem in Dal.GetOperationSubCategoryByBossId((int)((ComboBoxItem)CategoryValue.SelectedItem).Tag)) {
+                foreach (OperationSubCategory subCatItem in Dal.GetOperationSubCategoriesByBossId((int)((ComboBoxItem)CategoryValue.SelectedItem).Tag)) {
 
                     if ((subCatItem.VisibleInExpenses && inExpenses)
                         || (subCatItem.VisibleInIncomes && inIncomes)) {
@@ -414,7 +414,7 @@ namespace Finanse.Dialogs {
         private async void UsePatternButton_Click(object sender, RoutedEventArgs e) {
             Hide();
 
-            var ContentDialogItem = new OperationPatternsContentDialog(_source);
+            var ContentDialogItem = new OperationPatternsContentDialog();
 
             var result = await ContentDialogItem.ShowAsync();
         }

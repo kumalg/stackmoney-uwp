@@ -55,7 +55,7 @@ namespace Finanse.Dialogs {
                         break;
                     }
                 default: {
-                        GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key.ToString() == operation.Date);
+                        GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key == operation.Date);
                         if (group.Count == 1)
                             _source.Remove(group);
                         else {

@@ -1,4 +1,5 @@
-﻿using Finanse.Elements;
+﻿using Finanse.DataAccessLayer;
+using Finanse.Elements;
 using Finanse.Models;
 using System;
 using System.Collections.Generic;
@@ -310,15 +311,11 @@ namespace Finanse.Dialogs {
 
         private void RefreshOperationCategoriesList() {
             OperationCategories.Clear();
-            foreach (var message in conn.Table<OperationCategory>().OrderBy(category => category.Name)) {
-                OperationCategory operationCategoryItem = message;
+            foreach (var message in Dal.GetAllCategories()) {
 
-                foreach (var submessage in conn.Table<OperationSubCategory>().OrderByDescending(subCategory => subCategory.Name)) {
-                    if (submessage.BossCategoryId == message.Id) {
-                        operationCategoryItem.addSubCategory(submessage);
-                    }
-                }
-                OperationCategories.Add(operationCategoryItem);
+                message.subCategories = new ObservableCollection<OperationSubCategory>(Dal.GetOperationSubCategoriesByBossId(message.Id));
+
+                OperationCategories.Add(message);
             }
         }
     }

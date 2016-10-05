@@ -38,8 +38,9 @@ namespace Finanse.Dialogs {
 
                 OperationCategories.Remove(operationCategory);
                 conn.Delete(operationCategory);
-                foreach (var subCat in conn.Table<OperationSubCategory>().Where(x => x.BossCategoryId == operationCategory.Id))
-                    conn.Delete(subCat);
+                //foreach (var subCat in conn.Table<OperationSubCategory>().Where(x => x.BossCategoryId == operationCategory.Id))
+                    //conn.Delete(subCat);
+                conn.Delete(conn.Table<OperationSubCategory>().Where(x => x.BossCategoryId == operationCategory.Id));
             }
             else if (operationSubCategory != null) {
 

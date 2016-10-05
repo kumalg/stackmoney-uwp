@@ -21,6 +21,7 @@ using Finanse.Pages;
 using System.Collections.ObjectModel;
 using Windows.Graphics.Display;
 using Finanse.Models;
+using Finanse.DataAccessLayer;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -30,8 +31,8 @@ namespace Finanse {
         public MainPage() {
             this.InitializeComponent();
             //AktualnaStrona_Frame.Navigate(typeof(Konta));
-            Strona_glowna_ListBoxItem.IsChecked = true;
-
+            //Strona_glowna_ListBoxItem.IsChecked = true;
+            Dal.CreateDB();
             DisplayInformation info = DisplayInformation.GetForCurrentView();
 
             whichOrientation(info);
@@ -48,9 +49,9 @@ namespace Finanse {
 
         private void whichOrientation(DisplayInformation info) {
             if (info.CurrentOrientation == DisplayOrientations.Landscape || info.CurrentOrientation == DisplayOrientations.LandscapeFlipped)
-                StatusBarAndTitleBar("GreyColorStyle", "White");
+                StatusBarAndTitleBar("Background", "Text-1");
             else
-                StatusBarAndTitleBar("AccentDarkColorStyle", "AccentTextColorStyle");
+                StatusBarAndTitleBar("AccentColor-1", "AccentText");
         }
 
         private void MainPage_OrientationChanged(DisplayInformation info, object args) {
@@ -62,10 +63,10 @@ namespace Finanse {
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView")) {
                 var titleBar = ApplicationView.GetForCurrentView().TitleBar;
                 if (titleBar != null) {
-                    titleBar.ButtonBackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentDarkColorStyle"] as SolidColorBrush).Color;
+                    titleBar.ButtonBackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentColor-1"] as SolidColorBrush).Color;
                     titleBar.ButtonForegroundColor = Colors.White;
 
-                    titleBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentDarkColorStyle"] as SolidColorBrush).Color;
+                    titleBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentColor-1"] as SolidColorBrush).Color;
                     titleBar.ForegroundColor = Colors.White;
                 }
             }
@@ -85,70 +86,70 @@ namespace Finanse {
             }
         }
 
-        private void HamburgerButton_Click(object sender, RoutedEventArgs e) {
-
-            MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
-            if (MySplitView.IsPaneOpen) {
-                PageFillWhenPaneIsOpen.Visibility = Visibility.Visible;
-            }
-        }
-
-        private void Strona_glowna_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
+        private void OperationsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
             AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
-            ClosingPane();
         }
 
-        private void Kategorie_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
+        private void CategoriesAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
             AktualnaStrona_Frame.Navigate(typeof(Kategorie));
-            ClosingPane();
         }
 
-        private void Szablony_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
+        private void AddNewOperationAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
+            AktualnaStrona_Frame.Navigate(typeof(Nowa_Operacja));
+        }
+
+        private void StatisticsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
+            AktualnaStrona_Frame.Navigate(typeof(Statystyki));
+        }
+        private void RadioButton_Click(object sender, RoutedEventArgs e) {
+            MoreAppBarRadioButton.IsChecked = false;
+            CommandBar.IsOpen = !CommandBar.IsOpen;
+        }
+
+        private void SzablonyAppBarButton_Click(object sender, RoutedEventArgs e) {
+            UncheckAllMenuButtons();
             AktualnaStrona_Frame.Navigate(typeof(Szablony));
-            ClosingPane();
         }
 
-        private void ZleceniaStale_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
+        private void ZleceniaStaleAppBarButton_Click(object sender, RoutedEventArgs e) {
+            UncheckAllMenuButtons();
             AktualnaStrona_Frame.Navigate(typeof(ZleceniaStale));
-            ClosingPane();
         }
 
-        private void PlanowaneWydatki_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
-            AktualnaStrona_Frame.Navigate(typeof(PlanowaneWydatki));
-            ClosingPane();
-        }
-
-        private void Ustawienia_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
-            AktualnaStrona_Frame.Navigate(typeof(Ustawienia));
-            ClosingPane();
-        }
-
-        private void Konta_ListBoxItem_Checked(object sender, RoutedEventArgs e) {
+        private void KontaAppBarButton_Click(object sender, RoutedEventArgs e) {
+            UncheckAllMenuButtons();
             AktualnaStrona_Frame.Navigate(typeof(Konta));
-            ClosingPane();
         }
 
-        private void ClosingPane() {
-            if (MySplitView.IsPaneOpen)
-                MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
+        private void UstawieniaAppBarButton_Click(object sender, RoutedEventArgs e) {
+            UncheckAllMenuButtons();
+            AktualnaStrona_Frame.Navigate(typeof(Ustawienia));
         }
 
-        private void Strona_glowna_ListBoxItem_Click(object sender, RoutedEventArgs e) {
-            ClosingPane();
+        private void CommandBar_Opening(object sender, object e) {
+            OperationsAppBarRadioButton.Height = Double.NaN;
+            CategoriesAppBarRadioButton.Height = Double.NaN;
+            AddNewOperationAppBarRadioButton.Height = Double.NaN;
+            StatisticsAppBarRadioButton.Height = Double.NaN;
         }
 
-        private void MySplitView_PaneClosing(SplitView sender, SplitViewPaneClosingEventArgs args) {
-            PageFillWhenPaneIsOpen.Visibility = Visibility.Collapsed;
+        private void CommandBar_Closing(object sender, object e) {
+            OperationsAppBarRadioButton.Height = 40;
+            CategoriesAppBarRadioButton.Height = 40;
+            AddNewOperationAppBarRadioButton.Height = 40;
+            StatisticsAppBarRadioButton.Height = 40;
         }
 
-        private void ThemeToggle_Toggled(object sender, RoutedEventArgs e) {
-            if (ThemeToggle.IsOn) {
-                (Frame as ThemeAwareFrame).AppTheme = ElementTheme.Dark;
-                Settings.SetTheme(1);
-            }
-            else {
-                (Frame as ThemeAwareFrame).AppTheme = ElementTheme.Light;
-                Settings.SetTheme(0);
+        private void UncheckAllMenuButtons() {
+            OperationsAppBarRadioButton.IsChecked = false;
+            CategoriesAppBarRadioButton.IsChecked = false;
+            AddNewOperationAppBarRadioButton.IsChecked = false;
+            StatisticsAppBarRadioButton.IsChecked = false;
+        }
+
+        private void AktualnaStrona_Frame_Navigated(object sender, NavigationEventArgs e) {
+            if (((Frame)sender).SourcePageType == typeof(Strona_glowna)) {
+                OperationsAppBarRadioButton.IsChecked = true;
             }
         }
     }

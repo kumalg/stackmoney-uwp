@@ -41,9 +41,7 @@ namespace Finanse.Pages {
 
             foreach (var message in Dal.GetAllCategories()) {
 
-                foreach (var submessage in Dal.GetOperationSubCategoryByBossId(message.Id)) {
-                        message.addSubCategory(submessage);
-                }
+                message.subCategories = new ObservableCollection<OperationSubCategory>(Dal.GetOperationSubCategoriesByBossId(message.Id));
 
                 OperationCategories.Add(message);
             }

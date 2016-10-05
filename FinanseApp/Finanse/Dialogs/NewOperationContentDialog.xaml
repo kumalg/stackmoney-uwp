@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:Finanse.Elements"
     mc:Ignorable="d"
-    Background="{StaticResource GreyTransparentColorStyle}"
+    Background="{ThemeResource BackgroundTransparent}"
     Title="Nowa operacja"
     PrimaryButtonText="Dodaj"
     SecondaryButtonText="Anuluj"
@@ -87,14 +87,14 @@
                                         MinDate="{TemplateBinding MinDate}"
                                         MaxDate="{TemplateBinding MaxDate}"
                                         Style="{TemplateBinding CalendarViewStyle}"
-                                        Background="{StaticResource AccentDarkColorStyle}"
+                                        Background="{ThemeResource AccentColor-1}"
                                         CalendarItemBackground="Transparent"
                                         CalendarItemForeground="White"
                                         Foreground="#CCFFFFFF"
                                         HoverBorderBrush="#66E5E5E5"
                                         OutOfScopeForeground="#4FFFFFFF"
                                         OutOfScopeBackground="Transparent"
-                                        TodayForeground="{StaticResource AccentColorStyle}"
+                                        TodayForeground="{ThemeResource AccentColor}"
                                         FontWeight="Normal"
                                         FontSize="10"
                                         DayItemFontSize="15" />
@@ -314,7 +314,7 @@
                                                         Height="Auto" />
                                                 </Grid.RowDefinitions>
                                                 <Grid
-                                                    Background="{StaticResource AccentDarkColorStyle}">
+                                                    Background="{ThemeResource AccentColor}">
 
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition
@@ -331,7 +331,7 @@
                                                         FontSize="15"
                                                         FontFamily="XamlAutoFontFamily"
                                                         FontWeight="SemiBold"
-                                                        Foreground="{StaticResource AccentTextColorStyle}"
+                                                        Foreground="{ThemeResource AccentText}"
                                                         HorizontalAlignment="Left"
                                                         VerticalAlignment="Center"
                                                         IsTabStop="False"

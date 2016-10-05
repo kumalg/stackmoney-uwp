@@ -154,6 +154,7 @@
     <Compile Include="Dialogs\Delete_ContentDialog.xaml.cs">
       <DependentUpon>Delete_ContentDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EmptyOrFullSelector.cs" />
     <Compile Include="Models\ExpandPanel.cs" />
     <Compile Include="Models\Functions.cs" />
     <Compile Include="Models\CategoryGroupInfoList.cs" />
@@ -193,8 +194,11 @@
     <Compile Include="Dialogs\NewOperationContentDialog.xaml.cs">
       <DependentUpon>NewOperationContentDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PlanowaneWydatki.xaml.cs">
-      <DependentUpon>PlanowaneWydatki.xaml</DependentUpon>
+    <Compile Include="Pages\Nowa_Operacja.xaml.cs">
+      <DependentUpon>Nowa_Operacja.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Statystyki.xaml.cs">
+      <DependentUpon>Statystyki.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pages\Strona_glowna.xaml.cs">
@@ -263,6 +267,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Nowa_Operacja.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -291,7 +299,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\PlanowaneWydatki.xaml">
+    <Page Include="Pages\Statystyki.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

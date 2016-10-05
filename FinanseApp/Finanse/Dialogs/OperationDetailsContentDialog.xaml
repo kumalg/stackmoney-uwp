@@ -7,21 +7,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:Finanse.Elements"
     mc:Ignorable="d"
-    Background="{StaticResource GreyTransparentColorStyle}"
+    Background="{ThemeResource BackgroundTransparent}"
     Title="Szczegóły operacji"
     PrimaryButtonText="Edytuj"
     SecondaryButtonText="Wyjdź"
     PrimaryButtonClick="EditButton_Click"
     RequestedTheme="Dark">
-    <ContentDialog.Resources>
-        <Style
-            x:Key="DetailsIconStyle"
-            TargetType="FontIcon">
-            <Setter
-                Property="Opacity"
-                Value="0.5" />
-        </Style>
-    </ContentDialog.Resources>
 
     <ContentDialog.Style>
         <Style
@@ -75,7 +66,7 @@
                                                         Height="Auto" />
                                                 </Grid.RowDefinitions>
                                                 <Grid
-                                                    Background="{StaticResource AccentDarkColorStyle}">
+                                                    Background="{ThemeResource AccentColor}">
 
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition
@@ -92,7 +83,7 @@
                                                         FontSize="15"
                                                         FontFamily="XamlAutoFontFamily"
                                                         FontWeight="SemiBold"
-                                                        Foreground="{StaticResource AccentTextColorStyle}"
+                                                        Foreground="{ThemeResource AccentText}"
                                                         HorizontalAlignment="Left"
                                                         VerticalAlignment="Center"
                                                         IsTabStop="False"
@@ -176,6 +167,7 @@
 
         <TextBlock
             Name="NameValue"
+            Foreground="{ThemeResource Text}"
             TextWrapping="Wrap"
             Text="Zwrot podatku"
             FontSize="22" />
@@ -205,6 +197,7 @@
                 Glyph="" />
             <TextBlock
                 Name="DateValue"
+                Foreground="{ThemeResource Text}"
                 Text="2016.08.10"
                 Margin="20,0" />
         </StackPanel>
@@ -219,6 +212,7 @@
                     Glyph="&#xE71D;" />
                 <TextBlock
                     Name="CategoryValue"
+                    Foreground="{ThemeResource Text}"
                     Text="Jedzenie"
                     Margin="20,0" />
             </StackPanel>
@@ -231,6 +225,7 @@
                     Glyph="" />
                 <TextBlock
                     Name="SubCategoryValue"
+                    Foreground="{ThemeResource Text}"
                     Margin="5,0"
                     Text="Biedronka" />
             </StackPanel>
@@ -242,10 +237,11 @@
             Margin="0,15,0,0">
             <FontIcon
                 Style="{StaticResource DetailsIconStyle}"
-                FontFamily="/Assets/FontAwesome.ttf#FontAwesome"
+                FontFamily="{StaticResource FontAwesome}"
                 Glyph="" />
             <TextBlock
                 Name="PayForm"
+                Foreground="{ThemeResource Text}"
                 Text="Gotówka"
                 Margin="20,0" />
         </StackPanel>
@@ -255,7 +251,7 @@
             <Border
                 Margin="0,20"
                 BorderThickness="0,0,0,1"
-                BorderBrush="#24ffffff" />
+                BorderBrush="{ThemeResource Background+1}" />
             <Grid
                 VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
@@ -272,6 +268,7 @@
                 <TextBlock
                     Grid.Column="1"
                     Name="MoreInfo"
+                    Foreground="{ThemeResource Text}"
                     TextWrapping="Wrap"
                     Text="Więcej informacji"
                     Margin="20,0" />

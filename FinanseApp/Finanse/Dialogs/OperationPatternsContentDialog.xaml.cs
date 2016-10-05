@@ -27,10 +27,9 @@ namespace Finanse.Dialogs {
         public List<Operation> OperationPatterns = new List<Operation>();
         ObservableCollection<GroupInfoList<Operation>> _source;
 
-        public OperationPatternsContentDialog(ObservableCollection<GroupInfoList<Operation>> _source) {
+        public OperationPatternsContentDialog() {
 
             this.InitializeComponent();
-            this._source = _source;
 
             foreach (OperationPattern item in Dal.GetAllPatterns()) {
                 OperationPatterns.Add(new Operation {

@@ -1,6 +1,10 @@
 ﻿
 namespace Finanse.Models {
-
+    public class HeaderItem {
+        public bool IsEnabled {
+            get; set;
+        }
+    }
     public class Operation : OperationPattern {
 
        // public DateTimeOffset? Date { get; set; } 

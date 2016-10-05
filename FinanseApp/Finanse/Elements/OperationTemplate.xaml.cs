@@ -37,7 +37,7 @@ namespace Finanse.Elements {
             this.InitializeComponent();
             this.DataContextChanged += (s, e) => Bindings.Update();
         }
-
+        /*
         private SolidColorBrush GetSolidColorBrush(string hex) {
             hex = hex.Replace("#", string.Empty);
             byte a = (byte)(Convert.ToUInt32(hex.Substring(0, 2), 16));
@@ -47,50 +47,38 @@ namespace Finanse.Elements {
             SolidColorBrush myBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(a, r, g, b));
             return myBrush;
         }
-
+        */
         public void Operation_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
-
-            /* WYGLĄD KOŁA Z KATEGORIĄ */
-            string whichColor = ((SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"]).Color.ToString();
-            string whichIcon = ((TextBlock)Application.Current.Resources["DefaultEllipseIcon"]).Text;
-            Icon_OperationTemplate.Opacity = 0.2;
 
             /* BO PIERDOLI ŻE NULL WCHODZI */
             if (Operation == null)
                 return;
 
             MoneyAccount moneyAccount = Dal.GetAllMoneyAccounts().SingleOrDefault(i => i.Id == Operation.MoneyAccountId);
-            string moneyAccountColor = string.Empty;
 
-            if (moneyAccount != null)
-                moneyAccountColor = moneyAccount.Color;
-
-            if (!string.IsNullOrEmpty(moneyAccountColor))
-                MoneyAccountEllipse.Fill = GetSolidColorBrush(moneyAccountColor);
-            else
-                MoneyAccountEllipse.Visibility = Visibility.Collapsed;
+            if (!string.IsNullOrEmpty(moneyAccount.Color)) {
+                MoneyAccountEllipse.Visibility = Visibility.Visible;
+                MoneyAccountEllipse.Fill = Functions.GetSolidColorBrush(moneyAccount.Color);
+            }
 
             OperationCategory cat = Dal.GetOperationCategoryById(Operation.CategoryId);
             OperationSubCategory subCat = Dal.GetOperationSubCategoryById(Operation.SubCategoryId);
 
             /* WCHODZI IKONKA KATEGORII */
-            if (cat != null) {
-                Icon_OperationTemplate.Opacity = 1;
-                whichColor = cat.Color;
-                whichIcon = cat.Icon;
-            }
-
-            /* PRÓBUJE WEJŚC IKONKA SUBKATEGORII */
-            if (subCat != null) {
-                Icon_OperationTemplate.Opacity = 1;
-                whichColor = subCat.Color;
-                whichIcon = subCat.Icon;
-            }
-
-            /* GOTOWA IKONKA DO ZAPISANIA */
-            Ellipse_OperationTemplate.Fill = new SolidColorBrush(GetSolidColorBrush(whichColor).Color);
-            Icon_OperationTemplate.Text = whichIcon;
             Icon_OperationTemplate.FontFamily = new FontFamily(Settings.GetActualIconStyle());
+
+            if (cat != null && subCat == null) {
+                Ellipse_OperationTemplate.Fill = new SolidColorBrush(Functions.GetSolidColorBrush(cat.Color).Color);
+                Icon_OperationTemplate.Glyph = cat.Icon;
+            }
+
+            else if (cat != null && subCat != null) {
+                Ellipse_OperationTemplate.Fill = new SolidColorBrush(Functions.GetSolidColorBrush(subCat.Color).Color);
+                Icon_OperationTemplate.Glyph = subCat.Icon;
+            }
+
+            else
+                Icon_OperationTemplate.Opacity = 0.2;
 
             /* WYGLĄD KOSZTU (CZERWONY Z MINUSEM CZY ZIELONY Z PLUSEM) */
             if (Operation.isExpense) {
@@ -106,11 +94,13 @@ namespace Finanse.Elements {
             }
 
             /* WYGLĄD NAZWY KATEGORII */
-            Category_OperationTemplate.Text = "Nie odnaleziono wskazanej kategorii";
-            if(cat != null)
-                Category_OperationTemplate.Text = cat.Name;
-            if (subCat != null)
-                SubCategory_OperationTemplate.Text = "  /  " + subCat.Name;
+            /*
+Category_OperationTemplate.Text = "Nie odnaleziono wskazanej kategorii";
+if(cat != null)
+    Category_OperationTemplate.Text = cat.Name;
+if (subCat != null)
+    SubCategory_OperationTemplate.Text = "  /  " + subCat.Name;
+*/
         }
     }
 }

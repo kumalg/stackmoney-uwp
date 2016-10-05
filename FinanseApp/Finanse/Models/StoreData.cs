@@ -39,6 +39,16 @@ namespace Finanse.Models {
                             GroupName = g.Key,
                             Items = g
                         };
+            int dayOfWeek = (int)(new DateTime(year, month, 1).DayOfWeek);
+            for (int i = 1; i < dayOfWeek; i++) {
+                groups.Add(new GroupInfoList<Operation>());
+            }
+            for (int i= DateTime.DaysInMonth(year, month); i > 0; i--) {
+                groups.Add(new GroupInfoList<Operation>() {
+                    Key = year.ToString() + "." + month.ToString("00") + "." + i.ToString("00"),
+                    dayNum = i.ToString(),
+                });
+            };
 
             foreach (var g in query) {
                 info = new GroupInfoList<Operation>() {
@@ -61,7 +71,7 @@ namespace Finanse.Models {
                 }
                 info.decimalCost = sumCost;
                 info.cost = sumCost.ToString("C", Settings.GetActualCurrency());
-                groups.Add(info);
+                groups[groups.IndexOf(groups.Single(i => i.Key == info.Key))] = info;
             }
 
             return groups;

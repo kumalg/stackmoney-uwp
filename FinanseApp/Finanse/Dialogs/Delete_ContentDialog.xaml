@@ -1,5 +1,8 @@
 ﻿<ContentDialog
-    Style="{StaticResource MyContentDialog}"
+    Background="{ThemeResource BackgroundTransparent}"
+    BorderThickness="0"
+    BorderBrush="Transparent"
+    MaxWidth="{ThemeResource ContentDialogMinWidth}"
     x:Class="Finanse.Dialogs.Delete_ContentDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

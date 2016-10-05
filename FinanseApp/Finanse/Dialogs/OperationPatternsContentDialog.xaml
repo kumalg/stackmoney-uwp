@@ -11,7 +11,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Title="Użyj szablonu"
-    Background="{StaticResource GreyTransparentColorStyle}"
+    Background="{ThemeResource BackgroundTransparent}"
     SecondaryButtonText="Anuluj">
 
     <StackPanel

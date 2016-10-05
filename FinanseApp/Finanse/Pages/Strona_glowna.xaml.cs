@@ -46,11 +46,11 @@ namespace Finanse.Pages {
 
             this.InitializeComponent();
 
-            Dal.CreateDB();
-
             actualMonth = DateTime.Today.Month;
             actualYear = DateTime.Today.Year;
             NextMonthButton.IsEnabled = false;
+
+            ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
 
             _source = (new StoreData()).GetGroupsByDay(actualMonth, actualYear);
             _sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
@@ -132,49 +132,41 @@ namespace Finanse.Pages {
         }
 
         private void PreviousMonthButton_Click(object sender, RoutedEventArgs e) {
-            _source.Clear();
-            _sourceByCategory.Clear();
-            ObservableCollection<GroupInfoList<Operation>> source;
-            ObservableCollection<CategoryGroupInfoList<Operation>> sourceByCategory;
+
             if (actualMonth > 1) {
-                source = (new StoreData()).GetGroupsByDay(--actualMonth, actualYear);
-                sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
+                actualMonth--;
             }
             else {
                 actualMonth = 12;
-                source = (new StoreData()).GetGroupsByDay(actualMonth, --actualYear);
-                sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
+                actualYear--;
             }
 
-            ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
-            if (actualYear != DateTime.Today.Year)
-                ActualMonthText.Text += " " + actualYear.ToString();
-
-            foreach (var s in source) {
-                _source.Add(s);
-            };
-            foreach (var s in sourceByCategory) {
-                _sourceByCategory.Add(s);
-            };
-
-            SetNextMonthButtonEnabling();
-            SetPreviousMonthButtonEnabling();
+            SetListOfOperations();
         }
 
         private void NextMonthButton_Click(object sender, RoutedEventArgs e) {
-            _source.Clear();
-            _sourceByCategory.Clear();
-            ObservableCollection<GroupInfoList<Operation>> source;
-            ObservableCollection<CategoryGroupInfoList<Operation>> sourceByCategory;
+
             if (actualMonth < 12) {
-                source = (new StoreData()).GetGroupsByDay(++actualMonth, actualYear);
-                sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
+                actualMonth++;
             }
             else {
                 actualMonth = 1;
-                source = (new StoreData()).GetGroupsByDay(actualMonth, ++actualYear);
-                sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
+                actualYear++;
             }
+
+            SetListOfOperations();
+        }
+
+        private void SetListOfOperations() {
+
+            _source.Clear();
+            _sourceByCategory.Clear();
+
+            ObservableCollection<GroupInfoList<Operation>> source;
+            ObservableCollection<CategoryGroupInfoList<Operation>> sourceByCategory;
+
+            source = (new StoreData()).GetGroupsByDay(actualMonth, actualYear);
+            sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
 
             ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
             if (actualYear != DateTime.Today.Year)
@@ -186,6 +178,12 @@ namespace Finanse.Pages {
             foreach (var s in sourceByCategory) {
                 _sourceByCategory.Add(s);
             };
+
+            actualMoney = 0;
+            foreach (var item in source)
+                actualMoney += item.decimalCost;
+
+            ActualMoneyBar.Text = actualMoney.ToString("C", Settings.GetActualCurrency());
 
             SetNextMonthButtonEnabling();
             SetPreviousMonthButtonEnabling();

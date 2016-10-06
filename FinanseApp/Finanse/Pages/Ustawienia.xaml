@@ -25,71 +25,114 @@
         </Grid>
 
         <Pivot Grid.Row="1">
-            <PivotItem>
+            <PivotItem
+                Margin="0">
                 <PivotItem.Header>
                     <TextBlock
                         Text="Ogólne"
                         FontSize="15" />
                 </PivotItem.Header>
+                <ScrollViewer
+                    VerticalScrollBarVisibility="Auto">
+                    <Grid>
 
-                <StackPanel>
+                        <StackPanel
+                            MaxWidth="600"
+                            Margin="16">
+                            <TextBlock
+                                FontSize="18"
+                                Text="Pierwszy dzień tygodnia"
+                                Margin="0,0,0,10"
+                                Foreground="{ThemeResource AccentColor}" />
+
+                            <ComboBox
+                                Name="ColorValue"
+                                SelectedIndex="2"
+                                Style="{StaticResource ComboBoxStyle1}">
+
+                                <ComboBoxItem
+                                    Content="Sobota" />
+                                <ComboBoxItem
+                                    Content="Niedziela" />
+                                <ComboBoxItem
+                                    Content="Poniedziałek" />
+
+                            </ComboBox>
+
+
+                            <TextBlock
+                                FontSize="18"
+                                Text="Waluta"
+                                Margin="0,30,0,10"
+                                Foreground="{ThemeResource AccentColor}" />
+
+                            <ComboBox
+                                Name="CurrencyValue"
+                                Style="{StaticResource ComboBoxStyle1}"
+                                SelectionChanged="ComboBox_SelectionChanged"
+                                SelectedValuePath="ID"
+                                PlaceholderText="Waluta"/>
+
+                            <TextBlock
+                                FontSize="18"
+                                Margin="0,30,0,10"
+                                Text="Planowane wydatki"
+                                Foreground="{ThemeResource AccentColor}" />
+                            <TextBlock
+                                Margin="0,0,0,10"
+                                Text="Maksymalna liczba miesięcy do przodu"
+                                Foreground="{ThemeResource Text-1}" />
+                            <ComboBox
+                                Name="MaxNumberOfNextMonth"
+                                Style="{StaticResource ComboBoxStyle1}"
+                                SelectedIndex="0">
+                                <ComboBoxItem
+                                    Content="1" />
+                                <ComboBoxItem
+                                    Content="2" />
+                                <ComboBoxItem
+                                    Content="3" />
+                                <ComboBoxItem
+                                    Content="4" />
+                                <ComboBoxItem
+                                    Content="5" />
+                                <ComboBoxItem
+                                    Content="6" />
+                                <ComboBoxItem
+                                    Content="7" />
+                                <ComboBoxItem
+                                    Content="8" />
+                                <ComboBoxItem
+                                    Content="9" />
+                                <ComboBoxItem
+                                    Content="10" />
+                                <ComboBoxItem
+                                    Content="11" />
+                                <ComboBoxItem
+                                    Content="12" />
+                            </ComboBox>
+
+                        </StackPanel>
+
+                    </Grid>
+                </ScrollViewer>
+            </PivotItem>
+            <PivotItem
+                Margin="0">
+                <PivotItem.Header>
                     <TextBlock
-                        Text="Pierwszy dzień miesiąca"
-                        Margin="0,20,0,0" />
-
-                    <ComboBox
-                        Name="ColorValue"
-                        SelectedIndex="0"
-                        Margin="0,10"
-                        BorderThickness="0,0,0,1"
-                        Background="Transparent"
-                        MaxWidth="620">
-
-                        <ComboBoxItem
-                            Content="1" />
-                        <ComboBoxItem
-                            Content="2" />
-                        <ComboBoxItem
-                            Content="3" />
-                        <ComboBoxItem
-                            Content="4" />
-                        <ComboBoxItem
-                            Content="5" />
-                        <ComboBoxItem
-                            Content="6" />
-
-                    </ComboBox>
-
-                    <ComboBox
-                        Name="CurrencyValue"
-                        Style="{StaticResource ComboBoxStyle1}"
-                        SelectionChanged="ComboBox_SelectionChanged"
-                        SelectedValuePath="ID"
-                        PlaceholderText="Waluta"
-                        Margin="0,10"
-                        HorizontalAlignment="Stretch" />
-
+                        Text="Wygląd"
+                        FontSize="15" />
+                </PivotItem.Header>
+                <StackPanel
+                    Margin="16">
                     <TextBlock
-                        Margin="0,20,0,5"
-                        Text="Styl ikon" />
-                    <RadioButton
-                        x:Name="MonoIcon_RadioButton"
-                        Content="Monochromatyczne"
-                        Tag="Segoe UI Symbol"
-                        GroupName="IconStyle_RadioButtons"
-                        Checked="IconStyleRadioButton_Checked" />
-                    <RadioButton
-                        x:Name="ColorIcon_RadioButton"
-                        Content="Kolorowe"
-                        Tag="Segoe UI"
-                        GroupName="IconStyle_RadioButtons"
-                        Checked="IconStyleRadioButton_Checked" />
-
+                        FontSize="18"
+                        Text="Motyw"
+                        Foreground="{ThemeResource AccentColor}" />
                     <ToggleSwitch
-                        
                         Name="ThemeToggle"
                         Style="{StaticResource ToggleSwitchStyle1}"
-                        Margin="0,5,0,0"
                         Toggled="ThemeToggle_Toggled">
 
                         <ToggleSwitch.OffContent>
@@ -102,32 +145,78 @@
 
                     </ToggleSwitch>
 
-                    <CalendarView
-                        x:Name="Calendar"
-                        FirstDayOfWeek="Monday"
-                        IsTodayHighlighted="False"
-                        DisplayMode="Year"
-                        Background="{ThemeResource AccentColor-1}"
-                        CalendarItemBackground="Transparent"
-                        CalendarItemForeground="White"
-                        Foreground="#CCFFFFFF"
-                        HoverBorderBrush="#66E5E5E5"
-                        OutOfScopeForeground="#4FFFFFFF"
-                        OutOfScopeBackground="Transparent"
-                        TodayForeground="{ThemeResource AccentColor}"
-                        FontWeight="Normal"
-                        FontSize="10"
-                        DayItemFontSize="15" />
 
-                    <DatePicker 
-                        DayVisible="False"/>
+                    <TextBlock
+                        FontSize="18"
+                        Margin="0,20,0,10"
+                        Text="Styl ikon"
+                        Foreground="{ThemeResource AccentColor}" />
+                    <RadioButton
+                        x:Name="MonoIcon_RadioButton"
+                        Content="Monochromatyczne"
+                        Foreground="{ThemeResource Text}"
+                        Tag="Segoe UI Symbol"
+                        GroupName="IconStyle_RadioButtons"
+                        Checked="IconStyleRadioButton_Checked" />
+                    <RadioButton
+                        x:Name="ColorIcon_RadioButton"
+                        Content="Kolorowe"
+                        Foreground="{ThemeResource Text}"
+                        Tag="Segoe UI"
+                        GroupName="IconStyle_RadioButtons"
+                        Checked="IconStyleRadioButton_Checked" />
 
+
+                    <TextBlock
+                        FontSize="18"
+                        Margin="0,20,0,10"
+                        Text="Wygląd operacji"
+                        Foreground="{ThemeResource AccentColor}" />
+                    
+                    <TextBlock
+                        Margin="0,5,0,0"
+                        Text="Pokaż kategorię pod nazwą operacji"
+                        Foreground="{ThemeResource Text-1}" />
+
+                    <ToggleSwitch
+                        Name="CategoryName"
+                        Style="{StaticResource ToggleSwitchStyle1}">
+
+                        <ToggleSwitch.OffContent>
+                            Wyłączone
+                        </ToggleSwitch.OffContent>
+
+                        <ToggleSwitch.OnContent>
+                            Włączone
+                        </ToggleSwitch.OnContent>
+
+                    </ToggleSwitch>
+
+                    <TextBlock
+                        Margin="0,5,0,0"
+                        Text="Pokaż kolor konta przy ikonie operacji"
+                        Foreground="{ThemeResource Text-1}" />
+
+                    <ToggleSwitch
+                        Name="PayFormIcon"
+                        Style="{StaticResource ToggleSwitchStyle1}"
+                        IsOn="True">
+                        
+                        <ToggleSwitch.OffContent>
+                            Wyłączone
+                        </ToggleSwitch.OffContent>
+
+                        <ToggleSwitch.OnContent>
+                            Włączone
+                        </ToggleSwitch.OnContent>
+
+                    </ToggleSwitch>
                 </StackPanel>
             </PivotItem>
             <PivotItem>
                 <PivotItem.Header>
                     <TextBlock
-                        Text="Wygląd"
+                        Text="Synchronizacja"
                         FontSize="15" />
                 </PivotItem.Header>
                 <TextBlock>YOLOYOLOYOLO</TextBlock>
@@ -135,7 +224,7 @@
             <PivotItem>
                 <PivotItem.Header>
                     <TextBlock
-                        Text="Synchronizacja"
+                        Text="O aplikacji"
                         FontSize="15" />
                 </PivotItem.Header>
                 <TextBlock>YOLOYOLOYOLO</TextBlock>

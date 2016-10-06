@@ -170,11 +170,11 @@
             Foreground="{ThemeResource Text}"
             TextWrapping="Wrap"
             Text="Zwrot podatku"
+            Margin="0,0,0,15"
             FontSize="22" />
 
         <StackPanel
-            Orientation="Horizontal"
-            Margin="0,15,0,0">
+            Orientation="Horizontal">
             <FontIcon
                 Name="CostValueIcon"
                 Glyph=""

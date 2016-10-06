@@ -129,6 +129,11 @@
                 Style="{StaticResource PageTitleStyle}"
                 Margin="0" />
 
+            <ProgressRing
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                x:Name="LoadingIndicator" />
+
             <AppBarButton
                 Grid.Column="2"
                 Width="48"
@@ -180,6 +185,7 @@
                 </Button.Content>
                 <Button.Flyout>
                     <MenuFlyout
+                        x:Name="VisiblePayFormMenuFlyout"
                         Placement="Bottom">
                         <MenuFlyout.MenuFlyoutPresenterStyle>
                             <Style
@@ -192,12 +198,6 @@
                                     Value="{ThemeResource Background-1Transparent}" />
                             </Style>
                         </MenuFlyout.MenuFlyoutPresenterStyle>
-                        <ToggleMenuFlyoutItem
-                            Text="Wszystko" />
-                        <ToggleMenuFlyoutItem
-                            Text="Gotówka" />
-                        <ToggleMenuFlyoutItem
-                            Text="Karta Visa" />
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
@@ -560,8 +560,6 @@
 
                                             <Grid
                                                 Background="Transparent"
-                                                BorderBrush="#353535"
-                                                BorderThickness="0,0,0,1"
                                                 MaxWidth="620"
                                                 Margin="0,20,0,0">
                                                 <Grid
@@ -584,14 +582,14 @@
                                                             Height="30">
                                                             <FontIcon
                                                                 Grid.Column="0"
-                                                                Opacity="0.5"
+                                                                Foreground="{ThemeResource Text-2}"
                                                                 FontFamily="{Binding iconStyle}"
                                                                 Glyph="{Binding icon}"
                                                                 FontSize="16" />
                                                         </Grid>
 
                                                         <TextBlock
-                                                            Opacity="0.5"
+                                                            Foreground="{ThemeResource Text-1}"
                                                             Margin="15,0"
                                                             VerticalAlignment="Center"
                                                             Text="{Binding Key}"
@@ -605,11 +603,17 @@
                                                         Name="SumText"
                                                         HorizontalAlignment="Right"
                                                         Text="{Binding cost}"
-                                                        Opacity="0.5"
+                                                        Foreground="{ThemeResource Text-1}"
                                                         FontWeight="Bold"
                                                         FontSize="13"
                                                         Margin="16,0" />
                                                 </Grid>
+
+                                                <Border
+                                                    Grid.ColumnSpan="3"
+                                                    Opacity="0.3"
+                                                    BorderBrush="{ThemeResource Text-2}"
+                                                    BorderThickness="0,0,0,1" />
 
                                             </Grid>
 

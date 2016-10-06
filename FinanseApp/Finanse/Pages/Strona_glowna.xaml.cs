@@ -24,6 +24,7 @@ using Windows.Foundation.Metadata;
 using Finanse.DataAccessLayer;
 using Finanse.Dialogs;
 using Finanse.Models;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -35,6 +36,7 @@ namespace Finanse.Pages {
         private ObservableCollection<GroupInfoList<Operation>> _source;
         private ObservableCollection<CategoryGroupInfoList<Operation>> _sourceByCategory;
         private FontFamily iconStyle = new FontFamily(Settings.GetActualIconStyle());
+        private List<int> visiblePayFormList = new List<int>();
 
         bool isSelectionChanged = false;
 
@@ -52,19 +54,36 @@ namespace Finanse.Pages {
 
             ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
 
-            _source = (new StoreData()).GetGroupsByDay(actualMonth, actualYear);
-            _sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
+            foreach (var item in Dal.GetAllMoneyAccounts()) {
+                ToggleMenuFlyoutItem itema = new ToggleMenuFlyoutItem {
+                    Text = item.Name,
+                    Tag = item.Id,
+                    IsChecked = true,
+                };
+                itema.Click += Clicky;
+                visiblePayFormList.Add(item.Id);
+                VisiblePayFormMenuFlyout.Items.Add(itema);
+            }
+
+            _source = (new StoreData()).GetGroupsByDay(actualMonth, actualYear, visiblePayFormList);
+            _sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear, visiblePayFormList);
 
             ContactsCVS.Source = _source;
             CategorizedCVS.Source = _sourceByCategory;
 
-            foreach (var group in _source) {
-                actualMoney += group.decimalCost;
-            }
-            ActualMoneyBar.Text = actualMoney.ToString("C", Settings.GetActualCurrency());
+            SetActualMoneyBar();
 
           //  CategorizedCVS.Source = Operation.GetOperationsByCategoryGrouped();
 
+        }
+        public void Clicky(object sender, RoutedEventArgs e) {
+            if (((ToggleMenuFlyoutItem)sender).IsChecked == true) {
+                visiblePayFormList.Add((int)((ToggleMenuFlyoutItem)sender).Tag);
+            }
+            else
+                visiblePayFormList.Remove((int)((ToggleMenuFlyoutItem)sender).Tag);
+
+            SetListOfOperations(visiblePayFormList);
         }
 
         private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
@@ -94,6 +113,8 @@ namespace Finanse.Pages {
             var ContentDialogItem = new NewOperationContentDialog(_source, (Operation)datacontext, "edit");
 
             var result = await ContentDialogItem.ShowAsync();
+
+            SetActualMoneyBar();
             //this datacontext is probably some object of some type T
         }
 
@@ -103,6 +124,8 @@ namespace Finanse.Pages {
             var ContentDialogItem = new Delete_ContentDialog(_source, (Operation)datacontext,"");
 
             var result = await ContentDialogItem.ShowAsync();
+
+            SetActualMoneyBar();
         }
 
         private void Grid_DragStarting(UIElement sender, DragStartingEventArgs args) {
@@ -131,8 +154,18 @@ namespace Finanse.Pages {
             isSelectionChanged = true;
         }
 
-        private void PreviousMonthButton_Click(object sender, RoutedEventArgs e) {
+        private async void PreviousMonthButton_Click(object sender, RoutedEventArgs e) {
 
+            try {
+                LoadingIndicator.IsActive = true;
+                await LongOperation();
+            }
+            finally {
+                LoadingIndicator.IsActive = false;
+            }
+        }
+
+        private async Task LongOperation() {
             if (actualMonth > 1) {
                 actualMonth--;
             }
@@ -141,7 +174,7 @@ namespace Finanse.Pages {
                 actualYear--;
             }
 
-            SetListOfOperations();
+            SetListOfOperations(visiblePayFormList);
         }
 
         private void NextMonthButton_Click(object sender, RoutedEventArgs e) {
@@ -154,10 +187,10 @@ namespace Finanse.Pages {
                 actualYear++;
             }
 
-            SetListOfOperations();
+            SetListOfOperations(visiblePayFormList);
         }
 
-        private void SetListOfOperations() {
+        private void SetListOfOperations(List<int> visiblePayFormList) {
 
             _source.Clear();
             _sourceByCategory.Clear();
@@ -165,8 +198,14 @@ namespace Finanse.Pages {
             ObservableCollection<GroupInfoList<Operation>> source;
             ObservableCollection<CategoryGroupInfoList<Operation>> sourceByCategory;
 
-            source = (new StoreData()).GetGroupsByDay(actualMonth, actualYear);
-            sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
+            if (visiblePayFormList == null) {
+                source = (new StoreData()).GetGroupsByDay(actualMonth, actualYear);
+                sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
+            }
+            else {
+                source = (new StoreData()).GetGroupsByDay(actualMonth, actualYear, visiblePayFormList);
+                sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear, visiblePayFormList);
+            }
 
             ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
             if (actualYear != DateTime.Today.Year)
@@ -191,20 +230,23 @@ namespace Finanse.Pages {
 
         private void SetNextMonthButtonEnabling() {
 
-            if (DateTime.Today.Year == actualYear && DateTime.Today.Month == actualMonth)
-                NextMonthButton.IsEnabled = false;
-            else
-                NextMonthButton.IsEnabled = true;
+            NextMonthButton.IsEnabled = !(DateTime.Today.Year == actualYear && DateTime.Today.Month == actualMonth);
         }
+
         private void SetPreviousMonthButtonEnabling() {
 
             string eldestYear = Dal.GetEldestOperation().Date.Substring(0, 4);
             string eldestMonth = Dal.GetEldestOperation().Date.Substring(5, 2);
 
-            if (eldestMonth == actualMonth.ToString("00") && eldestYear == actualYear.ToString())
-                PrevMonthButton.IsEnabled = false;
-            else
-                PrevMonthButton.IsEnabled = true;
+            PrevMonthButton.IsEnabled = !(eldestMonth == actualMonth.ToString("00") && eldestYear == actualYear.ToString());
+        }
+
+        private void SetActualMoneyBar() {
+            actualMoney = 0;
+            foreach (var group in _source) {
+                actualMoney += group.decimalCost;
+            }
+            ActualMoneyBar.Text = actualMoney.ToString("C", Settings.GetActualCurrency());
         }
     }
 }

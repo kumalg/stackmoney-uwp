@@ -48,7 +48,8 @@
                     Glyph="" />
             </Button>
         </Grid>
-
+        <ProgressRing
+            x:Name="LoadingIndicator" />
         <ScrollViewer
             Grid.Row="1"
             VerticalScrollBarVisibility="Auto"

@@ -49,6 +49,12 @@ namespace Finanse.Dialogs {
                 CostValueIcon.Glyph = "";
             }
 
+            NameValue.Visibility = Visibility.Collapsed;
+            if (!String.IsNullOrEmpty(editedOperation.Title)) {
+                NameValue.Text = editedOperation.Title;
+                NameValue.Visibility = Visibility.Visible;
+            }
+
             CostValue.Text = editedOperation.Cost.ToString("C", Settings.GetActualCurrency());
 
             DateValuePanel.Visibility = Visibility.Collapsed;

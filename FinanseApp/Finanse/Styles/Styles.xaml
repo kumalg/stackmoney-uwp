@@ -2020,6 +2020,7 @@
                             Grid.Row="1"
                             Grid.RowSpan="1" />
                         <Border
+                            Opacity="0.3"
                             x:Name="BorderElement"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
@@ -2375,6 +2376,7 @@
                             Visibility="Collapsed"
                             x:DeferLoadStrategy="Lazy" />
                         <Border
+                            Opacity="0.3"
                             x:Name="Background"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"

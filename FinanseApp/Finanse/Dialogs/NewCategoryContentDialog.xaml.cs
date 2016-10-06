@@ -69,7 +69,7 @@ namespace Finanse.Dialogs {
                 NameValue.Text = editedCategory.Name;
 
                 CategoryIcon.Glyph = editedCategory.Icon;
-                CategoryCircle.Fill = GetSolidColorBrush(editedCategory.Color);
+                CategoryCircle.Fill = Functions.GetSolidColorBrush(editedCategory.Color);
 
                 VisibleInExpensesToggleButton.IsOn = editedCategory.VisibleInExpenses;
                 VisibleInIncomesToggleButton.IsOn = editedCategory.VisibleInIncomes;
@@ -85,11 +85,8 @@ namespace Finanse.Dialogs {
         }
 
         private void SetPrimaryButtonEnabled() {
-            if (NameValue.Text != "") {
-                IsPrimaryButtonEnabled = true;
-            }
-            else
-                IsPrimaryButtonEnabled = false;
+
+            IsPrimaryButtonEnabled = (NameValue.Text != "");
         }
 
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
@@ -298,15 +295,6 @@ namespace Finanse.Dialogs {
 
             if (CategoryValue.SelectedIndex == 0)
                 CategoryValue.SelectedIndex--;
-        }
-        private SolidColorBrush GetSolidColorBrush(string hex) {
-            hex = hex.Replace("#", string.Empty);
-            byte a = (byte)(Convert.ToUInt32(hex.Substring(0, 2), 16));
-            byte r = (byte)(Convert.ToUInt32(hex.Substring(2, 2), 16));
-            byte g = (byte)(Convert.ToUInt32(hex.Substring(4, 2), 16));
-            byte b = (byte)(Convert.ToUInt32(hex.Substring(6, 2), 16));
-            SolidColorBrush myBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(a, r, g, b));
-            return myBrush;
         }
 
         private void RefreshOperationCategoriesList() {

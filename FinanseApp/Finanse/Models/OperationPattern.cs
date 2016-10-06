@@ -9,19 +9,30 @@ namespace Finanse.Models {
         public int Id { get; set; }
         private string _title = string.Empty;
         private string _moreInfo = string.Empty;
+        private int _categoryId;
+        private int _subCategoryId;
+        private decimal _cost;
+        private bool _isExpense;
+        private int _moneyAccountId;
         public string Title {
             get {
                 return _title;
             }
-
             set {
                 if (_title != value) {
-                    _title = value;
-                   // OnPropertyChanged("Title");
+                    _title = value; /* OnPropertyChanged("Title");*/
                 }
             }
         }
-        private int _categoryId;
+        public string MoreInfo {
+            get {
+                return _moreInfo;
+            }
+            set {
+                if (_moreInfo != value)
+                    _moreInfo = value;
+            }
+        }
         public int CategoryId {
             get {
                 return _categoryId;
@@ -31,26 +42,44 @@ namespace Finanse.Models {
                 if (_categoryId != value) {
                     _categoryId = value;
                 }
-                else
-                    _categoryId = 1;
             }
         }
-        public int SubCategoryId { get; set; } 
-        public decimal Cost { get; set; } 
-        public bool isExpense { get; set; } 
-        public int MoneyAccountId { get; set; }
-        public string MoreInfo {
+        public int SubCategoryId {
             get {
-                return _moreInfo;
+                return _subCategoryId;
             }
-
             set {
-                if (_moreInfo != value) {
-                    _moreInfo = value;
-                }
+                if (_subCategoryId != value)
+                    _subCategoryId = value;
             }
         }
-
+        public decimal Cost {
+            get {
+                return _cost;
+            }
+            set {
+                if (_cost != value)
+                    _cost = value;
+            }
+        }
+        public bool isExpense {
+            get {
+                return _isExpense;
+            }
+            set {
+                if (_isExpense != value)
+                    _isExpense = value;
+            }
+        }
+        public int MoneyAccountId {
+            get {
+                return _moneyAccountId;
+            }
+            set {
+                if (_moneyAccountId != value)
+                    _moneyAccountId = value;
+            }
+        }
         /*
          * public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 

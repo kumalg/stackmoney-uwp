@@ -129,10 +129,7 @@ namespace Finanse.Pages {
 
                 }
 
-                if (SubCategoryValue.Items.Count == 0)
-                    SubCategoryValue.IsEnabled = false;
-                else
-                    SubCategoryValue.IsEnabled = true;
+                SubCategoryValue.IsEnabled = !(SubCategoryValue.Items.Count == 0);
             }
         }
 
@@ -207,6 +204,7 @@ namespace Finanse.Pages {
         }
 
         private void CostValue_SelectionChanged(object sender, RoutedEventArgs e) {
+
             whereIsSelection = CostValue.SelectionStart;
         }
 
@@ -218,10 +216,8 @@ namespace Finanse.Pages {
         }
 
         private void CostValue_TextChanged(object sender, TextChangedEventArgs e) {
-            if (!String.IsNullOrEmpty(CostValue.Text))
-                SaveButton.IsEnabled = true;
-            else
-                SaveButton.IsEnabled = false;
+
+            SaveButton.IsEnabled = !String.IsNullOrEmpty(CostValue.Text);
         }
 
 

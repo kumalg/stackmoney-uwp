@@ -374,6 +374,7 @@
                                 Visibility="Collapsed"
                                 x:DeferLoadStrategy="Lazy" />
                             <Border
+                                Opacity="0.3"
                                 x:Name="Background"
                                 BorderBrush="{ThemeResource Text-2}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
@@ -471,22 +472,25 @@
                     </StackPanel>
 
                     <TextBox
-                        Name="NameValue"
-                        Style="{StaticResource TextBoxStyle1}"
-                        PlaceholderText="Nazwa"
-                        Margin="0,20,0,0" />
-
-                    <TextBox
+                        FontSize="24"
+                        FontWeight="SemiLight"
+                        Foreground="{ThemeResource AccentColor}"
                         Name="CostValue"
                         Style="{StaticResource TextBoxStyle1}"
                         PlaceholderText="Wartość"
                         InputScope="CurrencyAmount"
-                        Margin="0,20,0,10"
+                        Margin="0,20,0,0"
                         GotFocus="CostValue_GotFocus"
                         LostFocus="CostValue_LostFocus"
                         TextChanging="CostValue_TextChanging"
                         SelectionChanged="CostValue_SelectionChanged"
                         TextChanged="CostValue_TextChanged" />
+
+                    <TextBox
+                        Name="NameValue"
+                        Style="{StaticResource TextBoxStyle1}"
+                        PlaceholderText="Nazwa"
+                        Margin="0,20,0,10" />
 
                     <CalendarDatePicker
                         Name="DateValue"

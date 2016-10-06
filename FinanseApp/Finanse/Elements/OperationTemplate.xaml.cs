@@ -37,17 +37,7 @@ namespace Finanse.Elements {
             this.InitializeComponent();
             this.DataContextChanged += (s, e) => Bindings.Update();
         }
-        /*
-        private SolidColorBrush GetSolidColorBrush(string hex) {
-            hex = hex.Replace("#", string.Empty);
-            byte a = (byte)(Convert.ToUInt32(hex.Substring(0, 2), 16));
-            byte r = (byte)(Convert.ToUInt32(hex.Substring(2, 2), 16));
-            byte g = (byte)(Convert.ToUInt32(hex.Substring(4, 2), 16));
-            byte b = (byte)(Convert.ToUInt32(hex.Substring(6, 2), 16));
-            SolidColorBrush myBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(a, r, g, b));
-            return myBrush;
-        }
-        */
+
         public void Operation_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
 
             /* BO PIERDOLI ŻE NULL WCHODZI */
@@ -70,11 +60,21 @@ namespace Finanse.Elements {
             if (cat != null && subCat == null) {
                 Ellipse_OperationTemplate.Fill = new SolidColorBrush(Functions.GetSolidColorBrush(cat.Color).Color);
                 Icon_OperationTemplate.Glyph = cat.Icon;
+
+                if (String.IsNullOrEmpty(Operation.Title)) {
+                    Title_OperationTemplate.Text = cat.Name;
+                    Title_OperationTemplate.Opacity = 0.5;
+                }
             }
 
             else if (cat != null && subCat != null) {
                 Ellipse_OperationTemplate.Fill = new SolidColorBrush(Functions.GetSolidColorBrush(subCat.Color).Color);
                 Icon_OperationTemplate.Glyph = subCat.Icon;
+
+                if (String.IsNullOrEmpty(Operation.Title)) {
+                    Title_OperationTemplate.Text = subCat.Name;
+                    Title_OperationTemplate.Opacity = 0.5;
+                }
             }
 
             else

@@ -17,7 +17,7 @@ namespace Finanse.Models {
             return GetEnumerator();
         }
         /*
-        public void Add(Operation item) {
+        public void Addy(Operation item) {
             _itemCollection.Add(item);
         }
         */

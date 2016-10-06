@@ -40,13 +40,9 @@ namespace Finanse.Pages {
             else
                 MonoIcon_RadioButton.IsChecked = true;
 
-            if (Settings.GetTheme() == ApplicationTheme.Dark)
-                ThemeToggle.IsOn = true;
-            else
-                ThemeToggle.IsOn = false;
+            ThemeToggle.IsOn = (Settings.GetTheme() == ApplicationTheme.Dark);
 
-            Calendar.MaxDate = DateTime.Today;
-            Calendar.MinDate = Convert.ToDateTime("2016.05.10");
+            CurrencyValue.SelectedItem = CurrencyValue.Items.SingleOrDefault(i => ((ComboBoxItem)i).Content.ToString() == Settings.GetActualCurrency().DisplayName);
 
         }
 
@@ -61,12 +57,8 @@ namespace Finanse.Pages {
         }
 
         private void ThemeToggle_Toggled(object sender, RoutedEventArgs e) {
-            if (ThemeToggle.IsOn) {
-                Settings.SetTheme(1);
-            }
-            else {
-                Settings.SetTheme(0);
-            }
+
+            Settings.SetTheme(ThemeToggle.IsOn ? 1 : 0);
         }
     }
 }

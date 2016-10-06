@@ -110,12 +110,8 @@ namespace Finanse.Dialogs {
         }
 
         private void SetNowaOperacjaButton() {
-            if (CostValue.Text != "") {
 
-                IsPrimaryButtonEnabled = true;
-            }
-            else
-                IsPrimaryButtonEnabled = false;
+            IsPrimaryButtonEnabled = (CostValue.Text != "");
         }
 
         private void EditAndPatternSetters() {
@@ -166,12 +162,18 @@ namespace Finanse.Dialogs {
 
                         if (item.Date == editedOperation.Date) {
                             group[group.IndexOf(group.Single(i => i.Id == item.Id))] = item;
+                            group.decimalCost += editedOperation.isExpense ? +editedOperation.Cost : -editedOperation.Cost;
+                            group.decimalCost += item.isExpense ? -item.Cost : item.Cost;
+                            group.cost = (group.decimalCost).ToString("C", Settings.GetActualCurrency());
                         }
                         else {
                             if (group.Count == 1)
                                 _source.Remove(group);
-                            else
+                            else {
                                 group.Remove(group.Single(i => i.Id == item.Id));
+                                group.decimalCost += editedOperation.isExpense ? +editedOperation.Cost : -editedOperation.Cost;
+                                group.cost = (group.decimalCost).ToString("C", Settings.GetActualCurrency());
+                            }
 
                             AddOperationToList(item);
                         }
@@ -330,10 +332,7 @@ namespace Finanse.Dialogs {
 
                 }
 
-                if (SubCategoryValue.Items.Count == 0)
-                    SubCategoryValue.IsEnabled = false;
-                else
-                    SubCategoryValue.IsEnabled = true;
+                SubCategoryValue.IsEnabled = !(SubCategoryValue.Items.Count == 0);
             }
         }
 

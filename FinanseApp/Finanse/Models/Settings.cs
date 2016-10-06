@@ -24,16 +24,6 @@ namespace Finanse.Models {
             return lista;
         }
 
-        public static List<string> GetAllFonts() {
-
-            List<string> lista = new List<string>();
-
-            lista.Add("Segoe UI");
-            lista.Add("Segoe UI Symbol");
-
-            return lista;
-        }
-
         public static void SetSettings() {
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
@@ -93,11 +83,6 @@ namespace Finanse.Models {
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
             localSettings.Values["iconStyle"] = iconStyle;
-        }
-
-        public static CultureInfo StringToCultureInfo(string s) {
-
-            return new CultureInfo(s);
         }
     }
 }

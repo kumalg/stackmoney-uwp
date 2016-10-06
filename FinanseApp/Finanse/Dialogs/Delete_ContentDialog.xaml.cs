@@ -59,10 +59,7 @@ namespace Finanse.Dialogs {
                         if (group.Count == 1)
                             _source.Remove(group);
                         else {
-                            if (operation.isExpense)
-                                group.decimalCost += operation.Cost;
-                            else
-                                group.decimalCost -= operation.Cost;
+                            group.decimalCost += operation.isExpense ? operation.Cost : -operation.Cost;
 
                             group.cost = group.decimalCost.ToString("C", Settings.GetActualCurrency());
                             group.Remove(operation);

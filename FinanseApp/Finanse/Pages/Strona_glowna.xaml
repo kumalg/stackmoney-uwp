@@ -11,7 +11,249 @@
     
     <Page.Resources>
         <!--Use a collection view source for content that presents a list of items that can be grouped or sorted.-->
-        
+        <GroupStyle
+            x:Name="ByDateGroupStyle"
+            HidesIfEmpty="True">
+            <GroupStyle.HeaderContainerStyle>
+                <Style
+                    TargetType="ListViewHeaderItem">
+                    <Setter
+                        Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate
+                                TargetType="ListViewHeaderItem">
+
+                                <ContentPresenter
+                                    x:Name="ContentPresenter"
+                                    Padding="0,15,0,0"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    ContentTransitions="{TemplateBinding ContentTransitions}"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </GroupStyle.HeaderContainerStyle>
+            <GroupStyle.HeaderTemplate>
+                <DataTemplate>
+
+                    <Grid
+                        Background="Transparent"
+                        MaxWidth="620">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="Auto" />
+                            <ColumnDefinition
+                                Width="*" />
+                            <ColumnDefinition
+                                Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Margin="16,0,0,5">
+                            <StackPanel
+                                Width="48">
+                                <TextBlock
+                                    Text="{Binding dayNum}"
+                                    FontSize="30"
+                                    Foreground="{ThemeResource Text-1}"
+                                    FontWeight="SemiLight"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel
+                                VerticalAlignment="Center"
+                                Margin="16,0,0,0">
+                                <TextBlock
+                                    Foreground="{ThemeResource Text-1}"
+                                    Text="{Binding day}"
+                                    FontSize="12" />
+                                <TextBlock
+                                    Text="{Binding month}"
+                                    FontSize="12"
+                                    Foreground="{ThemeResource Text-2}" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Grid.Column="2"
+                            Name="SumText"
+                            HorizontalAlignment="Right"
+                            Text="{Binding cost}"
+                            FontWeight="Bold"
+                            Foreground="{ThemeResource Text-1}"
+                            FontSize="13"
+                            Margin="16,0" />
+
+                        <Border
+                            Grid.ColumnSpan="3"
+                            Opacity="0.3"
+                            BorderBrush="{ThemeResource Text-2}"
+                            BorderThickness="0,0,0,1" />
+                    </Grid>
+
+                </DataTemplate>
+            </GroupStyle.HeaderTemplate>
+        </GroupStyle>
+
+        <ItemsPanelTemplate
+            x:Name="ByDateGroupItemsPanelTemplate">
+            <WrapGrid
+                MaximumRowsOrColumns="7"
+                Orientation="Horizontal"
+                HorizontalChildrenAlignment="Center"
+                VerticalChildrenAlignment="Center">
+            </WrapGrid>
+        </ItemsPanelTemplate>
+
+        <DataTemplate
+            x:Name="ByDateGroupItemTemplate">
+            <TextBlock
+                Text="{Binding Group.dayNum}"
+                FontSize="22"
+                Foreground="{ThemeResource Text-1}"
+                FontWeight="SemiLight"
+                VerticalAlignment="Center" />
+        </DataTemplate>
+
+        <ItemsPanelTemplate
+            x:Name="ByCategoryGroupItemsPanelTemplate">
+        </ItemsPanelTemplate>
+
+        <GroupStyle
+            x:Name="ByCategoryGroupStyle">
+            <GroupStyle.Panel>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel
+                        Margin="0"
+                        GroupPadding="0" />
+                </ItemsPanelTemplate>
+            </GroupStyle.Panel>
+            <GroupStyle.HeaderContainerStyle>
+                <Style
+                    TargetType="ListViewHeaderItem">
+                    <Setter
+                        Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate
+                                TargetType="ListViewHeaderItem">
+
+                                <ContentPresenter
+                                    x:Name="ContentPresenter"
+                                    Margin="0"
+                                    Padding="0"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    ContentTransitions="{TemplateBinding ContentTransitions}"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </GroupStyle.HeaderContainerStyle>
+            <GroupStyle.HeaderTemplate>
+                <DataTemplate>
+
+                    <Grid
+                        Background="Transparent"
+                        MaxWidth="620"
+                        Margin="0,20,0,0">
+                        <Grid
+                            Margin="0,5"
+                            MaxWidth="620">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="Auto" />
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel
+                                Orientation="Horizontal"
+                                Margin="15,0">
+                                <Grid
+                                    Width="50"
+                                    Height="30">
+                                    <FontIcon
+                                        Grid.Column="0"
+                                        Foreground="{ThemeResource Text-2}"
+                                        FontFamily="{Binding iconStyle}"
+                                        Glyph="{Binding icon}"
+                                        FontSize="16" />
+                                </Grid>
+
+                                <TextBlock
+                                    Foreground="{ThemeResource Text-1}"
+                                    Margin="15,0"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Key}"
+                                    FontSize="13" />
+
+                            </StackPanel>
+
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Grid.Column="2"
+                                Name="SumText"
+                                HorizontalAlignment="Right"
+                                Text="{Binding cost}"
+                                Foreground="{ThemeResource Text-1}"
+                                FontWeight="Bold"
+                                FontSize="13"
+                                Margin="16,0" />
+                        </Grid>
+
+                        <Border
+                            Grid.ColumnSpan="3"
+                            Opacity="0.3"
+                            BorderBrush="{ThemeResource Text-2}"
+                            BorderThickness="0,0,0,1" />
+
+                    </Grid>
+
+                </DataTemplate>
+            </GroupStyle.HeaderTemplate>
+        </GroupStyle>
+
+        <DataTemplate
+            x:Name="ByCategoryGroupItemTemplate">
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Center"
+                Margin="0,10">
+                <Grid
+                    Width="50"
+                    Height="50">
+                    <Rectangle
+                        RadiusX="5"
+                        RadiusY="5"
+                        Fill="{Binding Group.color}" />
+                    <FontIcon
+                        Grid.Column="0"
+                        FontFamily="Segoe UI"
+                        Glyph="{Binding Group.icon}"
+                        FontSize="24" />
+                </Grid>
+
+                <TextBlock
+                    Margin="20,0"
+                    VerticalAlignment="Center"
+                    Text="{Binding Group.Key}"
+                    FontSize="16" />
+
+            </StackPanel>
+        </DataTemplate>
+
         <CollectionViewSource
             x:Name="ContactsCVS"
             IsSourceGrouped="True" />
@@ -26,75 +268,10 @@
 
     <Grid
         Background="Transparent">
-<!--
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState
-                    x:Name="HamburgerTight">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                            MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter
-                            Target="UpperCommandBar.Visibility"
-                            Value="Collapsed" />
-                        <Setter
-                            Target="UpperPrevMonth.Visibility"
-                            Value="Collapsed" />
-                        <Setter
-                            Target="UpperNextMonth.Visibility"
-                            Value="Collapsed" />
-                        <Setter
-                            Target="LowerCommandBar.Visibility"
-                            Value="Visible" />
-                        <Setter
-                            Target="FakeHamburgerButton.Width"
-                            Value="48" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState
-                    x:Name="HamburgerWide">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                            MinWindowWidth="540" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter
-                            Target="FakeHamburgerButton.Width"
-                            Value="Auto" />
-                        <Setter
-                            Target="UpperCommandBar.Visibility"
-                            Value="Visible" />
-
-                        <Setter
-                            Target="UpperPrevMonth.Visibility"
-                            Value="Collapsed" />
-                        <Setter
-                            Target="UpperNextMonth.Visibility"
-                            Value="Collapsed" />
-                        <Setter
-                            Target="OperacjeListView.Padding"
-                            Value="0,-10,0,0" />
-                        <Setter
-                            Target="OperacjeListViewCategorized.Padding"
-                            Value="0,-10,0,0" />
-                        <Setter
-                            Target="OperacjeListViewGroup.Padding"
-                            Value="0" />
-                        <Setter
-                            Target="OperacjeListViewCategorizedGroup.Padding"
-                            Value="0" />
-                        <Setter
-                            Target="LowerCommandBar.Visibility"
-                            Value="Collapsed" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
--->
         
         <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
             <RowDefinition
                 Height="Auto" />
             <RowDefinition
@@ -107,11 +284,11 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
-                    Width="Auto" />
+                    Width="48" />
                 <ColumnDefinition
                     Width="*" />
                 <ColumnDefinition
-                    Width="Auto" />
+                    Width="48" />
             </Grid.ColumnDefinitions>
 
             <AppBarButton
@@ -128,12 +305,15 @@
                 Text="Wrzesień"
                 Style="{StaticResource PageTitleStyle}"
                 Margin="0" />
-
-            <ProgressRing
-                Grid.Column="1"
-                HorizontalAlignment="Right"
-                x:Name="LoadingIndicator" />
-
+            
+            <AppBarButton
+                Grid.Column="2"
+                Width="48"
+                x:Name="IncomingOperationsButton"
+                Icon="Clock"
+                Foreground="{ThemeResource AccentText}"
+                Click="IncomingOperationsButton_Click" />
+            
             <AppBarButton
                 Grid.Column="2"
                 Width="48"
@@ -141,68 +321,178 @@
                 Icon="Forward"
                 Foreground="{ThemeResource AccentText}"
                 Click="NextMonthButton_Click" />
-            <!--
-            <StackPanel
-                Name="UpperCommandBar"
-                Orientation="Horizontal"
-                Grid.Column="2">
-
-                <AppBarButton
-                    Icon="Add"
-                    IsCompact="True"
-                    Label="Nowa operacja"
-                    Foreground="{ThemeResource AccentText}"
-                    Click="NowaOperacja_Click" />
-
-            </StackPanel>
-            -->
         </Grid>
         
-        <StackPanel
-            Height="48"
-            Orientation="Horizontal"
+        <Grid
+            Background="{ThemeResource Background-1}"
             Grid.Row="1"
-            VerticalAlignment="Top"
-            HorizontalAlignment="Right"
-            Canvas.ZIndex="1">
-            <TextBlock
-                VerticalAlignment="Center"
-                Name="ActualMoneyBar"
-                Foreground="{ThemeResource Text-1}"
-                FontWeight="Bold"
-                FontSize="14" />
-            <Button
-                Margin="11,0"
-                Padding="5"
-                Background="Transparent"
-                VerticalAlignment="Center">
-                <Button.Content>
-                    <FontIcon
-                        Foreground="{ThemeResource Text-1}"
-                        Opacity="0.5"
+            Height="48">
+
+            <Grid
+                Margin="16,0"
+                MaxWidth="600">
+                <StackPanel
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Padding="0,0,0,2"
                         FontSize="13"
-                        Glyph="" />
-                </Button.Content>
-                <Button.Flyout>
-                    <MenuFlyout
-                        x:Name="VisiblePayFormMenuFlyout"
-                        Placement="Bottom">
-                        <MenuFlyout.MenuFlyoutPresenterStyle>
-                            <Style
-                                TargetType="MenuFlyoutPresenter">
-                                <Setter
-                                    Property="BorderThickness"
-                                    Value="0" />
-                                <Setter
-                                    Property="Background"
-                                    Value="{ThemeResource Background-1Transparent}" />
-                            </Style>
-                        </MenuFlyout.MenuFlyoutPresenterStyle>
-                    </MenuFlyout>
-                </Button.Flyout>
-            </Button>
-        </StackPanel>
-        
+                        VerticalAlignment="Center"
+                        Foreground="{ThemeResource Text-1}"
+                        Text="Grupuj:" />
+                    <ComboBox
+                        x:Name="GroupingComboBox"
+                        FontSize="13"
+                        FontWeight="Bold"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Style="{StaticResource ComboBoxStyle1}"
+                        Foreground="{ThemeResource Text-1}"
+                        SelectionChanged="GroupingComboBox_SelectionChanged">
+                        <ComboBoxItem
+                            Content="wg. daty"
+                            Tag="0" />
+                        <ComboBoxItem
+                            Content="wg. kategorii"
+                            Tag="1" />
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Name="ActualMoneyBar"
+                        Foreground="{ThemeResource Text-1}"
+                        FontWeight="Bold"
+                        FontSize="13" />
+                    <Button
+                        Margin="11,0,0,0"
+                        Padding="5"
+                        Background="Transparent"
+                        VerticalAlignment="Center">
+                        <Button.Content>
+                            <FontIcon
+                                Foreground="{ThemeResource Text-1}"
+                                Opacity="0.5"
+                                FontSize="13"
+                                Glyph="" />
+                        </Button.Content>
+                        <Button.Flyout>
+                            <MenuFlyout
+                                x:Name="VisiblePayFormMenuFlyout"
+                                Placement="Bottom">
+                                <MenuFlyout.MenuFlyoutPresenterStyle>
+                                    <Style
+                                        TargetType="MenuFlyoutPresenter">
+                                        <Setter
+                                            Property="BorderThickness"
+                                            Value="0" />
+                                        <Setter
+                                            Property="Background"
+                                            Value="{ThemeResource Background-1Transparent}" />
+                                    </Style>
+                                </MenuFlyout.MenuFlyoutPresenterStyle>
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <SemanticZoom
+            Grid.Row="2">
+            <SemanticZoom.ZoomedInView>
+                <ListView
+                    Padding="0,-10,0,0"
+                    x:Name="OperacjeListView"
+                    ItemsSource="{Binding Source={StaticResource ContactsCVS}, Mode=TwoWay}"
+                    SelectionMode="Single"
+                    BorderThickness="0"
+                    Background="Transparent"
+                    IsItemClickEnabled="True"
+                    SelectionChanged="OperacjeListView_SelectionChanged"
+                    ItemClick="OperacjeListView_ItemClick">
+
+                    <ListView.ItemContainerStyle>
+                        <Style
+                            TargetType="ListViewItem">
+                            <Setter
+                                Property="HorizontalContentAlignment"
+                                Value="Stretch" />
+                            <Setter
+                                Property="Padding"
+                                Value="0" />
+                            <Setter
+                                Property="MaxWidth"
+                                Value="620" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="models:Operation">
+
+                            <Grid
+                                Background="Transparent"
+                                RightTapped="Grid_RightTapped"
+                                DragStarting="Grid_DragStarting">
+
+                                <FlyoutBase.AttachedFlyout>
+
+                                    <MenuFlyout
+                                        MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
+
+                                        <MenuFlyoutItem
+                                            x:Name="DetailsButton"
+                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                            Tag="&#xEA55;"
+                                            Text="Szczegóły"
+                                            Click="DetailsButton_Click" />
+
+                                        <MenuFlyoutItem
+                                            x:Name="EditButton"
+                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                            Tag="&#xE104;"
+                                            Text="Edytuj"
+                                            Click="EditButton_Click" />
+
+                                        <MenuFlyoutItem
+                                            x:Name="DeleteButton"
+                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                            Tag="&#xE107;"
+                                            Text="Usuń"
+                                            Click="DeleteButton_Click" />
+
+                                    </MenuFlyout>
+
+                                </FlyoutBase.AttachedFlyout>
+                                <StackPanel
+                                    Background="Transparent">
+                                    <data:OperationTemplate />
+                                </StackPanel>
+
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </SemanticZoom.ZoomedInView>
+
+            <SemanticZoom.ZoomedOutView>
+                <GridView
+                    x:Name="OperacjeListViewGroup"
+                    ItemsSource="{x:Bind ContactsCVS.View.CollectionGroups}"
+                    ItemTemplate="{StaticResource ByDateGroupItemTemplate}"
+                    ItemsPanel="{StaticResource ByDateGroupItemsPanelTemplate}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    SelectionMode="None"
+                    ItemTemplateSelector="{StaticResource GroupEmptyOrFullSelector}">
+                </GridView>
+            </SemanticZoom.ZoomedOutView>
+        </SemanticZoom>
+<!--
         <Pivot
             Grid.Row="1"
             Grid.RowSpan="2"
@@ -227,7 +517,7 @@
                     <SemanticZoom.ZoomedInView>
                         <ListView
                             Padding="0,-10,0,0"
-                            Name="OperacjeListView"
+                            x:Name="OperacjeListView"
                             ItemsSource="{Binding Source={StaticResource ContactsCVS}, Mode=TwoWay}"
                             SelectionMode="Single"
                             BorderThickness="0"
@@ -295,149 +585,20 @@
                                     </Grid>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
-
-                            <ListView.GroupStyle>
-                                <GroupStyle
-                                    HidesIfEmpty="True">
-                                    <GroupStyle.HeaderContainerStyle>
-                                        <Style
-                                            TargetType="ListViewHeaderItem">
-                                            <Setter
-                                                Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate
-                                                        TargetType="ListViewHeaderItem">
-
-                                                        <ContentPresenter
-                                                            x:Name="ContentPresenter"
-                                                            Padding="0,15,0,0"
-                                                            Content="{TemplateBinding Content}"
-                                                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                            ContentTransitions="{TemplateBinding ContentTransitions}"
-                                                            HorizontalContentAlignment="Stretch"
-                                                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                    </GroupStyle.HeaderContainerStyle>
-                                    <GroupStyle.HeaderTemplate>
-                                        <DataTemplate>
-
-                                            <Grid
-                                                Background="Transparent"
-                                                MaxWidth="620">
-
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition
-                                                        Width="Auto" />
-                                                    <ColumnDefinition
-                                                        Width="*" />
-                                                    <ColumnDefinition
-                                                        Width="Auto" />
-                                                </Grid.ColumnDefinitions>
-
-                                                <StackPanel
-                                                    Orientation="Horizontal"
-                                                    Margin="16,0,0,5">
-                                                    <StackPanel
-                                                        Width="48">
-                                                        <TextBlock
-                                                            Text="{Binding dayNum}"
-                                                            FontSize="30"
-                                                            Foreground="{ThemeResource Text-1}"
-                                                            FontWeight="SemiLight"
-                                                            HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center" />
-                                                    </StackPanel>
-                                                    <StackPanel
-                                                        VerticalAlignment="Center"
-                                                        Margin="16,0,0,0">
-                                                        <TextBlock
-                                                            Foreground="{ThemeResource Text-1}"
-                                                            Text="{Binding day}"
-                                                            FontSize="12" />
-                                                        <TextBlock
-                                                            Text="{Binding month}"
-                                                            FontSize="12"
-                                                            Foreground="{ThemeResource Text-2}" />
-                                                    </StackPanel>
-                                                </StackPanel>
-
-                                                <TextBlock
-                                                    VerticalAlignment="Center"
-                                                    Grid.Column="2"
-                                                    Name="SumText"
-                                                    HorizontalAlignment="Right"
-                                                    Text="{Binding cost}"
-                                                    FontWeight="Bold"
-                                                    Foreground="{ThemeResource Text-1}"
-                                                    FontSize="13"
-                                                    Margin="16,0" />
-
-                                                <Border
-                                                    Grid.ColumnSpan="3"
-                                                    Opacity="0.3"
-                                                    BorderBrush="{ThemeResource Text-2}"
-                                                    BorderThickness="0,0,0,1" />
-                                            </Grid>
-
-                                        </DataTemplate>
-                                    </GroupStyle.HeaderTemplate>
-                                </GroupStyle>
-                            </ListView.GroupStyle>
                         </ListView>
                     </SemanticZoom.ZoomedInView>
 
                     <SemanticZoom.ZoomedOutView>
                         <GridView
-                            Name="OperacjeListViewGroup"
+                            x:Name="OperacjeListViewGroup"
                             ItemsSource="{x:Bind ContactsCVS.View.CollectionGroups}"
+                            ItemTemplate="{StaticResource ByDateGroupItemTemplate}"
+                            ItemsPanel="{StaticResource ByDateGroupItemsPanelTemplate}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             SelectionMode="None"
                             ItemTemplateSelector="{StaticResource GroupEmptyOrFullSelector}"
                             DataContextChanged="ListView_DataContextChanged">
-                            <GridView.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapGrid
-                                        MaximumRowsOrColumns="7"
-                                        Orientation="Horizontal"
-                                        HorizontalChildrenAlignment="Center"
-                                        VerticalChildrenAlignment="Center">
-                                    </WrapGrid>
-                                </ItemsPanelTemplate>
-                            </GridView.ItemsPanel>
-                            <GridView.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock
-                                        Text="{Binding Group.dayNum}"
-                                        FontSize="30"
-                                        FontWeight="SemiLight"
-                                        VerticalAlignment="Center" />
-                                    <!--<StackPanel
-                                        Orientation="Horizontal"
-                                        Margin="0,10">
-                                        <TextBlock
-                                            Text="{Binding Group.dayNum}"
-                                            FontSize="30"
-                                            FontWeight="SemiLight"
-                                            VerticalAlignment="Center" />
-                                        <StackPanel
-                                            VerticalAlignment="Center"
-                                            Margin="10,0,0,0">
-                                            <TextBlock
-                                                Text="{Binding Group.day}"
-                                                FontSize="12" />
-                                            <TextBlock
-                                                Text="{Binding Group.month}"
-                                                FontSize="12"
-                                                Opacity="0.4" />
-                                        </StackPanel>
-                                    </StackPanel>-->
-                                </DataTemplate>
-                            </GridView.ItemTemplate>
                         </GridView>
                     </SemanticZoom.ZoomedOutView>
                 </SemanticZoom>
@@ -668,7 +829,7 @@
                 </SemanticZoom>
             </PivotItem>
 
-        </Pivot>
+        </Pivot>-->
 
     </Grid>
 

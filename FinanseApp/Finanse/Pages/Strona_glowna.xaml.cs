@@ -38,8 +38,6 @@ namespace Finanse.Pages {
         private FontFamily iconStyle = new FontFamily(Settings.GetActualIconStyle());
         private List<int> visiblePayFormList = new List<int>();
 
-        bool isSelectionChanged = false;
-
         decimal actualMoney;
         int actualMonth;
         int actualYear;
@@ -47,12 +45,6 @@ namespace Finanse.Pages {
         public Strona_glowna() {
 
             this.InitializeComponent();
-
-            actualMonth = DateTime.Today.Month;
-            actualYear = DateTime.Today.Year;
-            NextMonthButton.IsEnabled = false;
-
-            ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
 
             foreach (var item in Dal.GetAllMoneyAccounts()) {
                 ToggleMenuFlyoutItem itema = new ToggleMenuFlyoutItem {
@@ -65,15 +57,21 @@ namespace Finanse.Pages {
                 VisiblePayFormMenuFlyout.Items.Add(itema);
             }
 
+            actualMonth = DateTime.Today.Month;
+            actualYear = DateTime.Today.Year;
+            NextMonthButton.Visibility = Visibility.Collapsed;
+
             _source = (new StoreData()).GetGroupsByDay(actualMonth, actualYear, visiblePayFormList);
             _sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear, visiblePayFormList);
 
             ContactsCVS.Source = _source;
             CategorizedCVS.Source = _sourceByCategory;
 
-            SetActualMoneyBar();
+            ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
 
-          //  CategorizedCVS.Source = Operation.GetOperationsByCategoryGrouped();
+            GroupingComboBox.SelectedIndex = 0;
+
+            SetActualMoneyBar();
 
         }
         public void Clicky(object sender, RoutedEventArgs e) {
@@ -134,34 +132,19 @@ namespace Finanse.Pages {
             flyoutBase.ShowAt(senderElement);
         }
 
-        private void PivotItem_GotFocus(object sender, RoutedEventArgs e) {
-        }
-
-        private async void OperacjeListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private void OperacjeListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             ListView listView = sender as ListView;
-            
-            if (listView.SelectedIndex != -1 && isSelectionChanged) {
-                Operation thisOperation = (Operation)listView.SelectedItem;
-
-                var ContentDialogItem = new OperationDetailsContentDialog(thisOperation, "");
-                listView.SelectedIndex = -1;
-                var result = await ContentDialogItem.ShowAsync();
-            }
-        }
-
-        private void ListView_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
-            OperacjeListView.SelectedIndex = -1;
-            isSelectionChanged = true;
+            listView.SelectedIndex = -1;
         }
 
         private async void PreviousMonthButton_Click(object sender, RoutedEventArgs e) {
 
             try {
-                LoadingIndicator.IsActive = true;
+
                 await LongOperation();
             }
             finally {
-                LoadingIndicator.IsActive = false;
+
             }
         }
 
@@ -195,21 +178,25 @@ namespace Finanse.Pages {
             _source.Clear();
             _sourceByCategory.Clear();
 
-            ObservableCollection<GroupInfoList<Operation>> source;
-            ObservableCollection<CategoryGroupInfoList<Operation>> sourceByCategory;
+            ObservableCollection<GroupInfoList<Operation>> source = new ObservableCollection<GroupInfoList<Operation>>();
+            ObservableCollection<CategoryGroupInfoList<Operation>> sourceByCategory = new ObservableCollection<CategoryGroupInfoList<Operation>>();
 
-            if (visiblePayFormList == null) {
-                source = (new StoreData()).GetGroupsByDay(actualMonth, actualYear);
-                sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear);
-            }
-            else {
+            if ((actualMonth <= DateTime.Today.Month && actualYear <= DateTime.Today.Year) || actualYear < DateTime.Today.Year) {
+
                 source = (new StoreData()).GetGroupsByDay(actualMonth, actualYear, visiblePayFormList);
                 sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear, visiblePayFormList);
-            }
 
-            ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
-            if (actualYear != DateTime.Today.Year)
-                ActualMonthText.Text += " " + actualYear.ToString();
+                ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
+                if (actualYear != DateTime.Today.Year)
+                    ActualMonthText.Text += " " + actualYear.ToString();
+            }
+            else {
+
+                source = (new StoreData()).GetFutureGroupsByDay(visiblePayFormList);
+                sourceByCategory = (new StoreData()).GetFutureGroupsByCategory(visiblePayFormList);
+
+                ActualMonthText.Text = "Planowane wydatki";
+            }
 
             foreach (var s in source) {
                 _source.Add(s);
@@ -218,11 +205,7 @@ namespace Finanse.Pages {
                 _sourceByCategory.Add(s);
             };
 
-            actualMoney = 0;
-            foreach (var item in source)
-                actualMoney += item.decimalCost;
-
-            ActualMoneyBar.Text = actualMoney.ToString("C", Settings.GetActualCurrency());
+            SetActualMoneyBar();
 
             SetNextMonthButtonEnabling();
             SetPreviousMonthButtonEnabling();
@@ -230,23 +213,82 @@ namespace Finanse.Pages {
 
         private void SetNextMonthButtonEnabling() {
 
-            NextMonthButton.IsEnabled = !(DateTime.Today.Year == actualYear && DateTime.Today.Month == actualMonth);
+            if (DateTime.Today.Year <= actualYear && DateTime.Today.Month <= actualMonth) {
+                NextMonthButton.Visibility = Visibility.Collapsed;
+                IncomingOperationsButton.Visibility = Visibility.Visible;
+                IncomingOperationsButton.IsEnabled = true;
+            }
+            else {
+                NextMonthButton.Visibility = Visibility.Visible;
+                IncomingOperationsButton.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void SetPreviousMonthButtonEnabling() {
 
-            string eldestYear = Dal.GetEldestOperation().Date.Substring(0, 4);
-            string eldestMonth = Dal.GetEldestOperation().Date.Substring(5, 2);
-
-            PrevMonthButton.IsEnabled = !(eldestMonth == actualMonth.ToString("00") && eldestYear == actualYear.ToString());
+            PrevMonthButton.IsEnabled = !(Convert.ToDateTime(Dal.GetEldestOperation().Date) > new DateTime(actualYear, actualMonth, 1));
         }
 
         private void SetActualMoneyBar() {
+
             actualMoney = 0;
+
             foreach (var group in _source) {
                 actualMoney += group.decimalCost;
             }
+
             ActualMoneyBar.Text = actualMoney.ToString("C", Settings.GetActualCurrency());
+        }
+
+        private void ListViewByDate() {
+            
+            OperacjeListView.ItemsSource = ContactsCVS.View;
+            OperacjeListView.GroupStyle.Clear();
+            OperacjeListView.GroupStyle.Add(ByDateGroupStyle);
+
+            OperacjeListViewGroup.ItemsSource = ContactsCVS.View.CollectionGroups;
+            OperacjeListViewGroup.ItemsPanel = ByDateGroupItemsPanelTemplate;
+            OperacjeListViewGroup.ItemTemplate = ByDateGroupItemTemplate;
+        }
+
+        private void ListViewByCategory() {
+
+            OperacjeListView.GroupStyle.Clear();
+            OperacjeListView.GroupStyle.Add(ByCategoryGroupStyle);
+            OperacjeListView.ItemsSource = CategorizedCVS.View;
+
+            OperacjeListViewGroup.ItemsSource = CategorizedCVS.View.CollectionGroups;
+            OperacjeListViewGroup.ItemsPanel = ByCategoryGroupItemsPanelTemplate;
+            OperacjeListViewGroup.ItemTemplate = ByCategoryGroupItemTemplate;
+        }
+
+        private void GroupingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (((ComboBoxItem)((ComboBox)sender).SelectedItem).Tag.ToString() == "0")
+                ListViewByDate();
+            else
+                ListViewByCategory();
+        }
+
+        private async void OperacjeListView_ItemClick(object sender, ItemClickEventArgs e) {
+            Operation thisOperation = (Operation)e.ClickedItem;
+
+            var ContentDialogItem = new OperationDetailsContentDialog(thisOperation, "");
+
+            var result = await ContentDialogItem.ShowAsync();
+        }
+
+        private void IncomingOperationsButton_Click(object sender, RoutedEventArgs e) {
+
+            if (actualMonth < 12) {
+                actualMonth++;
+            }
+            else {
+                actualMonth = 1;
+                actualYear++;
+            }
+
+            SetListOfOperations(visiblePayFormList);
+            IncomingOperationsButton.Visibility = Visibility.Collapsed;
         }
     }
 }

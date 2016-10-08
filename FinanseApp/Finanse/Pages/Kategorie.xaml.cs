@@ -24,9 +24,6 @@ namespace Finanse.Pages {
 
     public sealed partial class Kategorie : Page {
 
-        string path;
-        SQLite.Net.SQLiteConnection conn;
-
         public ObservableCollection<OperationCategory> OperationCategories = new ObservableCollection<OperationCategory>();
 
         public OperationCategory operationCategoryItem;
@@ -35,20 +32,10 @@ namespace Finanse.Pages {
         public Kategorie() {
 
             this.InitializeComponent();
-
-            path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
-            conn = new SQLite.Net.SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
-
-            foreach (var message in Dal.GetAllCategories()) {
-
-                message.subCategories = new ObservableCollection<OperationSubCategory>(Dal.GetOperationSubCategoriesByBossId(message.Id));
-
-                OperationCategories.Add(message);
-            }
         }
 
         private async void NewCategory_Click(object sender, RoutedEventArgs e) {
-            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, conn, new OperationCategory {Id = -1 }, -1);
+            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, new OperationCategory {Id = -1 }, -1);
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -68,7 +55,7 @@ namespace Finanse.Pages {
 
             OperationCategory thisCategory = (OperationCategory)datacontext;
 
-            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, conn, thisCategory, -1);
+            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, thisCategory, -1);
 
             var result = await ContentDialogItem.ShowAsync();
             //this datacontext is probably some object of some type T
@@ -79,7 +66,7 @@ namespace Finanse.Pages {
 
             OperationSubCategory thisSubCategory = (OperationSubCategory)datacontext;
             OperationCategory thisCategory = new OperationCategory {
-                Id = thisSubCategory.OperationCategoryId,
+                Id = thisSubCategory.Id,
                 Name = thisSubCategory.Name,
                 Color = thisSubCategory.Color,
                 Icon = thisSubCategory.Icon,
@@ -87,7 +74,7 @@ namespace Finanse.Pages {
                 VisibleInIncomes = thisSubCategory.VisibleInIncomes
             };
 
-            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, conn, thisCategory, thisSubCategory.BossCategoryId);
+            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, thisCategory, thisSubCategory.BossCategoryId);
 
             var result = await ContentDialogItem.ShowAsync();
             //this datacontext is probably some object of some type T
@@ -96,7 +83,7 @@ namespace Finanse.Pages {
         private async void DeleteCat_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new DeleteCategory_ContentDialog(OperationCategories, conn, (OperationCategory)datacontext, null);
+            var ContentDialogItem = new DeleteCategory_ContentDialog(OperationCategories, (OperationCategory)datacontext, null);
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -110,13 +97,16 @@ namespace Finanse.Pages {
         private async void DeleteSubCat_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new DeleteCategory_ContentDialog(OperationCategories, conn, null, (OperationSubCategory)datacontext);
+            var ContentDialogItem = new DeleteCategory_ContentDialog(OperationCategories, null, (OperationSubCategory)datacontext);
 
             var result = await ContentDialogItem.ShowAsync();
         }
 
         private async void AddSubCat_Click(object sender, RoutedEventArgs e) {
-            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, conn, new OperationCategory { Id = -1 }, -1);
+
+            //OperationCategory itemka = ((ListViewItem)sender).DataContext as OperationCategory;
+
+            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, new OperationCategory { Id = -1 }, -1);
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -125,6 +115,26 @@ namespace Finanse.Pages {
             TextBlock yco = sender as TextBlock;
 
             yco.FontFamily = new FontFamily(Settings.GetActualIconStyle());
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e) {
+            OperationCategories.Clear();
+
+            foreach (var message in Dal.GetAllCategories().Where(i=>i.VisibleInExpenses)) {
+
+                message.subCategories = new ObservableCollection<OperationSubCategory>(Dal.GetOperationSubCategoriesByBossId(message.Id));
+                OperationCategories.Add(message);
+            }
+        }
+
+        private void RadioButton_Checked_1(object sender, RoutedEventArgs e) {
+            OperationCategories.Clear();
+
+            foreach (var message in Dal.GetAllCategories().Where(i => i.VisibleInIncomes)) {
+
+                message.subCategories = new ObservableCollection<OperationSubCategory>(Dal.GetOperationSubCategoriesByBossId(message.Id));
+                OperationCategories.Add(message);
+            }
         }
     }
 }

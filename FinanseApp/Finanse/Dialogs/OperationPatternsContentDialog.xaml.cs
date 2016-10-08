@@ -25,7 +25,6 @@ namespace Finanse.Dialogs {
     public sealed partial class OperationPatternsContentDialog : ContentDialog {
 
         public List<Operation> OperationPatterns = new List<Operation>();
-        ObservableCollection<GroupInfoList<Operation>> _source;
 
         public OperationPatternsContentDialog() {
 
@@ -45,14 +44,8 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private async void OperationPatternsListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private void OperationPatternsListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             Hide();
-
-            Operation thisOperation = (Operation)OperationPatternsListView.SelectedItem;
-
-            var ContentDialogItem = new NewOperationContentDialog(_source, thisOperation, "pattern");
-
-            var result = await ContentDialogItem.ShowAsync();
         }
     }
 }

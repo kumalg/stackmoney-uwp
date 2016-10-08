@@ -32,7 +32,9 @@
             SelectionMode="Single"
             BorderThickness="0"
             Background="Transparent"
-            SelectionChanged="SzablonyListView_SelectionChanged">
+            SelectionChanged="SzablonyListView_SelectionChanged"
+            IsItemClickEnabled="True"
+            ItemClick="SzablonyListView_ItemClick">
 
             <ListView.ItemContainerStyle>
                 <Style

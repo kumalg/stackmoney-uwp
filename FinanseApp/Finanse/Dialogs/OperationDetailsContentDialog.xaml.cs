@@ -38,8 +38,6 @@ namespace Finanse.Dialogs {
             if (whichOption == "pattern")
                 Title = "Szczegóły szablonu";
 
-            NameValue.Text = editedOperation.Title;
-
             if (editedOperation.isExpense) {
                 CostValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"] as SolidColorBrush;
                 CostValueIcon.Glyph = "";

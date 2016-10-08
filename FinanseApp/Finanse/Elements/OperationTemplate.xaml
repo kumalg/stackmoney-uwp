@@ -96,7 +96,6 @@
                     Grid.Column="1"
                     Name="Cost_OperationTemplate"
                     VerticalAlignment="Center"
-                    FontWeight="Bold"
                     Foreground="{StaticResource RedColorStyle}" />
             </Grid>
         </Border>

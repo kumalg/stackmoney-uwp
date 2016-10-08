@@ -46,10 +46,11 @@ namespace Finanse.Elements {
 
             MoneyAccount moneyAccount = Dal.GetAllMoneyAccounts().SingleOrDefault(i => i.Id == Operation.MoneyAccountId);
 
-            if (!string.IsNullOrEmpty(moneyAccount.Color)) {
-                MoneyAccountEllipse.Visibility = Visibility.Visible;
-                MoneyAccountEllipse.Fill = Functions.GetSolidColorBrush(moneyAccount.Color);
-            }
+            if (moneyAccount != null)
+                if (!string.IsNullOrEmpty(moneyAccount.Color)) {
+                    MoneyAccountEllipse.Visibility = Visibility.Visible;
+                    MoneyAccountEllipse.Fill = Functions.GetSolidColorBrush(moneyAccount.Color);
+                }
 
             OperationCategory cat = Dal.GetOperationCategoryById(Operation.CategoryId);
             OperationSubCategory subCat = Dal.GetOperationSubCategoryById(Operation.SubCategoryId);

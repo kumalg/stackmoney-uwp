@@ -81,7 +81,10 @@ namespace Finanse.Pages {
             var result = await ContentDialogItem.ShowAsync();
         }
 
-        private async void SzablonyListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private void SzablonyListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            ListView listView = sender as ListView;
+            listView.SelectedIndex = -1;
+            /*
             ListView listView = sender as ListView;
 
             if (listView.SelectedIndex != -1) {
@@ -90,7 +93,15 @@ namespace Finanse.Pages {
                 var ContentDialogItem = new OperationDetailsContentDialog(thisOperation, "pattern");
                 listView.SelectedIndex = -1;
                 var result = await ContentDialogItem.ShowAsync();
-            }
+            }*/
+        }
+
+        private async void SzablonyListView_ItemClick(object sender, ItemClickEventArgs e) {
+            Operation thisOperation = (Operation)e.ClickedItem;
+
+            var ContentDialogItem = new OperationDetailsContentDialog(thisOperation, "");
+
+            var result = await ContentDialogItem.ShowAsync();
         }
     }
 }

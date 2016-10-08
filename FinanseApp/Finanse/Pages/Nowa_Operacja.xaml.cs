@@ -33,7 +33,7 @@ namespace Finanse.Pages {
 
             this.InitializeComponent();
 
-            DateValue.MaxDate = DateTime.Today;
+            //DateValue.MaxDate = DateTime.Today;
             DateValue.Date = DateTime.Today;
 
             Expense_RadioButton.IsChecked = true;
@@ -71,7 +71,7 @@ namespace Finanse.Pages {
                     SubCategoryValue.IsEnabled = false;
 
                 if (idOfSelectedSubCategory != -1) {
-                    if (SubCategoryValue.Items.OfType<OperationSubCategory>().Any(i => i.OperationCategoryId == idOfSelectedSubCategory)) {
+                    if (SubCategoryValue.Items.OfType<OperationSubCategory>().Any(i => i.Id == idOfSelectedSubCategory)) {
                         OperationSubCategory subCatItem = Dal.GetOperationSubCategoryById(idOfSelectedSubCategory);
                         SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
                     }
@@ -122,7 +122,7 @@ namespace Finanse.Pages {
                             });
                         SubCategoryValue.Items.Add(new ComboBoxItem {
                             Content = subCatItem.Name,
-                            Tag = subCatItem.OperationCategoryId
+                            Tag = subCatItem.Id
                         });
 
                     }

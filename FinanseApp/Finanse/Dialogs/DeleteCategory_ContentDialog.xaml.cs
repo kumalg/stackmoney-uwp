@@ -1,4 +1,5 @@
-﻿using Finanse.Elements;
+﻿using Finanse.DataAccessLayer;
+using Finanse.Elements;
 using Finanse.Models;
 using System;
 using System.Collections.Generic;
@@ -21,14 +22,11 @@ using Windows.UI.Xaml.Navigation;
 namespace Finanse.Dialogs {
     public sealed partial class DeleteCategory_ContentDialog : ContentDialog {
         ObservableCollection<OperationCategory> OperationCategories;
-        ObservableCollection<OperationSubCategory> OperationSubCategories;
-        SQLite.Net.SQLiteConnection conn;
         OperationCategory operationCategory;
         OperationSubCategory operationSubCategory;
-        public DeleteCategory_ContentDialog(ObservableCollection<OperationCategory> OperationCategories, SQLite.Net.SQLiteConnection conn, OperationCategory operationCategory, OperationSubCategory operationSubCategory) {
+        public DeleteCategory_ContentDialog(ObservableCollection<OperationCategory> OperationCategories, OperationCategory operationCategory, OperationSubCategory operationSubCategory) {
             this.InitializeComponent();
             this.OperationCategories = OperationCategories;
-            this.conn = conn;
             this.operationCategory = operationCategory;
             this.operationSubCategory = operationSubCategory;
         }
@@ -37,10 +35,7 @@ namespace Finanse.Dialogs {
             if (operationCategory != null) {
 
                 OperationCategories.Remove(operationCategory);
-                conn.Delete(operationCategory);
-                //foreach (var subCat in conn.Table<OperationSubCategory>().Where(x => x.BossCategoryId == operationCategory.Id))
-                    //conn.Delete(subCat);
-                conn.Delete(conn.Table<OperationSubCategory>().Where(x => x.BossCategoryId == operationCategory.Id));
+                Dal.DeleteCategory(operationCategory);
             }
             else if (operationSubCategory != null) {
 
@@ -49,7 +44,7 @@ namespace Finanse.Dialogs {
 
                 BossCatItem.subCategories.Remove(subCatItem);
 
-                conn.Delete(operationSubCategory);
+                Dal.DeleteSubCategory(operationSubCategory);
             }
         }
 

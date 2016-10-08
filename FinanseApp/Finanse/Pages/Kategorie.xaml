@@ -16,6 +16,8 @@
             <RowDefinition
                 Height="Auto" />
             <RowDefinition
+                Height="Auto" />
+            <RowDefinition
                 Height="*" />
         </Grid.RowDefinitions>
 
@@ -50,15 +52,43 @@
         </Grid>
         <ProgressRing
             x:Name="LoadingIndicator" />
-        <ScrollViewer
+        <Grid
+            Background="{ThemeResource Background-1}"
             Grid.Row="1"
+            Height="48">
+            <Grid
+                MaxWidth="600">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <RadioButton
+                    GroupName="CategoryExpenseOrIncomeRadioButtons"
+                    HorizontalAlignment="Center"
+                    Content="Wydatki"
+                    IsChecked="True"
+                    Checked="RadioButton_Checked" />
+                <RadioButton
+                    GroupName="CategoryExpenseOrIncomeRadioButtons"
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    Content="Wpływy"
+                    Checked="RadioButton_Checked_1" />
+            </Grid>
+        </Grid>
+
+        <ScrollViewer
+            Grid.Row="2"
             VerticalScrollBarVisibility="Auto"
             HorizontalScrollBarVisibility="Disabled">
 
             <StackPanel>
 
                 <ListView
-                    Margin="20,20,20,0"
+                    FlowDirection="LeftToRight"
+                    Padding="0,-8,0,0"
                     ScrollViewer.VerticalScrollMode="Disabled"
                     Name="OperacjeListView"
                     ItemsSource="{x:Bind OperationCategories}"
@@ -97,7 +127,7 @@
                                 Background="Transparent">
 
                                 <StackPanel
-                                    Margin="0,10">
+                                    Margin="0,16,0,0">
 
                                     <models:ExpandPanel>
 
@@ -106,7 +136,7 @@
 
                                             <Grid
                                                 MaxWidth="600"
-                                                Margin="10,10,10,10"
+                                                Margin="16"
                                                 Background="Transparent"
                                                 RightTapped="ExpandPanel_RightTapped">
 

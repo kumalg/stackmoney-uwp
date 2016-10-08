@@ -274,7 +274,7 @@ namespace Finanse.Dialogs {
                     SubCategoryValue.IsEnabled = false;
 
                 if (idOfSelectedSubCategory != -1) {
-                    if (SubCategoryValue.Items.OfType<OperationSubCategory>().Any(i => i.OperationCategoryId == idOfSelectedSubCategory)) {
+                    if (SubCategoryValue.Items.OfType<OperationSubCategory>().Any(i => i.Id == idOfSelectedSubCategory)) {
                         OperationSubCategory subCatItem = Dal.GetOperationSubCategoryById(idOfSelectedSubCategory);
                         SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
                     }
@@ -325,7 +325,7 @@ namespace Finanse.Dialogs {
                             });
                         SubCategoryValue.Items.Add(new ComboBoxItem {
                             Content = subCatItem.Name,
-                            Tag = subCatItem.OperationCategoryId
+                            Tag = subCatItem.Id
                         });
 
                     }

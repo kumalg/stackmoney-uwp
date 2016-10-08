@@ -208,30 +208,31 @@
                                     Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <ToggleButton
-                                x:Name="ExpandCollapseButton"
-                                VerticalAlignment="Stretch"
+                        <ToggleButton
+                            x:Name="ExpandCollapseButton"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Style="{ThemeResource ToggleButtonStyle1}">
+                            <Grid
                                 HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left"
-                                Style="{ThemeResource ToggleButtonStyle1}">
-                                <Grid
+                                VerticalAlignment="Stretch">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="*" />
+                                    <ColumnDefinition
+                                        Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <ContentPresenter
+                                    VerticalAlignment="Stretch"
                                     HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch">
-
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition
-                                            Width="*" />
-                                        <ColumnDefinition
-                                            Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <ContentPresenter
-                                        VerticalAlignment="Stretch"
-                                        HorizontalAlignment="Stretch"
-                                        Content="{TemplateBinding HeaderContent}">
-                                    </ContentPresenter>
+                                    Content="{TemplateBinding HeaderContent}">
+                                </ContentPresenter>
 
                                 <Grid
+                                    Margin="16,0"
                                     Height="40"
                                     Width="40"
                                     RenderTransformOrigin="0.5,0.5"
@@ -239,20 +240,20 @@
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Right">
                                     <FontIcon
-                                            VerticalAlignment="Center"
-                                            HorizontalAlignment="Center"
-                                            Glyph="&#xE26C;"
-                                            FontFamily="Segoe MDL2 Assets"
-                                            Foreground="Gray"
-                                            FontSize="12">
-                                        </FontIcon>
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        Glyph="&#xE26C;"
+                                        FontFamily="Segoe MDL2 Assets"
+                                        Foreground="Gray"
+                                        FontSize="12">
+                                    </FontIcon>
                                     <Grid.RenderTransform>
                                         <RotateTransform
                                             x:Name="RotateButtonTransform" />
                                     </Grid.RenderTransform>
                                 </Grid>
                             </Grid>
-                            </ToggleButton>
+                        </ToggleButton>
 
                         <Grid
                             Grid.Row="1"

@@ -44,13 +44,15 @@ namespace Finanse.Elements {
             if (Operation == null)
                 return;
 
-            MoneyAccount moneyAccount = Dal.GetAllMoneyAccounts().SingleOrDefault(i => i.Id == Operation.MoneyAccountId);
+            if (Settings.GetAccountEllipseVisibility()) {
+                MoneyAccount moneyAccount = Dal.GetAllMoneyAccounts().SingleOrDefault(i => i.Id == Operation.MoneyAccountId);
 
-            if (moneyAccount != null)
-                if (!string.IsNullOrEmpty(moneyAccount.Color)) {
-                    MoneyAccountEllipse.Visibility = Visibility.Visible;
-                    MoneyAccountEllipse.Fill = Functions.GetSolidColorBrush(moneyAccount.Color);
-                }
+                if (moneyAccount != null)
+                    if (!string.IsNullOrEmpty(moneyAccount.Color)) {
+                        MoneyAccountEllipse.Visibility = Visibility.Visible;
+                        MoneyAccountEllipse.Fill = Functions.GetSolidColorBrush(moneyAccount.Color);
+                    }
+            }
 
             OperationCategory cat = Dal.GetOperationCategoryById(Operation.CategoryId);
             OperationSubCategory subCat = Dal.GetOperationSubCategoryById(Operation.SubCategoryId);
@@ -63,8 +65,8 @@ namespace Finanse.Elements {
                 Icon_OperationTemplate.Glyph = cat.Icon;
 
                 if (String.IsNullOrEmpty(Operation.Title)) {
+                    Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text-2"];
                     Title_OperationTemplate.Text = cat.Name;
-                    Title_OperationTemplate.Opacity = 0.5;
                 }
             }
 
@@ -73,8 +75,8 @@ namespace Finanse.Elements {
                 Icon_OperationTemplate.Glyph = subCat.Icon;
 
                 if (String.IsNullOrEmpty(Operation.Title)) {
+                    Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text-2"];
                     Title_OperationTemplate.Text = subCat.Name;
-                    Title_OperationTemplate.Opacity = 0.5;
                 }
             }
 
@@ -95,13 +97,14 @@ namespace Finanse.Elements {
             }
 
             /* WYGLĄD NAZWY KATEGORII */
-            /*
-Category_OperationTemplate.Text = "Nie odnaleziono wskazanej kategorii";
-if(cat != null)
-    Category_OperationTemplate.Text = cat.Name;
-if (subCat != null)
-    SubCategory_OperationTemplate.Text = "  /  " + subCat.Name;
-*/
+            if (Settings.GetCategoryNameVisibility()) {
+                CategoryNameStackPanel.Visibility = Visibility.Visible;
+                Category_OperationTemplate.Text = "Nie znaleziono kategorii";
+                if (cat != null)
+                    Category_OperationTemplate.Text = cat.Name;
+                if (subCat != null)
+                    SubCategory_OperationTemplate.Text = "  /  " + subCat.Name;
+            }
         }
     }
 }

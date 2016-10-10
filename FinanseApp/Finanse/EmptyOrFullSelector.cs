@@ -15,20 +15,18 @@ namespace Finanse
         public DataTemplate Full { get; set; }
         public DataTemplate Empty { get; set; }
 
-        protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
-        {
+        protected override DataTemplate SelectTemplateCore(object item, DependencyObject container) {
+
             bool isEmpty = true;
 
-            if (item is HeaderItem)
-            {
+            if (item is HeaderItem) {
                 var groupItem = item as HeaderItem;
                 isEmpty = groupItem == null || !groupItem.IsEnabled;
             }
 
             // Disable empty items
             var selectorItem = container as SelectorItem;
-            if (selectorItem != null)
-            {
+            if (selectorItem != null) {
                 selectorItem.IsEnabled = !isEmpty;
             }
 

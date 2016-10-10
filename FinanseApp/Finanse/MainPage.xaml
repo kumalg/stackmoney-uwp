@@ -527,7 +527,7 @@
 
     <Grid
         Background="{ThemeResource Background}">
-
+<!--
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState
@@ -556,7 +556,7 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-
+-->
         <!-- Początek Hamburger Menu -->
         <Grid.RowDefinitions>
             <RowDefinition

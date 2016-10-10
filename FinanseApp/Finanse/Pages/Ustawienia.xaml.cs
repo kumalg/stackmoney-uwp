@@ -44,6 +44,14 @@ namespace Finanse.Pages {
 
             CurrencyValue.SelectedItem = CurrencyValue.Items.SingleOrDefault(i => ((ComboBoxItem)i).Content.ToString() == Settings.GetActualCurrency().DisplayName);
 
+            for (int i = 1; i <= 12; i++)
+                MaxNumberOfNextMonth.Items.Add(new ComboBoxItem {
+                    Content = i,
+                });
+
+            MaxNumberOfNextMonth.SelectedIndex = Settings.GetMaxFutureMonths() - 1;
+            CategoryNameVisibilityToggleButton.IsOn = Settings.GetCategoryNameVisibility();
+            AccountEllipseVisibilityToggleButton.IsOn = Settings.GetAccountEllipseVisibility();
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -59,6 +67,21 @@ namespace Finanse.Pages {
         private void ThemeToggle_Toggled(object sender, RoutedEventArgs e) {
 
             Settings.SetTheme(ThemeToggle.IsOn ? 1 : 0);
+        }
+
+        private void MaxNumberOfFutureMonths_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            ComboBoxItem item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
+            Settings.SetMaxFutureMonths((int)item.Content);
+        }
+
+        private void CategoryNameVisibilityToggleButton_Toggled(object sender, RoutedEventArgs e) {
+
+            Settings.SetCategoryNameVisibility(CategoryNameVisibilityToggleButton.IsOn);
+        }
+
+        private void AccountEllipseVisibilityToggleButton_Toggled(object sender, RoutedEventArgs e) {
+
+            Settings.SetAccountEllipseVisibility(AccountEllipseVisibilityToggleButton.IsOn);
         }
     }
 }

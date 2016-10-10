@@ -1,9 +1,10 @@
 ﻿
+using System;
+
 namespace Finanse.Models {
     public class HeaderItem {
-        public bool IsEnabled {
-            get; set;
-        }
+        public string Day { get; set; }
+        public bool IsEnabled { get; set; }
     }
     public class Operation : OperationPattern {
 

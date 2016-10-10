@@ -12,8 +12,7 @@
     <Page.Resources>
         <!--Use a collection view source for content that presents a list of items that can be grouped or sorted.-->
         <GroupStyle
-            x:Name="ByDateGroupStyle"
-            HidesIfEmpty="True">
+            x:Name="ByDateGroupStyle">
             <GroupStyle.HeaderContainerStyle>
                 <Style
                     TargetType="ListViewHeaderItem">
@@ -114,8 +113,9 @@
 
         <DataTemplate
             x:Name="ByDateGroupItemTemplate">
+            <!--Text="{Binding Group.dayNum}"-->
             <TextBlock
-                Text="{Binding Group.dayNum}"
+                Text="1"
                 FontSize="22"
                 Foreground="{ThemeResource Text-1}"
                 FontWeight="SemiLight"
@@ -262,7 +262,36 @@
             IsSourceGrouped="True" />
 
         <local:EmptyOrFullSelector
-            x:Key="GroupEmptyOrFullSelector" />
+            Full="{StaticResource JumpListGroupTemplate}"
+            Empty="{StaticResource JumptListEmptyTemplate}"
+            x:Name="GroupEmptyOrFullSelector" />
+
+        <DataTemplate
+            x:Key="JumpListGroupTemplate">
+            <Border
+                Margin="8"
+                Width="24"
+                Height="24">
+                <TextBlock
+                    Text="{Binding Day}"
+                    Foreground="{ThemeResource Text}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+            </Border>
+        </DataTemplate>
+        <DataTemplate
+            x:Key="JumptListEmptyTemplate">
+            <Border
+                Margin="8"
+                Width="24"
+                Height="24">
+                <TextBlock
+                    Text="{Binding Day}"
+                    Foreground="{ThemeResource Text-2}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+            </Border>
+        </DataTemplate>
 
     </Page.Resources>
 
@@ -402,18 +431,18 @@
         </Grid>
 
         <SemanticZoom
+            x:Name="semanticZoom"
             Grid.Row="2">
             <SemanticZoom.ZoomedInView>
                 <ListView
                     Padding="0,-10,0,0"
                     x:Name="OperacjeListView"
-                    ItemsSource="{Binding Source={StaticResource ContactsCVS}, Mode=TwoWay}"
                     SelectionMode="Single"
                     BorderThickness="0"
                     Background="Transparent"
                     IsItemClickEnabled="True"
-                    SelectionChanged="OperacjeListView_SelectionChanged"
-                    ItemClick="OperacjeListView_ItemClick">
+                    ItemClick="OperacjeListView_ItemClick"
+                    SelectionChanged="OperacjeListView_SelectionChanged">
 
                     <ListView.ItemContainerStyle>
                         <Style
@@ -482,13 +511,9 @@
             <SemanticZoom.ZoomedOutView>
                 <GridView
                     x:Name="OperacjeListViewGroup"
-                    ItemsSource="{x:Bind ContactsCVS.View.CollectionGroups}"
-                    ItemTemplate="{StaticResource ByDateGroupItemTemplate}"
-                    ItemsPanel="{StaticResource ByDateGroupItemsPanelTemplate}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    SelectionMode="None"
-                    ItemTemplateSelector="{StaticResource GroupEmptyOrFullSelector}">
+                    SelectionMode="Single">
                 </GridView>
             </SemanticZoom.ZoomedOutView>
         </SemanticZoom>

@@ -11,8 +11,7 @@
     Title="Szczegóły operacji"
     PrimaryButtonText="Edytuj"
     SecondaryButtonText="Wyjdź"
-    PrimaryButtonClick="EditButton_Click"
-    RequestedTheme="Dark">
+    PrimaryButtonClick="EditButton_Click">
 
     <ContentDialog.Style>
         <Style

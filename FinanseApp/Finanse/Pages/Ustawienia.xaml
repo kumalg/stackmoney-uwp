@@ -83,33 +83,9 @@
                                 Text="Maksymalna liczba miesięcy do przodu"
                                 Foreground="{ThemeResource Text-1}" />
                             <ComboBox
+                                SelectionChanged="MaxNumberOfFutureMonths_SelectionChanged"
                                 Name="MaxNumberOfNextMonth"
-                                Style="{StaticResource ComboBoxStyle1}"
-                                SelectedIndex="0">
-                                <ComboBoxItem
-                                    Content="1" />
-                                <ComboBoxItem
-                                    Content="2" />
-                                <ComboBoxItem
-                                    Content="3" />
-                                <ComboBoxItem
-                                    Content="4" />
-                                <ComboBoxItem
-                                    Content="5" />
-                                <ComboBoxItem
-                                    Content="6" />
-                                <ComboBoxItem
-                                    Content="7" />
-                                <ComboBoxItem
-                                    Content="8" />
-                                <ComboBoxItem
-                                    Content="9" />
-                                <ComboBoxItem
-                                    Content="10" />
-                                <ComboBoxItem
-                                    Content="11" />
-                                <ComboBoxItem
-                                    Content="12" />
+                                Style="{StaticResource ComboBoxStyle1}">
                             </ComboBox>
 
                         </StackPanel>
@@ -179,7 +155,8 @@
                         Foreground="{ThemeResource Text-1}" />
 
                     <ToggleSwitch
-                        Name="CategoryName"
+                        Toggled="CategoryNameVisibilityToggleButton_Toggled"
+                        x:Name="CategoryNameVisibilityToggleButton"
                         Style="{StaticResource ToggleSwitchStyle1}">
 
                         <ToggleSwitch.OffContent>
@@ -198,9 +175,9 @@
                         Foreground="{ThemeResource Text-1}" />
 
                     <ToggleSwitch
-                        Name="PayFormIcon"
-                        Style="{StaticResource ToggleSwitchStyle1}"
-                        IsOn="True">
+                        x:Name="AccountEllipseVisibilityToggleButton"
+                        Toggled="AccountEllipseVisibilityToggleButton_Toggled"
+                        Style="{StaticResource ToggleSwitchStyle1}">
                         
                         <ToggleSwitch.OffContent>
                             Wyłączone

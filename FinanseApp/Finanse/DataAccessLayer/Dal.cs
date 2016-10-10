@@ -185,16 +185,25 @@
 
                 string date = year.ToString() + "." + month.ToString("00");
 
-                models = (from p in db.Table<Operation>().ToList()
-                          where p.Date.Substring(0, 7) == date.ToString()
-                             && Convert.ToDateTime(p.Date) <= DateTime.Today
-                             && visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId) == true
-                          select p).ToList();
+                if (visiblePayFormList != null) {
+                    models = (from p in db.Table<Operation>().ToList()
+                              where p.Date.Substring(0, 7) == date.ToString()
+                                 && Convert.ToDateTime(p.Date) <= DateTime.Today
+                                 && visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId) == true
+                              select p).ToList();
+                }
+                else {
+                    models = (from p in db.Table<Operation>().ToList()
+                              where p.Date.Substring(0, 7) == date.ToString()
+                                 && Convert.ToDateTime(p.Date) <= DateTime.Today
+                              select p).ToList();
+                }
             }
 
             return models;
         }
-        public static List<Operation> GetAllFutureOperations(List<int> visiblePayFormList) {
+
+        public static List<Operation> GetAllFutureOperations() {
             List<Operation> models;
 
             // Create a new connection
@@ -204,8 +213,31 @@
 
                 models = (from p in db.Table<Operation>().ToList()
                           where Convert.ToDateTime(p.Date) > DateTime.Today
-                             && visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId) == true
                           select p).ToList();
+            }
+
+            return models;
+        }
+
+        public static List<Operation> GetAllFutureOperations(List<int> visiblePayFormList) {
+            List<Operation> models;
+
+            // Create a new connection
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                if (visiblePayFormList != null) {
+                    models = (from p in db.Table<Operation>().ToList()
+                              where Convert.ToDateTime(p.Date) > DateTime.Today
+                                 && visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId) == true
+                              select p).ToList();
+                }
+                else {
+                    models = (from p in db.Table<Operation>().ToList()
+                              where Convert.ToDateTime(p.Date) > DateTime.Today
+                              select p).ToList();
+                }
             }
 
             return models;

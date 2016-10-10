@@ -76,18 +76,18 @@
                         FontSize="16" />
 
                     <StackPanel
+                        Name="CategoryNameStackPanel"
                         Visibility="Collapsed"
-                        Orientation="Horizontal"
-                        Opacity="0.4">
+                        Orientation="Horizontal">
                         <TextBlock
                             Name="Category_OperationTemplate"
                             FontWeight="Bold"
                             FontSize="12"
-                            Foreground="White" />
+                            Foreground="{ThemeResource Text-2}" />
                         <TextBlock
                             Name="SubCategory_OperationTemplate"
                             FontSize="12"
-                            Foreground="White" />
+                            Foreground="{ThemeResource Text-2}" />
                     </StackPanel>
 
                 </StackPanel>

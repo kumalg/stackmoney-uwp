@@ -7,8 +7,28 @@ namespace Finanse.Models {
     public class Settings {
 
         //Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-        public string CultureInfoName {
-            get; set;
+        public string CultureInfoName { get; set; }
+
+        public static void SetSettings() {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            if (localSettings.Values["whichCurrency"] == null)
+                localSettings.Values["whichCurrency"] = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+
+            if (localSettings.Values["iconStyle"] == null)
+                localSettings.Values["iconStyle"] = "Segoe UI Symbol";
+
+            if (localSettings.Values["Theme"] == null)
+                localSettings.Values["Theme"] = 1;
+
+            if (localSettings.Values["maxFutureMonths"] == null)
+                localSettings.Values["maxFutureMonths"] = 6;
+
+            if (localSettings.Values["categoryNameVisibility"] == null)
+                localSettings.Values["categoryNameVisibility"] = false;
+
+            if (localSettings.Values["accountEllipseVisibility"] == null)
+                localSettings.Values["accountEllipseVisibility"] = true;
         }
 
         public static List<CultureInfo> GetAllCurrencies() {
@@ -24,35 +44,6 @@ namespace Finanse.Models {
             return lista;
         }
 
-        public static void SetSettings() {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            if (localSettings.Values["whichCurrency"] == null)
-                localSettings.Values["whichCurrency"] = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
-
-            if (localSettings.Values["iconStyle"] == null)
-                localSettings.Values["iconStyle"] = "Segoe UI Symbol";
-
-            if (localSettings.Values["Theme"] == null)
-                localSettings.Values["Theme"] = 1;
-        }
-
-        public static CultureInfo GetActualCurrency() {
-
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            CultureInfo value = new CultureInfo(localSettings.Values["whichCurrency"].ToString());
-            return value;
-        }
-
-        public static string GetActualIconStyle() {
-
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            string value = localSettings.Values["iconStyle"].ToString();
-            return value;
-        }
-
         public static ApplicationTheme GetTheme() {
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
@@ -65,11 +56,18 @@ namespace Finanse.Models {
 
             return actualTheme;
         }
-
         public static void SetTheme(int i) {
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
             localSettings.Values["Theme"] = i;
+        }
+
+        public static CultureInfo GetActualCurrency() {
+
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            CultureInfo value = new CultureInfo(localSettings.Values["whichCurrency"].ToString());
+            return value;
         }
         public static void SetActualCurrency(string currency) {
 
@@ -78,11 +76,62 @@ namespace Finanse.Models {
             localSettings.Values["whichCurrency"] = currency;
         }
 
+        public static string GetActualIconStyle() {
+
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            string value = localSettings.Values["iconStyle"].ToString();
+            return value;
+        }
         public static void SetActualIconStyle(string iconStyle) {
 
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
             localSettings.Values["iconStyle"] = iconStyle;
+        }
+
+        public static int GetMaxFutureMonths() {
+
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            int value = (int)localSettings.Values["maxFutureMonths"];
+            return value;
+        }
+        public static void SetMaxFutureMonths(int months) {
+
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            localSettings.Values["maxFutureMonths"] = months;
+        }
+
+        public static bool GetCategoryNameVisibility() {
+
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            bool value = (bool)localSettings.Values["categoryNameVisibility"];
+
+            return value;
+        }
+        public static void SetCategoryNameVisibility(bool value) {
+
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            localSettings.Values["categoryNameVisibility"] = value;
+        }
+
+        public static bool GetAccountEllipseVisibility() {
+
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            bool value = (bool)localSettings.Values["accountEllipseVisibility"];
+
+            return value;
+        }
+        public static void SetAccountEllipseVisibility(bool value) {
+
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            localSettings.Values["accountEllipseVisibility"] = value;
         }
     }
 }

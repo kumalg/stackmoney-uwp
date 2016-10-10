@@ -35,6 +35,7 @@ namespace Finanse.Pages {
 
             //DateValue.MaxDate = DateTime.Today;
             DateValue.Date = DateTime.Today;
+            DateValue.MaxDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month)).AddMonths(Settings.GetMaxFutureMonths());
 
             Expense_RadioButton.IsChecked = true;
 

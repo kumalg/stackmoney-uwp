@@ -33,10 +33,13 @@ namespace Finanse.Pages {
 
     public sealed partial class Strona_glowna : Page {
 
-        private ObservableCollection<GroupInfoList<Operation>> _source;
-        private ObservableCollection<CategoryGroupInfoList<Operation>> _sourceByCategory;
+        //private ObservableCollection<CategoryGroupInfoList<Operation>> _sourceByCategory;
         private FontFamily iconStyle = new FontFamily(Settings.GetActualIconStyle());
         private List<int> visiblePayFormList = new List<int>();
+
+        private StoreData storeData = new StoreData(DateTime.Today.Month, DateTime.Today.Year, false, null);
+        private ObservableCollection<GroupInfoList<Operation>> groupsByDay;
+        private ObservableCollection<CategoryGroupInfoList<Operation>> groupsByCategory;
 
         decimal actualMoney;
         int actualMonth;
@@ -61,11 +64,13 @@ namespace Finanse.Pages {
             actualYear = DateTime.Today.Year;
             NextMonthButton.Visibility = Visibility.Collapsed;
 
-            _source = (new StoreData()).GetGroupsByDay(actualMonth, actualYear, visiblePayFormList);
-            _sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear, visiblePayFormList);
+           // _sourceByCategory = (new StoreData(actualMonth, actualYear, false)).GetGroupsByCategory(actualMonth, actualYear, visiblePayFormList);
 
-            ContactsCVS.Source = _source;
-            CategorizedCVS.Source = _sourceByCategory;
+            groupsByDay = storeData.GroupsByDay;
+            groupsByCategory = storeData.GroupsByCategory;
+
+            ContactsCVS.Source = groupsByDay;
+            CategorizedCVS.Source = groupsByCategory;
 
             ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
 
@@ -81,14 +86,23 @@ namespace Finanse.Pages {
             else
                 visiblePayFormList.Remove((int)((ToggleMenuFlyoutItem)sender).Tag);
 
+            storeData.SetVisiblePayFormList(visiblePayFormList);
+
+            groupsByCategory.Clear();
+            foreach (var s in storeData.GroupsByCategory) {
+                groupsByCategory.Add(s);
+            };
+
+            groupsByDay.Clear();
+            foreach (var s in storeData.GroupsByDay) {
+                groupsByDay.Add(s);
+            };
+
+            SetActualMoneyBar();
+
             SetListOfOperations(visiblePayFormList);
-        }
-
-        private async void NowaOperacja_Click(object sender, RoutedEventArgs e) {
-
-            var ContentDialogItem = new NewOperationContentDialog(_source, null, "");
-
-            var result = await ContentDialogItem.ShowAsync();
+            if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
+                (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
         }
 
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
@@ -108,7 +122,7 @@ namespace Finanse.Pages {
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new NewOperationContentDialog(_source, (Operation)datacontext, "edit");
+            var ContentDialogItem = new NewOperationContentDialog(groupsByDay, (Operation)datacontext, "edit");
 
             var result = await ContentDialogItem.ShowAsync();
 
@@ -119,7 +133,7 @@ namespace Finanse.Pages {
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new Delete_ContentDialog(_source, (Operation)datacontext,"");
+            var ContentDialogItem = new Delete_ContentDialog(groupsByDay, (Operation)datacontext,"");
 
             var result = await ContentDialogItem.ShowAsync();
 
@@ -133,8 +147,23 @@ namespace Finanse.Pages {
         }
 
         private void OperacjeListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            ListView listView = sender as ListView;
-            listView.SelectedIndex = -1;
+            this.OperacjeListView.SelectedItem = null;
+        }
+
+        void semanticZoom_ViewChangeStarted(object sender, SemanticZoomViewChangedEventArgs e) {
+            if (e.SourceItem == null)
+                return;
+
+            if (e.SourceItem.Item.GetType() == typeof(HeaderItem)) {
+                HeaderItem hi = (HeaderItem)e.SourceItem.Item;
+
+                var group = groupsByDay.SingleOrDefault(d => Convert.ToDateTime(d.Key).Day.ToString() == hi.Day);
+
+                if (group != null)
+                    e.DestinationItem = new SemanticZoomLocation() { Item = group };
+            }
+
+            //e.DestinationItem = new SemanticZoomLocation { Item = e.SourceItem.Item };
         }
 
         private async void PreviousMonthButton_Click(object sender, RoutedEventArgs e) {
@@ -158,6 +187,8 @@ namespace Finanse.Pages {
             }
 
             SetListOfOperations(visiblePayFormList);
+            if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
+                (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
         }
 
         private void NextMonthButton_Click(object sender, RoutedEventArgs e) {
@@ -171,20 +202,15 @@ namespace Finanse.Pages {
             }
 
             SetListOfOperations(visiblePayFormList);
+            if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
+                (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
         }
 
         private void SetListOfOperations(List<int> visiblePayFormList) {
 
-            _source.Clear();
-            _sourceByCategory.Clear();
-
-            ObservableCollection<GroupInfoList<Operation>> source = new ObservableCollection<GroupInfoList<Operation>>();
-            ObservableCollection<CategoryGroupInfoList<Operation>> sourceByCategory = new ObservableCollection<CategoryGroupInfoList<Operation>>();
-
             if ((actualMonth <= DateTime.Today.Month && actualYear <= DateTime.Today.Year) || actualYear < DateTime.Today.Year) {
 
-                source = (new StoreData()).GetGroupsByDay(actualMonth, actualYear, visiblePayFormList);
-                sourceByCategory = (new StoreData()).GetGroupsByCategory(actualMonth, actualYear, visiblePayFormList);
+                storeData = new StoreData(actualMonth, actualYear, false, visiblePayFormList);
 
                 ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
                 if (actualYear != DateTime.Today.Year)
@@ -192,17 +218,21 @@ namespace Finanse.Pages {
             }
             else {
 
-                source = (new StoreData()).GetFutureGroupsByDay(visiblePayFormList);
-                sourceByCategory = (new StoreData()).GetFutureGroupsByCategory(visiblePayFormList);
+                storeData = new StoreData(actualMonth, actualYear, true, visiblePayFormList);
 
                 ActualMonthText.Text = "Planowane wydatki";
             }
 
-            foreach (var s in source) {
-                _source.Add(s);
+            //storeData.SetVisiblePayFormList(visiblePayFormList);
+
+            groupsByCategory.Clear();
+            foreach (var s in storeData.GroupsByCategory) {
+                groupsByCategory.Add(s);
             };
-            foreach (var s in sourceByCategory) {
-                _sourceByCategory.Add(s);
+
+            groupsByDay.Clear();
+            foreach (var s in storeData.GroupsByDay) {
+                groupsByDay.Add(s);
             };
 
             SetActualMoneyBar();
@@ -233,7 +263,7 @@ namespace Finanse.Pages {
 
             actualMoney = 0;
 
-            foreach (var group in _source) {
+            foreach (var group in groupsByDay) {
                 actualMoney += group.decimalCost;
             }
 
@@ -241,14 +271,22 @@ namespace Finanse.Pages {
         }
 
         private void ListViewByDate() {
-            
+
             OperacjeListView.ItemsSource = ContactsCVS.View;
             OperacjeListView.GroupStyle.Clear();
             OperacjeListView.GroupStyle.Add(ByDateGroupStyle);
 
-            OperacjeListViewGroup.ItemsSource = ContactsCVS.View.CollectionGroups;
-            OperacjeListViewGroup.ItemsPanel = ByDateGroupItemsPanelTemplate;
-            OperacjeListViewGroup.ItemTemplate = ByDateGroupItemTemplate;
+            OperacjeListView.SelectionChanged -= OperacjeListView_SelectionChanged;
+            OperacjeListView.SelectedItem = null;
+            (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
+            (semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate = null;
+            (semanticZoom.ZoomedOutView as ListViewBase).ItemTemplateSelector = GroupEmptyOrFullSelector;
+            (semanticZoom.ZoomedOutView as ListViewBase).ItemsPanel = ByDateGroupItemsPanelTemplate;
+
+            OperacjeListView.SelectionChanged += OperacjeListView_SelectionChanged;
+
+            semanticZoom.ViewChangeStarted -= semanticZoom_ViewChangeStarted;
+            semanticZoom.ViewChangeStarted += semanticZoom_ViewChangeStarted;
         }
 
         private void ListViewByCategory() {
@@ -257,9 +295,10 @@ namespace Finanse.Pages {
             OperacjeListView.GroupStyle.Add(ByCategoryGroupStyle);
             OperacjeListView.ItemsSource = CategorizedCVS.View;
 
-            OperacjeListViewGroup.ItemsSource = CategorizedCVS.View.CollectionGroups;
-            OperacjeListViewGroup.ItemsPanel = ByCategoryGroupItemsPanelTemplate;
-            OperacjeListViewGroup.ItemTemplate = ByCategoryGroupItemTemplate;
+            (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = CategorizedCVS.View.CollectionGroups;
+            (semanticZoom.ZoomedOutView as ListViewBase).ItemsPanel = ByCategoryGroupItemsPanelTemplate;
+            (semanticZoom.ZoomedOutView as ListViewBase).ItemTemplateSelector = null;
+            (semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate = ByCategoryGroupItemTemplate;
         }
 
         private void GroupingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {

@@ -25,12 +25,12 @@ namespace Finanse.Dialogs {
 
         Operation operation;
         string whichOption;
-        ObservableCollection<GroupInfoList<Operation>> _source;
-        public Delete_ContentDialog(ObservableCollection<GroupInfoList<Operation>> _source, Operation operation, string whichOption) {
+        ObservableCollection<GroupInfoList<Operation>> groups;
+        public Delete_ContentDialog(ObservableCollection<GroupInfoList<Operation>> groups, Operation operation, string whichOption) {
 
             this.InitializeComponent();
 
-            this._source = _source;
+            this.groups = groups;
             this.operation = operation;
             this.whichOption = whichOption;
         }
@@ -55,13 +55,13 @@ namespace Finanse.Dialogs {
                         break;
                     }
                 default: {
-                        GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key == operation.Date);
+                        GroupInfoList<Operation> group = groups.SingleOrDefault(i => ((GroupHeaderByDay)i.Key).date == operation.Date);
                         if (group.Count == 1)
-                            _source.Remove(group);
+                            groups.Remove(group);
                         else {
-                            group.decimalCost += operation.isExpense ? operation.Cost : -operation.Cost;
+                            //group.decimalCost += operation.isExpense ? operation.Cost : -operation.Cost;
 
-                            group.cost = group.decimalCost.ToString("C", Settings.GetActualCurrency());
+                            //group.cost = group.decimalCost.ToString("C", Settings.GetActualCurrency());
                             group.Remove(operation);
                         }
                         //Operations.Remove(operation);

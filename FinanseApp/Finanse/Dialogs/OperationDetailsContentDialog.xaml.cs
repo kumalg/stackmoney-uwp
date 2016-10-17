@@ -25,13 +25,14 @@ namespace Finanse.Dialogs {
 
     public sealed partial class OperationDetailsContentDialog : ContentDialog {
 
+        private readonly ObservableCollection<GroupInfoList<Operation>> _source;
         Operation editedOperation;
         string whichOption;
 
-        public OperationDetailsContentDialog(Operation editedOperation, string whichOption) {
+        public OperationDetailsContentDialog(ObservableCollection<GroupInfoList<Operation>> _source, Operation editedOperation, string whichOption) {
 
             this.InitializeComponent();
-
+            this._source = _source;
             this.editedOperation = editedOperation;
             this.whichOption = whichOption;
 
@@ -98,7 +99,7 @@ namespace Finanse.Dialogs {
 
             Hide();
 
-            var ContentDialogItem = new Delete_ContentDialog(null, editedOperation, whichOption);
+            var ContentDialogItem = new Delete_ContentDialog(_source, editedOperation, whichOption);
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -120,7 +121,7 @@ namespace Finanse.Dialogs {
                     }
             }
 
-            var ContentDialogItem = new NewOperationContentDialog(null, editedOperation, whichOptionLocal);
+            var ContentDialogItem = new NewOperationContentDialog(_source, editedOperation, whichOptionLocal);
 
             var result = await ContentDialogItem.ShowAsync();
         }

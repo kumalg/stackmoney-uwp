@@ -88,6 +88,49 @@
                                 Style="{StaticResource ComboBoxStyle1}">
                             </ComboBox>
 
+
+                            <TextBlock
+                                FontSize="18"
+                                Margin="0,20,0,10"
+                                Text="Powiadomienia"
+                                Foreground="{ThemeResource AccentColor}" />
+
+                            <TextBlock
+                                Margin="0,5,0,0"
+                                Text="Wysyłaj przypomnienie o dodaniu nowej operacji"
+                                Foreground="{ThemeResource Text-1}" />
+
+                            <ToggleSwitch
+                                x:Name="ReminderToggleSwitch"
+                                IsOn="True"
+                                Style="{StaticResource ToggleSwitchStyle1}"
+                                Toggled="ReminderToggleSwitch_Toggled">
+
+                                <ToggleSwitch.OffContent>
+                                    Wyłączone
+                                </ToggleSwitch.OffContent>
+
+                                <ToggleSwitch.OnContent>
+                                    Włączone
+                                </ToggleSwitch.OnContent>
+
+                            </ToggleSwitch>
+
+                            <StackPanel
+                                x:Name="ReminderStackPanel">
+                                <TextBlock
+                                    Margin="0,10,0,10"
+                                    Text="Czas przypomnienia"
+                                    Foreground="{ThemeResource Text-1}" />
+
+                                <ComboBox
+                                    SelectedIndex="0"
+                                    Style="{StaticResource ComboBoxStyle1}">
+                                    <ComboBoxItem
+                                        Content="20:00" />
+                                </ComboBox>
+                            </StackPanel>
+
                         </StackPanel>
 
                     </Grid>
@@ -100,95 +143,102 @@
                         Text="Wygląd"
                         FontSize="15" />
                 </PivotItem.Header>
-                <StackPanel
-                    Margin="16">
-                    <TextBlock
-                        FontSize="18"
-                        Text="Motyw"
-                        Foreground="{ThemeResource AccentColor}" />
-                    <ToggleSwitch
-                        Name="ThemeToggle"
-                        Style="{StaticResource ToggleSwitchStyle1}"
-                        Toggled="ThemeToggle_Toggled">
+                <ScrollViewer
+                    VerticalScrollBarVisibility="Auto">
+                    <Grid>
 
-                        <ToggleSwitch.OffContent>
-                            Jasny
-                        </ToggleSwitch.OffContent>
+                        <StackPanel
+                            MaxWidth="600"
+                            Margin="16">
+                            <TextBlock
+                                FontSize="18"
+                                Text="Motyw"
+                                Foreground="{ThemeResource AccentColor}" />
+                            <ToggleSwitch
+                                Name="ThemeToggle"
+                                Style="{StaticResource ToggleSwitchStyle1}"
+                                Toggled="ThemeToggle_Toggled">
 
-                        <ToggleSwitch.OnContent>
-                            Ciemny
-                        </ToggleSwitch.OnContent>
+                                <ToggleSwitch.OffContent>
+                                    Jasny
+                                </ToggleSwitch.OffContent>
 
-                    </ToggleSwitch>
+                                <ToggleSwitch.OnContent>
+                                    Ciemny
+                                </ToggleSwitch.OnContent>
 
-
-                    <TextBlock
-                        FontSize="18"
-                        Margin="0,20,0,10"
-                        Text="Styl ikon"
-                        Foreground="{ThemeResource AccentColor}" />
-                    <RadioButton
-                        x:Name="MonoIcon_RadioButton"
-                        Content="Monochromatyczne"
-                        Foreground="{ThemeResource Text}"
-                        Tag="Segoe UI Symbol"
-                        GroupName="IconStyle_RadioButtons"
-                        Checked="IconStyleRadioButton_Checked" />
-                    <RadioButton
-                        x:Name="ColorIcon_RadioButton"
-                        Content="Kolorowe"
-                        Foreground="{ThemeResource Text}"
-                        Tag="Segoe UI"
-                        GroupName="IconStyle_RadioButtons"
-                        Checked="IconStyleRadioButton_Checked" />
+                            </ToggleSwitch>
 
 
-                    <TextBlock
-                        FontSize="18"
-                        Margin="0,20,0,10"
-                        Text="Wygląd operacji"
-                        Foreground="{ThemeResource AccentColor}" />
-                    
-                    <TextBlock
-                        Margin="0,5,0,0"
-                        Text="Pokaż kategorię pod nazwą operacji"
-                        Foreground="{ThemeResource Text-1}" />
+                            <TextBlock
+                                FontSize="18"
+                                Margin="0,20,0,10"
+                                Text="Styl ikon"
+                                Foreground="{ThemeResource AccentColor}" />
+                            <RadioButton
+                                x:Name="MonoIcon_RadioButton"
+                                Content="Monochromatyczne"
+                                Foreground="{ThemeResource Text}"
+                                Tag="Segoe UI Symbol"
+                                GroupName="IconStyle_RadioButtons"
+                                Checked="IconStyleRadioButton_Checked" />
+                            <RadioButton
+                                x:Name="ColorIcon_RadioButton"
+                                Content="Kolorowe"
+                                Foreground="{ThemeResource Text}"
+                                Tag="Segoe UI"
+                                GroupName="IconStyle_RadioButtons"
+                                Checked="IconStyleRadioButton_Checked" />
 
-                    <ToggleSwitch
-                        Toggled="CategoryNameVisibilityToggleButton_Toggled"
-                        x:Name="CategoryNameVisibilityToggleButton"
-                        Style="{StaticResource ToggleSwitchStyle1}">
 
-                        <ToggleSwitch.OffContent>
-                            Wyłączone
-                        </ToggleSwitch.OffContent>
+                            <TextBlock
+                                FontSize="18"
+                                Margin="0,20,0,10"
+                                Text="Wygląd operacji"
+                                Foreground="{ThemeResource AccentColor}" />
 
-                        <ToggleSwitch.OnContent>
-                            Włączone
-                        </ToggleSwitch.OnContent>
+                            <TextBlock
+                                Margin="0,5,0,0"
+                                Text="Pokaż kategorię pod nazwą operacji"
+                                Foreground="{ThemeResource Text-1}" />
 
-                    </ToggleSwitch>
+                            <ToggleSwitch
+                                Toggled="CategoryNameVisibilityToggleButton_Toggled"
+                                x:Name="CategoryNameVisibilityToggleButton"
+                                Style="{StaticResource ToggleSwitchStyle1}">
 
-                    <TextBlock
-                        Margin="0,5,0,0"
-                        Text="Pokaż kolor konta przy ikonie operacji"
-                        Foreground="{ThemeResource Text-1}" />
+                                <ToggleSwitch.OffContent>
+                                    Wyłączone
+                                </ToggleSwitch.OffContent>
 
-                    <ToggleSwitch
-                        x:Name="AccountEllipseVisibilityToggleButton"
-                        Toggled="AccountEllipseVisibilityToggleButton_Toggled"
-                        Style="{StaticResource ToggleSwitchStyle1}">
-                        
-                        <ToggleSwitch.OffContent>
-                            Wyłączone
-                        </ToggleSwitch.OffContent>
+                                <ToggleSwitch.OnContent>
+                                    Włączone
+                                </ToggleSwitch.OnContent>
 
-                        <ToggleSwitch.OnContent>
-                            Włączone
-                        </ToggleSwitch.OnContent>
+                            </ToggleSwitch>
 
-                    </ToggleSwitch>
-                </StackPanel>
+                            <TextBlock
+                                Margin="0,5,0,0"
+                                Text="Pokaż kolor konta przy ikonie operacji"
+                                Foreground="{ThemeResource Text-1}" />
+
+                            <ToggleSwitch
+                                x:Name="AccountEllipseVisibilityToggleButton"
+                                Toggled="AccountEllipseVisibilityToggleButton_Toggled"
+                                Style="{StaticResource ToggleSwitchStyle1}">
+
+                                <ToggleSwitch.OffContent>
+                                    Wyłączone
+                                </ToggleSwitch.OffContent>
+
+                                <ToggleSwitch.OnContent>
+                                    Włączone
+                                </ToggleSwitch.OnContent>
+
+                            </ToggleSwitch>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
             </PivotItem>
             <PivotItem>
                 <PivotItem.Header>

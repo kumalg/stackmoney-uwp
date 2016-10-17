@@ -83,5 +83,10 @@ namespace Finanse.Pages {
 
             Settings.SetAccountEllipseVisibility(AccountEllipseVisibilityToggleButton.IsOn);
         }
+
+        private void ReminderToggleSwitch_Toggled(object sender, RoutedEventArgs e) {
+            if (ReminderStackPanel != null)
+                ReminderStackPanel.Visibility = ((ToggleSwitch)sender).IsOn ? Visibility.Visible : Visibility.Collapsed;
+        }
     }
 }

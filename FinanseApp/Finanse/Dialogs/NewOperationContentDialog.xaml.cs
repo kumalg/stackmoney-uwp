@@ -28,6 +28,7 @@ namespace Finanse.Dialogs {
         Operation editedOperation;
 
         private readonly ObservableCollection<GroupInfoList<Operation>> _source;
+        //private readonly ObservableCollection<OperationPattern> patterns;
 
         string whichOptions;
         string acceptedCostValue = "";
@@ -158,21 +159,21 @@ namespace Finanse.Dialogs {
                 case "edit": {
                         item.Id = editedOperation.Id;
 
-                        GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key == editedOperation.Date);
+                        GroupInfoList<Operation> group = _source.SingleOrDefault(i => ((GroupHeaderByDay)i.Key).date == editedOperation.Date);
 
                         if (item.Date == editedOperation.Date) {
                             group[group.IndexOf(group.Single(i => i.Id == item.Id))] = item;
-                            group.decimalCost += editedOperation.isExpense ? +editedOperation.Cost : -editedOperation.Cost;
-                            group.decimalCost += item.isExpense ? -item.Cost : item.Cost;
-                            group.cost = (group.decimalCost).ToString("C", Settings.GetActualCurrency());
+                            //group.decimalCost += editedOperation.isExpense ? +editedOperation.Cost : -editedOperation.Cost;
+                            //group.decimalCost += item.isExpense ? -item.Cost : item.Cost;
+                            //group.cost = (group.decimalCost).ToString("C", Settings.GetActualCurrency());
                         }
                         else {
                             if (group.Count == 1)
                                 _source.Remove(group);
                             else {
                                 group.Remove(group.Single(i => i.Id == item.Id));
-                                group.decimalCost += editedOperation.isExpense ? +editedOperation.Cost : -editedOperation.Cost;
-                                group.cost = (group.decimalCost).ToString("C", Settings.GetActualCurrency());
+                                //group.decimalCost += editedOperation.isExpense ? +editedOperation.Cost : -editedOperation.Cost;
+                                //group.cost = (group.decimalCost).ToString("C", Settings.GetActualCurrency());
                             }
 
                             AddOperationToList(item);
@@ -224,16 +225,11 @@ namespace Finanse.Dialogs {
 
         private void AddOperationToList(Operation item) {
 
-            GroupInfoList<Operation> group = _source.SingleOrDefault(i => i.Key == item.Date);
+            GroupInfoList<Operation> group = _source.SingleOrDefault(i => ((GroupHeaderByDay)i.Key).date == item.Date);
             if (group == null) {
-
-                DateTime date = Convert.ToDateTime(item.Date);
-
+                
                 GroupInfoList<Operation> newGroup = new GroupInfoList<Operation> {
-                    Key = item.Date,
-                    dayNum = String.Format("{0:dd}", date),
-                    day = String.Format("{0:dddd}", date),
-                    month = String.Format("{0:MMMM yyyy}", date),
+                    Key = new GroupHeaderByDay(item.Date)
                 };
 
                 int i = 0;
@@ -242,16 +238,20 @@ namespace Finanse.Dialogs {
                     bool check = true;
                     newGroup.Insert(0, item);
                     while (check) {
-                        if (Convert.ToDateTime(_source[i].Key) > Convert.ToDateTime(newGroup.Key))
+                        if (Convert.ToDateTime(((GroupHeaderByDay)_source[i].Key).date) > Convert.ToDateTime(((GroupHeaderByDay)newGroup.Key).date))
                             i++;
                         else
                             check = false;
                     }
                 }
+
+                //newGroup.cost = newGroup.Cost;
+
                 _source.Insert(i, newGroup);
             }
             else {
 
+                //group.cost = group.Cost;
                 group.Insert(0, item);
             }
         }

@@ -78,6 +78,7 @@
                     <StackPanel
                         Name="CategoryNameStackPanel"
                         Visibility="Collapsed"
+                        Margin="0,2,0,0"
                         Orientation="Horizontal">
                         <TextBlock
                             Name="Category_OperationTemplate"

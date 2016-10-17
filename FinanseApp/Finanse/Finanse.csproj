@@ -157,7 +157,6 @@
     <Compile Include="EmptyOrFullSelector.cs" />
     <Compile Include="Models\ExpandPanel.cs" />
     <Compile Include="Models\Functions.cs" />
-    <Compile Include="Models\CategoryGroupInfoList.cs" />
     <Compile Include="Models\GroupInfoList.cs" />
     <Compile Include="Models\ItemCollection.cs" />
     <Compile Include="Models\MoneyAccount.cs" />
@@ -175,7 +174,7 @@
       <DependentUpon>PivotHeader.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Settings.cs" />
-    <Compile Include="Models\StoreData.cs" />
+    <Compile Include="Models\OperationData.cs" />
     <Compile Include="Pages\Kategorie.xaml.cs">
       <DependentUpon>Kategorie.xaml</DependentUpon>
     </Compile>
@@ -341,8 +340,8 @@
     <SDKReference Include="Microsoft.VCLibs, Version=14.0">
       <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
     </SDKReference>
-    <SDKReference Include="SQLite.UWP.2015, Version=3.14.1">
-      <Name>SQLite for Universal Windows Platform %28SQLite.UWP.2015, Version=3.14.1%29</Name>
+    <SDKReference Include="SQLite.UWP.2015, Version=3.15.0">
+      <Name>SQLite for Universal Windows Platform</Name>
     </SDKReference>
     <SDKReference Include="WindowsMobile, Version=10.0.14393.0">
       <Name>Windows Mobile Extensions for the UWP</Name>

@@ -45,7 +45,8 @@ namespace Finanse.Elements {
                 return;
 
             if (Settings.GetAccountEllipseVisibility()) {
-                MoneyAccount moneyAccount = Dal.GetAllMoneyAccounts().SingleOrDefault(i => i.Id == Operation.MoneyAccountId);
+
+                MoneyAccount moneyAccount = Dal.GetMoneyAccountById(Operation.MoneyAccountId);
 
                 if (moneyAccount != null)
                     if (!string.IsNullOrEmpty(moneyAccount.Color)) {
@@ -59,13 +60,15 @@ namespace Finanse.Elements {
 
             /* WCHODZI IKONKA KATEGORII */
             Icon_OperationTemplate.FontFamily = new FontFamily(Settings.GetActualIconStyle());
+            Icon_OperationTemplate.Opacity = 1;
+            Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text"];
 
             if (cat != null && subCat == null) {
                 Ellipse_OperationTemplate.Fill = new SolidColorBrush(Functions.GetSolidColorBrush(cat.Color).Color);
                 Icon_OperationTemplate.Glyph = cat.Icon;
 
                 if (String.IsNullOrEmpty(Operation.Title)) {
-                    Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text-2"];
+                    Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text-1"];
                     Title_OperationTemplate.Text = cat.Name;
                 }
             }
@@ -75,13 +78,16 @@ namespace Finanse.Elements {
                 Icon_OperationTemplate.Glyph = subCat.Icon;
 
                 if (String.IsNullOrEmpty(Operation.Title)) {
-                    Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text-2"];
+                    Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text-1"];
                     Title_OperationTemplate.Text = subCat.Name;
                 }
             }
 
-            else
+            else {
+                Ellipse_OperationTemplate.Fill = (SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"];
+                Icon_OperationTemplate.Glyph = ((TextBlock)Application.Current.Resources["DefaultEllipseIcon"]).Text;
                 Icon_OperationTemplate.Opacity = 0.2;
+            }
 
             /* WYGLĄD KOSZTU (CZERWONY Z MINUSEM CZY ZIELONY Z PLUSEM) */
             if (Operation.isExpense) {
@@ -95,6 +101,9 @@ namespace Finanse.Elements {
                 Cost_OperationTemplate.Text = Operation.Cost.ToString("C", Settings.GetActualCurrency());
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"];
             }
+
+            SubCategory_OperationTemplate.Text = "";
+            Category_OperationTemplate.Text = "";
 
             /* WYGLĄD NAZWY KATEGORII */
             if (Settings.GetCategoryNameVisibility()) {

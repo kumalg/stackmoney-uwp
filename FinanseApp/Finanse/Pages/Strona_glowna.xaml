@@ -58,7 +58,7 @@
                             <StackPanel
                                 Width="48">
                                 <TextBlock
-                                    Text="{Binding dayNum}"
+                                    Text="{Binding Key.dayNum00}"
                                     FontSize="30"
                                     Foreground="{ThemeResource Text-1}"
                                     FontWeight="SemiLight"
@@ -70,10 +70,10 @@
                                 Margin="16,0,0,0">
                                 <TextBlock
                                     Foreground="{ThemeResource Text-1}"
-                                    Text="{Binding day}"
+                                    Text="{Binding Key.day}"
                                     FontSize="12" />
                                 <TextBlock
-                                    Text="{Binding month}"
+                                    Text="{Binding Key.month}"
                                     FontSize="12"
                                     Foreground="{ThemeResource Text-2}" />
                             </StackPanel>
@@ -114,12 +114,32 @@
         <DataTemplate
             x:Name="ByDateGroupItemTemplate">
             <!--Text="{Binding Group.dayNum}"-->
-            <TextBlock
-                Text="1"
-                FontSize="22"
-                Foreground="{ThemeResource Text-1}"
-                FontWeight="SemiLight"
-                VerticalAlignment="Center" />
+            <StackPanel
+                Orientation="Horizontal"
+                Margin="16,0,0,5">
+                <StackPanel
+                    Width="48">
+                    <TextBlock
+                        Text="{Binding Group.Key.dayNum}"
+                        FontSize="30"
+                        Foreground="{ThemeResource Text-1}"
+                        FontWeight="SemiLight"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                </StackPanel>
+                <StackPanel
+                    VerticalAlignment="Center"
+                    Margin="16,0,0,0">
+                    <TextBlock
+                        Foreground="{ThemeResource Text-1}"
+                        Text="{Binding Group.Key.day}"
+                        FontSize="12" />
+                    <TextBlock
+                        Text="{Binding Group.Key.month}"
+                        FontSize="12"
+                        Foreground="{ThemeResource Text-2}" />
+                </StackPanel>
+            </StackPanel>
         </DataTemplate>
 
         <ItemsPanelTemplate
@@ -187,8 +207,8 @@
                                     <FontIcon
                                         Grid.Column="0"
                                         Foreground="{ThemeResource Text-2}"
-                                        FontFamily="{Binding iconStyle}"
-                                        Glyph="{Binding icon}"
+                                        FontFamily="{Binding Key.iconStyle}"
+                                        Glyph="{Binding Key.icon}"
                                         FontSize="16" />
                                 </Grid>
 
@@ -196,7 +216,7 @@
                                     Foreground="{ThemeResource Text-1}"
                                     Margin="15,0"
                                     VerticalAlignment="Center"
-                                    Text="{Binding Key}"
+                                    Text="{Binding Key.name}"
                                     FontSize="13" />
 
                             </StackPanel>
@@ -237,18 +257,18 @@
                     <Rectangle
                         RadiusX="5"
                         RadiusY="5"
-                        Fill="{Binding Group.color}" />
+                        Fill="{Binding Group.Key.color}" />
                     <FontIcon
                         Grid.Column="0"
                         FontFamily="Segoe UI"
-                        Glyph="{Binding Group.icon}"
+                        Glyph="{Binding Group.Key.icon}"
                         FontSize="24" />
                 </Grid>
 
                 <TextBlock
                     Margin="20,0"
                     VerticalAlignment="Center"
-                    Text="{Binding Group.Key}"
+                    Text="{Binding Group.Key.name}"
                     FontSize="16" />
 
             </StackPanel>
@@ -256,6 +276,7 @@
 
         <CollectionViewSource
             x:Name="ContactsCVS"
+            Source="{Binding groupsByDay, Mode=OneWay}"
             IsSourceGrouped="True" />
         <CollectionViewSource
             x:Name="CategorizedCVS"

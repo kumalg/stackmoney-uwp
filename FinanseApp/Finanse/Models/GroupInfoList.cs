@@ -10,29 +10,55 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
 namespace Finanse.Models {
-    public class GroupInfoList<T> : ObservableCollection<T> {
-        public string Key { get; set; }
-        public string dayNum { get; set; }
-        public string day { get; set; }
-        public string month { get; set; }
-        public string cost { get; set; }
-        public decimal decimalCost { get; set; }
+    public class GroupInfoList<T> : ObservableCollection<Operation> {
+        public object Key { get; set; }
+        //private string _cost;
+        private decimal _decimalCost;
 
-        public new IEnumerator<T> GetEnumerator() {
+        public string cost {
+            get {
+                return decimalCost.ToString("C", Settings.GetActualCurrency());
+            }
+        }
+
+        public decimal decimalCost {
+            get {
+                _decimalCost = 0;
+
+                foreach (var item in this.Items)
+                    _decimalCost += item.isExpense ? -item.Cost : item.Cost;
+
+                return _decimalCost;
+            }
+        }
+
+        public new IEnumerator<Operation> GetEnumerator() {
             return base.GetEnumerator();
         }
     }
 
     class GroupHeaderByCategory {
-        public OperationCategory category { get; set; }
-        public string cost { get; set; }
+        public string name { get; set; }
+        public string icon { get; set; }
+        public FontFamily iconStyle { get; set; }
+        public string color { get; set; }
         public double opacity { get; set; }
     }
     class GroupHeaderByDay {
+        public string date { get; set; }
         public string dayNum { get; set; }
+        public string dayNum00 { get; set; }
         public string day { get; set; }
         public string month { get; set; }
-        public string cost { get; set; }
-        public decimal decimalCost { get; set; }
+
+        public GroupHeaderByDay(string date) {
+            DateTime dt = Convert.ToDateTime(date);
+
+            this.date = date;
+            dayNum00 = String.Format("{0:dd}", dt);
+            dayNum = dt.Day.ToString();
+            day = String.Format("{0:dddd}", dt);
+            month = String.Format("{0:MMMM yyyy}", dt);
+        }  
     }
 }

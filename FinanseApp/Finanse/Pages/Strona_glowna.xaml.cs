@@ -37,9 +37,9 @@ namespace Finanse.Pages {
         private FontFamily iconStyle = new FontFamily(Settings.GetActualIconStyle());
         private List<int> visiblePayFormList = new List<int>();
 
-        private StoreData storeData = new StoreData(DateTime.Today.Month, DateTime.Today.Year, false, null);
+        private OperationData storeData = new OperationData(DateTime.Today.Month, DateTime.Today.Year, false, null);
         private ObservableCollection<GroupInfoList<Operation>> groupsByDay;
-        private ObservableCollection<CategoryGroupInfoList<Operation>> groupsByCategory;
+        private ObservableCollection<GroupInfoList<Operation>> groupsByCategory;
 
         decimal actualMoney;
         int actualMonth;
@@ -114,7 +114,7 @@ namespace Finanse.Pages {
         private async void DetailsButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new OperationDetailsContentDialog((Operation)datacontext, "");
+            var ContentDialogItem = new OperationDetailsContentDialog(groupsByDay, (Operation)datacontext, "");
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -157,7 +157,7 @@ namespace Finanse.Pages {
             if (e.SourceItem.Item.GetType() == typeof(HeaderItem)) {
                 HeaderItem hi = (HeaderItem)e.SourceItem.Item;
 
-                var group = groupsByDay.SingleOrDefault(d => Convert.ToDateTime(d.Key).Day.ToString() == hi.Day);
+                var group = groupsByDay.SingleOrDefault(d => ((GroupHeaderByDay)d.Key).dayNum == hi.Day);
 
                 if (group != null)
                     e.DestinationItem = new SemanticZoomLocation() { Item = group };
@@ -210,7 +210,7 @@ namespace Finanse.Pages {
 
             if ((actualMonth <= DateTime.Today.Month && actualYear <= DateTime.Today.Year) || actualYear < DateTime.Today.Year) {
 
-                storeData = new StoreData(actualMonth, actualYear, false, visiblePayFormList);
+                storeData = new OperationData(actualMonth, actualYear, false, visiblePayFormList);
 
                 ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
                 if (actualYear != DateTime.Today.Year)
@@ -218,7 +218,12 @@ namespace Finanse.Pages {
             }
             else {
 
-                storeData = new StoreData(actualMonth, actualYear, true, visiblePayFormList);
+                storeData = new OperationData(actualMonth, actualYear, true, visiblePayFormList);
+                /*
+                OperacjeListViewGroup.ItemTemplate = ByDateGroupItemTemplate;
+                OperacjeListViewGroup.ItemTemplateSelector = null;
+                OperacjeListViewGroup.ItemsSource = ContactsCVS.View.CollectionGroups;
+                */
 
                 ActualMonthText.Text = "Planowane wydatki";
             }
@@ -311,7 +316,7 @@ namespace Finanse.Pages {
         private async void OperacjeListView_ItemClick(object sender, ItemClickEventArgs e) {
             Operation thisOperation = (Operation)e.ClickedItem;
 
-            var ContentDialogItem = new OperationDetailsContentDialog(thisOperation, "");
+            var ContentDialogItem = new OperationDetailsContentDialog(groupsByDay, thisOperation, "");
 
             var result = await ContentDialogItem.ShowAsync();
         }

@@ -76,7 +76,7 @@ namespace Finanse.Pages {
         private async void DetailsButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new OperationDetailsContentDialog((Operation)datacontext, "pattern");
+            var ContentDialogItem = new OperationDetailsContentDialog(null, (Operation)datacontext, "pattern");
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -99,7 +99,7 @@ namespace Finanse.Pages {
         private async void SzablonyListView_ItemClick(object sender, ItemClickEventArgs e) {
             Operation thisOperation = (Operation)e.ClickedItem;
 
-            var ContentDialogItem = new OperationDetailsContentDialog(thisOperation, "");
+            var ContentDialogItem = new OperationDetailsContentDialog(null, thisOperation, "");
 
             var result = await ContentDialogItem.ShowAsync();
         }

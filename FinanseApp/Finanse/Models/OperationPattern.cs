@@ -80,6 +80,7 @@ namespace Finanse.Models {
                     _moneyAccountId = value;
             }
         }
+
         /*
          * public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 

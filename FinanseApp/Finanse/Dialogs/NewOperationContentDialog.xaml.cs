@@ -28,25 +28,25 @@ namespace Finanse.Dialogs {
         Operation editedOperation;
 
         private readonly ObservableCollection<GroupInfoList<Operation>> _source;
-        //private readonly ObservableCollection<OperationPattern> patterns;
+        private readonly ObservableCollection<OperationPattern> patterns;
 
-        string whichOptions;
+        bool isPatternEditing = false;
+        //string whichOptions;
         string acceptedCostValue = "";
         int whereIsSelection;
 
         bool isUnfocused = true;
 
-        public NewOperationContentDialog(ObservableCollection<GroupInfoList<Operation>> _source, Operation editedOperation, string whichOptions) {
+        public NewOperationContentDialog(ObservableCollection<GroupInfoList<Operation>> _source, Operation editedOperation) {
 
             this.InitializeComponent();
 
             this.editedOperation = editedOperation;
-            this.whichOptions = whichOptions;
             this._source = _source;
 
             IsPrimaryButtonEnabled = false;
 
-            DateValue.MaxDate = DateTime.Today;
+            DateValue.MaxDate = Settings.GetMaxDate();
 
             Expense_RadioButton.IsChecked = true;
 
@@ -60,21 +60,39 @@ namespace Finanse.Dialogs {
                 });
             }
 
-            switch (whichOptions) {
+            Title = "Edycja operacji";
+            PrimaryButtonText = "Zapisz";
+            SaveAsAssetTitle.Visibility = Visibility.Collapsed;
+            SaveAsAssetToggle.Visibility = Visibility.Collapsed;
 
-                case "edit": {
+            EditAndPatternSetters();
+            DateValue.Date = Convert.ToDateTime(editedOperation.Date);
+        }
+        public NewOperationContentDialog(ObservableCollection<OperationPattern> patterns, Operation editedOperation, bool isPatternEditing) {
 
-                        Title = "Edycja operacji";
-                        PrimaryButtonText = "Zapisz";
-                        SaveAsAssetTitle.Visibility = Visibility.Collapsed;
-                        SaveAsAssetToggle.Visibility = Visibility.Collapsed;
+            this.InitializeComponent();
 
-                        EditAndPatternSetters();
-                        DateValue.Date = Convert.ToDateTime(editedOperation.Date);
-                        break;
-                    };
+            this.editedOperation = editedOperation;
+            this.isPatternEditing = isPatternEditing;
+            this.patterns = patterns;
 
-                case "editpattern": {
+            IsPrimaryButtonEnabled = false;
+
+            Expense_RadioButton.IsChecked = true;
+
+            SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
+
+            foreach (MoneyAccount account in Dal.GetAllMoneyAccounts()) {
+
+                PayFormValue.Items.Add(new ComboBoxItem {
+                    Content = account.Name,
+                    Tag = account.Id
+                });
+            }
+
+            switch (isPatternEditing) {
+
+                case true: {
 
                         Title = "Edycja szablonu";
                         PrimaryButtonText = "Zapisz";
@@ -86,21 +104,9 @@ namespace Finanse.Dialogs {
                         break;
                     };
 
-                case "pattern": {
-
-                        EditAndPatternSetters();
-                        DateValue.Date = DateTime.Today;
-
-                        if (PayFormValue.Items.Count > 0)
-                            PayFormValue.SelectedIndex = 0;
-
-                        break;
-                    };
-
                 default: {
 
-                        SubCategoryValue.IsEnabled = false;
-                        DateValue.Date = DateTime.Today;
+                        EditAndPatternSetters();
 
                         if (PayFormValue.Items.Count > 0)
                             PayFormValue.SelectedIndex = 0;
@@ -143,84 +149,79 @@ namespace Finanse.Dialogs {
             if (SubCategoryValue.SelectedIndex != -1)
                 subCategoryId = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
 
-            Operation item = new Operation {
-                Id = 0,
-                Title = NameValue.Text,
-                isExpense = (bool)Expense_RadioButton.IsChecked,
-                Cost = decimal.Parse(acceptedCostValue),
-                CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
-                SubCategoryId = subCategoryId,
-                Date = String.Format("{0:yyyy/MM/dd}", DateValue.Date),
-                MoreInfo = MoreInfoValue.Text,
-                MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
-            };
+            if (_source != null) {
 
-            switch (whichOptions) {
-                case "edit": {
-                        item.Id = editedOperation.Id;
+                Operation item = new Operation {
+                    Id = editedOperation.Id,
+                    Date = String.Format("{0:yyyy/MM/dd}", DateValue.Date),
+                    Title = NameValue.Text,
+                    Cost = decimal.Parse(acceptedCostValue),
+                    isExpense = (bool)Expense_RadioButton.IsChecked,
+                    CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
+                    SubCategoryId = subCategoryId,
+                    MoreInfo = MoreInfoValue.Text,
+                    MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
+                };
 
-                        GroupInfoList<Operation> group = _source.SingleOrDefault(i => ((GroupHeaderByDay)i.Key).date == editedOperation.Date);
+                GroupInfoList<Operation> group = _source.SingleOrDefault(i => ((GroupHeaderByDay)i.Key).date == editedOperation.Date);
 
-                        if (item.Date == editedOperation.Date) {
-                            group[group.IndexOf(group.Single(i => i.Id == item.Id))] = item;
-                            //group.decimalCost += editedOperation.isExpense ? +editedOperation.Cost : -editedOperation.Cost;
-                            //group.decimalCost += item.isExpense ? -item.Cost : item.Cost;
-                            //group.cost = (group.decimalCost).ToString("C", Settings.GetActualCurrency());
-                        }
-                        else {
-                            if (group.Count == 1)
-                                _source.Remove(group);
-                            else {
-                                group.Remove(group.Single(i => i.Id == item.Id));
-                                //group.decimalCost += editedOperation.isExpense ? +editedOperation.Cost : -editedOperation.Cost;
-                                //group.cost = (group.decimalCost).ToString("C", Settings.GetActualCurrency());
-                            }
+                if (item.Date == editedOperation.Date)
+                    group[group.IndexOf(group.Single(i => i.Id == item.Id))] = item;
 
-                            AddOperationToList(item);
-                        }
+                else {
 
-                        Dal.SaveOperation(item);
+                    if (group.Count == 1)
+                        _source.Remove(group);
 
-                        break;
-                    }
-                case "editpattern": {
-                        OperationPattern itemPattern = new OperationPattern {
-                            Id = editedOperation.Id,
-                            Title = NameValue.Text,
-                            isExpense = (bool)Expense_RadioButton.IsChecked,
-                            Cost = decimal.Parse(acceptedCostValue),
-                            CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
-                            SubCategoryId = subCategoryId,
-                            MoreInfo = MoreInfoValue.Text,
-                            MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
-                        };
+                    else
+                        group.Remove(group.Single(i => i.Id == item.Id));
 
-                        Dal.SaveOperationPattern(itemPattern);
-                        break;
-                    }
-                default: {
+                    AddOperationToList(item);
+                }
 
-                        AddOperationToList(item);
-
-                        Dal.SaveOperation(item);
-
-                        if (SaveAsAssetToggle.IsOn) {
-                            OperationPattern itemPattern = new OperationPattern {
-                                Id = 0,
-                                Title = NameValue.Text,
-                                Cost = decimal.Parse(acceptedCostValue),
-                                isExpense = (bool)Expense_RadioButton.IsChecked,
-                                CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
-                                SubCategoryId = subCategoryId,
-                                MoreInfo = MoreInfoValue.Text,
-                                MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
-                            };
-
-                            Dal.SaveOperationPattern(itemPattern);
-                        }
-                        break;
-                    }
+                Dal.SaveOperation(item);
             }
+
+            else if (isPatternEditing) {
+
+                OperationPattern itemPattern = new OperationPattern {
+                    Id = editedOperation.Id,
+                    Title = NameValue.Text,
+                    Cost = decimal.Parse(acceptedCostValue),
+                    isExpense = (bool)Expense_RadioButton.IsChecked,
+                    CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
+                    SubCategoryId = subCategoryId,
+                    MoreInfo = MoreInfoValue.Text,
+                    MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
+                };
+
+                patterns[patterns.IndexOf(patterns.SingleOrDefault(i => i.Id == editedOperation.Id))] = itemPattern;
+
+                Dal.SaveOperationPattern(itemPattern);
+            }
+            /*
+            else if (!isPatternEditing) {
+
+                AddOperationToList((Operation)itemPattern);
+
+                Dal.SaveOperation((Operation)itemPattern);
+
+                if (SaveAsAssetToggle.IsOn) {
+                    /*
+                    OperationPattern itemPattern = new OperationPattern {
+                        Id = 0,
+                        Title = NameValue.Text,
+                        Cost = decimal.Parse(acceptedCostValue),
+                        isExpense = (bool)Expense_RadioButton.IsChecked,
+                        CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
+                        SubCategoryId = subCategoryId,
+                        MoreInfo = MoreInfoValue.Text,
+                        MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
+                    };
+
+                    Dal.SaveOperationPattern(itemPattern);
+                }
+            }*/
         }
 
         private void AddOperationToList(Operation item) {
@@ -413,7 +414,9 @@ namespace Finanse.Dialogs {
         private async void UsePatternButton_Click(object sender, RoutedEventArgs e) {
             Hide();
 
-            var ContentDialogItem = new OperationPatternsContentDialog();
+            Operation selectedOperation = null;
+
+            var ContentDialogItem = new OperationPatternsContentDialog(selectedOperation);
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -421,7 +424,7 @@ namespace Finanse.Dialogs {
         private void UsePatternButton_Loading(FrameworkElement sender, object args) {
             Button yco = sender as Button;
 
-            if (whichOptions == "edit")
+            //if (whichOptions == "edit")
                 yco.Visibility = Visibility.Collapsed;
         }
 

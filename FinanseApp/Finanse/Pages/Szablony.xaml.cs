@@ -25,7 +25,7 @@ namespace Finanse.Pages {
 
     public sealed partial class Szablony : Page {
 
-        public ObservableCollection<Operation> OperationPatterns = new ObservableCollection<Operation>();
+        public ObservableCollection<OperationPattern> OperationPatterns = new ObservableCollection<OperationPattern>();
 
         public Szablony() {
 
@@ -60,7 +60,7 @@ namespace Finanse.Pages {
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new Delete_ContentDialog(null, (Operation)datacontext,"pattern");
+            var ContentDialogItem = new Delete_ContentDialog(null, (Operation)datacontext, "pattern");
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -68,7 +68,7 @@ namespace Finanse.Pages {
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new NewOperationContentDialog(null, (Operation)datacontext, "editpattern");
+            var ContentDialogItem = new NewOperationContentDialog(OperationPatterns, (Operation)datacontext, true);
 
             var result = await ContentDialogItem.ShowAsync();
         }
@@ -99,7 +99,7 @@ namespace Finanse.Pages {
         private async void SzablonyListView_ItemClick(object sender, ItemClickEventArgs e) {
             Operation thisOperation = (Operation)e.ClickedItem;
 
-            var ContentDialogItem = new OperationDetailsContentDialog(null, thisOperation, "");
+            var ContentDialogItem = new OperationDetailsContentDialog(null, thisOperation, "pattern");
 
             var result = await ContentDialogItem.ShowAsync();
         }

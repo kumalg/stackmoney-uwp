@@ -7,9 +7,9 @@
     
     <SolidColorBrush x:Key="DisabledColorStyle" Color="White" Opacity="0.2"/>
     
-    <SolidColorBrush x:Key="GreenColorStyle" Color="#3EB93E"/>
+    <SolidColorBrush x:Key="GreenColorStyle" Color="#34a159"/>
 
-    <SolidColorBrush x:Key="RedColorStyle" Color="#FF3B3B"/>
+    <SolidColorBrush x:Key="RedColorStyle" Color="#e04967"/>
     
     <SolidColorBrush x:Key="GreyColorStyle" Color="#23232e" />
     
@@ -46,9 +46,9 @@
         x:Key="DefaultEllipseColor"
         Color="#2e2f43" />
    
-    <TextBlock
+    <FontIcon
         x:Key="DefaultEllipseIcon"
-        Text="🏴"
+        Glyph="🏴"
         FontFamily="Segoe UI" />
 
     <FontFamily
@@ -85,6 +85,22 @@
     <!--*****************************************
     BAZA KOLORÓW DO KATEGORII
     ******************************************-->
+    <ResourceDictionary x:Key="ColorBase">
+        <SolidColorBrush x:Name="Blue" x:Key="a" Color="#02b0e7" />
+        
+	    <SolidColorBrush x:Name="Cyan" x:Key="b" Color="#3dc6ac" />
+                
+	    <SolidColorBrush x:Name="Green" x:Key="c" Color="#56af5b" />
+        
+	    <SolidColorBrush x:Name="Yellow" x:Key="e" Color="#e7c64a" />
+        
+	    <SolidColorBrush x:Name="Red" x:Key="g" Color="#e04967" />
+
+	    <SolidColorBrush x:Name="Pink" x:Key="h" Color="#b952c2" />
+        
+	    <SolidColorBrush x:Name="Violet" x:Key="i" Color="#7144b5" />
+    </ResourceDictionary>
+    <!--
     <ResourceDictionary x:Key="ColorBase">
         <SolidColorBrush x:Name="Blue1" x:Key="a" Color="#02b0e7" />
         <SolidColorBrush x:Name="Blue2" x:Key="b" Color="#018dcc" />
@@ -130,12 +146,14 @@
 	    <SolidColorBrush x:Name="VioletXBlue2" x:Key="wk" Color="#471ad6" />
 	    <SolidColorBrush x:Name="VioletXBlue3" x:Key="wl" Color="#3a1d95" />
     </ResourceDictionary>
-
+-->
     
     <!--*****************************************
     BAZA IKON DO KATEGORII
     ******************************************-->
-    <ResourceDictionary x:Key="IconBase">
+    <ResourceDictionary
+        x:Key="IconBase">
+        <!--
         <TextBlock x:Key="Pad2" Text="😂" FontFamily="Segoe UI" />
         <TextBlock x:Key="Keyboard2" Text="🍔" FontFamily="Segoe UI" />
        
@@ -160,13 +178,27 @@
         <TextBlock x:Key="Camera" Text="&#xE114;" FontFamily="Segoe MDL2 Assets" />
         <TextBlock x:Key="Camera2" Text="&#xE12D;" FontFamily="Segoe MDL2 Assets" />
         <TextBlock x:Key="VideoCamera" Text="&#xE116;" FontFamily="Segoe MDL2 Assets" />
+        -->
+        
+        <FontIcon x:Key="FontIcon_1" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_2" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_3" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_4" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_5" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_6" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_7" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_8" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_9" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_10" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_11" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_12" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_13" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        
     </ResourceDictionary>
 
 
 
-    <Style
-        x:Key="DetailsIconStyle"
-        TargetType="FontIcon">
+    <Style x:Key="DetailsIconStyle" TargetType="FontIcon">
         <Setter
             Property="Foreground"
             Value="{ThemeResource Text-2}" />
@@ -203,9 +235,7 @@
         <Setter Property="Margin" Value="16,0,0,0"/>
     </Style>
 
-    <Style
-        x:Key="HamburgerRadioButton"
-        TargetType="RadioButton">
+    <Style x:Key="HamburgerRadioButton" TargetType="RadioButton">
         <Setter
             Property="Background"
             Value="Transparent" />
@@ -363,9 +393,7 @@
     <!--*****************************************
     PIVOT MENU / DO WYWALENIA NIEBAWEM
     ******************************************-->
-    <Style
-        x:Key="PivotStyleDynamicHeader"
-        TargetType="Pivot">
+    <Style x:Key="PivotStyleDynamicHeader" TargetType="Pivot">
         <Setter
             Property="Margin"
             Value="0" />
@@ -845,9 +873,7 @@
     <!--*****************************************
     RADIO BUTTON KOLORÓW / DODAWANIE KATEGORII
     ******************************************-->
-    <Style
-        x:Key="ColorRadioButton"
-        TargetType="RadioButton">
+    <Style x:Key="ColorRadioButton" TargetType="RadioButton">
         <Setter
             Property="Background"
             Value="Transparent" />
@@ -964,9 +990,7 @@
     <!--*****************************************
     RADIO BUTTON IKON / DODAWANIE KATEGORII
     ******************************************-->
-    <Style
-        x:Key="IconRadioButton"
-        TargetType="RadioButton">
+    <Style x:Key="IconRadioButton" TargetType="RadioButton">
         <Setter
             Property="Background"
             Value="Transparent" />
@@ -1096,9 +1120,7 @@
     <!--*****************************************
     PRZYCISK Z DOLNĄ KRAWĘDZIĄ
     ******************************************-->
-    <Style
-        x:Key="ButtonWithBottomBorder"
-        TargetType="Button">
+    <Style x:Key="ButtonWithBottomBorder" TargetType="Button">
         <Setter
             Property="Background"
             Value="Transparent" />
@@ -1239,9 +1261,7 @@
     <!--*****************************************
     GridViewItemStyle1
     ******************************************-->
-    <Style
-        x:Key="GridViewItemStyle1"
-        TargetType="GridViewItem">
+    <Style x:Key="GridViewItemStyle1" TargetType="GridViewItem">
         <Setter
             Property="FontFamily"
             Value="{ThemeResource ContentControlThemeFontFamily}" />
@@ -1315,9 +1335,7 @@
     <!--*****************************************
     MyContentDialog
     ******************************************-->
-    <Style
-        x:Key="MyContentDialog"
-        TargetType="ContentDialog" >
+    <Style x:Key="MyContentDialog" TargetType="ContentDialog" >
         <Setter
             Property="Foreground"
             Value="{ThemeResource SystemControlPageTextBaseHighBrush}" />
@@ -1477,9 +1495,7 @@
     <!--*****************************************
     MyContentDialog2
     ******************************************-->
-    <Style
-        x:Key="MyContentDialog2"
-        TargetType="ContentDialog">
+    <Style x:Key="MyContentDialog2" TargetType="ContentDialog">
         <Setter
             Property="Foreground"
             Value="{ThemeResource SystemControlPageTextBaseHighBrush}" />
@@ -1651,9 +1667,7 @@
     <!--*****************************************
     FullScreenContentDialogStyle
     ******************************************-->
-    <Style
-        x:Key="FullScreenContentDialogStyle"
-        TargetType="ContentDialog">
+    <Style x:Key="FullScreenContentDialogStyle" TargetType="ContentDialog">
         <Setter
             Property="Template">
             <Setter.Value>
@@ -1761,9 +1775,7 @@
     TextBoxStyle1
     ******************************************-->
 
-    <Style
-        x:Key="TextBoxStyle1"
-        TargetType="TextBox">
+    <Style x:Key="TextBoxStyle1" TargetType="TextBox">
         <Setter
             Property="MinWidth"
             Value="{ThemeResource TextControlThemeMinWidth}" />
@@ -2087,9 +2099,7 @@
     ComboBoxStyle1
     ******************************************-->
     
-    <Style
-        x:Key="ComboBoxStyle1"
-        TargetType="ComboBox">
+    <Style x:Key="ComboBoxStyle1" TargetType="ComboBox">
         <Setter
             Property="Padding"
             Value="12,5,0,7" />
@@ -2457,9 +2467,7 @@
     ToggleSwitchStyle1
     ******************************************-->
 
-    <Style
-        x:Key="ToggleSwitchStyle1"
-        TargetType="ToggleSwitch">
+    <Style x:Key="ToggleSwitchStyle1" TargetType="ToggleSwitch">
         <Setter
             Property="Foreground"
             Value="{ThemeResource Text}" />
@@ -2958,9 +2966,7 @@
     PIVOT 
     ******************************************-->
 
-    <Style
-        x:Key="PivotStyle"
-        TargetType="Pivot">
+    <Style x:Key="PivotStyle" TargetType="Pivot">
         <Setter
             Property="ItemsPanel">
             <Setter.Value>
@@ -3391,9 +3397,7 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="PivotHeaderItemStyle"
-        TargetType="PivotHeaderItem">
+    <Style x:Key="PivotHeaderItemStyle" TargetType="PivotHeaderItem">
          <Setter
             Property="Template">
 
@@ -3675,10 +3679,7 @@
         </Setter>
     </Style>
 
-
-    <Style
-        x:Key="ButtonStyle1"
-        TargetType="Button">
+    <Style x:Key="ButtonStyle1" TargetType="Button">
         <Setter
             Property="Background"
             Value="{ThemeResource ButtonBackground}" />
@@ -3821,10 +3822,7 @@
         </Setter>
     </Style>
 
-
-    <Style
-        x:Key="MyMenuFlyoutItem"
-        TargetType="MenuFlyoutItem">
+    <Style x:Key="MyMenuFlyoutItem" TargetType="MenuFlyoutItem">
         <Setter
             Property="Background"
             Value="{ThemeResource MenuFlyoutItemBackground}" />
@@ -3990,9 +3988,7 @@
         </Setter>
     </Style>
     
-    <Style
-        x:Key="MyMenyFlyoutPresenter"
-        TargetType="MenuFlyoutPresenter">
+    <Style x:Key="MyMenyFlyoutPresenter" TargetType="MenuFlyoutPresenter">
         <Setter
             Property="BorderThickness"
             Value="0" />
@@ -4005,9 +4001,7 @@
     CommandBar Menu
     **************************************-->
 
-    <Style
-        x:Key="lala"
-        TargetType="CommandBar">
+    <Style x:Key="lala" TargetType="CommandBar">
         <Setter
             Property="Background"
             Value="{ThemeResource CommandBarBackground}" />
@@ -4620,9 +4614,7 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="MyAppBarRadioButton"
-        TargetType="RadioButton">
+    <Style x:Key="MyAppBarRadioButton" TargetType="RadioButton">
         <Setter
             Property="Background"
             Value="{ThemeResource RadioButtonBackground}" />

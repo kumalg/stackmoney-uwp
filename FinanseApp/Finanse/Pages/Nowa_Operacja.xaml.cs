@@ -33,9 +33,8 @@ namespace Finanse.Pages {
 
             this.InitializeComponent();
 
-            //DateValue.MaxDate = DateTime.Today;
             DateValue.Date = DateTime.Today;
-            DateValue.MaxDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month)).AddMonths(Settings.GetMaxFutureMonths());
+            DateValue.MaxDate = Settings.GetMaxDate();
 
             Expense_RadioButton.IsChecked = true;
 
@@ -211,9 +210,37 @@ namespace Finanse.Pages {
 
         private async void UsePatternButton_Click(object sender, RoutedEventArgs e) {
 
-            var ContentDialogItem = new OperationPatternsContentDialog();
+            Operation selectedOperation = null;
+
+            var ContentDialogItem = new OperationPatternsContentDialog(selectedOperation);
 
             var result = await ContentDialogItem.ShowAsync();
+
+            selectedOperation = ContentDialogItem.setOperation();
+
+            if (selectedOperation != null)
+                setValuesFromPattern(selectedOperation);
+        }
+
+        private void setValuesFromPattern(Operation selectedOperation) {
+            //CostValue.Text = selectedOperation.Cost;
+
+            if (selectedOperation.isExpense)
+                Expense_RadioButton.IsChecked = true;
+            else
+                Income_RadioButton.IsChecked = true;
+
+            CostValue.Text = selectedOperation.Cost.ToString("C", Settings.GetActualCurrency());
+            acceptedCostValue = selectedOperation.Cost.ToString();
+
+            NameValue.Text = selectedOperation.Title;
+
+            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == selectedOperation.CategoryId);
+            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == selectedOperation.SubCategoryId);
+            PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == selectedOperation.MoneyAccountId);
+
+            if (selectedOperation.MoreInfo != null)
+                MoreInfoValue.Text = selectedOperation.MoreInfo;
         }
 
         private void CostValue_TextChanged(object sender, TextChangedEventArgs e) {

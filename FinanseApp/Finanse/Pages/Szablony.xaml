@@ -53,7 +53,7 @@
 
             <ListView.ItemTemplate>
                 <DataTemplate
-                    x:DataType="models:Operation">
+                    x:DataType="models:OperationPattern">
 
                     <Grid
                         Background="Transparent"

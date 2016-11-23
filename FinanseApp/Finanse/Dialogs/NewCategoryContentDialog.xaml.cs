@@ -95,8 +95,8 @@ namespace Finanse.Dialogs {
                         Id = 0,
                         Name = NameValue.Text,
                         Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                        //Icon = CategoryIcon.Glyph,
-                        Icon = Icon2Value.Text,
+                        Icon = CategoryIcon.Glyph,
+                        //Icon = Icon2Value.Text,
                         BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
@@ -110,8 +110,8 @@ namespace Finanse.Dialogs {
                     newOperationCategoryItem = new OperationCategory {
                         Name = NameValue.Text,
                         Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                        //Icon = CategoryIcon.Glyph,
-                        Icon = Icon2Value.Text,
+                        Icon = CategoryIcon.Glyph,
+                        //Icon = Icon2Value.Text,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
@@ -129,13 +129,13 @@ namespace Finanse.Dialogs {
                         Id = editedCategory.Id,
                         Name = NameValue.Text,
                         Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                        //Icon = CategoryIcon.Glyph,
-                        Icon = Icon2Value.Text,
+                        Icon = CategoryIcon.Glyph,
+                        //Icon = Icon2Value.Text,
                         BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
-                    Dal.SaveOperationSubCategory(newOperationSubCategoryItem);
+                    Dal.SaveOperationSubCategory(editedOperationSubCategoryItem);
 
                     if (editedBossCategoryId == (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag) {
                         ObservableCollection<OperationSubCategory> subCategories = OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedBossCategoryId))].subCategories;
@@ -156,8 +156,8 @@ namespace Finanse.Dialogs {
                     editedOperationCategoryItem = new OperationCategory {
                         Name = NameValue.Text,
                         Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                        //Icon = CategoryIcon.Glyph,
-                        Icon = Icon2Value.Text,
+                        Icon = CategoryIcon.Glyph,
+                        //Icon = Icon2Value.Text,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
@@ -172,8 +172,8 @@ namespace Finanse.Dialogs {
                     editedOperationSubCategoryItem = new OperationSubCategory {
                         Name = NameValue.Text,
                         Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                        //Icon = CategoryIcon.Glyph,
-                        Icon = Icon2Value.Text,
+                        Icon = CategoryIcon.Glyph,
+                        //Icon = Icon2Value.Text,
                         BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
@@ -191,8 +191,8 @@ namespace Finanse.Dialogs {
                         Id = editedCategory.Id,
                         Name = NameValue.Text,
                         Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
-                        //Icon = CategoryIcon.Glyph,
-                        Icon = Icon2Value.Text,
+                        Icon = CategoryIcon.Glyph,
+                        //Icon = Icon2Value.Text,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
@@ -206,7 +206,9 @@ namespace Finanse.Dialogs {
 
         private void RadioButtonColor_Checked(object sender, RoutedEventArgs e) {
             var button = sender as RadioButton;
-            CategoryCircle.Fill = button.Background;
+            //CategoryCircle.Fill = button.Background;
+            CategoryCircle.Stroke = button.Background;
+            CategoryIcon.Foreground = button.Background;
         }
 
         private void RadioButtonIcon_Checked(object sender, RoutedEventArgs e) {

@@ -11,8 +11,10 @@
         Background="Transparent">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
         </Grid.RowDefinitions>
 
         <Grid
@@ -24,7 +26,8 @@
                 Style="{StaticResource PageTitleStyle}" />
         </Grid>
 
-        <Pivot Grid.Row="1">
+        <Pivot
+            Grid.Row="1">
             <PivotItem
                 Margin="0">
                 <PivotItem.Header>
@@ -43,7 +46,7 @@
                                 FontSize="18"
                                 Text="Pierwszy dzień tygodnia"
                                 Margin="0,0,0,10"
-                                Foreground="{ThemeResource AccentColor}" />
+                                Foreground="{ThemeResource Text}" />
 
                             <ComboBox
                                 Name="ColorValue"
@@ -64,20 +67,20 @@
                                 FontSize="18"
                                 Text="Waluta"
                                 Margin="0,30,0,10"
-                                Foreground="{ThemeResource AccentColor}" />
+                                Foreground="{ThemeResource Text}" />
 
                             <ComboBox
                                 Name="CurrencyValue"
                                 Style="{StaticResource ComboBoxStyle1}"
                                 SelectionChanged="ComboBox_SelectionChanged"
                                 SelectedValuePath="ID"
-                                PlaceholderText="Waluta"/>
+                                PlaceholderText="Waluta" />
 
                             <TextBlock
                                 FontSize="18"
                                 Margin="0,30,0,10"
                                 Text="Planowane wydatki"
-                                Foreground="{ThemeResource AccentColor}" />
+                                Foreground="{ThemeResource Text}" />
                             <TextBlock
                                 Margin="0,0,0,10"
                                 Text="Maksymalna liczba miesięcy do przodu"
@@ -93,7 +96,7 @@
                                 FontSize="18"
                                 Margin="0,20,0,10"
                                 Text="Powiadomienia"
-                                Foreground="{ThemeResource AccentColor}" />
+                                Foreground="{ThemeResource Text}" />
 
                             <TextBlock
                                 Margin="0,5,0,0"
@@ -153,7 +156,7 @@
                             <TextBlock
                                 FontSize="18"
                                 Text="Motyw"
-                                Foreground="{ThemeResource AccentColor}" />
+                                Foreground="{ThemeResource Text}" />
                             <ToggleSwitch
                                 Name="ThemeToggle"
                                 Style="{StaticResource ToggleSwitchStyle1}"
@@ -174,7 +177,7 @@
                                 FontSize="18"
                                 Margin="0,20,0,10"
                                 Text="Styl ikon"
-                                Foreground="{ThemeResource AccentColor}" />
+                                Foreground="{ThemeResource Text}" />
                             <RadioButton
                                 x:Name="MonoIcon_RadioButton"
                                 Content="Monochromatyczne"
@@ -195,7 +198,7 @@
                                 FontSize="18"
                                 Margin="0,20,0,10"
                                 Text="Wygląd operacji"
-                                Foreground="{ThemeResource AccentColor}" />
+                                Foreground="{ThemeResource Text}" />
 
                             <TextBlock
                                 Margin="0,5,0,0"
@@ -240,22 +243,49 @@
                     </Grid>
                 </ScrollViewer>
             </PivotItem>
-            <PivotItem>
+            <PivotItem
+                Margin="0">
                 <PivotItem.Header>
                     <TextBlock
                         Text="Synchronizacja"
                         FontSize="15" />
                 </PivotItem.Header>
-                <TextBlock>YOLOYOLOYOLO</TextBlock>
+                <ScrollViewer
+                    VerticalScrollBarVisibility="Auto">
+                    <Grid>
+
+                        <StackPanel
+                            MaxWidth="600"
+                            Margin="16">
+                            <TextBlock
+                                FontSize="18"
+                                Text="Synchronizacja"
+                                Foreground="{ThemeResource Text}" />
+                            <ToggleSwitch
+                                Style="{StaticResource ToggleSwitchStyle1}"
+                                Toggled="ThemeToggle_Toggled">
+
+                                <ToggleSwitch.OffContent>
+                                    Wyłączona
+                                </ToggleSwitch.OffContent>
+
+                                <ToggleSwitch.OnContent>
+                                    Włączona
+                                </ToggleSwitch.OnContent>
+
+                            </ToggleSwitch>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
             </PivotItem>
             <PivotItem>
-                <PivotItem.Header>
-                    <TextBlock
-                        Text="O aplikacji"
-                        FontSize="15" />
-                </PivotItem.Header>
-                <TextBlock>YOLOYOLOYOLO</TextBlock>
-            </PivotItem>
+                    <PivotItem.Header>
+                        <TextBlock
+                            Text="O aplikacji"
+                            FontSize="15" />
+                    </PivotItem.Header>
+                    <TextBlock>YOLOYOLOYOLO</TextBlock>
+                </PivotItem>
         </Pivot>
     </Grid>
 </Page>

@@ -25,7 +25,9 @@
             Width="48">
 
             <Ellipse
-                Fill="{StaticResource Background+2}"
+                Opacity="0.15"
+                StrokeThickness="2"
+                Stroke="{StaticResource Background+2}"
                 Name="Ellipse_OperationTemplate">
             </Ellipse>
             <Ellipse
@@ -46,9 +48,9 @@
 -->
             <FontIcon
                 Name="Icon_OperationTemplate"
-                FontSize="24"
+                FontSize="16"
                 Glyph="{Binding Source={StaticResource DefaultEllipseIcon}, Path=Text}"
-                FontFamily="Segoe UI Symbol"
+                FontFamily="{StaticResource FontAwesome}"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
                 Foreground="White" />
@@ -81,20 +83,36 @@
                         Margin="0,2,0,0"
                         Orientation="Horizontal">
                         <TextBlock
+                            Text="Zakupy"
                             Name="Category_OperationTemplate"
-                            FontWeight="Bold"
                             FontSize="12"
-                            Foreground="{ThemeResource Text-2}" />
-                        <TextBlock
-                            Name="SubCategory_OperationTemplate"
-                            FontSize="12"
-                            Foreground="{ThemeResource Text-2}" />
+                            Foreground="{ThemeResource Text-1}" />
+                        <StackPanel
+                            Name="SubCategoryNameStackPanel"
+                            Visibility="Collapsed"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                Padding="0,2,0,0"
+                                Margin="4,0"
+                                VerticalAlignment="Center"
+                                FontFamily="Segoe MDL2 Assets"
+                                Text=""
+                                FontSize="8"
+                                Foreground="{ThemeResource Text-1}" />
+                            <TextBlock
+                                
+                                Text="Lidl"
+                                Name="SubCategory_OperationTemplate"
+                                FontSize="12"
+                                Foreground="{ThemeResource Text-1}" />
+                        </StackPanel>
                     </StackPanel>
 
                 </StackPanel>
                 <TextBlock
-                    FontSize="13"
+                    FontSize="12"
                     Grid.Column="1"
+                    FontWeight="SemiBold"
                     Name="Cost_OperationTemplate"
                     VerticalAlignment="Center"
                     Foreground="{StaticResource RedColorStyle}" />

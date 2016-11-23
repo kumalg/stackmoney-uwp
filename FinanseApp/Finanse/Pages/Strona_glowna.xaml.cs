@@ -72,9 +72,12 @@ namespace Finanse.Pages {
             ContactsCVS.Source = groupsByDay;
             CategorizedCVS.Source = groupsByCategory;
 
+            (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
+
             ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
 
-            GroupingComboBox.SelectedIndex = 0;
+            //GroupingComboBox.SelectedIndex = 0;
+            ByDateRadioButton.IsChecked = true;
 
             SetActualMoneyBar();
 
@@ -99,10 +102,12 @@ namespace Finanse.Pages {
             };
 
             SetActualMoneyBar();
-
+            
             SetListOfOperations(visiblePayFormList);
+            
             if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
                 (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
+                
         }
 
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
@@ -122,7 +127,7 @@ namespace Finanse.Pages {
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new NewOperationContentDialog(groupsByDay, (Operation)datacontext, "edit");
+            var ContentDialogItem = new NewOperationContentDialog(groupsByDay, (Operation)datacontext);
 
             var result = await ContentDialogItem.ShowAsync();
 
@@ -166,18 +171,8 @@ namespace Finanse.Pages {
             //e.DestinationItem = new SemanticZoomLocation { Item = e.SourceItem.Item };
         }
 
-        private async void PreviousMonthButton_Click(object sender, RoutedEventArgs e) {
+        private void PreviousMonthButton_Click(object sender, RoutedEventArgs e) {
 
-            try {
-
-                await LongOperation();
-            }
-            finally {
-
-            }
-        }
-
-        private async Task LongOperation() {
             if (actualMonth > 1) {
                 actualMonth--;
             }
@@ -187,8 +182,10 @@ namespace Finanse.Pages {
             }
 
             SetListOfOperations(visiblePayFormList);
+            /*
             if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
-                (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
+                (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;   
+                */
         }
 
         private void NextMonthButton_Click(object sender, RoutedEventArgs e) {
@@ -202,8 +199,12 @@ namespace Finanse.Pages {
             }
 
             SetListOfOperations(visiblePayFormList);
+
+            //(semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
+            /*
             if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
                 (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
+                */
         }
 
         private void SetListOfOperations(List<int> visiblePayFormList) {
@@ -225,7 +226,7 @@ namespace Finanse.Pages {
                 OperacjeListViewGroup.ItemsSource = ContactsCVS.View.CollectionGroups;
                 */
 
-                ActualMonthText.Text = "Planowane wydatki";
+                ActualMonthText.Text = "Zaplanowane";
             }
 
             //storeData.SetVisiblePayFormList(visiblePayFormList);
@@ -333,6 +334,14 @@ namespace Finanse.Pages {
 
             SetListOfOperations(visiblePayFormList);
             IncomingOperationsButton.Visibility = Visibility.Collapsed;
+        }
+
+        private void ByCategoryRadioButton_Checked(object sender, RoutedEventArgs e) {
+            ListViewByCategory();
+        }
+
+        private void ByDateRadioButton_Checked(object sender, RoutedEventArgs e) {
+            ListViewByDate();
         }
     }
 }

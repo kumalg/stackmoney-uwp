@@ -24,11 +24,13 @@ namespace Finanse.Dialogs {
 
     public sealed partial class OperationPatternsContentDialog : ContentDialog {
 
-        public List<Operation> OperationPatterns = new List<Operation>();
+        private List<Operation> OperationPatterns = new List<Operation>();
+        private Operation selectedOperation = new Operation();
 
-        public OperationPatternsContentDialog() {
+        public OperationPatternsContentDialog(Operation selectedOperation) {
 
             this.InitializeComponent();
+            //this.selectedOperation = selectedOperation;
 
             foreach (OperationPattern item in Dal.GetAllPatterns()) {
                 OperationPatterns.Add(new Operation {
@@ -42,10 +44,18 @@ namespace Finanse.Dialogs {
                     MoneyAccountId = item.MoneyAccountId
                 });
             }
+
+            selectedOperation = OperationPatterns[0];
         }
 
         private void OperationPatternsListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            selectedOperation = OperationPatterns[0]; // (Operation)((ListView)sender).SelectedItem;
             Hide();
+        }
+
+        public Operation setOperation () {
+
+            return (Operation)OperationPatternsListView.SelectedItem;
         }
     }
 }

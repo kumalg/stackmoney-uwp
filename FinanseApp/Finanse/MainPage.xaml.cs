@@ -22,6 +22,7 @@ using System.Collections.ObjectModel;
 using Windows.Graphics.Display;
 using Finanse.Models;
 using Finanse.DataAccessLayer;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -87,18 +88,22 @@ namespace Finanse {
         }
 
         private void OperationsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
+            CommandBar.IsOpen = false;
             AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
         }
 
         private void CategoriesAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
+            CommandBar.IsOpen = false;
             AktualnaStrona_Frame.Navigate(typeof(Kategorie));
         }
 
         private void AddNewOperationAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
+            CommandBar.IsOpen = false;
             AktualnaStrona_Frame.Navigate(typeof(Nowa_Operacja));
         }
 
         private void StatisticsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
+            CommandBar.IsOpen = false;
             AktualnaStrona_Frame.Navigate(typeof(Statystyki));
         }
         private void RadioButton_Click(object sender, RoutedEventArgs e) {
@@ -146,7 +151,7 @@ namespace Finanse {
             AddNewOperationAppBarRadioButton.IsChecked = false;
             StatisticsAppBarRadioButton.IsChecked = false;
         }
-
+        
         private void AktualnaStrona_Frame_Navigated(object sender, NavigationEventArgs e) {
             if (((Frame)sender).SourcePageType == typeof(Strona_glowna)) {
                 OperationsAppBarRadioButton.IsChecked = true;

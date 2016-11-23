@@ -108,20 +108,20 @@ namespace Finanse.Dialogs {
 
             Hide();
 
-            string whichOptionLocal;
+            //string whichOptionLocal;
+
+            NewOperationContentDialog ContentDialogItem;
 
             switch (whichOption) {
                 case "pattern": {
-                        whichOptionLocal = "editpattern";
+                        ContentDialogItem = new NewOperationContentDialog(null, editedOperation, true);
                         break;
                     }
                 default: {
-                        whichOptionLocal = "edit";
+                        ContentDialogItem = new NewOperationContentDialog(_source, editedOperation);
                         break;
                     }
             }
-
-            var ContentDialogItem = new NewOperationContentDialog(_source, editedOperation, whichOptionLocal);
 
             var result = await ContentDialogItem.ShowAsync();
         }

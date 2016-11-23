@@ -96,6 +96,7 @@
                 }
             }
         }
+        /*
         public static async Task CreateDatabase() {
             // Create a new connection
             using (var db = DbConnection) {
@@ -108,7 +109,7 @@
 
             }
         }
-
+        */
         /*
         public static Settings GetSettings() {
             Settings settings;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Windows.UI.Xaml;
 
@@ -96,6 +97,10 @@ namespace Finanse.Models {
 
             int value = (int)localSettings.Values["maxFutureMonths"];
             return value;
+        }
+
+        public static DateTime GetMaxDate() {
+            return new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month)).AddMonths(Settings.GetMaxFutureMonths());
         }
         public static void SetMaxFutureMonths(int months) {
 

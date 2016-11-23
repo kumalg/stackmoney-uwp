@@ -25,10 +25,10 @@ namespace Finanse.Elements {
 
     public sealed partial class OperationTemplate : UserControl {
 
-        private Models.Operation Operation {
+        private Models.OperationPattern Operation {
 
             get {
-                return this.DataContext as Models.Operation;
+                return this.DataContext as Models.OperationPattern;
             }
         }
 
@@ -57,35 +57,41 @@ namespace Finanse.Elements {
 
             OperationCategory cat = Dal.GetOperationCategoryById(Operation.CategoryId);
             OperationSubCategory subCat = Dal.GetOperationSubCategoryById(Operation.SubCategoryId);
+            SubCategoryNameStackPanel.Visibility = Visibility.Collapsed;
 
             /* WCHODZI IKONKA KATEGORII */
-            Icon_OperationTemplate.FontFamily = new FontFamily(Settings.GetActualIconStyle());
+            //Icon_OperationTemplate.FontFamily = new FontFamily(Settings.GetActualIconStyle());
             Icon_OperationTemplate.Opacity = 1;
             Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text"];
 
             if (cat != null && subCat == null) {
-                Ellipse_OperationTemplate.Fill = new SolidColorBrush(Functions.GetSolidColorBrush(cat.Color).Color);
+                Ellipse_OperationTemplate.Stroke = new SolidColorBrush(Functions.GetSolidColorBrush(cat.Color).Color);
+                Icon_OperationTemplate.Foreground = new SolidColorBrush(Functions.GetSolidColorBrush(cat.Color).Color);
                 Icon_OperationTemplate.Glyph = cat.Icon;
 
                 if (String.IsNullOrEmpty(Operation.Title)) {
-                    Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text-1"];
+                    //Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text-1"];
                     Title_OperationTemplate.Text = cat.Name;
                 }
             }
 
             else if (cat != null && subCat != null) {
-                Ellipse_OperationTemplate.Fill = new SolidColorBrush(Functions.GetSolidColorBrush(subCat.Color).Color);
+                Ellipse_OperationTemplate.Stroke = new SolidColorBrush(Functions.GetSolidColorBrush(subCat.Color).Color);
+                Icon_OperationTemplate.Foreground = new SolidColorBrush(Functions.GetSolidColorBrush(subCat.Color).Color);
                 Icon_OperationTemplate.Glyph = subCat.Icon;
 
                 if (String.IsNullOrEmpty(Operation.Title)) {
-                    Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text-1"];
+                    //Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text-1"];
                     Title_OperationTemplate.Text = subCat.Name;
                 }
             }
 
+           // ((ResourceDictionary)Application.Current.Resources["IconBase"]).Item
+            
             else {
-                Ellipse_OperationTemplate.Fill = (SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"];
-                Icon_OperationTemplate.Glyph = ((TextBlock)Application.Current.Resources["DefaultEllipseIcon"]).Text;
+                Ellipse_OperationTemplate.Stroke = (SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"];
+                Icon_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"];
+                Icon_OperationTemplate.Glyph = ((FontIcon)Application.Current.Resources["DefaultEllipseIcon"]).Glyph;
                 Icon_OperationTemplate.Opacity = 0.2;
             }
 
@@ -111,8 +117,11 @@ namespace Finanse.Elements {
                 Category_OperationTemplate.Text = "Nie znaleziono kategorii";
                 if (cat != null)
                     Category_OperationTemplate.Text = cat.Name;
-                if (subCat != null)
-                    SubCategory_OperationTemplate.Text = "  /  " + subCat.Name;
+
+                if (subCat != null) {
+                    SubCategoryNameStackPanel.Visibility = Visibility.Visible;
+                    SubCategory_OperationTemplate.Text = subCat.Name;
+                }
             }
         }
     }

@@ -193,7 +193,8 @@
             Margin="0,15,0,0">
             <FontIcon
                 Style="{StaticResource DetailsIconStyle}"
-                Glyph="" />
+                FontFamily="{StaticResource FontAwesome}"
+                Glyph="" />
             <TextBlock
                 Name="DateValue"
                 Foreground="{ThemeResource Text}"
@@ -208,7 +209,8 @@
                 Orientation="Horizontal">
                 <FontIcon
                     Style="{StaticResource DetailsIconStyle}"
-                    Glyph="&#xE71D;" />
+                    FontFamily="{StaticResource FontAwesome}"
+                    Glyph="" />
                 <TextBlock
                     Name="CategoryValue"
                     Foreground="{ThemeResource Text}"

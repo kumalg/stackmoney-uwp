@@ -36,6 +36,65 @@
                     </Setter>
                 </Style>
             </GroupStyle.HeaderContainerStyle>
+
+            <GroupStyle.HeaderTemplate>
+                <DataTemplate>
+
+                    <Grid
+                        Background="Transparent"
+                        MaxWidth="620">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="Auto" />
+                            <ColumnDefinition
+                                Width="*" />
+                            <ColumnDefinition
+                                Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel
+                            Margin="0,12"
+                            Orientation="Horizontal">
+                            <StackPanel
+                                Width="80">
+                                <TextBlock
+                                    Text="{Binding Key.dayNum00}"
+                                    FontSize="12"
+                                    Foreground="{ThemeResource Text-1}"
+                                    FontWeight="SemiBold"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" />
+                            </StackPanel>
+                            <TextBlock
+                                FontWeight="SemiBold"
+                                Foreground="{ThemeResource Text-2}"
+                                Text="{Binding Key.day}"
+                                FontSize="12" />
+                        </StackPanel>
+
+                        <TextBlock
+                            Margin="16,0"
+                            VerticalAlignment="Center"
+                            Grid.Column="2"
+                            Name="SumText"
+                            HorizontalAlignment="Right"
+                            Text="{Binding cost}"
+                            FontWeight="SemiBold"
+                            Foreground="{ThemeResource Text-1}"
+                            FontSize="12"/>
+
+                        <Border
+                            Grid.ColumnSpan="3"
+                            Opacity="0.3"
+                            BorderBrush="{ThemeResource Text-2}"
+                            BorderThickness="0,0,0,1" />
+                    </Grid>
+
+                </DataTemplate>
+            </GroupStyle.HeaderTemplate>
+
+            <!--
             <GroupStyle.HeaderTemplate>
                 <DataTemplate>
 
@@ -99,6 +158,7 @@
 
                 </DataTemplate>
             </GroupStyle.HeaderTemplate>
+            -->
         </GroupStyle>
 
         <ItemsPanelTemplate
@@ -334,50 +394,143 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
-                    Width="48" />
-                <ColumnDefinition
                     Width="*" />
                 <ColumnDefinition
-                    Width="48" />
+                    Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <AppBarButton
-                x:Name="PrevMonthButton"
-                Icon="Back"
-                Width="48"
-                Foreground="{ThemeResource AccentText}"
-                Click="PreviousMonthButton_Click" />
+            <StackPanel
+                Orientation="Horizontal">
+                <Button
+                    x:Name="PrevMonthButton"
+                    Width="32"
+                    Margin="8,0,0,0"
+                    Padding="0"
+                    Foreground="{ThemeResource AccentText}"
+                    Click="PreviousMonthButton_Click"
+                    Background="Transparent">
+                    <FontIcon
+                        FontSize="16"
+                        Glyph=""
+                        FontFamily="{StaticResource FontAwesome}"/>
+                </Button>
 
-            <TextBlock
-                HorizontalAlignment="Center"
+                <Grid>
+                    <Button
+                        Margin="0"
+                        Padding="0"
+                        Background="Transparent"
+                        Width="32"
+                        x:Name="IncomingOperationsButton"
+                        Foreground="{ThemeResource AccentText}"
+                        Click="IncomingOperationsButton_Click">
+                        <FontIcon
+                            FontSize="16"
+                            Glyph=""
+                            FontFamily="{StaticResource FontAwesome}" />
+                    </Button>
+
+                    <Button
+                        Margin="0"
+                        Padding="0"
+                        Background="Transparent"
+                        Width="32"
+                        x:Name="NextMonthButton"
+                        Foreground="{ThemeResource AccentText}"
+                        Click="NextMonthButton_Click">
+                        <FontIcon
+                            FontSize="16"
+                            Glyph=""
+                            FontFamily="{StaticResource FontAwesome}" />
+                    </Button>
+                </Grid>
+
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    Margin="8,0,0,0"
+                    x:Name="ActualMonthText"
+                    Text="Wrzesień"
+                    Style="{StaticResource PageTitleStyle}" />
+            </StackPanel>
+
+            <StackPanel
                 Grid.Column="1"
-                x:Name="ActualMonthText"
-                Text="Wrzesień"
-                Style="{StaticResource PageTitleStyle}"
-                Margin="0" />
-            
-            <AppBarButton
-                Grid.Column="2"
-                Width="48"
-                x:Name="IncomingOperationsButton"
-                Icon="Clock"
-                Foreground="{ThemeResource AccentText}"
-                Click="IncomingOperationsButton_Click" />
-            
-            <AppBarButton
-                Grid.Column="2"
-                Width="48"
-                x:Name="NextMonthButton"
-                Icon="Forward"
-                Foreground="{ThemeResource AccentText}"
-                Click="NextMonthButton_Click" />
+                Orientation="Horizontal"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Name="ActualMoneyBar"
+                    Foreground="{ThemeResource AccentText}"
+                    FontWeight="Bold"
+                    FontSize="13" />
+                <Button
+                    Margin="11,0,16,0"
+                    Padding="5"
+                    Background="Transparent"
+                    VerticalAlignment="Center">
+                    <Button.Content>
+                        <FontIcon
+                            Foreground="{ThemeResource AccentText}"
+                            Opacity="0.5"
+                            FontSize="13"
+                            Glyph="" />
+                    </Button.Content>
+                    <Button.Flyout>
+                        <MenuFlyout
+                            x:Name="VisiblePayFormMenuFlyout"
+                            Placement="Bottom">
+                            <MenuFlyout.MenuFlyoutPresenterStyle>
+                                <Style
+                                    TargetType="MenuFlyoutPresenter">
+                                    <Setter
+                                        Property="BorderThickness"
+                                        Value="0" />
+                                    <Setter
+                                        Property="Background"
+                                        Value="{ThemeResource Background-1Transparent}" />
+                                </Style>
+                            </MenuFlyout.MenuFlyoutPresenterStyle>
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+            </StackPanel>
+
         </Grid>
         
         <Grid
             Background="{ThemeResource Background-1}"
             Grid.Row="1"
             Height="48">
-
+            <Grid
+                MaxWidth="600">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <RadioButton
+                    Name="ByDateRadioButton"
+                    GroupName="GroupingRadioButtons"
+                    Checked="ByDateRadioButton_Checked"
+                    FontSize="13"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Foreground="{ThemeResource Text-1}"
+                    Content="Wg. daty" />
+                <RadioButton
+                    Name="ByCategoryRadioButton"
+                    GroupName="GroupingRadioButtons"
+                    Checked="ByCategoryRadioButton_Checked"
+                    Grid.Column="1"
+                    FontSize="13"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Foreground="{ThemeResource Text-1}"
+                    Content="Wg. kategorii" />
+            </Grid>
+<!--
             <Grid
                 Margin="16,0"
                 MaxWidth="600">
@@ -407,49 +560,15 @@
                             Tag="1" />
                     </ComboBox>
                 </StackPanel>
-                <StackPanel
-                    Orientation="Horizontal"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Right">
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        Name="ActualMoneyBar"
-                        Foreground="{ThemeResource Text-1}"
-                        FontWeight="Bold"
-                        FontSize="13" />
-                    <Button
-                        Margin="11,0,0,0"
-                        Padding="5"
-                        Background="Transparent"
-                        VerticalAlignment="Center">
-                        <Button.Content>
-                            <FontIcon
-                                Foreground="{ThemeResource Text-1}"
-                                Opacity="0.5"
-                                FontSize="13"
-                                Glyph="" />
-                        </Button.Content>
-                        <Button.Flyout>
-                            <MenuFlyout
-                                x:Name="VisiblePayFormMenuFlyout"
-                                Placement="Bottom">
-                                <MenuFlyout.MenuFlyoutPresenterStyle>
-                                    <Style
-                                        TargetType="MenuFlyoutPresenter">
-                                        <Setter
-                                            Property="BorderThickness"
-                                            Value="0" />
-                                        <Setter
-                                            Property="Background"
-                                            Value="{ThemeResource Background-1Transparent}" />
-                                    </Style>
-                                </MenuFlyout.MenuFlyoutPresenterStyle>
-                            </MenuFlyout>
-                        </Button.Flyout>
-                    </Button>
-                </StackPanel>
             </Grid>
+            -->
         </Grid>
+
+        <ProgressRing
+            x:Name="Progress"
+            Visibility="Visible"
+            IsActive="True"
+            Grid.Row="2"/>
 
         <SemanticZoom
             x:Name="semanticZoom"
@@ -538,7 +657,7 @@
                 </GridView>
             </SemanticZoom.ZoomedOutView>
         </SemanticZoom>
-<!--
+        <!--
         <Pivot
             Grid.Row="1"
             Grid.RowSpan="2"

@@ -119,7 +119,7 @@ namespace Finanse.Models {
 
                         info.Key = new GroupHeaderByCategory {
                             name = "Nieprzyporządkowane",
-                            icon = ((TextBlock)Application.Current.Resources["DefaultEllipseIcon"]).Text,
+                            icon = ((FontIcon)Application.Current.Resources["DefaultEllipseIcon"]).Glyph,
                             color = ((SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"]).Color.ToString(),
                             opacity = 0.2,
                         };

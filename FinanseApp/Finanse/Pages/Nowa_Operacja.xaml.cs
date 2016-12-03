@@ -138,11 +138,6 @@ namespace Finanse.Pages {
             SetSubCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
         }
 
-        private void DateValue_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args) {
-            if (DateValue.Date == null)
-                DateValue.Date = DateTime.Today;
-        }
-
         private void DateValue_Closed(object sender, object e) {
             DateValue.Focus(FocusState.Programmatic);
         }

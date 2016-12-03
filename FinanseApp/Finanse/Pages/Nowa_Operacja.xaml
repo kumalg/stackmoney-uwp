@@ -495,7 +495,6 @@
                     <CalendarDatePicker
                         Name="DateValue"
                         Style="{StaticResource CalendarDatePickerStyle1}"
-                        DateChanged="DateValue_DateChanged"
                         PlaceholderText="Data"
                         Margin="0,10"
                         HorizontalAlignment="Stretch"

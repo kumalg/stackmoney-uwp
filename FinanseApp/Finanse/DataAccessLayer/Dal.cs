@@ -34,43 +34,19 @@
         public static void CreateDB() {
             using (var db = DbConnection) {
                 // Activate Tracing
+                db.Execute("PRAGMA foreign_keys = ON");
                 db.TraceListener = new DebugTraceListener();
+                db.Execute("CREATE TABLE IF NOT EXISTS images ( "
+                    + "nameRed VARCHAR(20) NOT NULL PRIMARY KEY,"
+                    + "patientID INT,"
+                    + "FOREIGN KEY(patientID) REFERENCES patients(id) ) ");
                 db.CreateTable<MoneyAccount>();
                 db.CreateTable<Operation>();
                 db.CreateTable<OperationPattern>();
                 db.CreateTable<OperationCategory>();
                 db.CreateTable<OperationSubCategory>();
-                db.CreateTable<Settings>();
-                /*
-                List<OperationSubCategory> subCatList = new List<OperationSubCategory>();
-                foreach (var item in db.Table<OperationSubCategory>()) {
-                    subCatList.Add(new OperationSubCategory {
-                        BossCategoryId = item.BossCategoryId,
-                        Color = item.Color,
-                        Icon = item.Icon,
-                        Name = item.Name,
-                        VisibleInExpenses = item.VisibleInExpenses,
-                        VisibleInIncomes = item.VisibleInIncomes,
-                    });
-                }
-                db.DropTable<OperationSubCategory>();
-                db.CreateTable<OperationSubCategory>();
-                foreach (var item in subCatList) {
-                    db.Insert(item);
-                }*/
-/*
-                db.DeleteAll<MoneyAccount>();
-                db.Insert(new MoneyAccount {
-                    Id = 1,
-                    Name = "Gotówka",
-                    Color = "#FFcfd8dc",
-                });
-                db.Insert(new MoneyAccount {
-                    Id = 2,
-                    Name = "Karta VISA",
-                    Color = "#FF00e676",
-                });
-                */
+                //db.CreateTable<Settings>();
+
                 if (!db.Table<Settings>().Any())
                     db.Insert(new Settings {
                         CultureInfoName = "en-US"
@@ -110,21 +86,6 @@
             }
         }
         */
-        /*
-        public static Settings GetSettings() {
-            Settings settings;
-
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                settings = db.Table<Settings>().ElementAt(0);
-            }
-
-            return settings;
-        }
-        */
 
         public static Operation GetEldestOperation() {
             Operation eldest;
@@ -133,7 +94,11 @@
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                eldest = db.Table<Operation>().Aggregate((c1, c2) => Convert.ToDateTime(c1.Date) < Convert.ToDateTime(c2.Date) ? c1 : c2);
+                //eldest = db.Table<Operation>().Aggregate((c1, c2) => Convert.ToDateTime(c1.Date) < Convert.ToDateTime(c2.Date) ? c1 : c2);
+                eldest = (from p in db.Table<Operation>().ToList()
+                          where p.Date != null && p.Date != ""
+                          orderby p.Date
+                          select p).ToList().ElementAt(0);
             }
 
             return eldest;
@@ -184,18 +149,22 @@
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                string date = year.ToString() + "." + month.ToString("00");
+                string settedYearAndMonth = year.ToString() + "." + month.ToString("00");
+                //DateTime settedYearAndMonth = new DateTime(year,month,1);
+                //bool isActualMonth = (year == DateTime.Today.Year && 
 
                 if (visiblePayFormList != null) {
                     models = (from p in db.Table<Operation>().ToList()
-                              where p.Date.Substring(0, 7) == date.ToString()
+                              where p.Date != null && p.Date != ""
+                                 && p.Date.Substring(0, 7) == settedYearAndMonth.ToString()
                                  && Convert.ToDateTime(p.Date) <= DateTime.Today
                                  && visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId) == true
                               select p).ToList();
                 }
                 else {
                     models = (from p in db.Table<Operation>().ToList()
-                              where p.Date.Substring(0, 7) == date.ToString()
+                              where p.Date != null && p.Date != ""
+                                 && p.Date.Substring(0, 7) == settedYearAndMonth.ToString()
                                  && Convert.ToDateTime(p.Date) <= DateTime.Today
                               select p).ToList();
                 }
@@ -213,7 +182,9 @@
                 db.TraceListener = new DebugTraceListener();
 
                 models = (from p in db.Table<Operation>().ToList()
-                          where Convert.ToDateTime(p.Date) > DateTime.Today
+                          where p.Date == null
+                             || p.Date == ""
+                             || Convert.ToDateTime(p.Date) > DateTime.Today
                           select p).ToList();
             }
 
@@ -230,13 +201,17 @@
 
                 if (visiblePayFormList != null) {
                     models = (from p in db.Table<Operation>().ToList()
-                              where Convert.ToDateTime(p.Date) > DateTime.Today
-                                 && visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId) == true
+                              where (p.Date == null
+                                  || p.Date == ""
+                                  || Convert.ToDateTime(p.Date) > DateTime.Today)
+                                  && visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId)
                               select p).ToList();
                 }
                 else {
                     models = (from p in db.Table<Operation>().ToList()
-                              where Convert.ToDateTime(p.Date) > DateTime.Today
+                              where p.Date == null
+                                 || p.Date == ""
+                                 || Convert.ToDateTime(p.Date) > DateTime.Today
                               select p).ToList();
                 }
             }

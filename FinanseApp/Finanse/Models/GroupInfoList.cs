@@ -52,13 +52,22 @@ namespace Finanse.Models {
         public string month { get; set; }
 
         public GroupHeaderByDay(string date) {
-            DateTime dt = Convert.ToDateTime(date);
+            try {
+                DateTime dt = Convert.ToDateTime(date);
 
-            this.date = date;
-            dayNum00 = String.Format("{0:dd}", dt);
-            dayNum = dt.Day.ToString();
-            day = String.Format("{0:dddd}", dt);
-            month = String.Format("{0:MMMM yyyy}", dt);
+                this.date = date;
+                dayNum00 = String.Format("{0:dd}", dt);
+                dayNum = dt.Day.ToString();
+                day = String.Format("{0:dddd}", dt);
+                month = String.Format("{0:MMMM yyyy}", dt);
+            }
+            catch {
+                //this.date = date;
+                dayNum00 = "#";
+                dayNum = "";
+                day = "Bez daty";
+                month = "";
+            }
         }  
     }
 }

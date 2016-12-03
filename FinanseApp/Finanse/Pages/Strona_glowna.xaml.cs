@@ -331,7 +331,7 @@ namespace Finanse.Pages {
                 actualMonth = 1;
                 actualYear++;
             }
-
+            
             SetListOfOperations(visiblePayFormList);
             IncomingOperationsButton.Visibility = Visibility.Collapsed;
         }

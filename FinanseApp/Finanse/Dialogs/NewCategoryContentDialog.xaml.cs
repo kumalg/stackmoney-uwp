@@ -94,7 +94,7 @@ namespace Finanse.Dialogs {
                     newOperationSubCategoryItem = new OperationSubCategory {
                         Id = 0,
                         Name = NameValue.Text,
-                        Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
+                        Color = ((SolidColorBrush)CategoryCircle.Stroke).Color.ToString(),
                         Icon = CategoryIcon.Glyph,
                         //Icon = Icon2Value.Text,
                         BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
@@ -109,7 +109,7 @@ namespace Finanse.Dialogs {
                 else {
                     newOperationCategoryItem = new OperationCategory {
                         Name = NameValue.Text,
-                        Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
+                        Color = ((SolidColorBrush)CategoryCircle.Stroke).Color.ToString(),
                         Icon = CategoryIcon.Glyph,
                         //Icon = Icon2Value.Text,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
@@ -128,7 +128,7 @@ namespace Finanse.Dialogs {
                     editedOperationSubCategoryItem = new OperationSubCategory {
                         Id = editedCategory.Id,
                         Name = NameValue.Text,
-                        Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
+                        Color = ((SolidColorBrush)CategoryCircle.Stroke).Color.ToString(),
                         Icon = CategoryIcon.Glyph,
                         //Icon = Icon2Value.Text,
                         BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
@@ -155,7 +155,7 @@ namespace Finanse.Dialogs {
                     };
                     editedOperationCategoryItem = new OperationCategory {
                         Name = NameValue.Text,
-                        Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
+                        Color = ((SolidColorBrush)CategoryCircle.Stroke).Color.ToString(),
                         Icon = CategoryIcon.Glyph,
                         //Icon = Icon2Value.Text,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
@@ -171,7 +171,7 @@ namespace Finanse.Dialogs {
                     // kategoria która została subkategorią
                     editedOperationSubCategoryItem = new OperationSubCategory {
                         Name = NameValue.Text,
-                        Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
+                        Color = ((SolidColorBrush)CategoryCircle.Stroke).Color.ToString(),
                         Icon = CategoryIcon.Glyph,
                         //Icon = Icon2Value.Text,
                         BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
@@ -190,7 +190,7 @@ namespace Finanse.Dialogs {
                     editedOperationCategoryItem = new OperationCategory {
                         Id = editedCategory.Id,
                         Name = NameValue.Text,
-                        Color = ((SolidColorBrush)CategoryCircle.Fill).Color.ToString(),
+                        Color = ((SolidColorBrush)CategoryCircle.Stroke).Color.ToString(),
                         Icon = CategoryIcon.Glyph,
                         //Icon = Icon2Value.Text,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,

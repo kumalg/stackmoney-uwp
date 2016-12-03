@@ -43,7 +43,7 @@ namespace Finanse.Models {
 
                     var query = from item in isFuture ? Dal.GetAllFutureOperations(visiblePayFormList) : Dal.GetAllOperations(month, year, visiblePayFormList)
                                 group item by item.Date into g
-                                orderby Convert.ToDateTime(g.Key) descending
+                                orderby g.Key descending
                                 select new {
                                     GroupName = g.Key,
                                     Items = g

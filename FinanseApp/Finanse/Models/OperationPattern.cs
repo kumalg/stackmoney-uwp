@@ -1,11 +1,11 @@
 ﻿using SQLite.Net.Attributes;
+using SQLiteNetExtensions.Attributes;
 
 namespace Finanse.Models {
 
     public class OperationPattern {
 
         [PrimaryKey, AutoIncrement]
-
         public int Id { get; set; }
         private string _title = string.Empty;
         private string _moreInfo = string.Empty;
@@ -14,6 +14,8 @@ namespace Finanse.Models {
         private decimal _cost;
         private bool _isExpense;
         private int _moneyAccountId;
+
+        [ForeignKey(typeof(OperationCategory))]
         public string Title {
             get {
                 return _title;

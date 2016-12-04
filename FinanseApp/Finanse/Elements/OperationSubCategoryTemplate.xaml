@@ -11,7 +11,7 @@
 
     <Grid
         MaxWidth="600"
-        Margin="10,10">
+        Margin="16,8">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition
@@ -41,25 +41,10 @@
             Grid.Column="1"
             Height="40"
             Width="40">
-            
-            <Ellipse
-                Name="Ellipse_OperationTemplate"
-                Fill="{x:Bind OperationSubCategory.Color}" />
-            
-            <!--
-            <Rectangle
-                RadiusX="5"
-                RadiusY="5"
-                Name="Ellipse_OperationTemplate"
-                Fill="{x:Bind OperationSubCategory.Color}" />
--->
-            <TextBlock
-                x:Name="Icon_OperationTemplate"
-                FontFamily="Segoe UI"
-                Text="{x:Bind OperationSubCategory.Icon}"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
-                Foreground="White" />
+
+            <data:CategoryIcon
+                Glyph="{x:Bind OperationSubCategory.Icon}"
+                Color="{x:Bind OperationSubCategory.Color}" />
         </Grid>
 
         <TextBlock

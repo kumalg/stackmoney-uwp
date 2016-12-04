@@ -57,5 +57,17 @@ namespace Finanse.Elements {
             FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
             flyoutBase.ShowAt(senderElement);
         }
+
+        private void AddSubCat_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void DeleteCat_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void EditCat_Click(object sender, RoutedEventArgs e) {
+
+        }
     }
 }

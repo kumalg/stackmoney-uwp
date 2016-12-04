@@ -114,7 +114,7 @@ namespace Finanse.Pages {
         private void Icon_OperationTemplate_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
             TextBlock yco = sender as TextBlock;
 
-            yco.FontFamily = new FontFamily(Settings.GetActualIconStyle());
+            //yco.FontFamily = new FontFamily(Settings.GetActualIconStyle());
         }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e) {

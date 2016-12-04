@@ -172,11 +172,15 @@ namespace Finanse.Dialogs {
 
                     if (group.Count == 1)
                         _source.Remove(group);
-
                     else
                         group.Remove(group.Single(i => i.Id == item.Id));
+                    /*
+                        || DateValue.Date.ToString().Equals("")
+                        || DateValue.Date.Value.Year != Convert.ToDateTime(editedOperation.Date).Year
+                        || DateValue.Date.Value.Month != Convert.ToDateTime(editedOperation.Date).Month
+                        */
 
-                    AddOperationToList(item);
+                    //AddOperationToList(item);
                 }
 
                 Dal.SaveOperation(item);
@@ -227,9 +231,27 @@ namespace Finanse.Dialogs {
         private void AddOperationToList(Operation item) {
 
             GroupInfoList<Operation> group = _source.SingleOrDefault(i => ((GroupHeaderByDay)i.Key).date == item.Date);
+
             if (group == null) {
-                
-                GroupInfoList<Operation> newGroup = new GroupInfoList<Operation> {
+                group = new GroupInfoList<Operation>() { Key = new GroupHeaderByDay(item.Date) };
+                group.Add(item);
+
+                int i = 0;
+
+                for (i = 0; i < _source.Count; i++)
+                    if (((GroupHeaderByDay)_source.ElementAt(i).Key).date.CompareTo(item.Date) < 0) break;
+
+                _source.Insert(i, group);
+            }
+            else {
+                group.Insert(0,item);
+            }
+
+            /*
+            GroupInfoList<Operation> group = _source.SingleOrDefault(i => ((GroupHeaderByDay)i.Key).date == item.Date);
+            if (group == null) {
+
+                group = new GroupInfoList<Operation> {
                     Key = new GroupHeaderByDay(item.Date)
                 };
 
@@ -237,9 +259,9 @@ namespace Finanse.Dialogs {
 
                 if (_source.Count != 0) {
                     bool check = true;
-                    newGroup.Insert(0, item);
+                    group.Insert(0, item);
                     while (check) {
-                        if (Convert.ToDateTime(((GroupHeaderByDay)_source[i].Key).date) > Convert.ToDateTime(((GroupHeaderByDay)newGroup.Key).date))
+                        if (Convert.ToDateTime(((GroupHeaderByDay)_source.ElementAt(i).Key).date) > Convert.ToDateTime(item.Date))
                             i++;
                         else
                             check = false;
@@ -248,13 +270,13 @@ namespace Finanse.Dialogs {
 
                 //newGroup.cost = newGroup.Cost;
 
-                _source.Insert(i, newGroup);
+                _source.Insert(i, group);
             }
             else {
 
                 //group.cost = group.Cost;
                 group.Insert(0, item);
-            }
+            }*/
         }
 
         private void TypeOfOperationRadioButton_Checked(object sender, RoutedEventArgs e) {

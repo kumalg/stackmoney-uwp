@@ -7,178 +7,32 @@
     xmlns:models="using:Finanse.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Height="68">
 
-    <StackPanel>
+    <Grid
+        MaxWidth="600"
+        Margin="16,0">
 
-        <models:ExpandPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="Auto" />
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
 
+        <data:CategoryIcon 
+            Glyph="{x:Bind OperationCategory.Icon}"
+            Color="{x:Bind OperationCategory.Color}"/>
 
-            <models:ExpandPanel.HeaderContent>
-
-                <Grid
-                    MaxWidth="600"
-                    Margin="0,5"
-                    Background="Transparent"
-                    RightTapped="ExpandPanel_RightTapped">
-
-                    <FlyoutBase.AttachedFlyout>
-                        <MenuFlyout>
-                            <MenuFlyoutItem
-                                x:Name="EditButton"
-                                Text="Edity"
-                                Click="EditButton_Click" />
-                            <MenuFlyoutItem
-                                x:Name="DeleteButton"
-                                Text="Deletey"
-                                Click="DeleteButton_Click" />
-                        </MenuFlyout>
-                    </FlyoutBase.AttachedFlyout>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="Auto" />
-                        <ColumnDefinition
-                            Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Grid
-                        Name="EllipseGrid"
-                        Grid.Column="0"
-                        Height="50"
-                        Width="50">
-
-                        <Ellipse
-                            Name="Ellipse_OperationTemplate"
-                            Fill="{x:Bind OperationCategory.Color}" />
-
-                        <TextBlock
-                            Name="Icon_OperationTemplate"
-                            FontFamily="Segoe UI"
-                            FontSize="24"
-                            Text="{x:Bind OperationCategory.Icon}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            Foreground="White" />
-                    </Grid>
-
-                    <TextBlock
-                        Name="Category_OperationCategoryTemplate"
-                        Grid.Column="1"
-                        VerticalAlignment="Center"
-                        Text="{x:Bind OperationCategory.Name}"
-                        Margin="20,0,0,0"
-                        FontSize="16"
-                        Foreground="White" />
-                </Grid>
-
-            </models:ExpandPanel.HeaderContent>
-
-
-            <models:ExpandPanel.Content>
-
-                <ListView
-                    ScrollViewer.VerticalScrollMode="Disabled"
-                    Name="SubOperacjeListView"
-                    ItemsSource="{x:Bind OperationCategory.subCategories}"
-                    MaxWidth="620"
-                    BorderThickness="0"
-                    Background="Transparent"
-                    SelectionMode="None">
-
-                    <ListView.ItemContainerStyle>
-                        <Style
-                            TargetType="ListViewItem">
-                            <Setter
-                                Property="HorizontalContentAlignment"
-                                Value="Stretch" />
-                            <Setter
-                                Property="Padding"
-                                Value="0" />
-                        </Style>
-                    </ListView.ItemContainerStyle>
-
-                    <ListView.ItemTemplate>
-                        <DataTemplate
-                            x:DataType="models:OperationSubCategory">
-                            <Grid
-                                MaxWidth="600"
-                                Margin="10,10"
-                                RightTapped="Grid_RightTapped">
-
-                                <FlyoutBase.AttachedFlyout>
-                                    <MenuFlyout>
-                                        <MenuFlyoutItem
-                                            x:Name="EditButton"
-                                            Text="WOLOOO"
-                                            Click="EditButton_Click" />
-                                        <MenuFlyoutItem
-                                            x:Name="DeleteButton"
-                                            Text="DFRffrfy"
-                                            Click="DeleteButton_Click" />
-                                    </MenuFlyout>
-                                </FlyoutBase.AttachedFlyout>
-
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition
-                                        Width="Auto" />
-                                    <ColumnDefinition
-                                        Width="Auto" />
-                                    <ColumnDefinition
-                                        Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <Grid
-                                    Name="SubCategorySymbol"
-                                    Visibility="Visible"
-                                    Width="50"
-                                    Height="40">
-                                    <Border
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Right"
-                                        Margin="0,0,10,0"
-                                        CornerRadius="0.75"
-                                        Width="16"
-                                        BorderBrush="Gray"
-                                        BorderThickness="1.5" />
-                                </Grid>
-
-                                <Grid
-                                    Name="EllipseGrid"
-                                    Grid.Column="1"
-                                    Height="40"
-                                    Width="40">
-
-                                    <Ellipse
-                                        Name="Ellipse_OperationTemplate"
-                                        Fill="{x:Bind Color}" />
-
-                                    <TextBlock
-                                        Name="Icon_OperationTemplate"
-                                        FontFamily="Segoe MDL2 Assets"
-                                        Text="{x:Bind Icon}"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
-                                        Foreground="White" />
-                                </Grid>
-
-                                <TextBlock
-                                    Grid.Column="2"
-                                    VerticalAlignment="Center"
-                                    Text="{x:Bind Name}"
-                                    Margin="20,0,0,0"
-                                    FontSize="16"
-                                    Foreground="White" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-
-            </models:ExpandPanel.Content>
-
-
-        </models:ExpandPanel>
-
-    </StackPanel>
+        <TextBlock
+            Name="Category_OperationCategoryTemplate"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            Text="{x:Bind OperationCategory.Name}"
+            Margin="20,0,0,0"
+            FontSize="16"
+            Foreground="{ThemeResource Text}" />
+    </Grid>
 
 </UserControl>

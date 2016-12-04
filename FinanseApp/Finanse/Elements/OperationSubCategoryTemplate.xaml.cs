@@ -36,7 +36,7 @@ namespace Finanse.Elements {
 
             this.DataContextChanged += (s, e) => Bindings.Update();       
             
-            Icon_OperationTemplate.FontFamily = new FontFamily(Settings.GetActualIconStyle());
+            //Icon_OperationTemplate.FontFamily = new FontFamily(Settings.GetActualIconStyle());
         }
     }
 }

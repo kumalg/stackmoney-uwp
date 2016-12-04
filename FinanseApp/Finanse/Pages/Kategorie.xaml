@@ -88,11 +88,11 @@
 
                 <ListView
                     FlowDirection="LeftToRight"
-                    Padding="0,-8,0,0"
+                    Padding="0,0,0,0"
                     ScrollViewer.VerticalScrollMode="Disabled"
                     Name="OperacjeListView"
                     ItemsSource="{x:Bind OperationCategories}"
-                    SelectionMode="None"
+                    SelectionMode="Single"
                     MaxWidth="620"
                     BorderThickness="0"
                     Background="Transparent">
@@ -100,6 +100,7 @@
                     <ListView.ItemContainerStyle>
                         <Style
                             TargetType="ListViewItem">
+                            <!--
                             <Setter
                                 Property="Template">
                                 <Setter.Value>
@@ -111,6 +112,7 @@
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
+                            -->
                             <Setter
                                 Property="HorizontalContentAlignment"
                                 Value="Stretch" />
@@ -127,92 +129,53 @@
                                 Background="Transparent">
 
                                 <StackPanel
-                                    Margin="0,16,0,0">
-
+                                    Margin="0,8">
+<!--
                                     <models:ExpandPanel>
 
 
                                         <models:ExpandPanel.HeaderContent>
-
-                                            <Grid
-                                                MaxWidth="600"
-                                                Margin="16"
-                                                Background="Transparent"
-                                                RightTapped="ExpandPanel_RightTapped">
-
-                                                <FlyoutBase.AttachedFlyout>
-                                                    <MenuFlyout
-                                                        MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
-                                                        <MenuFlyoutItem
-                                                            x:Name="EditCatButton"
-                                                            Style="{StaticResource MyMenuFlyoutItem}"
-                                                            Tag="&#xE104;"
-                                                            Text="Edytuj"
-                                                            Click="EditCat_Click" />
-                                                        <MenuFlyoutItem
-                                                            x:Name="DeleteCatButton"
-                                                            Style="{StaticResource MyMenuFlyoutItem}"
-                                                            Tag="&#xE107;"
-                                                            Text="Usuń"
-                                                            Click="DeleteCat_Click" />
-                                                        <MenuFlyoutSeparator />
-                                                        <MenuFlyoutItem
-                                                            x:Name="AddSubCatButton"
-                                                            Style="{StaticResource MyMenuFlyoutItem}"
-                                                            Tag="&#xE109;"
-                                                            Text="Dodaj podkategorię"
-                                                            Click="AddSubCat_Click" />
-                                                    </MenuFlyout>
-                                                </FlyoutBase.AttachedFlyout>
-
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition
-                                                        Width="Auto" />
-                                                    <ColumnDefinition
-                                                        Width="*" />
-                                                </Grid.ColumnDefinitions>
-
-                                                <Grid
-                                                    Name="EllipseGrid"
-                                                    Grid.Column="0"
-                                                    Height="50"
-                                                    Width="50">
-
-                                                    <Ellipse
-                                                        Name="Ellipse_OperationTemplate"
-                                                        Fill="{x:Bind Color}" />
-                                                    <!--
-                                                    <Rectangle
-                                                        RadiusX="5"
-                                                        RadiusY="5"
-                                                        Name="Ellipse_OperationTemplate"
-                                                        Fill="{x:Bind Color}" />
 -->
-                                                    <TextBlock
-                                                        x:Name="Icon_OperationTemplate"
-                                                        FontSize="24"
-                                                        Text="{x:Bind Icon}"
-                                                        VerticalAlignment="Center"
-                                                        HorizontalAlignment="Center"
-                                                        Foreground="White"
-                                                        DataContextChanged="Icon_OperationTemplate_DataContextChanged" />
-                                                </Grid>
 
-                                                <TextBlock
-                                                    Name="Category_OperationCategoryTemplate"
-                                                    Grid.Column="1"
-                                                    VerticalAlignment="Center"
-                                                    Text="{x:Bind Name}"
-                                                    Margin="20,0,0,0"
-                                                    FontSize="16"
-                                                    Foreground="{ThemeResource Text}" />
-                                            </Grid>
+                                    <StackPanel
+                                        Background="Transparent"
+                                        RightTapped="ExpandPanel_RightTapped">
 
+                                        <FlyoutBase.AttachedFlyout>
+                                            <MenuFlyout
+                                                MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
+                                                <MenuFlyoutItem
+                                                    x:Name="EditCatButton"
+                                                    Style="{StaticResource MyMenuFlyoutItem}"
+                                                    Tag="&#xE104;"
+                                                    Text="Edytuj"
+                                                    Click="EditCat_Click" />
+                                                <MenuFlyoutItem
+                                                    x:Name="DeleteCatButton"
+                                                    Style="{StaticResource MyMenuFlyoutItem}"
+                                                    Tag="&#xE107;"
+                                                    Text="Usuń"
+                                                    Click="DeleteCat_Click" />
+                                                <MenuFlyoutSeparator />
+                                                <MenuFlyoutItem
+                                                    x:Name="AddSubCatButton"
+                                                    Style="{StaticResource MyMenuFlyoutItem}"
+                                                    Tag="&#xE109;"
+                                                    Text="Dodaj podkategorię"
+                                                    Click="AddSubCat_Click" />
+                                            </MenuFlyout>
+                                        </FlyoutBase.AttachedFlyout>
+
+                                        <data:OperationCategoryTemplate />
+                                        
+                                    </StackPanel>
+
+                                    <!--
                                         </models:ExpandPanel.HeaderContent>
 
 
                                         <models:ExpandPanel.Content>
-
+-->
                                             <ListView
                                                 ScrollViewer.VerticalScrollMode="Disabled"
                                                 Name="SubOperacjeListView"
@@ -220,7 +183,7 @@
                                                 MaxWidth="620"
                                                 BorderThickness="0"
                                                 Background="Transparent"
-                                                SelectionMode="None">
+                                                SelectionMode="Single">
 
                                                 <ListView.ItemContainerStyle>
                                                     <Style
@@ -263,11 +226,11 @@
                                                     </DataTemplate>
                                                 </ListView.ItemTemplate>
                                             </ListView>
-
+<!--
                                         </models:ExpandPanel.Content>
 
                                     </models:ExpandPanel>
-
+-->
                                 </StackPanel>
 
                             </Grid>

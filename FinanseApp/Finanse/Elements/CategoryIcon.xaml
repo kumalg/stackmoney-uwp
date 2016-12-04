@@ -1,0 +1,35 @@
+﻿<UserControl
+    x:Class="Finanse.Elements.CategoryIcon"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Finanse.Elements"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="48"
+    d:DesignWidth="48">
+
+    <Grid
+        Width="48"
+        Height="48">
+
+        <Ellipse
+            Opacity="0.05"
+            Fill="{Binding Color}">
+        </Ellipse>
+
+        <Ellipse
+            Opacity="0.15"
+            StrokeThickness="2"
+            Stroke="{Binding Color}">
+        </Ellipse>
+
+        <FontIcon
+            FontSize="16"
+            Glyph="{Binding Glyph}"
+            FontFamily="{StaticResource FontAwesome}"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Foreground="{Binding Color}" />
+    </Grid>
+</UserControl>

@@ -36,6 +36,7 @@ namespace Finanse.Elements {
 
             this.InitializeComponent();
             this.DataContextChanged += (s, e) => Bindings.Update();
+           
         }
 
         public void Operation_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
@@ -60,39 +61,27 @@ namespace Finanse.Elements {
             SubCategoryNameStackPanel.Visibility = Visibility.Collapsed;
 
             /* WCHODZI IKONKA KATEGORII */
-            //Icon_OperationTemplate.FontFamily = new FontFamily(Settings.GetActualIconStyle());
-            Icon_OperationTemplate.Opacity = 1;
-            Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text"];
-
             if (cat != null && subCat == null) {
-                Ellipse_OperationTemplate.Stroke = new SolidColorBrush(Functions.GetSolidColorBrush(cat.Color).Color);
-                Icon_OperationTemplate.Foreground = new SolidColorBrush(Functions.GetSolidColorBrush(cat.Color).Color);
-                Icon_OperationTemplate.Glyph = cat.Icon;
+                CategoryIcon.Color = new SolidColorBrush(Functions.GetSolidColorBrush(cat.Color).Color);
+                CategoryIcon.Glyph = cat.Icon;
 
                 if (String.IsNullOrEmpty(Operation.Title)) {
-                    //Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text-1"];
                     Title_OperationTemplate.Text = cat.Name;
                 }
             }
 
             else if (cat != null && subCat != null) {
-                Ellipse_OperationTemplate.Stroke = new SolidColorBrush(Functions.GetSolidColorBrush(subCat.Color).Color);
-                Icon_OperationTemplate.Foreground = new SolidColorBrush(Functions.GetSolidColorBrush(subCat.Color).Color);
-                Icon_OperationTemplate.Glyph = subCat.Icon;
+                CategoryIcon.Color = new SolidColorBrush(Functions.GetSolidColorBrush(subCat.Color).Color);
+                CategoryIcon.Glyph = subCat.Icon;
 
                 if (String.IsNullOrEmpty(Operation.Title)) {
-                    //Title_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["Text-1"];
                     Title_OperationTemplate.Text = subCat.Name;
                 }
             }
-
-           // ((ResourceDictionary)Application.Current.Resources["IconBase"]).Item
             
             else {
-                Ellipse_OperationTemplate.Stroke = (SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"];
-                Icon_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"];
-                Icon_OperationTemplate.Glyph = ((FontIcon)Application.Current.Resources["DefaultEllipseIcon"]).Glyph;
-                Icon_OperationTemplate.Opacity = 0.2;
+                CategoryIcon.Color = (SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"];
+                CategoryIcon.Glyph = ((FontIcon)Application.Current.Resources["DefaultEllipseIcon"]).Glyph;
             }
 
             /* WYGLĄD KOSZTU (CZERWONY Z MINUSEM CZY ZIELONY Z PLUSEM) */

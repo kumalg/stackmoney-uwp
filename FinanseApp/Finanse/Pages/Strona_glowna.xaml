@@ -267,9 +267,9 @@
                                     <FontIcon
                                         Grid.Column="0"
                                         Foreground="{ThemeResource Text-2}"
-                                        FontFamily="{Binding Key.iconStyle}"
+                                        FontFamily="{StaticResource FontAwesome}"
                                         Glyph="{Binding Key.icon}"
-                                        FontSize="16" />
+                                        FontSize="13" />
                                 </Grid>
 
                                 <TextBlock
@@ -497,7 +497,7 @@
             </StackPanel>
 
         </Grid>
-        
+
         <Grid
             Background="{ThemeResource Background-1}"
             Grid.Row="1"
@@ -530,7 +530,7 @@
                     Foreground="{ThemeResource Text-1}"
                     Content="Wg. kategorii" />
             </Grid>
-<!--
+            <!--
             <Grid
                 Margin="16,0"
                 MaxWidth="600">
@@ -563,12 +563,6 @@
             </Grid>
             -->
         </Grid>
-
-        <ProgressRing
-            x:Name="Progress"
-            Visibility="Visible"
-            IsActive="True"
-            Grid.Row="2"/>
 
         <SemanticZoom
             x:Name="semanticZoom"

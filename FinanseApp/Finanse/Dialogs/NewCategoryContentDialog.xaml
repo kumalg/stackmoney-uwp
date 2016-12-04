@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:data="using:Finanse.Elements"
     Title="Nowa kategoria"
     Background="{ThemeResource BackgroundTransparent}"
     PrimaryButtonText="Dodaj"
@@ -30,27 +31,11 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Grid
+            <data:CategoryIcon
+                x:Name="CategoryIcon"
                 Grid.Column="1"
-                Name="Ikona"
-                Height="70"
-                Width="70">
-
-                <Ellipse
-                    Opacity="0.2"
-                    Name="CategoryCircle"
-                    StrokeThickness="2"
-                    Stroke="{StaticResource GreenColorStyle}" />
-
-                <FontIcon
-                    Name="CategoryIcon"
-                    FontFamily="Segoe MDL2 Assets"
-                    Glyph="&#xE804;"
-                    FontSize="28"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Foreground="{StaticResource GreenColorStyle}" />
-            </Grid>
+                Color="{StaticResource GreenColorStyle}"
+                Glyph="&#xE804;" />
 
             <Button
                 Style="{StaticResource ButtonWithBottomBorder}"

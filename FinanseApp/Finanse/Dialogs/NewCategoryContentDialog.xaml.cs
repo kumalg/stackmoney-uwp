@@ -67,7 +67,7 @@ namespace Finanse.Dialogs {
                 NameValue.Text = editedCategory.Name;
 
                 CategoryIcon.Glyph = editedCategory.Icon;
-                CategoryCircle.Fill = Functions.GetSolidColorBrush(editedCategory.Color);
+                CategoryIcon.Color = Functions.GetSolidColorBrush(editedCategory.Color);
 
                 VisibleInExpensesToggleButton.IsOn = editedCategory.VisibleInExpenses;
                 VisibleInIncomesToggleButton.IsOn = editedCategory.VisibleInIncomes;
@@ -94,7 +94,7 @@ namespace Finanse.Dialogs {
                     newOperationSubCategoryItem = new OperationSubCategory {
                         Id = 0,
                         Name = NameValue.Text,
-                        Color = ((SolidColorBrush)CategoryCircle.Stroke).Color.ToString(),
+                        Color = CategoryIcon.Color.Color.ToString(),
                         Icon = CategoryIcon.Glyph,
                         //Icon = Icon2Value.Text,
                         BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
@@ -109,7 +109,7 @@ namespace Finanse.Dialogs {
                 else {
                     newOperationCategoryItem = new OperationCategory {
                         Name = NameValue.Text,
-                        Color = ((SolidColorBrush)CategoryCircle.Stroke).Color.ToString(),
+                        Color = CategoryIcon.Color.Color.ToString(),
                         Icon = CategoryIcon.Glyph,
                         //Icon = Icon2Value.Text,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
@@ -128,7 +128,7 @@ namespace Finanse.Dialogs {
                     editedOperationSubCategoryItem = new OperationSubCategory {
                         Id = editedCategory.Id,
                         Name = NameValue.Text,
-                        Color = ((SolidColorBrush)CategoryCircle.Stroke).Color.ToString(),
+                        Color = CategoryIcon.Color.Color.ToString(),
                         Icon = CategoryIcon.Glyph,
                         //Icon = Icon2Value.Text,
                         BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
@@ -155,7 +155,7 @@ namespace Finanse.Dialogs {
                     };
                     editedOperationCategoryItem = new OperationCategory {
                         Name = NameValue.Text,
-                        Color = ((SolidColorBrush)CategoryCircle.Stroke).Color.ToString(),
+                        Color = CategoryIcon.Color.Color.ToString(),
                         Icon = CategoryIcon.Glyph,
                         //Icon = Icon2Value.Text,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
@@ -171,7 +171,7 @@ namespace Finanse.Dialogs {
                     // kategoria która została subkategorią
                     editedOperationSubCategoryItem = new OperationSubCategory {
                         Name = NameValue.Text,
-                        Color = ((SolidColorBrush)CategoryCircle.Stroke).Color.ToString(),
+                        Color = CategoryIcon.Color.Color.ToString(),
                         Icon = CategoryIcon.Glyph,
                         //Icon = Icon2Value.Text,
                         BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
@@ -190,7 +190,7 @@ namespace Finanse.Dialogs {
                     editedOperationCategoryItem = new OperationCategory {
                         Id = editedCategory.Id,
                         Name = NameValue.Text,
-                        Color = ((SolidColorBrush)CategoryCircle.Stroke).Color.ToString(),
+                        Color = CategoryIcon.Color.Color.ToString(),
                         Icon = CategoryIcon.Glyph,
                         //Icon = Icon2Value.Text,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
@@ -207,14 +207,12 @@ namespace Finanse.Dialogs {
         private void RadioButtonColor_Checked(object sender, RoutedEventArgs e) {
             var button = sender as RadioButton;
             //CategoryCircle.Fill = button.Background;
-            CategoryCircle.Stroke = button.Background;
-            CategoryIcon.Foreground = button.Background;
+            CategoryIcon.Color = (SolidColorBrush)button.Background;
         }
 
         private void RadioButtonIcon_Checked(object sender, RoutedEventArgs e) {
             var button = sender as RadioButton;
             CategoryIcon.Glyph = button.Content.ToString();
-            CategoryIcon.FontFamily = button.FontFamily;
         }
 
         private void NameValue_TextChanged(object sender, TextChangedEventArgs e) {

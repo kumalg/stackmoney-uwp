@@ -57,7 +57,7 @@ namespace Finanse.Dialogs {
             CostValue.Text = editedOperation.Cost.ToString("C", Settings.GetActualCurrency());
 
             DateValuePanel.Visibility = Visibility.Collapsed;
-            if (editedOperation.Date != null && whichOption != "pattern") {
+            if (!editedOperation.Date.Equals("") && whichOption != "pattern") {
                 DateValue.Text = String.Format("{0:dddd, dd MMMM yyyy}", Convert.ToDateTime(editedOperation.Date));
                 DateValuePanel.Visibility = Visibility.Visible;
             }

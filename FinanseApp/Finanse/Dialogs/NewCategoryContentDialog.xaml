@@ -26,16 +26,26 @@
             Margin="0,30,0,0">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="*" />
             </Grid.ColumnDefinitions>
 
             <data:CategoryIcon
                 x:Name="CategoryIcon"
                 Grid.Column="1"
                 Color="{StaticResource GreenColorStyle}"
-                Glyph="&#xE804;" />
+                Glyph="&#xE804;"
+                RenderTransformOrigin="0.5,0.5">
+                <data:CategoryIcon.RenderTransform>
+                    <CompositeTransform
+                        ScaleX="1.25"
+                        ScaleY="1.25" />
+                </data:CategoryIcon.RenderTransform>
+            </data:CategoryIcon>
 
             <Button
                 Style="{StaticResource ButtonWithBottomBorder}"
@@ -160,7 +170,7 @@
             <ToggleSwitch.OnContent>
                 Tak
             </ToggleSwitch.OnContent>
-            
+
         </ToggleSwitch>
 
         <TextBlock
@@ -181,7 +191,7 @@
             <ToggleSwitch.OnContent>
                 Tak
             </ToggleSwitch.OnContent>
-            
+
         </ToggleSwitch>
 
     </StackPanel>

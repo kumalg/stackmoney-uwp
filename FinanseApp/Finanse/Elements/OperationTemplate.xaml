@@ -25,6 +25,9 @@
             Width="48"
             Height="48">
 
+            <data:CategoryIcon
+                x:Name="CategoryIcon" />
+
             <Ellipse
                 Name="MoneyAccountEllipse"
                 Visibility="Collapsed"
@@ -35,9 +38,7 @@
                 Fill="{StaticResource RedColorStyle}"
                 Width="14"
                 Height="14" />
-            
-            <data:CategoryIcon
-                x:Name="CategoryIcon"/>
+           
         </Grid>
 
         <Border

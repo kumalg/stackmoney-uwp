@@ -174,13 +174,12 @@ namespace Finanse.Dialogs {
                         _source.Remove(group);
                     else
                         group.Remove(group.Single(i => i.Id == item.Id));
-                    /*
-                        || DateValue.Date.ToString().Equals("")
-                        || DateValue.Date.Value.Year != Convert.ToDateTime(editedOperation.Date).Year
-                        || DateValue.Date.Value.Month != Convert.ToDateTime(editedOperation.Date).Month
-                        */
 
-                    //AddOperationToList(item);
+                    if (!DateValue.Date.ToString().Equals("")
+                        && DateValue.Date.Value.Year == Convert.ToDateTime(editedOperation.Date).Year
+                        && DateValue.Date.Value.Month == Convert.ToDateTime(editedOperation.Date).Month)
+
+                        AddOperationToList(item);
                 }
 
                 Dal.SaveOperation(item);
@@ -452,6 +451,36 @@ namespace Finanse.Dialogs {
 
         private void CostValue_TextChanged(object sender, TextChangedEventArgs e) {
             SetNowaOperacjaButton();
+        }
+
+        private void OperationType_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
+            //RadioButton radioButton = sender as RadioButton;
+
+          //  IsPrimaryButtonEnabled = true;//Expense_RadioButton.IsChecked != editedOperation.isExpense;
+        }
+
+        private void NameValue_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
+          //  IsPrimaryButtonEnabled = NameValue.Text != editedOperation.Title && !CostValue.Text.Equals("");
+        }
+
+        private void DateValue_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
+           // IsPrimaryButtonEnabled = String.Format("{0:yyyy/MM/dd}", DateValue.Date) != editedOperation.Date && !CostValue.Text.Equals("");
+        }
+
+        private void CategoryValue_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
+          //  IsPrimaryButtonEnabled = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag != editedOperation.CategoryId && !CostValue.Text.Equals("");
+        }
+
+        private void SubCategoryValue_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
+           // IsPrimaryButtonEnabled = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag != editedOperation.SubCategoryId && !CostValue.Text.Equals("");
+        }
+
+        private void PayFormValue_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
+          //  IsPrimaryButtonEnabled = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag != editedOperation.MoneyAccountId && !CostValue.Text.Equals("");
+        }
+
+        private void MoreInfoValue_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
+          //  IsPrimaryButtonEnabled = MoreInfoValue.Text != editedOperation.MoreInfo && !CostValue.Text.Equals("");
         }
     }
 }

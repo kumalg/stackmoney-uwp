@@ -36,16 +36,18 @@
                 Fill="{ThemeResource Text-2}" />
         </Grid>
 
-        <Grid
-            Name="EllipseGrid"
+        <data:CategoryIcon
             Grid.Column="1"
-            Height="40"
-            Width="40">
+            Glyph="{x:Bind OperationSubCategory.Icon}"
+            Color="{x:Bind OperationSubCategory.Color}"
+            RenderTransformOrigin="0.5,0.5">
+            <data:CategoryIcon.RenderTransform>
+                <CompositeTransform
+                    ScaleX="0.75"
+                    ScaleY="0.75" />
+            </data:CategoryIcon.RenderTransform>
+        </data:CategoryIcon>
 
-            <data:CategoryIcon
-                Glyph="{x:Bind OperationSubCategory.Icon}"
-                Color="{x:Bind OperationSubCategory.Color}" />
-        </Grid>
 
         <TextBlock
             Grid.Column="2"

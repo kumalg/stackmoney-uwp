@@ -188,12 +188,22 @@
         <FontIcon x:Key="FontIcon_6" Glyph="" FontFamily="{StaticResource FontAwesome}" />
         <FontIcon x:Key="FontIcon_7" Glyph="" FontFamily="{StaticResource FontAwesome}" />
         <FontIcon x:Key="FontIcon_8" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_9" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_9" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        
         <FontIcon x:Key="FontIcon_10" Glyph="" FontFamily="{StaticResource FontAwesome}" />
         <FontIcon x:Key="FontIcon_11" Glyph="" FontFamily="{StaticResource FontAwesome}" />
         <FontIcon x:Key="FontIcon_12" Glyph="" FontFamily="{StaticResource FontAwesome}" />
         <FontIcon x:Key="FontIcon_13" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_14" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_15" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_16" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_17" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_18" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_19" Glyph="" FontFamily="{StaticResource FontAwesome}" />
         
+        <FontIcon x:Key="FontIcon_20" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_21" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+
     </ResourceDictionary>
 
 

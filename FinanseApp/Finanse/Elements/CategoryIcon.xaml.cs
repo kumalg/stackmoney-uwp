@@ -30,6 +30,12 @@ namespace Finanse.Elements {
             }
         }
 
+        public double HalfSize {
+            get {
+                return Width / 3.0;
+            }
+        }
+
         public static readonly DependencyProperty ColorProperty = DependencyProperty.Register("Color", typeof(SolidColorBrush), typeof(CategoryIcon), null);
 
         public SolidColorBrush Color {

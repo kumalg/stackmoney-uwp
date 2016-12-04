@@ -130,12 +130,6 @@
 
                                 <StackPanel
                                     Margin="0,8">
-<!--
-                                    <models:ExpandPanel>
-
-
-                                        <models:ExpandPanel.HeaderContent>
--->
 
                                     <StackPanel
                                         Background="Transparent"
@@ -167,15 +161,9 @@
                                         </FlyoutBase.AttachedFlyout>
 
                                         <data:OperationCategoryTemplate />
-                                        
+
                                     </StackPanel>
 
-                                    <!--
-                                        </models:ExpandPanel.HeaderContent>
-
-
-                                        <models:ExpandPanel.Content>
--->
                                             <ListView
                                                 ScrollViewer.VerticalScrollMode="Disabled"
                                                 Name="SubOperacjeListView"
@@ -226,11 +214,7 @@
                                                     </DataTemplate>
                                                 </ListView.ItemTemplate>
                                             </ListView>
-<!--
-                                        </models:ExpandPanel.Content>
 
-                                    </models:ExpandPanel>
--->
                                 </StackPanel>
 
                             </Grid>

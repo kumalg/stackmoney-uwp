@@ -426,12 +426,14 @@
                 Name="Expense_RadioButton"
                 Content="Wydatek"
                 GroupName="OperationType_RadioButtons"
-                Checked="TypeOfOperationRadioButton_Checked"/>
+                Checked="TypeOfOperationRadioButton_Checked"
+                DataContextChanged="OperationType_DataContextChanged" />
             <RadioButton
                 Name="Income_RadioButton"
                 Content="Wpływ"
                 GroupName="OperationType_RadioButtons"
-                Checked="TypeOfOperationRadioButton_Checked"/>
+                Checked="TypeOfOperationRadioButton_Checked"
+                DataContextChanged="OperationType_DataContextChanged"/>
 
         </StackPanel>
 
@@ -439,7 +441,8 @@
             Name="NameValue"
             Style="{StaticResource TextBoxStyle1}"
             PlaceholderText="Nazwa"
-            Margin="0,20,0,0" />
+            Margin="0,20,0,0"
+            DataContextChanged="NameValue_DataContextChanged" />
 
         <TextBox
             Name="CostValue"
@@ -460,7 +463,8 @@
             Margin="0,10"
             HorizontalAlignment="Stretch"
             Closed="DateValue_Closed"
-            IsTodayHighlighted="False" />
+            IsTodayHighlighted="False"
+            DataContextChanged="DateValue_DataContextChanged" />
 
         <ComboBox
             Name="CategoryValue"
@@ -469,7 +473,8 @@
             SelectedValuePath="ID"
             PlaceholderText="Kategoria"
             Margin="0,10"
-            HorizontalAlignment="Stretch"/>
+            HorizontalAlignment="Stretch"
+            DataContextChanged="CategoryValue_DataContextChanged" />
 
         <ComboBox
             Name="SubCategoryValue"
@@ -477,14 +482,16 @@
             PlaceholderText="Podkategoria"
             Margin="0,10"
             HorizontalAlignment="Stretch"
-            SelectionChanged="SubCategoryValue_SelectionChanged" />
+            SelectionChanged="SubCategoryValue_SelectionChanged"
+            DataContextChanged="SubCategoryValue_DataContextChanged" />
 
         <ComboBox
             Name="PayFormValue"
             Style="{StaticResource ComboBoxStyle1}"
             PlaceholderText="Forma płatności"
             Margin="0,10"
-            HorizontalAlignment="Stretch">
+            HorizontalAlignment="Stretch"
+            DataContextChanged="PayFormValue_DataContextChanged">
         </ComboBox>
        
         <TextBox
@@ -495,7 +502,8 @@
             PlaceholderText="Więcej informacji"
             Style="{StaticResource TextBoxStyle1}"
             Height="100"
-            Margin="0,10" />
+            Margin="0,10"
+            DataContextChanged="MoreInfoValue_DataContextChanged" />
 
         <TextBlock
             Name="SaveAsAssetTitle"

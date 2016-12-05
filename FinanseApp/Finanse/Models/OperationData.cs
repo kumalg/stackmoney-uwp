@@ -26,7 +26,7 @@ namespace Finanse.Models {
         }
 
         public void SetVisiblePayFormList(List<int> visiblePayFormList) {
-            if(this.visiblePayFormList != visiblePayFormList)
+            if (this.visiblePayFormList != visiblePayFormList)
                 this.visiblePayFormList = visiblePayFormList;
         }
 
@@ -39,8 +39,7 @@ namespace Finanse.Models {
                     groupsByDay = new ObservableCollection<GroupInfoList<Operation>>();
 
                     GroupInfoList<Operation> info;
-                    //decimal sumCost = 0;
-
+                    
                     var query = from item in isFuture ? Dal.GetAllFutureOperations(visiblePayFormList) : Dal.GetAllOperations(month, year, visiblePayFormList)
                                 group item by item.Date into g
                                 orderby g.Key descending
@@ -53,17 +52,12 @@ namespace Finanse.Models {
                         info = new GroupInfoList<Operation>() {
                             Key = new GroupHeaderByDay(g.GroupName),
                         };
-
-                        //sumCost = 0;
-
+                        
                         foreach (var item in g.Items.OrderByDescending(i => i.Id)) {
 
                             info.Add(item);
-                            //sumCost += item.isExpense ? -item.Cost : item.Cost;
                         }
-
-                        //info.decimalCost = sumCost;
-                        //info.cost = sumCost.ToString("C", Settings.GetActualCurrency());
+                        
                         groupsByDay.Add(info);
                     }
                 }
@@ -84,7 +78,7 @@ namespace Finanse.Models {
 
                     for (int i = 1; i <= DateTime.DaysInMonth(year, month); i++) {
 
-                        if (this.GroupsByDay.Any(k => ((GroupHeaderByDay)k.Key).dayNum == i.ToString()))
+                        if (this.groupsByDay.Any(k => ((GroupHeaderByDay)k.Key).dayNum == i.ToString()))
                             operationHeaders.Add(new HeaderItem() { Day = i.ToString(), IsEnabled = true });
                         else
                             operationHeaders.Add(new HeaderItem() { Day = i.ToString(), IsEnabled = false });
@@ -104,8 +98,7 @@ namespace Finanse.Models {
                     groupsByCategory = new ObservableCollection<GroupInfoList<Operation>>();
 
                     GroupInfoList<Operation> info;
-                    //decimal sumCost = 0;
-
+                    
                     var query = from item in isFuture ? Dal.GetAllFutureOperations(visiblePayFormList) : Dal.GetAllOperations(month, year, visiblePayFormList)
                                 group item by item.CategoryId into g
                                 orderby g.Key descending
@@ -136,15 +129,11 @@ namespace Finanse.Models {
 
                         ((GroupHeaderByCategory)info.Key).iconStyle = new FontFamily(Settings.GetActualIconStyle());
 
-                        //sumCost = 0;
-
                         foreach (var item in g.Items) {
 
                             info.Add(item);
-                            //sumCost += item.isExpense ? -item.Cost : item.Cost;
                         }
 
-                        //info.cost = sumCost.ToString("C", Settings.GetActualCurrency());
                         groupsByCategory.Add(info);
                     }
                 }

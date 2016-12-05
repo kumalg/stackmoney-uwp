@@ -25,17 +25,16 @@ namespace Finanse.Dialogs {
 
     public sealed partial class NewOperationContentDialog : ContentDialog {
 
-        Operation editedOperation;
+        private Operation editedOperation;
 
         private readonly ObservableCollection<GroupInfoList<Operation>> _source;
         private readonly ObservableCollection<OperationPattern> patterns;
 
-        bool isPatternEditing = false;
-        //string whichOptions;
-        string acceptedCostValue = "";
-        int whereIsSelection;
+        private bool isPatternEditing = false;
+        private string acceptedCostValue = "";
+        private int whereIsSelection;
 
-        bool isUnfocused = true;
+        private bool isUnfocused = true;
 
         public NewOperationContentDialog(ObservableCollection<GroupInfoList<Operation>> _source, Operation editedOperation) {
 
@@ -172,6 +171,7 @@ namespace Finanse.Dialogs {
 
                     if (group.Count == 1)
                         _source.Remove(group);
+
                     else
                         group.Remove(group.Single(i => i.Id == item.Id));
 
@@ -202,29 +202,6 @@ namespace Finanse.Dialogs {
 
                 Dal.SaveOperationPattern(itemPattern);
             }
-            /*
-            else if (!isPatternEditing) {
-
-                AddOperationToList((Operation)itemPattern);
-
-                Dal.SaveOperation((Operation)itemPattern);
-
-                if (SaveAsAssetToggle.IsOn) {
-                    /*
-                    OperationPattern itemPattern = new OperationPattern {
-                        Id = 0,
-                        Title = NameValue.Text,
-                        Cost = decimal.Parse(acceptedCostValue),
-                        isExpense = (bool)Expense_RadioButton.IsChecked,
-                        CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
-                        SubCategoryId = subCategoryId,
-                        MoreInfo = MoreInfoValue.Text,
-                        MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
-                    };
-
-                    Dal.SaveOperationPattern(itemPattern);
-                }
-            }*/
         }
 
         private void AddOperationToList(Operation item) {
@@ -238,44 +215,14 @@ namespace Finanse.Dialogs {
                 int i = 0;
 
                 for (i = 0; i < _source.Count; i++)
-                    if (((GroupHeaderByDay)_source.ElementAt(i).Key).date.CompareTo(item.Date) < 0) break;
+                    if (((GroupHeaderByDay)_source.ElementAt(i).Key).date.CompareTo(item.Date) < 0)
+                        break;
 
                 _source.Insert(i, group);
             }
             else {
-                group.Insert(0,item);
-            }
-
-            /*
-            GroupInfoList<Operation> group = _source.SingleOrDefault(i => ((GroupHeaderByDay)i.Key).date == item.Date);
-            if (group == null) {
-
-                group = new GroupInfoList<Operation> {
-                    Key = new GroupHeaderByDay(item.Date)
-                };
-
-                int i = 0;
-
-                if (_source.Count != 0) {
-                    bool check = true;
-                    group.Insert(0, item);
-                    while (check) {
-                        if (Convert.ToDateTime(((GroupHeaderByDay)_source.ElementAt(i).Key).date) > Convert.ToDateTime(item.Date))
-                            i++;
-                        else
-                            check = false;
-                    }
-                }
-
-                //newGroup.cost = newGroup.Cost;
-
-                _source.Insert(i, group);
-            }
-            else {
-
-                //group.cost = group.Cost;
                 group.Insert(0, item);
-            }*/
+            }
         }
 
         private void TypeOfOperationRadioButton_Checked(object sender, RoutedEventArgs e) {

@@ -12,7 +12,6 @@ using Windows.UI.Xaml.Media;
 namespace Finanse.Models {
     public class GroupInfoList<T> : ObservableCollection<Operation> {
         public object Key { get; set; }
-        //private string _cost;
         private decimal _decimalCost;
 
         public string cost {
@@ -52,7 +51,15 @@ namespace Finanse.Models {
         public string month { get; set; }
 
         public GroupHeaderByDay(string date) {
-            try {
+
+            if (date.Equals("")) {
+                dayNum00 = "#";
+                dayNum = "";
+                day = "Bez daty";
+                month = "";
+            }
+
+            else {
                 DateTime dt = Convert.ToDateTime(date);
 
                 this.date = date;
@@ -61,13 +68,6 @@ namespace Finanse.Models {
                 day = String.Format("{0:dddd}", dt);
                 month = String.Format("{0:MMMM yyyy}", dt);
             }
-            catch {
-                //this.date = date;
-                dayNum00 = "#";
-                dayNum = "";
-                day = "Bez daty";
-                month = "";
-            }
-        }  
+        }
     }
 }

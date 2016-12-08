@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Finanse.Models {
+﻿namespace Finanse.Models {
     public class HeaderItem {
         public string Day { get; set; }
         public bool IsEnabled { get; set; }

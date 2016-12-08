@@ -5,8 +5,6 @@ using Windows.UI.Xaml.Media;
 using Finanse.DataAccessLayer;
 using Finanse.Models;
 
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace Finanse.Elements {
 
     public sealed partial class OperationTemplate : UserControl {

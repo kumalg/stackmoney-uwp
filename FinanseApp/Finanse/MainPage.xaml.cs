@@ -1,43 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Foundation.Metadata;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Finanse.Elements;
 using Finanse.Pages;
-using System.Collections.ObjectModel;
 using Windows.Graphics.Display;
-using Finanse.Models;
 using Finanse.DataAccessLayer;
-using System.Threading.Tasks;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace Finanse {
     public sealed partial class MainPage : Page {
 
         public MainPage() {
             this.InitializeComponent();
-            //AktualnaStrona_Frame.Navigate(typeof(Konta));
-            //Strona_glowna_ListBoxItem.IsChecked = true;
             Dal.CreateDB();
             DisplayInformation info = DisplayInformation.GetForCurrentView();
 
             whichOrientation(info);
-            //StatusBarAndTitleBar("GreyColorStyle");
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {

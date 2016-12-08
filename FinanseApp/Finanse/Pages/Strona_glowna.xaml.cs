@@ -15,7 +15,6 @@ using Finanse.Models;
 namespace Finanse.Pages {
     public sealed partial class Strona_glowna : Page {
 
-        //private ObservableCollection<CategoryGroupInfoList<Operation>> _sourceByCategory;
         private FontFamily iconStyle = new FontFamily(Settings.GetActualIconStyle());
         private List<int> visiblePayFormList = new List<int>();
 

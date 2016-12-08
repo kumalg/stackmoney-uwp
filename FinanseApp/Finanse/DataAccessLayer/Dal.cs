@@ -1,16 +1,11 @@
 ﻿namespace Finanse.DataAccessLayer {
-    using Elements;
     using Models;
     using SQLite.Net;
     using SQLite.Net.Platform.WinRT;
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Threading.Tasks;
-    using Windows.ApplicationModel;
     using Windows.Storage;
 
     internal static class Dal {

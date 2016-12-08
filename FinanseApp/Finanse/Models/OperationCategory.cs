@@ -1,9 +1,8 @@
-﻿using SQLite.Net.Attributes;
-using System;
+﻿using Finanse.DataAccessLayer;
+using SQLite.Net.Attributes;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 
 namespace Finanse.Models {
 
@@ -23,9 +22,13 @@ namespace Finanse.Models {
         public bool VisibleInExpenses { get; set; }
 
         public ObservableCollection<OperationSubCategory> subCategories = new ObservableCollection<OperationSubCategory>();
-
+        
         public void addSubCategory(OperationSubCategory subCategory) {
             subCategories.Insert(0, subCategory);
+        }
+
+        public ObservableCollection<OperationSubCategory> getSubCategories() {
+            return new ObservableCollection<OperationSubCategory>(Dal.GetOperationSubCategoriesByBossId(Id));
         }
         
         public FontIcon getFontIcon() {

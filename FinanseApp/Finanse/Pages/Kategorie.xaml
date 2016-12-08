@@ -167,7 +167,7 @@
                                             <ListView
                                                 ScrollViewer.VerticalScrollMode="Disabled"
                                                 Name="SubOperacjeListView"
-                                                ItemsSource="{x:Bind subCategories}"
+                                                ItemsSource="{x:Bind getSubCategories()}"
                                                 MaxWidth="620"
                                                 BorderThickness="0"
                                                 Background="Transparent"

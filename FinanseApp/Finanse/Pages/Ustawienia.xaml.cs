@@ -2,6 +2,7 @@
 using Finanse.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -22,6 +23,17 @@ namespace Finanse.Pages {
 
     public sealed partial class Ustawienia : Page {
 
+        private ObservableCollection<ComboBoxItem> daysOfWeek = new ObservableCollection<ComboBoxItem> {
+            new ComboBoxItem {
+                Content = "ff",
+                Tag = DayOfWeek.Sunday
+            },
+            new ComboBoxItem {
+                Content = "d",
+                Tag = DayOfWeek.Monday
+            }
+        };
+        
         public Ustawienia() {
 
             this.InitializeComponent();
@@ -33,6 +45,20 @@ namespace Finanse.Pages {
                     Tag = item.Name
                 });
             }
+            
+            FirstDayOfWeek_ComboBox.Items.Add(
+                new ComboBoxItem {
+                    Content = "Niedziela",
+                    Tag = DayOfWeek.Sunday
+                }
+            );
+
+            FirstDayOfWeek_ComboBox.Items.Add(
+                new ComboBoxItem {
+                    Content = "Poniedziałek",
+                    Tag = DayOfWeek.Monday
+                }
+            );
 
             if (Settings.GetActualIconStyle() == "Segoe UI") {
                 ColorIcon_RadioButton.IsChecked = true;

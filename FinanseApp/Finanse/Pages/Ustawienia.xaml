@@ -49,16 +49,9 @@
                                 Foreground="{ThemeResource Text}" />
 
                             <ComboBox
-                                Name="ColorValue"
-                                SelectedIndex="2"
+                                Name="FirstDayOfWeek_ComboBox"
+                                ItemsSource="{Binding daysOfWeek}"
                                 Style="{StaticResource ComboBoxStyle1}">
-
-                                <ComboBoxItem
-                                    Content="Sobota" />
-                                <ComboBoxItem
-                                    Content="Niedziela" />
-                                <ComboBoxItem
-                                    Content="Poniedziałek" />
 
                             </ComboBox>
 

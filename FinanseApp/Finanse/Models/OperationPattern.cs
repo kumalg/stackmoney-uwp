@@ -83,6 +83,19 @@ namespace Finanse.Models {
             }
         }
 
+        public Operation toOperation() {
+            return new Operation {
+                Title = this.Title,
+                Cost = this.Cost,
+                Date = "",
+                CategoryId = this.CategoryId,
+                SubCategoryId = this.SubCategoryId,
+                MoneyAccountId = this.MoneyAccountId,
+                MoreInfo = this.MoreInfo,
+                isExpense = this.isExpense,
+                Id = this.Id
+            };
+        }
         /*
          * public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 

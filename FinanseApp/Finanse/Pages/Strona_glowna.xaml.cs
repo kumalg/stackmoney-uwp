@@ -1,36 +1,18 @@
-﻿using SQLite.Net.Attributes;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Finanse.Elements;
 using System.Collections.ObjectModel;
-using SQLite.Net.Platform.WinRT;
 using System.Globalization;
-using Windows.Graphics.Display;
-using Windows.Foundation.Metadata;
 using Finanse.DataAccessLayer;
 using Finanse.Dialogs;
 using Finanse.Models;
-using System.Threading.Tasks;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Finanse.Pages {
-
-
     public sealed partial class Strona_glowna : Page {
 
         //private ObservableCollection<CategoryGroupInfoList<Operation>> _sourceByCategory;

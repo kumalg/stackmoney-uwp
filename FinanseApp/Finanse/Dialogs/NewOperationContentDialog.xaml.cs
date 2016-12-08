@@ -1,28 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Finanse.Elements;
 using System.Collections.ObjectModel;
-using System.Text.RegularExpressions;
-using System.Globalization;
 using Finanse.DataAccessLayer;
 using Finanse.Models;
 
-// The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace Finanse.Dialogs {
-
     public sealed partial class NewOperationContentDialog : ContentDialog {
 
         private Operation editedOperation;
@@ -269,11 +253,8 @@ namespace Finanse.Dialogs {
                         Content = catItem.Name,
                         Tag = catItem.Id
                     });
-
                 }
-
             }
-
         }
 
         private void SetSubCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
@@ -296,9 +277,7 @@ namespace Finanse.Dialogs {
                             Content = subCatItem.Name,
                             Tag = subCatItem.Id
                         });
-
                     }
-
                 }
 
                 SubCategoryValue.IsEnabled = !(SubCategoryValue.Items.Count == 0);

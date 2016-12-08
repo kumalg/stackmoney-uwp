@@ -24,15 +24,18 @@ namespace Finanse.Pages {
 
     public sealed partial class Nowa_Operacja : Page {
 
+
+        private DayOfWeek firstDayOfWeek = Settings.GetFirstDayOfWeek();
+
         string acceptedCostValue = "";
         int whereIsSelection;
 
         bool isUnfocused = true;
 
         public Nowa_Operacja() {
-
+          
             this.InitializeComponent();
-
+            
             DateValue.Date = DateTime.Today;
             DateValue.MaxDate = Settings.GetMaxDate();
 
@@ -273,12 +276,12 @@ namespace Finanse.Pages {
                 OperationPattern itemPattern = new OperationPattern {
                     Id = 0,
                     Title = NameValue.Text,
-                    Cost = decimal.Parse(acceptedCostValue),
                     isExpense = (bool)Expense_RadioButton.IsChecked,
-                    CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
+                    Cost = decimal.Parse(acceptedCostValue),
+                    CategoryId = catId,
                     SubCategoryId = subCategoryId,
                     MoreInfo = MoreInfoValue.Text,
-                    MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
+                    MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
                 };
 
                 Dal.SaveOperationPattern(itemPattern);

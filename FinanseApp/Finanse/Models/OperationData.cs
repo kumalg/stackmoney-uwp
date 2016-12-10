@@ -62,16 +62,23 @@ namespace Finanse.Models {
             }
         }
 
+        private int howManyEmptyCells(int year, int month) {
+            int dayOfWeek = (int)(new DateTime(year, month, 1).DayOfWeek) - (int)Settings.GetFirstDayOfWeek();
+            if (dayOfWeek < 1)
+                dayOfWeek += 7;
+            return dayOfWeek;
+        }
+
         List<HeaderItem> operationHeaders = null;
         public List<HeaderItem> OperationHeaders {
             get {
                 if (operationHeaders == null || visiblePayFormList != null) {
                     operationHeaders = new List<HeaderItem>();
 
-                    int dayOfWeek = (int)(new DateTime(year, month, 1).DayOfWeek);
-                    for (int i = 1; i < dayOfWeek; i++) {
+                    int dayOfWeek = howManyEmptyCells(year, month);
+
+                    for (int i = 0; i < dayOfWeek; i++)
                         operationHeaders.Add(new HeaderItem() { Day = String.Empty, IsEnabled = false });
-                    }
 
                     for (int i = 1; i <= DateTime.DaysInMonth(year, month); i++) {
 

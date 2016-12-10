@@ -16,28 +16,33 @@ namespace Finanse {
         public MainPage() {
             this.InitializeComponent();
             Dal.CreateDB();
-            DisplayInformation info = DisplayInformation.GetForCurrentView();
-
-            whichOrientation(info);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             base.OnNavigatedTo(e);
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e) {
-            DisplayInformation.GetForCurrentView().OrientationChanged += MainPage_OrientationChanged;
+        private async void ShowStatusBar() {
+            var statusBar = StatusBar.GetForCurrentView();
+            await statusBar.ShowAsync();
         }
 
-        private void whichOrientation(DisplayInformation info) {
-            if (info.CurrentOrientation == DisplayOrientations.Landscape || info.CurrentOrientation == DisplayOrientations.LandscapeFlipped)
+        private async void HideStatusBar() {
+            var statusBar = StatusBar.GetForCurrentView();
+            await statusBar.HideAsync();
+        }
+
+        private void whichOrientation() {
+            DisplayInformation info = DisplayInformation.GetForCurrentView();
+
+            if (info.CurrentOrientation == DisplayOrientations.Landscape || info.CurrentOrientation == DisplayOrientations.LandscapeFlipped) {
                 StatusBarAndTitleBar("Background", "Text-1");
-            else
+                HideStatusBar();
+            }
+            else {
                 StatusBarAndTitleBar("AccentColor-1", "AccentText");
-        }
-
-        private void MainPage_OrientationChanged(DisplayInformation info, object args) {
-            whichOrientation(info);
+                ShowStatusBar();
+            }
         }
 
         private void StatusBarAndTitleBar(string statusBarBackgroundColor, string statusBarForegroundColor) {
@@ -137,6 +142,10 @@ namespace Finanse {
             if (((Frame)sender).SourcePageType == typeof(Strona_glowna)) {
                 OperationsAppBarRadioButton.IsChecked = true;
             }
+        }
+
+        private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e) {
+            whichOrientation();
         }
     }
 }

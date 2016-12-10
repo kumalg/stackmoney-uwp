@@ -1,6 +1,5 @@
 ﻿using Finanse.Models;
 using System;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Windows.UI.Xaml;
@@ -9,18 +8,7 @@ using Windows.UI.Xaml.Controls;
 namespace Finanse.Pages {
 
     public sealed partial class Ustawienia : Page {
-
-        private ObservableCollection<ComboBoxItem> daysOfWeek = new ObservableCollection<ComboBoxItem> {
-            new ComboBoxItem {
-                Content = "ff",
-                Tag = DayOfWeek.Sunday
-            },
-            new ComboBoxItem {
-                Content = "d",
-                Tag = DayOfWeek.Monday
-            }
-        };
-        
+       
         public Ustawienia() {
 
             this.InitializeComponent();
@@ -32,20 +20,6 @@ namespace Finanse.Pages {
                     Tag = item.Name
                 });
             }
-            
-            FirstDayOfWeek_ComboBox.Items.Add(
-                new ComboBoxItem {
-                    Content = "Niedziela",
-                    Tag = DayOfWeek.Sunday
-                }
-            );
-
-            FirstDayOfWeek_ComboBox.Items.Add(
-                new ComboBoxItem {
-                    Content = "Poniedziałek",
-                    Tag = DayOfWeek.Monday
-                }
-            );
 
             if (Settings.GetActualIconStyle() == "Segoe UI") {
                 ColorIcon_RadioButton.IsChecked = true;
@@ -55,7 +29,10 @@ namespace Finanse.Pages {
 
             ThemeToggle.IsOn = (Settings.GetTheme() == ApplicationTheme.Dark);
 
-            CurrencyValue.SelectedItem = CurrencyValue.Items.SingleOrDefault(i => ((ComboBoxItem)i).Content.ToString() == Settings.GetActualCurrency().DisplayName);
+            CurrencyValue.SelectedItem = CurrencyValue
+                .Items
+                .OfType<ComboBoxItem>()
+                .SingleOrDefault(i => i.Content.ToString() == Settings.GetActualCurrency().DisplayName);
 
             for (int i = 1; i <= 12; i++)
                 MaxNumberOfNextMonth.Items.Add(new ComboBoxItem {
@@ -100,6 +77,11 @@ namespace Finanse.Pages {
         private void ReminderToggleSwitch_Toggled(object sender, RoutedEventArgs e) {
             if (ReminderStackPanel != null)
                 ReminderStackPanel.Visibility = ((ToggleSwitch)sender).IsOn ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void FirstDayOfWeek_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            ComboBoxItem item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
+         //   Settings.SetFirstDayOfWeek((DayOfWeek)item.Tag);
         }
     }
 }

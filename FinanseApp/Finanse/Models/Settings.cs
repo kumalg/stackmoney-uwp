@@ -16,9 +16,6 @@ namespace Finanse.Models {
             if (localSettings.Values["whichCurrency"] == null)
                 localSettings.Values["whichCurrency"] = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
 
-            if (localSettings.Values["firstDayOfWeek"] == null)
-                localSettings.Values["firstDayOfWeek"] = DayOfWeek.Sunday.ToString();
-
             if (localSettings.Values["iconStyle"] == null)
                 localSettings.Values["iconStyle"] = "Segoe UI Symbol";
 
@@ -80,21 +77,9 @@ namespace Finanse.Models {
             localSettings.Values["whichCurrency"] = currency;
         }
 
-        public static DayOfWeek GetFirstDayOfWeek() {
+        public static Windows.Globalization.DayOfWeek GetFirstDayOfWeek() {
 
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-
-            String value = localSettings.Values["whichCurrency"].ToString();
-
-            return DayOfWeek.Sunday;
-        }
-
-        public static void SetFirstDayOfWeek(DayOfWeek day) {
-
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            localSettings.Values["firstDayOfWeek"] = day;
+            return Windows.System.UserProfile.GlobalizationPreferences.WeekStartsOn;
         }
 
         public static string GetActualIconStyle() {

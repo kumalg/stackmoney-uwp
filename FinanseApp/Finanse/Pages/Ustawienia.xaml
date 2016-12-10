@@ -42,6 +42,7 @@
                         <StackPanel
                             MaxWidth="600"
                             Margin="16">
+                            <!--
                             <TextBlock
                                 FontSize="18"
                                 Text="Pierwszy dzień tygodnia"
@@ -50,16 +51,17 @@
 
                             <ComboBox
                                 Name="FirstDayOfWeek_ComboBox"
-                                ItemsSource="{Binding daysOfWeek}"
+                                SelectionChanged="FirstDayOfWeek_ComboBox_SelectionChanged"
+                                ItemsSource="{Binding Settings.GetFirstDayOfWeek()}"
                                 Style="{StaticResource ComboBoxStyle1}">
 
                             </ComboBox>
 
-
+-->
                             <TextBlock
                                 FontSize="18"
                                 Text="Waluta"
-                                Margin="0,30,0,10"
+                                Margin="0,0,0,10"
                                 Foreground="{ThemeResource Text}" />
 
                             <ComboBox

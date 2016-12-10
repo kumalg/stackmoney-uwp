@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:Finanse.Elements"
     mc:Ignorable="d"
-    Loaded="Page_Loaded">
+    SizeChanged="MainPage_SizeChanged">
     <Page.Resources>
         <Style
             x:Name="MyAppBarButton"

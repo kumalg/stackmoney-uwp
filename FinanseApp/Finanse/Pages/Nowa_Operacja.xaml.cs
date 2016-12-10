@@ -10,9 +10,6 @@ namespace Finanse.Pages {
 
     public sealed partial class Nowa_Operacja : Page {
 
-
-        private DayOfWeek firstDayOfWeek = Settings.GetFirstDayOfWeek();
-
         string acceptedCostValue = "";
         int whereIsSelection;
 
@@ -41,6 +38,11 @@ namespace Finanse.Pages {
                 PayFormValue.SelectedIndex = 0;
 
         }
+
+        public Windows.Globalization.DayOfWeek firstDayOfWeek() {
+            return (Windows.Globalization.DayOfWeek)Settings.GetFirstDayOfWeek();
+        }
+
 
         private void TypeOfOperationRadioButton_Checked(object sender, RoutedEventArgs e) {
 

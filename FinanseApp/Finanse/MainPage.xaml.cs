@@ -23,13 +23,17 @@ namespace Finanse {
         }
 
         private async void ShowStatusBar() {
-            var statusBar = StatusBar.GetForCurrentView();
-            await statusBar.ShowAsync();
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) {
+                var statusBar = StatusBar.GetForCurrentView();
+                await statusBar.ShowAsync();
+            }
         }
 
         private async void HideStatusBar() {
-            var statusBar = StatusBar.GetForCurrentView();
-            await statusBar.HideAsync();
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) {
+                var statusBar = StatusBar.GetForCurrentView();
+                await statusBar.HideAsync();
+            }
         }
 
         private void whichOrientation() {

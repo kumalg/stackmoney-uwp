@@ -19,18 +19,16 @@ namespace Finanse.Pages {
         private List<int> visiblePayFormList = new List<int>();
 
         private OperationData storeData = new OperationData(DateTime.Today.Month, DateTime.Today.Year, false, null);
-        private ObservableCollection<GroupInfoList<Operation>> groupsByDay;
-        private ObservableCollection<GroupInfoList<Operation>> groupsByCategory;
-        private ObservableCollection<HeaderItem> operationHeaders;
+        private ObservableCollection<GroupInfoList<Operation>> operationGroups = new ObservableCollection<GroupInfoList<Operation>>();
 
-        decimal actualMoney;
-        int actualMonth;
-        int actualYear;
+        private decimal actualMoney;
+        private int actualMonth;
+        private int actualYear;
 
         public Strona_glowna() {
 
             this.InitializeComponent();
-            
+
             foreach (var item in Dal.GetAllMoneyAccounts()) {
                 ToggleMenuFlyoutItem itema = new ToggleMenuFlyoutItem {
                     Text = item.Name,
@@ -41,96 +39,84 @@ namespace Finanse.Pages {
                 visiblePayFormList.Add(item.Id);
                 VisiblePayFormMenuFlyout.Items.Add(itema);
             }
-            
+
             actualMonth = DateTime.Today.Month;
             actualYear = DateTime.Today.Year;
             NextMonthButton.Visibility = Visibility.Collapsed;
-            
-            groupsByDay = storeData.GroupsByDay;
-            groupsByCategory = storeData.GroupsByCategory;
-            
-            ContactsCVS.Source = groupsByDay;
-            CategorizedCVS.Source = groupsByCategory;
 
-            (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
-
-            ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
-            
             ByDateRadioButton.IsChecked = true;
 
+            //ActualMonthText.Text = getActualMonthText(actualYear, actualMonth);
+            setActualMonthText();
+
             SetActualMoneyBar();
-
         }
 
-        private ObservableCollection<GroupInfoList<Operation>> getActualGroupCollection() {
+        private void setActualMonthText() {
+            if ((actualMonth <= DateTime.Today.Month && actualYear == DateTime.Today.Year) || actualYear < DateTime.Today.Year) {
 
-            if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
-                return groupsByDay;
-            else
-                return groupsByCategory;
+                storeData = new OperationData(actualMonth, actualYear, false, visiblePayFormList);
+
+                ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
+                if (actualYear != DateTime.Today.Year)
+                    ActualMonthText.Text += " " + actualYear.ToString();
+            } else {
+
+                storeData = new OperationData(actualMonth, actualYear, true, visiblePayFormList);
+                ActualMonthText.Text = "Zaplanowane";
+            }
         }
 
+        private void setOperationGroups() {
+            operationGroups.Clear();
+            foreach (var s in (bool)ByDateRadioButton.IsChecked ? storeData.GroupsByDay : storeData.GroupsByCategory) {
+                operationGroups.Add(s);
+            }
+        }
 
         public void Clicky(object sender, RoutedEventArgs e) {
-            if (((ToggleMenuFlyoutItem)sender).IsChecked == true) {
+            if (((ToggleMenuFlyoutItem)sender).IsChecked == true)
                 visiblePayFormList.Add((int)((ToggleMenuFlyoutItem)sender).Tag);
-            }
             else
                 visiblePayFormList.Remove((int)((ToggleMenuFlyoutItem)sender).Tag);
 
             storeData.SetVisiblePayFormList(visiblePayFormList);
 
-            groupsByCategory.Clear();
-            foreach (var s in storeData.GroupsByCategory) {
-                groupsByCategory.Add(s);
-            };
-
-            groupsByDay.Clear();
-            foreach (var s in storeData.GroupsByDay) {
-                groupsByDay.Add(s);
-            };
+            setOperationGroups();
 
             SetActualMoneyBar();
-            
+
             SetListOfOperations(visiblePayFormList);
-            
+
             if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
+                //    if ((bool)ByDateRadioButton.IsChecked)
                 (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
-                
         }
 
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
-             FrameworkElement senderElement = sender as FrameworkElement;
-             FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
-             flyoutBase.ShowAt(senderElement);
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
         }
 
         private async void DetailsButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-
-            var ContentDialogItem = new OperationDetailsContentDialog(groupsByDay, (Operation)datacontext, "");
-
+            var ContentDialogItem = new OperationDetailsContentDialog(operationGroups, (Operation)datacontext, "");
             var result = await ContentDialogItem.ShowAsync();
         }
 
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-
-            var ContentDialogItem = new NewOperationContentDialog(groupsByDay, (Operation)datacontext);
-
+            var ContentDialogItem = new NewOperationContentDialog(operationGroups, (Operation)datacontext);
             var result = await ContentDialogItem.ShowAsync();
 
             SetActualMoneyBar();
-            //this datacontext is probably some object of some type T
         }
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-
-            var ContentDialogItem = new Delete_ContentDialog(groupsByDay, (Operation)datacontext,"");
-
+            var ContentDialogItem = new Delete_ContentDialog(operationGroups, (Operation)datacontext, "");
             var result = await ContentDialogItem.ShowAsync();
-
             SetActualMoneyBar();
         }
 
@@ -151,7 +137,7 @@ namespace Finanse.Pages {
             if (e.SourceItem.Item.GetType() == typeof(HeaderItem)) {
                 HeaderItem hi = (HeaderItem)e.SourceItem.Item;
 
-                var group = groupsByDay.SingleOrDefault(d => ((GroupHeaderByDay)d.Key).dayNum == hi.Day);
+                var group = operationGroups.SingleOrDefault(d => ((GroupHeaderByDay)d.Key).dayNum == hi.Day);
 
                 if (group != null)
                     e.DestinationItem = new SemanticZoomLocation() { Item = group };
@@ -164,8 +150,7 @@ namespace Finanse.Pages {
 
             if (actualMonth > 1) {
                 actualMonth--;
-            }
-            else {
+            } else {
                 actualMonth = 12;
                 actualYear--;
             }
@@ -177,8 +162,7 @@ namespace Finanse.Pages {
 
             if (actualMonth < 12) {
                 actualMonth++;
-            }
-            else {
+            } else {
                 actualMonth = 1;
                 actualYear++;
             }
@@ -194,31 +178,14 @@ namespace Finanse.Pages {
 
         private void SetListOfOperations(List<int> visiblePayFormList) {
 
-            if ((actualMonth <= DateTime.Today.Month && actualYear == DateTime.Today.Year) || actualYear < DateTime.Today.Year) {
+            setActualMonthText();
 
-                storeData = new OperationData(actualMonth, actualYear, false, visiblePayFormList);
+            setOperationGroups();
 
-                ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
-                if (actualYear != DateTime.Today.Year)
-                    ActualMonthText.Text += " " + actualYear.ToString();
-            }
-            else {
-            
-                storeData = new OperationData(actualMonth, actualYear, true, visiblePayFormList);
-                ActualMonthText.Text = "Zaplanowane";
-            }
-            
-             groupsByCategory.Clear();
-             foreach (GroupInfoList<Operation> categoryGroup in storeData.GroupsByCategory)
-                 groupsByCategory.Add(categoryGroup);
-             
-             groupsByDay.Clear();
-             foreach (GroupInfoList<Operation> dayGroup in storeData.GroupsByDay)
-                 groupsByDay.Add(dayGroup);
-                                 
             if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
+                // if ((bool)ByDateRadioButton.IsChecked)
                 (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
-            
+
             SetActualMoneyBar();
 
             SetNextMonthButtonEnabling();
@@ -230,8 +197,7 @@ namespace Finanse.Pages {
             if (new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1) <= new DateTime(actualYear, actualMonth, 1)) {
                 NextMonthButton.Visibility = Visibility.Collapsed;
                 IncomingOperationsButton.Visibility = Visibility.Visible;
-            }
-            else {
+            } else {
                 NextMonthButton.Visibility = Visibility.Visible;
                 IncomingOperationsButton.Visibility = Visibility.Collapsed;
             }
@@ -246,16 +212,19 @@ namespace Finanse.Pages {
 
             actualMoney = 0;
 
-            foreach (var group in groupsByDay) {
+            foreach (var group in operationGroups)
                 actualMoney += group.decimalCost;
-            }
 
             ActualMoneyBar.Text = actualMoney.ToString("C", Settings.GetActualCurrency());
         }
 
         private void ListViewByDate() {
 
-            OperacjeListView.ItemsSource = ContactsCVS.View;
+            operationGroups.Clear();
+            foreach (GroupInfoList<Operation> dayGroup in storeData.GroupsByDay)
+                operationGroups.Add(dayGroup);
+
+            //    OperacjeListView.ItemsSource = ContactsCVS.View;
             OperacjeListView.GroupStyle.Clear();
             OperacjeListView.GroupStyle.Add(ByDateGroupStyle);
 
@@ -274,11 +243,15 @@ namespace Finanse.Pages {
 
         private void ListViewByCategory() {
 
+            operationGroups.Clear();
+            foreach (GroupInfoList<Operation> singleGroup in storeData.GroupsByCategory)
+                operationGroups.Add(singleGroup);
+
             OperacjeListView.GroupStyle.Clear();
             OperacjeListView.GroupStyle.Add(ByCategoryGroupStyle);
-            OperacjeListView.ItemsSource = CategorizedCVS.View;
+            //   OperacjeListView.ItemsSource = ContactsCVS.View;
 
-            (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = CategorizedCVS.View.CollectionGroups;
+            (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = ContactsCVS.View.CollectionGroups;
             (semanticZoom.ZoomedOutView as ListViewBase).ItemsPanel = ByCategoryGroupItemsPanelTemplate;
             (semanticZoom.ZoomedOutView as ListViewBase).ItemTemplateSelector = null;
             (semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate = ByCategoryGroupItemTemplate;
@@ -294,16 +267,18 @@ namespace Finanse.Pages {
         private async void OperacjeListView_ItemClick(object sender, ItemClickEventArgs e) {
             Operation thisOperation = (Operation)e.ClickedItem;
 
-            var ContentDialogItem = new OperationDetailsContentDialog(groupsByDay, thisOperation, "");
+            var ContentDialogItem = new OperationDetailsContentDialog(operationGroups, thisOperation, "");
 
             var result = await ContentDialogItem.ShowAsync();
         }
-       
+
         private void ByCategoryRadioButton_Checked(object sender, RoutedEventArgs e) {
+            setOperationGroups();
             ListViewByCategory();
         }
 
         private void ByDateRadioButton_Checked(object sender, RoutedEventArgs e) {
+            setOperationGroups();
             ListViewByDate();
         }
     }

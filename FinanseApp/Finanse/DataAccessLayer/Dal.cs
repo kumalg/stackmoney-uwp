@@ -117,6 +117,22 @@
             return models;
         }
 
+        public static List<Operation> GetAllOperationsByMoneyAccount(MoneyAccount account) {
+            List<Operation> models;
+
+            // Create a new connection
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                models = (from p in db.Table<Operation>().ToList()
+                          where p.MoneyAccountId == account.Id
+                          select p).ToList();
+            }
+
+            return models;
+        }
+
         public static List<Operation> GetAllOperations(int month, int year) {
             List<Operation> models;
 

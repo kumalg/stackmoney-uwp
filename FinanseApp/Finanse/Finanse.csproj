@@ -157,6 +157,9 @@
     <Compile Include="Elements\CategoryIcon.xaml.cs">
       <DependentUpon>CategoryIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Elements\MoneyAccountTemplate.xaml.cs">
+      <DependentUpon>MoneyAccountTemplate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EmptyOrFullSelector.cs" />
     <Compile Include="Models\ExpandPanel.cs" />
     <Compile Include="Models\Functions.cs" />
@@ -266,6 +269,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Elements\OperationCategoryTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Elements\MoneyAccountTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

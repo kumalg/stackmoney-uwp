@@ -15,8 +15,7 @@
         Height="{Binding Width}">
 
         <Ellipse
-            Opacity="0.1"
-            Fill="{Binding Color}"
+            Opacity="0.15"
             StrokeThickness="2"
             Stroke="{Binding Color}">
         </Ellipse>

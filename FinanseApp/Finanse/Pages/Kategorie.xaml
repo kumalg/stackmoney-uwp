@@ -9,244 +9,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <ListView.ItemContainerStyle
-            x:Key="itemContainerStyle">
-            <Style
-                TargetType="ListViewItem">
-                <Setter
-                    Property="HorizontalContentAlignment"
-                    Value="Stretch" />
-                <Setter
-                    Property="Padding"
-                    Value="0" />
-            </Style>
-        </ListView.ItemContainerStyle>
-
-        <ListView.ItemTemplate
-            x:Key="itemTemplate">
-            <DataTemplate
-                x:DataType="models:OperationCategory">
-                <Grid
-                    Background="Transparent">
-
-                    <StackPanel
-                        Margin="0,8">
-
-                        <StackPanel
-                            Background="Transparent"
-                            RightTapped="ExpandPanel_RightTapped">
-
-                            <FlyoutBase.AttachedFlyout>
-                                <MenuFlyout
-                                    MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
-                                    <MenuFlyoutItem
-                                        x:Name="EditCatButton"
-                                        Style="{StaticResource MyMenuFlyoutItem}"
-                                        Tag="&#xE104;"
-                                        Text="Edytuj"
-                                        Click="EditCat_Click" />
-                                    <MenuFlyoutItem
-                                        x:Name="DeleteCatButton"
-                                        Style="{StaticResource MyMenuFlyoutItem}"
-                                        Tag="&#xE107;"
-                                        Text="Usuń"
-                                        Click="DeleteCat_Click" />
-                                    <MenuFlyoutSeparator />
-                                    <MenuFlyoutItem
-                                        x:Name="AddSubCatButton"
-                                        Style="{StaticResource MyMenuFlyoutItem}"
-                                        Tag="&#xE109;"
-                                        Text="Dodaj podkategorię"
-                                        Click="AddSubCat_Click" />
-                                </MenuFlyout>
-                            </FlyoutBase.AttachedFlyout>
-
-                            <data:OperationCategoryTemplate />
-
-                        </StackPanel>
-
-                        <ListView
-                            ScrollViewer.VerticalScrollMode="Disabled"
-                            Name="SubOperacjeListView"
-                            ItemsSource="{x:Bind getSubCategories()}"
-                            MaxWidth="620"
-                            BorderThickness="0"
-                            Background="Transparent"
-                            SelectionMode="Single">
-
-                            <ListView.ItemContainerStyle>
-                                <Style
-                                    TargetType="ListViewItem">
-                                    <Setter
-                                        Property="HorizontalContentAlignment"
-                                        Value="Stretch" />
-                                    <Setter
-                                        Property="Padding"
-                                        Value="0" />
-                                </Style>
-                            </ListView.ItemContainerStyle>
-
-                            <ListView.ItemTemplate>
-                                <DataTemplate
-                                    x:DataType="models:OperationSubCategory">
-                                    <Grid
-                                        RightTapped="Grid_RightTapped">
-
-                                        <FlyoutBase.AttachedFlyout>
-                                            <MenuFlyout
-                                                MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
-                                                <MenuFlyoutItem
-                                                    x:Name="EditSubCatButton"
-                                                    Style="{StaticResource MyMenuFlyoutItem}"
-                                                    Tag="&#xE104;"
-                                                    Text="Edytuj"
-                                                    Click="EditSubCat_Click" />
-                                                <MenuFlyoutItem
-                                                    x:Name="DeleteSubCatButton"
-                                                    Style="{StaticResource MyMenuFlyoutItem}"
-                                                    Tag="&#xE107;"
-                                                    Text="Usuń"
-                                                    Click="DeleteSubCat_Click" />
-                                            </MenuFlyout>
-                                        </FlyoutBase.AttachedFlyout>
-
-                                        <data:OperationSubCategoryTemplate />
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-
-                    </StackPanel>
-
-                </Grid>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-
-        <ListView
-            FlowDirection="LeftToRight"
-            Padding="0,0,0,0"
-            ScrollViewer.VerticalScrollMode="Disabled"
-            x:Key="OperationCategoriesListView"
-            ItemsSource="{x:Bind OperationCategories}"
-            SelectionMode="Single"
-            MaxWidth="620"
-            BorderThickness="0"
-            Background="Transparent">
-
-            <ListView.ItemContainerStyle>
-                <Style
-                    TargetType="ListViewItem">
-                    <Setter
-                        Property="HorizontalContentAlignment"
-                        Value="Stretch" />
-                    <Setter
-                        Property="Padding"
-                        Value="0" />
-                </Style>
-            </ListView.ItemContainerStyle>
-
-            <ListView.ItemTemplate>
-                <DataTemplate
-                    x:DataType="models:OperationCategory">
-                    <Grid
-                        Background="Transparent">
-
-                        <StackPanel
-                            Margin="0,8">
-
-                            <StackPanel
-                                Background="Transparent"
-                                RightTapped="ExpandPanel_RightTapped">
-
-                                <FlyoutBase.AttachedFlyout>
-                                    <MenuFlyout
-                                        MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
-                                        <MenuFlyoutItem
-                                            x:Name="EditCatButton"
-                                            Style="{StaticResource MyMenuFlyoutItem}"
-                                            Tag="&#xE104;"
-                                            Text="Edytuj"
-                                            Click="EditCat_Click" />
-                                        <MenuFlyoutItem
-                                            x:Name="DeleteCatButton"
-                                            Style="{StaticResource MyMenuFlyoutItem}"
-                                            Tag="&#xE107;"
-                                            Text="Usuń"
-                                            Click="DeleteCat_Click" />
-                                        <MenuFlyoutSeparator />
-                                        <MenuFlyoutItem
-                                            x:Name="AddSubCatButton"
-                                            Style="{StaticResource MyMenuFlyoutItem}"
-                                            Tag="&#xE109;"
-                                            Text="Dodaj podkategorię"
-                                            Click="AddSubCat_Click" />
-                                    </MenuFlyout>
-                                </FlyoutBase.AttachedFlyout>
-
-                                <data:OperationCategoryTemplate />
-
-                            </StackPanel>
-
-                            <ListView
-                                ScrollViewer.VerticalScrollMode="Disabled"
-                                Name="SubOperacjeListView"
-                                ItemsSource="{x:Bind getSubCategories()}"
-                                MaxWidth="620"
-                                BorderThickness="0"
-                                Background="Transparent"
-                                SelectionMode="Single">
-
-                                <ListView.ItemContainerStyle>
-                                    <Style
-                                        TargetType="ListViewItem">
-                                        <Setter
-                                            Property="HorizontalContentAlignment"
-                                            Value="Stretch" />
-                                        <Setter
-                                            Property="Padding"
-                                            Value="0" />
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-
-                                <ListView.ItemTemplate>
-                                    <DataTemplate
-                                        x:DataType="models:OperationSubCategory">
-                                        <Grid
-                                            RightTapped="Grid_RightTapped">
-
-                                            <FlyoutBase.AttachedFlyout>
-                                                <MenuFlyout
-                                                    MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
-                                                    <MenuFlyoutItem
-                                                        x:Name="EditSubCatButton"
-                                                        Style="{StaticResource MyMenuFlyoutItem}"
-                                                        Tag="&#xE104;"
-                                                        Text="Edytuj"
-                                                        Click="EditSubCat_Click" />
-                                                    <MenuFlyoutItem
-                                                        x:Name="DeleteSubCatButton"
-                                                        Style="{StaticResource MyMenuFlyoutItem}"
-                                                        Tag="&#xE107;"
-                                                        Text="Usuń"
-                                                        Click="DeleteSubCat_Click" />
-                                                </MenuFlyout>
-                                            </FlyoutBase.AttachedFlyout>
-
-                                            <data:OperationSubCategoryTemplate />
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-
-                        </StackPanel>
-
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </Page.Resources>
-    
     <Grid
         Background="Transparent">
 
@@ -323,21 +85,7 @@
             HorizontalScrollBarVisibility="Disabled">
 
             <StackPanel>
-                <ListView
-                    FlowDirection="LeftToRight"
-                    Padding="0,0,0,0"
-                    ScrollViewer.VerticalScrollMode="Disabled"
-                    Name="OperacjeListView"
-                    ItemsSource="{x:Bind OperationCategories}"
-                    SelectionMode="Single"
-                    MaxWidth="620"
-                    BorderThickness="0"
-                    ItemTemplate="{StaticResource itemTemplate}"
-                    ItemContainerStyle="{StaticResource itemContainerStyle}"
-                    Background="Transparent">
-                </ListView>
 
-                <!--
                 <ListView
                     FlowDirection="LeftToRight"
                     Padding="0,0,0,0"
@@ -352,7 +100,19 @@
                     <ListView.ItemContainerStyle>
                         <Style
                             TargetType="ListViewItem">
-
+                            <!--
+                            <Setter
+                                Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate
+                                        TargetType="ListViewItem">
+                                        <ListViewItemPresenter
+                                            PointerOverBackground="Transparent"
+                                            PressedBackground="Transparent" />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            -->
                             <Setter
                                 Property="HorizontalContentAlignment"
                                 Value="Stretch" />
@@ -404,56 +164,57 @@
 
                                     </StackPanel>
 
-                                            <ListView
-                                                ScrollViewer.VerticalScrollMode="Disabled"
-                                                Name="SubOperacjeListView"
-                                                ItemsSource="{x:Bind getSubCategories()}"
-                                                MaxWidth="620"
-                                                BorderThickness="0"
-                                                Background="Transparent"
-                                                SelectionMode="Single">
+                                    <ListView
+                                        ScrollViewer.VerticalScrollMode="Disabled"
+                                        Name="SubOperacjeListView"
+                                        ItemsSource="{x:Bind getSubCategories()}"
+                                        MaxWidth="620"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        SelectionMode="Single">
 
-                                                <ListView.ItemContainerStyle>
-                                                    <Style
-                                                        TargetType="ListViewItem">
-                                                        <Setter
-                                                            Property="HorizontalContentAlignment"
-                                                            Value="Stretch" />
-                                                        <Setter
-                                                            Property="Padding"
-                                                            Value="0" />
-                                                    </Style>
-                                                </ListView.ItemContainerStyle>
+                                        <ListView.ItemContainerStyle>
+                                            <Style
+                                                TargetType="ListViewItem">
+                                                <Setter
+                                                    Property="HorizontalContentAlignment"
+                                                    Value="Stretch" />
+                                                <Setter
+                                                    Property="Padding"
+                                                    Value="0" />
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
 
-                                                <ListView.ItemTemplate>
-                                                    <DataTemplate
-                                                        x:DataType="models:OperationSubCategory">
-                                                        <Grid
-                                                            RightTapped="Grid_RightTapped">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate
+                                                x:DataType="models:OperationSubCategory">
+                                                <Grid
+                                                    RightTapped="Grid_RightTapped">
 
-                                                            <FlyoutBase.AttachedFlyout>
-                                                                <MenuFlyout
-                                                                    MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
-                                                                    <MenuFlyoutItem
-                                                                        x:Name="EditSubCatButton"
-                                                                        Style="{StaticResource MyMenuFlyoutItem}"
-                                                                        Tag="&#xE104;"
-                                                                        Text="Edytuj"
-                                                                        Click="EditSubCat_Click" />
-                                                                    <MenuFlyoutItem
-                                                                        x:Name="DeleteSubCatButton"
-                                                                        Style="{StaticResource MyMenuFlyoutItem}"
-                                                                        Tag="&#xE107;"
-                                                                        Text="Usuń"
-                                                                        Click="DeleteSubCat_Click" />
-                                                                </MenuFlyout>
-                                                            </FlyoutBase.AttachedFlyout>
+                                                    <FlyoutBase.AttachedFlyout>
+                                                        <MenuFlyout
+                                                            MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
+                                                            <MenuFlyoutItem
+                                                                x:Name="EditSubCatButton"
+                                                                Style="{StaticResource MyMenuFlyoutItem}"
+                                                                Tag="&#xE104;"
+                                                                Text="Edytuj"
+                                                                Click="EditSubCat_Click" />
+                                                            <MenuFlyoutItem
+                                                                x:Name="DeleteSubCatButton"
+                                                                Style="{StaticResource MyMenuFlyoutItem}"
+                                                                Tag="&#xE107;"
+                                                                Text="Usuń"
+                                                                Click="DeleteSubCat_Click" />
+                                                        </MenuFlyout>
+                                                    </FlyoutBase.AttachedFlyout>
 
-                                                            <data:OperationSubCategoryTemplate />
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </ListView.ItemTemplate>
-                                            </ListView>
+                                                    <data:OperationSubCategoryTemplate />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+
 
                                 </StackPanel>
 
@@ -462,7 +223,6 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </StackPanel>
-    -->
         </ScrollViewer>
 
     </Grid>

@@ -27,7 +27,7 @@
 
             <data:CategoryIcon
                 x:Name="CategoryIcon" />
-
+            
             <Ellipse
                 Name="MoneyAccountEllipse"
                 Visibility="Collapsed"

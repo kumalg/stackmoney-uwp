@@ -11,7 +11,7 @@
 
     <Grid
         MaxWidth="600"
-        Margin="16,8">
+        Margin="16,4">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition

@@ -44,7 +44,7 @@ namespace Finanse {
                 HideStatusBar();
             }
             else {
-                StatusBarAndTitleBar("AccentColor-1", "AccentText");
+                StatusBarAndTitleBar("AccentColor", "AccentText");
                 ShowStatusBar();
             }
         }
@@ -54,10 +54,10 @@ namespace Finanse {
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView")) {
                 var titleBar = ApplicationView.GetForCurrentView().TitleBar;
                 if (titleBar != null) {
-                    titleBar.ButtonBackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentColor-1"] as SolidColorBrush).Color;
+                    titleBar.ButtonBackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentColor"] as SolidColorBrush).Color;
                     titleBar.ButtonForegroundColor = Colors.White;
 
-                    titleBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentColor-1"] as SolidColorBrush).Color;
+                    titleBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentColor"] as SolidColorBrush).Color;
                     titleBar.ForegroundColor = Colors.White;
                 }
             }

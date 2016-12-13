@@ -8,7 +8,7 @@
     xmlns:data="using:Finanse.Elements"
     xmlns:models="using:Finanse.Models"
     mc:Ignorable="d">
-    
+
     <Page.Resources>
         <!--Use a collection view source for content that presents a list of items that can be grouped or sorted.-->
         <GroupStyle
@@ -24,7 +24,7 @@
 
                                 <ContentPresenter
                                     x:Name="ContentPresenter"
-                                    Padding="0,15,0,0"
+                                    Padding="0,8,0,0"
                                     Content="{TemplateBinding Content}"
                                     ContentTemplate="{TemplateBinding ContentTemplate}"
                                     ContentTransitions="{TemplateBinding ContentTransitions}"
@@ -61,14 +61,14 @@
                                 <TextBlock
                                     Text="{Binding Key.dayNum00}"
                                     FontSize="12"
-                                    Foreground="{ThemeResource Text-1}"
+                                    Foreground="{ThemeResource Text-2}"
                                     FontWeight="SemiBold"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center" />
                             </StackPanel>
                             <TextBlock
                                 FontWeight="SemiBold"
-                                Foreground="{ThemeResource Text-2}"
+                                Foreground="{ThemeResource Text-1}"
                                 Text="{Binding Key.day}"
                                 FontSize="12" />
                         </StackPanel>
@@ -141,14 +141,9 @@
         </ItemsPanelTemplate>
 
         <GroupStyle
-            x:Name="ByCategoryGroupStyle">
-            <GroupStyle.Panel>
-                <ItemsPanelTemplate>
-                    <ItemsStackPanel
-                        Margin="0"
-                        GroupPadding="0" />
-                </ItemsPanelTemplate>
-            </GroupStyle.Panel>
+            x:Name="ByCategoryGroupStyle"
+            HeaderTemplate="{StaticResource ByCategoryHeaderTemplate}">
+
             <GroupStyle.HeaderContainerStyle>
                 <Style
                     TargetType="ListViewHeaderItem">
@@ -160,8 +155,7 @@
 
                                 <ContentPresenter
                                     x:Name="ContentPresenter"
-                                    Margin="0"
-                                    Padding="0"
+                                    Padding="0,8,0,0"
                                     Content="{TemplateBinding Content}"
                                     ContentTemplate="{TemplateBinding ContentTemplate}"
                                     ContentTransitions="{TemplateBinding ContentTransitions}"
@@ -173,71 +167,63 @@
                     </Setter>
                 </Style>
             </GroupStyle.HeaderContainerStyle>
-            <GroupStyle.HeaderTemplate>
-                <DataTemplate>
-
-                    <Grid
-                        Background="Transparent"
-                        MaxWidth="620"
-                        Margin="0,20,0,0">
-                        <Grid
-                            Margin="0,5"
-                            MaxWidth="620">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition
-                                    Width="Auto" />
-                                <ColumnDefinition
-                                    Width="*" />
-                                <ColumnDefinition
-                                    Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel
-                                Orientation="Horizontal"
-                                Margin="15,0">
-                                <Grid
-                                    Width="50"
-                                    Height="30">
-                                    <FontIcon
-                                        Grid.Column="0"
-                                        Foreground="{ThemeResource Text-2}"
-                                        FontFamily="{StaticResource FontAwesome}"
-                                        Glyph="{Binding Key.icon}"
-                                        FontSize="13" />
-                                </Grid>
-
-                                <TextBlock
-                                    Foreground="{ThemeResource Text-1}"
-                                    Margin="15,0"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding Key.name}"
-                                    FontSize="13" />
-
-                            </StackPanel>
-
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                Grid.Column="2"
-                                Name="SumText"
-                                HorizontalAlignment="Right"
-                                Text="{Binding cost}"
-                                Foreground="{ThemeResource Text-1}"
-                                FontWeight="Bold"
-                                FontSize="13"
-                                Margin="16,0" />
-                        </Grid>
-
-                        <Border
-                            Grid.ColumnSpan="3"
-                            Opacity="0.3"
-                            BorderBrush="{ThemeResource Text-2}"
-                            BorderThickness="0,0,0,1" />
-
-                    </Grid>
-
-                </DataTemplate>
-            </GroupStyle.HeaderTemplate>
         </GroupStyle>
+
+        <DataTemplate
+            x:Name="ByCategoryHeaderTemplate">
+
+            <Grid
+                Background="Transparent"
+                MaxWidth="620">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="Auto" />
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel
+                    Margin="0,12"
+                    Orientation="Horizontal">
+                    <StackPanel
+                        Width="80">
+                        <TextBlock
+                            Text="{Binding Key.icon}"
+                            FontFamily="{StaticResource FontAwesome}"
+                            FontSize="12"
+                            Foreground="{ThemeResource Text-2}"
+                            FontWeight="SemiBold"
+                            HorizontalAlignment="Center" />
+                    </StackPanel>
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Foreground="{ThemeResource Text-1}"
+                        Text="{Binding Key.name}"
+                        FontSize="12" />
+                </StackPanel>
+
+                <TextBlock
+                    Margin="16,0"
+                    VerticalAlignment="Center"
+                    Grid.Column="2"
+                    Name="SumText"
+                    HorizontalAlignment="Right"
+                    Text="{Binding cost}"
+                    FontWeight="SemiBold"
+                    Foreground="{ThemeResource Text-1}"
+                    FontSize="12" />
+
+                <Border
+                    Grid.ColumnSpan="3"
+                    Opacity="0.3"
+                    BorderBrush="{ThemeResource Text-2}"
+                    BorderThickness="0,0,0,1" />
+            </Grid>
+
+        </DataTemplate>
 
         <DataTemplate
             x:Name="ByCategoryGroupItemTemplate">
@@ -248,15 +234,9 @@
                 <Grid
                     Width="50"
                     Height="50">
-                    <Rectangle
-                        RadiusX="5"
-                        RadiusY="5"
-                        Fill="{Binding Group.Key.color}" />
-                    <FontIcon
-                        Grid.Column="0"
-                        FontFamily="Segoe UI"
+                    <data:CategoryIcon
                         Glyph="{Binding Group.Key.icon}"
-                        FontSize="24" />
+                        Color="{Binding Group.Key.color}" />
                 </Grid>
 
                 <TextBlock
@@ -428,7 +408,7 @@
             </StackPanel>
 
         </Grid>
-
+        <!--
         <Grid
             Background="{ThemeResource Background-1}"
             Grid.Row="1"
@@ -462,13 +442,13 @@
                     Content="Wg. kategorii" />
             </Grid>
         </Grid>
-
+-->
         <SemanticZoom
             x:Name="semanticZoom"
             Grid.Row="2">
             <SemanticZoom.ZoomedInView>
                 <ListView
-                    Padding="0,-10,0,0"
+                    Padding="0,-8,0,0"
                     x:Name="OperacjeListView"
                     SelectionMode="Single"
                     BorderThickness="0"
@@ -477,6 +457,39 @@
                     IsItemClickEnabled="True"
                     ItemClick="OperacjeListView_ItemClick"
                     SelectionChanged="OperacjeListView_SelectionChanged">
+
+                    <ListView.Header>
+                        <Grid
+                            Margin="0,16,0,0"
+                            Height="48"
+                            MaxWidth="600">
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal">
+                                <RadioButton
+                                    Style="{StaticResource HamburgerRadioButton}"
+                                    Name="ByDateRadioButton"
+                                    GroupName="GroupingRadioButtons"
+                                    Checked="ByDateRadioButton_Checked"
+                                    FontSize="13"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    Foreground="{ThemeResource Text-1}"
+                                    Content="Wg. daty" />
+                                <RadioButton
+                                    Style="{StaticResource HamburgerRadioButton}"
+                                    Name="ByCategoryRadioButton"
+                                    GroupName="GroupingRadioButtons"
+                                    Checked="ByCategoryRadioButton_Checked"
+                                    Grid.Column="1"
+                                    FontSize="13"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    Foreground="{ThemeResource Text-1}"
+                                    Content="Wg. kategorii" />
+                            </StackPanel>
+                        </Grid>
+                    </ListView.Header>
 
                     <ListView.ItemContainerStyle>
                         <Style

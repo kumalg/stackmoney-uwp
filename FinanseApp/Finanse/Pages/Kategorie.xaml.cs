@@ -91,5 +91,10 @@ namespace Finanse.Pages {
             foreach (var operationCategory in Dal.GetAllCategories().Where(i => i.VisibleInIncomes))
                 OperationCategories.Add(operationCategory);
         }
+
+        private void SubOperacjeListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            ListView listView = sender as ListView;
+            listView.SelectedIndex = -1;
+        }
     }
 }

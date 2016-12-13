@@ -92,7 +92,7 @@
                     ScrollViewer.VerticalScrollMode="Disabled"
                     Name="OperacjeListView"
                     ItemsSource="{x:Bind OperationCategories}"
-                    SelectionMode="Single"
+                    SelectionMode="None"
                     MaxWidth="620"
                     BorderThickness="0"
                     Background="Transparent">
@@ -160,7 +160,14 @@
                                             </MenuFlyout>
                                         </FlyoutBase.AttachedFlyout>
 
-                                        <data:OperationCategoryTemplate />
+                                        <Button
+                                            Margin="0"
+                                            Padding="0"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Stretch"
+                                            Background="Transparent">
+                                            <data:OperationCategoryTemplate />
+                                        </Button>
 
                                     </StackPanel>
 
@@ -171,6 +178,7 @@
                                         MaxWidth="620"
                                         BorderThickness="0"
                                         Background="Transparent"
+                                        SelectionChanged="SubOperacjeListView_SelectionChanged"
                                         SelectionMode="Single">
 
                                         <ListView.ItemContainerStyle>

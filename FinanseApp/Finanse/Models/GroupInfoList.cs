@@ -55,12 +55,22 @@ namespace Finanse.Models {
 
             else {
                 DateTime dt = Convert.ToDateTime(date);
+                DateTime dtToday = DateTime.Today;
 
                 this.date = date;
+                month = String.Format("{0:MMMM yyyy}", dt);
                 dayNum00 = String.Format("{0:dd}", dt);
                 dayNum = dt.Day.ToString();
-                day = String.Format("{0:dddd}", dt);
-                month = String.Format("{0:MMMM yyyy}", dt);
+                if (dt.Month == dtToday.Month && dt.Year == dtToday.Year) {
+                    if (dt.Day == dtToday.Day)
+                        day = "dzisiaj";
+                    else if (dt.Day == dtToday.Day - 1)
+                        day = "wczoraj";
+                    else
+                        day = String.Format("{0:dddd}", dt);
+                }
+                else
+                    day = String.Format("{0:dddd}", dt);
             }
         }
     }

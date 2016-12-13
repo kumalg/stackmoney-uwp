@@ -74,7 +74,8 @@ namespace Finanse.Pages {
         }
 
         private async void AddSubCat_Click(object sender, RoutedEventArgs e) {
-            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, new OperationCategory { Id = -1 }, -1);
+            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, (OperationCategory)datacontext);
             var result = await ContentDialogItem.ShowAsync();
         }
 

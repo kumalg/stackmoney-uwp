@@ -23,6 +23,31 @@ namespace Finanse.Dialogs {
         public int editedId;
         public int editedBossCategoryId;
 
+        public NewCategoryContentDialog(ObservableCollection<OperationCategory> OperationCategories, OperationCategory BossCategory) {
+
+            this.InitializeComponent();
+
+            this.OperationCategories = OperationCategories;
+            editedId = -1;
+
+            SetPrimaryButtonEnabled();
+
+            /* DODAWANIE KATEGORII DO COMBOBOX'A */
+            CategoryValue.Items.Add(new ComboBoxItem {
+                Content = "Brak",
+                Tag = -1,
+            });
+            foreach (OperationCategory OperationCategories_ComboBox in OperationCategories) {
+
+                CategoryValue.Items.Add(new ComboBoxItem {
+                    Content = OperationCategories_ComboBox.Name,
+                    Tag = OperationCategories_ComboBox.Id
+                });
+            }
+
+            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == BossCategory.Name);
+        }
+
         public NewCategoryContentDialog(ObservableCollection<OperationCategory> OperationCategories, OperationCategory editedCategory, int editedBossCategoryId) {
 
             this.InitializeComponent();

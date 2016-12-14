@@ -443,6 +443,7 @@
             </Grid>
         </Grid>
 -->
+
         <SemanticZoom
             x:Name="semanticZoom"
             Grid.Row="2">

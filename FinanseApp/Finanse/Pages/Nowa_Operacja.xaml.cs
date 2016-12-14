@@ -275,7 +275,7 @@ namespace Finanse.Pages {
                 Dal.SaveOperationPattern(itemPattern);
             }
 
-            Frame.Navigate(typeof(Strona_glowna));
+            Frame.Navigate(typeof(Strona_glowna), DateValue.Date.Value.DateTime);
         }
     }
 }

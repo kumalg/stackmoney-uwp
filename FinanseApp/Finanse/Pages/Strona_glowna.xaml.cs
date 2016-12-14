@@ -11,6 +11,7 @@ using System.Globalization;
 using Finanse.DataAccessLayer;
 using Finanse.Dialogs;
 using Finanse.Models;
+using Windows.UI.Xaml.Navigation;
 
 namespace Finanse.Pages {
     public sealed partial class Strona_glowna : Page {
@@ -18,12 +19,32 @@ namespace Finanse.Pages {
         private FontFamily iconStyle = new FontFamily(Settings.GetActualIconStyle());
         private List<int> visiblePayFormList = new List<int>();
 
-        private OperationData storeData = new OperationData(DateTime.Today.Month, DateTime.Today.Year, false, null);
+        private OperationData storeData;// = new OperationData(DateTime.Today.Month, DateTime.Today.Year, false, null);
         private ObservableCollection<GroupInfoList<Operation>> operationGroups = new ObservableCollection<GroupInfoList<Operation>>();
 
         private decimal actualMoney;
         private int actualMonth;
         private int actualYear;
+
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
+            if (e.Parameter is DateTime) {
+                actualMonth = ((DateTime)e.Parameter).Month;
+                actualYear = ((DateTime)e.Parameter).Year;
+            }
+            else {
+                actualMonth = DateTime.Today.Month;
+                actualYear = DateTime.Today.Year;
+            }
+
+            SetNextMonthButtonEnabling();
+            SetPreviousMonthButtonEnabling();
+            storeData = new OperationData(actualMonth, actualYear, false, null);
+            ByDateRadioButton.IsChecked = true;
+            setActualMonthText();
+            SetActualMoneyBar();
+
+            base.OnNavigatedTo(e);
+        }
 
         public Strona_glowna() {
 
@@ -39,17 +60,6 @@ namespace Finanse.Pages {
                 visiblePayFormList.Add(item.Id);
                 VisiblePayFormMenuFlyout.Items.Add(itema);
             }
-
-            actualMonth = DateTime.Today.Month;
-            actualYear = DateTime.Today.Year;
-            NextMonthButton.Visibility = Visibility.Collapsed;
-
-            ByDateRadioButton.IsChecked = true;
-
-            //ActualMonthText.Text = getActualMonthText(actualYear, actualMonth);
-            setActualMonthText();
-
-            SetActualMoneyBar();
         }
 
         private void setActualMonthText() {

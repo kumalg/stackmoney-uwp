@@ -12,6 +12,7 @@ namespace Finanse.Models {
 
         public static void SetSettings() {
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
 
             if (localSettings.Values["whichCurrency"] == null)
                 localSettings.Values["whichCurrency"] = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
@@ -30,6 +31,9 @@ namespace Finanse.Models {
 
             if (localSettings.Values["accountEllipseVisibility"] == null)
                 localSettings.Values["accountEllipseVisibility"] = true;
+
+            if (roamingSettings.Values["whichCurrency"] == null)
+                roamingSettings.Values["whichCurrency"] = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
         }
 
         public static List<CultureInfo> GetAllCurrencies() {
@@ -65,14 +69,17 @@ namespace Finanse.Models {
 
         public static CultureInfo GetActualCurrency() {
 
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            //   Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
+            
             CultureInfo value = new CultureInfo(localSettings.Values["whichCurrency"].ToString());
             return value;
         }
         public static void SetActualCurrency(string currency) {
 
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            //   Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
 
             localSettings.Values["whichCurrency"] = currency;
         }

@@ -12,9 +12,12 @@ using Finanse.DataAccessLayer;
 using Finanse.Dialogs;
 using Finanse.Models;
 using Windows.UI.Xaml.Navigation;
+using System.Threading.Tasks;
 
 namespace Finanse.Pages {
     public sealed partial class Strona_glowna : Page {
+
+        private TextBlock sourceText;
 
         private FontFamily iconStyle = new FontFamily(Settings.GetActualIconStyle());
         private List<int> visiblePayFormList = new List<int>();
@@ -27,6 +30,7 @@ namespace Finanse.Pages {
         private int actualYear;
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
+
             if (e.Parameter is DateTime) {
                 actualMonth = ((DateTime)e.Parameter).Month;
                 actualYear = ((DateTime)e.Parameter).Year;
@@ -42,6 +46,7 @@ namespace Finanse.Pages {
             ByDateRadioButton.IsChecked = true;
             setActualMonthText();
             SetActualMoneyBar();
+            ThereAreAnyOperationsInList();
 
             base.OnNavigatedTo(e);
         }
@@ -77,11 +82,26 @@ namespace Finanse.Pages {
             }
         }
 
+
+        private void getActualMonthText() {
+            if ((actualMonth <= DateTime.Today.Month && actualYear == DateTime.Today.Year) || actualYear < DateTime.Today.Year) {
+
+                storeData = new OperationData(actualMonth, actualYear, false, visiblePayFormList);
+
+                sourceText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
+                if (actualYear != DateTime.Today.Year)
+                    sourceText.Text += " " + actualYear.ToString();
+            }
+            else {
+
+                storeData = new OperationData(actualMonth, actualYear, true, visiblePayFormList);
+                sourceText.Text = "Zaplanowane";
+            }
+        }
         private void setOperationGroups() {
             operationGroups.Clear();
-            foreach (var s in (bool)ByDateRadioButton.IsChecked ? storeData.GroupsByDay : storeData.GroupsByCategory) {
+            foreach (var s in (bool)ByDateRadioButton.IsChecked ? storeData.GroupsByDay : storeData.GroupsByCategory)
                 operationGroups.Add(s);
-            }
         }
 
         public void Clicky(object sender, RoutedEventArgs e) {
@@ -119,7 +139,6 @@ namespace Finanse.Pages {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
             var ContentDialogItem = new NewOperationContentDialog(operationGroups, (Operation)datacontext);
             var result = await ContentDialogItem.ShowAsync();
-
             SetActualMoneyBar();
         }
 
@@ -156,7 +175,11 @@ namespace Finanse.Pages {
             //e.DestinationItem = new SemanticZoomLocation { Item = e.SourceItem.Item };
         }
 
-        private void PreviousMonthButton_Click(object sender, RoutedEventArgs e) {
+        private async void PreviousMonthButton_Click(object sender, RoutedEventArgs e) {
+            ProgressRingBackground.Visibility = Visibility.Visible;
+            ProgressRing.IsActive = true;
+
+            await Task.Delay(1);
 
             if (actualMonth > 1) {
                 actualMonth--;
@@ -164,32 +187,58 @@ namespace Finanse.Pages {
                 actualMonth = 12;
                 actualYear--;
             }
-
+            
             SetListOfOperations(visiblePayFormList);
+
+            ProgressRingBackground.Visibility = Visibility.Collapsed;
+            ProgressRing.IsActive = false;
         }
 
-        private void NextMonthButton_Click(object sender, RoutedEventArgs e) {
+        private async void NextMonthButton_Click(object sender, RoutedEventArgs e) {
+            ProgressRingBackground.Visibility = Visibility.Visible;
+            ProgressRing.IsActive = true;
 
+            await Task.Delay(1);
+            
             if (actualMonth < 12) {
                 actualMonth++;
             } else {
                 actualMonth = 1;
                 actualYear++;
             }
-
+        
             SetListOfOperations(visiblePayFormList);
+
+            ProgressRingBackground.Visibility = Visibility.Collapsed;
+            ProgressRing.IsActive = false;
         }
 
-        private void IncomingOperationsButton_Click(object sender, RoutedEventArgs e) {
-            NextMonthButton_Click(sender, e);
+        private async void IncomingOperationsButton_Click(object sender, RoutedEventArgs e) {
+            ProgressRingBackground.Visibility = Visibility.Visible;
+            ProgressRing.IsActive = true;
 
+            await Task.Delay(1);
+
+            if (actualMonth < 12) {
+                actualMonth++;
+            }
+            else {
+                actualMonth = 1;
+                actualYear++;
+            }
+
+            SetListOfOperations(visiblePayFormList);
+            //NextMonthButton_Click(sender, e);
             IncomingOperationsButton.Visibility = Visibility.Collapsed;
+
+            ProgressRingBackground.Visibility = Visibility.Collapsed;
+            ProgressRing.IsActive = false;
         }
 
         private void SetListOfOperations(List<int> visiblePayFormList) {
 
             setActualMonthText();
-
+            
             setOperationGroups();
 
             if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
@@ -200,6 +249,19 @@ namespace Finanse.Pages {
 
             SetNextMonthButtonEnabling();
             SetPreviousMonthButtonEnabling();
+
+            ThereAreAnyOperationsInList();
+        }
+
+        private void ThereAreAnyOperationsInList() {
+            if (operationGroups.Count == 0) {
+                semanticZoom.Visibility = Visibility.Collapsed;
+                EmptyListViewInfo.Visibility = Visibility.Visible;
+            }
+            else {
+                semanticZoom.Visibility = Visibility.Visible;
+                EmptyListViewInfo.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void SetNextMonthButtonEnabling() {
@@ -282,13 +344,32 @@ namespace Finanse.Pages {
         }
 
         private void ByCategoryRadioButton_Checked(object sender, RoutedEventArgs e) {
+            ProgressRingBackground.Visibility = Visibility.Visible;
+            ProgressRing.IsActive = true;
+          //  await Task.Delay(5);
+
             setOperationGroups();
             ListViewByCategory();
+
+            ProgressRingBackground.Visibility = Visibility.Collapsed;
+            ProgressRing.IsActive = false;
+        }
+
+        private void dupa() {
+            setOperationGroups();
+            ListViewByDate();
         }
 
         private void ByDateRadioButton_Checked(object sender, RoutedEventArgs e) {
+            ProgressRingBackground.Visibility = Visibility.Visible;
+            ProgressRing.IsActive = true;
+          //  await Task.Delay(5);
+
             setOperationGroups();
             ListViewByDate();
+
+            ProgressRingBackground.Visibility = Visibility.Collapsed;
+            ProgressRing.IsActive = false;
         }
     }
 }

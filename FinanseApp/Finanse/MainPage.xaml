@@ -357,7 +357,7 @@
                                     FontFamily="{TemplateBinding FontFamily}"
                                     FontSize="16"
                                     Foreground="{ThemeResource Text-1}"
-                                    HorizontalAlignment="Stretch"/>
+                                    HorizontalAlignment="Stretch" />
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     x:Name="TextLabel"
@@ -421,7 +421,7 @@
                                             <PointerUpThemeAnimation
                                                 Storyboard.TargetName="RootGrid" />
 
-                                            </Storyboard>
+                                        </Storyboard>
                                     </VisualState>
                                     <VisualState
                                         x:Name="PointerOver">
@@ -506,7 +506,7 @@
                                     </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
-                            
+
                             <ContentPresenter
                                 x:Name="ContentPresenter"
                                 AutomationProperties.AccessibilityView="Raw"
@@ -527,7 +527,7 @@
 
     <Grid
         Background="{ThemeResource Background}">
-<!--
+        <!--
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState
@@ -560,12 +560,30 @@
         <!-- Początek Hamburger Menu -->
         <Grid.RowDefinitions>
             <RowDefinition
+                Height="48" />
+            <RowDefinition
                 Height="*" />
             <RowDefinition
                 Height="Auto" />
         </Grid.RowDefinitions>
-        
+
+        <Grid>
+            <Grid.Background>
+                <LinearGradientBrush
+                    EndPoint="0.5,1"
+                    StartPoint="0.5,0">
+                    <GradientStop
+                        Color="#078b3e"
+                        Offset="0" />
+                    <GradientStop
+                        Color="#00078b3e"
+                        Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+        </Grid>
+
         <Frame
+            Grid.RowSpan="2"
             FlowDirection="LeftToRight"
             Navigated="AktualnaStrona_Frame_Navigated"
             Name="AktualnaStrona_Frame" />
@@ -576,7 +594,7 @@
             x:Name="CommandBar"
             VerticalAlignment="Bottom"
             Style="{StaticResource lala}"
-            Grid.Row="1"
+            Grid.Row="2"
             Background="{ThemeResource Background-1}"
             OverflowButtonVisibility="Collapsed">
             <CommandBar.Content>
@@ -616,6 +634,7 @@
                         Content="Operacje"
                         FontFamily="{StaticResource FontAwesome}"
                         Tag=""
+                        Click="OperationsAppBarRadioButton_Click"
                         Checked="OperationsAppBarRadioButton_Checked" />
                     <RadioButton
                         GroupName="MenuButtons"

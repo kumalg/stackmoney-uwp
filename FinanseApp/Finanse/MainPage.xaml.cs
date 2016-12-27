@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Navigation;
 using Finanse.Pages;
 using Windows.Graphics.Display;
 using Finanse.DataAccessLayer;
+using System.Threading.Tasks;
 
 namespace Finanse {
     public sealed partial class MainPage : Page {
@@ -77,18 +78,27 @@ namespace Finanse {
             }
         }
 
-        private void OperationsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
-            CommandBar.IsOpen = false;
-            AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
+        private void OperationsAppBarRadioButton_Click(object sender, RoutedEventArgs e) {
+
         }
 
-        private void CategoriesAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
+
+        private async void OperationsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
             CommandBar.IsOpen = false;
+            await Task.Delay(5);
+            if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(Strona_glowna))
+                AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
+        }
+
+        private async void CategoriesAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
+            CommandBar.IsOpen = false;
+            await Task.Delay(1);
             AktualnaStrona_Frame.Navigate(typeof(Kategorie));
         }
 
-        private void AddNewOperationAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
+        private async void AddNewOperationAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
             CommandBar.IsOpen = false;
+            await Task.Delay(1);
             AktualnaStrona_Frame.Navigate(typeof(Nowa_Operacja));
         }
 
@@ -96,28 +106,33 @@ namespace Finanse {
             CommandBar.IsOpen = false;
             AktualnaStrona_Frame.Navigate(typeof(Statystyki));
         }
-        private void RadioButton_Click(object sender, RoutedEventArgs e) {
+        private async void RadioButton_Click(object sender, RoutedEventArgs e) {
             MoreAppBarRadioButton.IsChecked = false;
+            await Task.Delay(1);
             CommandBar.IsOpen = !CommandBar.IsOpen;
         }
 
-        private void SzablonyAppBarButton_Click(object sender, RoutedEventArgs e) {
+        private async void SzablonyAppBarButton_Click(object sender, RoutedEventArgs e) {
             UncheckAllMenuButtons();
+            await Task.Delay(1);
             AktualnaStrona_Frame.Navigate(typeof(Szablony));
         }
 
-        private void ZleceniaStaleAppBarButton_Click(object sender, RoutedEventArgs e) {
+        private async void ZleceniaStaleAppBarButton_Click(object sender, RoutedEventArgs e) {
             UncheckAllMenuButtons();
+            await Task.Delay(1);
             AktualnaStrona_Frame.Navigate(typeof(ZleceniaStale));
         }
 
-        private void KontaAppBarButton_Click(object sender, RoutedEventArgs e) {
+        private async void KontaAppBarButton_Click(object sender, RoutedEventArgs e) {
             UncheckAllMenuButtons();
+            await Task.Delay(1);
             AktualnaStrona_Frame.Navigate(typeof(Konta));
         }
 
-        private void UstawieniaAppBarButton_Click(object sender, RoutedEventArgs e) {
+        private async void UstawieniaAppBarButton_Click(object sender, RoutedEventArgs e) {
             UncheckAllMenuButtons();
+            await Task.Delay(1);
             AktualnaStrona_Frame.Navigate(typeof(Ustawienia));
         }
 

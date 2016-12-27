@@ -9,6 +9,14 @@
     xmlns:models="using:Finanse.Models"
     mc:Ignorable="d">
 
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <EntranceNavigationTransitionInfo />
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+
     <Page.Resources>
         <!--Use a collection view source for content that presents a list of items that can be grouped or sorted.-->
         <GroupStyle
@@ -298,7 +306,7 @@
             <RowDefinition
                 Height="*" />
         </Grid.RowDefinitions>
-
+        
         <Grid
             Background="{ThemeResource AccentColor}"
             Height="48">
@@ -361,7 +369,23 @@
                     Margin="8,0,0,0"
                     x:Name="ActualMonthText"
                     Text="Wrzesień"
-                    Style="{StaticResource PageTitleStyle}" />
+                    Style="{StaticResource PageTitleStyle}">
+                    <TextBlock.Triggers>
+                        <EventTrigger
+                            RoutedEvent="TextBlock.Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation
+                                        Storyboard.TargetName="ActualMonthText"
+                                        Storyboard.TargetProperty="(TextBlock.Opacity)"
+                                        From="0.0"
+                                        To="1.0"
+                                        Duration="0:0:0.2" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </TextBlock.Triggers>
+                </TextBlock>
             </StackPanel>
 
             <StackPanel
@@ -443,7 +467,54 @@
             </Grid>
         </Grid>
 -->
+        <RelativePanel
+            Visibility="Collapsed"
+            x:Name="EmptyListViewInfo"
+            Grid.Row="2">
+            
+            <TextBlock
+                FontSize="24"
+                FontWeight="Light"
+                Foreground="{ThemeResource Text-1}"
+                RelativePanel.AlignHorizontalCenterWithPanel="True"
+                RelativePanel.AlignVerticalCenterWithPanel="True"
+                Text="Brak operacji w tym miesiącu :(" />
 
+            <TextBlock
+                Text="Dodaj nową"
+                Foreground="{ThemeResource Text}"
+                RelativePanel.AlignHorizontalCenterWithPanel="True"
+                RelativePanel.AlignTopWith="angleToAddButton"/>
+            <FontIcon
+                Name="angleToAddButton"
+                Foreground="{ThemeResource Text-1}"
+                Margin="32"
+                RelativePanel.AlignHorizontalCenterWithPanel="True"
+                RelativePanel.AlignBottomWithPanel="True"
+                Glyph="">
+
+                <FontIcon.Triggers>
+                    <EventTrigger
+                        RoutedEvent="FontIcon.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetName="angleToAddButton"
+                                    Storyboard.TargetProperty="(FontIcon.Opacity)"
+                                    From="1.0"
+                                    To="0.5"
+                                    AutoReverse="True"
+                                    RepeatBehavior="Forever"
+                                    Duration="0:0:3" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </FontIcon.Triggers>
+
+            </FontIcon>
+            
+        </RelativePanel>
+        
         <SemanticZoom
             x:Name="semanticZoom"
             Grid.Row="2">
@@ -461,33 +532,175 @@
 
                     <ListView.Header>
                         <Grid
-                            Margin="0,16,0,0"
-                            Height="48"
-                            MaxWidth="600">
-                            <StackPanel
-                                HorizontalAlignment="Center"
-                                Orientation="Horizontal">
-                                <RadioButton
-                                    Style="{StaticResource HamburgerRadioButton}"
-                                    Name="ByDateRadioButton"
-                                    GroupName="GroupingRadioButtons"
-                                    Checked="ByDateRadioButton_Checked"
-                                    FontSize="13"
-                                    VerticalAlignment="Center"
+                            Margin="16,16,16,0"
+                            MaxWidth="588">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition
+                                            Width="16" />
+                                        <ColumnDefinition
+                                            Width="3*" />
+                                        <ColumnDefinition
+                                            Width="2*" />
+                                        <ColumnDefinition
+                                            Width="2*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        FontSize="13"
+                                        Foreground="{ThemeResource Text-1}"
+                                        Margin="10"
+                                        Grid.Column="1"
+                                        Text="Saldo" />
+                                    <TextBlock
+                                        HorizontalAlignment="Right"
+                                        FontSize="13"
+                                        Foreground="{ThemeResource Text-1}"
+                                        Margin="10"
+                                        Grid.Column="2"
+                                        Text="Początkowe" />
+                                    <TextBlock
+                                        HorizontalAlignment="Right"
+                                        FontSize="13"
+                                        Foreground="{ThemeResource Text-1}"
+                                        Margin="10"
+                                        Grid.Column="3"
+                                        Text="Końcowe" />
+                                </Grid>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition
+                                            Width="16" />
+                                        <ColumnDefinition
+                                            Width="3*" />
+                                        <ColumnDefinition
+                                            Width="2*" />
+                                        <ColumnDefinition
+                                            Width="2*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Ellipse
+                                        Width="8"
+                                        Height="8"
+                                        Fill="{StaticResource GreenColorStyle}" />
+                                    <TextBlock
+                                        FontSize="13"
+                                        Foreground="{ThemeResource Text}"
+                                        Margin="10,5"
+                                        Grid.Column="1"
+                                        Text="Gotówka" />
+                                    <TextBlock
+                                        HorizontalAlignment="Right"
+                                        FontWeight="SemiBold"
+                                        FontSize="13"
+                                        Foreground="{ThemeResource Text-1}"
+                                        Margin="10,5"
+                                        Grid.Column="2"
+                                        Text="29,59 zl" />
+                                    <TextBlock
+                                        HorizontalAlignment="Right"
+                                        FontWeight="SemiBold"
+                                        FontSize="13"
+                                        Foreground="{ThemeResource Text-1}"
+                                        Margin="10,5"
+                                        Grid.Column="3"
+                                        Text="4,28 zł" />
+                                </Grid>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition
+                                            Width="16" />
+                                        <ColumnDefinition
+                                            Width="3*" />
+                                        <ColumnDefinition
+                                            Width="2*" />
+                                        <ColumnDefinition
+                                            Width="2*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Ellipse
+                                        Width="8"
+                                        Height="8"
+                                        Fill="Gray" />
+                                    <TextBlock
+                                        FontSize="13"
+                                        Foreground="{ThemeResource Text}"
+                                        Margin="10,5"
+                                        Grid.Column="1"
+                                        Text="Karta Visa" />
+                                    <TextBlock
+                                        HorizontalAlignment="Right"
+                                        FontWeight="SemiBold"
+                                        FontSize="13"
+                                        Foreground="{ThemeResource Text-1}"
+                                        Margin="10,5"
+                                        Grid.Column="2"
+                                        Text="426,67 zł" />
+                                    <TextBlock
+                                        HorizontalAlignment="Right"
+                                        FontWeight="SemiBold"
+                                        FontSize="13"
+                                        Foreground="{ThemeResource Text-1}"
+                                        Margin="10,5"
+                                        Grid.Column="3"
+                                        Text="289,90 zł" />
+                                </Grid>
+                                <StackPanel
+                                    Margin="0,16"
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        FontSize="13"
+                                        Foreground="{ThemeResource Text-1}"
+                                        Margin="16,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="Grupuj wg." />
+                                    <Button
+                                        FontSize="13"
+                                        Height="38"
+                                        Click="ByDateRadioButton_Checked"
+                                        Foreground="{ThemeResource Text-1}"
+                                        Background="{ThemeResource Background+1}"
+                                        Width="64"
+                                        Margin="16,0,0,0"
+                                        Content="Dnia" />
+                                    <Button
+                                        FontSize="13"
+                                        Height="38"
+                                        Click="ByCategoryRadioButton_Checked"
+                                        Foreground="{ThemeResource Text-1}"
+                                        Background="{ThemeResource Background+1}"
+                                        Width="92"
+                                        Margin="16,0,0,0"
+                                        Content="Kategorii" />
+                                </StackPanel>
+                                
+                                <StackPanel
+                                    Visibility="Collapsed"
+                                    Margin="0,20,0,5"
                                     HorizontalAlignment="Center"
-                                    Foreground="{ThemeResource Text-1}"
-                                    Content="Wg. daty" />
-                                <RadioButton
-                                    Style="{StaticResource HamburgerRadioButton}"
-                                    Name="ByCategoryRadioButton"
-                                    GroupName="GroupingRadioButtons"
-                                    Checked="ByCategoryRadioButton_Checked"
-                                    Grid.Column="1"
-                                    FontSize="13"
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"
-                                    Foreground="{ThemeResource Text-1}"
-                                    Content="Wg. kategorii" />
+                                    Orientation="Horizontal">
+                                    <RadioButton
+                                        Name="ByDateRadioButton"
+                                        GroupName="GroupingRadioButtons"
+                                        Checked="ByDateRadioButton_Checked"
+                                        FontSize="13"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        Foreground="{ThemeResource Text-1}"
+                                        Content="Wg. daty" />
+                                    <RadioButton
+                                        Name="ByCategoryRadioButton"
+                                        GroupName="GroupingRadioButtons"
+                                        Checked="ByCategoryRadioButton_Checked"
+                                        Grid.Column="1"
+                                        FontSize="13"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        Foreground="{ThemeResource Text-1}"
+                                        Content="Wg. kategorii" />
+                                </StackPanel>
+                               
                             </StackPanel>
                         </Grid>
                     </ListView.Header>
@@ -565,5 +778,18 @@
                 </GridView>
             </SemanticZoom.ZoomedOutView>
         </SemanticZoom>
+
+        <Grid
+            x:Name="ProgressRingBackground"
+            Grid.Row="2"
+            Opacity=".5"
+            Background="{ThemeResource Background}">            
+        </Grid>
+        <ProgressRing
+            Height="48"
+            Width="48"
+            Foreground="{ThemeResource AccentColor}"
+            x:Name="ProgressRing"
+            Grid.Row="2" />
     </Grid>
 </Page>

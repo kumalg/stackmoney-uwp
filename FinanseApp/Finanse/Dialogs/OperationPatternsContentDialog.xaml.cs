@@ -18,7 +18,9 @@ namespace Finanse.Dialogs {
         }
 
         public Operation setOperation () {
-            return ((OperationPattern)OperationPatternsListView.SelectedItem).toOperation();
+            return OperationPatternsListView.SelectedIndex == -1 ?
+                null 
+                : ((OperationPattern)OperationPatternsListView.SelectedItem).toOperation();
         }
     }
 }

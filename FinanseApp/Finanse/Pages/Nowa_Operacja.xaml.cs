@@ -3,6 +3,8 @@ using Finanse.Dialogs;
 using Finanse.Models;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -235,7 +237,7 @@ namespace Finanse.Pages {
         }
 
 
-        private void Button_Click_1(object sender, RoutedEventArgs e) {
+        private async void Button_Click_1(object sender, RoutedEventArgs e) {
 
             int catId = 1;
             int subCategoryId = -1;
@@ -274,7 +276,7 @@ namespace Finanse.Pages {
 
                 Dal.SaveOperationPattern(itemPattern);
             }
-
+            
             Frame.Navigate(typeof(Strona_glowna), DateValue.Date.Value.DateTime);
         }
     }

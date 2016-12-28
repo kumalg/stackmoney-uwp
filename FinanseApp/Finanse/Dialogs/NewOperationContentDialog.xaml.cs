@@ -133,7 +133,7 @@ namespace Finanse.Dialogs {
         public Operation newOperation() {
             return new Operation {
                 Id = editedOperation.Id,
-                Date = String.Format("{0:yyyy/MM/dd}", DateValue.Date),
+                Date = DateValue.Date.Value.ToString("yyyy.MM.dd"),
                 Title = NameValue.Text,
                 Cost = decimal.Parse(acceptedCostValue),
                 isExpense = (bool)Expense_RadioButton.IsChecked,
@@ -160,7 +160,7 @@ if (_source != null) {
 
     Operation item = new Operation {
         Id = editedOperation.Id,
-        Date = String.Format("{0:yyyy/MM/dd}", DateValue.Date),
+        Date = String.Format("{0:yyyy.MM.dd}", DateValue.Date),
         Title = NameValue.Text,
         Cost = decimal.Parse(acceptedCostValue),
         isExpense = (bool)Expense_RadioButton.IsChecked,
@@ -437,7 +437,7 @@ else if (isPatternEditing) {
         }
 
         private void DateValue_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
-           // IsPrimaryButtonEnabled = String.Format("{0:yyyy/MM/dd}", DateValue.Date) != editedOperation.Date && !CostValue.Text.Equals("");
+           // IsPrimaryButtonEnabled = String.Format("{0:yyyy.MM.dd}", DateValue.Date) != editedOperation.Date && !CostValue.Text.Equals("");
         }
 
         private void CategoryValue_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {

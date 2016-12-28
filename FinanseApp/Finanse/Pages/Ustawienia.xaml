@@ -357,7 +357,7 @@
                                     Foreground="{ThemeResource Text-1}" />
                                 <TextBlock
                                     Margin="0,10"
-                                    Text="1.0.0"
+                                    Text="{x:Bind GetAppVersion()}"
                                     FontWeight="SemiBold"
                                     Foreground="{ThemeResource Text-1}" />
                             </StackPanel>

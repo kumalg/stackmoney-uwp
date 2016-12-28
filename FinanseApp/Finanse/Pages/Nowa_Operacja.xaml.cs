@@ -90,11 +90,8 @@ namespace Finanse.Pages {
                         Content = catItem.Name,
                         Tag = catItem.Id
                     });
-
                 }
-
             }
-
         }
 
         private void SetSubCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
@@ -127,7 +124,6 @@ namespace Finanse.Pages {
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-
             SetSubCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
         }
 
@@ -136,7 +132,6 @@ namespace Finanse.Pages {
         }
 
         private void SubCategoryValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-
             if (SubCategoryValue.SelectedIndex == 0)
                 SubCategoryValue.SelectedIndex--;
         }
@@ -192,7 +187,6 @@ namespace Finanse.Pages {
         }
 
         private void CostValue_SelectionChanged(object sender, RoutedEventArgs e) {
-
             whereIsSelection = CostValue.SelectionStart;
         }
 
@@ -211,7 +205,6 @@ namespace Finanse.Pages {
         }
 
         private void setValuesFromPattern(Operation selectedOperation) {
-            //CostValue.Text = selectedOperation.Cost;
 
             if (selectedOperation.isExpense)
                 Expense_RadioButton.IsChecked = true;
@@ -232,49 +225,41 @@ namespace Finanse.Pages {
         }
 
         private void CostValue_TextChanged(object sender, TextChangedEventArgs e) {
-
             SaveButton.IsEnabled = !String.IsNullOrEmpty(CostValue.Text);
         }
 
 
-        private async void Button_Click_1(object sender, RoutedEventArgs e) {
+        private void Button_Click_1(object sender, RoutedEventArgs e) {
+            int catId = CategoryValue.SelectedIndex == -1 ?
+                    1 :
+                    (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
+            int subCatId = SubCategoryValue.SelectedIndex == -1 ?
+                    -1 :
+                    (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
 
-            int catId = 1;
-            int subCategoryId = -1;
-
-            if (CategoryValue.SelectedIndex != -1)
-                catId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
-
-            if (SubCategoryValue.SelectedIndex != -1)
-                subCategoryId = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
-
-            Operation item = new Operation {
+            Dal.SaveOperation(new Operation {
                 Id = 0,
                 Title = NameValue.Text,
                 isExpense = (bool)Expense_RadioButton.IsChecked,
                 Cost = decimal.Parse(acceptedCostValue),
                 CategoryId = catId,
-                SubCategoryId = subCategoryId,
-                Date = String.Format("{0:yyyy/MM/dd}", DateValue.Date),
+                SubCategoryId = subCatId,
+                Date = DateValue.Date.Value.ToString("yyyy.MM.dd"),// String.Format("{0:yyyy.MM.dd}", DateValue.Date),
                 MoreInfo = MoreInfoValue.Text,
                 MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
-            };
-
-            Dal.SaveOperation(item);
+            });
 
             if (SaveAsAssetToggle.IsOn) {
-                OperationPattern itemPattern = new OperationPattern {
+                Dal.SaveOperationPattern(new OperationPattern {
                     Id = 0,
                     Title = NameValue.Text,
                     isExpense = (bool)Expense_RadioButton.IsChecked,
                     Cost = decimal.Parse(acceptedCostValue),
                     CategoryId = catId,
-                    SubCategoryId = subCategoryId,
+                    SubCategoryId = subCatId,
                     MoreInfo = MoreInfoValue.Text,
                     MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
-                };
-
-                Dal.SaveOperationPattern(itemPattern);
+                });
             }
             
             Frame.Navigate(typeof(Strona_glowna), DateValue.Date.Value.DateTime);

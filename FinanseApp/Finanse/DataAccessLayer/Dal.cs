@@ -84,15 +84,20 @@
         */
 
         public static Operation GetEldestOperation() {
+            /// blokuje się gdy data jest w formacie innym niż yyyy.MM.dd , np. yyyy-MM-dd . czyli należy jeszcze sprawdzać czy stiring jest {0}.{1}.{2} czy coś
+
             Operation eldest;
 
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                //eldest = db.Table<Operation>().Aggregate((c1, c2) => Convert.ToDateTime(c1.Date) < Convert.ToDateTime(c2.Date) ? c1 : c2);
+
                 if (db.Table<Operation>().Count() == 0)
                     return null;
+
+                // eldest = db.Table<Operation>().Aggregate((c1, c2) => Convert.ToDateTime(c1.Date) < Convert.ToDateTime(c2.Date) ? c1 : c2);
+                // to jest spoko, ale może być super kłopotliwe przy duzych bazach.
 
                 eldest = (from p in db.Table<Operation>().ToList()
                           where p.Date != null && p.Date != ""

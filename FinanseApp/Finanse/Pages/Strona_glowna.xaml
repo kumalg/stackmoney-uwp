@@ -588,12 +588,14 @@
                                         Height="8"
                                         Fill="{StaticResource GreenColorStyle}" />
                                     <TextBlock
+                                        x:Name="dupa1"
                                         FontSize="13"
                                         Foreground="{ThemeResource Text}"
                                         Margin="10,5"
                                         Grid.Column="1"
                                         Text="Gotówka" />
                                     <TextBlock
+                                        x:Name="dupa2"
                                         HorizontalAlignment="Right"
                                         FontWeight="SemiBold"
                                         FontSize="13"
@@ -602,6 +604,7 @@
                                         Grid.Column="2"
                                         Text="29,59 zl" />
                                     <TextBlock
+                                        x:Name="dupa3"
                                         HorizontalAlignment="Right"
                                         FontWeight="SemiBold"
                                         FontSize="13"

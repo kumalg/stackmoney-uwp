@@ -1,6 +1,7 @@
 ﻿using Finanse.Models;
 using System.Globalization;
 using System.Linq;
+using Windows.ApplicationModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -83,6 +84,15 @@ namespace Finanse.Pages {
 
         private void LightThemeRadioButton_Checked(object sender, RoutedEventArgs e) {
             Settings.SetTheme(0);
+        }
+        public string GetAppVersion() {
+
+            Package package = Package.Current;
+            PackageId packageId = package.Id;
+            PackageVersion version = packageId.Version;
+
+            return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+
         }
     }
 }

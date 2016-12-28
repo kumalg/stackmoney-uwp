@@ -64,6 +64,10 @@ namespace Finanse.Pages {
                 visiblePayFormList.Add(item.Id);
                 VisiblePayFormMenuFlyout.Items.Add(itema);
             }
+            actualYear = 2016;
+            actualMonth = 12;
+            dupa2.Text = Dal.GetAllMoneyAccounts().ElementAt(0).getInitialBalance(new DateTime(actualYear,actualMonth,1));
+            dupa3.Text = Dal.GetAllMoneyAccounts().ElementAt(0).getFinalBalance(actualYear, actualMonth);
         }
 
         private void setActualMonthText() {
@@ -342,12 +346,14 @@ namespace Finanse.Pages {
             }
         }
 
+
+
         private void SetPreviousMonthButtonEnabling() {
             Operation eldestOperation = Dal.GetEldestOperation();
 
             PrevMonthButton.IsEnabled = eldestOperation == null ? 
                 false : 
-                !(Convert.ToDateTime(Dal.GetEldestOperation().Date) > new DateTime(actualYear, actualMonth, 1));
+                Convert.ToDateTime(Dal.GetEldestOperation().Date) <= new DateTime(actualYear, actualMonth, 1);
         }
 
         private void SetActualMoneyBar() {

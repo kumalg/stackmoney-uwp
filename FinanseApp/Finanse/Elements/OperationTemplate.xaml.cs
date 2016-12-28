@@ -46,8 +46,8 @@ namespace Finanse.Elements {
 
             /* WCHODZI IKONKA KATEGORII */
             if (cat != null && subCat == null) {
-                CategoryIcon.Color = new SolidColorBrush(Functions.GetSolidColorBrush(cat.Color).Color);
-                CategoryIcon.Glyph = cat.Icon;
+                CategoryIcon.Color = cat.Color;
+                CategoryIcon.Glyph = cat.Icon.Glyph;
 
                 if (String.IsNullOrEmpty(Operation.Title)) {
                     Title_OperationTemplate.Text = cat.Name;
@@ -55,8 +55,8 @@ namespace Finanse.Elements {
             }
 
             else if (cat != null && subCat != null) {
-                CategoryIcon.Color = new SolidColorBrush(Functions.GetSolidColorBrush(subCat.Color).Color);
-                CategoryIcon.Glyph = subCat.Icon;
+                CategoryIcon.Color = subCat.Color;
+                CategoryIcon.Glyph = subCat.Icon.Glyph;
 
                 if (String.IsNullOrEmpty(Operation.Title)) {
                     Title_OperationTemplate.Text = subCat.Name;

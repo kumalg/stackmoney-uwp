@@ -38,7 +38,7 @@
 
         <data:CategoryIcon
             Grid.Column="1"
-            Glyph="{x:Bind OperationSubCategory.Icon}"
+            Glyph="{x:Bind OperationSubCategory.Icon.Glyph}"
             Color="{x:Bind OperationSubCategory.Color}"
             RenderTransformOrigin="0.5,0.5">
             <data:CategoryIcon.RenderTransform>

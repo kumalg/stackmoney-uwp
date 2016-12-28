@@ -122,8 +122,8 @@ namespace Finanse.Models {
                         foreach (OperationCategory item in Dal.GetAllCategories()) {
                             if (item.Id == g.GroupName) {
                                 ((GroupHeaderByCategory)info.Key).categoryId = item.Id;
-                                ((GroupHeaderByCategory)info.Key).icon = item.Icon;
-                                ((GroupHeaderByCategory)info.Key).color = item.Color;
+                                ((GroupHeaderByCategory)info.Key).icon = item.Icon.Glyph;
+                                ((GroupHeaderByCategory)info.Key).color = item.Color.ToString(); /// cymczasowe
                                 ((GroupHeaderByCategory)info.Key).opacity = 1;
                                 break;
                             }

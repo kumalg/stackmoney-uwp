@@ -45,11 +45,11 @@ namespace Finanse.Pages {
             OperationCategory thisCategory = new OperationCategory {
                 Id = thisSubCategory.Id,
                 Name = thisSubCategory.Name,
-                Color = thisSubCategory.Color,
-                Icon = thisSubCategory.Icon,
+                ColorKey = thisSubCategory.ColorKey,
+                IconKey = thisSubCategory.IconKey,
                 VisibleInExpenses = thisSubCategory.VisibleInExpenses,
                 VisibleInIncomes = thisSubCategory.VisibleInIncomes
-            };
+            }; /// po co to?????? /// a dobra... bo musze z subkategori zrobic kategorię
 
             var ContentDialogItem = new NewCategoryContentDialog(OperationCategories, thisCategory, thisSubCategory.BossCategoryId);
             var result = await ContentDialogItem.ShowAsync();

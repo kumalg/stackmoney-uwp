@@ -22,7 +22,7 @@
         </Grid.ColumnDefinitions>
 
         <data:CategoryIcon 
-            Glyph="{x:Bind OperationCategory.Icon}"
+            Glyph="{x:Bind OperationCategory.Icon.Glyph}"
             Color="{x:Bind OperationCategory.Color}"/>
 
         <TextBlock

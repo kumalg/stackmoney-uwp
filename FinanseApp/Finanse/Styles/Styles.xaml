@@ -85,20 +85,18 @@
     <!--*****************************************
     BAZA KOLORÓW DO KATEGORII
     ******************************************-->
-    <ResourceDictionary x:Key="ColorBase">
-        <SolidColorBrush x:Name="Blue" x:Key="a" Color="#02b0e7" />
-        
-	    <SolidColorBrush x:Name="Cyan" x:Key="b" Color="#3dc6ac" />
-                
-	    <SolidColorBrush x:Name="Green" x:Key="c" Color="#56af5b" />
-        
-	    <SolidColorBrush x:Name="Yellow" x:Key="e" Color="#e7c64a" />
-        
-	    <SolidColorBrush x:Name="Red" x:Key="g" Color="#e04967" />
 
-	    <SolidColorBrush x:Name="Pink" x:Key="h" Color="#b952c2" />
-        
-	    <SolidColorBrush x:Name="Violet" x:Key="i" Color="#7144b5" />
+    <ResourceDictionary x:Key="ColorBase">
+        <SolidColorBrush x:Key="blue" Color="#02b0e7" />
+        <SolidColorBrush x:Key="darkBlue" Color="#2d5ac1" />
+	    <SolidColorBrush x:Key="cyan" Color="#3dc6ac" />
+	    <SolidColorBrush x:Key="green" Color="#0f993f" />
+	    <SolidColorBrush x:Key="yellow" Color="#d5a627" />
+        <SolidColorBrush x:Key="orange" Color="#fa8748" />
+	    <SolidColorBrush x:Key="red" Color="#b12b41" />
+	    <SolidColorBrush x:Key="pink" Color="#b952c2" />
+	    <SolidColorBrush x:Key="violet" Color="#7144b5" />
+        <SolidColorBrush x:Key="gray" Color="#a1adbc" />
     </ResourceDictionary>
     <!--
     <ResourceDictionary x:Key="ColorBase">

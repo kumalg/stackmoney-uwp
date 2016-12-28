@@ -154,6 +154,9 @@
     <Compile Include="Dialogs\Delete_ContentDialog.xaml.cs">
       <DependentUpon>Delete_ContentDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\NewMoneyAccountContentDialog.xaml.cs">
+      <DependentUpon>NewMoneyAccountContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Elements\CategoryIcon.xaml.cs">
       <DependentUpon>CategoryIcon.xaml</DependentUpon>
     </Compile>
@@ -259,6 +262,10 @@
     <Page Include="Dialogs\Delete_ContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\NewMoneyAccountContentDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Elements\CategoryIcon.xaml">
       <SubType>Designer</SubType>

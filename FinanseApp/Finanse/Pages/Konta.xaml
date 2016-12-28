@@ -29,9 +29,30 @@
             Background="{ThemeResource AccentColor}"
             MinHeight="48">
 
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="Auto" />
+            </Grid.ColumnDefinitions>
+
             <TextBlock
+                Margin="16,0"
+                Grid.Column="0"
                 Text="Konta"
                 Style="{StaticResource PageTitleStyle}" />
+
+            <Button
+                Background="Transparent"
+                Width="48"
+                Height="48"
+                Grid.Column="1"
+                Click="NewMoneyAccount_Click">
+                <FontIcon
+                    FontSize="24"
+                    Foreground="{ThemeResource AccentText}"
+                    Glyph="" />
+            </Button>
         </Grid>
         <ListView
             Padding="0,16"

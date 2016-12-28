@@ -20,14 +20,21 @@ namespace Finanse.Pages {
                     Tag = item.Name
                 });
             }
-
+            /*
             if (Settings.GetActualIconStyle() == "Segoe UI") {
                 ColorIcon_RadioButton.IsChecked = true;
             }
             else
                 MonoIcon_RadioButton.IsChecked = true;
+                */
+           // ThemeToggle.IsOn = (Settings.GetTheme() == ApplicationTheme.Dark);
+            if (Settings.GetTheme() == ApplicationTheme.Dark)
+                DarkThemeRadioButton.IsChecked = true;
+            else
+                LightThemeRadioButton.IsChecked = true;
 
-            ThemeToggle.IsOn = (Settings.GetTheme() == ApplicationTheme.Dark);
+            DarkThemeRadioButton.Checked += DarkThemeRadioButton_Checked;
+            LightThemeRadioButton.Checked += LightThemeRadioButton_Checked;
 
             CurrencyValue.SelectedItem = CurrencyValue
                 .Items
@@ -42,20 +49,21 @@ namespace Finanse.Pages {
             MaxNumberOfNextMonth.SelectedIndex = Settings.GetMaxFutureMonths() - 1;
             CategoryNameVisibilityToggleButton.IsOn = Settings.GetCategoryNameVisibility();
             AccountEllipseVisibilityToggleButton.IsOn = Settings.GetAccountEllipseVisibility();
+           
+            SyncSettingsToggleButton.IsOn = Settings.GetSyncSettings();
+            SyncSettingsToggleButton.Toggled += SyncSettingsToggleButton_Toggled;
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-
             Settings.SetActualCurrency((string)((ComboBoxItem)CurrencyValue.SelectedItem).Tag);
         }
-
+        /*
         private void IconStyleRadioButton_Checked(object sender, RoutedEventArgs e) {
 
             Settings.SetActualIconStyle(((RadioButton)sender).Tag.ToString());
         }
-
+        */
         private void ThemeToggle_Toggled(object sender, RoutedEventArgs e) {
-
             Settings.SetTheme(ThemeToggle.IsOn ? 1 : 0);
         }
 
@@ -65,12 +73,10 @@ namespace Finanse.Pages {
         }
 
         private void CategoryNameVisibilityToggleButton_Toggled(object sender, RoutedEventArgs e) {
-
             Settings.SetCategoryNameVisibility(CategoryNameVisibilityToggleButton.IsOn);
         }
 
         private void AccountEllipseVisibilityToggleButton_Toggled(object sender, RoutedEventArgs e) {
-
             Settings.SetAccountEllipseVisibility(AccountEllipseVisibilityToggleButton.IsOn);
         }
 
@@ -82,6 +88,18 @@ namespace Finanse.Pages {
         private void FirstDayOfWeek_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             ComboBoxItem item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
          //   Settings.SetFirstDayOfWeek((DayOfWeek)item.Tag);
+        }
+
+        private void SyncSettingsToggleButton_Toggled(object sender, RoutedEventArgs e) {
+            Settings.SetSyncSettings(SyncSettingsToggleButton.IsOn);
+        }
+
+        private void DarkThemeRadioButton_Checked(object sender, RoutedEventArgs e) {
+            Settings.SetTheme(1);
+        }
+
+        private void LightThemeRadioButton_Checked(object sender, RoutedEventArgs e) {
+            Settings.SetTheme(0);
         }
     }
 }

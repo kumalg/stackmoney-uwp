@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Finanse.DataAccessLayer;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media;
@@ -31,7 +32,16 @@ namespace Finanse.Models {
     }
 
     class GroupHeaderByCategory {
-        public string name { get; set; }
+        private string _name = "";
+        public string name {
+            get {
+                if (_name.Equals("")) {
+                    _name = categoryId == -1 ? "Nieprzyporządkowane" : Dal.GetOperationCategoryById(categoryId).Name;
+                }
+                return _name;
+            }
+        }
+        public int categoryId { get; set; }
         public string icon { get; set; }
         public FontFamily iconStyle { get; set; }
         public string color { get; set; }
@@ -47,6 +57,7 @@ namespace Finanse.Models {
         public GroupHeaderByDay(string date) {
 
             if (date.Equals("")) {
+                this.date = date;
                 dayNum00 = "#";
                 dayNum = "";
                 day = "Bez daty";

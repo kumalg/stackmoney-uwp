@@ -1,4 +1,5 @@
 ﻿using Finanse.DataAccessLayer;
+using Finanse.Dialogs;
 using Finanse.Models;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,11 @@ namespace Finanse.Pages {
         public Konta() {
 
             this.InitializeComponent();
+        }
+
+        private async void NewMoneyAccount_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
+            var ContentDialogItem = new NewMoneyAccountContentDialog();
+            var result = await ContentDialogItem.ShowAsync();
         }
     }
 }

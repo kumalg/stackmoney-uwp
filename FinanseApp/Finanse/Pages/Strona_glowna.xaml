@@ -502,10 +502,10 @@
                                     Storyboard.TargetName="angleToAddButton"
                                     Storyboard.TargetProperty="(FontIcon.Opacity)"
                                     From="1.0"
-                                    To="0.5"
+                                    To="0.2"
                                     AutoReverse="True"
                                     RepeatBehavior="Forever"
-                                    Duration="0:0:3" />
+                                    Duration="0:0:2" />
                             </Storyboard>
                         </BeginStoryboard>
                     </EventTrigger>
@@ -656,23 +656,29 @@
                                         VerticalAlignment="Center"
                                         Text="Grupuj wg." />
                                     <Button
+                                        x:Name="ByDateButton"
                                         FontSize="13"
                                         Height="38"
-                                        Click="ByDateRadioButton_Checked"
-                                        Foreground="{ThemeResource Text-1}"
+                                        Click="ByDateButton_Click"
+                                        Foreground="{ThemeResource AccentColor}"
+                                        FontFamily="{StaticResource FontAwesome}"
                                         Background="{ThemeResource Background+1}"
-                                        Width="64"
+                                        Width="38"
+                                        BorderThickness="0"
                                         Margin="16,0,0,0"
-                                        Content="Dnia" />
+                                        Content="" />
                                     <Button
+                                        x:Name="ByCategoryButton"
                                         FontSize="13"
                                         Height="38"
-                                        Click="ByCategoryRadioButton_Checked"
+                                        Click="ByCategoryButton_Click"
                                         Foreground="{ThemeResource Text-1}"
+                                        FontFamily="{StaticResource FontAwesome}"
                                         Background="{ThemeResource Background+1}"
-                                        Width="92"
+                                        Width="38"
+                                        BorderThickness="0"
                                         Margin="16,0,0,0"
-                                        Content="Kategorii" />
+                                        Content="" />
                                 </StackPanel>
                                 
                                 <StackPanel
@@ -685,6 +691,7 @@
                                         GroupName="GroupingRadioButtons"
                                         Checked="ByDateRadioButton_Checked"
                                         FontSize="13"
+                                        BorderThickness="0"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
                                         Foreground="{ThemeResource Text-1}"

@@ -103,7 +103,7 @@ namespace Finanse.Dialogs {
                         break;
                     }
                 default: {
-                        ContentDialogItem = new NewOperationContentDialog(_source, editedOperation);
+                        ContentDialogItem = new NewOperationContentDialog(editedOperation);
                         break;
                     }
             }

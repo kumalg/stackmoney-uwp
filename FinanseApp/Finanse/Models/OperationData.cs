@@ -15,7 +15,6 @@ namespace Finanse.Models {
 
         private readonly ItemCollection _collection = new ItemCollection();
         public OperationData(int month, int year, bool isFuture, List<int> visiblePayFormList) {
-
             this.month = month;
             this.year = year;
             this.isFuture = isFuture;
@@ -50,10 +49,8 @@ namespace Finanse.Models {
                             Key = new GroupHeaderByDay(g.GroupName),
                         };
                         
-                        foreach (var item in g.Items.OrderByDescending(i => i.Id)) {
-
+                        foreach (var item in g.Items.OrderByDescending(i => i.Id))
                             info.Add(item);
-                        }
                         
                         groupsByDay.Add(info);
                     }
@@ -115,7 +112,8 @@ namespace Finanse.Models {
                         info = new GroupInfoList<Operation>();
 
                         info.Key = new GroupHeaderByCategory {
-                            name = "Nieprzyporządkowane",
+                            //name = "Nieprzyporządkowane", /// WAŻNE MAXXXXXXXXXXXXXX
+                            categoryId = -1,
                             icon = ((FontIcon)Application.Current.Resources["DefaultEllipseIcon"]).Glyph,
                             color = ((SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"]).Color.ToString(),
                             opacity = 0.2,
@@ -123,7 +121,7 @@ namespace Finanse.Models {
 
                         foreach (OperationCategory item in Dal.GetAllCategories()) {
                             if (item.Id == g.GroupName) {
-                                ((GroupHeaderByCategory)info.Key).name = item.Name;
+                                ((GroupHeaderByCategory)info.Key).categoryId = item.Id;
                                 ((GroupHeaderByCategory)info.Key).icon = item.Icon;
                                 ((GroupHeaderByCategory)info.Key).color = item.Color;
                                 ((GroupHeaderByCategory)info.Key).opacity = 1;
@@ -133,10 +131,8 @@ namespace Finanse.Models {
 
                         ((GroupHeaderByCategory)info.Key).iconStyle = new FontFamily(Settings.GetActualIconStyle());
 
-                        foreach (var item in g.Items) {
-
+                        foreach (var item in g.Items.OrderByDescending(i=>i.Id))
                             info.Add(item);
-                        }
 
                         groupsByCategory.Add(info);
                     }

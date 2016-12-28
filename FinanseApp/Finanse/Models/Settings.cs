@@ -12,33 +12,33 @@ namespace Finanse.Models {
 
         public static void SetSettings() {
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
 
-            if (localSettings.Values["whichCurrency"] == null)
-                localSettings.Values["whichCurrency"] = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+            if (localSettings.Values["syncSettings"] == null)
+                localSettings.Values["syncSettings"] = true;
 
-            if (localSettings.Values["iconStyle"] == null)
-                localSettings.Values["iconStyle"] = "Segoe UI Symbol";
+            Windows.Storage.ApplicationDataContainer actualTypeOfSettings = whichSettings();
 
-            if (localSettings.Values["Theme"] == null)
-                localSettings.Values["Theme"] = 1;
+            if (actualTypeOfSettings.Values["iconStyle"] == null)
+                actualTypeOfSettings.Values["iconStyle"] = "Segoe UI Symbol";
 
-            if (localSettings.Values["maxFutureMonths"] == null)
-                localSettings.Values["maxFutureMonths"] = 6;
+            if (actualTypeOfSettings.Values["Theme"] == null)
+                actualTypeOfSettings.Values["Theme"] = 1;
 
-            if (localSettings.Values["categoryNameVisibility"] == null)
-                localSettings.Values["categoryNameVisibility"] = false;
+            if (actualTypeOfSettings.Values["maxFutureMonths"] == null)
+                actualTypeOfSettings.Values["maxFutureMonths"] = 6;
 
-            if (localSettings.Values["accountEllipseVisibility"] == null)
-                localSettings.Values["accountEllipseVisibility"] = true;
+            if (actualTypeOfSettings.Values["categoryNameVisibility"] == null)
+                actualTypeOfSettings.Values["categoryNameVisibility"] = false;
 
-            if (roamingSettings.Values["whichCurrency"] == null)
-                roamingSettings.Values["whichCurrency"] = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+            if (actualTypeOfSettings.Values["accountEllipseVisibility"] == null)
+                actualTypeOfSettings.Values["accountEllipseVisibility"] = true;
+
+            if (actualTypeOfSettings.Values["whichCurrency"] == null)
+                actualTypeOfSettings.Values["whichCurrency"] = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
         }
 
         public static List<CultureInfo> GetAllCurrencies() {
             List<CultureInfo> lista = new List<CultureInfo>{
-
                 new CultureInfo("en-US"),
                 new CultureInfo("en-GB"),
                 new CultureInfo("fr-FR"),
@@ -50,105 +50,86 @@ namespace Finanse.Models {
         }
 
         public static ApplicationTheme GetTheme() {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            ApplicationTheme actualTheme;
-
-            if ((int)localSettings.Values["Theme"] == 1)
-                actualTheme = ApplicationTheme.Dark;
-            else
-                actualTheme = ApplicationTheme.Light;
-
-            return actualTheme;
+            return (int)whichSettings().Values["Theme"] == 1 ?
+                ApplicationTheme.Dark :
+                ApplicationTheme.Light;
         }
         public static void SetTheme(int i) {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            localSettings.Values["Theme"] = i;
+            whichSettings().Values["Theme"] = i;
         }
 
         public static CultureInfo GetActualCurrency() {
+            return new CultureInfo(whichSettings().Values["whichCurrency"].ToString());
+        }
 
-            //   Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+        private static void setFromRoamingToLocal() {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
 
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
-            
-            CultureInfo value = new CultureInfo(localSettings.Values["whichCurrency"].ToString());
-            return value;
+            localSettings.Values["iconStyle"] = roamingSettings.Values["iconStyle"];
+            localSettings.Values["Theme"] = roamingSettings.Values["Theme"];
+            localSettings.Values["maxFutureMonths"] = roamingSettings.Values["maxFutureMonths"];
+            localSettings.Values["categoryNameVisibility"] = roamingSettings.Values["categoryNameVisibility"];
+            localSettings.Values["accountEllipseVisibility"] = roamingSettings.Values["accountEllipseVisibility"];
+            localSettings.Values["whichCurrency"] = roamingSettings.Values["whichCurrency"];
+        }
+        public static void SetSyncSettings(bool syncSettings) {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            if ((bool)localSettings.Values["syncSettings"] && !syncSettings)
+                setFromRoamingToLocal();
+
+            localSettings.Values["syncSettings"] = syncSettings;
+        }
+        public static bool GetSyncSettings() {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            return (bool)localSettings.Values["syncSettings"];
+        }
+
+        private static Windows.Storage.ApplicationDataContainer whichSettings() {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            return (bool)localSettings.Values["syncSettings"] ?
+                Windows.Storage.ApplicationData.Current.RoamingSettings :
+                Windows.Storage.ApplicationData.Current.LocalSettings;
         }
         public static void SetActualCurrency(string currency) {
-
-            //   Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
-
-            localSettings.Values["whichCurrency"] = currency;
+            whichSettings().Values["whichCurrency"] = currency;
         }
 
         public static Windows.Globalization.DayOfWeek GetFirstDayOfWeek() {
-
             return Windows.System.UserProfile.GlobalizationPreferences.WeekStartsOn;
         }
 
         public static string GetActualIconStyle() {
-
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            string value = localSettings.Values["iconStyle"].ToString();
-            return value;
-        }
-        public static void SetActualIconStyle(string iconStyle) {
-
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            localSettings.Values["iconStyle"] = iconStyle;
+            return whichSettings().Values["iconStyle"].ToString();
         }
 
         public static int GetMaxFutureMonths() {
-
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            int value = (int)localSettings.Values["maxFutureMonths"];
-            return value;
+            return (int)whichSettings().Values["maxFutureMonths"];
         }
 
         public static DateTime GetMaxDate() {
-            return new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month)).AddMonths(Settings.GetMaxFutureMonths());
+            return new DateTime(
+                DateTime.Today.Year, 
+                DateTime.Today.Month, 
+                DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month)).AddMonths(Settings.GetMaxFutureMonths());
         }
         public static void SetMaxFutureMonths(int months) {
-
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            localSettings.Values["maxFutureMonths"] = months;
+            whichSettings().Values["maxFutureMonths"] = months;
         }
 
         public static bool GetCategoryNameVisibility() {
-
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            bool value = (bool)localSettings.Values["categoryNameVisibility"];
-
-            return value;
+            return (bool)whichSettings().Values["categoryNameVisibility"];
         }
         public static void SetCategoryNameVisibility(bool value) {
-
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            localSettings.Values["categoryNameVisibility"] = value;
+            whichSettings().Values["categoryNameVisibility"] = value;
         }
 
         public static bool GetAccountEllipseVisibility() {
-
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            bool value = (bool)localSettings.Values["accountEllipseVisibility"];
-
-            return value;
+            return (bool)whichSettings().Values["accountEllipseVisibility"];
         }
         public static void SetAccountEllipseVisibility(bool value) {
-            
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            localSettings.Values["accountEllipseVisibility"] = value;
+            whichSettings().Values["accountEllipseVisibility"] = value;
         }
     }
 }

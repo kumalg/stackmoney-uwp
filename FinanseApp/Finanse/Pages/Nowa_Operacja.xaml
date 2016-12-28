@@ -475,13 +475,15 @@
                             Content="Wydatek"
                             GroupName="OperationType_RadioButtons"
                             Foreground="{ThemeResource Text}"
-                            Checked="TypeOfOperationRadioButton_Checked" />
+                            Checked="TypeOfOperationRadioButton_Checked"
+                            Style="{StaticResource MyRadioButtonStyle}" />
                         <RadioButton
                             Name="Income_RadioButton"
                             Content="Wpływ"
                             GroupName="OperationType_RadioButtons"
                             Foreground="{ThemeResource Text}"
-                            Checked="TypeOfOperationRadioButton_Checked" />
+                            Checked="TypeOfOperationRadioButton_Checked"
+                            Style="{StaticResource MyRadioButtonStyle}" />
 
                     </StackPanel>
 

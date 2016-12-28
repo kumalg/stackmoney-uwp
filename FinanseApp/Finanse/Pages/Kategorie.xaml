@@ -77,13 +77,15 @@
                     HorizontalAlignment="Center"
                     Content="Wydatki"
                     IsChecked="True"
-                    Checked="RadioButton_Checked" />
+                    Checked="RadioButton_Checked"
+                    Style="{StaticResource MyRadioButtonStyle}" />
                 <RadioButton
                     GroupName="CategoryExpenseOrIncomeRadioButtons"
                     Grid.Column="1"
                     HorizontalAlignment="Center"
                     Content="Wpływy"
-                    Checked="RadioButton_Checked_1" />
+                    Checked="RadioButton_Checked_1"
+                    Style="{StaticResource MyRadioButtonStyle}"/>
             </Grid>
         </Grid>
 

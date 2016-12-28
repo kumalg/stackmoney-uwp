@@ -14,6 +14,7 @@
             get {
                 if (string.IsNullOrEmpty(dbPath)) {
                     dbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "db.sqlite");
+                //    dbPath = Path.Combine(ApplicationData.Current.RoamingFolder.Path, "db.sqlite");
                 }
 
                 return dbPath;
@@ -41,12 +42,12 @@
                 db.CreateTable<OperationCategory>();
                 db.CreateTable<OperationSubCategory>();
                 //db.CreateTable<Settings>();
-
+                /*
                 if (!db.Table<Settings>().Any())
                     db.Insert(new Settings {
                         CultureInfoName = "en-US"
                     });
-
+                    */
                 if (!db.Table<MoneyAccount>().Any()) {
                     db.Insert(new MoneyAccount {
                         Name = "Gotówka",
@@ -90,6 +91,9 @@
                 db.TraceListener = new DebugTraceListener();
 
                 //eldest = db.Table<Operation>().Aggregate((c1, c2) => Convert.ToDateTime(c1.Date) < Convert.ToDateTime(c2.Date) ? c1 : c2);
+                if (db.Table<Operation>().Count() == 0)
+                    return null;
+
                 eldest = (from p in db.Table<Operation>().ToList()
                           where p.Date != null && p.Date != ""
                           orderby p.Date

@@ -427,13 +427,15 @@
                 Content="Wydatek"
                 GroupName="OperationType_RadioButtons"
                 Checked="TypeOfOperationRadioButton_Checked"
-                DataContextChanged="OperationType_DataContextChanged" />
+                DataContextChanged="OperationType_DataContextChanged"
+                Style="{StaticResource MyRadioButtonStyle}" />
             <RadioButton
                 Name="Income_RadioButton"
                 Content="Wpływ"
                 GroupName="OperationType_RadioButtons"
                 Checked="TypeOfOperationRadioButton_Checked"
-                DataContextChanged="OperationType_DataContextChanged"/>
+                DataContextChanged="OperationType_DataContextChanged"
+                Style="{StaticResource MyRadioButtonStyle}"/>
 
         </StackPanel>
 

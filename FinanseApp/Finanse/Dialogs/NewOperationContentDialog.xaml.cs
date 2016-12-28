@@ -9,9 +9,10 @@ using Finanse.Models;
 namespace Finanse.Dialogs {
     public sealed partial class NewOperationContentDialog : ContentDialog {
 
-        private Operation editedOperation;
+        private bool _isSaved = false;
 
-        private readonly ObservableCollection<GroupInfoList<Operation>> _source;
+        private Operation editedOperation;
+        
         private readonly ObservableCollection<OperationPattern> patterns;
 
         private bool isPatternEditing = false;
@@ -20,12 +21,11 @@ namespace Finanse.Dialogs {
 
         private bool isUnfocused = true;
 
-        public NewOperationContentDialog(ObservableCollection<GroupInfoList<Operation>> _source, Operation editedOperation) {
+        public NewOperationContentDialog(Operation editedOperation) {
 
             this.InitializeComponent();
 
             this.editedOperation = editedOperation;
-            this._source = _source;
 
             IsPrimaryButtonEnabled = false;
 
@@ -49,7 +49,8 @@ namespace Finanse.Dialogs {
             SaveAsAssetToggle.Visibility = Visibility.Collapsed;
 
             EditAndPatternSetters();
-            DateValue.Date = Convert.ToDateTime(editedOperation.Date);
+            if (!editedOperation.Date.Equals(""))
+                DateValue.Date = Convert.ToDateTime(editedOperation.Date); /// tu się wywala kiedy edytujesz zaplanowaną bez daty /// JUŻ NIE
         }
         public NewOperationContentDialog(ObservableCollection<OperationPattern> patterns, Operation editedOperation, bool isPatternEditing) {
 
@@ -125,6 +126,28 @@ namespace Finanse.Dialogs {
                 MoreInfoValue.Text = editedOperation.MoreInfo;
         }
 
+        public bool isSaved() {
+            return _isSaved;
+        }
+
+        public Operation newOperation() {
+            return new Operation {
+                Id = editedOperation.Id,
+                Date = String.Format("{0:yyyy/MM/dd}", DateValue.Date),
+                Title = NameValue.Text,
+                Cost = decimal.Parse(acceptedCostValue),
+                isExpense = (bool)Expense_RadioButton.IsChecked,
+                CategoryId = CategoryValue.SelectedIndex != -1 ?
+                             (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag
+                             : 1,
+                SubCategoryId = SubCategoryValue.SelectedIndex != -1 ?
+                                (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag
+                                : -1,
+                MoreInfo = MoreInfoValue.Text,
+                MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
+            };
+        }
+
         private void NowaOperacja_DodajClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
             int subCategoryId = -1;
@@ -132,44 +155,66 @@ namespace Finanse.Dialogs {
             if (SubCategoryValue.SelectedIndex != -1)
                 subCategoryId = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
 
-            if (_source != null) {
+            /*
+if (_source != null) {
 
-                Operation item = new Operation {
-                    Id = editedOperation.Id,
-                    Date = String.Format("{0:yyyy/MM/dd}", DateValue.Date),
-                    Title = NameValue.Text,
-                    Cost = decimal.Parse(acceptedCostValue),
-                    isExpense = (bool)Expense_RadioButton.IsChecked,
-                    CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
-                    SubCategoryId = subCategoryId,
-                    MoreInfo = MoreInfoValue.Text,
-                    MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
-                };
+    Operation item = new Operation {
+        Id = editedOperation.Id,
+        Date = String.Format("{0:yyyy/MM/dd}", DateValue.Date),
+        Title = NameValue.Text,
+        Cost = decimal.Parse(acceptedCostValue),
+        isExpense = (bool)Expense_RadioButton.IsChecked,
+        CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
+        SubCategoryId = subCategoryId,
+        MoreInfo = MoreInfoValue.Text,
+        MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
+    };
 
-                GroupInfoList<Operation> group = _source.SingleOrDefault(i => ((GroupHeaderByDay)i.Key).date == editedOperation.Date);
+    GroupInfoList<Operation> group = _source.SingleOrDefault(i => ((GroupHeaderByDay)i.Key).date == editedOperation.Date);
 
-                if (item.Date == editedOperation.Date)
-                    group[group.IndexOf(group.Single(i => i.Id == item.Id))] = item;
+    if (item.Date == editedOperation.Date)
+        group[group.IndexOf(group.Single(i => i.Id == item.Id))] = item;
 
-                else {
+    else {
 
-                    if (group.Count == 1)
-                        _source.Remove(group);
+        if (group.Count == 1)
+            _source.Remove(group);
 
-                    else
-                        group.Remove(group.Single(i => i.Id == item.Id));
+        else
+            group.Remove(group.Single(i => i.Id == item.Id));
 
-                    if (!DateValue.Date.ToString().Equals("")
-                        && DateValue.Date.Value.Year == Convert.ToDateTime(editedOperation.Date).Year
-                        && DateValue.Date.Value.Month == Convert.ToDateTime(editedOperation.Date).Month)
+        if (!DateValue.Date.ToString().Equals("")
+            && DateValue.Date.Value.Year == Convert.ToDateTime(editedOperation.Date).Year
+            && DateValue.Date.Value.Month == Convert.ToDateTime(editedOperation.Date).Month)
 
-                        AddOperationToList(item);
-                }
+            AddOperationToList(item);
+    }
 
-                Dal.SaveOperation(item);
-            }
+    Dal.SaveOperation(item);
+}
 
-            else if (isPatternEditing) {
+else if (isPatternEditing) {
+
+    OperationPattern itemPattern = new OperationPattern {
+        Id = editedOperation.Id,
+        Title = NameValue.Text,
+        Cost = decimal.Parse(acceptedCostValue),
+        isExpense = (bool)Expense_RadioButton.IsChecked,
+        CategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
+        SubCategoryId = subCategoryId,
+        MoreInfo = MoreInfoValue.Text,
+        MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
+    };
+
+    patterns[patterns.IndexOf(patterns.SingleOrDefault(i => i.Id == editedOperation.Id))] = itemPattern;
+
+    Dal.SaveOperationPattern(itemPattern);
+}
+*/
+
+            Dal.SaveOperation(newOperation());
+
+            if (isPatternEditing) {
 
                 OperationPattern itemPattern = new OperationPattern {
                     Id = editedOperation.Id,
@@ -186,8 +231,10 @@ namespace Finanse.Dialogs {
 
                 Dal.SaveOperationPattern(itemPattern);
             }
-        }
 
+            _isSaved = true;
+        }
+        /*
         private void AddOperationToList(Operation item) {
 
             GroupInfoList<Operation> group = _source.SingleOrDefault(i => ((GroupHeaderByDay)i.Key).date == item.Date);
@@ -199,7 +246,7 @@ namespace Finanse.Dialogs {
                 int i = 0;
 
                 for (i = 0; i < _source.Count; i++)
-                    if (((GroupHeaderByDay)_source.ElementAt(i).Key).date.CompareTo(item.Date) < 0)
+                    if (((GroupHeaderByDay)_source.ElementAt(i).Key).date.CompareTo(item.Date) < 0) /// tu się wywala jak z zaplanowanego z datą do wykonanego
                         break;
 
                 _source.Insert(i, group);
@@ -207,7 +254,7 @@ namespace Finanse.Dialogs {
             else {
                 group.Insert(0, item);
             }
-        }
+        }*/
 
         private void TypeOfOperationRadioButton_Checked(object sender, RoutedEventArgs e) {
 

@@ -40,6 +40,7 @@
                 Margin="16,0"
                 Grid.Column="0"
                 Text="Konta"
+                x:Uid="moneyAccounts"
                 Style="{StaticResource PageTitleStyle}" />
 
             <Button

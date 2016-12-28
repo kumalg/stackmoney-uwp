@@ -1,5 +1,4 @@
 ﻿using Finanse.Models;
-using System;
 using System.Globalization;
 using System.Linq;
 using Windows.UI.Xaml;
@@ -20,14 +19,7 @@ namespace Finanse.Pages {
                     Tag = item.Name
                 });
             }
-            /*
-            if (Settings.GetActualIconStyle() == "Segoe UI") {
-                ColorIcon_RadioButton.IsChecked = true;
-            }
-            else
-                MonoIcon_RadioButton.IsChecked = true;
-                */
-           // ThemeToggle.IsOn = (Settings.GetTheme() == ApplicationTheme.Dark);
+
             if (Settings.GetTheme() == ApplicationTheme.Dark)
                 DarkThemeRadioButton.IsChecked = true;
             else
@@ -56,15 +48,6 @@ namespace Finanse.Pages {
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             Settings.SetActualCurrency((string)((ComboBoxItem)CurrencyValue.SelectedItem).Tag);
-        }
-        /*
-        private void IconStyleRadioButton_Checked(object sender, RoutedEventArgs e) {
-
-            Settings.SetActualIconStyle(((RadioButton)sender).Tag.ToString());
-        }
-        */
-        private void ThemeToggle_Toggled(object sender, RoutedEventArgs e) {
-            Settings.SetTheme(ThemeToggle.IsOn ? 1 : 0);
         }
 
         private void MaxNumberOfFutureMonths_SelectionChanged(object sender, SelectionChangedEventArgs e) {

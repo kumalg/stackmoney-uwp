@@ -10,6 +10,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Title="Użyj szablonu"
+    x:Uid="usePatternContentDialog"
     Background="{ThemeResource BackgroundTransparent}"
     SecondaryButtonText="Anuluj">
 

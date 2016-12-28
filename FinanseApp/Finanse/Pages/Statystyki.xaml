@@ -43,6 +43,7 @@
 
             <TextBlock
                 Text="Statystyki"
+                x:Uid="statistics"
                 Style="{StaticResource PageTitleStyle}" />
 
         </Grid>

@@ -43,8 +43,8 @@ namespace Finanse.Dialogs {
                 });
             }
 
-            Title = "Edycja operacji";
-            PrimaryButtonText = "Zapisz";
+           // Title = "Edycja operacji";
+          //  PrimaryButtonText = "Zapisz";
             SaveAsAssetTitle.Visibility = Visibility.Collapsed;
             SaveAsAssetToggle.Visibility = Visibility.Collapsed;
 

@@ -1,0 +1,371 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="aboutApp.Text" xml:space="preserve">
+    <value>O aplikacji</value>
+  </data>
+  <data name="addNew.Text" xml:space="preserve">
+    <value>Dodaj nową</value>
+  </data>
+  <data name="addNewOperation.FontSize" xml:space="preserve">
+    <value>12</value>
+    <comment>UNNESSESARY NOW</comment>
+  </data>
+  <data name="addNewOperation.Text" xml:space="preserve">
+    <value>Dodaj operację</value>
+  </data>
+  <data name="appDesc.Text" xml:space="preserve">
+    <value>Aplikacja do zarządzania finansami.</value>
+  </data>
+  <data name="appearance.Text" xml:space="preserve">
+    <value>Wygląd</value>
+  </data>
+  <data name="applicationSettings.Text" xml:space="preserve">
+    <value>Ustawienia aplikacji (motyw, waluta itd.)</value>
+  </data>
+  <data name="author.Text" xml:space="preserve">
+    <value>Autor:</value>
+  </data>
+  <data name="balance.Text" xml:space="preserve">
+    <value>Saldo</value>
+  </data>
+  <data name="categories.Text" xml:space="preserve">
+    <value>Kategorie</value>
+  </data>
+  <data name="categoryPlaceholder.PlaceholderText" xml:space="preserve">
+    <value>Kategoria</value>
+  </data>
+  <data name="color.Text" xml:space="preserve">
+    <value>Kolor</value>
+  </data>
+  <data name="currency.Text" xml:space="preserve">
+    <value>Waluta</value>
+  </data>
+  <data name="currencyPlaceholder.PlaceholderText" xml:space="preserve">
+    <value>Waluta</value>
+  </data>
+  <data name="dark.Text" xml:space="preserve">
+    <value>Ciemny</value>
+  </data>
+  <data name="datePlaceholder.PlaceholderText" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="deleteCategoryContentDialog.Title" xml:space="preserve">
+    <value>Czy chcesz usunąć tą kategorię?</value>
+    <comment>TU TRZEBA SIE ZASTANAOWIĆ NAD UJEDNOLICENIEM</comment>
+  </data>
+  <data name="deleteOperationContentDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Tak</value>
+  </data>
+  <data name="deleteOperationContentDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="deleteOperationContentDialog.Title" xml:space="preserve">
+    <value>Czy chcesz usunąć operację?</value>
+  </data>
+  <data name="deletingText.Text" xml:space="preserve">
+    <value>Usuń wszystkie dane (operacje, planowane wydatki, szablony) i przywróc podstawowe kategorie, konta i ustawienia aplikacji</value>
+  </data>
+  <data name="editOperationContentDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Zapisz</value>
+  </data>
+  <data name="editOperationContentDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="editOperationContentDialog.Title" xml:space="preserve">
+    <value>Edycja operacji</value>
+  </data>
+  <data name="expense.Text" xml:space="preserve">
+    <value>Wydatek</value>
+  </data>
+  <data name="expenses.Text" xml:space="preserve">
+    <value>Wydatki</value>
+  </data>
+  <data name="final.Text" xml:space="preserve">
+    <value>Końcowe</value>
+  </data>
+  <data name="general.Text" xml:space="preserve">
+    <value>Ogólne</value>
+  </data>
+  <data name="groupBy.Text" xml:space="preserve">
+    <value>Grupuj wg.</value>
+  </data>
+  <data name="icon.Text" xml:space="preserve">
+    <value>Ikona</value>
+  </data>
+  <data name="income.Text" xml:space="preserve">
+    <value>Wpływ</value>
+  </data>
+  <data name="incomes.Text" xml:space="preserve">
+    <value>Wpływy</value>
+  </data>
+  <data name="initial.Text" xml:space="preserve">
+    <value>Początkowe</value>
+  </data>
+  <data name="initialAmountPlaceholder.PlaceholderText" xml:space="preserve">
+    <value>Kwota początkowa</value>
+  </data>
+  <data name="light.Text" xml:space="preserve">
+    <value>Jasny</value>
+  </data>
+  <data name="maxMonths.Text" xml:space="preserve">
+    <value>Maksymalna liczba miesięcy do przodu</value>
+  </data>
+  <data name="moneyAccountPlaceholder.PlaceholderText" xml:space="preserve">
+    <value>Konto</value>
+  </data>
+  <data name="moneyAccounts.Text" xml:space="preserve">
+    <value>Konta</value>
+  </data>
+  <data name="moreInfoPlaceholder.PlaceholderText" xml:space="preserve">
+    <value>Więcej informacji</value>
+  </data>
+  <data name="namePlaceholder.PlaceholderText" xml:space="preserve">
+    <value>Nazwa</value>
+  </data>
+  <data name="newCategory.PrimaryButtonText" xml:space="preserve">
+    <value>Dodaj</value>
+  </data>
+  <data name="newCategory.SecondaryButtonText" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="newCategory.Title" xml:space="preserve">
+    <value>Nowa kategoria</value>
+  </data>
+  <data name="newMoneyAccountContentDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="newMoneyAccountContentDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="newMoneyAccountContentDialog.Title" xml:space="preserve">
+    <value>New money account</value>
+  </data>
+  <data name="newOperation.Text" xml:space="preserve">
+    <value>Nowa operacja</value>
+  </data>
+  <data name="no.Text" xml:space="preserve">
+    <value>Nie</value>
+  </data>
+  <data name="noOperationsInThisMonth.Text" xml:space="preserve">
+    <value>Brak operacji w tym miesiącu :(</value>
+  </data>
+  <data name="notifications.Text" xml:space="preserve">
+    <value>Powiadomienia</value>
+  </data>
+  <data name="off.Text" xml:space="preserve">
+    <value>Wyłączone</value>
+  </data>
+  <data name="on.Text" xml:space="preserve">
+    <value>Włączone</value>
+  </data>
+  <data name="operationDetailsContentDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Edytuj</value>
+  </data>
+  <data name="operationDetailsContentDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Wyjdź</value>
+  </data>
+  <data name="operationDetailsContentDialog.Title" xml:space="preserve">
+    <value>Szczegóły operacji</value>
+  </data>
+  <data name="operationLook.Text" xml:space="preserve">
+    <value>Wygląd operacji</value>
+  </data>
+  <data name="operations.Text" xml:space="preserve">
+    <value>Operacje</value>
+  </data>
+  <data name="operationsCategoriesAccounts.Text" xml:space="preserve">
+    <value>Operacje, kategorie, konta</value>
+  </data>
+  <data name="operationType.Text" xml:space="preserve">
+    <value>Typ operacji</value>
+  </data>
+  <data name="parentCategoryPlaceholder.PlaceholderText" xml:space="preserve">
+    <value>Kategoria nadrzędna</value>
+  </data>
+  <data name="patterns.Text" xml:space="preserve">
+    <value>Szablony</value>
+  </data>
+  <data name="planned.Text" xml:space="preserve">
+    <value>Planowane operacje</value>
+  </data>
+  <data name="privacyPolicy.Text" xml:space="preserve">
+    <value>Polityka prywatności:</value>
+  </data>
+  <data name="privacyPolicyDesc.Text" xml:space="preserve">
+    <value>Aplikacja "Kumalg Finanse" nie zbiera żadnych danych osobowych. W celu synchronizacji danych aplikacja wykorzystuje informacje przypisane do Twojego konta Microsoft. Jest to konieczne do synchronizacji ustawień.</value>
+  </data>
+  <data name="reminderTime.Text" xml:space="preserve">
+    <value>Czas przypomnienia</value>
+  </data>
+  <data name="resetData.Text" xml:space="preserve">
+    <value>Resetuj dane</value>
+  </data>
+  <data name="saveAsPattern.Text" xml:space="preserve">
+    <value>Zapisz jako szablon</value>
+  </data>
+  <data name="sendMeNotifications.Text" xml:space="preserve">
+    <value>Wysyłaj przypomnienie o dodaniu nowej operacji</value>
+  </data>
+  <data name="settings.Text" xml:space="preserve">
+    <value>Ustawienia</value>
+  </data>
+  <data name="showAccountColorNearIcon.Text" xml:space="preserve">
+    <value>Pokaż kolor konta przy ikonie operacji</value>
+  </data>
+  <data name="showCategoryBelowOperationName.Text" xml:space="preserve">
+    <value>Pokaż kategorię pod nazwą operacji</value>
+  </data>
+  <data name="showInExpenses.Text" xml:space="preserve">
+    <value>Pokazuj w wydatkach</value>
+  </data>
+  <data name="showInIncomes.Text" xml:space="preserve">
+    <value>Pokazuj we wpływach</value>
+  </data>
+  <data name="standingOrders.Text" xml:space="preserve">
+    <value>Zlecenia stałe</value>
+  </data>
+  <data name="statistics.Text" xml:space="preserve">
+    <value>Statystyki</value>
+  </data>
+  <data name="subCategoryPlaceholder.PlaceholderText" xml:space="preserve">
+    <value>Podkategoria</value>
+  </data>
+  <data name="synchronization.Text" xml:space="preserve">
+    <value>Synchronizacja</value>
+  </data>
+  <data name="theme.Text" xml:space="preserve">
+    <value>Motyw</value>
+  </data>
+  <data name="usePatternContentDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="usePatternContentDialog.Title" xml:space="preserve">
+    <value>Użyj szablonu</value>
+  </data>
+  <data name="valuePlaceholder.PlaceholderText" xml:space="preserve">
+    <value>Wartość</value>
+  </data>
+  <data name="version.Text" xml:space="preserve">
+    <value>Wersja:</value>
+  </data>
+  <data name="yes.Text" xml:space="preserve">
+    <value>Tak</value>
+  </data>
+</root>

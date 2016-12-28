@@ -43,6 +43,7 @@
             <TextBlock
                 Margin="16,0"
                 Grid.Column="0"
+                x:Uid="categories"
                 Text="Kategorie"
                 Style="{StaticResource PageTitleStyle}" />
 
@@ -75,17 +76,23 @@
                 <RadioButton
                     GroupName="CategoryExpenseOrIncomeRadioButtons"
                     HorizontalAlignment="Center"
-                    Content="Wydatki"
                     IsChecked="True"
                     Checked="RadioButton_Checked"
-                    Style="{StaticResource MyRadioButtonStyle}" />
+                    Style="{StaticResource MyRadioButtonStyle}">
+                    <TextBlock
+                        Text="Wydatki"
+                        x:Uid="expenses" />
+                </RadioButton>
                 <RadioButton
                     GroupName="CategoryExpenseOrIncomeRadioButtons"
                     Grid.Column="1"
                     HorizontalAlignment="Center"
-                    Content="Wpływy"
                     Checked="RadioButton_Checked_1"
-                    Style="{StaticResource MyRadioButtonStyle}"/>
+                    Style="{StaticResource MyRadioButtonStyle}">
+                    <TextBlock
+                        Text="Wpływy"
+                        x:Uid="incomes" />
+                </RadioButton>
             </Grid>
         </Grid>
 

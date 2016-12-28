@@ -442,6 +442,7 @@
 
             <TextBlock
                 Text="Nowa operacja"
+                x:Uid="newOperation"
                 Style="{StaticResource PageTitleStyle}" />
 
             <Button
@@ -472,18 +473,20 @@
 
                         <RadioButton
                             Name="Expense_RadioButton"
-                            Content="Wydatek"
                             GroupName="OperationType_RadioButtons"
                             Foreground="{ThemeResource Text}"
                             Checked="TypeOfOperationRadioButton_Checked"
-                            Style="{StaticResource MyRadioButtonStyle}" />
+                            Style="{StaticResource MyRadioButtonStyle}">
+                            <TextBlock Text="Wydatek" x:Uid="expense"/>
+                        </RadioButton>
                         <RadioButton
                             Name="Income_RadioButton"
-                            Content="Wpływ"
                             GroupName="OperationType_RadioButtons"
                             Foreground="{ThemeResource Text}"
                             Checked="TypeOfOperationRadioButton_Checked"
-                            Style="{StaticResource MyRadioButtonStyle}" />
+                            Style="{StaticResource MyRadioButtonStyle}">
+                            <TextBlock Text="Wpływ" x:Uid="income"/>
+                        </RadioButton>
 
                     </StackPanel>
 
@@ -494,6 +497,7 @@
                         Name="CostValue"
                         Style="{StaticResource TextBoxStyle1}"
                         PlaceholderText="Wartość"
+                        x:Uid="valuePlaceholder"
                         InputScope="CurrencyAmount"
                         Margin="0,20,0,0"
                         GotFocus="CostValue_GotFocus"
@@ -506,6 +510,7 @@
                         Name="NameValue"
                         Style="{StaticResource TextBoxStyle1}"
                         PlaceholderText="Nazwa"
+                        x:Uid="namePlaceholder"
                         Margin="0,20,0,10" />
 
                     <CalendarDatePicker
@@ -524,6 +529,7 @@
                         SelectionChanged="ComboBox_SelectionChanged"
                         SelectedValuePath="ID"
                         PlaceholderText="Kategoria"
+                        x:Uid="categoryPlaceholder"
                         Margin="0,10"
                         HorizontalAlignment="Stretch" />
 
@@ -531,6 +537,7 @@
                         Name="SubCategoryValue"
                         Style="{StaticResource ComboBoxStyle1}"
                         PlaceholderText="Podkategoria"
+                        x:Uid="subCategoryPlaceholder"
                         Margin="0,10"
                         IsEnabled="False"
                         HorizontalAlignment="Stretch"
@@ -540,6 +547,7 @@
                         Name="PayFormValue"
                         Style="{StaticResource ComboBoxStyle1}"
                         PlaceholderText="Forma płatności"
+                        x:Uid="moneyAccountPlaceholder"
                         Margin="0,10"
                         HorizontalAlignment="Stretch">
                     </ComboBox>
@@ -549,6 +557,7 @@
                         TextWrapping="Wrap"
                         BorderThickness="1"
                         PlaceholderText="Więcej informacji"
+                        x:Uid="moreInfoPlaceholder"
                         Style="{StaticResource TextBoxStyle1}"
                         Padding="12"
                         Height="100"
@@ -558,19 +567,20 @@
                         Name="SaveAsAssetTitle"
                         Foreground="{ThemeResource Text-1}"
                         Text="Zapisz jako szablon"
-                        Margin="0" />
+                        x:Uid="saveAsPattern"
+                        Margin="10,0" />
 
                     <ToggleSwitch
                         Name="SaveAsAssetToggle"
                         Style="{StaticResource ToggleSwitchStyle1}"
-                        Margin="0,5,0,0">
+                        Margin="10,5,0,0">
 
                         <ToggleSwitch.OffContent>
-                            Nie
+                            <TextBlock Text="Nie" x:Uid="No" />
                         </ToggleSwitch.OffContent>
 
                         <ToggleSwitch.OnContent>
-                            Tak
+                            <TextBlock Text="Tak" x:Uid="Yes" />
                         </ToggleSwitch.OnContent>
 
                     </ToggleSwitch>

@@ -4657,7 +4657,7 @@
             Value="16" />
         <Setter
             Property="MinWidth"
-            Value="55" />
+            Value="60" />
         <Setter
             Property="UseSystemFocusVisuals"
             Value="True" />
@@ -4810,6 +4810,7 @@
                                 Foreground="{ThemeResource Text-2}"
                                 HorizontalAlignment="Stretch"
                                 AutomationProperties.AccessibilityView="Raw" />
+                            <!--
                             <TextBlock
                                 x:Name="TextLabel"
                                 Grid.Row="1"
@@ -4819,6 +4820,17 @@
                                 FontFamily="Segoe UI"
                                 TextAlignment="Center"
                                 TextWrapping="Wrap"
+                                Margin="2,0,2,6" />
+                            -->
+                            <!-- MOZNA PRÓBOWAĆ TRIGGERA ŻE JAK ZA WĄSKI EKRAN TO ZMNIEJSZA CZCIONKĘ -->
+                            <ContentPresenter
+                                x:Name="TextLabel"
+                                Content="{TemplateBinding Content}"
+                                Grid.Row="1"
+                                Foreground="{ThemeResource Text-1}"
+                                FontSize="11"
+                                FontFamily="Segoe UI"
+                                HorizontalAlignment="Center"
                                 Margin="2,0,2,6" />
                         </Grid>
                     </Grid>

@@ -77,26 +77,11 @@ namespace Finanse.Pages {
             } else {
 
                 storeData = new OperationData(actualMonth, actualYear, true, visiblePayFormList);
-                ActualMonthText.Text = "Zaplanowane";
+                var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+                ActualMonthText.Text = loader.GetString("planned.Text"); //"Zaplanowane";
             }
         }
 
-
-        private void getActualMonthText() {
-            if ((actualMonth <= DateTime.Today.Month && actualYear == DateTime.Today.Year) || actualYear < DateTime.Today.Year) {
-
-                storeData = new OperationData(actualMonth, actualYear, false, visiblePayFormList);
-
-                sourceText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualMonth).Substring(1);
-                if (actualYear != DateTime.Today.Year)
-                    sourceText.Text += " " + actualYear.ToString();
-            }
-            else {
-
-                storeData = new OperationData(actualMonth, actualYear, true, visiblePayFormList);
-                sourceText.Text = "Zaplanowane";
-            }
-        }
         private void setOperationGroups() {
             operationGroups.Clear();
             foreach (var s in (bool)ByDateRadioButton.IsChecked ? storeData.GroupsByDay : storeData.GroupsByCategory)

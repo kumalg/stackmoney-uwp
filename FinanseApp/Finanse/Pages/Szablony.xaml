@@ -30,6 +30,7 @@
 
             <TextBlock
                 Text="Szablony"
+                x:Uid="patterns"
                 Style="{StaticResource PageTitleStyle}" />
         </Grid>
         <ListView

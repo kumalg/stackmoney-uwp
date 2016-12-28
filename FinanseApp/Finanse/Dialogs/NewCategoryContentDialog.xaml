@@ -8,6 +8,7 @@
     mc:Ignorable="d"
     xmlns:data="using:Finanse.Elements"
     Title="Nowa kategoria"
+    x:Uid="newCategory"
     Background="{ThemeResource BackgroundTransparent}"
     PrimaryButtonText="Dodaj"
     SecondaryButtonText="Anuluj"
@@ -20,8 +21,8 @@
             Name="NameValue"
             Style="{StaticResource TextBoxStyle1}"
             PlaceholderText="Nazwa"
+            x:Uid="namePlaceholder"
             TextChanging="NameValue_TextChanging" />
-
         <Grid
             Margin="0,30,0,0">
 
@@ -49,7 +50,6 @@
 
             <Button
                 Style="{StaticResource ButtonWithBottomBorder}"
-                Content="Kolor"
                 Margin="0,10"
                 HorizontalAlignment="Right">
                 <Button.Flyout>
@@ -89,12 +89,14 @@
                         </GridView>
                     </Flyout>
                 </Button.Flyout>
+                <TextBlock
+                    Text="Kolor"
+                    x:Uid="color" />
             </Button>
 
             <Button
                 Grid.Column="2"
                 Style="{StaticResource ButtonWithBottomBorder}"
-                Content="Ikona"
                 Margin="0,10"
                 HorizontalAlignment="Left">
                 <Button.Flyout>
@@ -140,6 +142,9 @@
                         </GridView>
                     </Flyout>
                 </Button.Flyout>
+                <TextBlock
+                    Text="Ikona"
+                    x:Uid="icon" />
             </Button>
 
         </Grid>
@@ -148,12 +153,14 @@
             Name="CategoryValue"
             Style="{StaticResource ComboBoxStyle1}"
             PlaceholderText="Kategoria nadrzędna"
+            x:Uid="parentCategoryPlaceholder"
             Margin="0,30,0,10"
             HorizontalAlignment="Stretch"
             SelectionChanged="CategoryValue_SelectionChanged" />
 
         <TextBlock
             Text="Pokazuj w wydatkach"
+            x:Uid="showInExpenses"
             Margin="0,20,0,0" />
 
         <ToggleSwitch
@@ -164,17 +171,18 @@
             Toggled="VisibleInExpensesToggleButton_Toggled">
 
             <ToggleSwitch.OffContent>
-                Nie
+                <TextBlock Text="Nie" x:Uid="no" />
             </ToggleSwitch.OffContent>
 
             <ToggleSwitch.OnContent>
-                Tak
+                <TextBlock Text="Tak" x:Uid="yes" />
             </ToggleSwitch.OnContent>
 
         </ToggleSwitch>
 
         <TextBlock
             Text="Pokazuj we wpływach"
+            x:Uid="showInIncomes"
             Margin="0,20,0,0" />
 
         <ToggleSwitch
@@ -185,11 +193,11 @@
             Toggled="VisibleInIncomesToggleButton_Toggled">
 
             <ToggleSwitch.OffContent>
-                Nie
+                <TextBlock Text="Nie" x:Uid="no" />
             </ToggleSwitch.OffContent>
 
             <ToggleSwitch.OnContent>
-                Tak
+                <TextBlock Text="Tak" x:Uid="yes" />
             </ToggleSwitch.OnContent>
 
         </ToggleSwitch>

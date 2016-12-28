@@ -11,6 +11,7 @@
     Title="Szczegóły operacji"
     PrimaryButtonText="Edytuj"
     SecondaryButtonText="Wyjdź"
+    x:Uid="operationDetailsContentDialog"
     PrimaryButtonClick="EditButton_Click">
 
     <ContentDialog.Style>

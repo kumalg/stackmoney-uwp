@@ -31,6 +31,7 @@
 
             <TextBlock
                 Text="Ustawienia"
+                x:Uid="settings"
                 Style="{StaticResource PageTitleStyle}" />
         </Grid>
 
@@ -41,6 +42,7 @@
                 <PivotItem.Header>
                     <TextBlock
                         Text="Ogólne"
+                        x:Uid="general"
                         FontSize="15" />
                 </PivotItem.Header>
                 <ScrollViewer
@@ -70,6 +72,7 @@
                             <TextBlock
                                 FontSize="18"
                                 Text="Waluta"
+                                x:Uid="currency"
                                 Margin="10,0,0,10"
                                 Foreground="{ThemeResource Text}" />
 
@@ -78,16 +81,19 @@
                                 Style="{StaticResource ComboBoxStyle1}"
                                 SelectionChanged="ComboBox_SelectionChanged"
                                 SelectedValuePath="ID"
-                                PlaceholderText="Waluta" />
+                                PlaceholderText="Waluta"
+                                x:Uid="currencyPlaceholder"/>
 
                             <TextBlock
                                 FontSize="18"
                                 Margin="10,30,0,10"
-                                Text="Planowane wydatki"
+                                Text="Planowane operacje"
+                                x:Uid="planned"
                                 Foreground="{ThemeResource Text}" />
                             <TextBlock
                                 Margin="10,0,0,10"
                                 Text="Maksymalna liczba miesięcy do przodu"
+                                x:Uid="maxMonths"
                                 Foreground="{ThemeResource Text-1}" />
                             <ComboBox
                                 SelectionChanged="MaxNumberOfFutureMonths_SelectionChanged"
@@ -100,11 +106,13 @@
                                 FontSize="18"
                                 Margin="10,20,0,10"
                                 Text="Powiadomienia"
+                                x:Uid="notifications"
                                 Foreground="{ThemeResource Text}" />
 
                             <TextBlock
                                 Margin="10,5,0,0"
                                 Text="Wysyłaj przypomnienie o dodaniu nowej operacji"
+                                x:Uid="sendMeNotifications"
                                 Foreground="{ThemeResource Text-1}" />
 
                             <ToggleSwitch
@@ -115,11 +123,11 @@
                                 Toggled="ReminderToggleSwitch_Toggled">
 
                                 <ToggleSwitch.OffContent>
-                                    Wyłączone
+                                    <TextBlock Text="Wyłączone" x:Uid="off"/>
                                 </ToggleSwitch.OffContent>
 
                                 <ToggleSwitch.OnContent>
-                                    Włączone
+                                    <TextBlock Text="Włączone" x:Uid="on"/>
                                 </ToggleSwitch.OnContent>
 
                             </ToggleSwitch>
@@ -129,6 +137,7 @@
                                 <TextBlock
                                     Margin="10,10,0,10"
                                     Text="Czas przypomnienia"
+                                    x:Uid="reminderTime"
                                     Foreground="{ThemeResource Text-1}" />
 
                                 <ComboBox
@@ -149,11 +158,13 @@
                                 Margin="10,0"
                                 TextWrapping="WrapWholeWords"
                                 Text="Usuń wszystkie dane (operacje, planowane wydatki, szablony) i przywróc podstawowe kategorie, konta i ustawienia aplikacji"
+                                x:Uid="deletingText"
                                 Foreground="{ThemeResource Text-1}" />
 
                             <Button
-                                Margin="10,16"
-                                Content="Resetuj dane" />
+                                Margin="10,16">
+                                <TextBlock Text="Resetuj dane" x:Uid="resetData" />
+                            </Button>
                         </StackPanel>
 
                     </Grid>
@@ -164,6 +175,7 @@
                 <PivotItem.Header>
                     <TextBlock
                         Text="Wygląd"
+                        x:Uid="appearance"
                         FontSize="15" />
                 </PivotItem.Header>
                 <ScrollViewer
@@ -178,72 +190,39 @@
                                 Margin="10,0"
                                 FontSize="18"
                                 Text="Motyw"
+                                x:Uid="theme"
                                 Foreground="{ThemeResource Text}" />
 
                             <RadioButton
                                 Margin="10,8,0,0"
                                 x:Name="DarkThemeRadioButton"
-                                Content="Ciemny"
                                 Foreground="{ThemeResource Text}"
                                 GroupName="Theme_RadioButtons"
                                 Checked="DarkThemeRadioButton_Checked"
-                                Style="{StaticResource MyRadioButtonStyle}" />
+                                Style="{StaticResource MyRadioButtonStyle}">
+                                <TextBlock Text="Ciemny" x:Uid="dark" />
+                            </RadioButton>
                             <RadioButton
                                 Margin="10,0"
                                 x:Name="LightThemeRadioButton"
-                                Content="Jasny"
                                 Foreground="{ThemeResource Text}"
                                 GroupName="Theme_RadioButtons"
                                 Checked="LightThemeRadioButton_Checked"
-                                Style="{StaticResource MyRadioButtonStyle}" />
-
-                            <ToggleSwitch
-                                Visibility="Collapsed"
-                                Name="ThemeToggle"
-                                Style="{StaticResource ToggleSwitchStyle1}"
-                                Toggled="ThemeToggle_Toggled">
-
-                                <ToggleSwitch.OffContent>
-                                    Jasny
-                                </ToggleSwitch.OffContent>
-
-                                <ToggleSwitch.OnContent>
-                                    Ciemny
-                                </ToggleSwitch.OnContent>
-
-                            </ToggleSwitch>
-
-                            <!--
-                            <TextBlock
-                                FontSize="18"
-                                Margin="0,20,0,10"
-                                Text="Styl ikon"
-                                Foreground="{ThemeResource Text}" />
-                            <RadioButton
-                                x:Name="MonoIcon_RadioButton"
-                                Content="Monochromatyczne"
-                                Foreground="{ThemeResource Text}"
-                                Tag="Segoe UI Symbol"
-                                GroupName="IconStyle_RadioButtons"
-                                Checked="IconStyleRadioButton_Checked" />
-                            <RadioButton
-                                x:Name="ColorIcon_RadioButton"
-                                Content="Kolorowe"
-                                Foreground="{ThemeResource Text}"
-                                Tag="Segoe UI"
-                                GroupName="IconStyle_RadioButtons"
-                                Checked="IconStyleRadioButton_Checked" />
--->
+                                Style="{StaticResource MyRadioButtonStyle}">
+                                <TextBlock Text="Jasny" x:Uid="light" />
+                            </RadioButton>
 
                             <TextBlock
                                 FontSize="18"
                                 Margin="10,20,0,10"
                                 Text="Wygląd operacji"
+                                x:Uid="operationLook"
                                 Foreground="{ThemeResource Text}" />
 
                             <TextBlock
                                 Margin="10,5,0,0"
                                 Text="Pokaż kategorię pod nazwą operacji"
+                                x:Uid="showCategoryBelowOperationName"
                                 Foreground="{ThemeResource Text-1}" />
 
                             <ToggleSwitch
@@ -253,11 +232,11 @@
                                 Style="{StaticResource ToggleSwitchStyle1}">
 
                                 <ToggleSwitch.OffContent>
-                                    Wyłączone
+                                    <TextBlock Text="Wyłączone" x:Uid="off"/>
                                 </ToggleSwitch.OffContent>
 
                                 <ToggleSwitch.OnContent>
-                                    Włączone
+                                    <TextBlock Text="Włączone" x:Uid="on"/>
                                 </ToggleSwitch.OnContent>
 
                             </ToggleSwitch>
@@ -265,6 +244,7 @@
                             <TextBlock
                                 Margin="10,5,0,0"
                                 Text="Pokaż kolor konta przy ikonie operacji"
+                                x:Uid="showAccountColorNearIcon"
                                 Foreground="{ThemeResource Text-1}" />
 
                             <ToggleSwitch
@@ -274,11 +254,11 @@
                                 Style="{StaticResource ToggleSwitchStyle1}">
 
                                 <ToggleSwitch.OffContent>
-                                    Wyłączone
+                                    <TextBlock Text="Wyłączone" x:Uid="off"/>
                                 </ToggleSwitch.OffContent>
 
                                 <ToggleSwitch.OnContent>
-                                    Włączone
+                                    <TextBlock Text="Włączone" x:Uid="on"/>
                                 </ToggleSwitch.OnContent>
 
                             </ToggleSwitch>
@@ -291,6 +271,7 @@
                 <PivotItem.Header>
                     <TextBlock
                         Text="Synchronizacja"
+                        x:Uid="synchronization"
                         FontSize="15" />
                 </PivotItem.Header>
                 <ScrollViewer
@@ -305,6 +286,7 @@
                             <TextBlock
                                 Margin="10,0,0,0"
                                 Text="Ustawienia aplikacji (motyw, waluta itd.)"
+                                x:Uid="applicationSettings"
                                 Foreground="{ThemeResource Text-1}" />
 
                             <ToggleSwitch
@@ -313,11 +295,11 @@
                                 Style="{StaticResource ToggleSwitchStyle1}">
 
                                 <ToggleSwitch.OffContent>
-                                    Wyłączone
+                                    <TextBlock Text="Wyłączone" x:Uid="off"/>
                                 </ToggleSwitch.OffContent>
 
                                 <ToggleSwitch.OnContent>
-                                    Włączone
+                                    <TextBlock Text="Włączone" x:Uid="on"/>
                                 </ToggleSwitch.OnContent>
 
                             </ToggleSwitch>
@@ -325,6 +307,7 @@
                             <TextBlock
                                 Margin="10,5,0,0"
                                 Text="Operacje, kategorie, konta"
+                                x:Uid="operationsCategoriesAccounts"
                                 Foreground="{ThemeResource Text-1}" />
 
                             <ToggleSwitch
@@ -332,11 +315,11 @@
                                 Style="{StaticResource ToggleSwitchStyle1}">
 
                                 <ToggleSwitch.OffContent>
-                                    Wyłączone
+                                    <TextBlock Text="Wyłączone" x:Uid="off"/>
                                 </ToggleSwitch.OffContent>
 
                                 <ToggleSwitch.OnContent>
-                                    Włączone
+                                    <TextBlock Text="Włączone" x:Uid="on"/>
                                 </ToggleSwitch.OnContent>
 
                             </ToggleSwitch>
@@ -349,6 +332,7 @@
                 <PivotItem.Header>
                     <TextBlock
                         Text="O aplikacji"
+                        x:Uid="aboutApp"
                         FontSize="15" />
                 </PivotItem.Header>
                 <ScrollViewer
@@ -363,21 +347,32 @@
                                 Margin="10,0,10,10"
                                 Text="Kumalg Finanse"
                                 Foreground="{ThemeResource Text}" />
-                            <TextBlock
-                                Margin="10"
-                                Text="Wersja: 1.0.0"
-                                FontWeight="SemiBold"
-                                Foreground="{ThemeResource Text-1}" />
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <TextBlock
+                                    Margin="10"
+                                    Text="Wersja:"
+                                    x:Uid="version"
+                                    FontWeight="SemiBold"
+                                    Foreground="{ThemeResource Text-1}" />
+                                <TextBlock
+                                    Margin="0,10"
+                                    Text="1.0.0"
+                                    FontWeight="SemiBold"
+                                    Foreground="{ThemeResource Text-1}" />
+                            </StackPanel>
                             <TextBlock
                                 Margin="10,10,10,0"
                                 FontSize="14"
                                 Text="Aplikacja do zarządzania finansami."
+                                x:Uid="appDesc"
                                 TextWrapping="WrapWholeWords"
                                 Foreground="{ThemeResource Text-1}" />
 
                             <TextBlock
                                 Margin="10,32,10,10"
                                 Text="Autor:"
+                                x:Uid="author"
                                 FontWeight="SemiBold"
                                 Foreground="{ThemeResource Text}" />
                             <TextBlock
@@ -389,6 +384,7 @@
                             <TextBlock
                                 Margin="10,32,10,10"
                                 Text="Polityka prywatności:"
+                                x:Uid="privacyPolicy"
                                 FontWeight="SemiBold"
                                 Foreground="{ThemeResource Text}" />
                             <TextBlock
@@ -396,6 +392,7 @@
                                 FontSize="14"
                                 TextAlignment="Justify"
                                 Text="Aplikacja Kumalg Finanse nie zbiera żadnych danych osobowych. W celu synchronizacji danych aplikacja wykorzystuje informacje przypisane do Twojego konta Microsoft. Jest to konieczne do synchronizacji ustawień."
+                                x:Uid="privacyPolicyDesc"
                                 TextWrapping="WrapWholeWords"
                                 Foreground="{ThemeResource Text-1}" />
                         </StackPanel>

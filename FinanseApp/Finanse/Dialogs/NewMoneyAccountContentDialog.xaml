@@ -11,6 +11,7 @@
     Background="{ThemeResource BackgroundTransparent}"
     PrimaryButtonText="Dodaj"
     SecondaryButtonText="Anuluj"
+    x:Uid="newMoneyAccountContentDialog"
     PrimaryButtonClick="NewCategory_AddButtonClick">
 
     <StackPanel
@@ -20,6 +21,7 @@
             Name="NameValue"
             Style="{StaticResource TextBoxStyle1}"
             PlaceholderText="Nazwa"
+            x:Uid="namePlaceholder"
             TextChanging="NameValue_TextChanging" />
 
         <GridView
@@ -61,6 +63,7 @@
             Name="CostValue"
             Style="{StaticResource TextBoxStyle1}"
             PlaceholderText="Kwota początkowa"
+            x:Uid="initialAmountPlaceholder"
             InputScope="CurrencyAmount"
             Margin="0,20,0,10"
             GotFocus="CostValue_GotFocus"

@@ -353,20 +353,20 @@
                                     Margin="0,16"
                                     VerticalAlignment="Center"
                                     x:Name="Content"
-                                    Glyph="{TemplateBinding Content}"
+                                    Glyph="{TemplateBinding Label}"
                                     FontFamily="{TemplateBinding FontFamily}"
                                     FontSize="16"
                                     Foreground="{ThemeResource Text-1}"
                                     HorizontalAlignment="Stretch" />
-                                <TextBlock
+                                <ContentPresenter
                                     VerticalAlignment="Center"
                                     x:Name="TextLabel"
                                     Grid.Column="1"
-                                    Text="{TemplateBinding Label}"
+                                    Content="{TemplateBinding Content}"
                                     Foreground="{TemplateBinding Foreground}"
                                     FontSize="13"
                                     FontFamily="Segoe UI"
-                                    TextAlignment="Center"
+                                    HorizontalAlignment="Center"
                                     TextWrapping="Wrap"
                                     Margin="16,0,0,0"
                                     Padding="0" />
@@ -631,21 +631,23 @@
                         Height="40"
                         Style="{StaticResource MyAppBarRadioButton}"
                         Grid.Column="1"
-                        Content="Operacje"
                         FontFamily="{StaticResource FontAwesome}"
                         Tag=""
                         Click="OperationsAppBarRadioButton_Click"
-                        Checked="OperationsAppBarRadioButton_Checked" />
+                        Checked="OperationsAppBarRadioButton_Checked">
+                        <TextBlock Text="Operacje" x:Uid="operations" />
+                    </RadioButton>
                     <RadioButton
                         GroupName="MenuButtons"
                         x:Name="CategoriesAppBarRadioButton"
                         Height="40"
                         Style="{StaticResource MyAppBarRadioButton}"
                         Grid.Column="3"
-                        Content="Kategorie"
                         FontFamily="{StaticResource FontAwesome}"
                         Tag=""
-                        Checked="CategoriesAppBarRadioButton_Checked" />
+                        Checked="CategoriesAppBarRadioButton_Checked">
+                        <TextBlock Text="Kategorie" x:Uid="categories" />
+                    </RadioButton>
                     <RadioButton
                         GroupName="MenuButtons"
                         x:Name="AddNewOperationAppBarRadioButton"
@@ -653,20 +655,22 @@
                         Style="{StaticResource MyAppBarRadioButton}"
                         Grid.Column="5"
                         FontSize="22"
-                        Content="Dodaj operację"
                         FontFamily="Segoe MDL2 Assets"
                         Tag=""
-                        Checked="AddNewOperationAppBarRadioButton_Checked" />
+                        Checked="AddNewOperationAppBarRadioButton_Checked">
+                        <TextBlock TextWrapping="Wrap" TextAlignment="Center" Text="Dodaj operację" x:Uid="addNewOperation" />
+                    </RadioButton>
                     <RadioButton
                         GroupName="MenuButtons"
                         x:Name="StatisticsAppBarRadioButton"
                         Height="40"
                         Style="{StaticResource MyAppBarRadioButton}"
                         Grid.Column="7"
-                        Content="Statystyki"
                         FontFamily="{StaticResource FontAwesome}"
                         Tag=""
-                        Checked="StatisticsAppBarRadioButton_Checked" />
+                        Checked="StatisticsAppBarRadioButton_Checked">
+                        <TextBlock Text="Statystyki" x:Uid="statistics" />
+                    </RadioButton>
                     <RadioButton
                         x:Name="MoreAppBarRadioButton"
                         Style="{StaticResource MyAppBarRadioButton}"
@@ -682,30 +686,34 @@
                     Style="{StaticResource MyAppBarButton}"
                     Click="SzablonyAppBarButton_Click"
                     x:Name="SzablonyAppBarButton"
-                    Content=""
                     FontFamily="{StaticResource FontAwesome}"
-                    Label="Szablony" />
+                    Label="">
+                    <TextBlock Text="Szablony" x:Uid="patterns" />
+                </AppBarButton>
                 <AppBarButton
                     Style="{StaticResource MyAppBarButton}"
                     Click="ZleceniaStaleAppBarButton_Click"
                     x:Name="ZleceniaStaleAppBarButton"
-                    Content="&#xE81C;"
                     FontFamily="Segoe MDL2 Assets"
-                    Label="Zlecenia stałe" />
+                    Label="&#xE81C;">
+                    <TextBlock Text="Zlecenia stałe" x:Uid="standingOrders" />
+                </AppBarButton>
                 <AppBarButton
                     Style="{StaticResource MyAppBarButton}"
                     Click="KontaAppBarButton_Click"
                     x:Name="KontaAppBarButton"
-                    Content=""
                     FontFamily="{StaticResource FontAwesome}"
-                    Label="Konta" />
+                    Label="">
+                    <TextBlock Text="Konta" x:Uid="moneyAccounts" />
+                </AppBarButton>
                 <AppBarButton
                     Style="{StaticResource MyAppBarButton}"
                     Click="UstawieniaAppBarButton_Click"
                     x:Name="UstawieniaAppBarButton"
-                    Content=""
                     FontFamily="Segoe MDL2 Assets"
-                    Label="Ustawienia" />
+                    Label="">
+                    <TextBlock Text="Ustawienia" x:Uid="settings" />
+                </AppBarButton>
             </CommandBar.SecondaryCommands>
         </CommandBar>
         <!--

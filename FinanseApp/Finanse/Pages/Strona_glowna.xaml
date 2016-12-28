@@ -368,7 +368,6 @@
                     HorizontalAlignment="Center"
                     Margin="8,0,0,0"
                     x:Name="ActualMonthText"
-                    Text="Wrzesień"
                     Style="{StaticResource PageTitleStyle}">
                     <TextBlock.Triggers>
                         <EventTrigger
@@ -478,10 +477,12 @@
                 Foreground="{ThemeResource Text-1}"
                 RelativePanel.AlignHorizontalCenterWithPanel="True"
                 RelativePanel.AlignVerticalCenterWithPanel="True"
-                Text="Brak operacji w tym miesiącu :(" />
+                Text="Brak operacji w tym miesiącu :(" 
+                x:Uid="noOperationsInThisMonth"/>
 
             <TextBlock
                 Text="Dodaj nową"
+                x:Uid="addNew"
                 Foreground="{ThemeResource Text}"
                 RelativePanel.AlignHorizontalCenterWithPanel="True"
                 RelativePanel.AlignTopWith="angleToAddButton"/>
@@ -551,21 +552,24 @@
                                         Foreground="{ThemeResource Text-1}"
                                         Margin="10"
                                         Grid.Column="1"
-                                        Text="Saldo" />
+                                        Text="Saldo" 
+                                        x:Uid="balance"/>
                                     <TextBlock
                                         HorizontalAlignment="Right"
                                         FontSize="13"
                                         Foreground="{ThemeResource Text-1}"
                                         Margin="10"
                                         Grid.Column="2"
-                                        Text="Początkowe" />
+                                        Text="Początkowe" 
+                                        x:Uid="initial"/>
                                     <TextBlock
                                         HorizontalAlignment="Right"
                                         FontSize="13"
                                         Foreground="{ThemeResource Text-1}"
                                         Margin="10"
                                         Grid.Column="3"
-                                        Text="Końcowe" />
+                                        Text="Końcowe"
+                                        x:Uid="final" />
                                 </Grid>
 
                                 <Grid>
@@ -654,7 +658,8 @@
                                         Foreground="{ThemeResource Text-1}"
                                         Margin="16,0,0,0"
                                         VerticalAlignment="Center"
-                                        Text="Grupuj wg." />
+                                        Text="Grupuj wg."
+                                        x:Uid="groupBy"/>
                                     <Button
                                         x:Name="ByDateButton"
                                         FontSize="13"

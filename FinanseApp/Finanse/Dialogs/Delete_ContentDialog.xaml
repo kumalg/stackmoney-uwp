@@ -13,5 +13,6 @@
     Title="Czy chcesz usunąć operację?"
     PrimaryButtonText="Tak"
     SecondaryButtonText="Anuluj"
-    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    x:Uid="deleteOperationContentDialog">
 </ContentDialog>

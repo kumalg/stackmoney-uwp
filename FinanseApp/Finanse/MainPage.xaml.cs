@@ -10,6 +10,9 @@ using Finanse.Pages;
 using Windows.Graphics.Display;
 using Finanse.DataAccessLayer;
 using System.Threading.Tasks;
+using Windows.Phone.UI.Input;
+using Windows.System.Profile;
+using Windows.UI.Core;
 
 namespace Finanse {
     public sealed partial class MainPage : Page {
@@ -17,12 +20,29 @@ namespace Finanse {
         public MainPage() {
             this.InitializeComponent();
             Dal.CreateDB();
+            
+        }
+
+        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e) {
+            if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(Strona_glowna)) {
+                AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
+                e.Handled = true;
+            }
+        }
+        private void BackRequestedEvent(object sender, BackRequestedEventArgs e) {
+            if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(Strona_glowna)) {
+                AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
+                e.Handled = true;
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
+            if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile")
+                HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+            SystemNavigationManager.GetForCurrentView().BackRequested += BackRequestedEvent;
             base.OnNavigatedTo(e);
         }
-
+       
         private async void ShowStatusBar() {
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) {
                 var statusBar = StatusBar.GetForCurrentView();
@@ -159,8 +179,11 @@ namespace Finanse {
         
         private void AktualnaStrona_Frame_Navigated(object sender, NavigationEventArgs e) {
             if (((Frame)sender).SourcePageType == typeof(Strona_glowna)) {
+                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
                 OperationsAppBarRadioButton.IsChecked = true;
             }
+            else
+                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
         }
 
         private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e) {

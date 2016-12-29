@@ -571,7 +571,7 @@
                                         Text="Końcowe"
                                         x:Uid="final" />
                                 </Grid>
-
+<!--
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition
@@ -651,7 +651,80 @@
                                         Margin="10,5"
                                         Grid.Column="3"
                                         Text="289,90 zł" />
-                                </Grid>
+                                </Grid>-->
+                                <ListView
+                                    Margin="0"
+                                    Padding="0"
+                                    x:Name="BalanceListView"
+                                    SelectionMode="None"
+                                    ItemsSource="{x:Bind listOfMoneyAccounts()}">
+                                    <ListView.ItemContainerStyle>
+                                        <Style
+                                            TargetType="ListViewItem">
+                                            <Setter
+                                                Property="HorizontalContentAlignment"
+                                                Value="Stretch" />
+                                            <Setter
+                                                Property="Padding"
+                                                Value="0" />
+                                            <Setter
+                                                Property="Margin"
+                                                Value="0" />
+                                            <Setter
+                                                Property="MinHeight"
+                                                Value="16" />
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate
+                                            x:DataType="models:MoneyAccount">
+                                            <Grid
+                                                HorizontalAlignment="Stretch">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition
+                                                        Width="16" />
+                                                    <ColumnDefinition
+                                                        Width="3*" />
+                                                    <ColumnDefinition
+                                                        Width="2*" />
+                                                    <ColumnDefinition
+                                                        Width="2*" />
+                                                </Grid.ColumnDefinitions>
+                                                <Ellipse
+                                                    Width="8"
+                                                    Height="8"
+                                                    Fill="{Binding Color}" />
+                                                <TextBlock
+                                                    x:Name="dupa1"
+                                                    FontSize="13"
+                                                    Foreground="{ThemeResource Text}"
+                                                    Margin="10,5"
+                                                    Grid.Column="1"
+                                                    TextWrapping="Wrap"
+                                                    Text="{Binding Name}" />
+                                                <TextBlock
+                                                    x:Name="dupa2"
+                                                    HorizontalAlignment="Right"
+                                                    FontWeight="SemiBold"
+                                                    FontSize="13"
+                                                    Foreground="{ThemeResource Text-1}"
+                                                    Margin="10,5"
+                                                    Grid.Column="2"
+                                                    Text="{x:Bind getInitialBalance()}" />
+                                                <TextBlock
+                                                    x:Name="dupa3"
+                                                    HorizontalAlignment="Right"
+                                                    FontWeight="SemiBold"
+                                                    FontSize="13"
+                                                    Foreground="{ThemeResource Text-1}"
+                                                    Margin="10,5"
+                                                    Grid.Column="3"
+                                                    Text="{x:Bind getFinalBalance()}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                                
                                 <StackPanel
                                     Margin="0,16"
                                     HorizontalAlignment="Right"

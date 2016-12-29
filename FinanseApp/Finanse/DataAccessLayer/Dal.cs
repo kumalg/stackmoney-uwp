@@ -100,12 +100,31 @@
                 // to jest spoko, ale może być super kłopotliwe przy duzych bazach.
 
                 eldest = (from p in db.Table<Operation>().ToList()
-                          where p.Date != null && p.Date != ""
+                          where !String.IsNullOrEmpty(p.Date)
                           orderby p.Date
                           select p).ToList().ElementAt(0);
             }
 
             return eldest;
+        }
+
+        public static decimal[] getBalanceFromSingleAccountToDate(DateTime date, int moneyAccountId) {
+            decimal[] values = new decimal[2]; // initial, final
+
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                values[0] = (from p in db.Table<Operation>().ToList()
+                             where p.MoneyAccountId == moneyAccountId && !String.IsNullOrEmpty(p.Date) && DateTime.Parse(p.Date) < date
+                             select p.isExpense ? -p.Cost : p.Cost).Sum();
+                
+                values[1] = (from p in db.Table<Operation>().ToList()
+                             where p.MoneyAccountId == moneyAccountId && !String.IsNullOrEmpty(p.Date) && DateTime.Parse(p.Date) < date.AddMonths(1)
+                             select p.isExpense ? -p.Cost : p.Cost).Sum();
+            }
+
+            return values;
         }
 
         /* GET ALL */
@@ -150,7 +169,7 @@
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                string date = year.ToString() + "." + month.ToString("00");
+                string date = /*year.ToString() + "." + month.ToString("00");*/ String.Format("{yyyy}.{MM}", year, month);
 
                 models = (from p in db.Table<Operation>().ToList()
                           where p.Date.Substring(0,7) == date.ToString() 

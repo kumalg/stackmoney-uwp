@@ -64,10 +64,24 @@ namespace Finanse.Pages {
                 visiblePayFormList.Add(item.Id);
                 VisiblePayFormMenuFlyout.Items.Add(itema);
             }
-            actualYear = 2016;
-            actualMonth = 12;
-            dupa2.Text = Dal.GetAllMoneyAccounts().ElementAt(0).getInitialBalance(new DateTime(actualYear,actualMonth,1));
-            dupa3.Text = Dal.GetAllMoneyAccounts().ElementAt(0).getFinalBalance(actualYear, actualMonth);
+
+      //      dupa2.Text = Dal.GetAllMoneyAccounts().ElementAt(0).getInitialBalance(new DateTime(actualYear,actualMonth,1));
+        //    dupa3.Text = Dal.GetAllMoneyAccounts().ElementAt(0).getFinalBalance(actualYear, actualMonth);
+        }
+
+        private DateTime actualMonthAndYear() {
+            return new DateTime(actualYear, actualMonth, 1);
+        }
+
+        private List<MoneyAccount> listOfMoneyAccounts() {
+            List<MoneyAccount> list = new List<MoneyAccount>();
+
+            foreach (MoneyAccount account in Dal.GetAllMoneyAccounts()) {
+                account.actualYearAndMonth = actualMonthAndYear();
+                list.Add(account);
+            }
+
+            return list;
         }
 
         private void setActualMonthText() {
@@ -322,6 +336,8 @@ namespace Finanse.Pages {
             SetPreviousMonthButtonEnabling();
 
             ThereAreAnyOperationsInList();
+
+            BalanceListView.ItemsSource = listOfMoneyAccounts();
         }
 
         private void ThereAreAnyOperationsInList() {
@@ -444,6 +460,8 @@ namespace Finanse.Pages {
             ProgressRing.IsActive = false;
 
         }
+
+
 
         private void ByDateButton_Click(object sender, RoutedEventArgs e) {
             ByDateButton.Foreground = ((SolidColorBrush)Application.Current.Resources["AccentColor"] as SolidColorBrush);

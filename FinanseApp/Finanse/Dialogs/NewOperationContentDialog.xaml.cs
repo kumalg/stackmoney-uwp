@@ -362,8 +362,10 @@ else if (isPatternEditing) {
 
         private void CostValue_LostFocus(object sender, RoutedEventArgs e) {
             isUnfocused = true;
+           // string dupa = CostValue.Text;
+           // dupa.Replace(',', '.');
 
-            if(CostValue.Text != "")
+            if (CostValue.Text != "")
                 CostValue.Text = decimal.Parse(CostValue.Text).ToString("C", Settings.GetActualCurrency());
         }
 
@@ -398,6 +400,7 @@ else if (isPatternEditing) {
                 }
             }
             acceptedCostValue = CostValue.Text;
+          //  acceptedCostValue.Replace(',','.');
             whereIsSelection = CostValue.SelectionStart;
         }
 

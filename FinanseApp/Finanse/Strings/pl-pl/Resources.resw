@@ -368,4 +368,7 @@
   <data name="yes.Text" xml:space="preserve">
     <value>Tak</value>
   </data>
+  <data name="plannedString" xml:space="preserve">
+    <value>Planowane operacje</value>
+  </data>
 </root>

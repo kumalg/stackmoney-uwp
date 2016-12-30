@@ -171,6 +171,7 @@
     <Compile Include="Models\GroupInfoList.cs" />
     <Compile Include="Models\ItemCollection.cs" />
     <Compile Include="Models\MoneyAccount.cs" />
+    <Compile Include="Models\NewOperation.cs" />
     <Compile Include="Models\OperationPattern.cs" />
     <Compile Include="Models\OperationCategory.cs" />
     <Compile Include="Models\Operation.cs" />

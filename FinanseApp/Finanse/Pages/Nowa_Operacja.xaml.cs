@@ -2,6 +2,7 @@
 using Finanse.Dialogs;
 using Finanse.Models;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,6 +40,8 @@ namespace Finanse.Pages {
             if (PayFormValue.Items.Count > 0)
                 PayFormValue.SelectedIndex = 0;
 
+         //   CostValue.PlaceholderText = Decimal.Parse("12.55").ToString(); //.ToString("C", Settings.GetActualCurrency());
+         //   NameValue.PlaceholderText = Decimal.Parse("12,55", System.Globalization.NumberStyles.Number).ToString(); //.ToString("C", Settings.GetActualCurrency());
         }
 
         public Windows.Globalization.DayOfWeek firstDayOfWeek() {
@@ -149,7 +152,7 @@ namespace Finanse.Pages {
             isUnfocused = true;
 
             if (CostValue.Text != "")
-                CostValue.Text = decimal.Parse(CostValue.Text).ToString("C", Settings.GetActualCurrency());
+                CostValue.Text = NewOperation.valueToCurrencyString(CostValue.Text);//Decimal.Parse(CostValue.Text/*, new CultureInfo("pl-PL")*/).ToString("C", Settings.GetActualCurrency());
         }
 
         private void CostValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
@@ -183,6 +186,7 @@ namespace Finanse.Pages {
                 }
             }
             acceptedCostValue = CostValue.Text;
+           // acceptedCostValue.Replace('.', ',');
             whereIsSelection = CostValue.SelectionStart;
         }
 
@@ -241,7 +245,7 @@ namespace Finanse.Pages {
                 Id = 0,
                 Title = NameValue.Text,
                 isExpense = (bool)Expense_RadioButton.IsChecked,
-                Cost = decimal.Parse(acceptedCostValue),
+                Cost = Decimal.Parse(acceptedCostValue, new CultureInfo("pl-PL")),
                 CategoryId = catId,
                 SubCategoryId = subCatId,
                 Date = DateValue.Date.Value.ToString("yyyy.MM.dd"),// String.Format("{0:yyyy.MM.dd}", DateValue.Date),
@@ -254,7 +258,7 @@ namespace Finanse.Pages {
                     Id = 0,
                     Title = NameValue.Text,
                     isExpense = (bool)Expense_RadioButton.IsChecked,
-                    Cost = decimal.Parse(acceptedCostValue),
+                    Cost = decimal.Parse(acceptedCostValue, new CultureInfo("pl-PL")),
                     CategoryId = catId,
                     SubCategoryId = subCatId,
                     MoreInfo = MoreInfoValue.Text,

@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Windows.Phone.UI.Input;
 using Windows.System.Profile;
 using Windows.UI.Core;
+using Windows.Foundation;
 
 namespace Finanse {
     public sealed partial class MainPage : Page {
@@ -20,12 +21,12 @@ namespace Finanse {
         public MainPage() {
             this.InitializeComponent();
             Dal.CreateDB();
-            
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(360, 530));
         }
 
         private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e) {
             if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(Strona_glowna)) {
-                AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
+                OperationsAppBarRadioButton.IsChecked = true;// AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
                 e.Handled = true;
             }
         }

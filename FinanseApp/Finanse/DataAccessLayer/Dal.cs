@@ -27,7 +27,7 @@
             }
         }
 
-        public static void CreateDB() {
+        public static void createDB() {
             using (var db = DbConnection) {
                 // Activate Tracing
                 db.Execute("PRAGMA foreign_keys = ON");
@@ -83,10 +83,8 @@
         }
         */
 
-        public static Operation GetEldestOperation() {
+        public static Operation getEldestOperation() {
             /// blokuje się gdy data jest w formacie innym niż yyyy.MM.dd , np. yyyy-MM-dd . czyli należy jeszcze sprawdzać czy stiring jest {0}.{1}.{2} czy coś
-
-            Operation eldest;
 
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -99,13 +97,35 @@
                 // eldest = db.Table<Operation>().Aggregate((c1, c2) => Convert.ToDateTime(c1.Date) < Convert.ToDateTime(c2.Date) ? c1 : c2);
                 // to jest spoko, ale może być super kłopotliwe przy duzych bazach.
 
-                eldest = (from p in db.Table<Operation>().ToList()
-                          where !String.IsNullOrEmpty(p.Date)
+                Operation eldest = (from p in db.Table<Operation>().ToList()
+                          where !string.IsNullOrEmpty(p.Date)
                           orderby p.Date
                           select p).ToList().ElementAt(0);
-            }
 
-            return eldest;
+                return eldest;
+            }
+        }
+
+        //TODO
+        public static DateTime getEldestDateInOperations() {
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+
+               // if (db.Table<Operation>().Count() == 0)
+                    //return null;
+
+                // eldest = db.Table<Operation>().Aggregate((c1, c2) => Convert.ToDateTime(c1.Date) < Convert.ToDateTime(c2.Date) ? c1 : c2);
+                // to jest spoko, ale może być super kłopotliwe przy duzych bazach.
+
+                Operation eldest = (from p in db.Table<Operation>().ToList()
+                                    where !String.IsNullOrEmpty(p.Date)
+                                    orderby p.Date
+                                    select p).ToList().ElementAt(0);
+
+                return Convert.ToDateTime(eldest.Date);
+            }
         }
 
         public static decimal[] getBalanceFromSingleAccountToDate(DateTime date, int moneyAccountId) {
@@ -127,9 +147,50 @@
             return values;
         }
 
+        public static List<MoneyAccountBalance> listOfMoneyAccountBalances(DateTime date) {
+            List<MoneyAccountBalance> list = new List<MoneyAccountBalance>();
+
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                db.TraceListener = new DebugTraceListener();
+
+                var query = from p in db.Table<Operation>().ToList()
+                        group p by p.MoneyAccountId into g
+                        select new {
+                            moneyAccount = getMoneyAccountById(g.Key),
+                            initialValue = getInitialValue(g, date),
+                            finalValue = getFinalValue(g,date)
+                        };
+
+                foreach (var item in query) {
+                    list.Add(new MoneyAccountBalance(item.moneyAccount, item.initialValue, item.finalValue));
+                }
+            }
+            return list;
+        }
+
+        private static DateTime maxDateInFinalValue(DateTime date) {
+            return (date.Month == DateTime.Today.Month && date.Year == DateTime.Today.Year) ?
+                DateTime.Today.AddDays(1) :
+                date.AddMonths(1);
+        }
+        private static DateTime maxDateInInitialValue(DateTime date) {
+            return (date > DateTime.Today) ?
+                DateTime.Today.AddDays(1) :
+                date;
+        }
+
+        private static decimal getFinalValue(IGrouping<int,Operation> operations, DateTime date) {
+            return operations.Where(i => !string.IsNullOrEmpty(i.Date) && DateTime.Parse(i.Date) < maxDateInFinalValue(date))
+                                .Sum(i => i.isExpense ? -i.Cost : i.Cost);
+        }
+        private static decimal getInitialValue(IGrouping<int, Operation> operations, DateTime date) {
+            return operations.Where(i => !string.IsNullOrEmpty(i.Date) && DateTime.Parse(i.Date) < maxDateInInitialValue(date))
+                                .Sum(i => i.isExpense ? -i.Cost : i.Cost);
+        }
+
         /* GET ALL */
 
-        public static List<OperationCategory> GetAllCategories() {
+        public static List<OperationCategory> getAllCategories() {
             List<OperationCategory> models;
 
             // Create a new connection
@@ -145,7 +206,7 @@
             return models;
         }
 
-        public static List<Operation> GetAllOperationsByMoneyAccount(MoneyAccount account) {
+        public static List<Operation> getAllOperationsOfThisMoneyAccount(MoneyAccount account) {
             List<Operation> models;
 
             // Create a new connection
@@ -161,7 +222,7 @@
             return models;
         }
 
-        public static List<Operation> GetAllOperations(int month, int year) {
+        public static List<Operation> getAllOperations(int month, int year) {
             List<Operation> models;
 
             // Create a new connection
@@ -180,7 +241,7 @@
             return models;
         }
 
-        public static List<Operation> GetAllOperations(int month, int year, List<int> visiblePayFormList) {
+        public static List<Operation> getAllOperations(int month, int year, List<int> visiblePayFormList) {
             List<Operation> models;
 
             // Create a new connection
@@ -189,12 +250,10 @@
                 db.TraceListener = new DebugTraceListener();
 
                 string settedYearAndMonth = year.ToString() + "." + month.ToString("00");
-                //DateTime settedYearAndMonth = new DateTime(year,month,1);
-                //bool isActualMonth = (year == DateTime.Today.Year && 
 
                 if (visiblePayFormList != null) {
                     models = (from p in db.Table<Operation>().ToList()
-                              where p.Date != null && p.Date != ""
+                              where !string.IsNullOrEmpty(p.Date)
                                  && p.Date.Substring(0, 7) == settedYearAndMonth.ToString()
                                  && Convert.ToDateTime(p.Date) <= DateTime.Today
                                  && visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId) == true
@@ -212,25 +271,22 @@
             return models;
         }
 
-        public static List<Operation> GetAllFutureOperations() {
-            List<Operation> models;
-
+        public static List<Operation> getAllFutureOperations() {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                models = (from p in db.Table<Operation>().ToList()
-                          where p.Date == null
-                             || p.Date == ""
+                List<Operation> models = (from p in db.Table<Operation>().ToList()
+                          where string.IsNullOrEmpty(p.Date)
                              || Convert.ToDateTime(p.Date) > DateTime.Today
                           select p).ToList();
-            }
 
-            return models;
+                return models;
+            }
         }
 
-        public static List<Operation> GetAllFutureOperations(List<int> visiblePayFormList) {
+        public static List<Operation> getAllFutureOperations(List<int> visiblePayFormList) {
             List<Operation> models;
 
             // Create a new connection
@@ -240,16 +296,14 @@
 
                 if (visiblePayFormList != null) {
                     models = (from p in db.Table<Operation>().ToList()
-                              where (p.Date == null
-                                  || p.Date == ""
+                              where (string.IsNullOrEmpty(p.Date)
                                   || Convert.ToDateTime(p.Date) > DateTime.Today)
                                   && visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId)
                               select p).ToList();
                 }
                 else {
                     models = (from p in db.Table<Operation>().ToList()
-                              where p.Date == null
-                                 || p.Date == ""
+                              where string.IsNullOrEmpty(p.Date)
                                  || Convert.ToDateTime(p.Date) > DateTime.Today
                               select p).ToList();
                 }
@@ -258,7 +312,7 @@
             return models;
         }
 
-        public static List<OperationPattern> GetAllPatterns() {
+        public static List<OperationPattern> getAllPatterns() {
             List<OperationPattern> models;
 
             // Create a new connection
@@ -273,7 +327,7 @@
             return models;
         }
 
-        public static List<MoneyAccount> GetAllMoneyAccounts() {
+        public static List<MoneyAccount> getAllMoneyAccounts() {
             List<MoneyAccount> models;
 
             // Create a new connection
@@ -290,7 +344,7 @@
 
         /* GET BY ID */
     
-        public static Operation GetOperationById(int Id) {
+        public static Operation getOperationById(int Id) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -302,7 +356,7 @@
             }
         }
 
-        public static MoneyAccount GetMoneyAccountById(int Id) {
+        public static MoneyAccount getMoneyAccountById(int Id) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -314,7 +368,7 @@
             }
         }
 
-        public static OperationSubCategory GetOperationSubCategoryById(int Id) {
+        public static OperationSubCategory getOperationSubCategoryById(int Id) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -327,7 +381,7 @@
             }
         }
 
-        public static List<OperationSubCategory> GetOperationSubCategoriesByBossId(int Id) {
+        public static List<OperationSubCategory> getOperationSubCategoriesByBossId(int Id) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -341,7 +395,7 @@
             }
         }
 
-        public static OperationCategory GetOperationCategoryById(int Id) {
+        public static OperationCategory getOperationCategoryById(int Id) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -355,7 +409,7 @@
 
         /* SAVE */
 
-        public static void SaveOperation(Operation operation) {
+        public static void saveOperation(Operation operation) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -372,7 +426,7 @@
             }
         }
 
-        public static void SaveOperationPattern(OperationPattern operationPattern) {
+        public static void saveOperationPattern(OperationPattern operationPattern) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -389,7 +443,7 @@
             }
         }
 
-        public static void SaveOperationCategory(OperationCategory operationCategory) {
+        public static void saveOperationCategory(OperationCategory operationCategory) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -406,7 +460,7 @@
             }
         }
 
-        public static void SaveOperationSubCategory(OperationSubCategory operationSubCategory) {
+        public static void saveOperationSubCategory(OperationSubCategory operationSubCategory) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -424,7 +478,7 @@
         }
         /* DELETE */
 
-        public static void DeletePattern(OperationPattern operationPattern) {
+        public static void deletePattern(OperationPattern operationPattern) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -438,7 +492,7 @@
             }
         }
 
-        public static void DeleteOperation(Operation operation) {
+        public static void deleteOperation(Operation operation) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -452,7 +506,7 @@
             }
         }
 
-        public static void DeleteCategory(OperationCategory operationCategory) {
+        public static void deleteCategory(OperationCategory operationCategory) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -467,7 +521,7 @@
             }
         }
 
-        public static void DeleteSubCategory(OperationSubCategory operationSubCategory) {
+        public static void deleteSubCategory(OperationSubCategory operationSubCategory) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing

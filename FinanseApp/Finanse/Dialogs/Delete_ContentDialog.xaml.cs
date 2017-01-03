@@ -25,7 +25,7 @@ namespace Finanse.Dialogs {
                 case "pattern": {
                         //Operations.Remove(operation);
 
-                        Dal.DeletePattern(new OperationPattern {
+                        Dal.deletePattern(new OperationPattern {
                             Title = operation.Title,
                             Cost = operation.Cost,
                             CategoryId = operation.CategoryId,
@@ -49,7 +49,7 @@ namespace Finanse.Dialogs {
                             group.Remove(operation);
                         }
                         //Operations.Remove(operation);
-                        Dal.DeleteOperation(operation);
+                        Dal.deleteOperation(operation);
                         break;
                     }
             }

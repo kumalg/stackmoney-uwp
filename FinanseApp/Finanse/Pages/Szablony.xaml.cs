@@ -12,7 +12,7 @@ namespace Finanse.Pages {
 
     public sealed partial class Szablony : Page {
 
-        private ObservableCollection<OperationPattern> OperationPatterns = new ObservableCollection<OperationPattern>(Dal.GetAllPatterns());
+        private ObservableCollection<OperationPattern> OperationPatterns = new ObservableCollection<OperationPattern>(Dal.getAllPatterns());
 
         public Szablony() {
             this.InitializeComponent();

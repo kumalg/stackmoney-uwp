@@ -503,7 +503,6 @@
                         GotFocus="CostValue_GotFocus"
                         LostFocus="CostValue_LostFocus"
                         TextChanging="CostValue_TextChanging"
-                        SelectionChanged="CostValue_SelectionChanged"
                         TextChanged="CostValue_TextChanged" />
 
                     <TextBox

@@ -306,11 +306,32 @@
             <RowDefinition
                 Height="*" />
         </Grid.RowDefinitions>
-        
+        <!--
+                    Background="{ThemeResource AccentColor}"
+        -->
         <Grid
             Background="{ThemeResource AccentColor}"
             Height="48">
-
+            <!--
+            <Grid.Background>
+                <LinearGradientBrush
+                    EndPoint="0.5,1"
+                    StartPoint="0.5,0">
+                    <LinearGradientBrush.RelativeTransform>
+                        <CompositeTransform
+                            CenterY="0.5"
+                            CenterX="0.5"
+                            Rotation="-90" />
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop
+                        Color="#FF078B3E"
+                        Offset="0" />
+                    <GradientStop
+                        Color="#FF04AC82"
+                        Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
                     Width="*" />
@@ -470,22 +491,22 @@
             Visibility="Collapsed"
             x:Name="EmptyListViewInfo"
             Grid.Row="2">
-            
+
             <TextBlock
                 FontSize="24"
                 FontWeight="Light"
                 Foreground="{ThemeResource Text-1}"
                 RelativePanel.AlignHorizontalCenterWithPanel="True"
                 RelativePanel.AlignVerticalCenterWithPanel="True"
-                Text="Brak operacji w tym miesiącu :(" 
-                x:Uid="noOperationsInThisMonth"/>
+                Text="Brak operacji w tym miesiącu :("
+                x:Uid="noOperationsInThisMonth" />
 
             <TextBlock
                 Text="Dodaj nową"
                 x:Uid="addNew"
                 Foreground="{ThemeResource Text}"
                 RelativePanel.AlignHorizontalCenterWithPanel="True"
-                RelativePanel.AlignTopWith="angleToAddButton"/>
+                RelativePanel.AlignTopWith="angleToAddButton" />
             <FontIcon
                 Name="angleToAddButton"
                 Foreground="{ThemeResource Text-1}"
@@ -513,9 +534,9 @@
                 </FontIcon.Triggers>
 
             </FontIcon>
-            
+
         </RelativePanel>
-        
+
         <SemanticZoom
             x:Name="semanticZoom"
             Grid.Row="2">
@@ -552,16 +573,16 @@
                                         Foreground="{ThemeResource Text-1}"
                                         Margin="10"
                                         Grid.Column="1"
-                                        Text="Saldo" 
-                                        x:Uid="balance"/>
+                                        Text="Saldo"
+                                        x:Uid="balance" />
                                     <TextBlock
                                         HorizontalAlignment="Right"
                                         FontSize="13"
                                         Foreground="{ThemeResource Text-1}"
                                         Margin="10"
                                         Grid.Column="2"
-                                        Text="Początkowe" 
-                                        x:Uid="initial"/>
+                                        Text="Początkowe"
+                                        x:Uid="initial" />
                                     <TextBlock
                                         HorizontalAlignment="Right"
                                         FontSize="13"
@@ -571,7 +592,7 @@
                                         Text="Końcowe"
                                         x:Uid="final" />
                                 </Grid>
-<!--
+                                <!--
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition
@@ -677,7 +698,7 @@
                                     </ListView.ItemContainerStyle>
                                     <ListView.ItemTemplate>
                                         <DataTemplate
-                                            x:DataType="models:MoneyAccount">
+                                            x:DataType="models:MoneyAccountBalance">
                                             <Grid
                                                 HorizontalAlignment="Stretch">
                                                 <Grid.ColumnDefinitions>
@@ -693,7 +714,7 @@
                                                 <Ellipse
                                                     Width="8"
                                                     Height="8"
-                                                    Fill="{Binding Color}" />
+                                                    Fill="{Binding MoneyAccount.Color}" />
                                                 <TextBlock
                                                     x:Name="dupa1"
                                                     FontSize="13"
@@ -701,7 +722,7 @@
                                                     Margin="10,5"
                                                     Grid.Column="1"
                                                     TextWrapping="Wrap"
-                                                    Text="{Binding Name}" />
+                                                    Text="{Binding MoneyAccount.Name}" />
                                                 <TextBlock
                                                     x:Name="dupa2"
                                                     HorizontalAlignment="Right"
@@ -710,7 +731,7 @@
                                                     Foreground="{ThemeResource Text-1}"
                                                     Margin="10,5"
                                                     Grid.Column="2"
-                                                    Text="{x:Bind getInitialBalance()}" />
+                                                    Text="{Binding InitialValue}" />
                                                 <TextBlock
                                                     x:Name="dupa3"
                                                     HorizontalAlignment="Right"
@@ -719,12 +740,12 @@
                                                     Foreground="{ThemeResource Text-1}"
                                                     Margin="10,5"
                                                     Grid.Column="3"
-                                                    Text="{x:Bind getFinalBalance()}" />
+                                                    Text="{Binding FinalValue}" />
                                             </Grid>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
-                                
+
                                 <StackPanel
                                     Margin="0,16"
                                     HorizontalAlignment="Right"
@@ -735,7 +756,7 @@
                                         Margin="16,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="Grupuj wg."
-                                        x:Uid="groupBy"/>
+                                        x:Uid="groupBy" />
                                     <Button
                                         x:Name="ByDateButton"
                                         FontSize="13"
@@ -761,7 +782,7 @@
                                         Margin="16,0,0,0"
                                         Content="" />
                                 </StackPanel>
-                                
+
                                 <StackPanel
                                     Visibility="Collapsed"
                                     Margin="0,20,0,5"
@@ -770,7 +791,6 @@
                                     <RadioButton
                                         Name="ByDateRadioButton"
                                         GroupName="GroupingRadioButtons"
-                                        Checked="ByDateRadioButton_Checked"
                                         FontSize="13"
                                         BorderThickness="0"
                                         VerticalAlignment="Center"
@@ -780,7 +800,6 @@
                                     <RadioButton
                                         Name="ByCategoryRadioButton"
                                         GroupName="GroupingRadioButtons"
-                                        Checked="ByCategoryRadioButton_Checked"
                                         Grid.Column="1"
                                         FontSize="13"
                                         VerticalAlignment="Center"
@@ -788,7 +807,7 @@
                                         Foreground="{ThemeResource Text-1}"
                                         Content="Wg. kategorii" />
                                 </StackPanel>
-                               
+
                             </StackPanel>
                         </Grid>
                     </ListView.Header>
@@ -868,10 +887,11 @@
         </SemanticZoom>
 
         <Grid
+            Visibility="Collapsed"
             x:Name="ProgressRingBackground"
             Grid.Row="2"
             Opacity=".5"
-            Background="{ThemeResource Background}">            
+            Background="{ThemeResource Background}">
         </Grid>
         <ProgressRing
             Height="48"

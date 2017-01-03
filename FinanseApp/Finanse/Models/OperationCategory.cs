@@ -42,7 +42,7 @@ namespace Finanse.Models {
         }
 
         public ObservableCollection<OperationSubCategory> getSubCategories() {
-            return new ObservableCollection<OperationSubCategory>(Dal.GetOperationSubCategoriesByBossId(Id));
+            return new ObservableCollection<OperationSubCategory>(Dal.getOperationSubCategoriesByBossId(Id));
         }
     }
 }

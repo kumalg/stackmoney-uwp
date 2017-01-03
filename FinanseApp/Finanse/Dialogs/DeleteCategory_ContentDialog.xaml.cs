@@ -20,7 +20,7 @@ namespace Finanse.Dialogs {
             if (operationCategory != null) {
 
                 OperationCategories.Remove(operationCategory);
-                Dal.DeleteCategory(operationCategory);
+                Dal.deleteCategory(operationCategory);
             }
             else if (operationSubCategory != null) {
 
@@ -29,7 +29,7 @@ namespace Finanse.Dialogs {
 
                 BossCatItem.subCategories.Remove(subCatItem);
 
-                Dal.DeleteSubCategory(operationSubCategory);
+                Dal.deleteSubCategory(operationSubCategory);
             }
         }
 

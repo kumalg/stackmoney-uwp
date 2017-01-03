@@ -584,7 +584,6 @@
 
         <Frame
             Grid.RowSpan="2"
-            FlowDirection="LeftToRight"
             Navigated="AktualnaStrona_Frame_Navigated"
             Name="AktualnaStrona_Frame" />
 

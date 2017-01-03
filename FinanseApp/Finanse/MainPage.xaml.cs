@@ -20,7 +20,7 @@ namespace Finanse {
 
         public MainPage() {
             this.InitializeComponent();
-            Dal.CreateDB();
+            Dal.createDB();
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(360, 530));
         }
 
@@ -113,48 +113,56 @@ namespace Finanse {
 
         private async void CategoriesAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
             CommandBar.IsOpen = false;
-            await Task.Delay(1);
+            await Task.Delay(5);
             AktualnaStrona_Frame.Navigate(typeof(Kategorie));
         }
 
         private async void AddNewOperationAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
             CommandBar.IsOpen = false;
-            await Task.Delay(1);
+            await Task.Delay(5);
             AktualnaStrona_Frame.Navigate(typeof(Nowa_Operacja));
         }
 
-        private void StatisticsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
+        private async void StatisticsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
             CommandBar.IsOpen = false;
+            await Task.Delay(5);
             AktualnaStrona_Frame.Navigate(typeof(Statystyki));
         }
         private async void RadioButton_Click(object sender, RoutedEventArgs e) {
             MoreAppBarRadioButton.IsChecked = false;
-            await Task.Delay(1);
+            await Task.Delay(5);
             CommandBar.IsOpen = !CommandBar.IsOpen;
+        }
+
+        private void navigateIfDifferentPage(Type pageType) {
+            if (AktualnaStrona_Frame.CurrentSourcePageType != pageType)
+                AktualnaStrona_Frame.Navigate(pageType);
         }
 
         private async void SzablonyAppBarButton_Click(object sender, RoutedEventArgs e) {
             UncheckAllMenuButtons();
-            await Task.Delay(1);
-            AktualnaStrona_Frame.Navigate(typeof(Szablony));
+            await Task.Delay(5);
+            //  (Frame as ThemeAwareFrame).AppTheme = ElementTheme.Light;
+            navigateIfDifferentPage(typeof(Szablony));
         }
 
         private async void ZleceniaStaleAppBarButton_Click(object sender, RoutedEventArgs e) {
             UncheckAllMenuButtons();
-            await Task.Delay(1);
-            AktualnaStrona_Frame.Navigate(typeof(ZleceniaStale));
+            await Task.Delay(5);
+            //   (Frame as ThemeAwareFrame).AppTheme = ElementTheme.Dark;
+            navigateIfDifferentPage(typeof(ZleceniaStale));
         }
 
         private async void KontaAppBarButton_Click(object sender, RoutedEventArgs e) {
             UncheckAllMenuButtons();
-            await Task.Delay(1);
-            AktualnaStrona_Frame.Navigate(typeof(Konta));
+            await Task.Delay(5);
+            navigateIfDifferentPage(typeof(Konta));
         }
 
         private async void UstawieniaAppBarButton_Click(object sender, RoutedEventArgs e) {
             UncheckAllMenuButtons();
-            await Task.Delay(1);
-            AktualnaStrona_Frame.Navigate(typeof(Ustawienia));
+            await Task.Delay(5);
+            navigateIfDifferentPage(typeof(Ustawienia));
         }
 
         private void CommandBar_Opening(object sender, object e) {

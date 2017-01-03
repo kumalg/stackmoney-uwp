@@ -13,33 +13,56 @@ using Finanse.Dialogs;
 using Finanse.Models;
 using Windows.UI.Xaml.Navigation;
 using System.Threading.Tasks;
+using Windows.Phone.UI.Input;
+using Windows.UI.Core;
+using Windows.System.Profile;
 
 namespace Finanse.Pages {
     public sealed partial class Strona_glowna : Page {
 
-        private List<int> visiblePayFormList = new List<int>();
+        private List<int> visiblePayFormList = new List<int> { 19, 20, 21, 22};
         private OperationData storeData;
         private ObservableCollection<GroupInfoList<Operation>> operationGroups = new ObservableCollection<GroupInfoList<Operation>>();
         private DateTime actualYearAndMonth;
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
+            
+            DateTime dateTimeWithDays = (e.Parameter is DateTime) ?
+            (DateTime)e.Parameter : DateTime.Today;
 
-            actualYearAndMonth = (e.Parameter is DateTime) ?
-                (DateTime)e.Parameter :
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-
+            actualYearAndMonth = new DateTime(dateTimeWithDays.Year, dateTimeWithDays.Month, 1);
+             
             setNextMonthButtonEnabling();
             setPreviousMonthButtonEnabling();
             storeData = new OperationData(actualYearAndMonth.Month, actualYearAndMonth.Year, false, null);
             ByDateRadioButton.IsChecked = true;
+            groupOperations(operationGroups, storeData);
+            listViewByDate();
             ///  SetListOfOperations(visiblePayFormList);
-            ///  ByDateRadioButton.Checked += ByDateRadioButton_Checked;
-            ///  ByCategoryRadioButton.Checked += ByCategoryRadioButton_Checked;
+              ByDateRadioButton.Checked += ByDateRadioButton_Checked;
+              ByCategoryRadioButton.Checked += ByCategoryRadioButton_Checked;
             setActualMonthText();
             setActualMoneyBar();
             setEmptyListViewInfoVisibility();
+            
+            if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile")
+                HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+           // SystemNavigationManager.GetForCurrentView().BackRequested += BackRequestedEvent;
 
             base.OnNavigatedTo(e);
+        }
+
+        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e) {
+            if (!semanticZoom.IsZoomedInViewActive)
+                semanticZoom.IsZoomedInViewActive = true;
+               // e.Handled = true;
+
+        }
+        private void BackRequestedEvent(object sender, BackRequestedEventArgs e) {
+            if (!semanticZoom.IsZoomedInViewActive)
+                semanticZoom.IsZoomedInViewActive = true;
+            // e.Handled = true;
+
         }
 
         public Strona_glowna() {
@@ -47,7 +70,7 @@ namespace Finanse.Pages {
             this.InitializeComponent();
            // this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
     
-            foreach (var item in Dal.GetAllMoneyAccounts()) {
+            foreach (var item in Dal.getAllMoneyAccounts()) {
                 ToggleMenuFlyoutItem itema = new ToggleMenuFlyoutItem {
                     Text = item.Name,
                     Tag = item.Id,
@@ -59,15 +82,9 @@ namespace Finanse.Pages {
             }
         }
 
-        private List<MoneyAccount> listOfMoneyAccounts() {
-            List<MoneyAccount> list = new List<MoneyAccount>();
-
-            foreach (MoneyAccount account in Dal.GetAllMoneyAccounts()) {
-                account.actualYearAndMonth = actualYearAndMonth;// actualMonthAndYear();
-                list.Add(account);
-            }
-
-            return list;
+        private List<MoneyAccountBalance> listOfMoneyAccounts() {
+            //    return Dal.listOfMoneyAccountBalances(actualYearAndMonth).Where(i => visiblePayFormList.Any(ac => ac == i.MoneyAccount.Id)).ToList();
+            return Dal.listOfMoneyAccountBalances(actualYearAndMonth);
         }
 
         private bool isFutureMonth(DateTime date) {
@@ -104,15 +121,10 @@ namespace Finanse.Pages {
                 visiblePayFormList.Remove((int)((ToggleMenuFlyoutItem)sender).Tag);
 
             storeData.SetVisiblePayFormList(visiblePayFormList);
-
-          //  groupOperations(operationGroups, storeData);
-
-          //  SetActualMoneyBar();
-
             setListOfOperations(visiblePayFormList);
 
-          //  if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
-                    if ((bool)ByDateRadioButton.IsChecked)
+            //  if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
+            if ((bool)ByDateRadioButton.IsChecked)
                 (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
         }
 
@@ -300,8 +312,8 @@ namespace Finanse.Pages {
             setActualMonthText();
             groupOperations(operationGroups, storeData);
 
-           // if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
-                 if ((bool)ByDateRadioButton.IsChecked)
+            // if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
+            if ((bool)ByDateRadioButton.IsChecked)
                 (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
 
             setActualMoneyBar();
@@ -338,11 +350,11 @@ namespace Finanse.Pages {
         }
 
         private void setPreviousMonthButtonEnabling() {
-            Operation eldestOperation = Dal.GetEldestOperation();
+            Operation eldestOperation = Dal.getEldestOperation();
 
             PrevMonthButton.IsEnabled = eldestOperation == null ? 
                 false : 
-                Convert.ToDateTime(Dal.GetEldestOperation().Date) <= actualYearAndMonth;
+                Convert.ToDateTime(Dal.getEldestOperation().Date) <= actualYearAndMonth;
         }
 
         private void setActualMoneyBar() {
@@ -351,7 +363,7 @@ namespace Finanse.Pages {
             foreach (var group in operationGroups)
                 actualMoney += group.decimalCost;
 
-            ActualMoneyBar.Text = actualMoney.ToString("C", Settings.GetActualCurrency());
+            ActualMoneyBar.Text = actualMoney.ToString("C", Settings.getActualCultureInfo());
         }
 
         private void listViewByDate() {
@@ -389,9 +401,9 @@ namespace Finanse.Pages {
             var result = await ContentDialogItem.ShowAsync();
         }
 
-        private void ByCategoryRadioButton_Checked(object sender, RoutedEventArgs e) {
+        private async void ByCategoryRadioButton_Checked(object sender, RoutedEventArgs e) {
             activateProgressRing();
-            //   await Task.Delay(5);
+            await Task.Delay(1);
 
             groupOperations(operationGroups, storeData);
             listViewByCategory();
@@ -399,9 +411,9 @@ namespace Finanse.Pages {
             deactivateProgressRing();
         }
 
-        private void ByDateRadioButton_Checked(object sender, RoutedEventArgs e) {
+        private async void ByDateRadioButton_Checked(object sender, RoutedEventArgs e) {
             activateProgressRing();
-            // await Task.Delay(5);
+            await Task.Delay(1);
 
             groupOperations(operationGroups, storeData);
             listViewByDate();

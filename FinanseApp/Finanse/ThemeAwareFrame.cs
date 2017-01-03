@@ -4,7 +4,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 
-
 namespace Finanse {
     public class ThemeAwareFrame : Frame {
         private static readonly ThemeProxyClass _themeProxyClass = new ThemeProxyClass();

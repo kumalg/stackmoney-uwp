@@ -7,7 +7,7 @@ namespace Finanse.Dialogs {
 
     public sealed partial class OperationPatternsContentDialog : ContentDialog {
 
-        private List<OperationPattern> OperationPatterns = Dal.GetAllPatterns();
+        private List<OperationPattern> OperationPatterns = Dal.getAllPatterns();
 
         public OperationPatternsContentDialog(Operation selectedOperation) {
             this.InitializeComponent();

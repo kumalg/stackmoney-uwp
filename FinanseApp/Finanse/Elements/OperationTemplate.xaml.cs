@@ -29,9 +29,9 @@ namespace Finanse.Elements {
             if (Operation == null)
                 return;
 
-            if (Settings.GetAccountEllipseVisibility()) {
+            if (Settings.getAccountEllipseVisibility()) {
 
-                MoneyAccount moneyAccount = Dal.GetMoneyAccountById(Operation.MoneyAccountId);
+                MoneyAccount moneyAccount = Dal.getMoneyAccountById(Operation.MoneyAccountId);
 
                 if (moneyAccount != null)
                     if (!string.IsNullOrEmpty(moneyAccount.Color)) {
@@ -40,8 +40,8 @@ namespace Finanse.Elements {
                     }
             }
 
-            OperationCategory cat = Dal.GetOperationCategoryById(Operation.CategoryId);
-            OperationSubCategory subCat = Dal.GetOperationSubCategoryById(Operation.SubCategoryId);
+            OperationCategory cat = Dal.getOperationCategoryById(Operation.CategoryId);
+            OperationSubCategory subCat = Dal.getOperationSubCategoryById(Operation.SubCategoryId);
             SubCategoryNameStackPanel.Visibility = Visibility.Collapsed;
 
             /* WCHODZI IKONKA KATEGORII */
@@ -71,13 +71,13 @@ namespace Finanse.Elements {
             /* WYGLĄD KOSZTU (CZERWONY Z MINUSEM CZY ZIELONY Z PLUSEM) */
             if (Operation.isExpense) {
 
-                Cost_OperationTemplate.Text = (-Operation.Cost).ToString("C", Settings.GetActualCurrency());
+                Cost_OperationTemplate.Text = (-Operation.Cost).ToString("C", Settings.getActualCultureInfo());
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
             }
 
             else {
 
-                Cost_OperationTemplate.Text = Operation.Cost.ToString("C", Settings.GetActualCurrency());
+                Cost_OperationTemplate.Text = Operation.Cost.ToString("C", Settings.getActualCultureInfo());
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"];
             }
 
@@ -85,7 +85,7 @@ namespace Finanse.Elements {
             Category_OperationTemplate.Text = "";
 
             /* WYGLĄD NAZWY KATEGORII */
-            if (Settings.GetCategoryNameVisibility()) {
+            if (Settings.getCategoryNameVisibility()) {
                 CategoryNameStackPanel.Visibility = Visibility.Visible;
                 Category_OperationTemplate.Text = "Nie znaleziono kategorii";
                 if (cat != null)

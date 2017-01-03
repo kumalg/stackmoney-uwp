@@ -371,4 +371,10 @@
   <data name="plannedString" xml:space="preserve">
     <value>Planowane operacje</value>
   </data>
+  <data name="today" xml:space="preserve">
+    <value>dzisiaj</value>
+  </data>
+  <data name="yesterday" xml:space="preserve">
+    <value>wczoraj</value>
+  </data>
 </root>

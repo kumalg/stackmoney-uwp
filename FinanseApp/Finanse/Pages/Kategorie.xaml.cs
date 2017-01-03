@@ -13,7 +13,7 @@ namespace Finanse.Pages {
 
     public sealed partial class Kategorie : Page {
 
-        private ObservableCollection<OperationCategory> OperationCategories = new ObservableCollection<OperationCategory>(Dal.GetAllCategories());
+        private ObservableCollection<OperationCategory> OperationCategories = new ObservableCollection<OperationCategory>(Dal.getAllCategories());
 
         public Kategorie() {
             this.InitializeComponent();
@@ -82,14 +82,14 @@ namespace Finanse.Pages {
         private void RadioButton_Checked(object sender, RoutedEventArgs e) {
             OperationCategories.Clear();
 
-            foreach (var operationCategory in Dal.GetAllCategories().Where(i => i.VisibleInExpenses))
+            foreach (var operationCategory in Dal.getAllCategories().Where(i => i.VisibleInExpenses))
                 OperationCategories.Add(operationCategory);
         }
 
         private void RadioButton_Checked_1(object sender, RoutedEventArgs e) {
             OperationCategories.Clear();
 
-            foreach (var operationCategory in Dal.GetAllCategories().Where(i => i.VisibleInIncomes))
+            foreach (var operationCategory in Dal.getAllCategories().Where(i => i.VisibleInIncomes))
                 OperationCategories.Add(operationCategory);
         }
 

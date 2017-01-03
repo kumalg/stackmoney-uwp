@@ -4,33 +4,37 @@ using Finanse.Models;
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace Finanse.Pages {
 
     public sealed partial class Nowa_Operacja : Page {
 
-        string acceptedCostValue = "";
-        int whereIsSelection;
+        private Regex regex = NewOperation.getRegex();
 
-        bool isUnfocused = true;
+        private string acceptedCostValue = string.Empty;
+
+        private bool isUnfocused = true;
 
         public Nowa_Operacja() {
           
             this.InitializeComponent();
             
             DateValue.Date = DateTime.Today;
-            DateValue.MaxDate = Settings.GetMaxDate();
+            DateValue.MaxDate = Settings.getMaxDate();
+            DateValue.MinDate = Settings.getMinDate();
 
             Expense_RadioButton.IsChecked = true;
 
             SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
 
-            foreach (MoneyAccount account in Dal.GetAllMoneyAccounts()) {
-
+            foreach (MoneyAccount account in Dal.getAllMoneyAccounts()) {
                 PayFormValue.Items.Add(new ComboBoxItem {
                     Content = account.Name,
                     Tag = account.Id
@@ -39,13 +43,10 @@ namespace Finanse.Pages {
 
             if (PayFormValue.Items.Count > 0)
                 PayFormValue.SelectedIndex = 0;
-
-         //   CostValue.PlaceholderText = Decimal.Parse("12.55").ToString(); //.ToString("C", Settings.GetActualCurrency());
-         //   NameValue.PlaceholderText = Decimal.Parse("12,55", System.Globalization.NumberStyles.Number).ToString(); //.ToString("C", Settings.GetActualCurrency());
         }
 
         public Windows.Globalization.DayOfWeek firstDayOfWeek() {
-            return (Windows.Globalization.DayOfWeek)Settings.GetFirstDayOfWeek();
+            return Settings.getFirstDayOfWeek();
         }
 
 
@@ -68,7 +69,7 @@ namespace Finanse.Pages {
 
                 if (idOfSelectedSubCategory != -1) {
                     if (SubCategoryValue.Items.OfType<OperationSubCategory>().Any(i => i.Id == idOfSelectedSubCategory)) {
-                        OperationSubCategory subCatItem = Dal.GetOperationSubCategoryById(idOfSelectedSubCategory);
+                        OperationSubCategory subCatItem = Dal.getOperationSubCategoryById(idOfSelectedSubCategory);
                         SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
                     }
                 }
@@ -84,7 +85,7 @@ namespace Finanse.Pages {
 
             CategoryValue.Items.Clear();
 
-            foreach (OperationCategory catItem in Dal.GetAllCategories()) {
+            foreach (OperationCategory catItem in Dal.getAllCategories()) {
 
                 if ((catItem.VisibleInExpenses && inExpenses)
                     || (catItem.VisibleInIncomes && inIncomes)) {
@@ -103,7 +104,7 @@ namespace Finanse.Pages {
 
             if (CategoryValue.SelectedIndex != -1) {
 
-                foreach (OperationSubCategory subCatItem in Dal.GetOperationSubCategoriesByBossId((int)((ComboBoxItem)CategoryValue.SelectedItem).Tag)) {
+                foreach (OperationSubCategory subCatItem in Dal.getOperationSubCategoriesByBossId((int)((ComboBoxItem)CategoryValue.SelectedItem).Tag)) {
 
                     if ((subCatItem.VisibleInExpenses && inExpenses)
                         || (subCatItem.VisibleInIncomes && inIncomes)) {
@@ -117,11 +118,8 @@ namespace Finanse.Pages {
                             Content = subCatItem.Name,
                             Tag = subCatItem.Id
                         });
-
                     }
-
                 }
-
                 SubCategoryValue.IsEnabled = !(SubCategoryValue.Items.Count == 0);
             }
         }
@@ -152,46 +150,25 @@ namespace Finanse.Pages {
             isUnfocused = true;
 
             if (CostValue.Text != "")
-                CostValue.Text = NewOperation.valueToCurrencyString(CostValue.Text);//Decimal.Parse(CostValue.Text/*, new CultureInfo("pl-PL")*/).ToString("C", Settings.GetActualCurrency());
+                CostValue.Text = NewOperation.toCurrencyString(CostValue.Text);
         }
 
         private void CostValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
 
-            if (CostValue.Text == "")
+            if (string.IsNullOrEmpty(CostValue.Text)) {
+                acceptedCostValue = string.Empty;
+                return;
+            }
+
+            else if (isUnfocused)
                 return;
 
-            if (isUnfocused)
-                return;
-
-            if (CostValue.Text.Any(c => !char.IsDigit(c))) {
-                foreach (char letter in CostValue.Text)
-                    if (!char.IsDigit(letter) && letter != ',') {
-                        CostValue.Text = acceptedCostValue;
-                        CostValue.SelectionStart = whereIsSelection;
-                    }
-
-                if (CostValue.Text.Count(c => c == ',') > 1) {
-                    CostValue.Text = acceptedCostValue;
-                    CostValue.SelectionStart = whereIsSelection;
-                }
-
-                if (CostValue.Text.Count(c => c == ',') == 1) {
-
-                    int charactersAfterComma = CostValue.Text.Length - CostValue.Text.IndexOf(",") - 1;
-
-                    if (charactersAfterComma > 2) {
-                        CostValue.Text = acceptedCostValue;
-                        CostValue.SelectionStart = whereIsSelection;
-                    }
-                }
+            else if (regex.Match(CostValue.Text).Value != CostValue.Text) {
+                int whereIsSelection = CostValue.SelectionStart;
+                CostValue.Text = acceptedCostValue;
+                CostValue.SelectionStart = whereIsSelection - 1;
             }
             acceptedCostValue = CostValue.Text;
-           // acceptedCostValue.Replace('.', ',');
-            whereIsSelection = CostValue.SelectionStart;
-        }
-
-        private void CostValue_SelectionChanged(object sender, RoutedEventArgs e) {
-            whereIsSelection = CostValue.SelectionStart;
         }
 
         private async void UsePatternButton_Click(object sender, RoutedEventArgs e) {
@@ -215,8 +192,8 @@ namespace Finanse.Pages {
             else
                 Income_RadioButton.IsChecked = true;
 
-            CostValue.Text = selectedOperation.Cost.ToString("C", Settings.GetActualCurrency());
-            acceptedCostValue = selectedOperation.Cost.ToString();
+            CostValue.Text = NewOperation.toCurrencyString(selectedOperation.Cost);
+            acceptedCostValue = NewOperation.toCurrencyWithoutSymbolString(selectedOperation.Cost);
 
             NameValue.Text = selectedOperation.Title;
 
@@ -241,11 +218,11 @@ namespace Finanse.Pages {
                     -1 :
                     (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
 
-            Dal.SaveOperation(new Operation {
+            Dal.saveOperation(new Operation {
                 Id = 0,
                 Title = NameValue.Text,
                 isExpense = (bool)Expense_RadioButton.IsChecked,
-                Cost = Decimal.Parse(acceptedCostValue, new CultureInfo("pl-PL")),
+                Cost = decimal.Parse(acceptedCostValue, Settings.getActualCultureInfo()),
                 CategoryId = catId,
                 SubCategoryId = subCatId,
                 Date = DateValue.Date.Value.ToString("yyyy.MM.dd"),// String.Format("{0:yyyy.MM.dd}", DateValue.Date),
@@ -254,11 +231,11 @@ namespace Finanse.Pages {
             });
 
             if (SaveAsAssetToggle.IsOn) {
-                Dal.SaveOperationPattern(new OperationPattern {
+                Dal.saveOperationPattern(new OperationPattern {
                     Id = 0,
                     Title = NameValue.Text,
                     isExpense = (bool)Expense_RadioButton.IsChecked,
-                    Cost = decimal.Parse(acceptedCostValue, new CultureInfo("pl-PL")),
+                    Cost = decimal.Parse(acceptedCostValue, Settings.getActualCultureInfo()),
                     CategoryId = catId,
                     SubCategoryId = subCatId,
                     MoreInfo = MoreInfoValue.Text,

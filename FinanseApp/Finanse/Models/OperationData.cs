@@ -36,7 +36,7 @@ namespace Finanse.Models {
 
                     GroupInfoList<Operation> info;
                     
-                    var query = from item in isFuture ? Dal.GetAllFutureOperations(visiblePayFormList) : Dal.GetAllOperations(month, year, visiblePayFormList)
+                    var query = from item in isFuture ? Dal.getAllFutureOperations(visiblePayFormList) : Dal.getAllOperations(month, year, visiblePayFormList)
                                 group item by item.Date into g
                                 orderby g.Key descending
                                 select new {
@@ -60,7 +60,7 @@ namespace Finanse.Models {
         }
 
         private int howManyEmptyCells(int year, int month) {
-            int dayOfWeek = (int)(new DateTime(year, month, 1).DayOfWeek) - (int)Settings.GetFirstDayOfWeek();
+            int dayOfWeek = (int)(new DateTime(year, month, 1).DayOfWeek) - (int)Settings.getFirstDayOfWeek();
             if (dayOfWeek < 1)
                 dayOfWeek += 7;
             return dayOfWeek;
@@ -100,7 +100,7 @@ namespace Finanse.Models {
 
                     GroupInfoList<Operation> info;
                     
-                    var query = from item in isFuture ? Dal.GetAllFutureOperations(visiblePayFormList) : Dal.GetAllOperations(month, year, visiblePayFormList)
+                    var query = from item in isFuture ? Dal.getAllFutureOperations(visiblePayFormList) : Dal.getAllOperations(month, year, visiblePayFormList)
                                 group item by item.CategoryId into g
                                 orderby g.Key descending
                                 select new {
@@ -119,7 +119,7 @@ namespace Finanse.Models {
                             opacity = 0.2,
                         };
 
-                        foreach (OperationCategory item in Dal.GetAllCategories()) {
+                        foreach (OperationCategory item in Dal.getAllCategories()) {
                             if (item.Id == g.GroupName) {
                                 ((GroupHeaderByCategory)info.Key).categoryId = item.Id;
                                 ((GroupHeaderByCategory)info.Key).icon = item.Icon.Glyph;
@@ -129,7 +129,7 @@ namespace Finanse.Models {
                             }
                         }
 
-                        ((GroupHeaderByCategory)info.Key).iconStyle = new FontFamily(Settings.GetActualIconStyle());
+                        ((GroupHeaderByCategory)info.Key).iconStyle = new FontFamily(Settings.getActualIconStyle());
 
                         foreach (var item in g.Items.OrderByDescending(i=>i.Id))
                             info.Add(item);

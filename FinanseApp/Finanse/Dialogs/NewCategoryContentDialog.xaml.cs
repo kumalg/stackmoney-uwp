@@ -88,8 +88,8 @@ namespace Finanse.Dialogs {
                 VisibleInIncomesToggleButton.IsOn = editedCategory.VisibleInIncomes;
 
                 if (editedBossCategoryId != -1) {
-                    if (Dal.GetAllCategories().Any(i => i.Id == editedBossCategoryId)) {
-                        OperationCategory catItem = Dal.GetOperationCategoryById(editedBossCategoryId);
+                    if (Dal.getAllCategories().Any(i => i.Id == editedBossCategoryId)) {
+                        OperationCategory catItem = Dal.getOperationCategoryById(editedBossCategoryId);
                         CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == catItem.Name);
                     }
                 }
@@ -116,7 +116,7 @@ namespace Finanse.Dialogs {
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
 
-                    Dal.SaveOperationSubCategory(newOperationSubCategoryItem);
+                    Dal.saveOperationSubCategory(newOperationSubCategoryItem);
                     OperationCategories.Single(x => x.Id == (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag).addSubCategory(newOperationSubCategoryItem);
                 }
 
@@ -130,7 +130,7 @@ namespace Finanse.Dialogs {
                     };
 
                     OperationCategories.Insert(0, newOperationCategoryItem);
-                    Dal.SaveOperationCategory(newOperationCategoryItem);
+                    Dal.saveOperationCategory(newOperationCategoryItem);
                 }
             }
             else {
@@ -147,7 +147,7 @@ namespace Finanse.Dialogs {
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
-                    Dal.SaveOperationSubCategory(editedOperationSubCategoryItem);
+                    Dal.saveOperationSubCategory(editedOperationSubCategoryItem);
 
                     if (editedBossCategoryId == (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag) {
                         ObservableCollection<OperationSubCategory> subCategories = OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedBossCategoryId))].subCategories;
@@ -173,8 +173,8 @@ namespace Finanse.Dialogs {
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
 
-                    Dal.DeleteSubCategory(editedOperationSubCategoryItem);
-                    Dal.SaveOperationCategory(editedOperationCategoryItem);
+                    Dal.deleteSubCategory(editedOperationSubCategoryItem);
+                    Dal.saveOperationCategory(editedOperationCategoryItem);
 
                     RefreshOperationCategoriesList();
                 }
@@ -189,8 +189,8 @@ namespace Finanse.Dialogs {
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
 
-                    Dal.DeleteCategory(editedCategory);
-                    Dal.SaveOperationSubCategory(editedOperationSubCategoryItem);
+                    Dal.deleteCategory(editedCategory);
+                    Dal.saveOperationSubCategory(editedOperationSubCategoryItem);
 
                     RefreshOperationCategoriesList();
                 }
@@ -207,7 +207,7 @@ namespace Finanse.Dialogs {
                     };
 
                     OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedCategory.Id))] = editedOperationCategoryItem;
-                    Dal.SaveOperationCategory(editedOperationCategoryItem);
+                    Dal.saveOperationCategory(editedOperationCategoryItem);
                 }
 
             }
@@ -233,7 +233,7 @@ namespace Finanse.Dialogs {
 
             if (CategoryValue.SelectedIndex == -1) {
 
-                if (Dal.GetAllCategories().Any(item => item.Name == NamVal.Text))
+                if (Dal.getAllCategories().Any(item => item.Name == NamVal.Text))
                     NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
                 else {
                     NameValue.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
@@ -241,7 +241,7 @@ namespace Finanse.Dialogs {
                 }
             }
             else {
-                if (Dal.GetOperationSubCategoriesByBossId(selectedCategoryId).Any(item => item.Name == NamVal.Text)) {
+                if (Dal.getOperationSubCategoriesByBossId(selectedCategoryId).Any(item => item.Name == NamVal.Text)) {
                     NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
                 }
                 else {
@@ -256,7 +256,7 @@ namespace Finanse.Dialogs {
             SetPrimaryButtonEnabled();
 
             if (CategoryValue.SelectedIndex == -1) {
-                foreach (var message in Dal.GetAllCategories()) {
+                foreach (var message in Dal.getAllCategories()) {
                     if (message.Name.ToLower() == NameValue.Text.ToLower()) {
                         NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
                         IsPrimaryButtonEnabled = false;
@@ -271,7 +271,7 @@ namespace Finanse.Dialogs {
             else {
                 int selectedCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
 
-                foreach (var message in Dal.GetOperationSubCategoriesByBossId(selectedCategoryId)) {
+                foreach (var message in Dal.getOperationSubCategoriesByBossId(selectedCategoryId)) {
                     if (message.Name.ToLower() == NameValue.Text.ToLower()) {
                         NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
                         IsPrimaryButtonEnabled = false;
@@ -314,7 +314,7 @@ namespace Finanse.Dialogs {
                 VisibleInIncomesToggleButton.IsOn = true;
             }
             else {
-                OperationCategory item = Dal.GetOperationCategoryById((int)((ComboBoxItem)((ComboBox)sender).SelectedItem).Tag);
+                OperationCategory item = Dal.getOperationCategoryById((int)((ComboBoxItem)((ComboBox)sender).SelectedItem).Tag);
 
                 VisibleInExpensesToggleButton.IsEnabled = item.VisibleInExpenses;
                 if (item.VisibleInExpenses) {
@@ -339,9 +339,9 @@ namespace Finanse.Dialogs {
 
         private void RefreshOperationCategoriesList() {
             OperationCategories.Clear();
-            foreach (var message in Dal.GetAllCategories()) {
+            foreach (var message in Dal.getAllCategories()) {
 
-                message.subCategories = new ObservableCollection<OperationSubCategory>(Dal.GetOperationSubCategoriesByBossId(message.Id));
+                message.subCategories = new ObservableCollection<OperationSubCategory>(Dal.getOperationSubCategoriesByBossId(message.Id));
 
                 OperationCategories.Add(message);
             }

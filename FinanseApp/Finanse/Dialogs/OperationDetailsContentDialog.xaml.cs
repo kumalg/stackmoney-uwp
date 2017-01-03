@@ -39,7 +39,7 @@ namespace Finanse.Dialogs {
                 NameValue.Visibility = Visibility.Visible;
             }
 
-            CostValue.Text = editedOperation.Cost.ToString("C", Settings.GetActualCurrency());
+            CostValue.Text = editedOperation.Cost.ToString("C", Settings.getActualCultureInfo());
 
             DateValuePanel.Visibility = Visibility.Collapsed;
             if (!editedOperation.Date.Equals("") && whichOption != "pattern") {
@@ -47,9 +47,9 @@ namespace Finanse.Dialogs {
                 DateValuePanel.Visibility = Visibility.Visible;
             }
 
-            OperationCategory cat = Dal.GetOperationCategoryById(editedOperation.CategoryId);
-            OperationSubCategory subCat = Dal.GetOperationSubCategoryById(editedOperation.SubCategoryId);
-            MoneyAccount account = Dal.GetMoneyAccountById(editedOperation.MoneyAccountId);
+            OperationCategory cat = Dal.getOperationCategoryById(editedOperation.CategoryId);
+            OperationSubCategory subCat = Dal.getOperationSubCategoryById(editedOperation.SubCategoryId);
+            MoneyAccount account = Dal.getMoneyAccountById(editedOperation.MoneyAccountId);
 
             /* KATEGORIA */
             CategoryValuePanel.Visibility = Visibility.Collapsed;

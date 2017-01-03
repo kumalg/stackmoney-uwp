@@ -13,15 +13,14 @@ namespace Finanse.Pages {
 
             this.InitializeComponent();
 
-            foreach (CultureInfo item in Settings.GetAllCurrencies()) {
-
+            foreach (CultureInfo item in Settings.getAllCurrencies()) {
                 CurrencyValue.Items.Add(new ComboBoxItem {
-                    Content = item.DisplayName,
+                    Content = new RegionInfo(item.Name).ISOCurrencySymbol,
                     Tag = item.Name
                 });
             }
 
-            if (Settings.GetTheme() == ApplicationTheme.Dark)
+            if (Settings.getTheme() == ApplicationTheme.Dark)
                 DarkThemeRadioButton.IsChecked = true;
             else
                 LightThemeRadioButton.IsChecked = true;
@@ -32,36 +31,36 @@ namespace Finanse.Pages {
             CurrencyValue.SelectedItem = CurrencyValue
                 .Items
                 .OfType<ComboBoxItem>()
-                .SingleOrDefault(i => i.Content.ToString() == Settings.GetActualCurrency().DisplayName);
+                .SingleOrDefault(i => i.Tag.Equals(Settings.getActualCultureInfo().Name));
 
             for (int i = 1; i <= 12; i++)
                 MaxNumberOfNextMonth.Items.Add(new ComboBoxItem {
                     Content = i,
                 });
 
-            MaxNumberOfNextMonth.SelectedIndex = Settings.GetMaxFutureMonths() - 1;
-            CategoryNameVisibilityToggleButton.IsOn = Settings.GetCategoryNameVisibility();
-            AccountEllipseVisibilityToggleButton.IsOn = Settings.GetAccountEllipseVisibility();
+            MaxNumberOfNextMonth.SelectedIndex = Settings.getMaxFutureMonths() - 1;
+            CategoryNameVisibilityToggleButton.IsOn = Settings.getCategoryNameVisibility();
+            AccountEllipseVisibilityToggleButton.IsOn = Settings.getAccountEllipseVisibility();
            
-            SyncSettingsToggleButton.IsOn = Settings.GetSyncSettings();
+            SyncSettingsToggleButton.IsOn = Settings.getSyncSettings();
             SyncSettingsToggleButton.Toggled += SyncSettingsToggleButton_Toggled;
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            Settings.SetActualCurrency((string)((ComboBoxItem)CurrencyValue.SelectedItem).Tag);
+            Settings.setActualCultureInfo((string)((ComboBoxItem)CurrencyValue.SelectedItem).Tag);
         }
 
         private void MaxNumberOfFutureMonths_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             ComboBoxItem item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
-            Settings.SetMaxFutureMonths((int)item.Content);
+            Settings.setMaxFutureMonths((int)item.Content);
         }
 
         private void CategoryNameVisibilityToggleButton_Toggled(object sender, RoutedEventArgs e) {
-            Settings.SetCategoryNameVisibility(CategoryNameVisibilityToggleButton.IsOn);
+            Settings.setCategoryNameVisibility(CategoryNameVisibilityToggleButton.IsOn);
         }
 
         private void AccountEllipseVisibilityToggleButton_Toggled(object sender, RoutedEventArgs e) {
-            Settings.SetAccountEllipseVisibility(AccountEllipseVisibilityToggleButton.IsOn);
+            Settings.setAccountEllipseVisibility(AccountEllipseVisibilityToggleButton.IsOn);
         }
 
         private void ReminderToggleSwitch_Toggled(object sender, RoutedEventArgs e) {
@@ -75,15 +74,15 @@ namespace Finanse.Pages {
         }
 
         private void SyncSettingsToggleButton_Toggled(object sender, RoutedEventArgs e) {
-            Settings.SetSyncSettings(SyncSettingsToggleButton.IsOn);
+            Settings.setSyncSettings(SyncSettingsToggleButton.IsOn);
         }
 
         private void DarkThemeRadioButton_Checked(object sender, RoutedEventArgs e) {
-            Settings.SetTheme(1);
+            Settings.setTheme(1);
         }
 
         private void LightThemeRadioButton_Checked(object sender, RoutedEventArgs e) {
-            Settings.SetTheme(0);
+            Settings.setTheme(0);
         }
         public string GetAppVersion() {
 

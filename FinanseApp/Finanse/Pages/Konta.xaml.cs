@@ -16,7 +16,7 @@ namespace Finanse.Pages {
 
     public sealed partial class Konta : Page {
 
-        private ObservableCollection<MoneyAccount> MoneyAccounts = new ObservableCollection<MoneyAccount>(Dal.GetAllMoneyAccounts());
+        private ObservableCollection<MoneyAccount> MoneyAccounts = new ObservableCollection<MoneyAccount>(Dal.getAllMoneyAccounts());
 
         public Konta() {
 

@@ -30,23 +30,23 @@ namespace Finanse.Models {
 
         public string getActualMoneyValue() {
             decimal moneyValue = 0;
-            foreach (Operation o in Dal.GetAllOperationsByMoneyAccount(this))
+            foreach (Operation o in Dal.getAllOperationsOfThisMoneyAccount(this))
                 moneyValue += o.isExpense ? -o.Cost : o.Cost;
-            return moneyValue.ToString("C", Settings.GetActualCurrency());
+            return moneyValue.ToString("C", Settings.getActualCultureInfo());
         }
 
         public string getInitialBalance() {
             if (balance == null)
                 balance = Dal.getBalanceFromSingleAccountToDate(_actualYearAndMonth, this.Id);
 
-            return balance.ElementAt(0).ToString("C", Settings.GetActualCurrency());
+            return balance.ElementAt(0).ToString("C", Settings.getActualCultureInfo());
             //return ((decimal)9).ToString("C", Settings.GetActualCurrency());
         }
         public string getFinalBalance() {
             if (balance == null)
                 balance = Dal.getBalanceFromSingleAccountToDate(_actualYearAndMonth, this.Id);
 
-            return balance.ElementAt(1).ToString("C", Settings.GetActualCurrency());
+            return balance.ElementAt(1).ToString("C", Settings.getActualCultureInfo());
         }
     }
 }

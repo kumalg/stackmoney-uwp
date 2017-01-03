@@ -11,7 +11,7 @@ namespace Finanse.Models {
 
         public string cost {
             get {
-                return decimalCost.ToString("C", Settings.GetActualCurrency());
+                return decimalCost.ToString("C", Settings.getActualCultureInfo());
             }
         }
 
@@ -36,7 +36,7 @@ namespace Finanse.Models {
         public string name {
             get {
                 if (_name.Equals("")) {
-                    _name = categoryId == -1 ? "Nieprzyporządkowane" : Dal.GetOperationCategoryById(categoryId).Name;
+                    _name = categoryId == -1 ? "Nieprzyporządkowane" : Dal.getOperationCategoryById(categoryId).Name;
                 }
                 return _name;
             }
@@ -74,9 +74,9 @@ namespace Finanse.Models {
                 dayNum = dt.Day.ToString();
                 if (dt.Month == dtToday.Month && dt.Year == dtToday.Year) {
                     if (dt.Day == dtToday.Day)
-                        day = "dzisiaj";
+                        day = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("today");
                     else if (dt.Day == dtToday.Day - 1)
-                        day = "wczoraj";
+                        day = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("yesterday");
                     else
                         day = String.Format("{0:dddd}", dt);
                 }

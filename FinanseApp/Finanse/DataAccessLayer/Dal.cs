@@ -48,6 +48,7 @@
                         CultureInfoName = "en-US"
                     });
                     */
+                    
                 if (!db.Table<MoneyAccount>().Any()) {
                     db.Insert(new MoneyAccount {
                         Name = "Gotówka",

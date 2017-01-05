@@ -209,7 +209,6 @@ namespace Finanse.Pages {
             SaveButton.IsEnabled = !String.IsNullOrEmpty(CostValue.Text);
         }
 
-
         private void Button_Click_1(object sender, RoutedEventArgs e) {
             int catId = CategoryValue.SelectedIndex == -1 ?
                     1 :

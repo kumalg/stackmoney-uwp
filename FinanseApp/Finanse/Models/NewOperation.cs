@@ -27,7 +27,7 @@ namespace Finanse.Models {
 
             string format = decimalDigits == 0 ?
                 @"\d+" :
-                @"\d+\" + decimalSeparator + @"\d{0," + decimalDigits + @"}|\d+";
+                @"\d+\" + decimalSeparator + @"\d{0," + decimalDigits + @"}|\d+|\" + decimalSeparator + @"\d{0," + decimalDigits + @"}";
 
             return new Regex(format);
         }

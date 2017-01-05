@@ -14,7 +14,7 @@ namespace Finanse.Dialogs {
 
         private bool _isSaved = false;
 
-        private Operation editedOperation;
+        private Operation operationToEdit;
         
         private readonly ObservableCollection<OperationPattern> patterns;
 
@@ -24,11 +24,11 @@ namespace Finanse.Dialogs {
 
         private bool isUnfocused = true;
 
-        public NewOperationContentDialog(Operation editedOperation) {
+        public NewOperationContentDialog(Operation operationToEdit) {
 
             this.InitializeComponent();
 
-            this.editedOperation = editedOperation;
+            this.operationToEdit = operationToEdit;
 
             IsPrimaryButtonEnabled = false;
 
@@ -50,14 +50,14 @@ namespace Finanse.Dialogs {
             SaveAsAssetToggle.Visibility = Visibility.Collapsed;
 
             EditAndPatternSetters();
-            if (!editedOperation.Date.Equals(""))
-                DateValue.Date = Convert.ToDateTime(editedOperation.Date); /// tu się wywala kiedy edytujesz zaplanowaną bez daty /// JUŻ NIE
+            if (!operationToEdit.Date.Equals(""))
+                DateValue.Date = Convert.ToDateTime(operationToEdit.Date); /// tu się wywala kiedy edytujesz zaplanowaną bez daty /// JUŻ NIE
         }
         public NewOperationContentDialog(ObservableCollection<OperationPattern> patterns, Operation editedOperation, bool isPatternEditing) {
 
             this.InitializeComponent();
 
-            this.editedOperation = editedOperation;
+            this.operationToEdit = editedOperation;
             this.isPatternEditing = isPatternEditing;
             this.patterns = patterns;
 
@@ -108,23 +108,23 @@ namespace Finanse.Dialogs {
 
         private void EditAndPatternSetters() {
 
-            if (editedOperation.isExpense) {
+            if (operationToEdit.isExpense) {
                 Expense_RadioButton.IsChecked = true;
             }
             else
                 Income_RadioButton.IsChecked = true;
 
-            NameValue.Text = editedOperation.Title;
+            NameValue.Text = operationToEdit.Title;
 
-            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == editedOperation.CategoryId);
-            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == editedOperation.SubCategoryId);
-            PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == editedOperation.MoneyAccountId);
+            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == operationToEdit.CategoryId);
+            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operationToEdit.SubCategoryId);
+            PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operationToEdit.MoneyAccountId);
 
-            CostValue.Text = NewOperation.toCurrencyString(editedOperation.Cost);//editedOperation.Cost.ToString("C", Settings.getActualCultureInfo());
-            acceptedCostValue = NewOperation.toCurrencyWithoutSymbolString(editedOperation.Cost);//editedOperation.Cost.ToString(Settings.getActualCultureInfo());
+            CostValue.Text = NewOperation.toCurrencyString(operationToEdit.Cost);//editedOperation.Cost.ToString("C", Settings.getActualCultureInfo());
+            acceptedCostValue = NewOperation.toCurrencyWithoutSymbolString(operationToEdit.Cost);//editedOperation.Cost.ToString(Settings.getActualCultureInfo());
 
-            if (editedOperation.MoreInfo != null)
-                MoreInfoValue.Text = editedOperation.MoreInfo;
+            if (operationToEdit.MoreInfo != null)
+                MoreInfoValue.Text = operationToEdit.MoreInfo;
         }
 
         public bool isSaved() {
@@ -133,8 +133,25 @@ namespace Finanse.Dialogs {
 
         public Operation newOperation() {
             return new Operation {
-                Id = editedOperation.Id,
+                Id = operationToEdit.Id,
                 Date = DateValue.Date.Value.ToString("yyyy.MM.dd"),
+                Title = NameValue.Text,
+                Cost = decimal.Parse(acceptedCostValue, Settings.getActualCultureInfo()),
+                isExpense = (bool)Expense_RadioButton.IsChecked,
+                CategoryId = CategoryValue.SelectedIndex != -1 ?
+                             (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag
+                             : 1,
+                SubCategoryId = SubCategoryValue.SelectedIndex != -1 ?
+                                (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag
+                                : -1,
+                MoreInfo = MoreInfoValue.Text,
+                MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
+            };
+        }
+
+        public OperationPattern newOperationPattern() {
+            return new Operation {
+                Id = operationToEdit.Id,
                 Title = NameValue.Text,
                 Cost = decimal.Parse(acceptedCostValue, Settings.getActualCultureInfo()),
                 isExpense = (bool)Expense_RadioButton.IsChecked,
@@ -161,7 +178,7 @@ namespace Finanse.Dialogs {
             if (isPatternEditing) {
 
                 OperationPattern itemPattern = new OperationPattern {
-                    Id = editedOperation.Id,
+                    Id = operationToEdit.Id,
                     Title = NameValue.Text,
                     Cost = decimal.Parse(acceptedCostValue, Settings.getActualCultureInfo()),
                     isExpense = (bool)Expense_RadioButton.IsChecked,
@@ -171,7 +188,7 @@ namespace Finanse.Dialogs {
                     MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
                 };
 
-                patterns[patterns.IndexOf(patterns.SingleOrDefault(i => i.Id == editedOperation.Id))] = itemPattern;
+                patterns[patterns.IndexOf(patterns.SingleOrDefault(i => i.Id == operationToEdit.Id))] = itemPattern;
 
                 Dal.saveOperationPattern(itemPattern);
             }

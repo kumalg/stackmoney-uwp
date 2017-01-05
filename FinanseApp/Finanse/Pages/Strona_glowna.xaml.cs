@@ -142,17 +142,17 @@ namespace Finanse.Pages {
 
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-            var ContentDialogItem = new NewOperationContentDialog((Operation)datacontext);
+            var ContentDialogItem = new EditOperationContentDialog((Operation)datacontext);
             var result = await ContentDialogItem.ShowAsync();
 
             if (ContentDialogItem.isSaved()) {
                 if ((bool)ByDateRadioButton.IsChecked) {
                     removeOperationFromListByDay((Operation)datacontext);
-                    tryAddOperationToListByDay(ContentDialogItem.newOperation());
+                    tryAddOperationToListByDay(ContentDialogItem.editedOperation());
                 }
                 else {
                     removeOperationFromListByCategory((Operation)datacontext);
-                    tryAddOperationToListByCategory(ContentDialogItem.newOperation());
+                    tryAddOperationToListByCategory(ContentDialogItem.editedOperation());
                 }
 
                 setActualMoneyBar();

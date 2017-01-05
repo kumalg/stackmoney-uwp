@@ -1,0 +1,519 @@
+﻿<ContentDialog
+    x:Class="Finanse.Dialogs.EditOperationContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Finanse"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:Finanse.Elements"
+    mc:Ignorable="d"
+    Background="{ThemeResource BackgroundTransparent}"
+    Style="{StaticResource MyContentDialog}"
+    Title="Edycja operacji"
+    PrimaryButtonText="Zapisz"
+    SecondaryButtonText="Anuluj"
+    IsPrimaryButtonEnabled="False"
+    x:Uid="editOperationContentDialog"
+    PrimaryButtonClick="NowaOperacja_DodajClick"
+    RequestedTheme="Dark">
+
+    <ContentDialog.Resources>
+        <Style
+            x:Key="CalendarDatePickerStyle1"
+            TargetType="CalendarDatePicker">
+            <Setter
+                Property="Foreground"
+                Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+            <Setter
+                Property="Background"
+                Value="Transparent" />
+            <Setter
+                Property="BorderBrush"
+                Value="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" />
+            <Setter
+                Property="BorderThickness"
+                Value="0,0,0,1" />
+            <Setter
+                Property="HorizontalAlignment"
+                Value="Left" />
+            <Setter
+                Property="VerticalAlignment"
+                Value="Center" />
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="CalendarDatePicker">
+                        <Grid
+                            x:Name="Root">
+                            <FlyoutBase.AttachedFlyout>
+                                <Flyout
+                                    Placement="Bottom">
+                                    <Flyout.FlyoutPresenterStyle>
+                                        <Style
+                                            TargetType="FlyoutPresenter">
+                                            <Setter
+                                                Property="Padding"
+                                                Value="0" />
+                                            <Setter
+                                                Property="BorderThickness"
+                                                Value="0" />
+                                            <Setter
+                                                Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate
+                                                        TargetType="FlyoutPresenter">
+                                                        <ContentPresenter
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            Background="{TemplateBinding Background}"
+                                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                            ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                            Content="{TemplateBinding Content}"
+                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                            Margin="{TemplateBinding Padding}"
+                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Flyout.FlyoutPresenterStyle>
+                                    <CalendarView
+                                        x:Name="CalendarView"
+                                        CalendarIdentifier="{TemplateBinding CalendarIdentifier}"
+                                        DisplayMode="{TemplateBinding DisplayMode}"
+                                        DayOfWeekFormat="{TemplateBinding DayOfWeekFormat}"
+                                        FirstDayOfWeek="Monday"
+                                        IsTodayHighlighted="False"
+                                        IsGroupLabelVisible="{TemplateBinding IsGroupLabelVisible}"
+                                        IsOutOfScopeEnabled="{TemplateBinding IsOutOfScopeEnabled}"
+                                        MinDate="{TemplateBinding MinDate}"
+                                        MaxDate="{TemplateBinding MaxDate}"
+                                        Style="{TemplateBinding CalendarViewStyle}"
+                                        Background="{ThemeResource AccentColor-1}"
+                                        CalendarItemBackground="Transparent"
+                                        CalendarItemForeground="White"
+                                        Foreground="#CCFFFFFF"
+                                        HoverBorderBrush="#66E5E5E5"
+                                        OutOfScopeForeground="#4FFFFFFF"
+                                        OutOfScopeBackground="Transparent"
+                                        TodayForeground="{ThemeResource AccentColor}"
+                                        FontWeight="Normal"
+                                        FontSize="10"
+                                        DayItemFontSize="15" />
+                                </Flyout>
+                            </FlyoutBase.AttachedFlyout>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="32" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition
+                                    Height="Auto" />
+                                <RowDefinition
+                                    Height="32" />
+                            </Grid.RowDefinitions>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup
+                                    x:Name="CommonStates">
+                                    <VisualState
+                                        x:Name="Normal" />
+                                    <VisualState
+                                        x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="BorderBrush"
+                                                Storyboard.TargetName="Background">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="White" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Background"
+                                                Storyboard.TargetName="Background">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="BorderBrush"
+                                                Storyboard.TargetName="Background">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="White" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Background"
+                                                Storyboard.TargetName="Background">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="BorderBrush"
+                                                Storyboard.TargetName="Background">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlDisabledBaseLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Foreground"
+                                                Storyboard.TargetName="HeaderContentPresenter">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Foreground"
+                                                Storyboard.TargetName="DateText">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Foreground"
+                                                Storyboard.TargetName="CalendarGlyph">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Unfocused" />
+                                    <VisualState x:Name="PointerFocused" />
+                                    <VisualState x:Name="Focused">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Background"
+                                                Storyboard.TargetName="Background">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlHighlightListAccentLowBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup
+                                    x:Name="SelectionStates">
+                                    <VisualState
+                                        x:Name="Unselected" />
+                                    <VisualState
+                                        x:Name="Selected">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Foreground"
+                                                Storyboard.TargetName="DateText">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter
+                                x:Name="HeaderContentPresenter"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                Content="{TemplateBinding Header}"
+                                Margin="{ThemeResource ComboBoxHeaderThemeMargin}"
+                                Visibility="Collapsed"
+                                x:DeferLoadStrategy="Lazy" />
+                            <Border
+                                x:Name="Background"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                Grid.ColumnSpan="2"
+                                Grid.Row="1" />
+                            <TextBlock
+                                x:Name="DateText"
+                                Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                FontSize="15"
+                                HorizontalAlignment="Left"
+                                Padding="12, 0, 0, 2"
+                                Grid.Row="1"
+                                Text="{TemplateBinding PlaceholderText}"
+                                VerticalAlignment="Center" />
+                            <FontIcon
+                                x:Name="CalendarGlyph"
+                                Grid.Column="1"
+                                Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                                FontSize="16"
+                                FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                Glyph="&#xE787;"
+                                HorizontalAlignment="Center"
+                                Grid.Row="1"
+                                VerticalAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ContentDialog.Resources>
+<!--
+    <ContentDialog.Style>
+        <Style
+            TargetType="ContentDialog">
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="ContentDialog">
+                        <Border
+                            x:Name="Container">
+                            <Grid
+                                x:Name="LayoutRoot">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Border
+                                    x:Name="BackgroundElement"
+                                    Background="{TemplateBinding Background}"
+                                    FlowDirection="{TemplateBinding FlowDirection}"
+                                    BorderThickness="0"
+                                    BorderBrush="{ThemeResource SystemControlForegroundAccentBrush}"
+                                    MaxWidth="{TemplateBinding MinWidth}"
+                                    MaxHeight="{TemplateBinding MaxHeight}"
+                                    MinWidth="{TemplateBinding MinWidth}"
+                                    MinHeight="{TemplateBinding MinHeight}">
+
+                                    <Grid
+                                        x:Name="DialogSpace"
+                                        VerticalAlignment="Stretch"
+                                        Padding="0,0,0,20">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition
+                                                Height="Auto" />
+                                            <RowDefinition
+                                                Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <ScrollViewer
+                                            x:Name="ContentScrollViewer"
+                                            VerticalScrollBarVisibility="Auto">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition
+                                                        Height="48" />
+                                                    <RowDefinition
+                                                        Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Grid
+                                                    Background="{ThemeResource AccentColor}">
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition
+                                                            Width="*" />
+                                                        <ColumnDefinition
+                                                            Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <ContentControl
+                                                        x:Name="Title"
+                                                        Margin="20,0,0,0"
+                                                        Content="{TemplateBinding Title}"
+                                                        ContentTemplate="{TemplateBinding TitleTemplate}"
+                                                        FontSize="15"
+                                                        FontFamily="XamlAutoFontFamily"
+                                                        FontWeight="SemiBold"
+                                                        Foreground="{ThemeResource AccentText}"
+                                                        HorizontalAlignment="Left"
+                                                        VerticalAlignment="Center"
+                                                        IsTabStop="False"
+                                                        MaxHeight="{ThemeResource ContentDialogTitleMaxHeight}">
+                                                        <ContentControl.Template>
+                                                            <ControlTemplate
+                                                                TargetType="ContentControl">
+                                                                <ContentPresenter
+                                                                    Content="{TemplateBinding Content}"
+                                                                    MaxLines="2"
+                                                                    TextWrapping="Wrap"
+                                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                    Margin="{TemplateBinding Padding}"
+                                                                    ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                                            </ControlTemplate>
+                                                        </ContentControl.Template>
+                                                    </ContentControl>
+                                                    <Button
+                                                        x:Name="UsePatternButton"
+                                                        Style="{StaticResource ButtonStyle1}"
+                                                        ToolTipService.ToolTip="Użyj szablonu"
+                                                        Grid.Column="2"
+                                                        Width="48"
+                                                        Height="48"
+                                                        Click="UsePatternButton_Click"
+                                                        Loading="UsePatternButton_Loading">&#xE8C8;
+                                                    </Button>
+                                                </Grid>
+                                                <ContentPresenter
+                                                    x:Name="Content"
+                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                    Content="{TemplateBinding Content}"
+                                                    FontSize="{ThemeResource ControlContentThemeFontSize}"
+                                                    FontFamily="{ThemeResource ContentControlThemeFontFamily}"
+                                                    Margin="{ThemeResource ContentDialogContentMargin}"
+                                                    Foreground="{TemplateBinding Foreground}"
+                                                    Grid.Row="1"
+                                                    TextWrapping="Wrap" />
+                                            </Grid>
+                                        </ScrollViewer>
+                                        <Grid
+                                            Margin="20,0"
+                                            x:Name="CommandSpace"
+                                            Grid.Row="1"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Bottom">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border
+                                                x:Name="Button1Host"
+                                                Margin="{ThemeResource ContentDialogButton1HostMargin}"
+                                                MinWidth="{ThemeResource ContentDialogButtonMinWidth}"
+                                                MaxWidth="{ThemeResource ContentDialogButtonMaxWidth}"
+                                                Height="{ThemeResource ContentDialogButtonHeight}"
+                                                HorizontalAlignment="Stretch" />
+                                            <Border
+                                                x:Name="Button2Host"
+                                                Margin="{ThemeResource ContentDialogButton2HostMargin}"
+                                                MinWidth="{ThemeResource ContentDialogButtonMinWidth}"
+                                                MaxWidth="{ThemeResource ContentDialogButtonMaxWidth}"
+                                                Height="{ThemeResource ContentDialogButtonHeight}"
+                                                Grid.Column="1"
+                                                HorizontalAlignment="Stretch" />
+
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ContentDialog.Style>
+-->
+    <StackPanel
+        Margin="20,20">
+
+        <TextBlock
+            Text="Typ operacji"
+            x:Uid="operationType"
+            Margin="0,0,0,10" />
+
+        <StackPanel
+            Orientation="Horizontal">
+
+            <RadioButton
+                Name="Expense_RadioButton"
+                GroupName="OperationType_RadioButtons"
+                Checked="TypeOfOperationRadioButton_Checked"
+                Style="{StaticResource MyRadioButtonStyle}">
+                <TextBlock Text="Wydatek" x:Uid="expense"/>
+            </RadioButton>
+            <RadioButton
+                Name="Income_RadioButton"
+                GroupName="OperationType_RadioButtons"
+                Checked="TypeOfOperationRadioButton_Checked"
+                Style="{StaticResource MyRadioButtonStyle}">
+                <TextBlock Text="Wpływ" x:Uid="income"/>
+            </RadioButton>
+
+        </StackPanel>
+
+        <TextBox
+            Name="NameValue"
+            Style="{StaticResource TextBoxStyle1}"
+            PlaceholderText="Nazwa"
+            x:Uid="namePlaceholder"
+            Margin="0,20,0,0"
+            TextChanged="NameValue_TextChanged" />
+
+        <TextBox
+            Name="CostValue"
+            Style="{StaticResource TextBoxStyle1}"
+            PlaceholderText="Wartość"
+            x:Uid="valuePlaceholder"
+            InputScope="CurrencyAmount"
+            Margin="0,20,0,10"
+            GotFocus="CostValue_GotFocus"
+            LostFocus="CostValue_LostFocus"
+            TextChanging="CostValue_TextChanging"
+            TextChanged="CostValue_TextChanged" />
+
+        <CalendarDatePicker
+            Name="DateValue"
+            Style="{StaticResource CalendarDatePickerStyle1}"
+            PlaceholderText="Data"
+            x:Uid="datePlaceholder"
+            Margin="0,10"
+            HorizontalAlignment="Stretch"
+            IsTodayHighlighted="False"
+            DateChanged="DateValue_DateChanged" />
+        
+        <ComboBox
+            Name="CategoryValue"
+            Style="{StaticResource ComboBoxStyle1}"
+            SelectionChanged="ComboBox_SelectionChanged"
+            x:Uid="categoryPlaceholder"
+            SelectedValuePath="ID"
+            PlaceholderText="Kategoria"
+            Margin="0,10"
+            HorizontalAlignment="Stretch"/>
+
+        <ComboBox
+            Name="SubCategoryValue"
+            Style="{StaticResource ComboBoxStyle1}"
+            PlaceholderText="Podkategoria"
+            x:Uid="subCategoryPlaceholder"
+            Margin="0,10"
+            HorizontalAlignment="Stretch"
+            SelectionChanged="SubCategoryValue_SelectionChanged" />
+
+        <ComboBox
+            Name="PayFormValue"
+            Style="{StaticResource ComboBoxStyle1}"
+            PlaceholderText="Forma płatności"
+            x:Uid="moneyAccountPlaceholder"
+            Margin="0,10"
+            HorizontalAlignment="Stretch"
+            SelectionChanged="PayFormValue_SelectionChanged">
+        </ComboBox>
+
+        <TextBox
+            Name="MoreInfoValue"
+            MaxWidth="{ThemeResource ContentDialogMinWidth}"
+            TextWrapping="Wrap"
+            BorderThickness="1"
+            PlaceholderText="Więcej informacji"
+            x:Uid="moreInfoPlaceholder"
+            Style="{StaticResource TextBoxStyle1}"
+            Height="100"
+            Margin="0,10"
+            TextChanged="MoreInfoValue_TextChanged" />
+
+    </StackPanel>
+
+</ContentDialog>

@@ -17,12 +17,82 @@
     <StackPanel
         Margin="20,20">
 
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="*" />
+            </Grid.ColumnDefinitions>
+            <RadioButton
+                x:Name="CashAccountRadioButton"
+                GroupName="AccountType"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Center"
+                Grid.Column="0"
+                Tag="Cash"
+                MinWidth="0"
+                Margin="4"
+                Style="{StaticResource RadioButtonWithIconStyle}"
+                Click="CashAccountRadioButton_Click">
+                <FontIcon
+                    FontFamily="{StaticResource FontAwesome}"
+                    Glyph="" />
+            </RadioButton>
+            <RadioButton
+                x:Name="BankAccountRadioButton"
+                GroupName="AccountType"
+                VerticalAlignment="Top"
+                Grid.Column="1"
+                Tag="Bank Account"
+                HorizontalAlignment="Center"
+                MinWidth="0"
+                Margin="4"
+                IsChecked="True"
+                Style="{StaticResource RadioButtonWithIconStyle}"
+                Click="BankAccountRadioButton_Click">
+                <FontIcon
+                    FontFamily="{StaticResource FontAwesome}"
+                    Glyph="" />
+            </RadioButton>
+            <RadioButton
+                x:Name="PayCardRadioButton"
+                GroupName="AccountType"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Center"
+                Grid.Column="2"
+                Tag="Pay Card"
+                MinWidth="0"
+                Margin="4"
+                Style="{StaticResource RadioButtonWithIconStyle}"
+                Click="PayCardRadioButton_Click">
+                <FontIcon
+                    FontFamily="{StaticResource FontAwesome}"
+                    Glyph="" />
+            </RadioButton>
+        </Grid>
+
         <TextBox
             Name="NameValue"
             Style="{StaticResource TextBoxStyle1}"
             PlaceholderText="Nazwa"
             x:Uid="namePlaceholder"
             TextChanging="NameValue_TextChanging" />
+
+        <TextBox
+            Name="CostValue"
+            Style="{StaticResource TextBoxStyle1}"
+            PlaceholderText="Kwota początkowa"
+            x:Uid="initialAmountPlaceholder"
+            InputScope="CurrencyAmount"
+            Margin="0,20,0,10"
+            GotFocus="CostValue_GotFocus"
+            LostFocus="CostValue_LostFocus"
+            TextChanging="CostValue_TextChanging"
+            SelectionChanged="CostValue_SelectionChanged"
+            TextChanged="CostValue_TextChanged" />
 
         <GridView
             Margin="0,16,0,0"
@@ -44,33 +114,23 @@
             <GridView.ItemTemplate>
                 <DataTemplate
                     x:DataType="SolidColorBrush">
-                    <Grid
-                        Width="36"
-                        Height="36">
+                    <Ellipse
+                        Width="48"
+                        Height="48"
+                        Fill="{Binding Value}">
+                        <!--
                         <RadioButton
                             x:Name="RadioButtonColor"
                             Style="{StaticResource ColorRadioButton}"
                             Background="{Binding Value}"
                             GroupName="ColorRadioButtons"
-                            Checked="RadioButtonColor_Checked" />
-                    </Grid>
+                            Checked="RadioButtonColor_Checked" />-->
+                    </Ellipse>
                 </DataTemplate>
             </GridView.ItemTemplate>
 
         </GridView>
 
-        <TextBox
-            Name="CostValue"
-            Style="{StaticResource TextBoxStyle1}"
-            PlaceholderText="Kwota początkowa"
-            x:Uid="initialAmountPlaceholder"
-            InputScope="CurrencyAmount"
-            Margin="0,20,0,10"
-            GotFocus="CostValue_GotFocus"
-            LostFocus="CostValue_LostFocus"
-            TextChanging="CostValue_TextChanging"
-            SelectionChanged="CostValue_SelectionChanged"
-            TextChanged="CostValue_TextChanged" />
     </StackPanel>
 
 </ContentDialog>

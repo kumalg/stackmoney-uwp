@@ -1,0 +1,96 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:Finanse.Models"
+    mc:Ignorable="d">
+
+    <!--*****************************************
+    BAZA KOLORÓW DO KATEGORII
+    ******************************************-->
+    
+    <ResourceDictionary x:Key="ColorBase">
+        <SolidColorBrush x:Key="01" x:Name="darkBlue" Color="#2d5ac1" />        
+        <SolidColorBrush x:Key="02" x:Name="blue" Color="#02b0e7" />
+	    <SolidColorBrush x:Key="03" x:Name="cyan" Color="#3dc6ac" />
+	    <SolidColorBrush x:Key="04" x:Name="green" Color="#0f993f" />
+        <SolidColorBrush x:Key="05" x:Name="lightGreen" Color="#54c63d" />
+        <SolidColorBrush x:Key="06" x:Name="greenYellow" Color="#83b926" />
+	    <SolidColorBrush x:Key="07" x:Name="yellow" Color="#d5a627" />
+        <SolidColorBrush x:Key="08" x:Name="orange" Color="#fa8748" />
+	    <SolidColorBrush x:Key="09" x:Name="red" Color="#b12b41" />
+	    <SolidColorBrush x:Key="10" x:Name="pink" Color="#b952c2" />
+        <SolidColorBrush x:Key="11" x:Name="pinkViolet" Color="#7144b5" />
+	    <SolidColorBrush x:Key="12" x:Name="violet" Color="#4447b5" />
+        <SolidColorBrush x:Key="13" x:Name="lightGrey" Color="#3e434e" />
+        <SolidColorBrush x:Key="14" x:Name="grey" Color="#a1adbc" />
+        <SolidColorBrush x:Key="15" x:Name="darkGrey" Color="#d3dae8" />
+    </ResourceDictionary>
+    
+    <SolidColorBrush x:Key="DefaultEllipseColor" Color="#2e2f43" />
+    
+    <SolidColorBrush x:Key="DisabledColorStyle" Color="White" Opacity="0.2"/>
+    <SolidColorBrush x:Key="GreenColorStyle" Color="#34a159"/>
+    <SolidColorBrush x:Key="RedColorStyle" Color="#e04967"/>
+    <SolidColorBrush x:Key="GreyColorStyle" Color="#23232e" />   
+    <SolidColorBrush x:Key="White20%" Color="White" Opacity="0.05"/>    
+    
+    
+    <!--*****************************************
+    KOLORY W APLIKACJI
+    ******************************************-->
+
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="AccentColor+1" Color="#119f4c" />
+            <SolidColorBrush x:Key="AccentColor" Color="#078b3e" />
+            <SolidColorBrush x:Key="AccentColor-1" Color="#067c37" />
+
+            <SolidColorBrush x:Key="AccentText" Color="#bce3cc" />
+            <SolidColorBrush x:Key="AccentText-1" Color="#66bc8a" />
+            <SolidColorBrush x:Key="AccentText-2" Color="#329d5e" />
+            
+            <SolidColorBrush x:Key="Background+2" Color="#282e39" />
+            <SolidColorBrush x:Key="Background+1" Color="#242830" />
+            <SolidColorBrush x:Key="Background" Color="#202329" />
+            <SolidColorBrush x:Key="Background-1" Color="#1b1d21" />
+            <SolidColorBrush x:Key="Background-2" Color="#17181b" />
+            
+            <SolidColorBrush x:Key="Background+1Transparent" Color="#242830" Opacity="0.8" />
+            <SolidColorBrush x:Key="BackgroundTransparent" Color="#202329" Opacity="0.8" />
+            <SolidColorBrush x:Key="Background-1Transparent" Color="#1b1d21" Opacity="0.9" />
+
+            <SolidColorBrush x:Key="Text+max" Color="White" />
+            <SolidColorBrush x:Key="Text" Color="#b9c4da" />
+            <SolidColorBrush x:Key="Text-1" Color="#7c8493" />
+            <SolidColorBrush x:Key="Text-2" Color="#4c525c" />
+        </ResourceDictionary>
+        
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="AccentColor+1" Color="#119f4c" />
+            <SolidColorBrush x:Key="AccentColor" Color="#078b3e" />
+            <SolidColorBrush x:Key="AccentColor-1" Color="#067c37" />
+
+            <SolidColorBrush x:Key="AccentText" Color="#bce3cc" />
+            <SolidColorBrush x:Key="AccentText-1" Color="#66bc8a" />
+            <SolidColorBrush x:Key="AccentText-2" Color="#329d5e" />
+            
+            <SolidColorBrush x:Key="Background+2" Color="#d2d8e4" />
+            <SolidColorBrush x:Key="Background+1" Color="#e0e5ee" />
+            <SolidColorBrush x:Key="Background" Color="#eaeef6" />
+            <SolidColorBrush x:Key="Background-1" Color="#e0e5ee" />
+            <SolidColorBrush x:Key="Background-2" Color="#d2d8e4" />
+            
+            <SolidColorBrush x:Key="Background+1Transparent" Color="#e0e5ee" Opacity="0.8" />
+            <SolidColorBrush x:Key="BackgroundTransparent" Color="#eaeef6" Opacity="0.8" />
+            <SolidColorBrush x:Key="Background-1Transparent" Color="#e0e5ee" Opacity="0.9" />
+
+            <SolidColorBrush x:Key="Text+max" Color="Black" />
+            <SolidColorBrush x:Key="Text" Color="#455471" />
+            <SolidColorBrush x:Key="Text-1" Color="#798499" />
+            <SolidColorBrush x:Key="Text-2" Color="#a3abbb" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+   
+</ResourceDictionary>

@@ -48,7 +48,15 @@ namespace Finanse.Dialogs {
 
         }
 
-        private void RadioButtonColor_Checked(object sender, RoutedEventArgs e) {
+        private void BankAccountRadioButton_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void PayCardRadioButton_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void CashAccountRadioButton_Click(object sender, RoutedEventArgs e) {
 
         }
     }

@@ -7,8 +7,6 @@ namespace Finanse.Models {
 
     public class Settings {
 
-        //Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-        //public string CultureInfoName { get; set; }
         public static string[] allCultures = {
             "en-US",
             "pl-PL",
@@ -51,14 +49,7 @@ namespace Finanse.Models {
 
         public static List<CultureInfo> getAllCurrencies() {
             List<CultureInfo> lista = new List<CultureInfo>();
-            /*
-            {
-                new CultureInfo("en-US"),
-                new CultureInfo("en-GB"),
-                new CultureInfo("fr-FR"),
-                new CultureInfo("ja-JP"),
-                new CultureInfo("pl-PL"),
-            };*/
+
             foreach (string s in allCultures)
                 lista.Add(new CultureInfo(s));
 
@@ -129,7 +120,7 @@ namespace Finanse.Models {
                 DateTime.Today.Year, 
                 DateTime.Today.Month, 
                 DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
-                .AddMonths(Settings.getMaxFutureMonths());
+                    .AddMonths(Settings.getMaxFutureMonths());
         }
         public static void setMaxFutureMonths(int months) {
             whichSettings().Values["maxFutureMonths"] = months;

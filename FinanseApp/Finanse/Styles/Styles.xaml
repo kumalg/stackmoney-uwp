@@ -5,452 +5,37 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:Finanse.Models"
     mc:Ignorable="d">
-    
-    <SolidColorBrush x:Key="DisabledColorStyle" Color="White" Opacity="0.2"/>
-    
-    <SolidColorBrush x:Key="GreenColorStyle" Color="#34a159"/>
 
-    <SolidColorBrush x:Key="RedColorStyle" Color="#e04967"/>
-    
-    <SolidColorBrush x:Key="GreyColorStyle" Color="#23232e" />
-    
-    <SolidColorBrush x:Key="White20%" Color="White" Opacity="0.05"/>
-    
-    <!--
-    <SolidColorBrush x:Key="DarkBlueColorStyle" Color="#0A4E9B"/>
-    <SolidColorBrush x:Key="BlueColorStyle" Color="#0B63C7"/>
-    
-        <SolidColorBrush x:Key="AccentDarkColorStyle" Color="#1fb851"/>
-    <SolidColorBrush x:Key="AccentColorStyle" Color="#23d05f"/>
-    <SolidColorBrush x:Key="AccentLightColorStyle" Color="#01948a"/>
-    
-    <SolidColorBrush x:Key="AccentTextColorStyle" Color="#2d2e41"/>
-        <SolidColorBrush x:Key="AccentTextBackgroundColorStyle" Color="#2d2e41" Opacity="0.2"/>
-    
-    
-    
-    <SolidColorBrush x:Key="GreenColorStyle" Color="#3EB93E"/>
+    <FontFamily x:Key="FontAwesome">/Assets/Fonts/FontAwesome.ttf#FontAwesome</FontFamily>  
 
-    <SolidColorBrush x:Key="RedColorStyle" Color="#FF3B3B"/>
-
-    <SolidColorBrush x:Key="DarkBlueColorStyle" Color="#01948a"/>
-    <SolidColorBrush x:Key="BlueColorStyle" Color="#01b6ad"/>
-
-    <SolidColorBrush x:Key="GreyColorStyle" Color="#272733" />
-    <SolidColorBrush x:Key="GreyTransparentColorStyle" Color="#272733" Opacity="0.8" />
-    
-    <SolidColorBrush x:Key="LightGreyTransparentColorStyle" Color="#E52e2f43"/>
-    <SolidColorBrush x:Key="DarkGreyColorStyle" Color="#21212b"/>
-    <SolidColorBrush x:Key="DarkGreyTransparentColorStyle" Color="#21212b" Opacity="0.8"/>
-    -->
-    <SolidColorBrush
-        x:Key="DefaultEllipseColor"
-        Color="#2e2f43" />
-   
-    <FontIcon
-        x:Key="DefaultEllipseIcon"
-        Glyph="🏴"
-        FontFamily="Segoe UI" />
-
-    <FontFamily
-        x:Key="FontAwesome">/Assets/Fonts/FontAwesome.ttf#FontAwesome</FontFamily>
-
-
-    <!--*****************************************
-    KOLORY W APLIKACJI
-    ******************************************-->
-    <!--
-    <SolidColorBrush x:Key="AccentDarkColorStyle" Color="#067c37"/>
-    <SolidColorBrush x:Key="AccentColorStyle" Color="#078b3e"/>
-    <SolidColorBrush x:Key="AccentLightColorStyle" Color="Red"/>
-
-    <SolidColorBrush x:Key="AccentTextColorStyle" Color="White" />
-    <SolidColorBrush x:Key="AccentTransparentTextColorStyle" Color="#a6ffffff" />
-    <SolidColorBrush x:Key="AccentTextBackgroundColorStyle" Color="#2d2e41" Opacity="0.2"/>
-    
-    <SolidColorBrush x:Key="DisabledColorStyle" Color="White" Opacity="0.2"/>
-
-    <SolidColorBrush x:Key="DarkBlueColorStyle" Color="#01948a"/>
-    <SolidColorBrush x:Key="BlueColorStyle" Color="#01b6ad"/>
-
-    <SolidColorBrush x:Key="GreyTransparentColorStyle" Color="#23232e" Opacity="0.8" />
-    
-    <SolidColorBrush x:Key="White10%" Color="White" Opacity="0.02"/>
-    
-    <SolidColorBrush x:Key="LightGreyTransparentColorStyle" Color="#2c2c3b" Opacity="0.8"/>
-    
-    <SolidColorBrush x:Key="DarkGreyColorStyle" Color="#202029"/>
-    <SolidColorBrush x:Key="DarkGreyTransparentColorStyle" Color="#202029" Opacity="0.8"/>
-    -->
-
-    <!--*****************************************
-    BAZA KOLORÓW DO KATEGORII
-    ******************************************-->
-
-    <ResourceDictionary x:Key="ColorBase">
-        <SolidColorBrush x:Key="blue" Color="#02b0e7" />
-        <SolidColorBrush x:Key="darkBlue" Color="#2d5ac1" />
-	    <SolidColorBrush x:Key="cyan" Color="#3dc6ac" />
-	    <SolidColorBrush x:Key="green" Color="#0f993f" />
-	    <SolidColorBrush x:Key="yellow" Color="#d5a627" />
-        <SolidColorBrush x:Key="orange" Color="#fa8748" />
-	    <SolidColorBrush x:Key="red" Color="#b12b41" />
-	    <SolidColorBrush x:Key="pink" Color="#b952c2" />
-	    <SolidColorBrush x:Key="violet" Color="#7144b5" />
-        <SolidColorBrush x:Key="gray" Color="#a1adbc" />
-    </ResourceDictionary>
-    <!--
-    <ResourceDictionary x:Key="ColorBase">
-        <SolidColorBrush x:Name="Blue1" x:Key="a" Color="#02b0e7" />
-        <SolidColorBrush x:Name="Blue2" x:Key="b" Color="#018dcc" />
-	    <SolidColorBrush x:Name="Blue3" x:Key="c" Color="#016890" />
-        
-	    <SolidColorBrush x:Name="Cyan1" x:Key="d" Color="#06d9aa" />
-	    <SolidColorBrush x:Name="Cyan2" x:Key="e" Color="#14a988" />
-	    <SolidColorBrush x:Name="Cyan3" x:Key="f" Color="#138b99" />
-        
-	    <SolidColorBrush x:Name="CyanXGreen1" x:Key="g" Color="#29eb6d" />
-	    <SolidColorBrush x:Name="CyanXGreen2" x:Key="h" Color="#06d950" />
-	    <SolidColorBrush x:Name="CyanXGreen3" x:Key="i" Color="#0f993f" />
-        
-	    <SolidColorBrush x:Name="Green1" x:Key="j" Color="#3fd726" />
-	    <SolidColorBrush x:Name="Green2" x:Key="k" Color="#18ad00" />
-	    <SolidColorBrush x:Name="Green3" x:Key="l" Color="#218311" />
-
-	    <SolidColorBrush x:Name="Lime1" x:Key="m" Color="#a1ea23" />
-	    <SolidColorBrush x:Name="Lime2" x:Key="n" Color="#8cd906" />
-	    <SolidColorBrush x:Name="Lime3" x:Key="o" Color="#71a812" />
-        
-	    <SolidColorBrush x:Name="Yellow1" x:Key="p" Color="#eae03e" />
-	    <SolidColorBrush x:Name="Yellow2" x:Key="r" Color="#d9cd06" />
-	    <SolidColorBrush x:Name="Yellow3" x:Key="s" Color="#c2a900" />
-        
-	    <SolidColorBrush x:Name="Orange1" x:Key="t" Color="#f79f48" />
-	    <SolidColorBrush x:Name="Orange2" x:Key="u" Color="#ef7700" />
-	    <SolidColorBrush x:Name="Orange3" x:Key="v" Color="#ac5601" />
-
-	    <SolidColorBrush x:Name="Red1" x:Key="wa" Color="#e04967" />
-	    <SolidColorBrush x:Name="Red2" x:Key="wb" Color="#c2324a" />
-	    <SolidColorBrush x:Name="Red3" x:Key="wc" Color="#882b3d" />
-
-	    <SolidColorBrush x:Name="Pink1" x:Key="wd" Color="#b952c2" />
-	    <SolidColorBrush x:Name="Pink2" x:Key="we" Color="#96399f" />
-	    <SolidColorBrush x:Name="Pink3" x:Key="wf" Color="#6e3173" />
-        
-	    <SolidColorBrush x:Name="Violet1" x:Key="wg" Color="#b759f2" />
-	    <SolidColorBrush x:Name="Violet2" x:Key="wh" Color="#8706d9" />
-	    <SolidColorBrush x:Name="Violet3" x:Key="wi" Color="#6c1a9d" />
-        
-	    <SolidColorBrush x:Name="VioletXBlue1" x:Key="wj" Color="#673ee6" />
-	    <SolidColorBrush x:Name="VioletXBlue2" x:Key="wk" Color="#471ad6" />
-	    <SolidColorBrush x:Name="VioletXBlue3" x:Key="wl" Color="#3a1d95" />
-    </ResourceDictionary>
--->
-    
-    <!--*****************************************
-    BAZA IKON DO KATEGORII
-    ******************************************-->
-    <ResourceDictionary
-        x:Key="IconBase">
-        <!--
-        <TextBlock x:Key="Pad2" Text="😂" FontFamily="Segoe UI" />
-        <TextBlock x:Key="Keyboard2" Text="🍔" FontFamily="Segoe UI" />
-       
-        <TextBlock x:Key="Pad" Text="&#xE7FC;" FontFamily="Segoe MDL2 Assets" />
-        <TextBlock x:Key="Keyboard" Text="&#xE087;" FontFamily="Segoe MDL2 Assets" />
-        
-        <TextBlock x:Key="Home" Text="&#xEA8A;" FontFamily="Segoe MDL2 Assets" />
-        <TextBlock x:Key="Home2" Text="&#xE10F;" FontFamily="Segoe MDL2 Assets" />
-
-        <TextBlock x:Key="Bus2" Text="&#xEB47;" FontFamily="Segoe MDL2 Assets" />
-        <TextBlock x:Key="Car" Text="&#xE804;" FontFamily="Segoe MDL2 Assets" />
-        
-        <TextBlock x:Key="Star" Text="&#xE00A;" FontFamily="Segoe MDL2 Assets" />
-        
-        <TextBlock x:Key="Heart1" Text="&#xE006;" FontFamily="Segoe MDL2 Assets" />
-        <TextBlock x:Key="Heart2" Text="&#xE007;" FontFamily="Segoe MDL2 Assets" />
-        <TextBlock x:Key="Heart3" Text="&#xE00B;" FontFamily="Segoe MDL2 Assets" />
-        
-        <TextBlock x:Key="Pen" Text="&#xE104;" FontFamily="Segoe MDL2 Assets" />
-        <TextBlock x:Key="Bin" Text="&#xE107;" FontFamily="Segoe MDL2 Assets" />
-
-        <TextBlock x:Key="Camera" Text="&#xE114;" FontFamily="Segoe MDL2 Assets" />
-        <TextBlock x:Key="Camera2" Text="&#xE12D;" FontFamily="Segoe MDL2 Assets" />
-        <TextBlock x:Key="VideoCamera" Text="&#xE116;" FontFamily="Segoe MDL2 Assets" />
-        -->
-        
-        <FontIcon x:Key="FontIcon_1" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_2" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_3" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_4" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_5" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_6" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_7" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_8" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_9" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        
-        <FontIcon x:Key="FontIcon_10" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_11" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_12" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_13" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_14" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_15" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_16" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_17" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_18" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_19" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        
-        <FontIcon x:Key="FontIcon_20" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-        <FontIcon x:Key="FontIcon_21" Glyph="" FontFamily="{StaticResource FontAwesome}" />
-
-    </ResourceDictionary>
-
-
-
-    <Style x:Key="DetailsIconStyle" TargetType="FontIcon">
-        <Setter
-            Property="Foreground"
-            Value="{ThemeResource Text-2}" />
-    </Style>
-
-
-    <!--*****************************************
-    GÓRNY PASEK (CIEMNY NIEBIESKI)
-    ******************************************-->
-    <Style TargetType="TextBlock" x:Key="PageTitleStyle">
-        <Setter Property="Grid.Column" Value="1"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Foreground" Value="{ThemeResource AccentText}"/>
-        <!--<Setter Property="Margin" Value="16,0,0,0"/>-->
-        <Setter Property="Margin" Value="16,0"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="FontSize" Value="14"/>
-    </Style>
-
-
-    <!--*****************************************
-    HAMBURGER MENU
-    ******************************************-->
-    <Style TargetType="TextBlock" x:Key="SplitViewIconStyle">
-        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
-        <Setter
-            Property="FontSize"
-            Value="16" />
-    </Style>
-    
-    <Style TargetType="TextBlock" x:Key="SplitViewTitleStyle">
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="16,0,0,0"/>
-    </Style>
-
-    <Style x:Key="HamburgerRadioButton" TargetType="RadioButton">
-        <Setter
-            Property="Background"
-            Value="Transparent" />
-        <Setter
-            Property="HorizontalAlignment"
-            Value="Stretch" />
-        <Setter
-            Property="VerticalAlignment"
-            Value="Center" />
-        <Setter
-            Property="HorizontalContentAlignment"
-            Value="Left" />
-        <Setter
-            Property="VerticalContentAlignment"
-            Value="Top" />
-        <Setter
-            Property="FontFamily"
-            Value="{ThemeResource ContentControlThemeFontFamily}" />
-        <Setter
-            Property="FontSize"
-            Value="{ThemeResource ControlContentThemeFontSize}" />
-        <Setter
-            Property="MinWidth"
-            Value="120" />
-        <Setter
-            Property="UseSystemFocusVisuals"
-            Value="True" />
-        <Setter
-            Property="Template">
-            <Setter.Value>
-                <ControlTemplate
-                    TargetType="RadioButton">
-                    <Grid
-                        x:Name="HamburgerRadioButtonGrid"
-                        HorizontalAlignment="Stretch"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        Background="{TemplateBinding Background}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="48" />
-                            <ColumnDefinition
-                                Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup
-                                x:Name="CommonStates">
-                                <VisualState
-                                    x:Name="Normal">
-                                </VisualState>
-                                <VisualState
-                                    x:Name="PointerOver">
-                                    <VisualState.Setters>
-                                        <Setter
-                                            Target="HamburgerRadioButtonGrid.(Panel.Background)"
-                                            Value="{ThemeResource Background}" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Pressed">
-                                    <VisualState.Setters>
-                                        <Setter
-                                            Target="HamburgerRadioButtonGrid.(Panel.Background)"
-                                            Value="{ThemeResource AccentColor}" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                            </VisualStateGroup>
-                            <VisualStateGroup
-                                x:Name="CheckStates">
-                                <VisualStateGroup.Transitions>
-                                    <VisualTransition
-                                        From="Checked"
-                                        GeneratedDuration="0:0:0.2"
-                                        To="Unchecked">
-                                        <Storyboard>
-                                            <ColorAnimation
-                                                Storyboard.TargetName="HamburgerIcon"
-                                                To="{Binding Source={ThemeResource Text-1},Path=Color}"
-                                                Duration="0:0:0.2"
-                                                Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
-                                            <DoubleAnimation
-                                                Duration="0:0:0.2"
-                                                To="0"
-                                                Storyboard.TargetProperty="(UIElement.Opacity)"
-                                                Storyboard.TargetName="HoverBorder" />
-                                        </Storyboard>
-                                    </VisualTransition>
-                                </VisualStateGroup.Transitions>
-                                <VisualState
-                                    x:Name="Checked">
-                                    <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="HamburgerIcon"
-                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
-                                            Duration="0:0:0.2"
-                                            Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
-                                        <DoubleAnimation
-                                            Duration="0:0:0.2"
-                                            To="1"
-                                            Storyboard.TargetProperty="(UIElement.Opacity)"
-                                            Storyboard.TargetName="HoverBorder"
-                                            d:IsOptimized="True" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Unchecked">
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Duration="0"
-                                            To="0"
-                                            Storyboard.TargetProperty="(UIElement.Opacity)"
-                                            Storyboard.TargetName="HoverBorder"
-                                            d:IsOptimized="True" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Indeterminate" />
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-
-                        <Grid
-                            Height="48"
-                            VerticalAlignment="Top">
-                            <StackPanel
-                                x:Name="HoverBorder"
-                                Width="3"
-                                Height="24"
-                                HorizontalAlignment="Left"
-                                Background="{ThemeResource AccentColor}" />
-                            <FontIcon
-                                x:Name="HamburgerIcon"
-                                FontSize="16"
-                                Foreground="{ThemeResource Text-1}"
-                                Glyph="{TemplateBinding Tag}"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center" />
-                        </Grid>
-                        <TextBlock
-                            FontSize="14"
-                            x:Name="ContentPresenter"
-                            AutomationProperties.AccessibilityView="Raw"
-                            Text="{TemplateBinding Content}"
-                            Grid.Column="1"
-                            Foreground="{ThemeResource Text}"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            TextWrapping="Wrap"
-                            VerticalAlignment="Center" />
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!--*****************************************
-    PIVOT MENU / DO WYWALENIA NIEBAWEM
-    ******************************************-->
     <Style x:Key="PivotStyleDynamicHeader" TargetType="Pivot">
-        <Setter
-            Property="Margin"
-            Value="0" />
-        <Setter
-            Property="Padding"
-            Value="0" />
-        <Setter
-            Property="Background"
-            Value="Transparent" />
-        <Setter
-            Property="IsTabStop"
-            Value="False" />
-        <Setter
-            Property="ItemsPanel">
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
                     <Grid />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
-        <Setter
-            Property="Template">
+        <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate
-                    TargetType="Pivot">
+                <ControlTemplate TargetType="Pivot">
                     <Grid
                         x:Name="RootElement"
                         Background="{TemplateBinding Background}"
                         HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                         VerticalAlignment="{TemplateBinding VerticalAlignment}">
                         <Grid.Resources>
-                            <Style
-                                x:Key="BaseContentControlStyle"
-                                TargetType="ContentControl">
-                                <Setter
-                                    Property="FontFamily"
-                                    Value="Segoe UI" />
-                                <Setter
-                                    Property="FontWeight"
-                                    Value="SemiBold" />
-                                <Setter
-                                    Property="FontSize"
-                                    Value="15" />
-                                <Setter
-                                    Property="Template">
+                            <Style x:Key="BaseContentControlStyle" TargetType="ContentControl">
+                                <Setter Property="FontFamily" Value="Segoe UI" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                                <Setter Property="FontSize" Value="15" />
+                                <Setter Property="Template">
                                     <Setter.Value>
-                                        <ControlTemplate
-                                            TargetType="ContentControl">
+                                        <ControlTemplate TargetType="ContentControl">
                                             <ContentPresenter
                                                 ContentTemplate="{TemplateBinding ContentTemplate}"
                                                 ContentTransitions="{TemplateBinding ContentTransitions}"
@@ -467,28 +52,18 @@
                                 x:Key="TitleContentControlStyle"
                                 BasedOn="{StaticResource BaseContentControlStyle}"
                                 TargetType="ContentControl">
-                                <Setter
-                                    Property="FontFamily"
-                                    Value="{ThemeResource PivotTitleFontFamily}" />
-                                <Setter
-                                    Property="FontWeight"
-                                    Value="{ThemeResource PivotTitleThemeFontWeight}" />
-                                <Setter
-                                    Property="FontSize"
-                                    Value="{ThemeResource PivotTitleFontSize}" />
+                                <Setter Property="FontFamily" Value="{ThemeResource PivotTitleFontFamily}" />
+                                <Setter Property="FontWeight" Value="{ThemeResource PivotTitleThemeFontWeight}" />
+                                <Setter Property="FontSize" Value="{ThemeResource PivotTitleFontSize}" />
                             </Style>
                         </Grid.Resources>
                         <Grid.RowDefinitions>
-                            <RowDefinition
-                                Height="Auto" />
-                            <RowDefinition
-                                Height="*" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup
-                                x:Name="Orientation">
-                                <VisualState
-                                    x:Name="Portrait">
+                            <VisualStateGroup x:Name="Orientation">
+                                <VisualState x:Name="Portrait">
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames
                                             Storyboard.TargetProperty="Margin"
@@ -499,8 +74,7 @@
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
-                                <VisualState
-                                    x:Name="Landscape">
+                                <VisualState x:Name="Landscape">
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames
                                             Storyboard.TargetProperty="Margin"
@@ -877,332 +451,88 @@
         </Setter>
     </Style>
 
-
-
-    <!--*****************************************
-    RADIO BUTTON KOLORÓW / DODAWANIE KATEGORII
-    ******************************************-->
-    <Style x:Key="ColorRadioButton" TargetType="RadioButton">
-        <Setter
-            Property="Background"
-            Value="Transparent" />
-        <Setter
-            Property="Foreground"
-            Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
-        <Setter
-            Property="Padding"
-            Value="8,6,0,0" />
-        <Setter
-            Property="HorizontalAlignment"
-            Value="Left" />
-        <Setter
-            Property="VerticalAlignment"
-            Value="Center" />
-        <Setter
-            Property="HorizontalContentAlignment"
-            Value="Left" />
-        <Setter
-            Property="VerticalContentAlignment"
-            Value="Top" />
-        <Setter
-            Property="FontFamily"
-            Value="{ThemeResource ContentControlThemeFontFamily}" />
-        <Setter
-            Property="FontSize"
-            Value="{ThemeResource ControlContentThemeFontSize}" />
-        <Setter
-            Property="MaxWidth"
-            Value="36" />
-        <Setter
-            Property="UseSystemFocusVisuals"
-            Value="True" />
-        <Setter
-            Property="Template">
+    <Style x:Key="CalendarDatePickerStyle1" TargetType="CalendarDatePicker">
+        <Setter Property="Foreground" Value="{ThemeResource Text}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="FirstDayOfWeek" Value="Monday" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="IsTodayHighlighted" Value="True" />
+        <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate
-                    TargetType="RadioButton">
-                    <Grid
-                        Width="36"
-                        Height="36"
-                        HorizontalAlignment="Left"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        Background="{TemplateBinding Background}">
+                <ControlTemplate TargetType="CalendarDatePicker">
+                    <Grid x:Name="Root">
+                        <FlyoutBase.AttachedFlyout>
+                            <Flyout Placement="Bottom">
+                                <Flyout.FlyoutPresenterStyle>
+                                    <Style TargetType="FlyoutPresenter">
+                                        <Setter Property="Padding" Value="0" />
+                                        <Setter Property="BorderThickness" Value="0" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="FlyoutPresenter">
+                                                    <ContentPresenter
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        Background="{TemplateBinding Background}"
+                                                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                        ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                        Content="{TemplateBinding Content}"
+                                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                        Margin="{TemplateBinding Padding}"
+                                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Flyout.FlyoutPresenterStyle>
+                                <CalendarView
+                                    x:Name="CalendarView"
+                                    CalendarIdentifier="{TemplateBinding CalendarIdentifier}"
+                                    DisplayMode="{TemplateBinding DisplayMode}"
+                                    DayOfWeekFormat="{TemplateBinding DayOfWeekFormat}"
+                                    FirstDayOfWeek="{TemplateBinding FirstDayOfWeek}"
+                                    IsTodayHighlighted="{TemplateBinding IsTodayHighlighted}"
+                                    IsGroupLabelVisible="{TemplateBinding IsGroupLabelVisible}"
+                                    IsOutOfScopeEnabled="{TemplateBinding IsOutOfScopeEnabled}"
+                                    MinDate="{TemplateBinding MinDate}"
+                                    MaxDate="{TemplateBinding MaxDate}"
+                                    Style="{TemplateBinding CalendarViewStyle}"
+                                    Background="{ThemeResource AccentColor-1}"
+                                    CalendarItemBackground="Transparent"
+                                    CalendarItemForeground="{ThemeResource Text}"
+                                    Foreground="#CCFFFFFF"
+                                    HoverBorderBrush="#66E5E5E5"
+                                    OutOfScopeForeground="#4FFFFFFF"
+                                    OutOfScopeBackground="Transparent"
+                                    TodayForeground="{ThemeResource AccentText}"
+                                    FontWeight="Normal"
+                                    FontSize="10"
+                                    DayItemFontSize="15" />
+                            </Flyout>
+                        </FlyoutBase.AttachedFlyout>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="32" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="32" />
+                        </Grid.RowDefinitions>
                         <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup
-                                x:Name="CheckStates">
-                                <VisualStateGroup.Transitions>
-                                    <VisualTransition
-                                        From="Checked"
-                                        GeneratedDuration="0:0:0.2"
-                                        To="Unchecked">
-                                        <Storyboard>
-                                            <DoubleAnimation
-                                                Duration="0:0:0.2"
-                                                To="0"
-                                                Storyboard.TargetProperty="(UIElement.Opacity)"
-                                                Storyboard.TargetName="WhiteBorder" />
-                                        </Storyboard>
-                                    </VisualTransition>
-                                </VisualStateGroup.Transitions>
-                                <VisualState
-                                    x:Name="Checked">
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Duration="0:0:0.2"
-                                            To="1"
-                                            Storyboard.TargetProperty="(UIElement.Opacity)"
-                                            Storyboard.TargetName="WhiteBorder"
-                                            d:IsOptimized="True" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Unchecked">
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Duration="0"
-                                            To="0"
-                                            Storyboard.TargetProperty="(UIElement.Opacity)"
-                                            Storyboard.TargetName="WhiteBorder"
-                                            d:IsOptimized="True" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Indeterminate" />
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                        <Grid
-                            x:Name="WhiteBorder"
-                            BorderBrush="White"
-                            BorderThickness="2">
-                            <Grid>
-                                <Path
-                                    Data="M 10,0 36,0 36,26"
-                                    Fill="White" />
-                                <TextBlock
-                                    FontFamily="Segoe MDL2 Assets"
-                                    FontSize="16"
-                                    Foreground="{TemplateBinding Background}"
-                                    Text="&#xE001;"
-                                    HorizontalAlignment="Right"
-                                    Margin="0,-2,-2,0" />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-
-
-    <!--*****************************************
-    RADIO BUTTON IKON / DODAWANIE KATEGORII
-    ******************************************-->
-    <Style x:Key="IconRadioButton" TargetType="RadioButton">
-        <Setter
-            Property="Background"
-            Value="Transparent" />
-        <Setter
-            Property="Foreground"
-            Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
-        <Setter
-            Property="Padding"
-            Value="8,6,0,0" />
-        <Setter
-            Property="HorizontalAlignment"
-            Value="Left" />
-        <Setter
-            Property="VerticalAlignment"
-            Value="Center" />
-        <Setter
-            Property="HorizontalContentAlignment"
-            Value="Left" />
-        <Setter
-            Property="VerticalContentAlignment"
-            Value="Top" />
-        <Setter
-            Property="FontFamily"
-            Value="{ThemeResource ContentControlThemeFontFamily}" />
-        <Setter
-            Property="FontSize"
-            Value="{ThemeResource ControlContentThemeFontSize}" />
-        <Setter
-            Property="MaxWidth"
-            Value="36" />
-        <Setter
-            Property="UseSystemFocusVisuals"
-            Value="True" />
-        <Setter
-            Property="Template">
-            <Setter.Value>
-                <ControlTemplate
-                    TargetType="RadioButton">
-                    <Grid
-                        Width="36"
-                        Height="36"
-                        HorizontalAlignment="Left"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        Background="{TemplateBinding Background}">
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup
-                                x:Name="CheckStates">
-                                <VisualStateGroup.Transitions>
-
-                                    <VisualTransition
-                                        From="Checked"
-                                        GeneratedDuration="0:0:0.2"
-                                        To="Unchecked">
-                                        <Storyboard>
-                                            <DoubleAnimation
-                                                Duration="0:0:0.2"
-                                                To="0"
-                                                Storyboard.TargetProperty="(UIElement.Opacity)"
-                                                Storyboard.TargetName="WhiteBorder" />
-
-                                        </Storyboard>
-                                    </VisualTransition>
-                                </VisualStateGroup.Transitions>
-                                <VisualState
-                                    x:Name="Checked">
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Duration="0:0:0.2"
-                                            To="1"
-                                            Storyboard.TargetProperty="(UIElement.Opacity)"
-                                            Storyboard.TargetName="WhiteBorder"
-                                            d:IsOptimized="True" />
-
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Unchecked">
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Duration="0"
-                                            To="0"
-                                            Storyboard.TargetProperty="(UIElement.Opacity)"
-                                            Storyboard.TargetName="WhiteBorder"
-                                            d:IsOptimized="True" />
-
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Indeterminate" />
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-
-                        <TextBlock
-                            FontSize="{TemplateBinding FontSize}"
-                            FontFamily="{TemplateBinding FontFamily}"
-                            Text="{TemplateBinding Content}"
-                            Foreground="{TemplateBinding Foreground}" 
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"/>
-
-                        <Grid
-                            x:Name="WhiteBorder"
-                            BorderBrush="White"
-                            BorderThickness="2">
-                            <Grid>
-                                <Path
-                                    Data="M 10,0 36,0 36,26"
-                                    Fill="White" />
-                                <TextBlock
-                                    FontFamily="Segoe MDL2 Assets"
-                                    FontSize="16"
-                                    Foreground="{TemplateBinding Background}"
-                                    Text="&#xE001;"
-                                    HorizontalAlignment="Right"
-                                    Margin="0,-2,-2,0"/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-
-
-    <!--*****************************************
-    PRZYCISK Z DOLNĄ KRAWĘDZIĄ
-    ******************************************-->
-    <Style x:Key="ButtonWithBottomBorder" TargetType="Button">
-        <Setter
-            Property="Background"
-            Value="Transparent" />
-        <Setter
-            Property="Foreground"
-            Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
-        <Setter
-            Property="BorderBrush"
-            Value="{ThemeResource SystemControlForegroundTransparentBrush}" />
-        <Setter
-            Property="BorderThickness"
-            Value="0,0,0,1" />
-        <Setter
-            Property="Padding"
-            Value="8,4,8,4" />
-        <Setter
-            Property="HorizontalAlignment"
-            Value="Left" />
-        <Setter
-            Property="VerticalAlignment"
-            Value="Center" />
-        <Setter
-            Property="FontFamily"
-            Value="{ThemeResource ContentControlThemeFontFamily}" />
-        <Setter
-            Property="FontWeight"
-            Value="Normal" />
-        <Setter
-            Property="FontSize"
-            Value="{ThemeResource ControlContentThemeFontSize}" />
-        <Setter
-            Property="UseSystemFocusVisuals"
-            Value="True" />
-        <Setter
-            Property="Template">
-            <Setter.Value>
-                <ControlTemplate
-                    TargetType="Button">
-                    <Grid
-                        x:Name="RootGrid"
-                        Background="{TemplateBinding Background}">
-
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup
-                                x:Name="CommonStates">
-                                <VisualStateGroup.Transitions>
-                                    <VisualTransition
-                                        GeneratedDuration="0" />
-                                </VisualStateGroup.Transitions>
-                                <VisualState
-                                    x:Name="Normal">
-                                    <Storyboard>
-                                        <PointerUpThemeAnimation
-                                            Storyboard.TargetName="RootGrid" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="PointerOver">
-                                    <VisualState.Setters>
-                                        <Setter
-                                            Target="ContentPresenter.(ContentPresenter.BorderBrush)"
-                                            Value="{ThemeResource AppBarItemPointerOverForegroundThemeBrush}" />
-                                    </VisualState.Setters>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Foreground"
-                                            Storyboard.TargetName="ContentPresenter">
+                                            Storyboard.TargetProperty="BorderBrush"
+                                            Storyboard.TargetName="Background">
                                             <DiscreteObjectKeyFrame
                                                 KeyTime="0"
-                                                Value="{ThemeResource SystemControlHighlightBaseHighBrush}" />
+                                                Value="{ThemeResource Text-1}" />
                                         </ObjectAnimationUsingKeyFrames>
-                                        <PointerUpThemeAnimation
-                                            Storyboard.TargetName="RootGrid" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState
@@ -1210,20 +540,18 @@
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames
                                             Storyboard.TargetProperty="Background"
-                                            Storyboard.TargetName="RootGrid">
+                                            Storyboard.TargetName="Background">
                                             <DiscreteObjectKeyFrame
                                                 KeyTime="0"
-                                                Value="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" />
+                                                Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Foreground"
-                                            Storyboard.TargetName="ContentPresenter">
+                                            Storyboard.TargetProperty="BorderBrush"
+                                            Storyboard.TargetName="Background">
                                             <DiscreteObjectKeyFrame
                                                 KeyTime="0"
-                                                Value="{ThemeResource SystemControlHighlightBaseHighBrush}" />
+                                                Value="White" />
                                         </ObjectAnimationUsingKeyFrames>
-                                        <PointerDownThemeAnimation
-                                            Storyboard.TargetName="RootGrid" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState
@@ -1231,14 +559,35 @@
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames
                                             Storyboard.TargetProperty="Background"
-                                            Storyboard.TargetName="RootGrid">
+                                            Storyboard.TargetName="Background">
                                             <DiscreteObjectKeyFrame
                                                 KeyTime="0"
                                                 Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames
+                                            Storyboard.TargetProperty="BorderBrush"
+                                            Storyboard.TargetName="Background">
+                                            <DiscreteObjectKeyFrame
+                                                KeyTime="0"
+                                                Value="{ThemeResource SystemControlDisabledBaseLowBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames
                                             Storyboard.TargetProperty="Foreground"
-                                            Storyboard.TargetName="ContentPresenter">
+                                            Storyboard.TargetName="HeaderContentPresenter">
+                                            <DiscreteObjectKeyFrame
+                                                KeyTime="0"
+                                                Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames
+                                            Storyboard.TargetProperty="Foreground"
+                                            Storyboard.TargetName="DateText">
+                                            <DiscreteObjectKeyFrame
+                                                KeyTime="0"
+                                                Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames
+                                            Storyboard.TargetProperty="Foreground"
+                                            Storyboard.TargetName="CalendarGlyph">
                                             <DiscreteObjectKeyFrame
                                                 KeyTime="0"
                                                 Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
@@ -1246,30 +595,84 @@
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
+                            <VisualStateGroup
+                                x:Name="FocusStates">
+                                <VisualState
+                                    x:Name="Unfocused" />
+                                <VisualState
+                                    x:Name="PointerFocused" />
+                                <VisualState
+                                    x:Name="Focused">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames
+                                            Storyboard.TargetProperty="Background"
+                                            Storyboard.TargetName="Background">
+                                            <DiscreteObjectKeyFrame
+                                                KeyTime="0"
+                                                Value="{ThemeResource SystemControlHighlightListAccentLowBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup
+                                x:Name="SelectionStates">
+                                <VisualState
+                                    x:Name="Unselected" />
+                                <VisualState
+                                    x:Name="Selected">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames
+                                            Storyboard.TargetProperty="Foreground"
+                                            Storyboard.TargetName="DateText">
+                                            <DiscreteObjectKeyFrame
+                                                KeyTime="0"
+                                                Value="{ThemeResource Text}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-
                         <ContentPresenter
-                            x:Name="ContentPresenter"
-                            AutomationProperties.AccessibilityView="Raw"
-                            BorderBrush="{ThemeResource AppBarSeparatorForegroundThemeBrush}"
-                            BorderThickness="0,0,0,1"
-                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                            ContentTransitions="{TemplateBinding ContentTransitions}"
-                            Content="{TemplateBinding Content}"
-                            HorizontalContentAlignment="Left"
-                            Padding="12,4,8,4"
-                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            Foreground="{ThemeResource Text}"
+                            x:Name="HeaderContentPresenter"
+                            ContentTemplate="{TemplateBinding HeaderTemplate}"
+                            Content="{TemplateBinding Header}"
+                            Margin="{ThemeResource ComboBoxHeaderThemeMargin}"
+                            Visibility="Collapsed"
+                            x:DeferLoadStrategy="Lazy" />
+                        <Border
+                            Opacity="0.3"
+                            x:Name="Background"
+                            BorderBrush="{ThemeResource Text-2}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            Grid.ColumnSpan="2"
+                            Grid.Row="1" />
+                        <TextBlock
+                            x:Name="DateText"
+                            Foreground="{ThemeResource Text-1}"
+                            FontSize="15"
+                            HorizontalAlignment="Left"
+                            Padding="12, 0, 0, 2"
+                            Grid.Row="1"
+                            Text="{TemplateBinding PlaceholderText}"
+                            VerticalAlignment="Center" />
+                        <FontIcon
+                            x:Name="CalendarGlyph"
+                            Grid.Column="1"
+                            Foreground="{ThemeResource Text-1}"
+                            FontSize="16"
+                            FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                            Glyph="&#xE787;"
+                            HorizontalAlignment="Center"
+                            Grid.Row="1"
+                            VerticalAlignment="Center" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    
-    
-    <!--*****************************************
-    GridViewItemStyle1
-    ******************************************-->
     <Style x:Key="GridViewItemStyle1" TargetType="GridViewItem">
         <Setter
             Property="FontFamily"
@@ -1339,11 +742,6 @@
         </Setter>
     </Style>
     
-
-
-    <!--*****************************************
-    MyContentDialog
-    ******************************************-->
     <Style x:Key="MyContentDialog" TargetType="ContentDialog" >
         <Setter
             Property="Foreground"
@@ -1500,10 +898,6 @@
         </Setter>
     </Style>
 
-
-    <!--*****************************************
-    MyContentDialog2
-    ******************************************-->
     <Style x:Key="MyContentDialog2" TargetType="ContentDialog">
         <Setter
             Property="Foreground"
@@ -1672,10 +1066,6 @@
         </Setter>
     </Style>
 
-
-    <!--*****************************************
-    FullScreenContentDialogStyle
-    ******************************************-->
     <Style x:Key="FullScreenContentDialogStyle" TargetType="ContentDialog">
         <Setter
             Property="Template">
@@ -1778,11 +1168,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
-    <!--*****************************************
-    TextBoxStyle1
-    ******************************************-->
 
     <Style x:Key="TextBoxStyle1" TargetType="TextBox">
         <Setter
@@ -2102,11 +1487,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    
-    <!--*****************************************
-    ComboBoxStyle1
-    ******************************************-->
     
     <Style x:Key="ComboBoxStyle1" TargetType="ComboBox">
         <Setter
@@ -2469,12 +1849,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
-
-    <!--*****************************************
-    ToggleSwitchStyle1
-    ******************************************-->
 
     <Style x:Key="ToggleSwitchStyle1" TargetType="ToggleSwitch">
         <Setter
@@ -2968,12 +2342,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    
-    
-    <!--*****************************************
-    PIVOT 
-    ******************************************-->
 
     <Style x:Key="PivotStyle" TargetType="Pivot">
         <Setter
@@ -3688,149 +3056,6 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ButtonStyle1" TargetType="Button">
-        <Setter
-            Property="Background"
-            Value="{ThemeResource ButtonBackground}" />
-        <Setter
-            Property="Foreground"
-            Value="{ThemeResource ButtonForeground}" />
-        <Setter
-            Property="BorderBrush"
-            Value="{ThemeResource ButtonBorderBrush}" />
-        <Setter
-            Property="BorderThickness"
-            Value="{ThemeResource ButtonBorderThemeThickness}" />
-        <Setter
-            Property="Padding"
-            Value="8,4,8,4" />
-        <Setter
-            Property="HorizontalAlignment"
-            Value="Left" />
-        <Setter
-            Property="VerticalAlignment"
-            Value="Center" />
-        <Setter
-            Property="FontFamily"
-            Value="{ThemeResource ContentControlThemeFontFamily}" />
-        <Setter
-            Property="FontWeight"
-            Value="Normal" />
-        <Setter
-            Property="FontSize"
-            Value="{ThemeResource ControlContentThemeFontSize}" />
-        <Setter
-            Property="UseSystemFocusVisuals"
-            Value="True" />
-        <Setter
-            Property="FocusVisualMargin"
-            Value="-3" />
-        <Setter
-            Property="Template">
-            <Setter.Value>
-                <ControlTemplate
-                    TargetType="Button">
-                    <Border
-                        x:Name="RootGrid"
-                        Background="Transparent">
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup
-                                x:Name="CommonStates">
-                                <VisualState
-                                    x:Name="Normal">
-                                    <Storyboard>
-                                        <PointerUpThemeAnimation
-                                            Storyboard.TargetName="RootGrid" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="PointerOver">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Background"
-                                            Storyboard.TargetName="RootGrid">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{StaticResource ButtonBackgroundPointerOver}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Foreground"
-                                            Storyboard.TargetName="ContentPresenter">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="White" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <PointerUpThemeAnimation
-                                            Storyboard.TargetName="RootGrid" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Pressed">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Background"
-                                            Storyboard.TargetName="RootGrid">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource ButtonBackgroundPressed}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Foreground"
-                                            Storyboard.TargetName="ContentPresenter">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource ButtonForegroundPressed}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <PointerDownThemeAnimation
-                                            Storyboard.TargetName="RootGrid" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Disabled">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Background"
-                                            Storyboard.TargetName="RootGrid">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource ButtonBackgroundDisabled}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Foreground"
-                                            Storyboard.TargetName="ContentPresenter">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource ButtonForegroundDisabled}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                        <FontIcon
-                            x:Name="ContentPresenter"
-                            Foreground="{ThemeResource AccentText}"
-                            FontSize="16"
-                            FontFamily="Segoe MDL2 Assets"
-                            Glyph="{TemplateBinding Content}" />
-                        <!--
-                            <ContentPresenter
-                                x:Name="ContentPresenter"
-                                AutomationProperties.AccessibilityView="Raw"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                                ContentTransitions="{TemplateBinding ContentTransitions}"
-                                Content="{TemplateBinding Content}"
-                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                Padding="{TemplateBinding Padding}"
-                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                                -->
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style x:Key="MyMenuFlyoutItem" TargetType="MenuFlyoutItem">
         <Setter
             Property="Background"
@@ -4005,10 +3230,6 @@
             Property="Background"
             Value="{ThemeResource Background-1Transparent}" />
     </Style>
-
-    <!--*************************************
-    CommandBar Menu
-    **************************************-->
 
     <Style x:Key="lala" TargetType="CommandBar">
         <Setter
@@ -4622,623 +3843,5 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    <Style x:Key="MyAppBarRadioButton" TargetType="RadioButton">
-        <Setter
-            Property="Background"
-            Value="{ThemeResource RadioButtonBackground}" />
-        <Setter
-            Property="Foreground"
-            Value="{ThemeResource RadioButtonForeground}" />
-        <Setter
-            Property="BorderBrush"
-            Value="{ThemeResource RadioButtonBorderBrush}" />
-        <Setter
-            Property="Padding"
-            Value="8,6,0,0" />
-        <Setter
-            Property="HorizontalAlignment"
-            Value="Center" />
-        <Setter
-            Property="VerticalAlignment"
-            Value="Top" />
-        <Setter
-            Property="HorizontalContentAlignment"
-            Value="Center" />
-        <Setter
-            Property="VerticalContentAlignment"
-            Value="Top" />
-        <Setter
-            Property="FontFamily"
-            Value="{ThemeResource ContentControlThemeFontFamily}" />
-        <Setter
-            Property="FontSize"
-            Value="16" />
-        <Setter
-            Property="MinWidth"
-            Value="60" />
-        <Setter
-            Property="UseSystemFocusVisuals"
-            Value="True" />
-        <Setter
-            Property="FocusVisualMargin"
-            Value="-7,-3,-7,-3" />
-        <Setter
-            Property="Template">
-            <Setter.Value>
-                <ControlTemplate
-                    TargetType="RadioButton">
-                    <Grid
-                        x:Name="RootGrid"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup
-                                x:Name="CommonStates">
-                                <VisualStateGroup.Transitions>
-                                    <VisualTransition
-                                        GeneratedDuration="0:0:0.2" />
-                                </VisualStateGroup.Transitions>
-                                <VisualState
-                                    x:Name="Normal" />
-                                <VisualState
-                                    x:Name="PointerOver">
-                                    <Storyboard>
-
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Pressed">
-                                    <Storyboard>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Disabled">
-                                    <Storyboard>
-
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                            <VisualStateGroup
-                                x:Name="CheckStates">
-                                <VisualStateGroup.Transitions>
-                                    <VisualTransition
-                                        GeneratedDuration="0:0:0.2" />
-                                </VisualStateGroup.Transitions>
-                                <VisualState
-                                    x:Name="Checked">
-                                    <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="Content"
-                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
-                                            Duration="0"
-                                            Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
-
-                                        <ColorAnimation
-                                            Storyboard.TargetName="TextLabel"
-                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
-                                            Duration="0"
-                                            Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
-
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="Hover"
-                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)"
-                                            To="1"
-                                            Duration="0" />
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="Hover"
-                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)"
-                                            To="1"
-                                            Duration="0" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Unchecked">
-                                    <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="Content"
-                                            To="{Binding Source={ThemeResource Text-2},Path=Color}"
-                                            Duration="0"
-                                            Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
-
-                                        <ColorAnimation
-                                            Storyboard.TargetName="TextLabel"
-                                            To="{Binding Source={ThemeResource Text-1},Path=Color}"
-                                            Duration="0"
-                                            Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
-
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="Hover"
-                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)"
-                                            To="0"
-                                            Duration="0" />
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="Hover"
-                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)"
-                                            To="0"
-                                            Duration="0" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Indeterminate" />
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-
-                        <Grid
-                            x:Name="ContentRoot"
-                            MinHeight="{ThemeResource AppBarThemeMinHeight}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition
-                                    Width="*" />
-                                <ColumnDefinition
-                                    Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition
-                                    Height="Auto" />
-                                <RowDefinition
-                                    Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Ellipse
-                                x:Name="Hover"
-                                VerticalAlignment="Top"
-                                Margin="0,-5,0,0"
-                                Width="10"
-                                Height="10"
-                                Fill="{ThemeResource AccentColor}"
-                                RenderTransformOrigin="0.5,0.5">
-                                <Ellipse.RenderTransform>
-                                    <CompositeTransform
-                                        ScaleX="0"
-                                        ScaleY="0" />
-                                </Ellipse.RenderTransform>
-                                <!--
-                                <Ellipse.Clip>
-                                    <RectangleGeometry
-                                        Rect="0,5,10,5" />
-                                </Ellipse.Clip>-->
-                            </Ellipse>
-                            <FontIcon
-                                x:Name="Content"
-                                Height="20"
-                                Margin="0,14,0,4"
-                                Glyph="{TemplateBinding Tag}"
-                                FontFamily="{TemplateBinding FontFamily}"
-                                FontSize="{TemplateBinding FontSize}"
-                                Foreground="{ThemeResource Text-2}"
-                                HorizontalAlignment="Stretch"
-                                AutomationProperties.AccessibilityView="Raw" />
-                            <!--
-                            <TextBlock
-                                x:Name="TextLabel"
-                                Grid.Row="1"
-                                Text="{TemplateBinding Content}"
-                                Foreground="{ThemeResource Text-1}"
-                                FontSize="12"
-                                FontFamily="Segoe UI"
-                                TextAlignment="Center"
-                                TextWrapping="Wrap"
-                                Margin="2,0,2,6" />
-                            -->
-                            <!-- MOZNA PRÓBOWAĆ TRIGGERA ŻE JAK ZA WĄSKI EKRAN TO ZMNIEJSZA CZCIONKĘ -->
-                            <ContentPresenter
-                                x:Name="TextLabel"
-                                Content="{TemplateBinding Content}"
-                                Grid.Row="1"
-                                Foreground="{ThemeResource Text-1}"
-                                FontSize="11"
-                                FontFamily="Segoe UI"
-                                HorizontalAlignment="Center"
-                                Margin="2,0,2,6" />
-                        </Grid>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style
-        x:Key="MyRadioButtonStyle"
-        TargetType="RadioButton">
-        <Setter
-            Property="Background"
-            Value="{ThemeResource RadioButtonBackground}" />
-        <Setter
-            Property="Foreground"
-            Value="{ThemeResource RadioButtonForeground}" />
-        <Setter
-            Property="BorderBrush"
-            Value="{ThemeResource RadioButtonBorderBrush}" />
-        <Setter
-            Property="Padding"
-            Value="16,6,0,0" />
-        <Setter
-            Property="HorizontalAlignment"
-            Value="Left" />
-        <Setter
-            Property="VerticalAlignment"
-            Value="Center" />
-        <Setter
-            Property="HorizontalContentAlignment"
-            Value="Left" />
-        <Setter
-            Property="VerticalContentAlignment"
-            Value="Top" />
-        <Setter
-            Property="FontFamily"
-            Value="{ThemeResource ContentControlThemeFontFamily}" />
-        <Setter
-            Property="FontSize"
-            Value="{ThemeResource ControlContentThemeFontSize}" />
-        <Setter
-            Property="MinWidth"
-            Value="120" />
-        <Setter
-            Property="UseSystemFocusVisuals"
-            Value="True" />
-        <Setter
-            Property="FocusVisualMargin"
-            Value="-7,-3,-7,-3" />
-        <Setter
-            Property="Template">
-            <Setter.Value>
-                <ControlTemplate
-                    TargetType="RadioButton">
-                    <Grid
-                        x:Name="RootGrid"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        Background="{TemplateBinding Background}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="20" />
-                            <ColumnDefinition
-                                Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup
-                                x:Name="CommonStates">
-                                <VisualState
-                                    x:Name="Normal" />
-                                <VisualState
-                                    x:Name="PointerOver">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Foreground"
-                                            Storyboard.TargetName="ContentPresenter">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonForegroundPointerOver}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Background"
-                                            Storyboard.TargetName="RootGrid">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonBackgroundPointerOver}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="BorderBrush"
-                                            Storyboard.TargetName="RootGrid">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonBorderBrushPointerOver}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Stroke"
-                                            Storyboard.TargetName="OuterEllipse">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource Text-1}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Fill"
-                                            Storyboard.TargetName="OuterEllipse">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonOuterEllipseFillPointerOver}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Stroke"
-                                            Storyboard.TargetName="CheckOuterEllipse">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonOuterEllipseCheckedStrokePointerOver}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Fill"
-                                            Storyboard.TargetName="CheckOuterEllipse">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonOuterEllipseCheckedFillPointerOver}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Fill"
-                                            Storyboard.TargetName="CheckGlyph">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource AccentColor+1}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Stroke"
-                                            Storyboard.TargetName="CheckGlyph">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonCheckGlyphStrokePointerOver}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Pressed">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Foreground"
-                                            Storyboard.TargetName="ContentPresenter">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonForegroundPressed}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Background"
-                                            Storyboard.TargetName="RootGrid">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonBackgroundPressed}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="BorderBrush"
-                                            Storyboard.TargetName="RootGrid">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonBorderBrushPressed}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Stroke"
-                                            Storyboard.TargetName="OuterEllipse">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonOuterEllipseStrokePressed}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Fill"
-                                            Storyboard.TargetName="OuterEllipse">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonOuterEllipseFillPressed}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Stroke"
-                                            Storyboard.TargetName="CheckOuterEllipse">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonOuterEllipseCheckedStrokePressed}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Fill"
-                                            Storyboard.TargetName="CheckOuterEllipse">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonOuterEllipseCheckedFillPressed}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Fill"
-                                            Storyboard.TargetName="CheckGlyph">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonCheckGlyphFillPressed}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Stroke"
-                                            Storyboard.TargetName="CheckGlyph">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonCheckGlyphStrokePressed}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Disabled">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Foreground"
-                                            Storyboard.TargetName="ContentPresenter">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonForegroundDisabled}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Background"
-                                            Storyboard.TargetName="RootGrid">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonBackgroundDisabled}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="BorderBrush"
-                                            Storyboard.TargetName="RootGrid">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonBorderBrushDisabled}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Stroke"
-                                            Storyboard.TargetName="OuterEllipse">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonOuterEllipseStrokeDisabled}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Fill"
-                                            Storyboard.TargetName="OuterEllipse">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonOuterEllipseFillDisabled}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Stroke"
-                                            Storyboard.TargetName="CheckOuterEllipse">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonOuterEllipseCheckedStrokeDisabled}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Fill"
-                                            Storyboard.TargetName="CheckOuterEllipse">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonOuterEllipseCheckedFillDisabled}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Fill"
-                                            Storyboard.TargetName="CheckGlyph">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonCheckGlyphFillDisabled}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetProperty="Stroke"
-                                            Storyboard.TargetName="CheckGlyph">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0"
-                                                Value="{ThemeResource RadioButtonCheckGlyphStrokeDisabled}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                            <VisualStateGroup
-                                x:Name="CheckStates">
-                                <VisualState
-                                    x:Name="Checked">
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Duration="0"
-                                            To="1"
-                                            Storyboard.TargetProperty="Opacity"
-                                            Storyboard.TargetName="CheckGlyph" />
-                                        <DoubleAnimation
-                                            Duration="0"
-                                            To="0"
-                                            Storyboard.TargetProperty="Opacity"
-                                            Storyboard.TargetName="OuterEllipse" />
-                                        <DoubleAnimation
-                                            Duration="0"
-                                            To="1"
-                                            Storyboard.TargetProperty="Opacity"
-                                            Storyboard.TargetName="CheckOuterEllipse" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Unchecked" />
-                                <VisualState
-                                    x:Name="Indeterminate" />
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                        <Grid
-                            Height="32"
-                            VerticalAlignment="Top">
-                            <Ellipse
-                                x:Name="OuterEllipse"
-                                Fill="{StaticResource RadioButtonOuterEllipseFill}"
-                                Height="20"
-                                Stroke="{ThemeResource Text-2}"
-                                StrokeThickness="{ThemeResource RadioButtonBorderThemeThickness}"
-                                UseLayoutRounding="False"
-                                Width="20" />
-                            <Ellipse
-                                x:Name="CheckOuterEllipse"
-                                Fill="{ThemeResource RadioButtonOuterEllipseCheckedFill}"
-                                Height="20"
-                                Opacity="0"
-                                Stroke="{ThemeResource AccentColor}"
-                                StrokeThickness="{ThemeResource RadioButtonBorderThemeThickness}"
-                                UseLayoutRounding="False"
-                                Width="20" />
-                            <Ellipse
-                                x:Name="CheckGlyph"
-                                Fill="{ThemeResource AccentColor}"
-                                Height="10"
-                                Opacity="0"
-                                Stroke="{ThemeResource RadioButtonCheckGlyphStroke}"
-                                UseLayoutRounding="False"
-                                Width="10" />
-                        </Grid>
-                        <ContentPresenter
-                            x:Name="ContentPresenter"
-                            AutomationProperties.AccessibilityView="Raw"
-                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                            ContentTransitions="{TemplateBinding ContentTransitions}"
-                            Content="{TemplateBinding Content}"
-                            Grid.Column="1"
-                            Foreground="{TemplateBinding Foreground}"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            Margin="{TemplateBinding Padding}"
-                            TextWrapping="Wrap"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Dark">
-            <SolidColorBrush x:Key="AccentColor+1" Color="#119f4c" />
-            <SolidColorBrush x:Key="AccentColor" Color="#078b3e" />
-            <SolidColorBrush x:Key="AccentColor-1" Color="#067c37" />
-
-            <SolidColorBrush x:Key="AccentText" Color="#bce3cc" />
-            <SolidColorBrush x:Key="AccentText-1" Color="#66bc8a" />
-            <SolidColorBrush x:Key="AccentText-2" Color="#329d5e" />
-            
-            <SolidColorBrush x:Key="Background+2" Color="#282e39" />
-            <SolidColorBrush x:Key="Background+1" Color="#242830" />
-            <SolidColorBrush x:Key="Background" Color="#202329" />
-            <SolidColorBrush x:Key="Background-1" Color="#1b1d21" />
-            <SolidColorBrush x:Key="Background-2" Color="#17181b" />
-            
-            <SolidColorBrush x:Key="Background+1Transparent" Color="#242830" Opacity="0.8" />
-            <SolidColorBrush x:Key="BackgroundTransparent" Color="#202329" Opacity="0.8" />
-            <SolidColorBrush x:Key="Background-1Transparent" Color="#1b1d21" Opacity="0.9" />
-
-            <SolidColorBrush x:Key="Text+max" Color="White" />
-            <SolidColorBrush x:Key="Text" Color="#b9c4da" />
-            <SolidColorBrush x:Key="Text-1" Color="#7c8493" />
-            <SolidColorBrush x:Key="Text-2" Color="#4c525c" />
-        </ResourceDictionary>
-        
-        <ResourceDictionary x:Key="Light">
-            <SolidColorBrush x:Key="AccentColor+1" Color="#119f4c" />
-            <SolidColorBrush x:Key="AccentColor" Color="#078b3e" />
-            <SolidColorBrush x:Key="AccentColor-1" Color="#067c37" />
-
-            <SolidColorBrush x:Key="AccentText" Color="#bce3cc" />
-            <SolidColorBrush x:Key="AccentText-1" Color="#66bc8a" />
-            <SolidColorBrush x:Key="AccentText-2" Color="#329d5e" />
-            
-            <SolidColorBrush x:Key="Background+2" Color="#d2d8e4" />
-            <SolidColorBrush x:Key="Background+1" Color="#e0e5ee" />
-            <SolidColorBrush x:Key="Background" Color="#eaeef6" />
-            <SolidColorBrush x:Key="Background-1" Color="#e0e5ee" />
-            <SolidColorBrush x:Key="Background-2" Color="#d2d8e4" />
-            
-            <!--
-                        <SolidColorBrush x:Key="Background+2" Color="#eaeef6" />
-            <SolidColorBrush x:Key="Background+1" Color="#e0e5ee" />
-            <SolidColorBrush x:Key="Background" Color="#d2d8e4" />
-            <SolidColorBrush x:Key="Background-1" Color="#bfc7d7" />
-            <SolidColorBrush x:Key="Background-2" Color="#aab5c9" />
-            -->
-            
-            <SolidColorBrush x:Key="Background+1Transparent" Color="#e0e5ee" Opacity="0.8" />
-            <SolidColorBrush x:Key="BackgroundTransparent" Color="#eaeef6" Opacity="0.8" />
-            <SolidColorBrush x:Key="Background-1Transparent" Color="#e0e5ee" Opacity="0.9" />
-
-            <SolidColorBrush x:Key="Text+max" Color="Black" />
-            <SolidColorBrush x:Key="Text" Color="#455471" />
-            <SolidColorBrush x:Key="Text-1" Color="#798499" />
-            <SolidColorBrush x:Key="Text-2" Color="#a3abbb" />
-        </ResourceDictionary>
-    </ResourceDictionary.ThemeDictionaries>
     
 </ResourceDictionary>

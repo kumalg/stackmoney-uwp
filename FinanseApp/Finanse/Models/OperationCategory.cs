@@ -35,14 +35,16 @@ namespace Finanse.Models {
         public bool VisibleInIncomes { get; set; } 
         public bool VisibleInExpenses { get; set; }
 
-        public ObservableCollection<OperationSubCategory> subCategories = new ObservableCollection<OperationSubCategory>();
+        public ObservableCollection<OperationSubCategory> subCategories = null;
         
         public void addSubCategory(OperationSubCategory subCategory) {
             subCategories.Insert(0, subCategory);
         }
 
         public ObservableCollection<OperationSubCategory> getSubCategories() {
-            return new ObservableCollection<OperationSubCategory>(Dal.getOperationSubCategoriesByBossId(Id));
+            if (subCategories == null)
+                subCategories = new ObservableCollection<OperationSubCategory>(Dal.getOperationSubCategoriesByBossId(Id));
+            return subCategories;
         }
     }
 }

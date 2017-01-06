@@ -57,7 +57,6 @@
                         <GridView
                             Name="ColorBaseList"
                             Padding="0"
-                            ItemsSource="{StaticResource ColorBase}"
                             ItemContainerStyle="{StaticResource GridViewItemStyle1}">
 
                             <GridView.ItemsPanel>

@@ -1,17 +1,15 @@
 ﻿using Finanse.DataAccessLayer;
-using SQLite.Net.Attributes;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Finanse.Models {
-    class MoneyAccount {
+namespace Finanse.Models.MoneyAccounts {
+    class CardAccount : Account {
+        public int BankAccountId { get; set; }
 
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Color { get; set; }
-
-        public string getActualMoneyValue() {
+        public override string getActualMoneyValue() {
             decimal moneyValue = 0;
             foreach (Operation o in Dal.getAllOperationsOfThisMoneyAccount(this))
                 moneyValue += o.isExpense ? -o.Cost : o.Cost;

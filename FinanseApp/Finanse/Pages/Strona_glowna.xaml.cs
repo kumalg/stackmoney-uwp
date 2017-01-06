@@ -146,17 +146,41 @@ namespace Finanse.Pages {
             var result = await ContentDialogItem.ShowAsync();
 
             if (ContentDialogItem.isSaved()) {
-                if ((bool)ByDateRadioButton.IsChecked) {
-                    removeOperationFromListByDay((Operation)datacontext);
-                    tryAddOperationToListByDay(ContentDialogItem.editedOperation());
-                }
-                else {
-                    removeOperationFromListByCategory((Operation)datacontext);
-                    tryAddOperationToListByCategory(ContentDialogItem.editedOperation());
-                }
-
+                updateOperationInList((Operation)datacontext, ContentDialogItem.editedOperation());
                 setActualMoneyBar();
             }
+        }
+
+        private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
+            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            var ContentDialogItem = new AcceptContentDialog("Czy chcesz usunąć operację?");
+            var result = await ContentDialogItem.ShowAsync();
+
+            if (ContentDialogItem.isAccepted()) {
+                Operation operation = (Operation)datacontext;
+                removeOperationFromList(operation);
+                Dal.deleteOperation(operation);
+                setActualMoneyBar();
+            }
+        }
+
+        private void updateOperationInList(Operation previous, Operation actual) {
+            removeOperationFromList(previous);
+            tryAddOperationToList(actual);
+        }
+
+        private void removeOperationFromList(Operation operation) {
+            if ((bool)ByDateRadioButton.IsChecked)
+                removeOperationFromListByDay(operation);
+            else
+                removeOperationFromListByCategory(operation);
+        }
+
+        private void tryAddOperationToList(Operation operation) {
+            if ((bool)ByDateRadioButton.IsChecked)
+                tryAddOperationToListByDay(operation);
+            else
+                tryAddOperationToListByCategory(operation);
         }
 
         private void removeOperationFromListByDay(Operation operation) {
@@ -208,7 +232,7 @@ namespace Finanse.Pages {
         }
 
         private void removeOperationFromListByCategory(Operation operation) {
-            int index = operationGroups.IndexOf(operationGroups.First(i => ((GroupHeaderByCategory)i.Key).categoryId == operation.Id));
+            int index = operationGroups.IndexOf(operationGroups.First(i => ((GroupHeaderByCategory)i.Key).categoryId == operation.CategoryId));
             if (operationGroups.ElementAt(index).Count > 1)
                 operationGroups.ElementAt(index).Remove(operation);
             else
@@ -225,17 +249,12 @@ namespace Finanse.Pages {
                 }
                 else {
                     GroupInfoList<Operation> group = new GroupInfoList<Operation>();
+                    /// tu trzeba dodać ikonkę i nazwę kategorii
+                    /// jest pomysł żeby przesyłać wyłącznie Id
                     group.Add(operation);
                     operationGroups.Add(group);
                 }
             }
-        }
-
-        private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
-            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-            var ContentDialogItem = new Delete_ContentDialog(operationGroups, (Operation)datacontext, "");
-            var result = await ContentDialogItem.ShowAsync();
-            setActualMoneyBar();
         }
 
         private void Grid_DragStarting(UIElement sender, DragStartingEventArgs args) {

@@ -17,431 +17,55 @@
     PrimaryButtonClick="NowaOperacja_DodajClick"
     RequestedTheme="Dark">
 
-    <ContentDialog.Resources>
-        <Style
-            x:Key="CalendarDatePickerStyle1"
-            TargetType="CalendarDatePicker">
-            <Setter
-                Property="Foreground"
-                Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
-            <Setter
-                Property="Background"
-                Value="Transparent" />
-            <Setter
-                Property="BorderBrush"
-                Value="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" />
-            <Setter
-                Property="BorderThickness"
-                Value="0,0,0,1" />
-            <Setter
-                Property="HorizontalAlignment"
-                Value="Left" />
-            <Setter
-                Property="VerticalAlignment"
-                Value="Center" />
-            <Setter
-                Property="Template">
-                <Setter.Value>
-                    <ControlTemplate
-                        TargetType="CalendarDatePicker">
-                        <Grid
-                            x:Name="Root">
-                            <FlyoutBase.AttachedFlyout>
-                                <Flyout
-                                    Placement="Bottom">
-                                    <Flyout.FlyoutPresenterStyle>
-                                        <Style
-                                            TargetType="FlyoutPresenter">
-                                            <Setter
-                                                Property="Padding"
-                                                Value="0" />
-                                            <Setter
-                                                Property="BorderThickness"
-                                                Value="0" />
-                                            <Setter
-                                                Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate
-                                                        TargetType="FlyoutPresenter">
-                                                        <ContentPresenter
-                                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                                            Background="{TemplateBinding Background}"
-                                                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                            ContentTransitions="{TemplateBinding ContentTransitions}"
-                                                            Content="{TemplateBinding Content}"
-                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                            Margin="{TemplateBinding Padding}"
-                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                    </Flyout.FlyoutPresenterStyle>
-                                    <CalendarView
-                                        x:Name="CalendarView"
-                                        CalendarIdentifier="{TemplateBinding CalendarIdentifier}"
-                                        DisplayMode="{TemplateBinding DisplayMode}"
-                                        DayOfWeekFormat="{TemplateBinding DayOfWeekFormat}"
-                                        FirstDayOfWeek="Monday"
-                                        IsTodayHighlighted="False"
-                                        IsGroupLabelVisible="{TemplateBinding IsGroupLabelVisible}"
-                                        IsOutOfScopeEnabled="{TemplateBinding IsOutOfScopeEnabled}"
-                                        MinDate="{TemplateBinding MinDate}"
-                                        MaxDate="{TemplateBinding MaxDate}"
-                                        Style="{TemplateBinding CalendarViewStyle}"
-                                        Background="{ThemeResource AccentColor-1}"
-                                        CalendarItemBackground="Transparent"
-                                        CalendarItemForeground="White"
-                                        Foreground="#CCFFFFFF"
-                                        HoverBorderBrush="#66E5E5E5"
-                                        OutOfScopeForeground="#4FFFFFFF"
-                                        OutOfScopeBackground="Transparent"
-                                        TodayForeground="{ThemeResource AccentColor}"
-                                        FontWeight="Normal"
-                                        FontSize="10"
-                                        DayItemFontSize="15" />
-                                </Flyout>
-                            </FlyoutBase.AttachedFlyout>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition
-                                    Width="*" />
-                                <ColumnDefinition
-                                    Width="32" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition
-                                    Height="Auto" />
-                                <RowDefinition
-                                    Height="32" />
-                            </Grid.RowDefinitions>
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup
-                                    x:Name="CommonStates">
-                                    <VisualState
-                                        x:Name="Normal" />
-                                    <VisualState
-                                        x:Name="PointerOver">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="BorderBrush"
-                                                Storyboard.TargetName="Background">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="White" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState
-                                        x:Name="Pressed">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Background"
-                                                Storyboard.TargetName="Background">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="BorderBrush"
-                                                Storyboard.TargetName="Background">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="White" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState
-                                        x:Name="Disabled">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Background"
-                                                Storyboard.TargetName="Background">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="BorderBrush"
-                                                Storyboard.TargetName="Background">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="{ThemeResource SystemControlDisabledBaseLowBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Foreground"
-                                                Storyboard.TargetName="HeaderContentPresenter">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Foreground"
-                                                Storyboard.TargetName="DateText">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Foreground"
-                                                Storyboard.TargetName="CalendarGlyph">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                                <VisualStateGroup x:Name="FocusStates">
-                                    <VisualState x:Name="Unfocused" />
-                                    <VisualState x:Name="PointerFocused" />
-                                    <VisualState x:Name="Focused">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Background"
-                                                Storyboard.TargetName="Background">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="{ThemeResource SystemControlHighlightListAccentLowBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                                <VisualStateGroup
-                                    x:Name="SelectionStates">
-                                    <VisualState
-                                        x:Name="Unselected" />
-                                    <VisualState
-                                        x:Name="Selected">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Foreground"
-                                                Storyboard.TargetName="DateText">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <ContentPresenter
-                                x:Name="HeaderContentPresenter"
-                                ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                Content="{TemplateBinding Header}"
-                                Margin="{ThemeResource ComboBoxHeaderThemeMargin}"
-                                Visibility="Collapsed"
-                                x:DeferLoadStrategy="Lazy" />
-                            <Border
-                                x:Name="Background"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Background="{TemplateBinding Background}"
-                                Grid.ColumnSpan="2"
-                                Grid.Row="1" />
-                            <TextBlock
-                                x:Name="DateText"
-                                Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                FontSize="15"
-                                HorizontalAlignment="Left"
-                                Padding="12, 0, 0, 2"
-                                Grid.Row="1"
-                                Text="{TemplateBinding PlaceholderText}"
-                                VerticalAlignment="Center" />
-                            <FontIcon
-                                x:Name="CalendarGlyph"
-                                Grid.Column="1"
-                                Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
-                                FontSize="16"
-                                FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                Glyph="&#xE787;"
-                                HorizontalAlignment="Center"
-                                Grid.Row="1"
-                                VerticalAlignment="Center" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </ContentDialog.Resources>
-<!--
-    <ContentDialog.Style>
-        <Style
-            TargetType="ContentDialog">
-            <Setter
-                Property="Template">
-                <Setter.Value>
-                    <ControlTemplate
-                        TargetType="ContentDialog">
-                        <Border
-                            x:Name="Container">
-                            <Grid
-                                x:Name="LayoutRoot">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition
-                                        Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition
-                                        Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Border
-                                    x:Name="BackgroundElement"
-                                    Background="{TemplateBinding Background}"
-                                    FlowDirection="{TemplateBinding FlowDirection}"
-                                    BorderThickness="0"
-                                    BorderBrush="{ThemeResource SystemControlForegroundAccentBrush}"
-                                    MaxWidth="{TemplateBinding MinWidth}"
-                                    MaxHeight="{TemplateBinding MaxHeight}"
-                                    MinWidth="{TemplateBinding MinWidth}"
-                                    MinHeight="{TemplateBinding MinHeight}">
-
-                                    <Grid
-                                        x:Name="DialogSpace"
-                                        VerticalAlignment="Stretch"
-                                        Padding="0,0,0,20">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition
-                                                Height="Auto" />
-                                            <RowDefinition
-                                                Height="*" />
-                                        </Grid.RowDefinitions>
-                                        <ScrollViewer
-                                            x:Name="ContentScrollViewer"
-                                            VerticalScrollBarVisibility="Auto">
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition
-                                                        Height="48" />
-                                                    <RowDefinition
-                                                        Height="Auto" />
-                                                </Grid.RowDefinitions>
-                                                <Grid
-                                                    Background="{ThemeResource AccentColor}">
-
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition
-                                                            Width="*" />
-                                                        <ColumnDefinition
-                                                            Width="Auto" />
-                                                    </Grid.ColumnDefinitions>
-
-                                                    <ContentControl
-                                                        x:Name="Title"
-                                                        Margin="20,0,0,0"
-                                                        Content="{TemplateBinding Title}"
-                                                        ContentTemplate="{TemplateBinding TitleTemplate}"
-                                                        FontSize="15"
-                                                        FontFamily="XamlAutoFontFamily"
-                                                        FontWeight="SemiBold"
-                                                        Foreground="{ThemeResource AccentText}"
-                                                        HorizontalAlignment="Left"
-                                                        VerticalAlignment="Center"
-                                                        IsTabStop="False"
-                                                        MaxHeight="{ThemeResource ContentDialogTitleMaxHeight}">
-                                                        <ContentControl.Template>
-                                                            <ControlTemplate
-                                                                TargetType="ContentControl">
-                                                                <ContentPresenter
-                                                                    Content="{TemplateBinding Content}"
-                                                                    MaxLines="2"
-                                                                    TextWrapping="Wrap"
-                                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                                    Margin="{TemplateBinding Padding}"
-                                                                    ContentTransitions="{TemplateBinding ContentTransitions}"
-                                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                                                            </ControlTemplate>
-                                                        </ContentControl.Template>
-                                                    </ContentControl>
-                                                    <Button
-                                                        x:Name="UsePatternButton"
-                                                        Style="{StaticResource ButtonStyle1}"
-                                                        ToolTipService.ToolTip="Użyj szablonu"
-                                                        Grid.Column="2"
-                                                        Width="48"
-                                                        Height="48"
-                                                        Click="UsePatternButton_Click"
-                                                        Loading="UsePatternButton_Loading">&#xE8C8;
-                                                    </Button>
-                                                </Grid>
-                                                <ContentPresenter
-                                                    x:Name="Content"
-                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                    Content="{TemplateBinding Content}"
-                                                    FontSize="{ThemeResource ControlContentThemeFontSize}"
-                                                    FontFamily="{ThemeResource ContentControlThemeFontFamily}"
-                                                    Margin="{ThemeResource ContentDialogContentMargin}"
-                                                    Foreground="{TemplateBinding Foreground}"
-                                                    Grid.Row="1"
-                                                    TextWrapping="Wrap" />
-                                            </Grid>
-                                        </ScrollViewer>
-                                        <Grid
-                                            Margin="20,0"
-                                            x:Name="CommandSpace"
-                                            Grid.Row="1"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Bottom">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition />
-                                                <ColumnDefinition />
-                                            </Grid.ColumnDefinitions>
-
-                                            <Border
-                                                x:Name="Button1Host"
-                                                Margin="{ThemeResource ContentDialogButton1HostMargin}"
-                                                MinWidth="{ThemeResource ContentDialogButtonMinWidth}"
-                                                MaxWidth="{ThemeResource ContentDialogButtonMaxWidth}"
-                                                Height="{ThemeResource ContentDialogButtonHeight}"
-                                                HorizontalAlignment="Stretch" />
-                                            <Border
-                                                x:Name="Button2Host"
-                                                Margin="{ThemeResource ContentDialogButton2HostMargin}"
-                                                MinWidth="{ThemeResource ContentDialogButtonMinWidth}"
-                                                MaxWidth="{ThemeResource ContentDialogButtonMaxWidth}"
-                                                Height="{ThemeResource ContentDialogButtonHeight}"
-                                                Grid.Column="1"
-                                                HorizontalAlignment="Stretch" />
-
-                                        </Grid>
-                                    </Grid>
-                                </Border>
-                            </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </ContentDialog.Style>
--->
-    <StackPanel
+    <StackPanel 
         Margin="20,20">
 
-        <TextBlock
-            Text="Typ operacji"
-            x:Uid="operationType"
-            Margin="0,0,0,10" />
-
-        <StackPanel
-            Orientation="Horizontal">
+        <Grid Margin="16,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
             <RadioButton
                 Name="Expense_RadioButton"
                 GroupName="OperationType_RadioButtons"
+                Tag="Wydatek"
                 Checked="TypeOfOperationRadioButton_Checked"
-                Style="{StaticResource MyRadioButtonStyle}">
-                <TextBlock Text="Wydatek" x:Uid="expense"/>
-            </RadioButton>
-            <RadioButton
-                Name="Income_RadioButton"
-                GroupName="OperationType_RadioButtons"
-                Checked="TypeOfOperationRadioButton_Checked"
-                Style="{StaticResource MyRadioButtonStyle}">
-                <TextBlock Text="Wpływ" x:Uid="income"/>
+                Style="{StaticResource RadioButtonWithIconStyle}">
+                <Canvas Width="32" Height="32">
+                    <PathIcon Data="M14.01 9.812c0.548 0 0.992-0.444 0.992-0.992c0.027-1.063 0.424-1.513 1.139-1.942  c0.653-0.368 1.588-0.536 2.408-0.56l-1.776 1.764c-0.389 0.386-0.391 1.015-0.005 1.403c0.386 0.39 1.015 0.391 1.403 0.005  l3.494-3.47c0.188-0.186 0.293-0.438 0.293-0.703c0-0.266-0.104-0.517-0.293-0.705l-3.494-3.47  c-0.389-0.385-1.018-0.384-1.403 0.005c-0.386 0.389-0.384 1.018 0.005 1.403l1.79 1.779c-2.079 0.058-5.479 0.902-5.545 4.491  C13.018 9.367 13.462 9.812 14.01 9.812z" />
+                    <PathIcon Data="M23.344 14.78c-0.453-2.273-2.454-3.99-4.862-3.99H9.308c-2.742 0-4.966 2.224-4.966 4.959V26.17  c0 2.74 2.221 4.961 4.961 4.961h13.643c2.74 0 4.961-2.221 4.961-4.961v-6.449C27.906 17.115 25.897 14.983 23.344 14.78z   M9.308 12.773h9.174c1.293 0 2.385 0.833 2.798 1.986H9.303c-1.119 0-2.147 0.375-2.977 0.999v-0.01  C6.326 14.113 7.665 12.773 9.308 12.773z M25.922 26.17c0 1.642-1.335 2.977-2.977 2.977H9.303c-1.642 0-2.977-1.335-2.977-2.977  v-6.449c0-1.642 1.335-2.977 2.977-2.977h13.643c1.642 0 2.977 1.335 2.977 2.977V26.17z" />
+                    <PathIcon Data="m 23.937 22.448999 a 0.99199998 0.99199998 0 0 1 -0.992 0.992 0.99199998 0.99199998 0 0 1 -0.992 -0.992 0.99199998 0.99199998 0 0 1 0.992 -0.992 0.99199998 0.99199998 0 0 1 0.992 0.992 z" />
+                </Canvas>
             </RadioButton>
 
-        </StackPanel>
+            <RadioButton
+                Grid.Column="1"
+                Name="Income_RadioButton"
+                GroupName="OperationType_RadioButtons"
+                Tag="Wpływ"
+                Checked="TypeOfOperationRadioButton_Checked"
+                Style="{StaticResource RadioButtonWithIconStyle}">
+                <Canvas Width="32" Height="32">
+                    <PathIcon Data="M23.344 14.78c-0.453-2.273-2.454-3.99-4.862-3.99H9.308c-2.742 0-4.966 2.224-4.966 4.959V26.17  c0 2.74 2.221 4.961 4.961 4.961h13.643c2.74 0 4.961-2.221 4.961-4.961v-6.449C27.906 17.115 25.897 14.983 23.344 14.78z   M9.308 12.773h9.174c1.293 0 2.385 0.833 2.798 1.986H9.303c-1.119 0-2.147 0.375-2.977 0.999v-0.01  C6.326 14.113 7.665 12.773 9.308 12.773z M25.922 26.17c0 1.642-1.335 2.977-2.977 2.977H9.303c-1.642 0-2.977-1.335-2.977-2.977  v-6.449c0-1.642 1.335-2.977 2.977-2.977h13.643c1.642 0 2.977 1.335 2.977 2.977V26.17z" />
+                    <PathIcon Data="M16.854 4.615L15.04 6.429c0.021-0.832 0.191-1.787 0.568-2.452  c0.435-0.719 0.896-1.124 1.979-1.151c0.549 0 0.993-0.444 0.993-0.992c0-0.548-0.444-0.992-0.993-0.992  c-3.634 0.063-4.483 3.507-4.536 5.599l-1.827-1.826c-0.387-0.387-1.015-0.387-1.403 0c-0.387 0.388-0.387 1.016 0 1.403  l3.515 3.515c0.185 0.185 0.44 0.291 0.702 0.291c0.261 0 0.516-0.106 0.701-0.291l3.515-3.515c0.388-0.388 0.388-1.016 0-1.403  C17.869 4.228 17.241 4.228 16.854 4.615z" />
+                    <PathIcon Data="m 23.937 22.448999 a 0.99199998 0.99199998 0 0 1 -0.992 0.992 0.99199998 0.99199998 0 0 1 -0.992 -0.992 0.99199998 0.99199998 0 0 1 0.992 -0.992 0.99199998 0.99199998 0 0 1 0.992 0.992 z" />
+                </Canvas>
+            </RadioButton>
+
+            <RadioButton
+                Grid.Column="2"
+                Name="Transfer_RadioButton"
+                GroupName="OperationType_RadioButtons"
+                Tag="Transfer"
+                Style="{StaticResource RadioButtonWithIconStyle}">
+                <Canvas Width="32" Height="32">
+                    <PathIcon Data="M20.5 19.504c0 0-6.904 0-9.088 0l1.795-1.796c0.39-0.391 0.39-1.024-0.001-1.414  c-0.39-0.391-1.023-0.391-1.414 0l-3.5 3.503c-0.39 0.392-0.39 1.023 0 1.414l3.5 3.502c0.391 0.392 1.024 0.393 1.414 0.002  c0.391-0.391 0.391-1.023 0.001-1.414l-1.795-1.797c2.184 0 9.088 0 9.088 0c0.553 0 1-0.447 1-1  C21.5 19.952 21.053 19.504 20.5 19.504z" />
+                    <PathIcon Data="M23.707 10.792l-3.5-3.5c-0.391-0.391-1.023-0.391-1.414 0s-0.391 1.023 0 1.414l1.793 1.793  c-2.187 0-9.077 0-9.085 0c-0.553 0-1 0.448-1 1s0.447 1 1 1c0.003 0 1.817 0 3.881 0c1.966 0 4.144 0 5.204 0l-1.793 1.792  c-0.391 0.391-0.391 1.024 0 1.415s1.023 0.391 1.414 0l3.5-3.5C23.894 12.021 24 11.763 24 11.5S23.894 10.979 23.707 10.792z" />
+                </Canvas>
+            </RadioButton>
+        </Grid>
 
         <TextBox
             Name="NameValue"

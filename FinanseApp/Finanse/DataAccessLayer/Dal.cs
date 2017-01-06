@@ -1,5 +1,6 @@
 ﻿namespace Finanse.DataAccessLayer {
     using Models;
+    using Models.MoneyAccounts;
     using SQLite.Net;
     using SQLite.Net.Platform.WinRT;
     using System;
@@ -202,6 +203,58 @@
                 models = (from p in db.Table<OperationCategory>()
                           orderby p.Name
                           select p).ToList();
+            }
+
+            return models;
+        }
+
+        public static List<CardAccount> getListOfLinkedCardAccountToThisBankAccount(BankAccount account) {
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                List<CardAccount> models = (from p in db.Table<CardAccount>().ToList()
+                              where p.BankAccountId == account.Id
+                              select p).ToList();
+
+                return models;
+            }
+        }
+
+        public static List<Operation> getAllOperationsOfThisMoneyAccount(BankAccount account) {
+
+            // Create a new connection
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                List<Operation> models = (from p in db.Table<Operation>().ToList()
+                          where p.MoneyAccountId == account.Id 
+                            || getListOfLinkedCardAccountToThisBankAccount(account)
+                            .Any(i => i.BankAccountId == account.Id)
+                          select p).ToList();
+
+                return models;
+            }
+        }
+
+
+        public static List<Operation> getAllOperationsOfThisMoneyAccount(Account account) {
+            List<Operation> models;
+
+            // Create a new connection
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                if (account is BankAccount)
+                    models = (from p in db.Table<Operation>().ToList()
+                              where p.MoneyAccountId == account.Id || getListOfLinkedCardAccountToThisBankAccount((BankAccount)account).Any(i=>i.BankAccountId == account.Id)
+                              select p).ToList();
+                else
+                    models = (from p in db.Table<Operation>().ToList()
+                              where p.MoneyAccountId == account.Id
+                              select p).ToList();
             }
 
             return models;
@@ -434,11 +487,9 @@
                 db.TraceListener = new DebugTraceListener();
 
                 if (operationPattern.Id == 0) {
-                    // New
                     db.Insert(operationPattern);
                 }
                 else {
-                    // Update
                     db.Update(operationPattern);
                 }
             }

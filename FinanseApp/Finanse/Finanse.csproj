@@ -153,6 +153,9 @@
     <Compile Include="Dialogs\DeleteCategory_ContentDialog.xaml.cs">
       <DependentUpon>DeleteCategory_ContentDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\AcceptContentDialog.xaml.cs">
+      <DependentUpon>AcceptContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\Delete_ContentDialog.xaml.cs">
       <DependentUpon>Delete_ContentDialog.xaml</DependentUpon>
     </Compile>
@@ -169,6 +172,10 @@
       <DependentUpon>MoneyAccountTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="EmptyOrFullSelector.cs" />
+    <Compile Include="Models\MoneyAccounts\Account.cs" />
+    <Compile Include="Models\MoneyAccounts\BankAccount.cs" />
+    <Compile Include="Models\MoneyAccounts\CardAccount.cs" />
+    <Compile Include="Models\MoneyAccounts\CashAccount.cs" />
     <Compile Include="Models\ExpandPanel.cs" />
     <Compile Include="Models\Functions.cs" />
     <Compile Include="Models\GroupInfoList.cs" />
@@ -248,6 +255,9 @@
   <ItemGroup>
     <Content Include="Assets\angle.png" />
     <Content Include="Assets\angle.svg" />
+    <Content Include="Assets\Icons\expense.png" />
+    <Content Include="Assets\Icons\income.png" />
+    <Content Include="Assets\Icons\transfer.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -263,6 +273,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Dialogs\DeleteCategory_ContentDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\AcceptContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -301,6 +315,31 @@
     <Page Include="Pages\Nowa_Operacja.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Buttons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Styles\TextBlocks.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Styles\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Styles\Colors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Styles\RadioButtons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>

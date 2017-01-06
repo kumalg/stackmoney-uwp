@@ -13,7 +13,7 @@ namespace Finanse.Dialogs {
         private Regex regex = NewOperation.getRegex();
 
         private bool _isSaved = false;
-        private bool notLoaded = true;
+        private bool isLoaded = false;
         private bool isUnfocused = true;
 
         private Operation operationToEdit = null;
@@ -29,7 +29,7 @@ namespace Finanse.Dialogs {
             DateValue.MaxDate = Settings.getMaxDate();
             setMoneyAccountComboBoxItems();
 
-            setEditedOperationValues();
+            setEditedOperationValues(operationToEdit);
         }
 
         public EditOperationContentDialog(OperationPattern operationPatternToEdit) {
@@ -37,10 +37,10 @@ namespace Finanse.Dialogs {
             this.InitializeComponent();
             this.operationPatternToEdit = operationPatternToEdit;
 
-            DateValue.MaxDate = Settings.getMaxDate();
+            DateValue.Visibility = Visibility.Collapsed;
             setMoneyAccountComboBoxItems();
 
-            setEditedOperationValues();
+            setEditedOperationValues(operationPatternToEdit);
         }
 
         private void setMoneyAccountComboBoxItems() {
@@ -52,34 +52,43 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private void setEditedOperationValues() {
-            if (operationToEdit.isExpense)
+        private void setEditedOperationValues(OperationPattern operation) {
+
+            if (operation.isExpense)
                 Expense_RadioButton.IsChecked = true;
             else Income_RadioButton.IsChecked = true;
 
-            CostValue.Text = NewOperation.toCurrencyString(operationToEdit.Cost);
-            acceptedCostValue = NewOperation.toCurrencyWithoutSymbolString(operationToEdit.Cost);
+            CostValue.Text = NewOperation.toCurrencyString(operation.Cost);
+            acceptedCostValue = NewOperation.toCurrencyWithoutSymbolString(operation.Cost);
             
-            NameValue.Text = operationToEdit.Title;
+            NameValue.Text = operation.Title;
 
-            if (operationPatternToEdit == null && !string.IsNullOrEmpty(operationToEdit.Date))
-                DateValue.Date = DateTime.Parse(operationToEdit.Date);
+            if (operation is Operation && !string.IsNullOrEmpty(((Operation)operation).Date))
+                DateValue.Date = DateTime.Parse(((Operation)operation).Date);
 
-            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == operationToEdit.CategoryId);
-            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operationToEdit.SubCategoryId);
-            PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operationToEdit.MoneyAccountId);
+            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == operation.CategoryId);
+            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operation.SubCategoryId);
+            PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operation.MoneyAccountId);
 
-            if (!string.IsNullOrEmpty(operationToEdit.MoreInfo))
-                MoreInfoValue.Text = operationToEdit.MoreInfo;
+            if (!string.IsNullOrEmpty(operation.MoreInfo))
+                MoreInfoValue.Text = operation.MoreInfo;
 
-            notLoaded = false;
+            isLoaded = true;
         }
 
 
         private void setPrimaryButtonEnabling() {
-            IsPrimaryButtonEnabled = !string.IsNullOrEmpty(CostValue.Text) && !isOperationNotEdited();
+            IsPrimaryButtonEnabled = !string.IsNullOrEmpty(CostValue.Text) && isOperationEdited();
         }
-      
+
+        private bool isOperationEdited() {
+            if (isLoaded)
+                return operationPatternToEdit == null ?
+                    !operationToEdit.Equals(editedOperation()) :
+                    !operationPatternToEdit.Equals(editedOperationPattern());
+            return false;
+        }
+
         public bool isSaved() {
             return _isSaved;
         }
@@ -99,8 +108,8 @@ namespace Finanse.Dialogs {
         }
 
         public OperationPattern editedOperationPattern() {
-            return new Operation {
-                Id = operationToEdit.Id,
+            return new OperationPattern {
+                Id = operationPatternToEdit.Id,
                 Title = NameValue.Text,
                 Cost = decimal.Parse(acceptedCostValue, Settings.getActualCultureInfo()),
                 isExpense = (bool)Expense_RadioButton.IsChecked,
@@ -131,9 +140,9 @@ namespace Finanse.Dialogs {
 
         private void NowaOperacja_DodajClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
-            if (operationPatternToEdit == null)
+             if (operationPatternToEdit == null)
                 Dal.saveOperation(editedOperation());
-            else
+             else
                 Dal.saveOperationPattern(editedOperationPattern());
 
             _isSaved = true;
@@ -148,7 +157,7 @@ namespace Finanse.Dialogs {
                 if (SubCategoryValue.SelectedIndex != -1)
                     idOfSelectedSubCategory = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
 
-                SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
+                setCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
 
                 if (CategoryValue.Items.OfType<ComboBoxItem>().Any(i => (int)i.Tag == idOfSelectedCategory))
                     CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(i => (int)i.Tag == idOfSelectedCategory);
@@ -165,14 +174,14 @@ namespace Finanse.Dialogs {
             }
 
             else {
-                SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
+                setCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
                 SubCategoryValue.IsEnabled = false;
             }
 
             setPrimaryButtonEnabling();
         }
 
-        private void SetCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
+        private void setCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
 
             CategoryValue.Items.Clear();
 
@@ -189,7 +198,7 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private void SetSubCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
+        private void setSubCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
 
             SubCategoryValue.Items.Clear();
 
@@ -217,7 +226,7 @@ namespace Finanse.Dialogs {
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            SetSubCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
+            setSubCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
             setPrimaryButtonEnabling();
         }
 
@@ -266,12 +275,6 @@ namespace Finanse.Dialogs {
 
         private void CostValue_TextChanged(object sender, TextChangedEventArgs e) {
             setPrimaryButtonEnabling();
-        }
-
-        private bool isOperationNotEdited() {
-            if (notLoaded)
-                return true;
-            return operationToEdit.Equals(editedOperation());
         }
 
         private void NameValue_TextChanged(object sender, TextChangedEventArgs e) {

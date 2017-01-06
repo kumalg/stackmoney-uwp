@@ -1,0 +1,45 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:Finanse.Models"
+    mc:Ignorable="d">
+
+    <!--*****************************************
+    BAZA IKON DO KATEGORII
+    ******************************************-->
+    
+    <ResourceDictionary x:Key="IconBase">
+        <FontIcon x:Key="FontIcon_1" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_2" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_3" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_4" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_5" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_6" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_7" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_8" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_9" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        
+        <FontIcon x:Key="FontIcon_10" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_11" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_12" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_13" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_14" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_15" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_16" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_17" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_18" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_19" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        
+        <FontIcon x:Key="FontIcon_20" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+        <FontIcon x:Key="FontIcon_21" Glyph="" FontFamily="{StaticResource FontAwesome}" />
+    </ResourceDictionary>
+
+    <FontIcon x:Key="DefaultEllipseIcon" Glyph="🏴" FontFamily="Segoe UI" />
+    
+    <Style x:Key="DetailsIconStyle" TargetType="FontIcon">
+        <Setter Property="Foreground" Value="{ThemeResource Text-2}" />
+    </Style>
+    
+</ResourceDictionary>

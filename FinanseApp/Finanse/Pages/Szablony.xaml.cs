@@ -3,6 +3,7 @@ using Finanse.Dialogs;
 using Finanse.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -32,18 +33,34 @@ namespace Finanse.Pages {
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-
-            var ContentDialogItem = new Delete_ContentDialog(null, ((OperationPattern)datacontext).toOperation(), "pattern");
-
+            var ContentDialogItem = new AcceptContentDialog("Czy chcesz usunąć szablon?");
             var result = await ContentDialogItem.ShowAsync();
+
+            if (ContentDialogItem.isAccepted()) {
+                removeOperationPatternFromList((OperationPattern)datacontext);
+                Dal.deletePattern((OperationPattern)datacontext);
+            }
         }
 
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-
-            var ContentDialogItem = new NewOperationContentDialog(OperationPatterns, ((OperationPattern)datacontext).toOperation(), true);
-
+            var ContentDialogItem = new EditOperationContentDialog(((OperationPattern)datacontext));
             var result = await ContentDialogItem.ShowAsync();
+
+            if (ContentDialogItem.isSaved()) {
+                OperationPattern operationPattern = ContentDialogItem.editedOperationPattern();
+                OperationPatterns[OperationPatterns
+                    .IndexOf(OperationPatterns
+                    .FirstOrDefault(i => i.Id == operationPattern.Id))] = operationPattern;
+            }
+        }
+
+        public void removeOperationPatternFromList(OperationPattern operationPattern) {
+            OperationPatterns.Remove(operationPattern);
+        }
+
+        public void addOperationPatternToList(OperationPattern operationPattern) {
+            OperationPatterns.Insert(0, operationPattern);
         }
 
         private async void DetailsButton_Click(object sender, RoutedEventArgs e) {

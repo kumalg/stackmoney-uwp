@@ -49,6 +49,7 @@ namespace Finanse.Dialogs {
             }
 
             CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == BossCategory.Name);
+            ColorBaseList.ItemsSource = ((ResourceDictionary)Application.Current.Resources["ColorBase"]).OrderByDescending(i=>i.Key.ToString());
         }
 
         public NewCategoryContentDialog(ObservableCollection<OperationCategory> OperationCategories, OperationCategory editedCategory, int editedBossCategoryId) {
@@ -81,8 +82,10 @@ namespace Finanse.Dialogs {
 
                 NameValue.Text = editedCategory.Name;
 
-                CategoryIcon.Glyph = editedCategory.Icon.ToString();
+                CategoryIcon.Glyph = editedCategory.Icon.Glyph;//.ToString();
+                iconKey = editedCategory.IconKey;
                 CategoryIcon.Color = editedCategory.Color;//Functions.GetSolidColorBrush(editedCategory.Color);
+                colorKey = editedCategory.ColorKey;
 
                 VisibleInExpensesToggleButton.IsOn = editedCategory.VisibleInExpenses;
                 VisibleInIncomesToggleButton.IsOn = editedCategory.VisibleInIncomes;
@@ -95,6 +98,7 @@ namespace Finanse.Dialogs {
                 }
                 SetPrimaryButtonEnabled();
             }
+            ColorBaseList.ItemsSource = ((ResourceDictionary)Application.Current.Resources["ColorBase"]).OrderBy(i => i.Key.ToString());
         }
 
         private void SetPrimaryButtonEnabled() {
@@ -152,7 +156,7 @@ namespace Finanse.Dialogs {
                     if (editedBossCategoryId == (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag) {
                         ObservableCollection<OperationSubCategory> subCategories = OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedBossCategoryId))].subCategories;
 
-                        subCategories[subCategories.IndexOf(subCategories.Single(c => c.Id == editedCategory.Id))] = editedOperationSubCategoryItem;
+                        subCategories[subCategories.IndexOf(subCategories.Single(c => c.Id == editedCategory.Id))] = editedOperationSubCategoryItem;///$$$$$$$$$$4
 
                         OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedBossCategoryId))].subCategories = subCategories;
                     }

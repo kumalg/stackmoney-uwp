@@ -7,81 +7,14 @@ namespace Finanse.Models {
 
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        private string _title = string.Empty;
-        private string _moreInfo = string.Empty;
-        private int _categoryId;
-        private int _subCategoryId;
-        private decimal _cost;
-        private bool _isExpense;
-        private int _moneyAccountId;
-
         [ForeignKey(typeof(OperationCategory))]
-        public string Title {
-            get {
-                return _title;
-            }
-            set {
-                if (_title != value) {
-                    _title = value; /* OnPropertyChanged("Title");*/
-                }
-            }
-        }
-        public string MoreInfo {
-            get {
-                return _moreInfo;
-            }
-            set {
-                if (_moreInfo != value)
-                    _moreInfo = value;
-            }
-        }
-        public int CategoryId {
-            get {
-                return _categoryId;
-            }
-
-            set {
-                if (_categoryId != value) {
-                    _categoryId = value;
-                }
-            }
-        }
-        public int SubCategoryId {
-            get {
-                return _subCategoryId;
-            }
-            set {
-                if (_subCategoryId != value)
-                    _subCategoryId = value;
-            }
-        }
-        public decimal Cost {
-            get {
-                return _cost;
-            }
-            set {
-                if (_cost != value)
-                    _cost = value;
-            }
-        }
-        public bool isExpense {
-            get {
-                return _isExpense;
-            }
-            set {
-                if (_isExpense != value)
-                    _isExpense = value;
-            }
-        }
-        public int MoneyAccountId {
-            get {
-                return _moneyAccountId;
-            }
-            set {
-                if (_moneyAccountId != value)
-                    _moneyAccountId = value;
-            }
-        }
+        public string Title { get; set; }
+        public string MoreInfo { get; set; }
+        public int CategoryId { get; set; }
+        public int SubCategoryId { get; set; }
+        public decimal Cost { get; set; }
+        public bool isExpense { get; set; }
+        public int MoneyAccountId { get; set; }
 
         public Operation toOperation() {
             return new Operation {
@@ -95,6 +28,27 @@ namespace Finanse.Models {
                 isExpense = this.isExpense,
                 Id = this.Id
             };
+        }
+
+        public override int GetHashCode() {
+            return this.Title.GetHashCode() * this.Id;
+        }
+        public override bool Equals(object o) {
+            if (o == null || !(o is OperationPattern))
+                return false;
+
+            OperationPattern secondOperation = (OperationPattern)o;
+
+            return
+                secondOperation.Id == Id &&
+                secondOperation.Cost == Cost &&
+                secondOperation.Title.Equals(Title) &&
+                secondOperation.isExpense == isExpense &&
+                secondOperation.CategoryId == CategoryId &&
+                secondOperation.SubCategoryId == SubCategoryId &&
+                secondOperation.MoneyAccountId == MoneyAccountId &&
+                secondOperation.MoreInfo.Equals(MoreInfo);
+
         }
         /*
          * public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;

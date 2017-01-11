@@ -30,11 +30,15 @@ namespace Finanse.Pages {
             DateTime dateTimeWithDays = (e.Parameter is DateTime) ?
             (DateTime)e.Parameter : DateTime.Today;
 
-            actualYearAndMonth = new DateTime(dateTimeWithDays.Year, dateTimeWithDays.Month, 1);
+            actualYearAndMonth = Functions.dateTimeWithFirstDayOfMonth(dateTimeWithDays);//new DateTime(dateTimeWithDays.Year, dateTimeWithDays.Month, 1);
              
             setNextMonthButtonEnabling();
             setPreviousMonthButtonEnabling();
-            storeData = new OperationData(actualYearAndMonth.Month, actualYearAndMonth.Year, false, null);
+
+            storeData = dateTimeWithDays > DateTime.Today ? 
+                new OperationData(actualYearAndMonth.Month, actualYearAndMonth.Year, true, null) : 
+                new OperationData(actualYearAndMonth.Month, actualYearAndMonth.Year, false, null);
+
             ByDateRadioButton.IsChecked = true;
             groupOperations(operationGroups, storeData);
             listViewByDate();

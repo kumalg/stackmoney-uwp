@@ -110,18 +110,20 @@ namespace Finanse.Dialogs {
 
             if (editedId == -1) {
                 if (CategoryValue.SelectedIndex != -1) {
+                    int bossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
+
                     newOperationSubCategoryItem = new OperationSubCategory {
                         Id = 0,
                         Name = NameValue.Text,
                         ColorKey = colorKey,
                         IconKey = iconKey,
-                        BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
+                        BossCategoryId = bossCategoryId,
                         VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
 
                     Dal.saveOperationSubCategory(newOperationSubCategoryItem);
-                    OperationCategories.Single(x => x.Id == (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag).addSubCategory(newOperationSubCategoryItem);
+                    OperationCategories.Single(x => x.Id == bossCategoryId).addSubCategory(newOperationSubCategoryItem);
                 }
 
                 else {

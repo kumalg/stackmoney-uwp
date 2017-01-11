@@ -27,7 +27,7 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         Background="{TemplateBinding Background}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="48" />
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
@@ -45,7 +45,7 @@
                                     <VisualState.Setters>
                                         <Setter
                                             Target="HamburgerRadioButtonGrid.(Panel.Background)"
-                                            Value="{ThemeResource AccentColor}" />
+                                            Value="{ThemeResource Background+1}" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
@@ -58,7 +58,7 @@
                                         <Storyboard>
                                             <ColorAnimation
                                                 Storyboard.TargetName="HamburgerIcon"
-                                                To="{Binding Source={ThemeResource Text-1},Path=Color}"
+                                                To="{Binding Source={ThemeResource Text-2},Path=Color}"
                                                 Duration="0:0:0.2"
                                                 Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
                                             <DoubleAnimation
@@ -99,29 +99,39 @@
                         </VisualStateManager.VisualStateGroups>
 
                         <Grid
+                            Margin="16,0,0,0"
+                            Width="48"
                             Height="48"
                             VerticalAlignment="Top">
                             <StackPanel
                                 x:Name="HoverBorder"
-                                Width="3"
-                                Height="24"
-                                HorizontalAlignment="Left"
-                                Background="{ThemeResource AccentColor}" />
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+                                <Ellipse
+                                    Width="6"
+                                    Height="6"
+                                    VerticalAlignment="Center"
+                                    Fill="{ThemeResource AccentColor}" />
+                            </StackPanel>
                             <FontIcon
                                 x:Name="HamburgerIcon"
                                 FontSize="16"
-                                Foreground="{ThemeResource Text-1}"
+                                Foreground="{ThemeResource Text-2}"
+                                FontFamily="{TemplateBinding FontFamily}"
                                 Glyph="{TemplateBinding Tag}"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center" />
                         </Grid>
-                        <TextBlock
+
+                        <ContentPresenter
+                            Margin="0"
                             FontSize="14"
                             x:Name="ContentPresenter"
                             AutomationProperties.AccessibilityView="Raw"
-                            Text="{TemplateBinding Content}"
+                            Content="{TemplateBinding Content}"
+                            FontFamily="Segoe UI"
                             Grid.Column="1"
-                            Foreground="{ThemeResource Text}"
+                            Foreground="{ThemeResource Text-1}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             TextWrapping="Wrap"
                             VerticalAlignment="Center" />
@@ -130,7 +140,141 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
+    <Style x:Key="HamburgerGreenRadioButton" TargetType="RadioButton">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
+        <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+        <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+        <Setter Property="MinWidth" Value="120" />
+        <Setter Property="UseSystemFocusVisuals" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Grid
+                        x:Name="HamburgerRadioButtonGrid"
+                        HorizontalAlignment="Stretch"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Background="{TemplateBinding Background}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter
+                                            Target="HamburgerRadioButtonGrid.(Panel.Background)"
+                                            Value="{ThemeResource AccentColor}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter
+                                            Target="HamburgerRadioButtonGrid.(Panel.Background)"
+                                            Value="{ThemeResource AccentColor+1}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition
+                                        From="Checked"
+                                        GeneratedDuration="0:0:0.2"
+                                        To="Unchecked">
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="HamburgerIcon"
+                                                To="{Binding Source={ThemeResource AccentText-1},Path=Color}"
+                                                Duration="0:0:0.2"
+                                                Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
+                                            <DoubleAnimation
+                                                Duration="0:0:0.2"
+                                                To="0"
+                                                Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                Storyboard.TargetName="HoverBorder" />
+                                        </Storyboard>
+                                    </VisualTransition>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <ColorAnimation
+                                            Storyboard.TargetName="HamburgerIcon"
+                                            To="{Binding Source={ThemeResource AccentText},Path=Color}"
+                                            Duration="0:0:0.2"
+                                            Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
+                                        <DoubleAnimation
+                                            Duration="0:0:0.2"
+                                            To="1"
+                                            Storyboard.TargetProperty="(UIElement.Opacity)"
+                                            Storyboard.TargetName="HoverBorder"
+                                            d:IsOptimized="True" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Duration="0"
+                                            To="0"
+                                            Storyboard.TargetProperty="(UIElement.Opacity)"
+                                            Storyboard.TargetName="HoverBorder"
+                                            d:IsOptimized="True" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Indeterminate" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid
+                            Margin="16,0,0,0"
+                            Width="48"
+                            Height="48"
+                            VerticalAlignment="Top">
+                            <StackPanel
+                                x:Name="HoverBorder"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+                                <Ellipse
+                                    Width="6"
+                                    Height="6"
+                                    VerticalAlignment="Center"
+                                    Fill="{ThemeResource AccentText}" />
+                            </StackPanel>
+                            <FontIcon
+                                x:Name="HamburgerIcon"
+                                FontSize="16"
+                                Foreground="{ThemeResource AccentText-1}"
+                                FontFamily="{TemplateBinding FontFamily}"
+                                Glyph="{TemplateBinding Tag}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center" />
+                        </Grid>
+
+                        <ContentPresenter
+                            Margin="0"
+                            FontSize="14"
+                            x:Name="ContentPresenter"
+                            AutomationProperties.AccessibilityView="Raw"
+                            Content="{TemplateBinding Content}"
+                            FontFamily="Segoe UI"
+                            Grid.Column="1"
+                            Foreground="{ThemeResource AccentText}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            TextWrapping="Wrap"
+                            VerticalAlignment="Center" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="ColorRadioButton" TargetType="RadioButton">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
@@ -373,36 +517,61 @@
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup
                                 x:Name="CommonStates">
-                                <VisualStateGroup.Transitions>
-                                    <VisualTransition
-                                        GeneratedDuration="0:0:0.2" />
-                                </VisualStateGroup.Transitions>
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition From="Normal" To="PointerOver" GeneratedDuration="0:0:0.2" />
+                                        
+                                        <VisualTransition From="PointerOver" To="Normal" GeneratedDuration="0:0:0.2" />
+                                        <VisualTransition From="PointerOver" To="Pressed" GeneratedDuration="0:0:0.2" />
+                                        <VisualTransition From="PointerOver" To="Checked" GeneratedDuration="0:0:0.2" /> <!-- tu kłopot gdy jest checked i pointer over leci (czemu na odwrót?) -->
+                                        <VisualTransition From="PointerOver" To="Disabled" GeneratedDuration="0:0:0.2" />
+
+                                        <VisualTransition From="Pressed" To="PointerOver" GeneratedDuration="0:0:0.2" />
+                                        <VisualTransition From="Pressed" To="Normal" GeneratedDuration="0:0:0.2" />
+                                        <VisualTransition From="Pressed" To="Checked" GeneratedDuration="0:0:0.2" />
+                                        <VisualTransition From="Pressed" To="Disabled" GeneratedDuration="0:0:0.2" />
+
+                                        <VisualTransition From="Checked" To="PointerOver" GeneratedDuration="0" />
+                                        <VisualTransition From="Checked" To="Pressed" GeneratedDuration="0:0:0.2" />
+                                        <VisualTransition From="Checked" To="Normal" GeneratedDuration="0:0:0.2" />
+                                        <VisualTransition From="Checked" To="Disabled" GeneratedDuration="0:0:0.2" />
+                                    </VisualStateGroup.Transitions>
                                 <VisualState
                                     x:Name="Normal" />
                                 <VisualState
                                     x:Name="PointerOver">
                                     <Storyboard>
-
+                                        <ColorAnimation
+                                            Storyboard.TargetName="Content"
+                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                            Duration="0"
+                                            Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="TextLabel"
+                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                            Duration="0"
+                                            Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState
                                     x:Name="Pressed">
                                     <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="Content"
+                                                To="{Binding Source={ThemeResource AccentColor+1},Path=Color}"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="TextLabel"
+                                            To="{Binding Source={ThemeResource AccentColor+1},Path=Color}"
+                                            Duration="0"
+                                            Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
                                     </Storyboard>
-                                </VisualState>
+                                    </VisualState>
                                 <VisualState
                                     x:Name="Disabled">
                                     <Storyboard>
-
                                     </Storyboard>
                                 </VisualState>
-                            </VisualStateGroup>
-                            <VisualStateGroup
-                                x:Name="CheckStates">
-                                <VisualStateGroup.Transitions>
-                                    <VisualTransition
-                                        GeneratedDuration="0:0:0.2" />
-                                </VisualStateGroup.Transitions>
                                 <VisualState
                                     x:Name="Checked">
                                     <Storyboard>
@@ -430,37 +599,9 @@
                                             Duration="0" />
                                     </Storyboard>
                                 </VisualState>
-                                <VisualState
-                                    x:Name="Unchecked">
-                                    <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="Content"
-                                            To="{Binding Source={ThemeResource Text-2},Path=Color}"
-                                            Duration="0"
-                                            Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
 
-                                        <ColorAnimation
-                                            Storyboard.TargetName="TextLabel"
-                                            To="{Binding Source={ThemeResource Text-1},Path=Color}"
-                                            Duration="0"
-                                            Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
-
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="Hover"
-                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)"
-                                            To="0"
-                                            Duration="0" />
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="Hover"
-                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)"
-                                            To="0"
-                                            Duration="0" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState
-                                    x:Name="Indeterminate" />
                             </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
+                            </VisualStateManager.VisualStateGroups>
 
                         <Grid
                             x:Name="ContentRoot"
@@ -478,6 +619,7 @@
                                     Height="Auto" />
                             </Grid.RowDefinitions>
                             <Ellipse
+                                Visibility="Collapsed"
                                 x:Name="Hover"
                                 VerticalAlignment="Top"
                                 Margin="0,-5,0,0"

@@ -12,5 +12,9 @@ namespace Finanse.Models {
             SolidColorBrush myBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(a, r, g, b));
             return myBrush;
         }
+
+        public static DateTime dateTimeWithFirstDayOfMonth(DateTime dateTime) {
+            return new DateTime(dateTime.Year, dateTime.Month, 1);
+        }
     }
 }

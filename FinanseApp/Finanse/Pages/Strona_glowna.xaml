@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:Finanse.Elements"
     xmlns:models="using:Finanse.Models"
+    NavigationCacheMode="Enabled"
     mc:Ignorable="d">
 
     <Page.Transitions>
@@ -60,7 +61,7 @@
                             <ColumnDefinition
                                 Width="Auto" />
                         </Grid.ColumnDefinitions>
-
+                        
                         <StackPanel
                             Margin="0,12"
                             Orientation="Horizontal">
@@ -93,6 +94,7 @@
                             FontSize="12" />
 
                         <Border
+                            Visibility="Collapsed"
                             Grid.ColumnSpan="3"
                             Opacity="0.3"
                             BorderBrush="{ThemeResource Text-2}"
@@ -306,32 +308,14 @@
             <RowDefinition
                 Height="*" />
         </Grid.RowDefinitions>
-        <!--
-                    Background="{ThemeResource AccentColor}"
-        -->
+
         <Grid
             Background="{ThemeResource AccentColor}"
             Height="48">
-            <!--
-            <Grid.Background>
-                <LinearGradientBrush
-                    EndPoint="0.5,1"
-                    StartPoint="0.5,0">
-                    <LinearGradientBrush.RelativeTransform>
-                        <CompositeTransform
-                            CenterY="0.5"
-                            CenterX="0.5"
-                            Rotation="-90" />
-                    </LinearGradientBrush.RelativeTransform>
-                    <GradientStop
-                        Color="#FF078B3E"
-                        Offset="0" />
-                    <GradientStop
-                        Color="#FF04AC82"
-                        Offset="1" />
-                </LinearGradientBrush>
-            </Grid.Background>
--->
+        
+        <Grid
+            MaxWidth="620">
+   
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
                     Width="*" />
@@ -343,9 +327,10 @@
                 Orientation="Horizontal">
                 <Button
                     x:Name="PrevMonthButton"
+                    BorderThickness="0"
                     Width="32"
+                    Height="32"
                     Margin="8,0,0,0"
-                    Padding="0"
                     Foreground="{ThemeResource AccentText}"
                     Click="PreviousMonthButton_Click"
                     Background="Transparent">
@@ -357,10 +342,10 @@
 
                 <Grid>
                     <Button
-                        Margin="0"
-                        Padding="0"
+                        BorderThickness="0"
                         Background="Transparent"
                         Width="32"
+                        Height="32"
                         x:Name="IncomingOperationsButton"
                         Foreground="{ThemeResource AccentText}"
                         Click="IncomingOperationsButton_Click">
@@ -371,8 +356,8 @@
                     </Button>
 
                     <Button
-                        Margin="0"
-                        Padding="0"
+                        BorderThickness="0"
+                        Height="32"
                         Background="Transparent"
                         Width="32"
                         x:Name="NextMonthButton"
@@ -420,8 +405,10 @@
                     FontWeight="Bold"
                     FontSize="13" />
                 <Button
-                    Margin="11,0,16,0"
-                    Padding="5"
+                    BorderThickness="0"
+                    Width="32"
+                    Height="32"
+                    Margin="8,0"
                     Background="Transparent"
                     VerticalAlignment="Center">
                     <Button.Content>
@@ -452,6 +439,9 @@
             </StackPanel>
 
         </Grid>
+
+        </Grid>
+
         <!--
         <Grid
             Background="{ThemeResource Background-1}"

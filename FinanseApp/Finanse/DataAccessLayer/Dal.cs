@@ -208,6 +208,57 @@
             return models;
         }
 
+        public static List<List<OperationSubCategory>> getAllSubCategoriesInExpensesGroupedByBoss() {
+
+            // Create a new connection
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                List<List<OperationSubCategory>> models = new List<List<OperationSubCategory>>();
+
+
+                var query = (from p in db.Table<OperationSubCategory>()
+                          where p.VisibleInExpenses orderby p.Name
+                          group p by p.BossCategoryId into g
+                          select new {
+                              GroupName = g.Key,
+                              Items = g
+                          }).ToList();
+
+                foreach (var g in query)
+                    models.Add(g.Items.ToList());
+
+                return models;
+            }
+        }
+
+        public static List<List<OperationSubCategory>> getAllSubCategoriesInIncomesGroupedByBoss() {
+
+            // Create a new connection
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                List<List<OperationSubCategory>> models = new List<List<OperationSubCategory>>();
+
+
+                var query = (from p in db.Table<OperationSubCategory>()
+                             where p.VisibleInIncomes
+                             orderby p.Name
+                             group p by p.BossCategoryId into g
+                             select new {
+                                 GroupName = g.Key,
+                                 Items = g
+                             }).ToList();
+
+                foreach (var g in query)
+                    models.Add(g.Items.ToList());
+
+                return models;
+            }
+        }
+
         public static List<CardAccount> getListOfLinkedCardAccountToThisBankAccount(BankAccount account) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing

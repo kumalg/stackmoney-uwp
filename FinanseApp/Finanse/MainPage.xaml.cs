@@ -14,6 +14,8 @@ using Windows.Phone.UI.Input;
 using Windows.System.Profile;
 using Windows.UI.Core;
 using Windows.Foundation;
+using Windows.ApplicationModel.Core;
+using Finanse.Models;
 
 namespace Finanse {
     public sealed partial class MainPage : Page {
@@ -22,6 +24,21 @@ namespace Finanse {
             this.InitializeComponent();
             Dal.createDB();
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(360, 530));
+            CoreApplication.GetCurrentView().TitleBar.IsVisibleChanged += TitleBar_IsVisibleChanged;
+
+            ApplicationViewTitleBar formattableTitleBar = ApplicationView.GetForCurrentView().TitleBar;
+            formattableTitleBar.ButtonBackgroundColor = Colors.Transparent;
+            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+            formattableTitleBar.ButtonHoverBackgroundColor = Functions.GetSolidColorBrush("#19000000").Color;
+                }
+
+        private void TitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args) {
+            //  throw new NotImplementedException();
+            if (sender.IsVisible)
+                TitleBarRowDefinition.Height = new GridLength(32);
+            else
+                TitleBarRowDefinition.Height = new GridLength(0);
         }
 
         private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e) {
@@ -73,6 +90,7 @@ namespace Finanse {
 
         private void StatusBarAndTitleBar(string statusBarBackgroundColor, string statusBarForegroundColor) {
             //PC customization
+            /*
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView")) {
                 var titleBar = ApplicationView.GetForCurrentView().TitleBar;
                 if (titleBar != null) {
@@ -83,7 +101,7 @@ namespace Finanse {
                     titleBar.ForegroundColor = Colors.White;
                 }
             }
-
+            */
             //Mobile customization
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) {
 
@@ -103,28 +121,32 @@ namespace Finanse {
 
         }
 
+        private void closeCommandBar() {
+            if (CommandBar != null)
+                CommandBar.IsOpen = false;
+        }
 
         private async void OperationsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
-            CommandBar.IsOpen = false;
+            closeCommandBar();
             await Task.Delay(5);
             if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(Strona_glowna))
                 AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
         }
 
         private async void CategoriesAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
-            CommandBar.IsOpen = false;
+            closeCommandBar();
             await Task.Delay(5);
             AktualnaStrona_Frame.Navigate(typeof(Kategorie));
         }
 
         private async void AddNewOperationAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
-            CommandBar.IsOpen = false;
+            closeCommandBar();
             await Task.Delay(5);
             AktualnaStrona_Frame.Navigate(typeof(Nowa_Operacja));
         }
 
         private async void StatisticsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
-            CommandBar.IsOpen = false;
+            closeCommandBar();
             await Task.Delay(5);
             AktualnaStrona_Frame.Navigate(typeof(Statystyki));
         }
@@ -189,10 +211,16 @@ namespace Finanse {
         private void AktualnaStrona_Frame_Navigated(object sender, NavigationEventArgs e) {
             if (((Frame)sender).SourcePageType == typeof(Strona_glowna)) {
                 SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
-                OperationsAppBarRadioButton.IsChecked = true;
+                AppTitle.Margin = new Thickness(16, 0, 0, 0);
+                if (OperationsAppBarRadioButton != null)
+                    OperationsAppBarRadioButton.IsChecked = true;
+                if (Strona_glowna_ListBoxItem != null)
+                    Strona_glowna_ListBoxItem.IsChecked = true;
             }
-            else
+            else {
                 SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+                AppTitle.Margin = new Thickness(64, 0, 0, 0);
+            }
         }
 
         private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e) {

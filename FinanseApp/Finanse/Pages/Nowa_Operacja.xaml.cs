@@ -224,7 +224,7 @@ namespace Finanse.Pages {
                 Cost = decimal.Parse(acceptedCostValue, Settings.getActualCultureInfo()),
                 CategoryId = catId,
                 SubCategoryId = subCatId,
-                Date = DateValue.Date.Value.ToString("yyyy.MM.dd"),// String.Format("{0:yyyy.MM.dd}", DateValue.Date),
+                Date = DateValue.Date == null ? string.Empty : DateValue.Date.Value.ToString("yyyy.MM.dd"),// String.Format("{0:yyyy.MM.dd}", DateValue.Date),
                 MoreInfo = MoreInfoValue.Text,
                 MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
             });
@@ -241,8 +241,10 @@ namespace Finanse.Pages {
                     MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
                 });
             }
-            
-            Frame.Navigate(typeof(Strona_glowna), DateValue.Date.Value.DateTime);
+
+            DateTime navigateToThisMonth = DateValue.Date == null ? DateTime.Today.AddMonths(1) : DateValue.Date.Value.DateTime;// Functions.dateTimeWithFirstDayOfMonth(DateTime.Today.AddMonths(1)) : DateValue.Date.Value.DateTime;
+
+            Frame.Navigate(typeof(Strona_glowna), navigateToThisMonth);
         }
     }
 }

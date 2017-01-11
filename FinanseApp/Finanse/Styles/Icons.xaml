@@ -37,7 +37,7 @@
     </ResourceDictionary>
 
     <FontIcon x:Key="DefaultEllipseIcon" Glyph="🏴" FontFamily="Segoe UI" />
-    
+
     <Style x:Key="DetailsIconStyle" TargetType="FontIcon">
         <Setter Property="Foreground" Value="{ThemeResource Text-2}" />
     </Style>

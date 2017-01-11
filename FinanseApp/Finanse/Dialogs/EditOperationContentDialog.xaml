@@ -31,6 +31,7 @@
                 Name="Expense_RadioButton"
                 GroupName="OperationType_RadioButtons"
                 Tag="Wydatek"
+                x:Uid="expenseTag"
                 Checked="TypeOfOperationRadioButton_Checked"
                 Style="{StaticResource RadioButtonWithIconStyle}">
                 <Canvas Width="32" Height="32">
@@ -45,6 +46,7 @@
                 Name="Income_RadioButton"
                 GroupName="OperationType_RadioButtons"
                 Tag="Wpływ"
+                x:Uid="incomeTag"
                 Checked="TypeOfOperationRadioButton_Checked"
                 Style="{StaticResource RadioButtonWithIconStyle}">
                 <Canvas Width="32" Height="32">
@@ -59,6 +61,7 @@
                 Name="Transfer_RadioButton"
                 GroupName="OperationType_RadioButtons"
                 Tag="Transfer"
+                x:Uid="transferTag"
                 Style="{StaticResource RadioButtonWithIconStyle}">
                 <Canvas Width="32" Height="32">
                     <PathIcon Data="M20.5 19.504c0 0-6.904 0-9.088 0l1.795-1.796c0.39-0.391 0.39-1.024-0.001-1.414  c-0.39-0.391-1.023-0.391-1.414 0l-3.5 3.503c-0.39 0.392-0.39 1.023 0 1.414l3.5 3.502c0.391 0.392 1.024 0.393 1.414 0.002  c0.391-0.391 0.391-1.023 0.001-1.414l-1.795-1.797c2.184 0 9.088 0 9.088 0c0.553 0 1-0.447 1-1  C21.5 19.952 21.053 19.504 20.5 19.504z" />

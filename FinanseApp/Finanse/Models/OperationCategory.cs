@@ -40,10 +40,12 @@ namespace Finanse.Models {
         public void addSubCategory(OperationSubCategory subCategory) {
             subCategories.Insert(0, subCategory);
         }
-
+        
         public ObservableCollection<OperationSubCategory> getSubCategories() {
+            //  if (subCategories == null)
+            //      subCategories = new ObservableCollection<OperationSubCategory>(Dal.getOperationSubCategoriesByBossId(Id));
             if (subCategories == null)
-                subCategories = new ObservableCollection<OperationSubCategory>(Dal.getOperationSubCategoriesByBossId(Id));
+                subCategories = new ObservableCollection<OperationSubCategory>();
             return subCategories;
         }
     }

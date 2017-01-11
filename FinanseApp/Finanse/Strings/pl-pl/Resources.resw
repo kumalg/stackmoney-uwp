@@ -377,4 +377,16 @@
   <data name="yesterday" xml:space="preserve">
     <value>wczoraj</value>
   </data>
+  <data name="expenseTag.Tag" xml:space="preserve">
+    <value>Wydatek</value>
+  </data>
+  <data name="incomeTag.Tag" xml:space="preserve">
+    <value>Wpływ</value>
+  </data>
+  <data name="transferTag.Tag" xml:space="preserve">
+    <value>Transfer</value>
+  </data>
+  <data name="addNewOperation14" xml:space="preserve">
+    <value>Dodaj operację</value>
+  </data>
 </root>

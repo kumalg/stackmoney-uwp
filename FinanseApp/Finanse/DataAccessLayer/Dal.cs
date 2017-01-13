@@ -346,7 +346,7 @@
             return models;
         }
 
-        public static List<Operation> getAllOperations(int month, int year, List<int> visiblePayFormList) {
+        public static List<Operation> getAllOperations(int month, int year, HashSet<int> visiblePayFormList) {
             List<Operation> models;
 
             // Create a new connection
@@ -391,7 +391,7 @@
             }
         }
 
-        public static List<Operation> getAllFutureOperations(List<int> visiblePayFormList) {
+        public static List<Operation> getAllFutureOperations(HashSet<int> visiblePayFormList) {
             List<Operation> models;
 
             // Create a new connection

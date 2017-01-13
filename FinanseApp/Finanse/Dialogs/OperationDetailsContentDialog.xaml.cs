@@ -79,14 +79,21 @@ namespace Finanse.Dialogs {
             else
                 MoreInfoPanel.Visibility = Visibility.Collapsed;
         }
-
+        /*
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
-
             Hide();
-
             var ContentDialogItem = new Delete_ContentDialog(_source, editedOperation, whichOption);
-
             var result = await ContentDialogItem.ShowAsync();
+        }
+
+        private async void DeleteButton_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
+            Hide();
+            var ContentDialogItem = new Delete_ContentDialog(_source, editedOperation, whichOption);
+            var result = await ContentDialogItem.ShowAsync();
+        }*/
+        
+        private void Exit_Click(object sender, RoutedEventArgs e) {
+            Hide();
         }
 
         private async void EditButton_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args) {

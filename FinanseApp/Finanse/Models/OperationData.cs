@@ -11,17 +11,17 @@ namespace Finanse.Models {
     public class OperationData {
         private int month, year;
         private bool isFuture;
-        private List<int> visiblePayFormList;
+        private HashSet<int> visiblePayFormList;
 
         private readonly ItemCollection _collection = new ItemCollection();
-        public OperationData(int month, int year, bool isFuture, List<int> visiblePayFormList) {
+        public OperationData(int month, int year, bool isFuture, HashSet<int> visiblePayFormList) {
             this.month = month;
             this.year = year;
             this.isFuture = isFuture;
             this.visiblePayFormList = visiblePayFormList;
         }
 
-        public void SetVisiblePayFormList(List<int> visiblePayFormList) {
+        public void SetVisiblePayFormList(HashSet<int> visiblePayFormList) {
             if (this.visiblePayFormList != visiblePayFormList)
                 this.visiblePayFormList = visiblePayFormList;
         }

@@ -419,6 +419,26 @@
                             Glyph="" />
                     </Button.Content>
                     <Button.Flyout>
+                            <Flyout
+                                x:Name="VisibleAccountsFlyout"
+                                Placement="Bottom">
+                                <Flyout.FlyoutPresenterStyle>
+                                    <Style
+                                        TargetType="FlyoutPresenter">
+                                        <Setter
+                                            Property="BorderThickness"
+                                            Value="0" />
+                                        <Setter
+                                            Property="Background"
+                                            Value="{ThemeResource Background-1Transparent}" />
+                                    </Style>
+                                </Flyout.FlyoutPresenterStyle>
+
+                                <ListView
+                                    SelectionMode="None"/>
+
+                            </Flyout>
+                        <!--
                         <MenuFlyout
                             x:Name="VisiblePayFormMenuFlyout"
                             Placement="Bottom">
@@ -433,7 +453,7 @@
                                         Value="{ThemeResource Background-1Transparent}" />
                                 </Style>
                             </MenuFlyout.MenuFlyoutPresenterStyle>
-                        </MenuFlyout>
+                        </MenuFlyout>-->
                     </Button.Flyout>
                 </Button>
             </StackPanel>
@@ -539,7 +559,7 @@
                     Background="Transparent"
                     ItemsSource="{x:Bind ContactsCVS.View}"
                     IsItemClickEnabled="True"
-                    ItemClick="OperacjeListView_ItemClick"
+                    ItemClick="DetailsButton_Click"
                     SelectionChanged="OperacjeListView_SelectionChanged">
 
                     <ListView.Header>

@@ -354,7 +354,7 @@
                         <FontIcon
                             x:Name="ContentPresenter"
                             Foreground="{ThemeResource AccentText}"
-                            FontSize="16"
+                            FontSize="13"
                             FontFamily="Segoe MDL2 Assets"
                             Glyph="{TemplateBinding Content}" />
                     </Border>

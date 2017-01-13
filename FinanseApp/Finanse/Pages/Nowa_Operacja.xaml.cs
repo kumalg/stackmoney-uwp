@@ -11,6 +11,7 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 
 namespace Finanse.Pages {
 
@@ -21,6 +22,26 @@ namespace Finanse.Pages {
         private string acceptedCostValue = string.Empty;
 
         private bool isUnfocused = true;
+
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
+            setDefaultPageValues();
+
+            base.OnNavigatedTo(e); 
+        }
+
+        private void setDefaultPageValues() {
+            CostValue.Text = string.Empty;
+            acceptedCostValue = string.Empty;
+            NameValue.Text = string.Empty;
+            DateValue.Date = DateTime.Today;
+            CategoryValue.SelectedIndex = -1;
+            SubCategoryValue.SelectedIndex = -1;
+            SubCategoryValue.IsEnabled = false;
+            PayFormValue.SelectedIndex = 0;
+            MoreInfoValue.Text = string.Empty;
+            SaveAsAssetToggle.IsOn = false;
+            Expense_RadioButton.IsChecked = true;
+        }
 
         public Nowa_Operacja() {
           
@@ -224,7 +245,7 @@ namespace Finanse.Pages {
                 Cost = decimal.Parse(acceptedCostValue, Settings.getActualCultureInfo()),
                 CategoryId = catId,
                 SubCategoryId = subCatId,
-                Date = DateValue.Date == null ? string.Empty : DateValue.Date.Value.ToString("yyyy.MM.dd"),// String.Format("{0:yyyy.MM.dd}", DateValue.Date),
+                Date = DateValue.Date == null ? string.Empty : DateValue.Date.Value.ToString("yyyy.MM.dd"),
                 MoreInfo = MoreInfoValue.Text,
                 MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
             });
@@ -241,8 +262,10 @@ namespace Finanse.Pages {
                     MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
                 });
             }
-
-            DateTime navigateToThisMonth = DateValue.Date == null ? DateTime.Today.AddMonths(1) : DateValue.Date.Value.DateTime;// Functions.dateTimeWithFirstDayOfMonth(DateTime.Today.AddMonths(1)) : DateValue.Date.Value.DateTime;
+            
+            DateTime navigateToThisMonth = DateValue.Date == null || DateValue.Date > DateTime.Today ? 
+                DateTime.Today.AddMonths(1) :
+                DateValue.Date.Value.DateTime;
 
             Frame.Navigate(typeof(Strona_glowna), navigateToThisMonth);
         }

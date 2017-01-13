@@ -11,8 +11,7 @@ namespace Finanse.Dialogs {
     public sealed partial class EditOperationContentDialog : ContentDialog {
 
         private Regex regex = NewOperation.getRegex();
-
-        private bool _isSaved = false;
+        
         private bool isLoaded = false;
         private bool isUnfocused = true;
 
@@ -89,10 +88,6 @@ namespace Finanse.Dialogs {
             return false;
         }
 
-        public bool isSaved() {
-            return _isSaved;
-        }
-
         public Operation editedOperation() {
             return new Operation {
                 Id = operationToEdit.Id,
@@ -144,8 +139,6 @@ namespace Finanse.Dialogs {
                 Dal.saveOperation(editedOperation());
              else
                 Dal.saveOperationPattern(editedOperationPattern());
-
-            _isSaved = true;
         }
 
         private void TypeOfOperationRadioButton_Checked(object sender, RoutedEventArgs e) {

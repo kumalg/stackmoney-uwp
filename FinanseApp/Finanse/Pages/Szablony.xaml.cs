@@ -44,15 +44,16 @@ namespace Finanse.Pages {
 
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-            var ContentDialogItem = new EditOperationContentDialog(((OperationPattern)datacontext));
-            var result = await ContentDialogItem.ShowAsync();
 
-            if (ContentDialogItem.isSaved()) {
+            var ContentDialogItem = new EditOperationContentDialog(((OperationPattern)datacontext));
+            ContentDialogItem.PrimaryButtonClick += delegate {
                 OperationPattern operationPattern = ContentDialogItem.editedOperationPattern();
                 OperationPatterns[OperationPatterns
                     .IndexOf(OperationPatterns
                     .FirstOrDefault(i => i.Id == operationPattern.Id))] = operationPattern;
-            }
+            };
+
+            var result = await ContentDialogItem.ShowAsync();
         }
 
         public void removeOperationPatternFromList(OperationPattern operationPattern) {

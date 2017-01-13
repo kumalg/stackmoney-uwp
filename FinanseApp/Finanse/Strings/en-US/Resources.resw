@@ -269,7 +269,7 @@
     <value>Edit</value>
   </data>
   <data name="operationDetailsContentDialog.SecondaryButtonText" xml:space="preserve">
-    <value>Close</value>
+    <value>Delete</value>
   </data>
   <data name="operationDetailsContentDialog.Title" xml:space="preserve">
     <value>Operation details</value>

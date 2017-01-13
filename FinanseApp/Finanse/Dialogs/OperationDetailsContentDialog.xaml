@@ -10,7 +10,7 @@
     Background="{ThemeResource BackgroundTransparent}"
     Title="Szczegóły operacji"
     PrimaryButtonText="Edytuj"
-    SecondaryButtonText="Wyjdź"
+    SecondaryButtonText="Usuń"
     x:Uid="operationDetailsContentDialog"
     PrimaryButtonClick="EditButton_Click">
 
@@ -105,11 +105,11 @@
                                                     </ContentControl>
                                                     <Button
                                                         Style="{StaticResource ButtonStyle1}"
-                                                        ToolTipService.ToolTip="Usuń operację"
+                                                        ToolTipService.ToolTip="Wyjdź"
                                                         Grid.Column="2"
                                                         Width="48"
                                                         Height="48"
-                                                        Click="DeleteButton_Click">&#xE107;
+                                                        Click="Exit_Click">&#xE106;
                                                     </Button>
                                                 </Grid>
                                                 <ContentPresenter
@@ -125,7 +125,7 @@
                                             </Grid>
                                         </ScrollViewer>
                                         <Grid
-                                            Margin="20,0"
+                                            Margin="20,10,20,0"
                                             x:Name="CommandSpace"
                                             Grid.Row="1"
                                             HorizontalAlignment="Stretch"

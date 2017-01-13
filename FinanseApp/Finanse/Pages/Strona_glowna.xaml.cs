@@ -16,44 +16,43 @@ using System.Threading.Tasks;
 using Windows.Phone.UI.Input;
 using Windows.UI.Core;
 using Windows.System.Profile;
+using Windows.Foundation;
+using Windows.UI.Popups;
+using Windows.UI;
 
 namespace Finanse.Pages {
     public sealed partial class Strona_glowna : Page {
 
-        private List<int> visiblePayFormList = new List<int> { 19, 20, 21, 22};
+        private HashSet<int> visibleAccountsSet = new HashSet<int>();
         private OperationData storeData;
         private ObservableCollection<GroupInfoList<Operation>> operationGroups = new ObservableCollection<GroupInfoList<Operation>>();
         private DateTime actualYearAndMonth;
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
-            
-            DateTime dateTimeWithDays = (e.Parameter is DateTime) ?
-            (DateTime)e.Parameter : DateTime.Today;
 
-            actualYearAndMonth = Functions.dateTimeWithFirstDayOfMonth(dateTimeWithDays);//new DateTime(dateTimeWithDays.Year, dateTimeWithDays.Month, 1);
-             
-            setNextMonthButtonEnabling();
-            setPreviousMonthButtonEnabling();
+            if (e.Parameter is DateTime) {
+                DateTime dateTimeWithDays = (DateTime)e.Parameter;
 
-            storeData = dateTimeWithDays > DateTime.Today ? 
-                new OperationData(actualYearAndMonth.Month, actualYearAndMonth.Year, true, null) : 
-                new OperationData(actualYearAndMonth.Month, actualYearAndMonth.Year, false, null);
+                actualYearAndMonth = Functions.dateTimeWithFirstDayOfMonth(dateTimeWithDays);
 
-            ByDateRadioButton.IsChecked = true;
-            groupOperations(operationGroups, storeData);
-            listViewByDate();
-            ///  SetListOfOperations(visiblePayFormList);
-              ByDateRadioButton.Checked += ByDateRadioButton_Checked;
-              ByCategoryRadioButton.Checked += ByCategoryRadioButton_Checked;
-            setActualMonthText();
-            setActualMoneyBar();
-            setEmptyListViewInfoVisibility();
-            
-            if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile")
-                HardwareButtons.BackPressed += HardwareButtons_BackPressed;
-           // SystemNavigationManager.GetForCurrentView().BackRequested += BackRequestedEvent;
+                setNextMonthButtonEnabling();
+                setPreviousMonthButtonEnabling();
 
-            base.OnNavigatedTo(e);
+                storeData = setStoreData();
+
+                groupOperations(operationGroups, storeData);
+
+                if ((bool)ByDateRadioButton.IsChecked)
+                    listViewByDate();
+                else
+                    listViewByCategory();
+
+                setActualMonthText();
+                setActualMoneyBar();
+                setEmptyListViewInfoVisibility();
+                
+                base.OnNavigatedTo(e);
+            }            
         }
 
         private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e) {
@@ -66,23 +65,64 @@ namespace Finanse.Pages {
             if (!semanticZoom.IsZoomedInViewActive)
                 semanticZoom.IsZoomedInViewActive = true;
             // e.Handled = true;
-
         }
+        
 
         public Strona_glowna() {
 
             this.InitializeComponent();
-           // this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
-    
+
+            if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile")
+                HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+
             foreach (var item in Dal.getAllMoneyAccounts()) {
-                ToggleMenuFlyoutItem itema = new ToggleMenuFlyoutItem {
-                    Text = item.Name,
+                CheckBox itema = new CheckBox {
+                    Content = item.Name,
                     Tag = item.Id,
                     IsChecked = true,
                 };
-                itema.Click += Clicky;
-                visiblePayFormList.Add(item.Id);
-                VisiblePayFormMenuFlyout.Items.Add(itema);
+                visibleAccountsSet.Add(item.Id);
+                ((ListView)VisibleAccountsFlyout.Content).Items.Add(itema);
+            }
+           
+            actualYearAndMonth = Functions.dateTimeWithFirstDayOfMonth(DateTime.Today);
+
+            setNextMonthButtonEnabling();
+            setPreviousMonthButtonEnabling();
+
+            storeData = setStoreData();
+
+            ByDateRadioButton.IsChecked = true;
+            groupOperations(operationGroups, storeData);
+            listViewByDate();
+
+            ByDateRadioButton.Checked += ByDateRadioButton_Checked;
+            ByCategoryRadioButton.Checked += ByCategoryRadioButton_Checked;
+
+            setActualMonthText();
+            setActualMoneyBar();
+            setEmptyListViewInfoVisibility();
+
+            VisibleAccountsFlyout.Closed += delegate {
+                reloadOperationsWithNewVisibleAccounts();
+            };
+        }
+
+        private void reloadOperationsWithNewVisibleAccounts() {
+            HashSet<int> previousAccountsSet = new HashSet<int>(visibleAccountsSet);
+            visibleAccountsSet.Clear();
+
+            foreach (CheckBox item in ((ListView)VisibleAccountsFlyout.Content).Items)
+                if (item.IsChecked == true)
+                    visibleAccountsSet.Add((int)item.Tag);
+            
+            if (!previousAccountsSet.SetEquals(visibleAccountsSet)) {
+                storeData.SetVisiblePayFormList(visibleAccountsSet);
+                setListOfOperations(visibleAccountsSet);
+                
+                //  if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
+                if ((bool)ByDateRadioButton.IsChecked)
+                    (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
             }
         }
 
@@ -96,7 +136,7 @@ namespace Finanse.Pages {
         }
 
         private OperationData setStoreData() {
-            return new OperationData(actualYearAndMonth.Month, actualYearAndMonth.Year, isFutureMonth(actualYearAndMonth), visiblePayFormList);
+            return new OperationData(actualYearAndMonth.Month, actualYearAndMonth.Year, isFutureMonth(actualYearAndMonth), visibleAccountsSet);
         }
 
         private void setActualMonthText() {
@@ -117,57 +157,64 @@ namespace Finanse.Pages {
             foreach (var s in (bool)ByDateRadioButton.IsChecked ? operations.GroupsByDay : operations.GroupsByCategory)
                 operationGroups.Add(s);
         }
-
-        private void Clicky(object sender, RoutedEventArgs e) {
-            if (((ToggleMenuFlyoutItem)sender).IsChecked == true)
-                visiblePayFormList.Add((int)((ToggleMenuFlyoutItem)sender).Tag);
-            else
-                visiblePayFormList.Remove((int)((ToggleMenuFlyoutItem)sender).Tag);
-
-            storeData.SetVisiblePayFormList(visiblePayFormList);
-            setListOfOperations(visiblePayFormList);
-
-            //  if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
-            if ((bool)ByDateRadioButton.IsChecked)
-                (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
-        }
-
+        
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
             FrameworkElement senderElement = sender as FrameworkElement;
             FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
             flyoutBase.ShowAt(senderElement);
         }
 
-        private async void DetailsButton_Click(object sender, RoutedEventArgs e) {
-            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-            var ContentDialogItem = new OperationDetailsContentDialog(operationGroups, (Operation)datacontext, "");
-            var result = await ContentDialogItem.ShowAsync();
+        /**
+         * BUTTON CLICKS
+         */
+
+        private void DetailsButton_Click(object sender, ItemClickEventArgs e) {
+            showDetailsContentDialog((Operation)e.ClickedItem);
+        }
+        private void DetailsButton_Click(object sender, RoutedEventArgs e) {
+            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            showDetailsContentDialog((Operation)datacontext);
+        }
+        private async void showDetailsContentDialog(Operation operation) {
+            OperationDetailsContentDialog operationDetailsContentDialog = new OperationDetailsContentDialog(operationGroups, operation, "");
+
+            operationDetailsContentDialog.SecondaryButtonClick += delegate {
+            };
+
+            ContentDialogResult result = await operationDetailsContentDialog.ShowAsync();
         }
 
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
-            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-            var ContentDialogItem = new EditOperationContentDialog((Operation)datacontext);
-            var result = await ContentDialogItem.ShowAsync();
+            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            Operation oldOperation = (Operation)datacontext;
 
-            if (ContentDialogItem.isSaved()) {
-                updateOperationInList((Operation)datacontext, ContentDialogItem.editedOperation());
+            EditOperationContentDialog editOperationContentDialog = new EditOperationContentDialog(oldOperation);
+            editOperationContentDialog.PrimaryButtonClick += delegate {
+                updateOperationInList(oldOperation, editOperationContentDialog.editedOperation());
                 setActualMoneyBar();
-            }
+            };
+
+            ContentDialogResult result = await editOperationContentDialog.ShowAsync();
+        }
+        
+        private void DeleteButton_Click(object sender, RoutedEventArgs e) {
+            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            showDeleteOperationContentDialog((Operation)datacontext);
+        }
+        private async void showDeleteOperationContentDialog(Operation operation) {
+            AcceptContentDialog acceptDeleteOperationContentDialog = new AcceptContentDialog("Czy chcesz usunąć operację?");
+            acceptDeleteOperationContentDialog.PrimaryButtonClick += delegate {
+                deleteOperation_DialogButtonClick(operation);
+            };
+            ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
         }
 
-        private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
-            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-            var ContentDialogItem = new AcceptContentDialog("Czy chcesz usunąć operację?");
-            var result = await ContentDialogItem.ShowAsync();
-
-            if (ContentDialogItem.isAccepted()) {
-                Operation operation = (Operation)datacontext;
-                removeOperationFromList(operation);
-                Dal.deleteOperation(operation);
-                setActualMoneyBar();
-            }
+        private void deleteOperation_DialogButtonClick(Operation operation) {
+            removeOperationFromList(operation);
+            Dal.deleteOperation(operation);
+            setActualMoneyBar();
         }
-
+        
         private void updateOperationInList(Operation previous, Operation actual) {
             removeOperationFromList(previous);
             tryAddOperationToList(actual);
@@ -268,7 +315,7 @@ namespace Finanse.Pages {
         }
 
         private void OperacjeListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            this.OperacjeListView.SelectedItem = null;
+            OperacjeListView.SelectedItem = null;
         }
 
         private void semanticZoom_ViewChangeStarted(object sender, SemanticZoomViewChangedEventArgs e) {
@@ -289,30 +336,30 @@ namespace Finanse.Pages {
 
         private async void PreviousMonthButton_Click(object sender, RoutedEventArgs e) {
             activateProgressRing();
-            await Task.Delay(1);
+            await Task.Delay(5);
 
             actualYearAndMonth = actualYearAndMonth.AddMonths(-1);
-            setListOfOperations(visiblePayFormList);
+            setListOfOperations(visibleAccountsSet);
 
             deactivateProgressRing();
         }
 
         private async void NextMonthButton_Click(object sender, RoutedEventArgs e) {
             activateProgressRing();
-            await Task.Delay(1);
+            await Task.Delay(5);
 
             actualYearAndMonth = actualYearAndMonth.AddMonths(1);
-            setListOfOperations(visiblePayFormList);
+            setListOfOperations(visibleAccountsSet);
 
             deactivateProgressRing();
         }
 
         private async void IncomingOperationsButton_Click(object sender, RoutedEventArgs e) {
             activateProgressRing();
-            await Task.Delay(1);
+            await Task.Delay(5);
 
             actualYearAndMonth = actualYearAndMonth.AddMonths(1);
-            setListOfOperations(visiblePayFormList);
+            setListOfOperations(visibleAccountsSet);
             PrevMonthButton.IsEnabled = true; // ponieważ trzeba wrócić z planowanych do aktualnego miesiąca
             IncomingOperationsButton.Visibility = Visibility.Collapsed;
 
@@ -329,7 +376,7 @@ namespace Finanse.Pages {
             ProgressRing.IsActive = false;
         }
 
-        private void setListOfOperations(List<int> visiblePayFormList) {
+        private void setListOfOperations(HashSet<int> visiblePayFormList) {
 
             storeData = setStoreData();
             setActualMonthText();
@@ -414,14 +461,6 @@ namespace Finanse.Pages {
             (semanticZoom.ZoomedOutView as ListViewBase).ItemsPanel = ByCategoryGroupItemsPanelTemplate;
             (semanticZoom.ZoomedOutView as ListViewBase).ItemTemplateSelector = null;
             (semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate = ByCategoryGroupItemTemplate;
-        }
-
-        private async void OperacjeListView_ItemClick(object sender, ItemClickEventArgs e) {
-            Operation thisOperation = (Operation)e.ClickedItem;
-
-            var ContentDialogItem = new OperationDetailsContentDialog(operationGroups, thisOperation, "");
-
-            var result = await ContentDialogItem.ShowAsync();
         }
 
         private async void ByCategoryRadioButton_Checked(object sender, RoutedEventArgs e) {

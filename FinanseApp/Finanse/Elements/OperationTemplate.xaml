@@ -32,7 +32,7 @@
                 Name="MoneyAccountEllipse"
                 Visibility="Collapsed"
                 HorizontalAlignment="Right"
-                VerticalAlignment="Top"
+                VerticalAlignment="Bottom"
                 Stroke="{ThemeResource Background}"
                 StrokeThickness="4"
                 Fill="{StaticResource RedColorStyle}"

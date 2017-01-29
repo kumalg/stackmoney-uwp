@@ -7,6 +7,11 @@
     mc:Ignorable="d">
 
     <FontFamily x:Key="FontAwesome">/Assets/Fonts/FontAwesome.ttf#FontAwesome</FontFamily>  
+    <FontFamily x:Key="Bariol">/Assets/Fonts/Bariol.ttf#Bariol</FontFamily>
+
+    <FontFamily x:Key="DefaultFontFamily">/Assets/Fonts/Bariol.ttf#Bariol</FontFamily>
+    <!-- <FontFamily x:Key="DefaultFontFamily">#Bebas Neue</FontFamily> -->
+              
 
     <Style x:Key="PivotStyleDynamicHeader" TargetType="Pivot">
         <Setter Property="Margin" Value="0" />
@@ -30,7 +35,7 @@
                         VerticalAlignment="{TemplateBinding VerticalAlignment}">
                         <Grid.Resources>
                             <Style x:Key="BaseContentControlStyle" TargetType="ContentControl">
-                                <Setter Property="FontFamily" Value="Segoe UI" />
+                                <Setter Property="FontFamily" Value="{StaticResource DefaultFontFamily}" />
                                 <Setter Property="FontWeight" Value="SemiBold" />
                                 <Setter Property="FontSize" Value="15" />
                                 <Setter Property="Template">
@@ -52,7 +57,7 @@
                                 x:Key="TitleContentControlStyle"
                                 BasedOn="{StaticResource BaseContentControlStyle}"
                                 TargetType="ContentControl">
-                                <Setter Property="FontFamily" Value="{ThemeResource PivotTitleFontFamily}" />
+                                <Setter Property="FontFamily" Value="{StaticResource DefaultFontFamily}" />
                                 <Setter Property="FontWeight" Value="{ThemeResource PivotTitleThemeFontWeight}" />
                                 <Setter Property="FontSize" Value="{ThemeResource PivotTitleFontSize}" />
                             </Style>
@@ -676,7 +681,7 @@
     <Style x:Key="GridViewItemStyle1" TargetType="GridViewItem">
         <Setter
             Property="FontFamily"
-            Value="{ThemeResource ContentControlThemeFontFamily}" />
+            Value="{StaticResource DefaultFontFamily}" />
         <Setter
             Property="FontSize"
             Value="{ThemeResource ControlContentThemeFontSize}" />
@@ -754,7 +759,7 @@
             Value="Center" />
         <Setter
             Property="VerticalAlignment"
-            Value="Top" />
+            Value="Center" />
         <Setter
             Property="IsTabStop"
             Value="False" />
@@ -855,7 +860,7 @@
                                                 ContentTemplate="{TemplateBinding ContentTemplate}"
                                                 Content="{TemplateBinding Content}"
                                                 FontSize="{ThemeResource ControlContentThemeFontSize}"
-                                                FontFamily="{ThemeResource ContentControlThemeFontFamily}"
+                                                FontFamily="{StaticResource DefaultFontFamily}"
                                                 Margin="{ThemeResource ContentDialogContentMargin}"
                                                 Foreground="{TemplateBinding Foreground}"
                                                 Grid.Row="1"
@@ -1025,7 +1030,7 @@
                                                 ContentTemplate="{TemplateBinding ContentTemplate}"
                                                 Content="{TemplateBinding Content}"
                                                 FontSize="{ThemeResource ControlContentThemeFontSize}"
-                                                FontFamily="{ThemeResource ContentControlThemeFontFamily}"
+                                                FontFamily="{StaticResource DefaultFontFamily}"
                                                 Margin="{ThemeResource ContentDialogContentMargin}"
                                                 Foreground="{TemplateBinding Foreground}"
                                                 Grid.Row="1"
@@ -1138,7 +1143,7 @@
                                             Content="{TemplateBinding Title}"
                                             ContentTemplate="{TemplateBinding TitleTemplate}"
                                             FontSize="{StaticResource TextStyleExtraLargeFontSize}"
-                                            FontFamily="{ThemeResource PhoneFontFamilyNormal}"
+                                            FontFamily="{StaticResource DefaultFontFamily}"
                                             FontWeight="SemiBold"
                                             Grid.ColumnSpan="2" />
                                         <ContentPresenter
@@ -1146,7 +1151,7 @@
                                             ContentTemplate="{TemplateBinding ContentTemplate}"
                                             Content="{TemplateBinding Content}"
                                             FontSize="{StaticResource TextStyleLargeFontSize}"
-                                            FontFamily="{ThemeResource PhoneFontFamilyNormal}"
+                                            FontFamily="{StaticResource DefaultFontFamily}"
                                             Margin="{ThemeResource ContentDialogContentMargin}"
                                             Grid.Row="1"
                                             Grid.ColumnSpan="2" />
@@ -1193,7 +1198,7 @@
             Value="0,0,0,1" />
         <Setter
             Property="FontFamily"
-            Value="{ThemeResource ContentControlThemeFontFamily}" />
+            Value="{StaticResource DefaultFontFamily}" />
         <Setter
             Property="FontSize"
             Value="{ThemeResource ControlContentThemeFontSize}" />
@@ -1542,7 +1547,7 @@
             Value="Top" />
         <Setter
             Property="FontFamily"
-            Value="{ThemeResource ContentControlThemeFontFamily}" />
+            Value="{StaticResource DefaultFontFamily}" />
         <Setter
             Property="FontSize"
             Value="{ThemeResource ControlContentThemeFontSize}" />
@@ -1865,7 +1870,7 @@
             Value="Left" />
         <Setter
             Property="FontFamily"
-            Value="{ThemeResource ContentControlThemeFontFamily}" />
+            Value="{StaticResource DefaultFontFamily}" />
         <Setter
             Property="FontSize"
             Value="{ThemeResource ControlContentThemeFontSize}" />
@@ -2398,7 +2403,7 @@
                                 TargetType="ContentControl">
                                 <Setter
                                     Property="FontFamily"
-                                    Value="{ThemeResource PivotTitleFontFamily}" />
+                                    Value="{StaticResource DefaultFontFamily}" />
                                 <Setter
                                     Property="FontWeight"
                                     Value="{ThemeResource PivotTitleThemeFontWeight}" />
@@ -2796,7 +2801,7 @@
 
                                 <Setter
                                     Property="FontFamily"
-                                    Value="Segoe UI" />
+                                    Value="{StaticResource DefaultFontFamily}" />
 
                                 <Setter
                                     Property="FontWeight"
@@ -2831,7 +2836,7 @@
 
                                 <Setter
                                     Property="FontFamily"
-                                    Value="{ThemeResource PivotHeaderItemFontFamily}" />
+                                    Value="{StaticResource DefaultFontFamily}" />
 
                                 <Setter
                                     Property="FontWeight"

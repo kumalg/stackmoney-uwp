@@ -19,12 +19,13 @@
     </Page.Transitions>
 
     <Page.Resources>
-        <!--Use a collection view source for content that presents a list of items that can be grouped or sorted.-->
+        <!--Use a collection view source for content that presents a list of items that can be grouped or sorted.-->        
         <GroupStyle
             x:Name="ByDateGroupStyle">
             <GroupStyle.HeaderContainerStyle>
                 <Style
                     TargetType="ListViewHeaderItem">
+                    <Setter Property="FontFamily" Value="{StaticResource DefaultFontFamily}"/>
                     <Setter
                         Property="Template">
                         <Setter.Value>
@@ -137,10 +138,12 @@
                     <TextBlock
                         Foreground="{ThemeResource Text-1}"
                         Text="{Binding Group.Key.day}"
+                        FontFamily="{StaticResource DefaultFontFamily}"
                         FontSize="12" />
                     <TextBlock
                         Text="{Binding Group.Key.month}"
                         FontSize="12"
+                        FontFamily="{StaticResource DefaultFontFamily}"
                         Foreground="{ThemeResource Text-2}" />
                 </StackPanel>
             </StackPanel>
@@ -211,6 +214,7 @@
                     <TextBlock
                         FontWeight="SemiBold"
                         Foreground="{ThemeResource Text-1}"
+                        FontFamily="{StaticResource DefaultFontFamily}"
                         Text="{Binding Key.name}"
                         FontSize="12" />
                 </StackPanel>
@@ -224,6 +228,7 @@
                     Text="{Binding cost}"
                     FontWeight="SemiBold"
                     Foreground="{ThemeResource Text-1}"
+                    FontFamily="{StaticResource DefaultFontFamily}"
                     FontSize="12" />
 
                 <Border
@@ -252,6 +257,7 @@
                 <TextBlock
                     Margin="20,0"
                     VerticalAlignment="Center"
+                    FontFamily="{StaticResource DefaultFontFamily}"
                     Text="{Binding Group.Key.name}"
                     FontSize="16" />
 
@@ -277,6 +283,7 @@
                 <TextBlock
                     Text="{Binding Day}"
                     Foreground="{ThemeResource Text}"
+                    FontFamily="{StaticResource DefaultFontFamily}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center" />
             </Border>
@@ -289,7 +296,8 @@
                 Height="24">
                 <TextBlock
                     Text="{Binding Day}"
-                    Foreground="{ThemeResource Text-2}"
+                    FontFamily="{StaticResource DefaultFontFamily}"
+                    Foreground="{ThemeResource Text-1}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center" />
             </Border>
@@ -402,6 +410,7 @@
                     VerticalAlignment="Center"
                     Name="ActualMoneyBar"
                     Foreground="{ThemeResource AccentText}"
+                    FontFamily="{StaticResource DefaultFontFamily}"
                     FontWeight="Bold"
                     FontSize="13" />
                 <Button
@@ -423,38 +432,15 @@
                                 x:Name="VisibleAccountsFlyout"
                                 Placement="Bottom">
                                 <Flyout.FlyoutPresenterStyle>
-                                    <Style
-                                        TargetType="FlyoutPresenter">
-                                        <Setter
-                                            Property="BorderThickness"
-                                            Value="0" />
-                                        <Setter
-                                            Property="Background"
-                                            Value="{ThemeResource Background-1Transparent}" />
+                                    <Style TargetType="FlyoutPresenter">
+                                        <Setter Property="BorderThickness" Value="0" />
+                                        <Setter Property="Background" Value="{ThemeResource Background-1Transparent}" />
                                     </Style>
                                 </Flyout.FlyoutPresenterStyle>
-
                                 <ListView
-                                    SelectionMode="None"/>
-
+                                    SelectionMode="None" />
                             </Flyout>
-                        <!--
-                        <MenuFlyout
-                            x:Name="VisiblePayFormMenuFlyout"
-                            Placement="Bottom">
-                            <MenuFlyout.MenuFlyoutPresenterStyle>
-                                <Style
-                                    TargetType="MenuFlyoutPresenter">
-                                    <Setter
-                                        Property="BorderThickness"
-                                        Value="0" />
-                                    <Setter
-                                        Property="Background"
-                                        Value="{ThemeResource Background-1Transparent}" />
-                                </Style>
-                            </MenuFlyout.MenuFlyoutPresenterStyle>
-                        </MenuFlyout>-->
-                    </Button.Flyout>
+                        </Button.Flyout>
                 </Button>
             </StackPanel>
 
@@ -462,41 +448,6 @@
 
         </Grid>
 
-        <!--
-        <Grid
-            Background="{ThemeResource Background-1}"
-            Grid.Row="1"
-            Height="48">
-            <Grid
-                MaxWidth="600">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="*" />
-                    <ColumnDefinition
-                        Width="*" />
-                </Grid.ColumnDefinitions>
-                <RadioButton
-                    Name="ByDateRadioButton"
-                    GroupName="GroupingRadioButtons"
-                    Checked="ByDateRadioButton_Checked"
-                    FontSize="13"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Foreground="{ThemeResource Text-1}"
-                    Content="Wg. daty" />
-                <RadioButton
-                    Name="ByCategoryRadioButton"
-                    GroupName="GroupingRadioButtons"
-                    Checked="ByCategoryRadioButton_Checked"
-                    Grid.Column="1"
-                    FontSize="13"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Foreground="{ThemeResource Text-1}"
-                    Content="Wg. kategorii" />
-            </Grid>
-        </Grid>
--->
         <RelativePanel
             Visibility="Collapsed"
             x:Name="EmptyListViewInfo"
@@ -584,6 +535,7 @@
                                         Margin="10"
                                         Grid.Column="1"
                                         Text="Saldo"
+                                        FontFamily="{StaticResource DefaultFontFamily}"
                                         x:Uid="balance" />
                                     <TextBlock
                                         HorizontalAlignment="Right"
@@ -602,87 +554,7 @@
                                         Text="Końcowe"
                                         x:Uid="final" />
                                 </Grid>
-                                <!--
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition
-                                            Width="16" />
-                                        <ColumnDefinition
-                                            Width="3*" />
-                                        <ColumnDefinition
-                                            Width="2*" />
-                                        <ColumnDefinition
-                                            Width="2*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Ellipse
-                                        Width="8"
-                                        Height="8"
-                                        Fill="{StaticResource GreenColorStyle}" />
-                                    <TextBlock
-                                        x:Name="dupa1"
-                                        FontSize="13"
-                                        Foreground="{ThemeResource Text}"
-                                        Margin="10,5"
-                                        Grid.Column="1"
-                                        Text="Gotówka" />
-                                    <TextBlock
-                                        x:Name="dupa2"
-                                        HorizontalAlignment="Right"
-                                        FontWeight="SemiBold"
-                                        FontSize="13"
-                                        Foreground="{ThemeResource Text-1}"
-                                        Margin="10,5"
-                                        Grid.Column="2"
-                                        Text="29,59 zl" />
-                                    <TextBlock
-                                        x:Name="dupa3"
-                                        HorizontalAlignment="Right"
-                                        FontWeight="SemiBold"
-                                        FontSize="13"
-                                        Foreground="{ThemeResource Text-1}"
-                                        Margin="10,5"
-                                        Grid.Column="3"
-                                        Text="4,28 zł" />
-                                </Grid>
-
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition
-                                            Width="16" />
-                                        <ColumnDefinition
-                                            Width="3*" />
-                                        <ColumnDefinition
-                                            Width="2*" />
-                                        <ColumnDefinition
-                                            Width="2*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Ellipse
-                                        Width="8"
-                                        Height="8"
-                                        Fill="Gray" />
-                                    <TextBlock
-                                        FontSize="13"
-                                        Foreground="{ThemeResource Text}"
-                                        Margin="10,5"
-                                        Grid.Column="1"
-                                        Text="Karta Visa" />
-                                    <TextBlock
-                                        HorizontalAlignment="Right"
-                                        FontWeight="SemiBold"
-                                        FontSize="13"
-                                        Foreground="{ThemeResource Text-1}"
-                                        Margin="10,5"
-                                        Grid.Column="2"
-                                        Text="426,67 zł" />
-                                    <TextBlock
-                                        HorizontalAlignment="Right"
-                                        FontWeight="SemiBold"
-                                        FontSize="13"
-                                        Foreground="{ThemeResource Text-1}"
-                                        Margin="10,5"
-                                        Grid.Column="3"
-                                        Text="289,90 zł" />
-                                </Grid>-->
+                                
                                 <ListView
                                     Margin="0"
                                     Padding="0"
@@ -732,6 +604,7 @@
                                                     Margin="10,5"
                                                     Grid.Column="1"
                                                     TextWrapping="Wrap"
+                                                    FontFamily="{StaticResource DefaultFontFamily}"
                                                     Text="{Binding MoneyAccount.Name}" />
                                                 <TextBlock
                                                     x:Name="dupa2"
@@ -740,6 +613,7 @@
                                                     FontSize="13"
                                                     Foreground="{ThemeResource Text-1}"
                                                     Margin="10,5"
+                                                    FontFamily="{StaticResource DefaultFontFamily}"
                                                     Grid.Column="2"
                                                     Text="{Binding InitialValue}" />
                                                 <TextBlock
@@ -750,6 +624,7 @@
                                                     Foreground="{ThemeResource Text-1}"
                                                     Margin="10,5"
                                                     Grid.Column="3"
+                                                    FontFamily="{StaticResource DefaultFontFamily}"
                                                     Text="{Binding FinalValue}" />
                                             </Grid>
                                         </DataTemplate>

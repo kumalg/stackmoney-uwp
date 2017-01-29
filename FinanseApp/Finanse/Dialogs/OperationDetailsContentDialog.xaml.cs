@@ -25,12 +25,14 @@ namespace Finanse.Dialogs {
                 Title = "Szczegóły szablonu";
 
             if (editedOperation.isExpense) {
+                CostValue.Text = (-editedOperation.Cost).ToString("C", Settings.getActualCultureInfo());
                 CostValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"] as SolidColorBrush;
-                CostValueIcon.Glyph = "";
+                //CostValueIcon.Glyph = "";
             }
             else {
+                CostValue.Text = editedOperation.Cost.ToString("C", Settings.getActualCultureInfo());
                 CostValue.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"] as SolidColorBrush;
-                CostValueIcon.Glyph = "";
+               // CostValueIcon.Glyph = "";
             }
 
             NameValue.Visibility = Visibility.Collapsed;
@@ -38,8 +40,6 @@ namespace Finanse.Dialogs {
                 NameValue.Text = editedOperation.Title;
                 NameValue.Visibility = Visibility.Visible;
             }
-
-            CostValue.Text = editedOperation.Cost.ToString("C", Settings.getActualCultureInfo());
 
             DateValuePanel.Visibility = Visibility.Collapsed;
             if (!editedOperation.Date.Equals("") && whichOption != "pattern") {

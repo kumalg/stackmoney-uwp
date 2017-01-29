@@ -17,7 +17,7 @@
         <Ellipse
             Opacity="0.15"
             StrokeThickness="2"
-            Stroke="{Binding Color}">
+            Stroke="{ThemeResource Text-2}">
         </Ellipse>
 
         <FontIcon

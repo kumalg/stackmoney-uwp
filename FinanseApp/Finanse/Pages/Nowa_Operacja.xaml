@@ -66,13 +66,14 @@
             Margin="0"
             Padding="0"
             Grid.Row="1">
-            <Grid>
+            <Grid
+                Margin="0,0,0,48">
                 <StackPanel
                     MaxWidth="600"
                     Margin="16">
 
                     <Grid
-                        Margin="16,0">
+                        Margin="16">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition
                                 Width="*" />
@@ -87,7 +88,7 @@
                             GroupName="OperationType_RadioButtons"
                             Tag="Wydatek"
                             x:Uid="expenseTag"
-                            Checked="TypeOfOperationRadioButton_Checked"
+                            Checked="ExpenseOrIncomeRadioButton_Checked"
                             Style="{StaticResource RadioButtonWithIconStyle}">
                             <PathIcon
                                 Data="M 17.46875 0.85351562 C 17.21475 0.85426563 16.960078 0.95198437 16.767578 1.1464844 C 16.381578 1.5354844 16.384438 2.1657813 16.773438 2.5507812 L 18.5625 4.328125 C 16.4835 4.386125 13.083578 5.2313125 13.017578 8.8203125 C 13.017578 9.3673125 13.461766 9.8125 14.009766 9.8125 C 14.557766 9.8125 15.001953 9.3683125 15.001953 8.8203125 C 15.028953 7.7573125 15.425625 7.3079063 16.140625 6.8789062 C 16.793625 6.5109062 17.728828 6.3423594 18.548828 6.3183594 L 16.773438 8.0820312 C 16.384438 8.4680312 16.381578 9.096375 16.767578 9.484375 C 17.153578 9.874375 17.783875 9.8762344 18.171875 9.4902344 L 21.664062 6.0195312 C 21.852062 5.8335313 21.957031 5.5814063 21.957031 5.3164062 C 21.957031 5.0504062 21.853063 4.7993281 21.664062 4.6113281 L 18.171875 1.1425781 C 17.977375 0.95007812 17.72275 0.85276562 17.46875 0.85351562 z M 9.3085938 10.789062 C 6.5665938 10.789062 4.3417969 13.013047 4.3417969 15.748047 L 4.3417969 26.169922 C 4.3417969 28.909922 6.5627344 31.130859 9.3027344 31.130859 L 22.945312 31.130859 C 25.685312 31.130859 27.90625 28.909922 27.90625 26.169922 L 27.90625 19.720703 C 27.90525 17.114703 25.89675 14.982297 23.34375 14.779297 C 22.89075 12.506297 20.890422 10.789062 18.482422 10.789062 L 9.3085938 10.789062 z M 9.3085938 12.773438 L 18.482422 12.773438 C 19.775422 12.773438 20.866297 13.606766 21.279297 14.759766 L 9.3027344 14.759766 C 8.1837344 14.759766 7.1561719 15.133812 6.3261719 15.757812 L 6.3261719 15.748047 C 6.3261719 14.113047 7.6655938 12.773438 9.3085938 12.773438 z M 9.3027344 16.744141 L 22.945312 16.744141 C 24.587312 16.744141 25.923828 18.078703 25.923828 19.720703 L 25.923828 26.169922 L 25.921875 26.169922 C 25.921875 27.811922 24.587312 29.146484 22.945312 29.146484 L 9.3027344 29.146484 C 7.6607344 29.146484 6.3261719 27.811922 6.3261719 26.169922 L 6.3261719 19.720703 C 6.3261719 18.078703 7.6607344 16.744141 9.3027344 16.744141 z M 22.945312 21.457031 A 0.99199998 0.99199998 0 0 0 21.953125 22.449219 A 0.99199998 0.99199998 0 0 0 22.945312 23.441406 A 0.99199998 0.99199998 0 0 0 23.9375 22.449219 A 0.99199998 0.99199998 0 0 0 22.945312 21.457031 z" />
@@ -99,7 +100,7 @@
                             GroupName="OperationType_RadioButtons"
                             Tag="Wpływ"
                             x:Uid="incomeTag"
-                            Checked="TypeOfOperationRadioButton_Checked"
+                            Checked="ExpenseOrIncomeRadioButton_Checked"
                             Style="{StaticResource RadioButtonWithIconStyle}">
                             <Canvas
                                 Width="32"
@@ -119,6 +120,7 @@
                             GroupName="OperationType_RadioButtons"
                             Tag="Transfer"
                             x:Uid="transferTag"
+                            Checked="TransferRadioButton_Checked"
                             Style="{StaticResource RadioButtonWithIconStyle}">
                             <Canvas
                                 Width="32"
@@ -130,30 +132,7 @@
                             </Canvas>
                         </RadioButton>
                     </Grid>
-                    <!---
-                    <StackPanel
-                        HorizontalAlignment="Center"
-                        Orientation="Horizontal">
 
-                        <RadioButton
-                            Name="Expense_RadioButton"
-                            GroupName="OperationType_RadioButtons"
-                            Foreground="{ThemeResource Text}"
-                            Checked="TypeOfOperationRadioButton_Checked"
-                            Style="{StaticResource MyRadioButtonStyle}">
-                            <TextBlock Text="Wydatek" x:Uid="expense"/>
-                        </RadioButton>
-                        <RadioButton
-                            Name="Income_RadioButton"
-                            GroupName="OperationType_RadioButtons"
-                            Foreground="{ThemeResource Text}"
-                            Checked="TypeOfOperationRadioButton_Checked"
-                            Style="{StaticResource MyRadioButtonStyle}">
-                            <TextBlock Text="Wpływ" x:Uid="income"/>
-                        </RadioButton>
-
-                    </StackPanel>
--->
                     <TextBox
                         FontSize="24"
                         FontWeight="SemiLight"
@@ -163,27 +142,77 @@
                         PlaceholderText="Wartość"
                         x:Uid="valuePlaceholder"
                         InputScope="CurrencyAmount"
-                        Margin="0,20,0,0"
+                        Margin="0,20,0,16"
                         GotFocus="CostValue_GotFocus"
                         LostFocus="CostValue_LostFocus"
                         TextChanging="CostValue_TextChanging"
                         TextChanged="CostValue_TextChanged" />
+
+                    <Grid
+                        x:Name="TransferAccounts_Grid"
+                        Margin="0,4,0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="*" />
+                            <RowDefinition
+                                Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="Auto" />
+                            <ColumnDefinition
+                                Width="*" />
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Margin="10,0,20,0"
+                            VerticalAlignment="Center"
+                            Foreground="{ThemeResource Text-1}"
+                            Text="Od" />
+                        <ComboBox
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            Visibility="Visible"
+                            Name="InitialAccount"
+                            PlaceholderText="Konto początkowe"
+                            Style="{StaticResource ComboBoxStyle1}"
+                            Margin="0,10"
+                            HorizontalAlignment="Stretch" />
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            Margin="10,0,20,0"
+                            VerticalAlignment="Center"
+                            Foreground="{ThemeResource Text-1}"
+                            Text="Do" />
+                        <ComboBox
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            Visibility="Visible"
+                            Name="DestinationAccount"
+                            PlaceholderText="Konto docelowe"
+                            Style="{StaticResource ComboBoxStyle1}"
+                            Margin="0,10"
+                            HorizontalAlignment="Stretch" />
+                    </Grid>
 
                     <TextBox
                         Name="NameValue"
                         Style="{StaticResource TextBoxStyle1}"
                         PlaceholderText="Nazwa"
                         x:Uid="namePlaceholder"
-                        Margin="0,20,0,10" />
+                        Margin="0,16" />
 
                     <CalendarDatePicker
                         Name="DateValue"
                         Style="{StaticResource CalendarDatePickerStyle1}"
                         FirstDayOfWeek="{x:Bind firstDayOfWeek()}"
                         PlaceholderText="Data"
-                        Margin="0,10"
+                        Margin="0,16"
                         HorizontalAlignment="Stretch"
-                        Closed="DateValue_Closed"
                         IsTodayHighlighted="True" />
 
                     <ComboBox
@@ -193,7 +222,7 @@
                         SelectedValuePath="ID"
                         PlaceholderText="Kategoria"
                         x:Uid="categoryPlaceholder"
-                        Margin="0,10"
+                        Margin="0,16"
                         HorizontalAlignment="Stretch" />
 
                     <ComboBox
@@ -201,17 +230,18 @@
                         Style="{StaticResource ComboBoxStyle1}"
                         PlaceholderText="Podkategoria"
                         x:Uid="subCategoryPlaceholder"
-                        Margin="0,10"
+                        Margin="0,16,0,16"
                         IsEnabled="False"
                         HorizontalAlignment="Stretch"
                         SelectionChanged="SubCategoryValue_SelectionChanged" />
 
                     <ComboBox
+                        Visibility="Collapsed"
                         Name="PayFormValue"
                         Style="{StaticResource ComboBoxStyle1}"
                         PlaceholderText="Forma płatności"
                         x:Uid="moneyAccountPlaceholder"
-                        Margin="0,10"
+                        Margin="0,16"
                         HorizontalAlignment="Stretch">
                     </ComboBox>
 
@@ -225,33 +255,36 @@
                         Padding="12"
                         Height="100"
                         Margin="0,20" />
+                    
+                    <StackPanel
+                        x:Name="SaveAsPattern_StackPanel"
+                        Visibility="Collapsed">
+                        <TextBlock
+                            Name="SaveAsAssetTitle"
+                            Foreground="{ThemeResource Text-1}"
+                            Text="Zapisz jako szablon"
+                            x:Uid="saveAsPattern"
+                            Margin="10,0" />
 
-                    <TextBlock
-                        Name="SaveAsAssetTitle"
-                        Foreground="{ThemeResource Text-1}"
-                        Text="Zapisz jako szablon"
-                        x:Uid="saveAsPattern"
-                        Margin="10,0" />
+                        <ToggleSwitch
+                            Name="SaveAsAssetToggle"
+                            Style="{StaticResource ToggleSwitchStyle1}"
+                            Margin="10,5,0,0">
 
-                    <ToggleSwitch
-                        Name="SaveAsAssetToggle"
-                        Style="{StaticResource ToggleSwitchStyle1}"
-                        Margin="10,5,0,0">
+                            <ToggleSwitch.OffContent>
+                                <TextBlock
+                                    Text="Nie"
+                                    x:Uid="No" />
+                            </ToggleSwitch.OffContent>
 
-                        <ToggleSwitch.OffContent>
-                            <TextBlock
-                                Text="Nie"
-                                x:Uid="No" />
-                        </ToggleSwitch.OffContent>
+                            <ToggleSwitch.OnContent>
+                                <TextBlock
+                                    Text="Tak"
+                                    x:Uid="Yes" />
+                            </ToggleSwitch.OnContent>
 
-                        <ToggleSwitch.OnContent>
-                            <TextBlock
-                                Text="Tak"
-                                x:Uid="Yes" />
-                        </ToggleSwitch.OnContent>
-
-                    </ToggleSwitch>
-
+                        </ToggleSwitch>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </ScrollViewer>
@@ -267,7 +300,7 @@
             VerticalAlignment="Bottom"
             HorizontalAlignment="Center"
             Content="&#xE105;"
-            Click="Button_Click_1">
+            Click="SaveButton_Click">
         </Button>
     </Grid>
 </Page>

@@ -178,23 +178,32 @@ namespace Finanse.Pages {
         private async void showDetailsContentDialog(Operation operation) {
             OperationDetailsContentDialog operationDetailsContentDialog = new OperationDetailsContentDialog(operationGroups, operation, "");
 
-            operationDetailsContentDialog.SecondaryButtonClick += delegate {
-            };
+            operationDetailsContentDialog.MaxHeight = Window.Current.Bounds.Height - 80;
+            operationDetailsContentDialog.VerticalAlignment = VerticalAlignment.Center;
+            operationDetailsContentDialog.VerticalContentAlignment = VerticalAlignment.Center;
 
             ContentDialogResult result = await operationDetailsContentDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+                showEditContentDialog(operation);
+            else if (result == ContentDialogResult.Secondary)
+                showDeleteOperationContentDialog(operation);
         }
 
-        private async void EditButton_Click(object sender, RoutedEventArgs e) {
-            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-            Operation oldOperation = (Operation)datacontext;
+        private void EditButton_Click(object sender, RoutedEventArgs e) {
+            Operation operation = (e.OriginalSource as FrameworkElement).DataContext as Operation;
+            showEditContentDialog(operation);
+        }
 
-            EditOperationContentDialog editOperationContentDialog = new EditOperationContentDialog(oldOperation);
-            editOperationContentDialog.PrimaryButtonClick += delegate {
-                updateOperationInList(oldOperation, editOperationContentDialog.editedOperation());
-                setActualMoneyBar();
-            };
+        private async void showEditContentDialog(Operation operation) {
+            EditOperationContentDialog editOperationContentDialog = new EditOperationContentDialog(operation);
 
             ContentDialogResult result = await editOperationContentDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary) {
+                updateOperationInList(operation, editOperationContentDialog.editedOperation());
+                setActualMoneyBar();
+            }
         }
         
         private void DeleteButton_Click(object sender, RoutedEventArgs e) {
@@ -203,10 +212,14 @@ namespace Finanse.Pages {
         }
         private async void showDeleteOperationContentDialog(Operation operation) {
             AcceptContentDialog acceptDeleteOperationContentDialog = new AcceptContentDialog("Czy chcesz usunąć operację?");
-            acceptDeleteOperationContentDialog.PrimaryButtonClick += delegate {
-                deleteOperation_DialogButtonClick(operation);
-            };
+
             ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+                deleteOperation_DialogButtonClick(operation);
+
+            else if (result == ContentDialogResult.Secondary)
+                showDetailsContentDialog(operation);
         }
 
         private void deleteOperation_DialogButtonClick(Operation operation) {

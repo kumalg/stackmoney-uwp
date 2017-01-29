@@ -143,6 +143,7 @@
     <Content Include="Assets\Fonts\Poppins\Poppins-Medium.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Fonts\Bariol.ttf" />
     <None Include="Finanse_TemporaryKey.snk" />
     <None Include="project.json" />
     <PRIResource Include="Strings\pl-PL\Resources.resw" />

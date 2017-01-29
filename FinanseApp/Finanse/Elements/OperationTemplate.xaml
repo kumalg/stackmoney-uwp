@@ -59,6 +59,7 @@
                     <TextBlock
                         Name="Title_OperationTemplate"
                         Text="{x:Bind Operation.Title}"
+                        FontFamily="{StaticResource DefaultFontFamily}"
                         Foreground="{ThemeResource Text}"
                         TextWrapping="Wrap"
                         FontSize="16" />
@@ -71,6 +72,7 @@
                         <TextBlock
                             Text="Zakupy"
                             Name="Category_OperationTemplate"
+                            FontFamily="{StaticResource DefaultFontFamily}"
                             FontSize="12"
                             Foreground="{ThemeResource Text-1}" />
                         <StackPanel
@@ -86,7 +88,7 @@
                                 FontSize="8"
                                 Foreground="{ThemeResource Text-1}" />
                             <TextBlock
-                                
+                                FontFamily="{StaticResource DefaultFontFamily}"
                                 Text="Lidl"
                                 Name="SubCategory_OperationTemplate"
                                 FontSize="12"
@@ -96,6 +98,7 @@
 
                 </StackPanel>
                 <TextBlock
+                    FontFamily="{StaticResource DefaultFontFamily}"
                     FontSize="12"
                     Grid.Column="1"
                     FontWeight="SemiBold"

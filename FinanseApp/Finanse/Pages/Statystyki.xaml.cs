@@ -1,4 +1,8 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using Finanse.DataAccessLayer;
+using Finanse.Models;
+using System.Collections.Generic;
+using Windows.UI.Xaml.Controls;
+using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 
 namespace Finanse.Pages {
 
@@ -8,6 +12,9 @@ namespace Finanse.Pages {
 
             this.InitializeComponent();
 
+            List<OperationCategory> lista = Dal.getAllCategories();
+
+            (ColumnChart.Series[0] as ColumnSeries).ItemsSource = lista;
         }
     }
 }

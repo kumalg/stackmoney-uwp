@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:Finanse.Elements"
     mc:Ignorable="d"
+    FontFamily="{StaticResource DefaultFontFamily}"
     SizeChanged="MainPage_SizeChanged">
     <Page.Resources>
         <Style
@@ -29,7 +30,7 @@
                 Value="Top" />
             <Setter
                 Property="FontFamily"
-                Value="{ThemeResource ContentControlThemeFontFamily}" />
+                Value="{ThemeResource DefaultFontFamily}" />
             <Setter
                 Property="FontWeight"
                 Value="Normal" />
@@ -138,7 +139,7 @@
                                     Content="{TemplateBinding Content}"
                                     Foreground="{TemplateBinding Foreground}"
                                     FontSize="13"
-                                    FontFamily="Segoe UI"
+                                    FontFamily="{StaticResource DefaultFontFamily}"
                                     HorizontalAlignment="Center"
                                     TextWrapping="Wrap"
                                     Margin="16,0,0,0"
@@ -281,7 +282,7 @@
         <Grid.RowDefinitions>
             <RowDefinition
                 x:Name="TitleBarRowDefinition"
-                Height="0"/>
+                Height="Auto"/>
             <RowDefinition
                 Height="48" />
             <RowDefinition
@@ -412,7 +413,8 @@
                         Grid.Column="9"
                         FontFamily="{StaticResource FontAwesome}"
                         Tag=""
-                        Click="RadioButton_Click" />
+                        Click="RadioButton_Click">
+                    </RadioButton>
                 </Grid>
             </CommandBar.Content>
 
@@ -423,7 +425,7 @@
                     x:Name="SzablonyAppBarButton"
                     FontFamily="{StaticResource FontAwesome}"
                     Label="">
-                    <TextBlock Text="Szablony" x:Uid="patterns" />
+                    <TextBlock Text="Szablony" x:Uid="patterns" TextAlignment="Left"/>
                 </AppBarButton>
                 <AppBarButton
                     Style="{StaticResource MyAppBarButton}"
@@ -561,146 +563,6 @@
                 <TextBlock Text="Ustawienia" x:Uid="settings" />
             </RadioButton>
         </Grid>
-        <!--
-        <Button
-            Name="HamburgerButton"
-            Height="48"
-            Width="48"
-            BorderThickness="0"
-            FontFamily="Segoe MDL2 Assets"
-            Content="&#xE700;"
-            FontSize="16"
-            Click="HamburgerButton_Click"
-            Background="{ThemeResource AccentColor}"
-            Canvas.ZIndex="3"
-            VerticalAlignment="Top"
-            HorizontalAlignment="Left"
-            Foreground="White"
-            ClickMode="Press"
-            Style="{StaticResource HamburgerButtonStyle}" />
-
-        <SplitView
-            Name="MySplitView"
-            DisplayMode="Overlay"
-            OpenPaneLength="250"
-            CompactPaneLength="48"
-            HorizontalAlignment="Stretch"
-            PaneBackground="Transparent"
-            Grid.RowSpan="3"
-            Canvas.ZIndex="2">
-
-            <SplitView.Pane>
-
-                <Grid
-                    Background="{ThemeResource Background+1Transparent}">
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition
-                            Height="48" />
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <Grid
-                        Background="{ThemeResource AccentColor}"
-                        Margin="48,0,0,0">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Foreground="{ThemeResource AccentText}"
-                            FontWeight="Bold"
-                            FontSize="14">
-                            Kumalg Finanse
-                        </TextBlock>
-                    </Grid>
-
-                    <ScrollViewer
-                        VerticalScrollBarVisibility="Auto"
-                        Grid.Row="1">
-                        <StackPanel>
-
-                            <RadioButton
-                                Name="Strona_glowna_ListBoxItem"
-                                GroupName="HamburgerRadioButtons"
-                                Style="{StaticResource HamburgerRadioButton}"
-                                Content="Moje finanse"
-                                Tag="&#xE10F;" />
-
-                            <RadioButton
-                                Name="Kategorie_ListBoxItem"
-                                GroupName="HamburgerRadioButtons"
-                                Style="{StaticResource HamburgerRadioButton}"
-                                Content="Kategorie"
-                                Tag="&#xE71D;"/>
-
-                            <RadioButton
-                                Name="Szablony_ListBoxItem"
-                                GroupName="HamburgerRadioButtons"
-                                Style="{StaticResource HamburgerRadioButton}"
-                                Content="Szablony"
-                                Tag="&#xE8C8;" />
-
-                            <RadioButton
-                                Name="Konta_ListBoxItem"
-                                GroupName="HamburgerRadioButtons"
-                                Style="{StaticResource HamburgerRadioButton}"
-                                Content="Formy płatności"
-                                Tag="&#xE963;" />
-
-                            <RadioButton
-                                Name="ZleceniaStale_ListBoxItem"
-                                GroupName="HamburgerRadioButtons"
-                                Style="{StaticResource HamburgerRadioButton}"
-                                Content="Zlecenia stałe"
-                                Tag="&#xE81C;" />
-
-                            <RadioButton
-                                Name="PlanowaneWydatki_ListBoxItem"
-                                GroupName="HamburgerRadioButtons"
-                                Style="{StaticResource HamburgerRadioButton}"
-                                Content="Planowane wydatki"
-                                Tag="&#xE823;"/>
-                            <ToggleSwitch
-                                Name="ThemeToggle"
-                                Style="{StaticResource ToggleSwitchStyle1}"
-                                Margin="16,5,0,0">
-
-                                <ToggleSwitch.OffContent>
-                                    Jasny
-                                </ToggleSwitch.OffContent>
-
-                                <ToggleSwitch.OnContent>
-                                    Ciemny
-                                </ToggleSwitch.OnContent>
-
-                            </ToggleSwitch>
-                        </StackPanel>
-                    </ScrollViewer>
-                    <RadioButton
-                        Grid.Row="2"
-                        GroupName="HamburgerRadioButtons"
-                        Name="Ustawienia_ListBoxItem"
-                        Style="{StaticResource HamburgerRadioButton}"
-                        Content="Ustawienia"
-                        Tag="&#xE713;"/>
-                </Grid>
-            </SplitView.Pane>
-
-            <SplitView.Content>
-                <Grid>
-                    <Frame
-                        Name="AktualnaStrona_Frame" />
-                    <Grid
-                        Name="PageFillWhenPaneIsOpen"
-                        Visibility="Collapsed"
-                        Opacity="0.5"
-                        Background="{ThemeResource Background}" />
-                </Grid>
-            </SplitView.Content>
-        </SplitView>
-        -->
-
 
         <Frame
             Grid.RowSpan="2"
@@ -715,17 +577,21 @@
             Grid.Column="2"
             Background="{ThemeResource Background-1}">
         </Grid>
-        
 
-        <TextBlock
-            Name="AppTitle"
-            Grid.ColumnSpan="2"
-            Text="Kumalg Finanse"
-            Opacity="0.75"
+        <Grid
+            Visibility="Collapsed"
             Margin="64,0"
-            FontSize="12"
-            FontWeight="Medium"
-            VerticalAlignment="Center"
-            Foreground="White" />
+            Grid.ColumnSpan="2"
+            Height="32"
+            Name="TitleBar">
+            <TextBlock
+                Text="Kumalg Finanse"
+                Opacity="0.75"
+                FontSize="12"
+                FontWeight="Medium"
+                FontFamily="Segoe UI"
+                VerticalAlignment="Center"
+                Foreground="White" />
+        </Grid>
     </Grid>
 </Page>

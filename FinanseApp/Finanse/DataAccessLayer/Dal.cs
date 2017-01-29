@@ -609,7 +609,7 @@
             }
         }
 
-        public static void deleteCategory(OperationCategory operationCategory) {
+        public static void deleteCategoryWithSubCategories(int categoryId) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -619,12 +619,12 @@
                 //db.Delete(person);
 
                 // SQL Syntax:
-                db.Execute("DELETE FROM OperationCategory WHERE Id = ?", operationCategory.Id);
-                db.Execute("DELETE FROM OperationSubCategory WHERE BossCategoryId = ?", operationCategory.Id);
+                db.Execute("DELETE FROM OperationCategory WHERE Id = ?", categoryId);
+                db.Execute("DELETE FROM OperationSubCategory WHERE BossCategoryId = ?", categoryId);
             }
         }
 
-        public static void deleteSubCategory(OperationSubCategory operationSubCategory) {
+        public static void deleteSubCategory(int subCategoryId) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
@@ -634,7 +634,7 @@
                 //db.Delete(person);
 
                 // SQL Syntax:
-                db.Execute("DELETE FROM OperationSubCategory WHERE Id = ?", operationSubCategory.Id);
+                db.Execute("DELETE FROM OperationSubCategory WHERE Id = ?", subCategoryId);
             }
         }
     }

@@ -179,7 +179,7 @@ namespace Finanse.Dialogs {
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
 
-                    Dal.deleteSubCategory(editedOperationSubCategoryItem);
+                    Dal.deleteSubCategory(editedOperationSubCategoryItem.Id);
                     Dal.saveOperationCategory(editedOperationCategoryItem);
 
                     RefreshOperationCategoriesList();
@@ -195,7 +195,7 @@ namespace Finanse.Dialogs {
                         VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
                     };
 
-                    Dal.deleteCategory(editedCategory);
+                    Dal.deleteCategoryWithSubCategories(editedCategory.Id);
                     Dal.saveOperationSubCategory(editedOperationSubCategoryItem);
 
                     RefreshOperationCategoriesList();

@@ -7,12 +7,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:Finanse.Elements"
     mc:Ignorable="d"
+    FontFamily="{StaticResource DefaultFontFamily}"
     Background="{ThemeResource BackgroundTransparent}"
     Title="Szczegóły operacji"
     PrimaryButtonText="Edytuj"
     SecondaryButtonText="Usuń"
-    x:Uid="operationDetailsContentDialog"
-    PrimaryButtonClick="EditButton_Click">
+    FullSizeDesired="False"
+    x:Uid="operationDetailsContentDialog">
 
     <ContentDialog.Style>
         <Style
@@ -81,7 +82,7 @@
                                                         Content="{TemplateBinding Title}"
                                                         ContentTemplate="{TemplateBinding TitleTemplate}"
                                                         FontSize="15"
-                                                        FontFamily="XamlAutoFontFamily"
+                                                        FontFamily="{StaticResource DefaultFontFamily}"
                                                         FontWeight="SemiBold"
                                                         Foreground="{ThemeResource AccentText}"
                                                         HorizontalAlignment="Left"
@@ -166,95 +167,111 @@
         Margin="20,20">
 
         <TextBlock
+            Name="CostValue"
+            FontSize="36"
+            FontFamily="{StaticResource DefaultFontFamily}"
+            TextAlignment="Center"
+            Foreground="{StaticResource GreenColorStyle}"
+            Text="20,99 zł"
+            Margin="0,10" />
+
+        <TextBlock
             Name="NameValue"
             Foreground="{ThemeResource Text}"
+            FontFamily="{StaticResource DefaultFontFamily}"
             TextWrapping="Wrap"
+            TextAlignment="Center"
             Text="Zwrot podatku"
-            Margin="0,0,0,15"
-            FontSize="22" />
+            FontSize="22"
+            Margin="0,10" />
+
+        <Border
+            Margin="0,10"
+            BorderThickness="0,0,0,1"
+            BorderBrush="{ThemeResource Background+1}" />
 
         <StackPanel
+            Name="CategoryValuePanel"
+            Margin="0,10"
+            VerticalAlignment="Center"
             Orientation="Horizontal">
             <FontIcon
-                Name="CostValueIcon"
-                Glyph=""
-                Style="{StaticResource DetailsIconStyle}" />
+                Width="48"
+                Style="{StaticResource DetailsIconStyle}"
+                FontFamily="{StaticResource FontAwesome}"
+                FontSize="16"
+                Glyph=""/>
             <TextBlock
-                Name="CostValue"
-                FontSize="18"
-                FontWeight="Bold"
-                Foreground="{StaticResource GreenColorStyle}"
-                Text="20,99 zł"
-                Margin="20,0" />
+                Text="Zakupy"
+                Name="CategoryValue"
+                VerticalAlignment="Center"
+                FontFamily="{StaticResource DefaultFontFamily}"
+                Foreground="{ThemeResource Text}" />
+            <StackPanel
+                VerticalAlignment="Center"
+                Name="SubCategoryValuePanel"
+                Orientation="Horizontal">
+                <TextBlock
+                    Padding="0,2,0,0"
+                    Margin="8,0"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe MDL2 Assets"
+                    Text=""
+                    FontSize="8"
+                    Foreground="{ThemeResource Text-1}" />
+                <TextBlock
+                    FontFamily="{StaticResource DefaultFontFamily}"
+                    Text="Lidl"
+                    Name="SubCategoryValue"
+                    Foreground="{ThemeResource Text}" />
+            </StackPanel>
         </StackPanel>
+
 
         <StackPanel
             Name="DateValuePanel"
             Orientation="Horizontal"
-            Margin="0,15,0,0">
+            Margin="0,10">
             <FontIcon
+                Width="48"
                 Style="{StaticResource DetailsIconStyle}"
                 FontFamily="{StaticResource FontAwesome}"
+                FontSize="16"
                 Glyph="" />
             <TextBlock
                 Name="DateValue"
+                VerticalAlignment="Center"
+                FontFamily="{StaticResource DefaultFontFamily}"
                 Foreground="{ThemeResource Text}"
-                Text="2016.08.10"
-                Margin="20,0" />
-        </StackPanel>
-
-        <StackPanel
-            Name="CategoryValuePanel"
-            Margin="0,15,0,0">
-            <StackPanel
-                Orientation="Horizontal">
-                <FontIcon
-                    Style="{StaticResource DetailsIconStyle}"
-                    FontFamily="{StaticResource FontAwesome}"
-                    Glyph="" />
-                <TextBlock
-                    Name="CategoryValue"
-                    Foreground="{ThemeResource Text}"
-                    Text="Jedzenie"
-                    Margin="20,0" />
-            </StackPanel>
-            <StackPanel
-                Name="SubCategoryValuePanel"
-                Margin="40,5,0,0"
-                Orientation="Horizontal">
-                <FontIcon
-                    Style="{StaticResource DetailsIconStyle}"
-                    Glyph="" />
-                <TextBlock
-                    Name="SubCategoryValue"
-                    Foreground="{ThemeResource Text}"
-                    Margin="5,0"
-                    Text="Biedronka" />
-            </StackPanel>
+                Text="2016.08.10" />
         </StackPanel>
 
         <StackPanel
             Name="PayFormPanel"
             Orientation="Horizontal"
-            Margin="0,15,0,0">
+            Margin="0,10">
             <FontIcon
                 Style="{StaticResource DetailsIconStyle}"
                 FontFamily="{StaticResource FontAwesome}"
-                Glyph="" />
+                Glyph=""
+                FontSize="16"
+                Width="48" />
             <TextBlock
                 Name="PayForm"
+                VerticalAlignment="Center"
                 Foreground="{ThemeResource Text}"
-                Text="Gotówka"
-                Margin="20,0" />
+                FontFamily="{StaticResource DefaultFontFamily}"
+                Text="Gotówka"/>
         </StackPanel>
 
         <StackPanel
             Name="MoreInfoPanel">
             <Border
-                Margin="0,20"
+                Margin="0,10"
                 BorderThickness="0,0,0,1"
                 BorderBrush="{ThemeResource Background+1}" />
             <Grid
+                Margin="0,10"
                 VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition
@@ -266,14 +283,17 @@
                 <FontIcon
                     Style="{StaticResource DetailsIconStyle}"
                     Glyph="&#xEA55;"
-                    VerticalAlignment="Top" />
+                    VerticalAlignment="Top"
+                    FontSize="16"
+                    Width="48" />
                 <TextBlock
                     Grid.Column="1"
                     Name="MoreInfo"
                     Foreground="{ThemeResource Text}"
+                    FontFamily="{StaticResource DefaultFontFamily}"
                     TextWrapping="Wrap"
-                    Text="Więcej informacji"
-                    Margin="20,0" />
+                    TextAlignment="Justify"
+                    Text="Więcej informacji"/>
             </Grid>
         </StackPanel>
 

@@ -59,5 +59,21 @@ protected virtual void OnPropertyChanged(string propertyName) {
     }
 }
 */
+
+            /// <summary>
+            /// może pokazywac błędnie jak edytujesz kategorię
+            /// </summary>
+/*
+        private OperationCategory operationCategory;
+        public OperationCategory OperationCategory {
+            get {
+                if (operationCategory != null) {
+
+                }
+
+                return operationCategory;
+            }
+        }
+        */
     }
 }

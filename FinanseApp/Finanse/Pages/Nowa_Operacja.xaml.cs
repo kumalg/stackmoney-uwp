@@ -2,6 +2,7 @@
 using Finanse.Dialogs;
 using Finanse.Models;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -18,14 +19,11 @@ namespace Finanse.Pages {
     public sealed partial class Nowa_Operacja : Page {
 
         private Regex regex = NewOperation.getRegex();
-
         private string acceptedCostValue = string.Empty;
-
         private bool isUnfocused = true;
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             setDefaultPageValues();
-
             base.OnNavigatedTo(e); 
         }
 
@@ -43,10 +41,29 @@ namespace Finanse.Pages {
             Expense_RadioButton.IsChecked = true;
         }
 
+        public List<ComboBoxItem> listOfMoneyAccounts() {
+            List<ComboBoxItem> list = new List<ComboBoxItem>();
+            foreach (MoneyAccount account in Dal.getAllMoneyAccounts()) {
+                list.Add(new ComboBoxItem {
+                    Content = account.Name,
+                    Tag = account.Id
+                });
+            }
+            return list;
+        }
+
+        private void setItemSource(ComboBox comboBox, List<ComboBoxItem> list) {
+            comboBox.ItemsSource = list;
+        }
+
         public Nowa_Operacja() {
           
             this.InitializeComponent();
-            
+
+            PayFormValue.ItemsSource = listOfMoneyAccounts();
+            InitialAccount.ItemsSource = listOfMoneyAccounts();
+            DestinationAccount.ItemsSource = listOfMoneyAccounts();
+
             DateValue.Date = DateTime.Today;
             DateValue.MaxDate = Settings.getMaxDate();
             DateValue.MinDate = Settings.getMinDate();
@@ -55,23 +72,49 @@ namespace Finanse.Pages {
 
             SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
 
-            foreach (MoneyAccount account in Dal.getAllMoneyAccounts()) {
-                PayFormValue.Items.Add(new ComboBoxItem {
-                    Content = account.Name,
-                    Tag = account.Id
-                });
-            }
-
             if (PayFormValue.Items.Count > 0)
                 PayFormValue.SelectedIndex = 0;
+            if (InitialAccount.Items.Count > 0)
+                InitialAccount.SelectedIndex = 0;
         }
 
         public Windows.Globalization.DayOfWeek firstDayOfWeek() {
             return Settings.getFirstDayOfWeek();
         }
 
+        private void TransferRadioButton_Checked(object sender, RoutedEventArgs e) {
+            TransferAccounts_Grid.Visibility = Visibility.Visible;
 
-        private void TypeOfOperationRadioButton_Checked(object sender, RoutedEventArgs e) {
+            PayFormValue.Visibility = Visibility.Collapsed;
+            SaveAsPattern_StackPanel.Visibility = Visibility.Collapsed;
+            UsePatternButton.Visibility = Visibility.Collapsed;
+
+            int selectedCategoryId = -1;
+            int selectedSubCategoryId = -1;
+
+            if (CategoryValue.SelectedIndex != -1) {
+                selectedCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
+
+                if (SubCategoryValue.SelectedIndex != -1)
+                    selectedSubCategoryId = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
+            }
+            
+            SetCategoryComboBoxItems(true, true);
+
+            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == selectedCategoryId);
+
+            if (CategoryValue.SelectedItem != null)
+                SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == selectedSubCategoryId);
+
+        }
+
+        private void ExpenseOrIncomeRadioButton_Checked(object sender, RoutedEventArgs e) {
+            TransferAccounts_Grid.Visibility = Visibility.Collapsed;
+
+            PayFormValue.Visibility = Visibility.Visible;
+            SaveAsPattern_StackPanel.Visibility = Visibility.Visible;
+            UsePatternButton.Visibility = Visibility.Visible;
+
 
             if (CategoryValue.SelectedIndex != -1) {
                 int idOfSelectedCategory = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
@@ -148,11 +191,7 @@ namespace Finanse.Pages {
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             SetSubCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
         }
-
-        private void DateValue_Closed(object sender, object e) {
-            DateValue.Focus(FocusState.Programmatic);
-        }
-
+        
         private void SubCategoryValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (SubCategoryValue.SelectedIndex == 0)
                 SubCategoryValue.SelectedIndex--;
@@ -195,11 +234,8 @@ namespace Finanse.Pages {
         private async void UsePatternButton_Click(object sender, RoutedEventArgs e) {
 
             Operation selectedOperation = null;
-
             var ContentDialogItem = new OperationPatternsContentDialog(selectedOperation);
-
             var result = await ContentDialogItem.ShowAsync();
-
             selectedOperation = ContentDialogItem.setOperation();
 
             if (selectedOperation != null)
@@ -229,45 +265,57 @@ namespace Finanse.Pages {
         private void CostValue_TextChanged(object sender, TextChangedEventArgs e) {
             SaveButton.IsEnabled = !String.IsNullOrEmpty(CostValue.Text);
         }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e) {
-            int catId = CategoryValue.SelectedIndex == -1 ?
-                    1 :
-                    (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
-            int subCatId = SubCategoryValue.SelectedIndex == -1 ?
-                    -1 :
-                    (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
-
-            Dal.saveOperation(new Operation {
-                Id = 0,
+       
+        private OperationPattern getNewOperationPattern() {
+            return new OperationPattern {
                 Title = NameValue.Text,
                 isExpense = (bool)Expense_RadioButton.IsChecked,
                 Cost = decimal.Parse(acceptedCostValue, Settings.getActualCultureInfo()),
-                CategoryId = catId,
-                SubCategoryId = subCatId,
-                Date = DateValue.Date == null ? string.Empty : DateValue.Date.Value.ToString("yyyy.MM.dd"),
+                CategoryId = getCategoryId(),
+                SubCategoryId = getSubCategoryId(),
                 MoreInfo = MoreInfoValue.Text,
                 MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
-            });
+            };
+        }
 
-            if (SaveAsAssetToggle.IsOn) {
-                Dal.saveOperationPattern(new OperationPattern {
-                    Id = 0,
-                    Title = NameValue.Text,
-                    isExpense = (bool)Expense_RadioButton.IsChecked,
-                    Cost = decimal.Parse(acceptedCostValue, Settings.getActualCultureInfo()),
-                    CategoryId = catId,
-                    SubCategoryId = subCatId,
-                    MoreInfo = MoreInfoValue.Text,
-                    MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
-                });
+        private Operation getNewOperation(ComboBoxItem moneyAccount, bool isExpense) {
+            Operation operation = getNewOperationPattern().toOperation();
+            operation.Date = DateValue.Date == null ? string.Empty : DateValue.Date.Value.ToString("yyyy.MM.dd");
+            return operation;
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e) {
+
+            if ((bool)Transfer_RadioButton.IsChecked) {
+                Dal.saveOperation(getNewOperation((ComboBoxItem)InitialAccount.SelectedItem, true));
+                Dal.saveOperation(getNewOperation((ComboBoxItem)DestinationAccount.SelectedItem, false));
+            }
+            else {
+                Dal.saveOperation(getNewOperation((ComboBoxItem)PayFormValue.SelectedItem, (bool)Expense_RadioButton.IsChecked));
+
+                if (SaveAsAssetToggle.IsOn)
+                    Dal.saveOperationPattern(getNewOperationPattern());
             }
             
-            DateTime navigateToThisMonth = DateValue.Date == null || DateValue.Date > DateTime.Today ? 
+            Frame.Navigate(typeof(Strona_glowna), navigateToThisMonthAfterSave());
+        }
+
+        private int getCategoryId() {
+            return CategoryValue.SelectedIndex == -1 ?
+                        1 :
+                        (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
+        }
+
+        private int getSubCategoryId() {
+            return SubCategoryValue.SelectedIndex == -1 ?
+                        -1 :
+                        (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
+        }
+       
+        private DateTime navigateToThisMonthAfterSave() {
+            return DateValue.Date == null || DateValue.Date > DateTime.Today ?
                 DateTime.Today.AddMonths(1) :
                 DateValue.Date.Value.DateTime;
-
-            Frame.Navigate(typeof(Strona_glowna), navigateToThisMonth);
         }
     }
 }

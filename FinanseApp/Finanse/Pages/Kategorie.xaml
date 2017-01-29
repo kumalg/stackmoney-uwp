@@ -151,6 +151,7 @@
 
                                     <StackPanel
                                         Background="Transparent"
+                                        Tapped="StackPanel_Tapped"
                                         RightTapped="ExpandPanel_RightTapped">
 
                                         <FlyoutBase.AttachedFlyout>

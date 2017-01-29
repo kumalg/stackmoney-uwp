@@ -18,18 +18,6 @@ namespace Finanse.Pages {
 
         public Kategorie() {
             this.InitializeComponent();
-          //  addSubCategoriesToCategories(); 
-        }
-
-        private void addSubCategoriesToCategories() {
-            List<List<OperationSubCategory>> operationSubCategories = new List<List<OperationSubCategory>>(Dal.getAllSubCategoriesInExpensesGroupedByBoss());
-
-            foreach (OperationCategory category in OperationCategories) {
-                List<OperationSubCategory> subCategories = operationSubCategories.SingleOrDefault(i => i.ElementAt(0).BossCategoryId == category.Id);
-
-                if (subCategories != null)
-                    category.subCategories = new ObservableCollection<OperationSubCategory>(subCategories);
-            }
         }
 
         private async void NewCategory_Click(object sender, RoutedEventArgs e) {
@@ -69,15 +57,16 @@ namespace Finanse.Pages {
         }
 
         private async void DeleteCat_Click(object sender, RoutedEventArgs e) {
-            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-            var ContentDialogItem = new DeleteCategory_ContentDialog(OperationCategories, (OperationCategory)datacontext, null);
-            var result = await ContentDialogItem.ShowAsync();
-        }
+            OperationCategory operationCategory = (e.OriginalSource as FrameworkElement).DataContext as OperationCategory;
 
-        private void ExpandPanel_RightTapped(object sender, RightTappedRoutedEventArgs e) {
-            FrameworkElement senderElement = sender as FrameworkElement;
-            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
-            flyoutBase.ShowAt(senderElement);
+            AcceptContentDialog deleteContentDialog = new AcceptContentDialog("Czy chcesz usunąć kategorię?");
+
+            var result = await deleteContentDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary) {
+                OperationCategories.Remove(operationCategory);
+                Dal.deleteCategoryWithSubCategories(operationCategory.Id);
+            }
         }
 
         private async void DeleteSubCat_Click(object sender, RoutedEventArgs e) {
@@ -127,6 +116,20 @@ namespace Finanse.Pages {
         private void SubOperacjeListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             ListView listView = sender as ListView;
             listView.SelectedIndex = -1;
+        }
+        
+        private void ExpandPanel_RightTapped(object sender, RightTappedRoutedEventArgs e) {
+            showFlyoutBase(sender);
+        }
+
+        private void StackPanel_Tapped(object sender, TappedRoutedEventArgs e) {
+            showFlyoutBase(sender);
+        }
+
+        private void showFlyoutBase(object sender) {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
         }
     }
 }

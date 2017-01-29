@@ -24,6 +24,7 @@ namespace Finanse {
             this.InitializeComponent();
             Dal.createDB();
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(360, 530));
+
             CoreApplication.GetCurrentView().TitleBar.IsVisibleChanged += TitleBar_IsVisibleChanged;
 
             ApplicationViewTitleBar formattableTitleBar = ApplicationView.GetForCurrentView().TitleBar;
@@ -31,14 +32,11 @@ namespace Finanse {
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
             formattableTitleBar.ButtonHoverBackgroundColor = Functions.GetSolidColorBrush("#19000000").Color;
-                }
+        }
 
         private void TitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args) {
             //  throw new NotImplementedException();
-            if (sender.IsVisible)
-                TitleBarRowDefinition.Height = new GridLength(32);
-            else
-                TitleBarRowDefinition.Height = new GridLength(0);
+            TitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e) {
@@ -211,7 +209,7 @@ namespace Finanse {
         private void AktualnaStrona_Frame_Navigated(object sender, NavigationEventArgs e) {
             if (((Frame)sender).SourcePageType == typeof(Strona_glowna)) {
                 SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
-                AppTitle.Margin = new Thickness(16, 0, 0, 0);
+                TitleBar.Margin = new Thickness(16, 0, 0, 0);
                 if (OperationsAppBarRadioButton != null)
                     OperationsAppBarRadioButton.IsChecked = true;
                 if (Strona_glowna_ListBoxItem != null)
@@ -219,7 +217,7 @@ namespace Finanse {
             }
             else {
                 SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-                AppTitle.Margin = new Thickness(64, 0, 0, 0);
+                TitleBar.Margin = new Thickness(64, 0, 0, 0);
             }
         }
 

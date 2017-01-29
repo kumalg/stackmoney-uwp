@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -73,7 +74,18 @@ namespace Finanse.Models {
                     operationHeaders = new List<HeaderItem>();
 
                     int dayOfWeek = howManyEmptyCells(year, month);
+                    /*
+                    string[] names = Settings.getActualCultureInfo().DateTimeFormat.AbbreviatedDayNames;
+                    string monday = names[(int)DayOfWeek.Monday];
 
+                    operationHeaders.Add(new HeaderItem() { Day = names[(int)DayOfWeek.Monday], IsEnabled = false });
+                    operationHeaders.Add(new HeaderItem() { Day = names[(int)DayOfWeek.Tuesday], IsEnabled = false });
+                    operationHeaders.Add(new HeaderItem() { Day = names[(int)DayOfWeek.Wednesday], IsEnabled = false });
+                    operationHeaders.Add(new HeaderItem() { Day = names[(int)DayOfWeek.Thursday], IsEnabled = false });
+                    operationHeaders.Add(new HeaderItem() { Day = names[(int)DayOfWeek.Friday], IsEnabled = false });
+                    operationHeaders.Add(new HeaderItem() { Day = names[(int)DayOfWeek.Saturday], IsEnabled = false });
+                    operationHeaders.Add(new HeaderItem() { Day = names[(int)DayOfWeek.Sunday], IsEnabled = false });
+                    */
                     for (int i = 0; i < dayOfWeek; i++)
                         operationHeaders.Add(new HeaderItem() { Day = String.Empty, IsEnabled = false });
 

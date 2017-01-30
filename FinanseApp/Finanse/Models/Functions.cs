@@ -14,7 +14,7 @@ namespace Finanse.Models {
         }
 
         public static DateTime dateTimeWithFirstDayOfMonth(DateTime dateTime) {
-            return new DateTime(dateTime.Year, dateTime.Month, 1);
+            return new DateTime(dateTime.Year, dateTime.Month, 1).Date;
         }
     }
 }

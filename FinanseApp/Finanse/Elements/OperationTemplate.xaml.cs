@@ -9,6 +9,8 @@ namespace Finanse.Elements {
 
     public sealed partial class OperationTemplate : UserControl {
 
+        public decimal Date = 12;
+
         private Models.OperationPattern Operation {
 
             get {

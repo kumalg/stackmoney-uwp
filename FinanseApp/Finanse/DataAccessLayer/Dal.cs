@@ -130,25 +130,6 @@
             }
         }
 
-        public static decimal[] getBalanceFromSingleAccountToDate(DateTime date, int moneyAccountId) {
-            decimal[] values = new decimal[2]; // initial, final
-
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                values[0] = (from p in db.Table<Operation>().ToList()
-                             where p.MoneyAccountId == moneyAccountId && !String.IsNullOrEmpty(p.Date) && DateTime.Parse(p.Date) < date
-                             select p.isExpense ? -p.Cost : p.Cost).Sum();
-                
-                values[1] = (from p in db.Table<Operation>().ToList()
-                             where p.MoneyAccountId == moneyAccountId && !String.IsNullOrEmpty(p.Date) && DateTime.Parse(p.Date) < date.AddMonths(1)
-                             select p.isExpense ? -p.Cost : p.Cost).Sum();
-            }
-
-            return values;
-        }
-
         public static List<MoneyAccountBalance> listOfMoneyAccountBalances(DateTime date) {
             List<MoneyAccountBalance> list = new List<MoneyAccountBalance>();
 
@@ -188,6 +169,21 @@
         private static decimal getInitialValue(IGrouping<int, Operation> operations, DateTime date) {
             return operations.Where(i => !string.IsNullOrEmpty(i.Date) && DateTime.Parse(i.Date) < maxDateInInitialValue(date))
                                 .Sum(i => i.isExpense ? -i.Cost : i.Cost);
+        }
+
+        public static string getCategoryNameById(int id) {
+            string name;
+
+            // Create a new connection
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                name = (from p in db.Table<OperationCategory>()
+                          where p.Id == id select p.Name).First();
+            }
+
+            return name;
         }
 
         /* GET ALL */

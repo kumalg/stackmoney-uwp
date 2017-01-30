@@ -153,8 +153,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\DecimalToCurrencyStringConverter.cs" />
     <Compile Include="DataAccessLayer\Dal.cs" />
     <Compile Include="DataAccessLayer\DebugTraceListener.cs" />
+    <Compile Include="DataAccessLayer\StatisticsDal.cs" />
     <Compile Include="Dialogs\DeleteCategory_ContentDialog.xaml.cs">
       <DependentUpon>DeleteCategory_ContentDialog.xaml</DependentUpon>
     </Compile>

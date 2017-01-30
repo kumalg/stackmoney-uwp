@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -280,6 +281,7 @@ namespace Finanse.Pages {
 
         private Operation getNewOperation(ComboBoxItem moneyAccount, bool isExpense) {
             Operation operation = getNewOperationPattern().toOperation();
+            operation.isExpense = isExpense;
             operation.Date = DateValue.Date == null ? string.Empty : DateValue.Date.Value.ToString("yyyy.MM.dd");
             return operation;
         }
@@ -287,6 +289,11 @@ namespace Finanse.Pages {
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
 
             if ((bool)Transfer_RadioButton.IsChecked) {
+                if (InitialAccount.SelectedItem == null || DestinationAccount.SelectedItem == null) {
+                    showMessageDialog("Nie wybrano kont");
+                    return;
+                }
+                
                 Dal.saveOperation(getNewOperation((ComboBoxItem)InitialAccount.SelectedItem, true));
                 Dal.saveOperation(getNewOperation((ComboBoxItem)DestinationAccount.SelectedItem, false));
             }
@@ -298,6 +305,11 @@ namespace Finanse.Pages {
             }
             
             Frame.Navigate(typeof(Strona_glowna), navigateToThisMonthAfterSave());
+        }
+
+        private async void showMessageDialog(string message) {
+            MessageDialog dialog = new MessageDialog(message);
+            var result = await dialog.ShowAsync();
         }
 
         private int getCategoryId() {

@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Finanse"
     xmlns:data="using:Finanse.Elements"
+    xmlns:conv="using:Finanse.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -13,6 +14,11 @@
         MaxWidth="600"
         Margin="16,0"
         DataContextChanged="Operation_DataContextChanged">
+
+        <Grid.Resources>
+            <conv:DecimalToCurrencyStringConverter
+                x:Name="DecimalToCurrencyStringConverter" />
+        </Grid.Resources>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition
@@ -97,6 +103,17 @@
                     </StackPanel>
 
                 </StackPanel>
+                <!--
+                <TextBlock
+                    Visibility="Collapsed"
+                    FontFamily="{StaticResource DefaultFontFamily}"
+                    FontSize="12"
+                    Grid.Column="1"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"
+                    Text="{Binding Date, Converter={StaticResource DecimalToCurrencyStringConverter}}"
+                    Foreground="{StaticResource RedColorStyle}" />
+                -->
                 <TextBlock
                     FontFamily="{StaticResource DefaultFontFamily}"
                     FontSize="12"

@@ -27,6 +27,7 @@ namespace Finanse.Pages {
         private OperationData storeData;
         private ObservableCollection<GroupInfoList<Operation>> operationGroups = new ObservableCollection<GroupInfoList<Operation>>();
         private DateTime actualYearAndMonth;
+        private TextBlock actualMonthText = new TextBlock();
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
 
@@ -142,12 +143,12 @@ namespace Finanse.Pages {
         private void setActualMonthText() {
 
             if (!isFutureMonth(actualYearAndMonth)) {
-                ActualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualYearAndMonth.Month).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualYearAndMonth.Month).Substring(1);
+                actualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualYearAndMonth.Month).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualYearAndMonth.Month).Substring(1);
                 if (actualYearAndMonth.Year != DateTime.Today.Year)
-                    ActualMonthText.Text += " " + actualYearAndMonth.Year.ToString();
+                    actualMonthText.Text += " " + actualYearAndMonth.Year.ToString();
             } else {
                 var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
-                ActualMonthText.Text = loader.GetString("plannedString");
+                actualMonthText.Text = loader.GetString("plannedString");
             }
         }
 
@@ -179,8 +180,6 @@ namespace Finanse.Pages {
             OperationDetailsContentDialog operationDetailsContentDialog = new OperationDetailsContentDialog(operationGroups, operation, "");
 
             operationDetailsContentDialog.MaxHeight = Window.Current.Bounds.Height - 80;
-            operationDetailsContentDialog.VerticalAlignment = VerticalAlignment.Center;
-            operationDetailsContentDialog.VerticalContentAlignment = VerticalAlignment.Center;
 
             ContentDialogResult result = await operationDetailsContentDialog.ShowAsync();
 

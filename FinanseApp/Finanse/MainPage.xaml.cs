@@ -126,6 +126,12 @@ namespace Finanse {
 
         private async void OperationsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
             closeCommandBar();
+
+            if (Strona_glowna_ListBoxItem != null)
+                Strona_glowna_ListBoxItem.IsChecked = true;
+            if (OperationsAppBarRadioButton != null)
+                OperationsAppBarRadioButton.IsChecked = true;
+
             await Task.Delay(5);
             if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(Strona_glowna))
                 AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
@@ -133,18 +139,36 @@ namespace Finanse {
 
         private async void CategoriesAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
             closeCommandBar();
+
+            if (Kategorie_ListBoxItem != null)
+                Kategorie_ListBoxItem.IsChecked = true;
+            if (CategoriesAppBarRadioButton != null)
+                CategoriesAppBarRadioButton.IsChecked = true;
+
             await Task.Delay(5);
             AktualnaStrona_Frame.Navigate(typeof(Kategorie));
         }
 
         private async void AddNewOperationAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
             closeCommandBar();
+
+            if (AddNewOperation_ListBoxItem != null)
+                AddNewOperation_ListBoxItem.IsChecked = true;
+            if (AddNewOperationAppBarRadioButton != null)
+                AddNewOperationAppBarRadioButton.IsChecked = true;
+
             await Task.Delay(5);
             AktualnaStrona_Frame.Navigate(typeof(Nowa_Operacja));
         }
 
         private async void StatisticsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
             closeCommandBar();
+
+            if (Statystyki_ListBoxItem != null)
+                Statystyki_ListBoxItem.IsChecked = true;
+            if (StatisticsAppBarRadioButton != null)
+                StatisticsAppBarRadioButton.IsChecked = true;
+
             await Task.Delay(5);
             AktualnaStrona_Frame.Navigate(typeof(Statystyki));
         }
@@ -161,6 +185,10 @@ namespace Finanse {
 
         private async void SzablonyAppBarButton_Click(object sender, RoutedEventArgs e) {
             UncheckAllMenuButtons();
+
+            if (Szablony_ListBoxItem != null)
+                Szablony_ListBoxItem.IsChecked = true;
+
             await Task.Delay(5);
             //  (Frame as ThemeAwareFrame).AppTheme = ElementTheme.Light;
             navigateIfDifferentPage(typeof(Szablony));
@@ -168,6 +196,10 @@ namespace Finanse {
 
         private async void ZleceniaStaleAppBarButton_Click(object sender, RoutedEventArgs e) {
             UncheckAllMenuButtons();
+
+            if (ZleceniaStale_ListBoxItem != null)
+                ZleceniaStale_ListBoxItem.IsChecked = true;
+
             await Task.Delay(5);
             //   (Frame as ThemeAwareFrame).AppTheme = ElementTheme.Dark;
             navigateIfDifferentPage(typeof(ZleceniaStale));
@@ -175,12 +207,20 @@ namespace Finanse {
 
         private async void KontaAppBarButton_Click(object sender, RoutedEventArgs e) {
             UncheckAllMenuButtons();
+
+            if (Konta_ListBoxItem != null)
+                Konta_ListBoxItem.IsChecked = true;
+
             await Task.Delay(5);
             navigateIfDifferentPage(typeof(Konta));
         }
 
         private async void UstawieniaAppBarButton_Click(object sender, RoutedEventArgs e) {
             UncheckAllMenuButtons();
+
+            if (Ustawienia_ListBoxItem != null)
+                Ustawienia_ListBoxItem.IsChecked = true;
+
             await Task.Delay(5);
             navigateIfDifferentPage(typeof(Ustawienia));
         }
@@ -200,10 +240,12 @@ namespace Finanse {
         }
 
         private void UncheckAllMenuButtons() {
-            OperationsAppBarRadioButton.IsChecked = false;
-            CategoriesAppBarRadioButton.IsChecked = false;
-            AddNewOperationAppBarRadioButton.IsChecked = false;
-            StatisticsAppBarRadioButton.IsChecked = false;
+            if (AddNewOperationAppBarRadioButton != null) {
+                OperationsAppBarRadioButton.IsChecked = false;
+                CategoriesAppBarRadioButton.IsChecked = false;
+                AddNewOperationAppBarRadioButton.IsChecked = false;
+                StatisticsAppBarRadioButton.IsChecked = false;
+            }
         }
         
         private void AktualnaStrona_Frame_Navigated(object sender, NavigationEventArgs e) {

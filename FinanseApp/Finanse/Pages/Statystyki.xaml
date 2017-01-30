@@ -9,6 +9,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Charting="using:WinRTXamlToolkit.Controls.DataVisualization.Charting"
+    xmlns:Charts="using:FourToolkit.Charts"
     mc:Ignorable="d">
 
     <Page.Transitions>
@@ -43,25 +44,164 @@
             Background="{ThemeResource AccentColor}"
             MinHeight="48">
 
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="*" />
+            </Grid.ColumnDefinitions>
+            
             <TextBlock
                 Text="Statystyki"
                 x:Uid="statistics"
                 Style="{StaticResource PageTitleStyle}" />
 
+
+            <StackPanel
+                Grid.Column="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right">
+
+                <TextBlock
+                    x:Name="Zakres"
+                    Style="{StaticResource PageTitleStyle}"
+                    Margin="0"
+                    VerticalAlignment="Center"
+                    Text="{x:Bind dateRangeText.Text, Mode=TwoWay}" />
+
+                <Button
+                    BorderThickness="0"
+                    Width="32"
+                    Height="32"
+                    Margin="8,0"
+                    Background="Transparent"
+                    VerticalAlignment="Center">
+                    <Button.Content>
+                        <FontIcon
+                            Foreground="{ThemeResource AccentText}"
+                            Opacity="0.5"
+                            FontSize="13"
+                            Glyph="" />
+                    </Button.Content>
+                    <Button.Flyout>
+                        <Flyout
+                            x:Name="VisibleAccountsFlyout"
+                            Closed="MinDatePicker_Closed"
+                            Placement="Bottom">
+                            <Flyout.FlyoutPresenterStyle>
+                                <Style
+                                    TargetType="FlyoutPresenter">
+                                    <Setter
+                                        Property="BorderThickness"
+                                        Value="0" />
+                                    <Setter
+                                        Property="Background"
+                                        Value="{ThemeResource Background-1Transparent}" />
+                                </Style>
+                            </Flyout.FlyoutPresenterStyle>
+                            
+                            <StackPanel>
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    Margin="0,24,0,0"
+                                    Foreground="{ThemeResource Text-1}"
+                                    FontFamily="{StaticResource DefaultFontFamily}"
+                                    Text="Data początkowa" />
+                                <DatePicker
+                                    x:Name="MinDatePicker"
+                                    FontFamily="{StaticResource DefaultFontFamily}"
+                                    Foreground="{ThemeResource Text}"
+                                    Margin="16,8,16,0" />
+
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    Margin="0,24,0,0"
+                                    Foreground="{ThemeResource Text-1}"
+                                    FontFamily="{StaticResource DefaultFontFamily}"
+                                    Text="Data końcowa" />
+                                <DatePicker
+                                    x:Name="MaxDatePicker"
+                                    FontFamily="{StaticResource DefaultFontFamily}"
+                                    Foreground="{ThemeResource Text}"
+                                    Margin="16,8,16,24" />
+                            </StackPanel>
+                            
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+            </StackPanel>
+
         </Grid>
 
-        <Grid
+        <ScrollViewer
+            VerticalScrollBarVisibility="Auto"
             Grid.Row="1">
-            <Charting:Chart
-                x:Name="ColumnChart">
-                <Charting:ColumnSeries 
-                    Foreground="{Binding OperationCategory.Color}"
-                    Title="Title"
-                    IndependentValuePath="Name"
-                    DependentValuePath="Id"/>
-            </Charting:Chart>
-        </Grid>
-        
-    </Grid>
+            <StackPanel>
 
+                <Grid>
+                    <Charts:DoughnutChart
+                        x:Name="DoughnutChart"
+                        Thickness="40"
+                        Width="256"
+                        Height="256"
+                        ItemsSource="{x:Bind ExpensesToIncomes}"
+                        Margin="48">
+                        <Charts:DoughnutChart.ItemTemplate>
+                            <DataTemplate>
+                                <Charts:DoughnutChartItem
+                                    Name="Yco"
+                                    Value="{Binding Value}"
+                                    Color="{Binding Key}" />
+                            </DataTemplate>
+                        </Charts:DoughnutChart.ItemTemplate>
+                    </Charts:DoughnutChart>
+                    <TextBlock
+                        Text="{x:Bind incomesPercentageText.Text, Mode=TwoWay}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        FontSize="64"
+                        FontFamily="{StaticResource DefaultFontFamily}"
+                        Foreground="{ThemeResource AccentColor}"/>
+                </Grid>
+
+                <StackPanel
+                    HorizontalAlignment="Center">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <Ellipse
+                            Margin="8"
+                            Width="16"
+                            Height="16"
+                            Fill="{ThemeResource AccentColor}" />
+                        <TextBlock
+                            Foreground="{ThemeResource Text}"
+                            VerticalAlignment="Center"
+                            Text="Wpływy" />
+                    </StackPanel>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <Ellipse
+                            Margin="8"
+                            Width="16"
+                            Height="16"
+                            Fill="{ThemeResource Background+2}" />
+                        <TextBlock
+                            Foreground="{ThemeResource Text}"
+                            VerticalAlignment="Center"
+                            Text="Wydatki" />
+                    </StackPanel>
+                </StackPanel>
+
+                <Charting:Chart
+                    x:Name="ColumnChart">
+                    <Charting:PieSeries
+                        Foreground="{Binding OperationCategory.Color}"
+                        Title="Title"
+                        IndependentValuePath="Key"
+                        DependentValuePath="Value" />
+                </Charting:Chart>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </Page>

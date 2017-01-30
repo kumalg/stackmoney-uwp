@@ -49,59 +49,62 @@
 
             <GroupStyle.HeaderTemplate>
                 <DataTemplate>
+                    <Button
+                        Padding="0"
+                        BorderThickness="0"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
+                        MaxWidth="620"
+                        Background="Transparent">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="Auto" />
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                    <Grid
-                        Background="Transparent"
-                        MaxWidth="620">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="Auto" />
-                            <ColumnDefinition
-                                Width="*" />
-                            <ColumnDefinition
-                                Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        
-                        <StackPanel
-                            Margin="0,12"
-                            Orientation="Horizontal">
                             <StackPanel
-                                Width="80">
+                                Margin="0,12"
+                                Orientation="Horizontal">
+                                <StackPanel
+                                    Width="80">
+                                    <TextBlock
+                                        Text="{Binding Key.dayNum00}"
+                                        FontSize="12"
+                                        Foreground="{ThemeResource Text-2}"
+                                        FontWeight="SemiBold"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center" />
+                                </StackPanel>
                                 <TextBlock
-                                    Text="{Binding Key.dayNum00}"
-                                    FontSize="12"
-                                    Foreground="{ThemeResource Text-2}"
                                     FontWeight="SemiBold"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center" />
+                                    Foreground="{ThemeResource Text-1}"
+                                    Text="{Binding Key.day}"
+                                    FontSize="12" />
                             </StackPanel>
+
                             <TextBlock
+                                Margin="16,0"
+                                VerticalAlignment="Center"
+                                Grid.Column="2"
+                                Name="SumText"
+                                HorizontalAlignment="Right"
+                                Text="{Binding cost}"
                                 FontWeight="SemiBold"
                                 Foreground="{ThemeResource Text-1}"
-                                Text="{Binding Key.day}"
                                 FontSize="12" />
-                        </StackPanel>
 
-                        <TextBlock
-                            Margin="16,0"
-                            VerticalAlignment="Center"
-                            Grid.Column="2"
-                            Name="SumText"
-                            HorizontalAlignment="Right"
-                            Text="{Binding cost}"
-                            FontWeight="SemiBold"
-                            Foreground="{ThemeResource Text-1}"
-                            FontSize="12" />
-
-                        <Border
-                            Visibility="Collapsed"
-                            Grid.ColumnSpan="3"
-                            Opacity="0.3"
-                            BorderBrush="{ThemeResource Text-2}"
-                            BorderThickness="0,0,0,1" />
-                    </Grid>
-
+                            <Border
+                                Visibility="Collapsed"
+                                Grid.ColumnSpan="3"
+                                Opacity="0.3"
+                                BorderBrush="{ThemeResource Text-2}"
+                                BorderThickness="0,0,0,1" />
+                        </Grid>
+                    </Button>
                 </DataTemplate>
             </GroupStyle.HeaderTemplate>
         </GroupStyle>
@@ -378,30 +381,17 @@
                     </Button>
                 </Grid>
 
-                <TextBlock
-                    HorizontalAlignment="Center"
-                    Margin="8,0,0,0"
-                    x:Name="ActualMonthText"
-                    Style="{StaticResource PageTitleStyle}">
-                    <TextBlock.Triggers>
-                        <EventTrigger
-                            RoutedEvent="TextBlock.Loaded">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation
-                                        Storyboard.TargetName="ActualMonthText"
-                                        Storyboard.TargetProperty="(TextBlock.Opacity)"
-                                        From="0.0"
-                                        To="1.0"
-                                        Duration="0:0:0.2" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </TextBlock.Triggers>
-                </TextBlock>
-            </StackPanel>
+                    <TextBlock
+                        Name="targetBlock"
+                        Text="{x:Bind actualMonthText.Text, Mode=TwoWay}"
+                        HorizontalAlignment="Center"
+                        Margin="8,0,0,0"
+                        Style="{StaticResource PageTitleStyle}">
+                    </TextBlock>
 
-            <StackPanel
+                </StackPanel>
+
+                <StackPanel
                 Grid.Column="1"
                 Orientation="Horizontal"
                 VerticalAlignment="Center"

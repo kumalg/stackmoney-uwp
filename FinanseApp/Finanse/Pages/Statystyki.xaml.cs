@@ -1,8 +1,13 @@
 ﻿using Finanse.DataAccessLayer;
 using Finanse.Models;
+using Finanse.Models.Statistics;
 using FourToolkit.Charts.Data;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -11,53 +16,99 @@ using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 
 namespace Finanse.Pages {
 
-    public sealed partial class Statystyki : Page {
+    public sealed partial class Statystyki : Page, INotifyPropertyChanged {
+
+        StatisticsData statisticsData = new StatisticsData();
         
-        DateTime minDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).Date;
-        DateTime maxDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month)).Date;
-        TextBlock dateRangeText = new TextBlock();
-        TextBlock incomesPercentageText = new TextBlock();
+        public DateTime minDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).Date;
+        public DateTime maxDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month)).Date;
 
-        SortedDictionary<string, double> lista = new SortedDictionary<string, double>();
-        Dictionary<string, double> expensesToIncomes = new Dictionary<string, double>();
-
-        List<KeyValuePair<Color, double>> ExpensesToIncomes = new List<KeyValuePair<Color, double>>();
-
-        private List<KeyValuePair<Color, double>> makeNewList(double expenses, double incomes) {
-            double sum = expenses + incomes;
-            double incomesPercentage = 100 * incomes / sum;
-            Color expenseColor = ((SolidColorBrush)Application.Current.Resources["Background+2"] as SolidColorBrush).Color;
-            Color incomeColor = ((SolidColorBrush)Application.Current.Resources["AccentColor"] as SolidColorBrush).Color;
-            List<KeyValuePair<Color, double>> newList = new List<KeyValuePair<Color, double>>();
-            newList.Add(new KeyValuePair<Color, double>(expenseColor, expenses/sum));
-            newList.Add(new KeyValuePair<Color, double>(incomeColor, incomes/sum));
-
-            incomesPercentageText.Text = incomesPercentage.ToString("#") + "%";
-
-            return newList;
+        private string incomesPercentageText;
+        public string IncomesPercentageText {
+            get {
+                return incomesPercentageText;
+            }
+            set {
+                incomesPercentageText = value;
+                RaisePropertyChanged("IncomesPercentageText");
+            }
         }
 
-        private void setActualDateRangeText() {
-            dateRangeText.Text = minDate.ToString("d") + "   |   " + maxDate.ToString("d");
+        private string dateRangeText;
+        public string DateRangeText {
+            get {
+                return dateRangeText;
+            }
+            set {
+                dateRangeText = value;
+                RaisePropertyChanged("DateRangeText");
+            }
+        }
+
+        private ObservableCollection<ChartPart> expensesToIncomes = new ObservableCollection<ChartPart>();
+        public ObservableCollection<ChartPart> ExpensesToIncomes {
+            get {
+                return expensesToIncomes;
+            }
+            set {
+                expensesToIncomes = value;
+                RaisePropertyChanged("ExpensesToIncomes");
+            }
+        }
+
+        private ObservableCollection<ChartPart> expensesByCategory = new ObservableCollection<ChartPart>();
+        public ObservableCollection<ChartPart> ExpensesByCategory {
+            get {
+                return expensesByCategory;
+            }
+            set {
+                expensesByCategory = value;
+                RaisePropertyChanged("ExpensesByCategory");
+            }
+        }
+
+        private ObservableCollection<ChartPart> incomesByCategory = new ObservableCollection<ChartPart>();
+        public ObservableCollection<ChartPart> IncomesByCategory {
+            get {
+                return incomesByCategory;
+            }
+            set {
+                incomesByCategory = value;
+                RaisePropertyChanged("IncomesByCategory");
+            }
+        }
+
+        private ObservableCollection<ChartPart> categoryExpensesBySubCategory = new ObservableCollection<ChartPart>();
+        public ObservableCollection<ChartPart> CategoryExpensesBySubCategory {
+            get {
+                return categoryExpensesBySubCategory;
+            }
+            set {
+                categoryExpensesBySubCategory = value;
+                RaisePropertyChanged("CategoryExpensesBySubCategory");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void RaisePropertyChanged(string propertyName) {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public Statystyki() {
 
             this.InitializeComponent();
+
             MinDatePicker.Date = minDate;
             MaxDatePicker.Date = maxDate;
-            setActualDateRangeText();
 
-
-            lista = StatisticsDal.getExpensesSummaryGroupedByCategoryInRange(minDate, maxDate);
-            (ColumnChart.Series[0] as PieSeries).ItemsSource = lista;
-
-            expensesToIncomes = StatisticsDal.getExpenseToIncomeComparsion(minDate, maxDate);
-
-            ExpensesToIncomes = makeNewList(expensesToIncomes["expenses"], expensesToIncomes["incomes"]);
+            reload();
         }
 
-        private void MinDatePicker_Closed(object sender, object e) {
+
+        private void DateRangeFlyout_Closed(object sender, object e) {
             DateTime newMinDate = MinDatePicker.Date.Date;
             DateTime newMaxDate = MaxDatePicker.Date.Date;
             if (newMinDate != minDate || newMaxDate != maxDate) {
@@ -67,16 +118,17 @@ namespace Finanse.Pages {
             }
         }
 
-        private void reload() {
-            setActualDateRangeText();
+        public void reload() {
+            DateRangeText = statisticsData.getActualDateRangeText(minDate, maxDate);
 
-            lista = StatisticsDal.getExpensesSummaryGroupedByCategoryInRange(minDate, maxDate);
-            (ColumnChart.Series[0] as PieSeries).ItemsSource = lista;
+            ExpensesToIncomes = statisticsData.setExpensesToIncomesChartValues(minDate, maxDate);
+            double incomesPercentage = 100 * ExpensesToIncomes[1].RelativeValue;
+            IncomesPercentageText = incomesPercentage.ToString("0") + "%";
 
-            expensesToIncomes = StatisticsDal.getExpenseToIncomeComparsion(minDate, maxDate);
-
-            ExpensesToIncomes = makeNewList(expensesToIncomes["expenses"], expensesToIncomes["incomes"]);
-            DoughnutChart.ItemsSource = ExpensesToIncomes;
+            ExpensesByCategory = statisticsData.setRelativeValues(StatisticsDal.getExpensesGroupedByCategoryInRange(minDate, maxDate));
+            IncomesByCategory = statisticsData.setRelativeValues(StatisticsDal.getIncomesGroupedByCategoryInRange(minDate, maxDate));
+            CategoryExpensesBySubCategory = statisticsData.setRelativeValues(StatisticsDal.getExpensesFromCategoryGroupedBySubCategoryInRange(minDate, maxDate, 14));
         }
+
     }
 }

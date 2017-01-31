@@ -1,4 +1,5 @@
 ﻿using Finanse.Models;
+using Finanse.Models.Statistics;
 using SQLite.Net;
 using SQLite.Net.Platform.WinRT;
 using System;
@@ -29,34 +30,114 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static SortedDictionary<string, double> getExpensesSummaryGroupedByCategoryInRange(DateTime minDate, DateTime maxDate) {
-            SortedDictionary<string, double> models = new SortedDictionary<string, double>();
+        public static List<ChartPart> getExpensesGroupedByCategoryInRange(DateTime minDate, DateTime maxDate) {
+            List<ChartPart> models = new List<ChartPart>();
 
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                var query = from item in db.Table<Operation>().ToList() where 
-                            !String.IsNullOrEmpty(item.Date)
-                            && item.isExpense
+                var query = from item in db.Table<Operation>().ToList()
+                            where !String.IsNullOrEmpty(item.Date) 
+                            && item.isExpense 
                             && isDateInRange(item.Date, minDate, maxDate)
                             group item.Cost by item.CategoryId into g
-                            orderby g.Key descending
+                            orderby g.Sum() descending
                             select new {
-                                CategoryId = Dal.getCategoryNameById(g.Key),
+                                CategoryId = g.Key,
                                 Cost = g.Sum()
                             };
 
-                foreach (var item in query)
-                    models.Add(item.CategoryId, (double)item.Cost);
+                foreach (var item in query) {
+                    OperationCategory operationCategory = Dal.getOperationCategoryById(item.CategoryId);
+                    models.Add(new ChartPart {
+                        SolidColorBrush = operationCategory.Color,
+                        Name = operationCategory.Name,
+                        UnrelativeValue = (double)item.Cost
+                    });
+                }
             }
 
             return models;
         }
 
-        public static Dictionary<string, double> getExpenseToIncomeComparsion(DateTime minDate, DateTime maxDate) {
-            Dictionary<string, double> models = new Dictionary<string, double>();
+        public static List<ChartPart> getIncomesGroupedByCategoryInRange(DateTime minDate, DateTime maxDate) {
+            List<ChartPart> models = new List<ChartPart>();
+
+            // Create a new connection
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                var query = from item in db.Table<Operation>().ToList()
+                            where !String.IsNullOrEmpty(item.Date)
+                            && !item.isExpense
+                            && isDateInRange(item.Date, minDate, maxDate)
+                            group item.Cost by item.CategoryId into g
+                            orderby g.Sum() descending
+                            select new {
+                                CategoryId = g.Key,
+                                Cost = g.Sum()
+                            };
+
+                foreach (var item in query) {
+                    OperationCategory operationCategory = Dal.getOperationCategoryById(item.CategoryId);
+                    models.Add(new ChartPart {
+                        SolidColorBrush = operationCategory.Color,
+                        Name = operationCategory.Name,
+                        UnrelativeValue = (double)item.Cost
+                    });
+                }
+            }
+
+            return models;
+        }
+
+        public static List<ChartPart> getExpensesFromCategoryGroupedBySubCategoryInRange(DateTime minDate, DateTime maxDate, int CategoryId) {
+            List<ChartPart> models = new List<ChartPart>();
+
+            // Create a new connection
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                var query = from item in db.Table<Operation>().ToList()
+                            where !String.IsNullOrEmpty(item.Date)
+                            && item.isExpense
+                            && isDateInRange(item.Date, minDate, maxDate)
+                            && item.CategoryId == CategoryId
+                            group item.Cost by item.SubCategoryId into g
+                            orderby g.Sum() descending
+                            select new {
+                                SubCategoryId = g.Key,
+                                Cost = g.Sum()
+                            };
+
+                foreach (var item in query) {
+                    OperationSubCategory operationSubCategory = Dal.getOperationSubCategoryById(item.SubCategoryId);
+                    if (operationSubCategory != null)
+                        models.Add(new ChartPart {
+                            SolidColorBrush = operationSubCategory.Color,
+                            Name = operationSubCategory.Name,
+                            UnrelativeValue = (double)item.Cost
+                        });
+                    else {
+                        OperationCategory operationCategory = Dal.getOperationCategoryById(CategoryId);
+                        models.Add(new ChartPart {
+                            SolidColorBrush = operationCategory.Color,
+                            Name = operationCategory.Name,
+                            UnrelativeValue = (double)item.Cost
+                        });
+                    }
+                }
+            }
+
+            return models;
+        }
+
+        public static List<double> getExpenseToIncomeComparsion(DateTime minDate, DateTime maxDate) {
+            List<double> models = new List<double>();
 
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
@@ -75,8 +156,8 @@ namespace Finanse.DataAccessLayer {
                                      && isDateInRange(item.Date, minDate, maxDate)
                                      select item.Cost).Sum();
 
-                models.Add("expenses", expenses);
-                models.Add("incomes", incomes);
+                models.Add(expenses);
+                models.Add(incomes);
             }
 
             return models;

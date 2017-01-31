@@ -153,6 +153,15 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Charts\Data\ChartData.cs" />
+    <Compile Include="Charts\Data\ChartDataItem.cs" />
+    <Compile Include="Charts\DefaultColors.cs" />
+    <Compile Include="Charts\DoughnutChart.cs" />
+    <Compile Include="Charts\DoughnutChartItem.cs" />
+    <Compile Include="Charts\Extensions\IListExt.cs" />
+    <Compile Include="Charts\LineChart.cs" />
+    <Compile Include="Charts\LineChartItem.cs" />
+    <Compile Include="Charts\Shapes\Arc.cs" />
     <Compile Include="Converters\DecimalToCurrencyStringConverter.cs" />
     <Compile Include="DataAccessLayer\Dal.cs" />
     <Compile Include="DataAccessLayer\DebugTraceListener.cs" />
@@ -205,6 +214,8 @@
     </Compile>
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\OperationData.cs" />
+    <Compile Include="Models\Statistics\StatisticsData.cs" />
+    <Compile Include="Models\Statistics\ChartPart.cs" />
     <Compile Include="Pages\Kategorie.xaml.cs">
       <DependentUpon>Kategorie.xaml</DependentUpon>
     </Compile>

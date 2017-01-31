@@ -6,10 +6,11 @@
     NavigationCacheMode="Enabled"
     xmlns:data="using:Finanse.Elements"
     xmlns:models="using:Finanse.Models"
+    xmlns:statistics="using:Finanse.Models.Statistics"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Charting="using:WinRTXamlToolkit.Controls.DataVisualization.Charting"
-    xmlns:Charts="using:FourToolkit.Charts"
+    xmlns:Charts="using:Finanse.Charts"
     mc:Ignorable="d">
 
     <Page.Transitions>
@@ -21,13 +22,30 @@
     </Page.Transitions>
 
     <Page.Resources>
+        <DataTemplate
+            x:Key="DoughnutChartItemTemplate">
+            <Charts:DoughnutChartItem                
+                Value="{Binding RelativeValue}"
+                Color="{Binding SolidColorBrush.Color}" />
+        </DataTemplate>
 
-        <!-- Default style for Windows.UI.Xaml.Controls.CommandBar -->
 
-        <CollectionViewSource
-            x:Name="ContactsCVS"
-            IsSourceGrouped="True" />
-
+        <DataTemplate
+            x:Key="LegendItemTemplate">
+            <StackPanel
+                Orientation="Horizontal">
+                <Ellipse
+                    Margin="8"
+                    Width="16"
+                    Height="16"
+                    Fill="{Binding SolidColorBrush}" />
+                <TextBlock
+                    Foreground="{ThemeResource Text}"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource DefaultFontFamily}"
+                    Text="{Binding Name}" />
+            </StackPanel>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid
@@ -50,7 +68,7 @@
                 <ColumnDefinition
                     Width="*" />
             </Grid.ColumnDefinitions>
-            
+
             <TextBlock
                 Text="Statystyki"
                 x:Uid="statistics"
@@ -67,7 +85,7 @@
                     Style="{StaticResource PageTitleStyle}"
                     Margin="0"
                     VerticalAlignment="Center"
-                    Text="{x:Bind dateRangeText.Text, Mode=TwoWay}" />
+                    Text="{x:Bind DateRangeText, Mode=OneWay}" />
 
                 <Button
                     BorderThickness="0"
@@ -86,7 +104,7 @@
                     <Button.Flyout>
                         <Flyout
                             x:Name="VisibleAccountsFlyout"
-                            Closed="MinDatePicker_Closed"
+                            Closed="DateRangeFlyout_Closed"
                             Placement="Bottom">
                             <Flyout.FlyoutPresenterStyle>
                                 <Style
@@ -99,7 +117,7 @@
                                         Value="{ThemeResource Background-1Transparent}" />
                                 </Style>
                             </Flyout.FlyoutPresenterStyle>
-                            
+
                             <StackPanel>
                                 <TextBlock
                                     HorizontalAlignment="Center"
@@ -125,7 +143,7 @@
                                     Foreground="{ThemeResource Text}"
                                     Margin="16,8,16,24" />
                             </StackPanel>
-                            
+
                         </Flyout>
                     </Button.Flyout>
                 </Button>
@@ -144,24 +162,17 @@
                         Thickness="40"
                         Width="256"
                         Height="256"
-                        ItemsSource="{x:Bind ExpensesToIncomes}"
-                        Margin="48">
-                        <Charts:DoughnutChart.ItemTemplate>
-                            <DataTemplate>
-                                <Charts:DoughnutChartItem
-                                    Name="Yco"
-                                    Value="{Binding Value}"
-                                    Color="{Binding Key}" />
-                            </DataTemplate>
-                        </Charts:DoughnutChart.ItemTemplate>
-                    </Charts:DoughnutChart>
+                        ItemsSource="{x:Bind ExpensesToIncomes, Mode=OneWay}"
+                        ItemTemplate="{StaticResource DoughnutChartItemTemplate}"
+                        Margin="48" />
+
                     <TextBlock
-                        Text="{x:Bind incomesPercentageText.Text, Mode=TwoWay}"
+                        Text="{x:Bind IncomesPercentageText, Mode=OneWay}"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         FontSize="64"
                         FontFamily="{StaticResource DefaultFontFamily}"
-                        Foreground="{ThemeResource AccentColor}"/>
+                        Foreground="{ThemeResource AccentColor}" />
                 </Grid>
 
                 <StackPanel
@@ -181,6 +192,7 @@
                     <StackPanel
                         Orientation="Horizontal">
                         <Ellipse
+                            Name="Dupa"
                             Margin="8"
                             Width="16"
                             Height="16"
@@ -190,17 +202,46 @@
                             VerticalAlignment="Center"
                             Text="Wydatki" />
                     </StackPanel>
+                    <Charts:DoughnutChart
+                        x:Name="DoughnutChart2"
+                        Thickness="110"
+                        Distance="10"
+                        Width="256"
+                        Height="256"
+                        ItemsSource="{x:Bind ExpensesByCategory, Mode=OneWay}"
+                        ItemTemplate="{StaticResource DoughnutChartItemTemplate}"
+                        Margin="48" />
+
+                    <ListView
+                        HorizontalAlignment="Center"
+                        Name="ExpensesByCategoryLegend"
+                        ItemsSource="{x:Bind ExpensesByCategory, Mode=OneWay}"
+                        ItemTemplate="{StaticResource LegendItemTemplate}"
+                        SelectionMode="None" />
+                    <Charts:DoughnutChart
+                        x:Name="DoughnutChart4"
+                        Thickness="40"
+                        Width="256"
+                        Height="256"
+                        ItemsSource="{x:Bind IncomesByCategory, Mode=OneWay}"
+                        ItemTemplate="{StaticResource DoughnutChartItemTemplate}"
+                        Margin="48" />
+
+                    <ListView
+                        HorizontalAlignment="Center"
+                        ItemsSource="{x:Bind IncomesByCategory, Mode=OneWay}"
+                        ItemTemplate="{StaticResource LegendItemTemplate}"
+                        SelectionMode="None" />
+                    
+                    <Charts:DoughnutChart
+                        x:Name="DoughnutChart3"
+                        Thickness="40"
+                        Width="128"
+                        Height="128"
+                        ItemsSource="{x:Bind CategoryExpensesBySubCategory, Mode=OneWay}"
+                        ItemTemplate="{StaticResource DoughnutChartItemTemplate}"
+                        Margin="48" />
                 </StackPanel>
-
-                <Charting:Chart
-                    x:Name="ColumnChart">
-                    <Charting:PieSeries
-                        Foreground="{Binding OperationCategory.Color}"
-                        Title="Title"
-                        IndependentValuePath="Key"
-                        DependentValuePath="Value" />
-                </Charting:Chart>
-
             </StackPanel>
         </ScrollViewer>
     </Grid>

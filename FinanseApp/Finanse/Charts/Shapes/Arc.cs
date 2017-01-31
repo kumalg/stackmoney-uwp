@@ -88,11 +88,11 @@ namespace Finanse.Charts.Shapes
                 double relativeDistance = Distance / radius.X;
                 double relativeSecondDistance = Distance / (radius.X - Thickness/2);
                 double repairSweepAngle = SweepAngle > relativeDistance ? SweepAngle - relativeDistance : 0;
-                double repairSecondSweepAngle = SweepAngle > relativeSecondDistance ? SweepAngle - relativeSecondDistance/2 : 0;
+                double repairSecondSweepAngle = SweepAngle > relativeSecondDistance/2 ? SweepAngle - relativeSecondDistance/2 : 0;
 
                 builder.BeginFigure(startPoint);
-                builder.AddArc(center, radius.X, radius.Y, startAngle + (float)relativeDistance / 2, (float)repairSweepAngle);
-                builder.AddArc(center, radius.X - (float)Thickness/2, radius.Y - (float)Thickness/2, startAngle + (float)SweepAngle - (float)relativeSecondDistance/2, -(float)repairSecondSweepAngle);
+                builder.AddArc(center, radius.X, radius.Y, (float)(startAngle + relativeDistance / 2), (float)repairSweepAngle);
+                builder.AddArc(center, radius.X - (float)Thickness/2, (float)(radius.Y - Thickness/2), (float)(startAngle + SweepAngle - relativeSecondDistance/2), -(float)repairSecondSweepAngle);
                 builder.EndFigure(CanvasFigureLoop.Closed);
                 
                 /*

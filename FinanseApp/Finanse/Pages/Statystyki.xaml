@@ -204,8 +204,8 @@
                     </StackPanel>
                     <Charts:DoughnutChart
                         x:Name="DoughnutChart2"
-                        Thickness="110"
-                        Distance="10"
+                        Thickness="70"
+                        Distance="5"
                         Width="256"
                         Height="256"
                         ItemsSource="{x:Bind ExpensesByCategory, Mode=OneWay}"

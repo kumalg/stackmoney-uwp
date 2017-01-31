@@ -1,6 +1,9 @@
 ﻿using Finanse.Charts.Shapes;
+using Finanse.Models.Statistics;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -72,12 +75,25 @@ namespace Finanse.Charts {
             if (ItemsSource == null)
                 return;
             _root.Children.Clear();
-            for (var i = 0; i < ItemsSource.Count; i++) {
-                var c = i;
-                var chartItem = ItemTemplate.LoadContent() as DoughnutChartItem;
-                if (chartItem == null)
-                    return;
-                chartItem.DataContext = ItemsSource[c];
+
+            //double valueSum = 0;
+            List<DoughnutChartItem> Items = new List<DoughnutChartItem>();
+            List<DoughnutChartItem> ItemsGood = new List<DoughnutChartItem>();
+            foreach (ChartPart item in ItemsSource)
+                Items.Add(new DoughnutChartItem {
+                    Value = item.RelativeValue,
+                    Color = item.SolidColorBrush.Color,
+                });
+
+            double valueSum = Items.Sum(i => i.Value);
+
+            foreach (DoughnutChartItem chartItem in Items)
+                if (chartItem.Value / valueSum > 0.01)
+                    ItemsGood.Add(chartItem);
+
+            valueSum = ItemsGood.Sum(i => i.Value);
+
+            foreach (DoughnutChartItem chartItem in ItemsGood) {
                 if (chartItem.Color == default(Color))
                     chartItem.Color = DefaultColors.GetRandom();
                 var arc = new Arc {
@@ -85,6 +101,9 @@ namespace Finanse.Charts {
                     Distance = Distance
                 };
                 arc.DataContext = chartItem;
+
+                chartItem.Value = chartItem.Value / valueSum;
+
                 // Angle
                 var angleBinding = new Binding {
                     Path = new PropertyPath(nameof(DoughnutChartItem.Angle))
@@ -97,7 +116,36 @@ namespace Finanse.Charts {
                 arc.SetBinding(Arc.FillProperty, fillBinding);
                 _root.Children.Add(arc);
             }
-            UpdateStartAngles();
+
+                /*
+                for (var i = 0; i < ItemsSource.Count; i++) {
+                    var c = i;
+                    var chartItem = ItemTemplate.LoadContent() as DoughnutChartItem;
+                    if (chartItem == null)
+                        return;
+                    chartItem.DataContext = ItemsSource[c];
+                    if (chartItem.Color == default(Color))
+                        chartItem.Color = DefaultColors.GetRandom();
+                    var arc = new Arc {
+                        Thickness = Thickness,
+                        Distance = Distance
+                    };
+                    arc.DataContext = chartItem;
+                    // Angle
+                    var angleBinding = new Binding {
+                        Path = new PropertyPath(nameof(DoughnutChartItem.Angle))
+                    };
+                    arc.SetBinding(Arc.SweepAngleProperty, angleBinding);
+                    // Fill
+                    var fillBinding = new Binding {
+                        Path = new PropertyPath(nameof(DoughnutChartItem.Fill))
+                    };
+                    arc.SetBinding(Arc.FillProperty, fillBinding);
+                    _root.Children.Add(arc);
+                }
+                */
+
+                UpdateStartAngles();
         }
 
         private void UpdateStartAngles() {

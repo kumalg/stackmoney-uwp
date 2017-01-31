@@ -43,7 +43,7 @@ namespace Finanse.Models {
                 part.RelativeValue = part.UnrelativeValue / sum;
 
                 string percentagePart = (part.RelativeValue >0.0001) ? 
-                    (part.RelativeValue * 100).ToString("0.00") : "<0.01";
+                    (part.RelativeValue * 100).ToString("0.##") : "<0.01";
                 part.Name += " (" + percentagePart + "%)";
             }
 

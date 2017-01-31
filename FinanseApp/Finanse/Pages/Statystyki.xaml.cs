@@ -127,7 +127,7 @@ namespace Finanse.Pages {
 
             ExpensesByCategory = statisticsData.setRelativeValues(StatisticsDal.getExpensesGroupedByCategoryInRange(minDate, maxDate));
             IncomesByCategory = statisticsData.setRelativeValues(StatisticsDal.getIncomesGroupedByCategoryInRange(minDate, maxDate));
-            CategoryExpensesBySubCategory = statisticsData.setRelativeValues(StatisticsDal.getExpensesFromCategoryGroupedBySubCategoryInRange(minDate, maxDate, 14));
+            CategoryExpensesBySubCategory = statisticsData.setRelativeValues(StatisticsDal.getExpensesFromCategoryGroupedBySubCategoryInRange(minDate, maxDate, 17));
         }
 
     }

@@ -79,8 +79,8 @@ namespace Finanse.Charts.Shapes
 
             var center = new Vector2((float)(ActualWidth / 2), (float)(ActualHeight / 2));
             var radius = center.X > center.Y
-                ? new Vector2(center.Y - (float)Thickness / 2)
-                : new Vector2(center.X - (float)Thickness / 2);
+                ? new Vector2(center.Y)
+                : new Vector2(center.X);
             var startPoint = center + Vector2.Transform(Vector2.UnitX, Matrix3x2.CreateRotation(startAngle)) * radius;
 
             using (var builder = new CanvasPathBuilder(sender))

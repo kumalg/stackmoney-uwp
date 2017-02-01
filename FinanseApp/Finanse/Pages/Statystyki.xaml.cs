@@ -1,25 +1,16 @@
-﻿using Finanse.DataAccessLayer;
-using Finanse.Models;
+﻿using Finanse.Models;
 using Finanse.Models.Statistics;
-using FourToolkit.Charts.Data;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using Windows.UI;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
-using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 
 namespace Finanse.Pages {
 
     public sealed partial class Statystyki : Page, INotifyPropertyChanged {
 
         StatisticsData statisticsData = new StatisticsData();
-        
+
         public DateTime minDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).Date;
         public DateTime maxDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month)).Date;
 
@@ -67,6 +58,17 @@ namespace Finanse.Pages {
             }
         }
 
+        private ObservableCollection<ObservableCollection<ChartPart>> categoriesExpensesBySubCategory = new ObservableCollection<ObservableCollection<ChartPart>>();
+        public ObservableCollection<ObservableCollection<ChartPart>> CategoriesExpensesBySubCategory {
+            get {
+                return categoriesExpensesBySubCategory;
+            }
+            set {
+                categoriesExpensesBySubCategory = value;
+                RaisePropertyChanged("CategoriesExpensesBySubCategory");
+            }
+        }
+
         private ObservableCollection<ChartPart> incomesByCategory = new ObservableCollection<ChartPart>();
         public ObservableCollection<ChartPart> IncomesByCategory {
             get {
@@ -103,7 +105,7 @@ namespace Finanse.Pages {
 
             MinDatePicker.Date = minDate;
             MaxDatePicker.Date = maxDate;
-
+            
             reload();
         }
 
@@ -119,15 +121,17 @@ namespace Finanse.Pages {
         }
 
         public void reload() {
+            statisticsData.setNewRangeAndData(minDate, maxDate);
+
             DateRangeText = statisticsData.getActualDateRangeText(minDate, maxDate);
 
             ExpensesToIncomes = statisticsData.setExpensesToIncomesChartValues(minDate, maxDate);
             double incomesPercentage = 100 * ExpensesToIncomes[1].RelativeValue;
             IncomesPercentageText = incomesPercentage.ToString("0") + "%";
 
-            ExpensesByCategory = statisticsData.setRelativeValues(StatisticsDal.getExpensesGroupedByCategoryInRange(minDate, maxDate));
-            IncomesByCategory = statisticsData.setRelativeValues(StatisticsDal.getIncomesGroupedByCategoryInRange(minDate, maxDate));
-            CategoryExpensesBySubCategory = statisticsData.setRelativeValues(StatisticsDal.getExpensesFromCategoryGroupedBySubCategoryInRange(minDate, maxDate, 17));
+            ExpensesByCategory = statisticsData.getExpensesGroupedByCategoryInRange(minDate, maxDate);
+            IncomesByCategory = statisticsData.getIncomesGroupedByCategoryInRange(minDate, maxDate);
+            CategoryExpensesBySubCategory = statisticsData.getExpensesFromCategoryGroupedBySubCategoryInRange(minDate, maxDate, 17);
         }
 
     }

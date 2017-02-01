@@ -162,6 +162,7 @@
     <Compile Include="Charts\LineChart.cs" />
     <Compile Include="Charts\LineChartItem.cs" />
     <Compile Include="Charts\Shapes\Arc.cs" />
+    <Compile Include="Converters\DoubleToPercentStringConverter.cs" />
     <Compile Include="Converters\DecimalToCurrencyStringConverter.cs" />
     <Compile Include="DataAccessLayer\Dal.cs" />
     <Compile Include="DataAccessLayer\DebugTraceListener.cs" />
@@ -214,6 +215,7 @@
     </Compile>
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\OperationData.cs" />
+    <Compile Include="Models\Statistics\CategoryChartPart.cs" />
     <Compile Include="Models\Statistics\StatisticsData.cs" />
     <Compile Include="Models\Statistics\ChartPart.cs" />
     <Compile Include="Pages\Kategorie.xaml.cs">

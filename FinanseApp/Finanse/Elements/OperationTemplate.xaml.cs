@@ -73,13 +73,13 @@ namespace Finanse.Elements {
             /* WYGLĄD KOSZTU (CZERWONY Z MINUSEM CZY ZIELONY Z PLUSEM) */
             if (Operation.isExpense) {
 
-                Cost_OperationTemplate.Text = (-Operation.Cost).ToString("C", Settings.getActualCultureInfo());
+             //   Cost_OperationTemplate.Text = (-Operation.Cost).ToString("C", Settings.getActualCultureInfo());
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
             }
 
             else {
 
-                Cost_OperationTemplate.Text = Operation.Cost.ToString("C", Settings.getActualCultureInfo());
+            //    Cost_OperationTemplate.Text = Operation.Cost.ToString("C", Settings.getActualCultureInfo());
                 Cost_OperationTemplate.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"];
             }
 

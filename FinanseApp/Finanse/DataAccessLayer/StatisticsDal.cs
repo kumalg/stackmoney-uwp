@@ -54,6 +54,7 @@ namespace Finanse.DataAccessLayer {
                     models.Add(new ChartPart {
                         SolidColorBrush = operationCategory.Color,
                         Name = operationCategory.Name,
+                        Tag = item.CategoryId,
                         UnrelativeValue = (double)item.Cost
                     });
                 }
@@ -86,6 +87,7 @@ namespace Finanse.DataAccessLayer {
                     models.Add(new ChartPart {
                         SolidColorBrush = operationCategory.Color,
                         Name = operationCategory.Name,
+                        Tag = item.CategoryId,
                         UnrelativeValue = (double)item.Cost
                     });
                 }

@@ -95,39 +95,26 @@
 
                 if (db.Table<Operation>().Count() == 0)
                     return null;
-
-                // eldest = db.Table<Operation>().Aggregate((c1, c2) => Convert.ToDateTime(c1.Date) < Convert.ToDateTime(c2.Date) ? c1 : c2);
-                // to jest spoko, ale może być super kłopotliwe przy duzych bazach.
-
-                Operation eldest = (from p in db.Table<Operation>().ToList()
-                          where !string.IsNullOrEmpty(p.Date)
-                          orderby p.Date
-                          select p).ToList().ElementAt(0);
+                
+                Operation eldest = db.Query<Operation>("SELECT * FROM Operation WHERE Date IS NOT NULL AND Date != '' ORDER BY Date LIMIT 1").FirstOrDefault();
+               // string eldestS = db.Query<string>("SELECT `Date` FROM Operation WHERE `Date` IS NOT NULL AND `Date` != '' ORDER BY `Date` LIMIT 1").FirstOrDefault();
 
                 return eldest;
             }
         }
+        
+        internal static List<Operation> getAllOperationsFromRange(DateTime minDate, DateTime maxDate) {
+            List<Operation> models;
 
-        //TODO
-        public static DateTime getEldestDateInOperations() {
+            // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-
-               // if (db.Table<Operation>().Count() == 0)
-                    //return null;
-
-                // eldest = db.Table<Operation>().Aggregate((c1, c2) => Convert.ToDateTime(c1.Date) < Convert.ToDateTime(c2.Date) ? c1 : c2);
-                // to jest spoko, ale może być super kłopotliwe przy duzych bazach.
-
-                Operation eldest = (from p in db.Table<Operation>().ToList()
-                                    where !String.IsNullOrEmpty(p.Date)
-                                    orderby p.Date
-                                    select p).ToList().ElementAt(0);
-
-                return Convert.ToDateTime(eldest.Date);
+                models = db.Query<Operation>("SELECT * FROM Operation WHERE Date >= ? AND Date <= ?", minDate.ToString("yyyy.MM.dd"), maxDate.ToString("yyyy.MM.dd"));
             }
+
+            return models;
         }
 
         public static List<MoneyAccountBalance> listOfMoneyAccountBalances(DateTime date) {
@@ -163,27 +150,15 @@
         }
 
         private static decimal getFinalValue(IGrouping<int,Operation> operations, DateTime date) {
-            return operations.Where(i => !string.IsNullOrEmpty(i.Date) && DateTime.Parse(i.Date) < maxDateInFinalValue(date))
-                                .Sum(i => i.isExpense ? -i.Cost : i.Cost);
+            if (date.Date > DateTime.Today.Date)
+                return operations.Sum(i => i.isExpense ? -i.Cost : i.Cost);
+            else
+                return operations.Where(i => !string.IsNullOrEmpty(i.Date) && DateTime.Parse(i.Date) < maxDateInFinalValue(date))
+                                    .Sum(i => i.isExpense ? -i.Cost : i.Cost);
         }
         private static decimal getInitialValue(IGrouping<int, Operation> operations, DateTime date) {
-            return operations.Where(i => !string.IsNullOrEmpty(i.Date) && DateTime.Parse(i.Date) < maxDateInInitialValue(date))
-                                .Sum(i => i.isExpense ? -i.Cost : i.Cost);
-        }
-
-        public static string getCategoryNameById(int id) {
-            string name;
-
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                name = (from p in db.Table<OperationCategory>()
-                          where p.Id == id select p.Name).First();
-            }
-
-            return name;
+                return operations.Where(i => !string.IsNullOrEmpty(i.Date) && DateTime.Parse(i.Date) < maxDateInInitialValue(date))
+                                    .Sum(i => i.isExpense ? -i.Cost : i.Cost);
         }
 
         /* GET ALL */
@@ -196,12 +171,121 @@
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                models = (from p in db.Table<OperationCategory>()
-                          orderby p.Name
-                          select p).ToList();
+                models = db.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name");
             }
 
             return models;
+        }
+
+        public static List<OperationCategory> getAllCategoriesInExpenses() {
+            List<OperationCategory> models;
+
+            // Create a new connection
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                models = db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInExpenses ORDER BY Name");
+            }
+
+            return models;
+        }
+        public static List<OperationCategory> getAllCategoriesInIncomes() {
+        
+            List<OperationCategory> models;
+
+            // Create a new connection
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                models = db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInIncomes ORDER BY Name");
+            }
+
+            return models;
+        }
+
+        public static List<OperationCategory> getOperationCategoriesWithSubCategoriesInExpenses() {
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                HashSet<OperationCategory> list = new HashSet<OperationCategory>();
+
+                var test = from category in db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInExpenses ORDER BY Name")
+                           join subCategory in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInExpenses ORDER BY Name")
+                           on category.Id equals subCategory.BossCategoryId
+                           select new {
+                               category,
+                               subCategory
+                           };
+
+                foreach (var item in test) {
+                    list.Add(item.category);
+                    list.FirstOrDefault(i => i == item.category).SubCategories.Add(item.subCategory);
+                }
+
+                return list.ToList();
+            }
+        }
+
+        public static List<OperationCategory> getOperationCategoriesWithSubCategoriesInIncomes() {
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                HashSet<OperationCategory> list = new HashSet<OperationCategory>();
+
+                var test = from category in db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInIncomes ORDER BY Name")
+                           join subCategory in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInIncomes ORDER BY Name")
+                           on category.Id equals subCategory.BossCategoryId
+                           select new {
+                               category,
+                               subCategory
+                           };
+
+                foreach (var item in test) {
+                    list.Add(item.category);
+                    list.FirstOrDefault(i => i == item.category).SubCategories.Add(item.subCategory);
+                }
+
+                return list.ToList();
+            }
+        }
+
+        public static string getJoinTest() {
+            // Create a new connection
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                //       List<object> models = db.Query<object>("SELECT * FROM OperationCategory LEFT OUTER JOIN OperationSubCategory ON OperationCategory.Id = OperationSubCategory.BossCategoryId WHERE OperationCategory.VisibleInExpenses AND OperationSubCategory.VisibleInExpenses");
+
+                HashSet<OperationCategory> list = new HashSet<OperationCategory>();
+
+                var test = (from category in db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInExpenses")
+                            join subCategory in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInExpenses")
+                            on category.Id equals subCategory.BossCategoryId
+                            select new { category, subCategory });
+
+                foreach (var item in test) {
+                    list.Add(item.category);
+                    list.FirstOrDefault(i => i == item.category).SubCategories.Add(item.subCategory);
+                }
+
+                string result = string.Empty;
+
+                foreach (var item in list) {
+                    result += item.Name + "\n";
+
+                    foreach(var itemka in item.SubCategories)
+                        result += itemka.Name + "\n";
+
+                    result += "\n";
+                }
+
+                return result;
+            }
         }
 
         public static List<List<OperationSubCategory>> getAllSubCategoriesInExpensesGroupedByBoss() {
@@ -211,19 +295,11 @@
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                List<List<OperationSubCategory>> models = new List<List<OperationSubCategory>>();
-
-
-                var query = (from p in db.Table<OperationSubCategory>()
-                          where p.VisibleInExpenses orderby p.Name
-                          group p by p.BossCategoryId into g
-                          select new {
-                              GroupName = g.Key,
-                              Items = g
-                          }).ToList();
-
-                foreach (var g in query)
-                    models.Add(g.Items.ToList());
+                List<List<OperationSubCategory>> models = (
+                    from p in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInExpenses ORDER BY Name")
+                    group p by p.BossCategoryId into g
+                    select new List<OperationSubCategory>(g)
+                             ).ToList();
 
                 return models;
             }
@@ -236,20 +312,11 @@
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                List<List<OperationSubCategory>> models = new List<List<OperationSubCategory>>();
-
-
-                var query = (from p in db.Table<OperationSubCategory>()
-                             where p.VisibleInIncomes
-                             orderby p.Name
-                             group p by p.BossCategoryId into g
-                             select new {
-                                 GroupName = g.Key,
-                                 Items = g
-                             }).ToList();
-
-                foreach (var g in query)
-                    models.Add(g.Items.ToList());
+                List<List<OperationSubCategory>> models = (
+                    from p in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInIncomes ORDER BY Name")
+                    group p by p.BossCategoryId into g
+                    select new List<OperationSubCategory>(g)
+                             ).ToList();
 
                 return models;
             }
@@ -299,9 +366,7 @@
                               where p.MoneyAccountId == account.Id || getListOfLinkedCardAccountToThisBankAccount((BankAccount)account).Any(i=>i.BankAccountId == account.Id)
                               select p).ToList();
                 else
-                    models = (from p in db.Table<Operation>().ToList()
-                              where p.MoneyAccountId == account.Id
-                              select p).ToList();
+                    models = db.Query<Operation>("SELECT * FROM Operation WHERE MoneyAccountId == ?", account.Id);
             }
 
             return models;
@@ -315,28 +380,7 @@
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                models = (from p in db.Table<Operation>().ToList()
-                          where p.MoneyAccountId == account.Id
-                          select p).ToList();
-            }
-
-            return models;
-        }
-
-        public static List<Operation> getAllOperations(int month, int year) {
-            List<Operation> models;
-
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                string date = /*year.ToString() + "." + month.ToString("00");*/ String.Format("{yyyy}.{MM}", year, month);
-
-                models = (from p in db.Table<Operation>().ToList()
-                          where p.Date.Substring(0,7) == date.ToString() 
-                             && Convert.ToDateTime(p.Date) <= DateTime.Today
-                          select p).ToList();
+                models = db.Query<Operation>("SELECT * FROM Operation WHERE MoneyAccountId == ?", account.Id);
             }
 
             return models;
@@ -350,23 +394,19 @@
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                string settedYearAndMonth = year.ToString() + "." + month.ToString("00");
+                string settedYearAndMonth = year.ToString() + "." + month.ToString("00") + "*";
+
+                //      db.Query<Operation>("SELECT * FROM Operation WHERE Date GLOB '?'", settedYearAndMonth);
+
+                List<Operation> list = db.Query<Operation>("SELECT * FROM Operation WHERE Date GLOB ? AND Date <= ?", settedYearAndMonth, DateTime.Today.ToString("yyyy.MM.dd"));
 
                 if (visiblePayFormList != null) {
-                    models = (from p in db.Table<Operation>().ToList()
-                              where !string.IsNullOrEmpty(p.Date)
-                                 && p.Date.Substring(0, 7) == settedYearAndMonth.ToString()
-                                 && Convert.ToDateTime(p.Date) <= DateTime.Today
-                                 && visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId) == true
+                    models = (from p in list
+                              where visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId) == true
                               select p).ToList();
                 }
-                else {
-                    models = (from p in db.Table<Operation>().ToList()
-                              where p.Date != null && p.Date != ""
-                                 && p.Date.Substring(0, 7) == settedYearAndMonth.ToString()
-                                 && Convert.ToDateTime(p.Date) <= DateTime.Today
-                              select p).ToList();
-                }
+                else
+                    models = list;
             }
 
             return models;
@@ -378,10 +418,7 @@
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                List<Operation> models = (from p in db.Table<Operation>().ToList()
-                          where string.IsNullOrEmpty(p.Date)
-                             || Convert.ToDateTime(p.Date) > DateTime.Today
-                          select p).ToList();
+                List<Operation> models = db.Query<Operation>("SELECT * FROM Operation WHERE Date > ? OR Date IS NULL OR Date == ''", DateTime.Today.ToString("yyyy.MM.dd"));
 
                 return models;
             }
@@ -395,19 +432,15 @@
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
+                List<Operation> list = db.Query<Operation>("SELECT * FROM Operation WHERE Date > ? OR Date IS NULL OR Date == ''", DateTime.Today.ToString("yyyy.MM.dd"));
+
                 if (visiblePayFormList != null) {
-                    models = (from p in db.Table<Operation>().ToList()
-                              where (string.IsNullOrEmpty(p.Date)
-                                  || Convert.ToDateTime(p.Date) > DateTime.Today)
-                                  && visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId)
+                    models = (from p in list
+                              where visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId)
                               select p).ToList();
                 }
-                else {
-                    models = (from p in db.Table<Operation>().ToList()
-                              where string.IsNullOrEmpty(p.Date)
-                                 || Convert.ToDateTime(p.Date) > DateTime.Today
-                              select p).ToList();
-                }
+                else
+                    models = list;
             }
 
             return models;
@@ -421,8 +454,7 @@
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                models = (from p in db.Table<OperationPattern>()
-                          select p).ToList();
+                models = db.Table<OperationPattern>().ToList();
             }
 
             return models;
@@ -436,8 +468,12 @@
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                models = (from p in db.Table<MoneyAccount>()
-                          select p).ToList();
+                /*
+                var table = db.Query<MoneyAccount>("SELECT * FROM MoneyAccount");//db.Table<MoneyAccount>();
+                var test = db.Query<OperationCategory>("SELECT * FROM Settings");
+                */
+
+                models = db.Table<MoneyAccount>().ToList();
             }
 
             return models;
@@ -450,9 +486,8 @@
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
-                Operation m = (from p in db.Table<Operation>()
-                               where p.Id == Id
-                               select p).FirstOrDefault();
+                Operation m = db.Query<Operation>("SELECT * FROM Operation WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
+
                 return m;
             }
         }
@@ -462,9 +497,8 @@
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
-                MoneyAccount m = (from p in db.Table<MoneyAccount>()
-                                          where p.Id == Id
-                                          select p).FirstOrDefault();
+                MoneyAccount m = db.Query<MoneyAccount>("SELECT * FROM MoneyAccount WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
+
                 return m;
             }
         }
@@ -474,9 +508,7 @@
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
-                OperationSubCategory m = (from p in db.Table<OperationSubCategory>()
-                                       where p.Id == Id
-                                       select p).FirstOrDefault();
+                OperationSubCategory m = db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
 
                 return m;
             }
@@ -487,10 +519,7 @@
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
-                List<OperationSubCategory> m = (from p in db.Table<OperationSubCategory>()
-                                                where p.BossCategoryId == Id
-                                                orderby p.Name
-                                                select p).ToList();
+                List<OperationSubCategory> m = db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE BossCategoryId == ? ORDER BY Name", Id);
 
                 return m;
             }
@@ -501,9 +530,8 @@
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
-                OperationCategory m = (from p in db.Table<OperationCategory>()
-                               where p.Id == Id
-                               select p).FirstOrDefault();
+                OperationCategory m = db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
+
                 return m;
             }
         }

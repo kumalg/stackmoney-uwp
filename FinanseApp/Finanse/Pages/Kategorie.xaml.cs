@@ -4,6 +4,7 @@ using Finanse.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -12,9 +13,27 @@ using Windows.UI.Xaml.Input;
 
 namespace Finanse.Pages {
 
-    public sealed partial class Kategorie : Page {
+    public sealed partial class Kategorie : Page, INotifyPropertyChanged {
 
-        private ObservableCollection<OperationCategory> OperationCategories = new ObservableCollection<OperationCategory>();// = new ObservableCollection<OperationCategory>(Dal.getAllCategories());
+        private ObservableCollection<OperationCategory> operationCategories;
+        private ObservableCollection<OperationCategory> OperationCategories {
+            get {
+                return operationCategories;
+            }
+            set {
+                operationCategories = value;
+                RaisePropertyChanged("OperationCategories");
+            }
+        }
+        
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void RaisePropertyChanged(string propertyName) {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
 
         public Kategorie() {
             this.InitializeComponent();
@@ -82,35 +101,11 @@ namespace Finanse.Pages {
         }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e) {
-            OperationCategories.Clear();
-
-            List<List<OperationSubCategory>> operationSubCategories = new List<List<OperationSubCategory>>(Dal.getAllSubCategoriesInExpensesGroupedByBoss());
-           
-            foreach (var operationCategory in Dal.getAllCategories().Where(i => i.VisibleInExpenses)) {
-
-                List<OperationSubCategory> subCategories = operationSubCategories.SingleOrDefault(i => i.ElementAt(0).BossCategoryId == operationCategory.Id);
-
-                if (subCategories != null)
-                    operationCategory.subCategories = new ObservableCollection<OperationSubCategory>(subCategories);
-
-                OperationCategories.Add(operationCategory);
-            }
+            OperationCategories = new ObservableCollection<OperationCategory>(Dal.getOperationCategoriesWithSubCategoriesInExpenses());
         }
 
         private void RadioButton_Checked_1(object sender, RoutedEventArgs e) {
-            OperationCategories.Clear();
-
-            List<List<OperationSubCategory>> operationSubCategories = new List<List<OperationSubCategory>>(Dal.getAllSubCategoriesInIncomesGroupedByBoss());
-
-            foreach (var operationCategory in Dal.getAllCategories().Where(i => i.VisibleInIncomes)) {
-
-                List<OperationSubCategory> subCategories = operationSubCategories.SingleOrDefault(i => i.ElementAt(0).BossCategoryId == operationCategory.Id);
-
-                if (subCategories != null)
-                    operationCategory.subCategories = new ObservableCollection<OperationSubCategory>(subCategories);
-
-                OperationCategories.Add(operationCategory);
-            }
+            OperationCategories = new ObservableCollection<OperationCategory>(Dal.getOperationCategoriesWithSubCategoriesInIncomes());
         }
 
         private void SubOperacjeListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {

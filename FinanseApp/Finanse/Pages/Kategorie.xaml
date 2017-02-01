@@ -104,12 +104,16 @@
 
             <StackPanel>
 
+                <TextBlock
+                    Text=""
+                    Name="Lista" />
+
                 <ListView
                     FlowDirection="LeftToRight"
                     Padding="0,0,0,0"
                     ScrollViewer.VerticalScrollMode="Disabled"
                     Name="OperacjeListView"
-                    ItemsSource="{x:Bind OperationCategories}"
+                    ItemsSource="{x:Bind OperationCategories, Mode=OneWay}"
                     SelectionMode="None"
                     MaxWidth="620"
                     BorderThickness="0"
@@ -194,7 +198,7 @@
                                     <ListView
                                         ScrollViewer.VerticalScrollMode="Disabled"
                                         Name="SubOperacjeListView"
-                                        ItemsSource="{x:Bind getSubCategories()}"
+                                        ItemsSource="{x:Bind SubCategories}"
                                         MaxWidth="620"
                                         BorderThickness="0"
                                         Background="Transparent"

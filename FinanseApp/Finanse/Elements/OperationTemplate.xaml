@@ -103,23 +103,25 @@
                     </StackPanel>
 
                 </StackPanel>
-                <!--
+                
                 <TextBlock
-                    Visibility="Collapsed"
+                    Visibility="Visible"
                     FontFamily="{StaticResource DefaultFontFamily}"
                     FontSize="12"
                     Grid.Column="1"
                     FontWeight="SemiBold"
                     VerticalAlignment="Center"
-                    Text="{Binding Date, Converter={StaticResource DecimalToCurrencyStringConverter}}"
+                    Name="Cost_OperationTemplate"
+                    Text="{Binding Cost, Converter={StaticResource DecimalToCurrencyStringConverter}}"
                     Foreground="{StaticResource RedColorStyle}" />
-                -->
+                
                 <TextBlock
                     FontFamily="{StaticResource DefaultFontFamily}"
+                    Visibility="Collapsed"
                     FontSize="12"
                     Grid.Column="1"
                     FontWeight="SemiBold"
-                    Name="Cost_OperationTemplate"
+                    Name="Cost_OperationTemplate2"
                     VerticalAlignment="Center"
                     Foreground="{StaticResource RedColorStyle}" />
             </Grid>

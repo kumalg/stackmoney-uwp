@@ -18,6 +18,8 @@
         <Grid.Resources>
             <conv:DecimalToCurrencyStringConverter
                 x:Name="DecimalToCurrencyStringConverter" />
+            <conv:BooleanToColorConverter
+                x:Name="BooleanToColorConverter" />
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
@@ -112,8 +114,8 @@
                     FontWeight="SemiBold"
                     VerticalAlignment="Center"
                     Name="Cost_OperationTemplate"
-                    Text="{Binding Cost, Converter={StaticResource DecimalToCurrencyStringConverter}}"
-                    Foreground="{StaticResource RedColorStyle}" />
+                    Foreground="{Binding isExpense, Converter={StaticResource BooleanToColorConverter}}"
+                    Text="{Binding SignedCost, Converter={StaticResource DecimalToCurrencyStringConverter}}" />
                 
                 <TextBlock
                     FontFamily="{StaticResource DefaultFontFamily}"

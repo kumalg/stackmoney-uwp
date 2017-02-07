@@ -1,0 +1,205 @@
+﻿<ContentDialog
+    Style="{StaticResource MyContentDialog}"
+    x:Class="Finanse.Dialogs.NewCategoryContentDialogNew"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:conv="using:Finanse.Converters"
+    mc:Ignorable="d"
+    xmlns:data="using:Finanse.Elements"
+    Title="Nowa kategoria (NEW TEST)"
+    Background="{ThemeResource BackgroundTransparent}"
+    PrimaryButtonText="Dodaj"
+    SecondaryButtonText="Anuluj"
+    PrimaryButtonClick="NewCategory_AddButtonClick">
+
+    <StackPanel
+        Margin="20,20">
+
+        <TextBox
+            Name="NameValue"
+            Style="{StaticResource TextBoxStyle1}"
+            Text="{x:Bind editedOperationCategoryItem.Name, Mode=OneTime}"
+            TextChanged="NameValue_TextChanged"
+            PlaceholderText="Nazwa"
+            x:Uid="namePlaceholder"/>
+        <Grid
+            Margin="0,30,0,0">
+
+            <Grid.Resources>
+                <conv:ObjectToSolidColorBrushConverter
+                    x:Name="ObjectToSolidColorBrushConverter" />
+                <conv:ExpenseToggleEnablingByBossCategoryIdConverter
+                    x:Name="ExpenseToggleEnablingByBossCategoryIdConverter" />
+            </Grid.Resources>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <data:CategoryIcon
+                x:Name="CategoryIcon"
+                Grid.Column="1"
+                Color="{x:Bind Color, Mode=OneWay}"
+                Glyph="{x:Bind Icon.Glyph, Mode=OneWay}"
+                RenderTransformOrigin="0.5,0.5">
+                <data:CategoryIcon.RenderTransform>
+                    <CompositeTransform
+                        ScaleX="1.25"
+                        ScaleY="1.25" />
+                </data:CategoryIcon.RenderTransform>
+            </data:CategoryIcon>
+
+            <Button
+                Grid.Column="0"
+                Style="{StaticResource ButtonWithBottomBorder}"
+                Margin="0,10"
+                HorizontalAlignment="Right">
+                <Button.Flyout>
+                    <Flyout>
+                        <GridView
+                            Name="ColorBaseList"
+                            SelectionMode="Single"
+                            Padding="0"
+                            ItemsSource="{x:Bind ColorBase, Mode=OneTime}"
+                            SelectedItem="{x:Bind SelectedColor, Mode=TwoWay}"
+                            SelectionChanged="ColorBaseList_SelectionChanged">
+
+                            <GridView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapGrid
+                                        MaximumRowsOrColumns="3"
+                                        Orientation="Horizontal"
+                                        HorizontalChildrenAlignment="Stretch"
+                                        VerticalChildrenAlignment="Stretch" />
+                                </ItemsPanelTemplate>
+                            </GridView.ItemsPanel>
+
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <Rectangle
+                                        Width="36"
+                                        Height="36"
+                                        Fill="{Binding Value}">
+                                    </Rectangle>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+
+                        </GridView>
+                    </Flyout>
+                </Button.Flyout>
+                <TextBlock
+                    Text="Kolor"
+                    x:Uid="color" />
+            </Button>
+
+            <Button
+                Grid.Column="2"
+                Style="{StaticResource ButtonWithBottomBorder}"
+                Margin="0,10"
+                HorizontalAlignment="Left">
+                <Button.Flyout>
+                    <Flyout>
+                        <GridView
+                            Name="IconBaseList"
+                            SelectionMode="Single"
+                            Padding="0"
+                            ItemsSource="{x:Bind IconBase, Mode=OneTime}"
+                            SelectedItem="{x:Bind SelectedIcon, Mode=TwoWay}"
+                            SelectionChanged="ColorBaseList_SelectionChanged">
+
+                            <GridView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapGrid
+                                        MaximumRowsOrColumns="3"
+                                        Orientation="Horizontal"
+                                        HorizontalChildrenAlignment="Stretch"
+                                        VerticalChildrenAlignment="Stretch" />
+                                </ItemsPanelTemplate>
+                            </GridView.ItemsPanel>
+
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <FontIcon
+                                        Width="36"
+                                        Height="36"
+                                        Glyph="{Binding Value.Glyph}"
+                                        FontFamily="{Binding Value.FontFamily}">
+                                    </FontIcon>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+
+                        </GridView>
+                    </Flyout>
+                </Button.Flyout>
+                <TextBlock
+                    Text="Ikona"
+                    x:Uid="icon" />
+            </Button>
+
+        </Grid>
+
+        <ComboBox
+            Name="CategoryValue"
+            ItemsSource="{x:Bind OperationCategoriesInComboBox, Mode=OneTime}"
+            SelectedItem="{x:Bind SelectedCategory, Mode=OneWay}"
+            Style="{StaticResource ComboBoxStyle1}"
+            PlaceholderText="Kategoria nadrzędna"
+            x:Uid="parentCategoryPlaceholder"
+            Margin="0,30,0,10"
+            HorizontalAlignment="Stretch"
+            SelectionChanged="CategoryValue_SelectionChanged" />
+
+        <TextBlock
+            Text="Pokazuj w wydatkach"
+            x:Uid="showInExpenses"
+            Margin="10,20,0,0" />
+
+        <ToggleSwitch
+            Name="VisibleInExpensesToggleButton"
+            Style="{StaticResource ToggleSwitchStyle1}"
+            Margin="10,5,0,0"
+            IsOn="{x:Bind editedOperationCategoryItem.VisibleInExpenses, Mode=OneTime}"
+            Toggled="VisibleInExpensesToggleButton_Toggled">
+
+            <ToggleSwitch.OffContent>
+                <TextBlock Text="Nie" x:Uid="no" />
+            </ToggleSwitch.OffContent>
+
+            <ToggleSwitch.OnContent>
+                <TextBlock Text="Tak" x:Uid="yes" />
+            </ToggleSwitch.OnContent>
+
+        </ToggleSwitch>
+
+        <TextBlock
+            Text="Pokazuj we wpływach"
+            x:Uid="showInIncomes"
+            Margin="10,20,0,0" />
+
+        <ToggleSwitch
+            Name="VisibleInIncomesToggleButton"
+            Style="{StaticResource ToggleSwitchStyle1}"
+            Margin="10,5,0,0"
+            IsOn="{x:Bind editedOperationCategoryItem.VisibleInIncomes, Mode=OneTime}"
+            Toggled="VisibleInIncomesToggleButton_Toggled">
+
+            <ToggleSwitch.OffContent>
+                <TextBlock Text="Nie" x:Uid="no" />
+            </ToggleSwitch.OffContent>
+
+            <ToggleSwitch.OnContent>
+                <TextBlock Text="Tak" x:Uid="yes" />
+            </ToggleSwitch.OnContent>
+
+        </ToggleSwitch>
+
+    </StackPanel>
+
+</ContentDialog>

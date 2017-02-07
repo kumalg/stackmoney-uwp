@@ -1,10 +1,13 @@
 ﻿namespace Finanse.DataAccessLayer {
     using Models;
+    using Models.Categories;
     using Models.MoneyAccounts;
     using SQLite.Net;
     using SQLite.Net.Platform.WinRT;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using Windows.Storage;
@@ -205,13 +208,12 @@
             return models;
         }
 
-        public static List<OperationCategory> getOperationCategoriesWithSubCategoriesInExpenses() {
+        public static HashSet<CategoryWithSubCategories> getOperationCategoriesWithSubCategoriesInExpenses() {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                HashSet<OperationCategory> list = new HashSet<OperationCategory>();
-
+                /*
                 var test = from category in db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInExpenses ORDER BY Name")
                            join subCategory in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInExpenses ORDER BY Name")
                            on category.Id equals subCategory.BossCategoryId
@@ -219,23 +221,41 @@
                                category,
                                subCategory
                            };
+                           */
 
-                foreach (var item in test) {
-                    list.Add(item.category);
-                    list.FirstOrDefault(i => i == item.category).SubCategories.Add(item.subCategory);
+                List<OperationCategory> categories = db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInExpenses ORDER BY Name");
+                var subCategoriesGroups = from subCategory in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInExpenses ORDER BY Name")
+                                          group subCategory by subCategory.BossCategoryId into g
+                                          select new {
+                                              BossCategoryId = g.Key,
+                                              subCategories = g.ToList()
+                                          };
+                                         
+
+                HashSet<CategoryWithSubCategories> categoriesWithSubCategories = new HashSet<CategoryWithSubCategories>();
+
+                foreach (var item in categories) {
+                    CategoryWithSubCategories categoryWithSubCategories = new CategoryWithSubCategories {
+                        Category = item,
+                    };
+
+                    var yco = subCategoriesGroups.FirstOrDefault(i => i.BossCategoryId == item.Id);//.subCategories;
+
+                    if (yco != null)
+                        categoryWithSubCategories.SubCategories = new ObservableCollection<OperationSubCategory>(yco.subCategories);
+
+                    categoriesWithSubCategories.Add(categoryWithSubCategories);
                 }
 
-                return list.ToList();
+                return categoriesWithSubCategories;
             }
         }
 
-        public static List<OperationCategory> getOperationCategoriesWithSubCategoriesInIncomes() {
+        public static HashSet<CategoryWithSubCategories> getOperationCategoriesWithSubCategoriesInIncomes() {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
-
-                HashSet<OperationCategory> list = new HashSet<OperationCategory>();
-
+                /*
                 var test = from category in db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInIncomes ORDER BY Name")
                            join subCategory in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInIncomes ORDER BY Name")
                            on category.Id equals subCategory.BossCategoryId
@@ -244,47 +264,40 @@
                                subCategory
                            };
 
-                foreach (var item in test) {
-                    list.Add(item.category);
-                    list.FirstOrDefault(i => i == item.category).SubCategories.Add(item.subCategory);
-                }
-
-                return list.ToList();
-            }
-        }
-
-        public static string getJoinTest() {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                //       List<object> models = db.Query<object>("SELECT * FROM OperationCategory LEFT OUTER JOIN OperationSubCategory ON OperationCategory.Id = OperationSubCategory.BossCategoryId WHERE OperationCategory.VisibleInExpenses AND OperationSubCategory.VisibleInExpenses");
-
-                HashSet<OperationCategory> list = new HashSet<OperationCategory>();
-
-                var test = (from category in db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInExpenses")
-                            join subCategory in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInExpenses")
-                            on category.Id equals subCategory.BossCategoryId
-                            select new { category, subCategory });
+                HashSet<CategoryWithSubCategories> categoryWithSubCategories = new HashSet<CategoryWithSubCategories>();
 
                 foreach (var item in test) {
-                    list.Add(item.category);
-                    list.FirstOrDefault(i => i == item.category).SubCategories.Add(item.subCategory);
+                    categoryWithSubCategories.Add(new CategoryWithSubCategories { Category = item.category });
+                    categoryWithSubCategories.FirstOrDefault(i => i.Category == item.category).SubCategories.Add(item.subCategory);
                 }
 
-                string result = string.Empty;
+                return categoryWithSubCategories;
+                */
+                List<OperationCategory> categories = db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInIncomes ORDER BY Name");
+                var subCategoriesGroups = from subCategory in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInIncomes ORDER BY Name")
+                                          group subCategory by subCategory.BossCategoryId into g
+                                          select new {
+                                              BossCategoryId = g.Key,
+                                              subCategories = g.ToList()
+                                          };
 
-                foreach (var item in list) {
-                    result += item.Name + "\n";
 
-                    foreach(var itemka in item.SubCategories)
-                        result += itemka.Name + "\n";
+                HashSet<CategoryWithSubCategories> categoriesWithSubCategories = new HashSet<CategoryWithSubCategories>();
 
-                    result += "\n";
+                foreach (var item in categories) {
+                    CategoryWithSubCategories categoryWithSubCategories = new CategoryWithSubCategories {
+                        Category = item,
+                    };
+
+                    var yco = subCategoriesGroups.FirstOrDefault(i => i.BossCategoryId == item.Id);
+
+                    if (yco != null)
+                        categoryWithSubCategories.SubCategories = new ObservableCollection<OperationSubCategory>(yco.subCategories);
+
+                    categoriesWithSubCategories.Add(categoryWithSubCategories);
                 }
 
-                return result;
+                return categoriesWithSubCategories;
             }
         }
 
@@ -587,6 +600,20 @@
             }
         }
 
+        public static void updateOperationCategory(OperationCategory operationCategory) {
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                db.TraceListener = new DebugTraceListener();
+                db.Update(operationCategory);
+            }
+        }
+
+        public static void addOperationCategory(OperationCategory operationCategory) {
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                db.TraceListener = new DebugTraceListener();
+                db.Insert(operationCategory);
+            }
+        }
+
         public static void saveOperationSubCategory(OperationSubCategory operationSubCategory) {
             // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
@@ -603,6 +630,19 @@
                 }
             }
         }
+        public static void updateOperationSubCategory(OperationSubCategory operationSubCategory) {
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                db.TraceListener = new DebugTraceListener();
+                db.Update(operationSubCategory);
+            }
+        }
+        public static void addOperationSubCategory(OperationSubCategory operationSubCategory) {
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                db.TraceListener = new DebugTraceListener();
+                db.Insert(operationSubCategory);
+            }
+        }
+
         /* DELETE */
 
         public static void deletePattern(OperationPattern operationPattern) {

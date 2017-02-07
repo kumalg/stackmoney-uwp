@@ -17,6 +17,7 @@ namespace Finanse.Dialogs {
         }
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
+            /*
             if (operationCategory != null) {
 
                 OperationCategories.Remove(operationCategory);
@@ -30,7 +31,7 @@ namespace Finanse.Dialogs {
                 BossCatItem.subCategories.Remove(subCatItem);
 
                 Dal.deleteSubCategory(operationSubCategory.Id);
-            }
+            }*/
         }
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {

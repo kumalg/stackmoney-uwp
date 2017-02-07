@@ -17,6 +17,11 @@ namespace Finanse.Models {
         public int Id { get; set; } 
         public string Name  { get; set; }
         public string ColorKey { get; set; }
+        public string IconKey { get; set; }
+        public bool VisibleInIncomes { get; set; } 
+        public bool VisibleInExpenses { get; set; }
+
+
         public SolidColorBrush Color {
             get {
                 return string.IsNullOrEmpty(ColorKey) ?
@@ -24,23 +29,40 @@ namespace Finanse.Models {
                     (SolidColorBrush)(((ResourceDictionary)Application.Current.Resources["ColorBase"]).FirstOrDefault(i => i.Key.Equals(ColorKey)).Value);
             }
         }
-        public string IconKey { get; set; }
         public FontIcon Icon {
             get {
-                return string.IsNullOrEmpty(IconKey) ? 
-                    (FontIcon)Application.Current.Resources["DefaultEllipseIcon"] : 
+                return string.IsNullOrEmpty(IconKey) ?
+                    (FontIcon)Application.Current.Resources["DefaultEllipseIcon"] :
                     (FontIcon)(((ResourceDictionary)Application.Current.Resources["IconBase"]).FirstOrDefault(i => i.Key.Equals(IconKey)).Value);
             }
-        } 
-        public bool VisibleInIncomes { get; set; } 
-        public bool VisibleInExpenses { get; set; }
+        }
+        public OperationCategory() {
+        }
 
-        public ObservableCollection<OperationSubCategory> SubCategories = new ObservableCollection<OperationSubCategory>();
+        public OperationCategory(OperationCategory previousCategory) {
+            Id = previousCategory.Id;
+            IconKey = previousCategory.IconKey;
+            ColorKey = previousCategory.ColorKey;
+            Name = previousCategory.Name;
+            VisibleInExpenses = previousCategory.VisibleInExpenses;
+            VisibleInIncomes = previousCategory.VisibleInIncomes;
+        }
 
-        public ObservableCollection<OperationSubCategory> subCategories = null;
-        
-        public void addSubCategory(OperationSubCategory subCategory) {
-            subCategories.Insert(0, subCategory);
+        public override int GetHashCode() {
+            return Name.GetHashCode() * Id;
+        }
+        public override bool Equals(object o) {
+            if (o == null || !(o is OperationCategory))
+                return false;
+
+            OperationCategory secondCategory = o as OperationCategory;
+
+            return
+                ColorKey == secondCategory.ColorKey &&
+                IconKey == secondCategory.IconKey &&
+                Name == secondCategory.Name &&
+                VisibleInExpenses == secondCategory.VisibleInExpenses &&
+                VisibleInIncomes == secondCategory.VisibleInIncomes;
         }
     }
 }

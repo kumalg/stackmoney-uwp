@@ -237,9 +237,6 @@ namespace Finanse.Pages {
 
             if (result == ContentDialogResult.Primary)
                 deleteOperation_DialogButtonClick(operation);
-
-            else if (result == ContentDialogResult.Secondary)
-                showDetailsContentDialog(operation);
         }
 
         private void deleteOperation_DialogButtonClick(Operation operation) {

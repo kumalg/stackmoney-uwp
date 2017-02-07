@@ -23,14 +23,14 @@
         </Grid.ColumnDefinitions>
 
         <data:CategoryIcon 
-            Glyph="{x:Bind OperationCategory.Icon.Glyph}"
-            Color="{x:Bind OperationCategory.Color}"/>
+            Glyph="{x:Bind OperationCategory.Icon.Glyph, Mode=OneWay}"
+            Color="{x:Bind OperationCategory.Color, Mode=OneWay}"/>
 
         <TextBlock
             Name="Category_OperationCategoryTemplate"
             Grid.Column="1"
             VerticalAlignment="Center"
-            Text="{x:Bind OperationCategory.Name}"
+            Text="{x:Bind OperationCategory.Name, Mode=OneWay}"
             Margin="20,0,0,0"
             FontSize="16"
             Foreground="{ThemeResource Text}" />

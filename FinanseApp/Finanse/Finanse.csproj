@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{E0943526-CAED-449A-B07C-B7121C6F1BB0}</ProjectGuid>
+    <ProjectGuid>{EA1BF119-1D55-4899-A2B0-5C211C81EC3B}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Finanse</RootNamespace>
@@ -92,62 +92,12 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\FontAwesome.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Rubik\Rubik-Black.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Rubik\Rubik-BlackItalic.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Rubik\Rubik-Bold.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Rubik\Rubik-BoldItalic.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Rubik\Rubik-Italic.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Rubik\Rubik-Light.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Rubik\Rubik-LightItalic.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Rubik\Rubik-Medium.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Rubik\Rubik-MediumItalic.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Rubik\Rubik-Regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Poppins\Poppins-SemiBold.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Poppins\Poppins-Light.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Poppins\Poppins-Regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Poppins\Poppins-Bold.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Fonts\Poppins\Poppins-Medium.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="Assets\defaultData.json" />
+    <Content Include="Assets\Fonts\FontAwesome.ttf" />
     <Content Include="Assets\Fonts\Bariol.ttf" />
-    <None Include="Finanse_TemporaryKey.snk" />
     <None Include="project.json" />
-    <PRIResource Include="Strings\pl-PL\Resources.resw" />
     <PRIResource Include="Strings\en-US\Resources.resw" />
+    <PRIResource Include="Strings\pl-pl\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -162,25 +112,43 @@
     <Compile Include="Charts\LineChart.cs" />
     <Compile Include="Charts\LineChartItem.cs" />
     <Compile Include="Charts\Shapes\Arc.cs" />
-    <Compile Include="Converters\DoubleToPercentStringConverter.cs" />
+    <Compile Include="Converters\ExpenseToggleEnablingByBossCategoryIdConverter.cs" />
+    <Compile Include="Converters\BooleanToColorConverter.cs" />
+    <Compile Include="Converters\ObjectToSolidColorBrushConverter.cs" />
     <Compile Include="Converters\DecimalToCurrencyStringConverter.cs" />
+    <Compile Include="Converters\DoubleToPercentStringConverter.cs" />
     <Compile Include="DataAccessLayer\Dal.cs" />
     <Compile Include="DataAccessLayer\DebugTraceListener.cs" />
     <Compile Include="DataAccessLayer\StatisticsDal.cs" />
-    <Compile Include="Dialogs\DeleteCategory_ContentDialog.xaml.cs">
-      <DependentUpon>DeleteCategory_ContentDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Dialogs\AcceptContentDialog.xaml.cs">
       <DependentUpon>AcceptContentDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\DeleteCategory_ContentDialog.xaml.cs">
+      <DependentUpon>DeleteCategory_ContentDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Delete_ContentDialog.xaml.cs">
       <DependentUpon>Delete_ContentDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\EditOperationContentDialog.xaml.cs">
+      <DependentUpon>EditOperationContentDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\NewCategoryContentDialogNew.xaml.cs">
+      <DependentUpon>NewCategoryContentDialogNew.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\NewCategoryContentDialog.xaml.cs">
+      <DependentUpon>NewCategoryContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\NewMoneyAccountContentDialog.xaml.cs">
       <DependentUpon>NewMoneyAccountContentDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\EditOperationContentDialog.xaml.cs">
-      <DependentUpon>EditOperationContentDialog.xaml</DependentUpon>
+    <Compile Include="Dialogs\NewOperationContentDialog.xaml.cs">
+      <DependentUpon>NewOperationContentDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\OperationDetailsContentDialog.xaml.cs">
+      <DependentUpon>OperationDetailsContentDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\OperationPatternsContentDialog.xaml.cs">
+      <DependentUpon>OperationPatternsContentDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Elements\CategoryIcon.xaml.cs">
       <DependentUpon>CategoryIcon.xaml</DependentUpon>
@@ -188,54 +156,52 @@
     <Compile Include="Elements\MoneyAccountTemplate.xaml.cs">
       <DependentUpon>MoneyAccountTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EmptyOrFullSelector.cs" />
-    <Compile Include="Models\Helpers\Date.cs" />
-    <Compile Include="Models\MoneyAccounts\Account.cs" />
-    <Compile Include="Models\MoneyAccounts\BankAccount.cs" />
-    <Compile Include="Models\MoneyAccounts\CardAccount.cs" />
-    <Compile Include="Models\MoneyAccounts\CashAccount.cs" />
-    <Compile Include="Models\ExpandPanel.cs" />
-    <Compile Include="Models\Functions.cs" />
-    <Compile Include="Models\GroupInfoList.cs" />
-    <Compile Include="Models\ItemCollection.cs" />
-    <Compile Include="Models\MoneyAccount.cs" />
-    <Compile Include="Models\MoneyAccountBalance.cs" />
-    <Compile Include="Models\NewOperation.cs" />
-    <Compile Include="Models\OperationPattern.cs" />
-    <Compile Include="Models\OperationCategory.cs" />
-    <Compile Include="Models\Operation.cs" />
-    <Compile Include="Models\OperationSubCategory.cs" />
+    <Compile Include="Elements\OperationCategoryTemplate.xaml.cs">
+      <DependentUpon>OperationCategoryTemplate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Elements\OperationSubCategoryTemplate.xaml.cs">
       <DependentUpon>OperationSubCategoryTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Elements\OperationCategoryTemplate.xaml.cs">
-      <DependentUpon>OperationCategoryTemplate.xaml</DependentUpon>
+    <Compile Include="Elements\OperationTemplate.xaml.cs">
+      <DependentUpon>OperationTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Elements\PivotHeader.xaml.cs">
       <DependentUpon>PivotHeader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\Settings.cs" />
-    <Compile Include="Models\OperationData.cs" />
-    <Compile Include="Models\Statistics\CategoryChartPart.cs" />
-    <Compile Include="Models\Statistics\StatisticsData.cs" />
-    <Compile Include="Models\Statistics\ChartPart.cs" />
-    <Compile Include="Pages\Kategorie.xaml.cs">
-      <DependentUpon>Kategorie.xaml</DependentUpon>
+    <Compile Include="Elements\PivotItemHeaderTemplate.xaml.cs">
+      <DependentUpon>PivotItemHeaderTemplate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EmptyOrFullSelector.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\OperationPatternsContentDialog.xaml.cs">
-      <DependentUpon>OperationPatternsContentDialog.xaml</DependentUpon>
+    <Compile Include="Models\Categories\CategoryWithSubCategories.cs" />
+    <Compile Include="Models\ExpandPanel.cs" />
+    <Compile Include="Models\Functions.cs" />
+    <Compile Include="Models\GroupInfoList.cs" />
+    <Compile Include="Models\Helpers\Date.cs" />
+    <Compile Include="Models\ItemCollection.cs" />
+    <Compile Include="Models\MoneyAccount.cs" />
+    <Compile Include="Models\MoneyAccountBalance.cs" />
+    <Compile Include="Models\MoneyAccounts\Account.cs" />
+    <Compile Include="Models\MoneyAccounts\BankAccount.cs" />
+    <Compile Include="Models\MoneyAccounts\CardAccount.cs" />
+    <Compile Include="Models\MoneyAccounts\CashAccount.cs" />
+    <Compile Include="Models\NewOperation.cs" />
+    <Compile Include="Models\Operation.cs" />
+    <Compile Include="Models\OperationCategory.cs" />
+    <Compile Include="Models\OperationData.cs" />
+    <Compile Include="Models\OperationPattern.cs" />
+    <Compile Include="Models\OperationSubCategory.cs" />
+    <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\Statistics\CategoryChartPart.cs" />
+    <Compile Include="Models\Statistics\ChartPart.cs" />
+    <Compile Include="Models\Statistics\StatisticsData.cs" />
+    <Compile Include="Pages\Kategorie.xaml.cs">
+      <DependentUpon>Kategorie.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\NewCategoryContentDialog.xaml.cs">
-      <DependentUpon>NewCategoryContentDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\OperationDetailsContentDialog.xaml.cs">
-      <DependentUpon>OperationDetailsContentDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\NewOperationContentDialog.xaml.cs">
-      <DependentUpon>NewOperationContentDialog.xaml</DependentUpon>
+    <Compile Include="Pages\Konta.xaml.cs">
+      <DependentUpon>Konta.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Nowa_Operacja.xaml.cs">
       <DependentUpon>Nowa_Operacja.xaml</DependentUpon>
@@ -243,28 +209,19 @@
     <Compile Include="Pages\Statystyki.xaml.cs">
       <DependentUpon>Statystyki.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pages\Strona_glowna.xaml.cs">
       <DependentUpon>Strona_glowna.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Konta.xaml.cs">
-      <DependentUpon>Konta.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Szablony.xaml.cs">
       <DependentUpon>Szablony.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Elements\PivotItemHeaderTemplate.xaml.cs">
-      <DependentUpon>PivotItemHeaderTemplate.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Ustawienia.xaml.cs">
       <DependentUpon>Ustawienia.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Elements\OperationTemplate.xaml.cs">
-      <DependentUpon>OperationTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ZleceniaStale.xaml.cs">
       <DependentUpon>ZleceniaStale.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThemeAwareFrame.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -290,19 +247,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Dialogs\DeleteCategory_ContentDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Dialogs\AcceptContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialogs\Delete_ContentDialog.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Dialogs\DeleteCategory_ContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialogs\NewMoneyAccountContentDialog.xaml">
+    <Page Include="Dialogs\Delete_ContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -310,64 +263,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Elements\CategoryIcon.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Elements\OperationSubCategoryTemplate.xaml">
+    <Page Include="Dialogs\NewCategoryContentDialogNew.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Elements\OperationCategoryTemplate.xaml">
+    <Page Include="Dialogs\NewCategoryContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Elements\MoneyAccountTemplate.xaml">
+    <Page Include="Dialogs\NewMoneyAccountContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Elements\PivotHeader.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Nowa_Operacja.xaml">
+    <Page Include="Dialogs\NewOperationContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\Buttons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Styles\TextBlocks.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Styles\Icons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Styles\Colors.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Styles\RadioButtons.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\Kategorie.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainPage.xaml">
+    <Page Include="Dialogs\OperationDetailsContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -375,76 +287,116 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialogs\NewCategoryContentDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\OperationDetailsContentDialog.xaml">
+    <Page Include="Elements\CategoryIcon.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialogs\NewOperationContentDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Statystyki.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Strona_glowna.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Styles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Pages\Konta.xaml">
+    <Page Include="Elements\MoneyAccountTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Szablony.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Elements\OperationCategoryTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Elements\OperationSubCategoryTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Elements\OperationTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Elements\PivotHeader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Elements\PivotItemHeaderTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Ustawienia.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Elements\OperationTemplate.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Pages\Kategorie.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Konta.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Nowa_Operacja.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Statystyki.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Strona_glowna.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Szablony.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Ustawienia.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\ZleceniaStale.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Buttons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Colors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\RadioButtons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\TextBlocks.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <SDKReference Include="Microsoft.VCLibs, Version=14.0">
-      <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
-    </SDKReference>
     <SDKReference Include="SQLite.UWP.2015, Version=3.16.0">
-      <Name>SQLite for Universal Windows Platform %28SQLite.UWP.2015, Version=3.16.0%29</Name>
+      <Name>SQLite for Universal Windows Platform</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsDesktop, Version=10.0.14393.0">
+      <Name>Windows Desktop Extensions for the UWP</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsIoT, Version=10.0.14393.0">
+      <Name>Windows IoT Extensions for the UWP</Name>
     </SDKReference>
     <SDKReference Include="WindowsMobile, Version=10.0.14393.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Finanse_TemporaryKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

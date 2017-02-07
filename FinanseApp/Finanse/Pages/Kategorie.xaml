@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Finanse"
     xmlns:models="using:Finanse.Models"
+    xmlns:categories="using:Finanse.Models.Categories"
     NavigationCacheMode="Enabled"
     xmlns:data="using:Finanse.Elements"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -75,6 +76,7 @@
                         Width="*" />
                 </Grid.ColumnDefinitions>
                 <RadioButton
+                    Name="ExpenseRadioButton"
                     GroupName="CategoryExpenseOrIncomeRadioButtons"
                     HorizontalAlignment="Center"
                     IsChecked="True"
@@ -85,6 +87,7 @@
                         x:Uid="expenses" />
                 </RadioButton>
                 <RadioButton
+                    Name="IncomeRadioButton"
                     GroupName="CategoryExpenseOrIncomeRadioButtons"
                     Grid.Column="1"
                     HorizontalAlignment="Center"
@@ -113,7 +116,7 @@
                     Padding="0,0,0,0"
                     ScrollViewer.VerticalScrollMode="Disabled"
                     Name="OperacjeListView"
-                    ItemsSource="{x:Bind OperationCategories, Mode=OneWay}"
+                    ItemsSource="{x:Bind OperationCategoriesTest, Mode=OneWay}"
                     SelectionMode="None"
                     MaxWidth="620"
                     BorderThickness="0"
@@ -146,7 +149,7 @@
 
                     <ListView.ItemTemplate>
                         <DataTemplate
-                            x:DataType="models:OperationCategory">
+                            x:DataType="categories:CategoryWithSubCategories">
                             <Grid
                                 Background="Transparent">
 
@@ -166,13 +169,13 @@
                                                     Style="{StaticResource MyMenuFlyoutItem}"
                                                     Tag="&#xE104;"
                                                     Text="Edytuj"
-                                                    Click="EditCat_Click" />
+                                                    Click="EditCategory_Click" />
                                                 <MenuFlyoutItem
                                                     x:Name="DeleteCatButton"
                                                     Style="{StaticResource MyMenuFlyoutItem}"
                                                     Tag="&#xE107;"
                                                     Text="Usuń"
-                                                    Click="DeleteCat_Click" />
+                                                    Click="DeleteCategory_Click" />
                                                 <MenuFlyoutSeparator />
                                                 <MenuFlyoutItem
                                                     x:Name="AddSubCatButton"
@@ -190,7 +193,8 @@
                                             HorizontalAlignment="Stretch"
                                             HorizontalContentAlignment="Stretch"
                                             Background="Transparent">
-                                            <data:OperationCategoryTemplate />
+                                            <data:OperationCategoryTemplate
+                                                DataContext="{x:Bind Category}" />
                                         </Button>
 
                                     </StackPanel>
@@ -198,7 +202,7 @@
                                     <ListView
                                         ScrollViewer.VerticalScrollMode="Disabled"
                                         Name="SubOperacjeListView"
-                                        ItemsSource="{x:Bind SubCategories}"
+                                        ItemsSource="{x:Bind SubCategories, Mode=OneWay}"
                                         MaxWidth="620"
                                         BorderThickness="0"
                                         Background="Transparent"
@@ -221,6 +225,7 @@
                                             <DataTemplate
                                                 x:DataType="models:OperationSubCategory">
                                                 <Grid
+                                                    Tapped="Grid_Tapped"
                                                     RightTapped="Grid_RightTapped">
 
                                                     <FlyoutBase.AttachedFlyout>
@@ -231,13 +236,13 @@
                                                                 Style="{StaticResource MyMenuFlyoutItem}"
                                                                 Tag="&#xE104;"
                                                                 Text="Edytuj"
-                                                                Click="EditSubCat_Click" />
+                                                                Click="EditSubCategory_Click" />
                                                             <MenuFlyoutItem
                                                                 x:Name="DeleteSubCatButton"
                                                                 Style="{StaticResource MyMenuFlyoutItem}"
                                                                 Tag="&#xE107;"
                                                                 Text="Usuń"
-                                                                Click="DeleteSubCat_Click" />
+                                                                Click="DeleteSubCategory_Click" />
                                                         </MenuFlyout>
                                                     </FlyoutBase.AttachedFlyout>
 

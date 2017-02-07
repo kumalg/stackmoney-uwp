@@ -1,5 +1,4 @@
 ﻿using SQLite.Net.Attributes;
-using SQLiteNetExtensions.Attributes;
 
 namespace Finanse.Models {
 
@@ -7,7 +6,6 @@ namespace Finanse.Models {
 
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        [ForeignKey(typeof(OperationCategory))]
         public string Title { get; set; }
         public string MoreInfo { get; set; }
         public int CategoryId { get; set; }
@@ -16,22 +14,28 @@ namespace Finanse.Models {
         public bool isExpense { get; set; }
         public int MoneyAccountId { get; set; }
 
+        public decimal SignedCost {
+            get {
+                return isExpense ? -Cost : Cost;
+            }
+        }
+
         public Operation toOperation() {
             return new Operation {
-                Title = this.Title,
-                Cost = this.Cost,
+                Title = Title,
+                Cost = Cost,
                 Date = "",
-                CategoryId = this.CategoryId,
-                SubCategoryId = this.SubCategoryId,
-                MoneyAccountId = this.MoneyAccountId,
-                MoreInfo = this.MoreInfo,
-                isExpense = this.isExpense,
-                Id = this.Id
+                CategoryId = CategoryId,
+                SubCategoryId = SubCategoryId,
+                MoneyAccountId = MoneyAccountId,
+                MoreInfo = MoreInfo,
+                isExpense = isExpense,
+                Id = Id
             };
         }
 
         public override int GetHashCode() {
-            return this.Title.GetHashCode() * this.Id;
+            return Title.GetHashCode() * Id;
         }
         public override bool Equals(object o) {
             if (o == null || !(o is OperationPattern))

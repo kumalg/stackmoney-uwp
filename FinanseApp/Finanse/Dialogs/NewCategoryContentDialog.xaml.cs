@@ -107,6 +107,7 @@ namespace Finanse.Dialogs {
         }
 
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
+            /*
 
             if (editedId == -1) {
                 if (CategoryValue.SelectedIndex != -1) {
@@ -217,6 +218,7 @@ namespace Finanse.Dialogs {
                 }
 
             }
+            */
         }
 
         private void RadioButtonColor_Checked(object sender, RoutedEventArgs e) {
@@ -347,7 +349,7 @@ namespace Finanse.Dialogs {
             OperationCategories.Clear();
             foreach (var message in Dal.getAllCategories()) {
 
-                message.subCategories = new ObservableCollection<OperationSubCategory>(Dal.getOperationSubCategoriesByBossId(message.Id));
+              //  message.subCategories = new ObservableCollection<OperationSubCategory>(Dal.getOperationSubCategoriesByBossId(message.Id));
 
                 OperationCategories.Add(message);
             }

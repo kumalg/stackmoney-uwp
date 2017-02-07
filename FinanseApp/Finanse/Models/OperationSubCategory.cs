@@ -5,29 +5,37 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
 namespace Finanse.Models {
-    public class OperationSubCategory {
+    public class OperationSubCategory : OperationCategory {
 
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; } 
-        public string Name  { get; set; } 
-        public string ColorKey { get; set; }
-        public SolidColorBrush Color {
-            get {
-                return string.IsNullOrEmpty(ColorKey) ?
-                    (SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"] :
-                    (SolidColorBrush)(((ResourceDictionary)Application.Current.Resources["ColorBase"]).FirstOrDefault(i => i.Key.Equals(ColorKey)).Value);
-            }
+        public int BossCategoryId { get; set; }
+
+        public OperationSubCategory(OperationCategory category) {
+            if (category is OperationSubCategory)
+                BossCategoryId = ((OperationSubCategory)category).BossCategoryId;
+            else
+                BossCategoryId = -1;
+
+            ColorKey = category.ColorKey;
+            IconKey = category.IconKey;
+            Id = category.Id;
+            Name = category.Name;
+            VisibleInExpenses = category.VisibleInExpenses;
+            VisibleInIncomes = category.VisibleInIncomes;
         }
-        public string IconKey { get; set; }
-        public FontIcon Icon {
-            get {
-                return string.IsNullOrEmpty(IconKey) ? 
-                    (FontIcon)Application.Current.Resources["DefaultEllipseIcon"] : 
-                    (FontIcon)(((ResourceDictionary)Application.Current.Resources["IconBase"]).FirstOrDefault(i => i.Key.Equals(IconKey)).Value);
-            }
-        } 
-        public int BossCategoryId { get; set; } 
-        public bool VisibleInIncomes { get; set; } 
-        public bool VisibleInExpenses { get; set; }
+
+        public OperationSubCategory() {
+        }
+
+        public override int GetHashCode() {
+            return Name.GetHashCode() * Id;
+        }
+        public override bool Equals(object o) {
+            if (o == null || !(o is OperationSubCategory))
+                return false;
+
+            return
+                base.Equals((OperationCategory)o) &&
+                ((OperationSubCategory)o).BossCategoryId == BossCategoryId;
+        }
     }
 }

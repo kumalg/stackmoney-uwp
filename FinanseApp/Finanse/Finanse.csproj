@@ -189,6 +189,7 @@
       <DependentUpon>MoneyAccountTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="EmptyOrFullSelector.cs" />
+    <Compile Include="Models\Helpers\Date.cs" />
     <Compile Include="Models\MoneyAccounts\Account.cs" />
     <Compile Include="Models\MoneyAccounts\BankAccount.cs" />
     <Compile Include="Models\MoneyAccounts\CardAccount.cs" />

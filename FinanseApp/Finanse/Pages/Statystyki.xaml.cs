@@ -1,4 +1,5 @@
 ﻿using Finanse.Models;
+using Finanse.Models.Helpers;
 using Finanse.Models.Statistics;
 using System;
 using System.Collections.ObjectModel;
@@ -10,9 +11,9 @@ namespace Finanse.Pages {
     public sealed partial class Statystyki : Page, INotifyPropertyChanged {
 
         StatisticsData statisticsData = new StatisticsData();
-
-        public DateTime minDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).Date;
-        public DateTime maxDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month)).Date;
+        
+        public DateTime minDate = Date.FirstDayInMonth(DateTime.Today);
+        public DateTime maxDate = Date.LastDayInMonth(DateTime.Today);
 
         private string incomesPercentageText;
         public string IncomesPercentageText {

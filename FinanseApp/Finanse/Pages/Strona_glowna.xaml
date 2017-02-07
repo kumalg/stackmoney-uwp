@@ -498,7 +498,7 @@
                     SelectionMode="Single"
                     BorderThickness="0"
                     Background="Transparent"
-                    ItemsSource="{x:Bind ContactsCVS.View}"
+                    ItemsSource="{x:Bind ContactsCVS.View, Mode=OneWay}"
                     IsItemClickEnabled="True"
                     ItemClick="DetailsButton_Click"
                     SelectionChanged="OperacjeListView_SelectionChanged">

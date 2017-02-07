@@ -19,13 +19,23 @@ using Windows.System.Profile;
 using Windows.Foundation;
 using Windows.UI.Popups;
 using Windows.UI;
+using System.ComponentModel;
 
 namespace Finanse.Pages {
-    public sealed partial class Strona_glowna : Page {
+    public sealed partial class Strona_glowna : Page, INotifyPropertyChanged {
 
         private HashSet<int> visibleAccountsSet = new HashSet<int>();
         private OperationData storeData;
-        private ObservableCollection<GroupInfoList<Operation>> operationGroups = new ObservableCollection<GroupInfoList<Operation>>();
+        private ObservableCollection<GroupInfoList<Operation>> _operationGroups = new ObservableCollection<GroupInfoList<Operation>>();
+        private ObservableCollection<GroupInfoList<Operation>> operationGroups {
+            get {
+                return _operationGroups;
+            }
+            set {
+                _operationGroups = value;
+                RaisePropertyChanged("operationGroups");
+            }
+        }
         private DateTime actualYearAndMonth;
         private TextBlock actualMonthText = new TextBlock();
 
@@ -67,7 +77,14 @@ namespace Finanse.Pages {
                 semanticZoom.IsZoomedInViewActive = true;
             // e.Handled = true;
         }
-        
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void RaisePropertyChanged(string propertyName) {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public Strona_glowna() {
 
@@ -75,7 +92,7 @@ namespace Finanse.Pages {
 
             if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile")
                 HardwareButtons.BackPressed += HardwareButtons_BackPressed;
-
+           
             foreach (var item in Dal.getAllMoneyAccounts()) {
                 CheckBox itema = new CheckBox {
                     Content = item.Name,
@@ -152,11 +169,15 @@ namespace Finanse.Pages {
             }
         }
 
-        private void groupOperations(ObservableCollection<GroupInfoList<Operation>> operationGroups, OperationData operations) {
+        private void groupOperations(ObservableCollection<GroupInfoList<Operation>> operationGroupsTYMCZASOWO, OperationData operations) {
+            operationGroups = (bool)ByDateRadioButton.IsChecked ? operations.GroupsByDay : operations.GroupsByCategory;
+            /*
             operationGroups.Clear();
 
             foreach (var s in (bool)ByDateRadioButton.IsChecked ? operations.GroupsByDay : operations.GroupsByCategory)
                 operationGroups.Add(s);
+            */
+                
         }
         
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
@@ -436,7 +457,7 @@ namespace Finanse.Pages {
 
             PrevMonthButton.IsEnabled = eldestOperation == null ? 
                 false : 
-                Convert.ToDateTime(Dal.getEldestOperation().Date) <= actualYearAndMonth;
+                Convert.ToDateTime(eldestOperation.Date) < actualYearAndMonth;
         }
 
         private void setActualMoneyBar() {

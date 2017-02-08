@@ -135,6 +135,8 @@ namespace Finanse.Dialogs {
             }
         }
 
+
+
         public NewCategoryContentDialogNew(OperationCategory editedOperationCategoryItem) {
             this.InitializeComponent();
             this.editedOperationCategoryItem = new OperationCategory(editedOperationCategoryItem);
@@ -148,13 +150,12 @@ namespace Finanse.Dialogs {
             newOperationCategoryItem = new OperationCategory(editedOperationCategoryItem);
         }
 
-        private object SelectedCategory {
-            get {
-                if (editedCategiryAlwaysAsSubCategory == null)
-                    return null;
+        public NewCategoryContentDialogNew(int BossCategoryId) {
+            this.InitializeComponent();
 
-                return OperationCategoriesInComboBox.FirstOrDefault(i => ((int)i.Tag).Equals(editedCategiryAlwaysAsSubCategory.BossCategoryId));
-            }
+            VisibleInExpensesToggleButton.IsOn = true;
+            VisibleInIncomesToggleButton.IsOn = true;
+            this.BossCategoryId = BossCategoryId;
         }
 
         public NewCategoryContentDialogNew() {
@@ -162,6 +163,14 @@ namespace Finanse.Dialogs {
 
             VisibleInExpensesToggleButton.IsOn = true;
             VisibleInIncomesToggleButton.IsOn = true;
+        }
+
+
+
+        private object SelectedCategory {
+            get {
+                return OperationCategoriesInComboBox.FirstOrDefault(i => ((int)i.Tag).Equals(BossCategoryId));
+            }
         }
 
         private void SetPrimaryButtonEnabled() {

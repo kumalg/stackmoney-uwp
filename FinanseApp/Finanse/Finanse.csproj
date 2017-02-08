@@ -197,6 +197,7 @@
     <Compile Include="Models\Statistics\CategoryChartPart.cs" />
     <Compile Include="Models\Statistics\ChartPart.cs" />
     <Compile Include="Models\Statistics\StatisticsData.cs" />
+    <Compile Include="Models\Statistics\SubCategoriesList.cs" />
     <Compile Include="Pages\Kategorie.xaml.cs">
       <DependentUpon>Kategorie.xaml</DependentUpon>
     </Compile>

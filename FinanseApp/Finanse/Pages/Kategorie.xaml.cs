@@ -91,11 +91,8 @@ namespace Finanse.Pages {
             int index = OperationCategoriesTest.IndexOf(categoryWithSubCategories);
             OperationCategoriesTest.Remove(categoryWithSubCategories);
 
-            if (((bool)ExpenseRadioButton.IsChecked && category.VisibleInExpenses) ||
-                ((bool)IncomeRadioButton.IsChecked && category.VisibleInIncomes)) {
-
+            if (isCategoryVisibleInCurrentView(category))
                 OperationCategoriesTest.Insert(index, newCategoryWithSubCategorie);
-            }
 
             Dal.updateOperationCategory(category);
         }
@@ -103,15 +100,8 @@ namespace Finanse.Pages {
         private void updateCategory(CategoryWithSubCategories categoryWithSubCategories, OperationSubCategory subCategory) {
             OperationCategoriesTest
                 .Remove(categoryWithSubCategories);
+            tryAddSubCategoryToList(subCategory);
 
-            if (((bool)ExpenseRadioButton.IsChecked && subCategory.VisibleInExpenses) ||
-                ((bool)IncomeRadioButton.IsChecked && subCategory.VisibleInIncomes)) {
-
-                OperationCategoriesTest
-                    .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
-                    .SubCategories
-                    .Insert(0, subCategory);
-            }
             Dal.deleteCategoryWithSubCategories(categoryWithSubCategories.Category.Id);
             Dal.addOperationSubCategory(subCategory);
         }
@@ -138,14 +128,7 @@ namespace Finanse.Pages {
                 .SubCategories
                 .Remove(oldSubCategory);
 
-            if (((bool)ExpenseRadioButton.IsChecked && category.VisibleInExpenses) ||
-                ((bool)IncomeRadioButton.IsChecked && category.VisibleInIncomes)) {
-
-                OperationCategoriesTest
-                    .Insert(0, new CategoryWithSubCategories {
-                        Category = category
-                    });
-            }
+            tryAddCategoryToList(category);
 
             Dal.deleteSubCategory(category.Id);
             Dal.addOperationCategory(category);
@@ -157,15 +140,7 @@ namespace Finanse.Pages {
                 .SubCategories
                 .Remove(oldSubCategory);
 
-            if (((bool)ExpenseRadioButton.IsChecked && subCategory.VisibleInExpenses) ||
-                ((bool)IncomeRadioButton.IsChecked && subCategory.VisibleInIncomes)) {
-
-                OperationCategoriesTest
-                    .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
-                    .SubCategories
-                    .Insert(0, subCategory);
-            }
-
+            tryAddSubCategoryToList(subCategory);
             Dal.updateOperationSubCategory(subCategory);
         }
 
@@ -198,41 +173,58 @@ namespace Finanse.Pages {
         }
 
         private async void AddSubCat_Click(object sender, RoutedEventArgs e) {
+            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            CategoryWithSubCategories categoryWithSubCategories = (CategoryWithSubCategories)datacontext;
 
+            NewCategoryContentDialogNew ContentDialogItem = new NewCategoryContentDialogNew(categoryWithSubCategories.Category.Id);
+            ContentDialogResult result = await ContentDialogItem.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+                addNewCategoryOrSubCategoryToListAndSQL(ContentDialogItem.NewOperationCategoryItem);
         }
 
         private async void NewCategory_Click(object sender, RoutedEventArgs e) {
             NewCategoryContentDialogNew ContentDialogItem = new NewCategoryContentDialogNew();
             ContentDialogResult result = await ContentDialogItem.ShowAsync();
 
-            if (result == ContentDialogResult.Primary) {
-                OperationCategory newCategoryOrSubCategory = ContentDialogItem.NewOperationCategoryItem;
+            if (result == ContentDialogResult.Primary)
+                addNewCategoryOrSubCategoryToListAndSQL(ContentDialogItem.NewOperationCategoryItem);
+        }
 
-                if (newCategoryOrSubCategory is OperationSubCategory) {
-
-                    if (((bool)ExpenseRadioButton.IsChecked && newCategoryOrSubCategory.VisibleInExpenses) ||
-                        ((bool)IncomeRadioButton.IsChecked && newCategoryOrSubCategory.VisibleInIncomes)) {
-
-                        OperationCategoriesTest
-                            .FirstOrDefault(item => item.Category.Id == ((OperationSubCategory)newCategoryOrSubCategory).BossCategoryId)
-                            .SubCategories.Insert(0, (OperationSubCategory)newCategoryOrSubCategory);
-                    }
-                   
-                    Dal.addOperationSubCategory((OperationSubCategory)newCategoryOrSubCategory);
-                }
-                else {
-                    if (((bool)ExpenseRadioButton.IsChecked && newCategoryOrSubCategory.VisibleInExpenses) ||
-                        ((bool)IncomeRadioButton.IsChecked && newCategoryOrSubCategory.VisibleInIncomes)) {
-
-                        OperationCategoriesTest.Insert(0, new CategoryWithSubCategories {
-                            Category = newCategoryOrSubCategory
-                        });
-                    }
-
-                    Dal.addOperationCategory(newCategoryOrSubCategory);
-                }
+        private void addNewCategoryOrSubCategoryToListAndSQL(OperationCategory newCategoryOrSubCategory) {
+            if (newCategoryOrSubCategory is OperationSubCategory) {
+                tryAddSubCategoryToList((OperationSubCategory)newCategoryOrSubCategory);
+                Dal.addOperationSubCategory((OperationSubCategory)newCategoryOrSubCategory);
+            }
+            else {
+                tryAddCategoryToList(newCategoryOrSubCategory);
+                Dal.addOperationCategory(newCategoryOrSubCategory);
             }
         }
+
+        private void tryAddSubCategoryToList(OperationSubCategory subCategory) {
+            if (isCategoryVisibleInCurrentView(subCategory)) {
+
+                OperationCategoriesTest
+                    .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
+                    .SubCategories.Insert(0, subCategory);
+            }
+        }
+        
+        private void tryAddCategoryToList(OperationCategory category) {
+            if (isCategoryVisibleInCurrentView(category)) {
+
+                OperationCategoriesTest.Insert(0, new CategoryWithSubCategories {
+                    Category = category
+                });
+            }
+        }
+
+        private bool isCategoryVisibleInCurrentView(OperationCategory category) {
+            return ((bool)ExpenseRadioButton.IsChecked && category.VisibleInExpenses) ||
+                   ((bool)IncomeRadioButton.IsChecked && category.VisibleInIncomes);
+        }
+
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e) {
             OperationCategoriesTest = new ObservableCollection<CategoryWithSubCategories>(Dal.getOperationCategoriesWithSubCategoriesInExpenses());

@@ -67,6 +67,10 @@ namespace Finanse.Charts {
         public DoughnutChart() {
             _root = new Grid();
             Content = _root;
+
+         //   TextBlock text = new TextBlock();
+        //    text.Text = "Test";
+        //    _root.Children.Add(text);
         }
 
         private void Redraw() {
@@ -81,7 +85,7 @@ namespace Finanse.Charts {
             List<DoughnutChartItem> ItemsGood = new List<DoughnutChartItem>();
             foreach (ChartPart item in ItemsSource)
                 Items.Add(new DoughnutChartItem {
-                    Value = item.RelativeValue,
+                    Value = item.UnrelativeValue,
                     Color = item.SolidColorBrush.Color,
                 });
 

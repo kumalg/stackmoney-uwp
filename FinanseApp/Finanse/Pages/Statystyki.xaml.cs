@@ -2,6 +2,7 @@
 using Finanse.Models.Helpers;
 using Finanse.Models.Statistics;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Windows.UI.Xaml.Controls;
@@ -92,6 +93,17 @@ namespace Finanse.Pages {
             }
         }
 
+        private ObservableCollection<SubCategoriesList> expensesFromCategoryGroupedBySubCategory = new ObservableCollection<SubCategoriesList>();
+        public ObservableCollection<SubCategoriesList> ExpensesFromCategoryGroupedBySubCategory {
+            get {
+                return expensesFromCategoryGroupedBySubCategory;
+            }
+            set {
+                expensesFromCategoryGroupedBySubCategory = value;
+                RaisePropertyChanged("ExpensesFromCategoryGroupedBySubCategory");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void RaisePropertyChanged(string propertyName) {
@@ -126,14 +138,12 @@ namespace Finanse.Pages {
 
             DateRangeText = statisticsData.getActualDateRangeText(minDate, maxDate);
 
-            ExpensesToIncomes = statisticsData.setExpensesToIncomesChartValues(minDate, maxDate);
-            double incomesPercentage = 100 * ExpensesToIncomes[1].RelativeValue;
-            IncomesPercentageText = incomesPercentage.ToString("0") + "%";
+            ExpensesToIncomes = statisticsData.getExpenseToIncomeComparsion();
+            IncomesPercentageText = (100 * ExpensesToIncomes[1].RelativeValue).ToString("0") + "%";
 
             ExpensesByCategory = statisticsData.getExpensesGroupedByCategoryInRange(minDate, maxDate);
             IncomesByCategory = statisticsData.getIncomesGroupedByCategoryInRange(minDate, maxDate);
-            CategoryExpensesBySubCategory = statisticsData.getExpensesFromCategoryGroupedBySubCategoryInRange(minDate, maxDate, 17);
+            ExpensesFromCategoryGroupedBySubCategory = statisticsData.getExpensesFromCategoryGroupedBySubCategoryInRange();
         }
-
     }
 }

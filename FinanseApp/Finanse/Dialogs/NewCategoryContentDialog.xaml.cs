@@ -1,7 +1,7 @@
 ﻿using Finanse.DataAccessLayer;
-using Finanse.Elements;
 using Finanse.Models;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -9,297 +9,228 @@ using Windows.UI.Xaml.Media;
 
 namespace Finanse.Dialogs {
 
-    public sealed partial class NewCategoryContentDialog : ContentDialog {
+    public sealed partial class NewCategoryContentDialog : ContentDialog, INotifyPropertyChanged {
 
-        private string colorKey = string.Empty;
-        private string iconKey = string.Empty;
-
-        ObservableCollection<OperationCategory> OperationCategories;
-
-        public OperationSubCategory newOperationSubCategoryItem;
-        public OperationCategory newOperationCategoryItem;
-
-        public OperationSubCategory editedOperationSubCategoryItem;
-        public OperationCategory editedOperationCategoryItem;
-
-        public OperationCategory editedCategory;
-        public int editedId;
-        public int editedBossCategoryId;
-
-        public NewCategoryContentDialog(ObservableCollection<OperationCategory> OperationCategories, OperationCategory BossCategory) {
-
-            this.InitializeComponent();
-
-            this.OperationCategories = OperationCategories;
-            editedId = -1;
-
-            SetPrimaryButtonEnabled();
-
-            /* DODAWANIE KATEGORII DO COMBOBOX'A */
-            CategoryValue.Items.Add(new ComboBoxItem {
-                Content = "Brak",
-                Tag = -1,
-            });
-            foreach (OperationCategory OperationCategories_ComboBox in OperationCategories) {
-
-                CategoryValue.Items.Add(new ComboBoxItem {
-                    Content = OperationCategories_ComboBox.Name,
-                    Tag = OperationCategories_ComboBox.Id
-                });
-            }
-
-            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == BossCategory.Name);
-            ColorBaseList.ItemsSource = ((ResourceDictionary)Application.Current.Resources["ColorBase"]).OrderByDescending(i=>i.Key.ToString());
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void RaisePropertyChanged(string propertyName) {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public NewCategoryContentDialog(ObservableCollection<OperationCategory> OperationCategories, OperationCategory editedCategory, int editedBossCategoryId) {
 
-            this.InitializeComponent();
-
-            this.OperationCategories = OperationCategories;
-            this.editedCategory = editedCategory;
-            editedId = editedCategory.Id;
-            this.editedBossCategoryId = editedBossCategoryId;
-
-            SetPrimaryButtonEnabled();
-
-            /* DODAWANIE KATEGORII DO COMBOBOX'A */
-            CategoryValue.Items.Add(new ComboBoxItem {
-                Content = "Brak",
-                Tag = -1,
-            });
-            foreach (OperationCategory OperationCategories_ComboBox in OperationCategories) {
-
-                CategoryValue.Items.Add(new ComboBoxItem {
-                    Content = OperationCategories_ComboBox.Name,
-                    Tag = OperationCategories_ComboBox.Id
-                });
+        private List<KeyValuePair<object, object>> colorBase;
+        private List<KeyValuePair<object, object>> ColorBase {
+            get {
+                if (colorBase == null) {
+                    colorBase = ((ResourceDictionary)Application.Current.Resources["ColorBase"]).ToList();
+                }
+                return colorBase;
             }
+        }
+        private SolidColorBrush Color {
+            get {
+                return (SolidColorBrush)SelectedColor.Value;
+            }
+        }
 
-            if (editedCategory.Id != -1) {
-                Title = "Edycja kategorii";
-                PrimaryButtonText = "Zapisz";
+        private string ColorKey {
+            get {
+                return SelectedColor.Key.ToString();
+            }
+        }
 
-                NameValue.Text = editedCategory.Name;
+        private KeyValuePair<object, object> selectedColor;
 
-                CategoryIcon.Glyph = editedCategory.Icon.Glyph;//.ToString();
-                iconKey = editedCategory.IconKey;
-                CategoryIcon.Color = editedCategory.Color;//Functions.GetSolidColorBrush(editedCategory.Color);
-                colorKey = editedCategory.ColorKey;
+        public KeyValuePair<object, object> SelectedColor {
+            get {
+                if (selectedColor.Key == null || selectedColor.Value == null)
+                    selectedColor = ColorBase.ElementAt(3);
 
-                VisibleInExpensesToggleButton.IsOn = editedCategory.VisibleInExpenses;
-                VisibleInIncomesToggleButton.IsOn = editedCategory.VisibleInIncomes;
+                return selectedColor;
+            }
+            set {
+                selectedColor = value;
+                RaisePropertyChanged("Color");
+            }
+        }
 
-                if (editedBossCategoryId != -1) {
-                    if (Dal.getAllCategories().Any(i => i.Id == editedBossCategoryId)) {
-                        OperationCategory catItem = Dal.getOperationCategoryById(editedBossCategoryId);
-                        CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == catItem.Name);
+
+        private List<KeyValuePair<object, object>> iconBase;
+        private List<KeyValuePair<object, object>> IconBase {
+            get {
+                if (iconBase == null) {
+                    iconBase = ((ResourceDictionary)Application.Current.Resources["IconBase"]).ToList();
+                }
+                return iconBase;
+            }
+        }
+        private FontIcon Icon {
+            get {
+                return (FontIcon)SelectedIcon.Value;
+            }
+        }
+
+        private string IconKey {
+            get {
+                return SelectedIcon.Key.ToString();
+            }
+        }
+
+        private KeyValuePair<object, object> selectedIcon;
+
+        public KeyValuePair<object, object> SelectedIcon {
+            get {
+                if (selectedIcon.Key == null || selectedIcon.Value == null)
+                    selectedIcon = IconBase.ElementAt(3);
+
+                return selectedIcon;
+            }
+            set {
+                selectedIcon = value;
+                RaisePropertyChanged("Icon");
+            }
+        }
+
+        private int bossCategoryId = -1;
+        private int BossCategoryId {
+            get {
+                return bossCategoryId;
+            }
+            set {
+                bossCategoryId = value;
+                RaisePropertyChanged("BossCategoryId");
+            }
+        }
+
+        private List<OperationCategory> OperationCategories = Dal.getAllCategories();
+
+        private OperationCategory newOperationCategoryItem = new OperationCategory();
+        public OperationCategory NewOperationCategoryItem {
+            get {
+                return newOperationCategoryItem;
+            }
+        }
+        private OperationCategory editedOperationCategoryItem;
+        private OperationSubCategory editedCategiryAlwaysAsSubCategory;
+
+        private List<ComboBoxItem> operationCategoriesInComboBox;
+        private List<ComboBoxItem> OperationCategoriesInComboBox {
+            get {
+                if (operationCategoriesInComboBox == null) {
+                    operationCategoriesInComboBox = new List<ComboBoxItem>();
+                    operationCategoriesInComboBox.Add(new ComboBoxItem {
+                        Content = "Brak",
+                        Tag = -1,
+                    });
+                    foreach (OperationCategory OperationCategories_ComboBox in OperationCategories) {
+                        operationCategoriesInComboBox.Add(new ComboBoxItem {
+                            Content = OperationCategories_ComboBox.Name,
+                            Tag = OperationCategories_ComboBox.Id
+                        });
                     }
                 }
-                SetPrimaryButtonEnabled();
+
+                return operationCategoriesInComboBox;
             }
-            ColorBaseList.ItemsSource = ((ResourceDictionary)Application.Current.Resources["ColorBase"]).OrderBy(i => i.Key.ToString());
+        }
+
+
+
+        public NewCategoryContentDialog(OperationCategory editedOperationCategoryItem) {
+            this.InitializeComponent();
+            this.editedOperationCategoryItem = new OperationCategory(editedOperationCategoryItem);
+            this.editedCategiryAlwaysAsSubCategory = new OperationSubCategory(editedOperationCategoryItem);
+            Title = "Edytowanie kategorii";
+
+            SelectedColor = ColorBase.FirstOrDefault(i => i.Key.Equals(editedOperationCategoryItem.ColorKey));
+            SelectedIcon = IconBase.FirstOrDefault(i => i.Key.Equals(editedOperationCategoryItem.IconKey));
+
+            BossCategoryId = editedCategiryAlwaysAsSubCategory.BossCategoryId;
+            
+            newOperationCategoryItem = new OperationCategory(editedOperationCategoryItem);
+        }
+
+        public NewCategoryContentDialog(int BossCategoryId) {
+            this.InitializeComponent();
+            Title = "Nowa kategoria";
+
+            OperationCategory bossCategory = Dal.getOperationCategoryById(BossCategoryId);
+            SelectedColor = ColorBase.FirstOrDefault(i => i.Key.Equals(bossCategory.ColorKey));
+            SelectedIcon = IconBase.FirstOrDefault(i => i.Key.Equals(bossCategory.IconKey));
+
+            VisibleInExpensesToggleButton.IsOn = true;
+            VisibleInIncomesToggleButton.IsOn = true;
+            this.BossCategoryId = BossCategoryId;
+        }
+
+        public NewCategoryContentDialog() {
+            this.InitializeComponent();
+            Title = "Nowa kategoria";
+
+            VisibleInExpensesToggleButton.IsOn = true;
+            VisibleInIncomesToggleButton.IsOn = true;
+        }
+
+
+
+        private object SelectedCategory {
+            get {
+                return OperationCategoriesInComboBox.FirstOrDefault(i => ((int)i.Tag).Equals(BossCategoryId));
+            }
         }
 
         private void SetPrimaryButtonEnabled() {
+            IsPrimaryButtonEnabled = editedCategiryAlwaysAsSubCategory == null ? !string.IsNullOrEmpty(NameValue.Text) : !isNewOperationTheSame();
+        }
 
-            IsPrimaryButtonEnabled = (NameValue.Text != "");
+        private bool isNewOperationTheSame() {
+           
+            return
+                editedCategiryAlwaysAsSubCategory.BossCategoryId == BossCategoryId &&
+                editedCategiryAlwaysAsSubCategory.ColorKey == SelectedColor.Key.ToString() &&
+                editedCategiryAlwaysAsSubCategory.IconKey == SelectedIcon.Key.ToString() &&
+                editedCategiryAlwaysAsSubCategory.Name == NameValue.Text &&
+                !string.IsNullOrEmpty(NameValue.Text) &&
+                editedCategiryAlwaysAsSubCategory.VisibleInExpenses == VisibleInExpensesToggleButton.IsOn &&
+                editedCategiryAlwaysAsSubCategory.VisibleInIncomes == VisibleInIncomesToggleButton.IsOn;
         }
 
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-            /*
 
-            if (editedId == -1) {
-                if (CategoryValue.SelectedIndex != -1) {
-                    int bossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
+            newOperationCategoryItem.Name = NameValue.Text;
+            newOperationCategoryItem.ColorKey = SelectedColor.Key.ToString();
+            newOperationCategoryItem.IconKey = SelectedIcon.Key.ToString();
+            newOperationCategoryItem.VisibleInExpenses = VisibleInExpensesToggleButton.IsOn;
+            newOperationCategoryItem.VisibleInIncomes = VisibleInIncomesToggleButton.IsOn;
 
-                    newOperationSubCategoryItem = new OperationSubCategory {
-                        Id = 0,
-                        Name = NameValue.Text,
-                        ColorKey = colorKey,
-                        IconKey = iconKey,
-                        BossCategoryId = bossCategoryId,
-                        VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
-                        VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
-                    };
+            if (CategoryValue.SelectedIndex != -1) {
+                OperationSubCategory op = new OperationSubCategory(newOperationCategoryItem);
+                op.BossCategoryId = BossCategoryId;
 
-                    Dal.saveOperationSubCategory(newOperationSubCategoryItem);
-                    OperationCategories.Single(x => x.Id == bossCategoryId).addSubCategory(newOperationSubCategoryItem);
-                }
-
-                else {
-                    newOperationCategoryItem = new OperationCategory {
-                        Name = NameValue.Text,
-                        ColorKey = colorKey,//((RadioButton)((GridViewItem)ColorBaseList.SelectedItem).Content).Content.ToString(), //CategoryIcon.Color.Color.ToString(),
-                        IconKey = iconKey,
-                        VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
-                        VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
-                    };
-
-                    OperationCategories.Insert(0, newOperationCategoryItem);
-                    Dal.saveOperationCategory(newOperationCategoryItem);
-                }
+                newOperationCategoryItem = op;
             }
-            else {
-
-                if (editedBossCategoryId != -1 && CategoryValue.SelectedIndex != -1) {
-                    // subkategoria która dalej jest subkategorią
-
-                    editedOperationSubCategoryItem = new OperationSubCategory {
-                        Id = editedCategory.Id,
-                        Name = NameValue.Text,
-                        ColorKey = colorKey,
-                        IconKey = iconKey,
-                        BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
-                        VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
-                        VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
-                    };
-                    Dal.saveOperationSubCategory(editedOperationSubCategoryItem);
-
-                    if (editedBossCategoryId == (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag) {
-                        ObservableCollection<OperationSubCategory> subCategories = OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedBossCategoryId))].subCategories;
-
-                        subCategories[subCategories.IndexOf(subCategories.Single(c => c.Id == editedCategory.Id))] = editedOperationSubCategoryItem;///$$$$$$$$$$4
-
-                        OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedBossCategoryId))].subCategories = subCategories;
-                    }
-
-                    else
-                        RefreshOperationCategoriesList();
-                }
-                else if (editedBossCategoryId != -1 && CategoryValue.SelectedIndex == -1) {
-                    // subkategoria która zostala kategorią
-                    editedOperationSubCategoryItem = new OperationSubCategory {
-                        Id = editedCategory.Id,
-                    };
-                    editedOperationCategoryItem = new OperationCategory {
-                        Name = NameValue.Text,
-                        ColorKey = colorKey,
-                        IconKey = iconKey,
-                        VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
-                        VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
-                    };
-
-                    Dal.deleteSubCategory(editedOperationSubCategoryItem.Id);
-                    Dal.saveOperationCategory(editedOperationCategoryItem);
-
-                    RefreshOperationCategoriesList();
-                }
-                else if (editedBossCategoryId == -1 && CategoryValue.SelectedIndex != -1) {
-                    // kategoria która została subkategorią
-                    editedOperationSubCategoryItem = new OperationSubCategory {
-                        Name = NameValue.Text,
-                        ColorKey = colorKey,
-                        IconKey = iconKey,
-                        BossCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag,
-                        VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
-                        VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
-                    };
-
-                    Dal.deleteCategoryWithSubCategories(editedCategory.Id);
-                    Dal.saveOperationSubCategory(editedOperationSubCategoryItem);
-
-                    RefreshOperationCategoriesList();
-                }
-                else if (editedBossCategoryId == -1 && CategoryValue.SelectedIndex == -1) {
-                    // kategoria która dalej jest kategorią
-
-                    editedOperationCategoryItem = new OperationCategory {
-                        Id = editedCategory.Id,
-                        Name = NameValue.Text,
-                        ColorKey = colorKey,
-                        IconKey = iconKey,
-                        VisibleInExpenses = VisibleInExpensesToggleButton.IsOn,
-                        VisibleInIncomes = VisibleInIncomesToggleButton.IsOn
-                    };
-
-                    OperationCategories[OperationCategories.IndexOf(OperationCategories.Single(c => c.Id == editedCategory.Id))] = editedOperationCategoryItem;
-                    Dal.saveOperationCategory(editedOperationCategoryItem);
-                }
-
-            }
-            */
         }
-
-        private void RadioButtonColor_Checked(object sender, RoutedEventArgs e) {
-            var button = sender as RadioButton;
-            colorKey = button.Content.ToString();
-            CategoryIcon.Color = (SolidColorBrush)button.Background;
-        }
-
-        private void RadioButtonIcon_Checked(object sender, RoutedEventArgs e) {
-            var button = sender as RadioButton;
-            iconKey = button.Tag.ToString();
-            CategoryIcon.Glyph = button.Content.ToString();
-        }
-
+        
         private void NameValue_TextChanged(object sender, TextChangedEventArgs e) {
-
-            TextBox NamVal = sender as TextBox;
-
-            int selectedCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
-
-            if (CategoryValue.SelectedIndex == -1) {
-
-                if (Dal.getAllCategories().Any(item => item.Name == NamVal.Text))
-                    NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
-                else {
-                    NameValue.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
-                    SetPrimaryButtonEnabled();
-                }
-            }
-            else {
-                if (Dal.getOperationSubCategoriesByBossId(selectedCategoryId).Any(item => item.Name == NamVal.Text)) {
-                    NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
-                }
-                else {
-                    NameValue.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
-                    SetPrimaryButtonEnabled();
-                }
-            }
+            SetPrimaryButtonEnabled();
         }
 
-        private void NameValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
-
-            SetPrimaryButtonEnabled();
-
-            if (CategoryValue.SelectedIndex == -1) {
-                foreach (var message in Dal.getAllCategories()) {
-                    if (message.Name.ToLower() == NameValue.Text.ToLower()) {
-                        NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
-                        IsPrimaryButtonEnabled = false;
-                        break;
-                    }
-                    else {
-                        NameValue.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
-                        SetPrimaryButtonEnabled();
-                    }
-                }
-            }
-            else {
-                int selectedCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
-
-                foreach (var message in Dal.getOperationSubCategoriesByBossId(selectedCategoryId)) {
-                    if (message.Name.ToLower() == NameValue.Text.ToLower()) {
-                        NameValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
-                        IsPrimaryButtonEnabled = false;
-                        break;
-                    }
-                    else {
-                        NameValue.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
-                        SetPrimaryButtonEnabled();
-                    }
-                }
-            }
+        private void setVisibleInExpensesAndIncomesToNewCategory() {
+            newOperationCategoryItem.VisibleInExpenses = VisibleInExpensesToggleButton.IsOn;
+            newOperationCategoryItem.VisibleInIncomes = VisibleInIncomesToggleButton.IsOn;
         }
 
         private void VisibleInExpensesToggleButton_Toggled(object sender, RoutedEventArgs e) {
-            if(VisibleInIncomesToggleButton != null)
+            if (VisibleInIncomesToggleButton != null)
                 if (!VisibleInIncomesToggleButton.IsEnabled)
                     VisibleInExpensesToggleButton.IsOn = true;
 
             if (!VisibleInExpensesToggleButton.IsOn && !VisibleInIncomesToggleButton.IsOn)
                 VisibleInIncomesToggleButton.IsOn = true;
+
+            setVisibleInExpensesAndIncomesToNewCategory();
+            SetPrimaryButtonEnabled();
         }
 
         private void VisibleInIncomesToggleButton_Toggled(object sender, RoutedEventArgs e) {
@@ -308,51 +239,44 @@ namespace Finanse.Dialogs {
 
             else if (!VisibleInExpensesToggleButton.IsOn && !VisibleInIncomesToggleButton.IsOn)
                 VisibleInExpensesToggleButton.IsOn = true;
+
+            setVisibleInExpensesAndIncomesToNewCategory();
+            SetPrimaryButtonEnabled();
         }
 
         private void CategoryValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (((ComboBox)sender).SelectedIndex == 0)
+                CategoryValue.SelectedIndex = -1;
 
-            if (CategoryValue.SelectedIndex == 0) {
-                CategoryValue.SelectedIndex--;
+            BossCategoryId = (CategoryValue.SelectedIndex == -1) ? -1 : (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
+            setExpenseAndIncomeToggleButtonsEnabling();
 
-                VisibleInExpensesToggleButton.IsEnabled = true;
-                VisibleInExpensesToggleButton.IsOn = true;
+            SetPrimaryButtonEnabled();
+        }
 
-                VisibleInIncomesToggleButton.IsEnabled = true;
-                VisibleInIncomesToggleButton.IsOn = true;
-            }
-            else {
-                OperationCategory item = Dal.getOperationCategoryById((int)((ComboBoxItem)((ComboBox)sender).SelectedItem).Tag);
+        private void setExpenseAndIncomeToggleButtonsEnabling() {
+            OperationCategory bossCategory = Dal.getOperationCategoryById(BossCategoryId);
 
-                VisibleInExpensesToggleButton.IsEnabled = item.VisibleInExpenses;
-                if (item.VisibleInExpenses) {
-                    VisibleInExpensesToggleButton.IsEnabled = true;
-                    VisibleInExpensesToggleButton.IsOn = true;
-                }
-                else {
-                    VisibleInExpensesToggleButton.IsEnabled = false;
+            if (bossCategory != null && (!bossCategory.VisibleInIncomes || !bossCategory.VisibleInExpenses)) {
+                VisibleInExpensesToggleButton.IsEnabled = bossCategory.VisibleInExpenses;
+                VisibleInIncomesToggleButton.IsEnabled = bossCategory.VisibleInIncomes;
+
+                if (!VisibleInExpensesToggleButton.IsEnabled) {
                     VisibleInExpensesToggleButton.IsOn = false;
                 }
 
-                if (item.VisibleInIncomes) {
-                    VisibleInIncomesToggleButton.IsEnabled = true;
-                    VisibleInIncomesToggleButton.IsOn = true;
-                }
-                else {
-                    VisibleInIncomesToggleButton.IsEnabled = false;
+                if (!VisibleInIncomesToggleButton.IsEnabled) {
                     VisibleInIncomesToggleButton.IsOn = false;
                 }
             }
+            else {
+                VisibleInExpensesToggleButton.IsEnabled = true;
+                VisibleInIncomesToggleButton.IsEnabled = true;
+            }
         }
 
-        private void RefreshOperationCategoriesList() {
-            OperationCategories.Clear();
-            foreach (var message in Dal.getAllCategories()) {
-
-              //  message.subCategories = new ObservableCollection<OperationSubCategory>(Dal.getOperationSubCategoriesByBossId(message.Id));
-
-                OperationCategories.Add(message);
-            }
+        private void ColorBaseList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            SetPrimaryButtonEnabled();
         }
     }
 }

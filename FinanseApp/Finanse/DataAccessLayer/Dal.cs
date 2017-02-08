@@ -89,41 +89,23 @@
         */
 
         public static Operation getEldestOperation() {
-            /// blokuje się gdy data jest w formacie innym niż yyyy.MM.dd , np. yyyy-MM-dd . czyli należy jeszcze sprawdzać czy stiring jest {0}.{1}.{2} czy coś
-
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-
-
-                if (db.Table<Operation>().Count() == 0)
-                    return null;
-                
-                Operation eldest = db.Query<Operation>("SELECT * FROM Operation WHERE Date IS NOT NULL AND Date != '' ORDER BY Date LIMIT 1").FirstOrDefault();
-               // string eldestS = db.Query<string>("SELECT `Date` FROM Operation WHERE `Date` IS NOT NULL AND `Date` != '' ORDER BY `Date` LIMIT 1").FirstOrDefault();
-
-                return eldest;
+                return db.Query<Operation>("SELECT * FROM Operation WHERE Date IS NOT NULL AND Date != '' ORDER BY Date LIMIT 1").FirstOrDefault();
             }
         }
         
-        internal static List<Operation> getAllOperationsFromRange(DateTime minDate, DateTime maxDate) {
-            List<Operation> models;
-
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+        internal static List<Operation> getAllOperationsFromRangeToStatistics(DateTime minDate, DateTime maxDate) {
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-
-                models = db.Query<Operation>("SELECT * FROM Operation WHERE Date >= ? AND Date <= ?", minDate.ToString("yyyy.MM.dd"), maxDate.ToString("yyyy.MM.dd"));
+                return db.Query<Operation>("SELECT * FROM Operation WHERE (VisibleInStatistics OR VisibleInStatistics ISNULL) AND Date >= ? AND Date <= ?", minDate.ToString("yyyy.MM.dd"), maxDate.ToString("yyyy.MM.dd"));
             }
-
-            return models;
         }
 
         public static List<MoneyAccountBalance> listOfMoneyAccountBalances(DateTime date) {
             List<MoneyAccountBalance> list = new List<MoneyAccountBalance>();
 
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
                 var query = from p in db.Table<Operation>().ToList()
@@ -167,49 +149,27 @@
         /* GET ALL */
 
         public static List<OperationCategory> getAllCategories() {
-            List<OperationCategory> models;
-
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-
-                models = db.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name");
+                return db.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name");
             }
-
-            return models;
         }
 
         public static List<OperationCategory> getAllCategoriesInExpenses() {
-            List<OperationCategory> models;
-
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-
-                models = db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInExpenses ORDER BY Name");
+                return db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInExpenses ORDER BY Name");
             }
-
-            return models;
         }
         public static List<OperationCategory> getAllCategoriesInIncomes() {
-        
-            List<OperationCategory> models;
-
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-
-                models = db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInIncomes ORDER BY Name");
+                return db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInIncomes ORDER BY Name");
             }
-
-            return models;
         }
 
         public static HashSet<CategoryWithSubCategories> getOperationCategoriesWithSubCategoriesInExpenses() {
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+            using (var db = DbConnection) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
@@ -252,7 +212,7 @@
         }
 
         public static HashSet<CategoryWithSubCategories> getOperationCategoriesWithSubCategoriesInIncomes() {
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+            using (var db = DbConnection) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
                 /*
@@ -301,42 +261,8 @@
             }
         }
 
-        public static List<List<OperationSubCategory>> getAllSubCategoriesInExpensesGroupedByBoss() {
-
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                List<List<OperationSubCategory>> models = (
-                    from p in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInExpenses ORDER BY Name")
-                    group p by p.BossCategoryId into g
-                    select new List<OperationSubCategory>(g)
-                             ).ToList();
-
-                return models;
-            }
-        }
-
-        public static List<List<OperationSubCategory>> getAllSubCategoriesInIncomesGroupedByBoss() {
-
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                List<List<OperationSubCategory>> models = (
-                    from p in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInIncomes ORDER BY Name")
-                    group p by p.BossCategoryId into g
-                    select new List<OperationSubCategory>(g)
-                             ).ToList();
-
-                return models;
-            }
-        }
-
         public static List<CardAccount> getListOfLinkedCardAccountToThisBankAccount(BankAccount account) {
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+            using (var db = DbConnection) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
@@ -351,7 +277,7 @@
         public static List<Operation> getAllOperationsOfThisMoneyAccount(BankAccount account) {
 
             // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+            using (var db = DbConnection) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
@@ -370,7 +296,7 @@
             List<Operation> models;
 
             // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+            using (var db = DbConnection) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
@@ -403,13 +329,11 @@
             List<Operation> models;
 
             // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+            using (var db = DbConnection) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
                 string settedYearAndMonth = year.ToString() + "." + month.ToString("00") + "*";
-
-                //      db.Query<Operation>("SELECT * FROM Operation WHERE Date GLOB '?'", settedYearAndMonth);
 
                 List<Operation> list = db.Query<Operation>("SELECT * FROM Operation WHERE Date GLOB ? AND Date <= ?", settedYearAndMonth, DateTime.Today.ToString("yyyy.MM.dd"));
 
@@ -426,14 +350,9 @@
         }
 
         public static List<Operation> getAllFutureOperations() {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-
-                List<Operation> models = db.Query<Operation>("SELECT * FROM Operation WHERE Date > ? OR Date IS NULL OR Date == ''", DateTime.Today.ToString("yyyy.MM.dd"));
-
-                return models;
+                return db.Query<Operation>("SELECT * FROM Operation WHERE Date > ? OR Date IS NULL OR Date == ''", DateTime.Today.ToString("yyyy.MM.dd"));
             }
         }
 
@@ -441,7 +360,7 @@
             List<Operation> models;
 
             // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+            using (var db = DbConnection) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
@@ -460,178 +379,98 @@
         }
 
         public static List<OperationPattern> getAllPatterns() {
-            List<OperationPattern> models;
-
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-
-                models = db.Table<OperationPattern>().ToList();
+                return db.Table<OperationPattern>().ToList();
             }
-
-            return models;
         }
 
         public static List<MoneyAccount> getAllMoneyAccounts() {
-            List<MoneyAccount> models;
-
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-
-                /*
-                var table = db.Query<MoneyAccount>("SELECT * FROM MoneyAccount");//db.Table<MoneyAccount>();
-                var test = db.Query<OperationCategory>("SELECT * FROM Settings");
-                */
-
-                models = db.Table<MoneyAccount>().ToList();
+                return db.Query<MoneyAccount>("SELECT * FROM MoneyAccount");
             }
-
-            return models;
         }
 
         /* GET BY ID */
     
         public static Operation getOperationById(int Id) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                Operation m = db.Query<Operation>("SELECT * FROM Operation WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
-
-                return m;
+                return db.Query<Operation>("SELECT * FROM Operation WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
             }
         }
 
         public static MoneyAccount getMoneyAccountById(int Id) {
             // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+            using (var db = DbConnection) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
-                MoneyAccount m = db.Query<MoneyAccount>("SELECT * FROM MoneyAccount WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
-
-                return m;
+                return db.Query<MoneyAccount>("SELECT * FROM MoneyAccount WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
             }
         }
 
         public static OperationSubCategory getOperationSubCategoryById(int Id) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                OperationSubCategory m = db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
-
-                return m;
+                return db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
             }
         }
 
         public static List<OperationSubCategory> getOperationSubCategoriesByBossId(int Id) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                List<OperationSubCategory> m = db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE BossCategoryId == ? ORDER BY Name", Id);
-
-                return m;
+                return db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE BossCategoryId == ? ORDER BY Name", Id);
             }
         }
 
         public static OperationCategory getOperationCategoryById(int Id) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                OperationCategory m = db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
-
-                return m;
+                return db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
             }
         }
 
         /* SAVE */
 
         public static void saveOperation(Operation operation) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
-                if (operation.Id == 0) {
-                    // New
+                if (operation.Id == 0)
                     db.Insert(operation);
-                }
-                else {
-                    // Update
+                else
                     db.Update(operation);
-                }
             }
         }
 
         public static void saveOperationPattern(OperationPattern operationPattern) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
-                if (operationPattern.Id == 0) {
+                if (operationPattern.Id == 0)
                     db.Insert(operationPattern);
-                }
-                else {
+                else
                     db.Update(operationPattern);
-                }
-            }
-        }
-
-        public static void saveOperationCategory(OperationCategory operationCategory) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                if (operationCategory.Id == 0) {
-                    // New
-                    db.Insert(operationCategory);
-                }
-                else {
-                    // Update
-                    db.Update(operationCategory);
-                }
             }
         }
 
         public static void updateOperationCategory(OperationCategory operationCategory) {
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 db.Update(operationCategory);
             }
         }
 
         public static void addOperationCategory(OperationCategory operationCategory) {
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 db.Insert(operationCategory);
             }
         }
 
-        public static void saveOperationSubCategory(OperationSubCategory operationSubCategory) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                if (operationSubCategory.Id == 0) {
-                    // New
-                    db.Insert(operationSubCategory);
-                }
-                else {
-                    // Update
-                    db.Update(operationSubCategory);
-                }
-            }
-        }
         public static void updateOperationSubCategory(OperationSubCategory operationSubCategory) {
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 db.Update(operationSubCategory);
             }
@@ -646,58 +485,30 @@
         /* DELETE */
 
         public static void deletePattern(OperationPattern operationPattern) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-
-                // Object model:
-                //db.Delete(person);
-
-                // SQL Syntax:
                 db.Execute("DELETE FROM OperationPattern WHERE Id = ?", operationPattern.Id);
             }
         }
 
         public static void deleteOperation(Operation operation) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-
-                // Object model:
-                //db.Delete(person);
-
-                // SQL Syntax:
                 db.Execute("DELETE FROM Operation WHERE Id = ?", operation.Id);
             }
         }
 
         public static void deleteCategoryWithSubCategories(int categoryId) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-
-                // Object model:
-                //db.Delete(person);
-
-                // SQL Syntax:
                 db.Execute("DELETE FROM OperationCategory WHERE Id = ?", categoryId);
                 db.Execute("DELETE FROM OperationSubCategory WHERE BossCategoryId = ?", categoryId);
             }
         }
 
         public static void deleteSubCategory(int subCategoryId) {
-            // Create a new connection
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-
-                // Object model:
-                //db.Delete(person);
-
-                // SQL Syntax:
                 db.Execute("DELETE FROM OperationSubCategory WHERE Id = ?", subCategoryId);
             }
         }

@@ -276,6 +276,33 @@
 
                         </ToggleSwitch>
                     </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock
+                            Name="HideInStatisticsTitle"
+                            Foreground="{ThemeResource Text-1}"
+                            Text="Ukryj w statystykach"
+                            Margin="10,0" />
+
+                        <ToggleSwitch
+                            Name="HideInStatisticsToggle"
+                            Style="{StaticResource ToggleSwitchStyle1}"
+                            Margin="10,5,0,0">
+
+                            <ToggleSwitch.OffContent>
+                                <TextBlock
+                                    Text="Nie"
+                                    x:Uid="No" />
+                            </ToggleSwitch.OffContent>
+
+                            <ToggleSwitch.OnContent>
+                                <TextBlock
+                                    Text="Tak"
+                                    x:Uid="Yes" />
+                            </ToggleSwitch.OnContent>
+
+                        </ToggleSwitch>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

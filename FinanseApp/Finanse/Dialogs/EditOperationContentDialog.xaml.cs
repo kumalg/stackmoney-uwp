@@ -51,26 +51,30 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private void setEditedOperationValues(OperationPattern operation) {
+        private void setEditedOperationValues(OperationPattern operationPattern) {
 
-            if (operation.isExpense)
+            if (operationPattern.isExpense)
                 Expense_RadioButton.IsChecked = true;
             else Income_RadioButton.IsChecked = true;
 
-            CostValue.Text = NewOperation.toCurrencyString(operation.Cost);
-            acceptedCostValue = NewOperation.toCurrencyWithoutSymbolString(operation.Cost);
+            CostValue.Text = NewOperation.toCurrencyString(operationPattern.Cost);
+            acceptedCostValue = NewOperation.toCurrencyWithoutSymbolString(operationPattern.Cost);
             
-            NameValue.Text = operation.Title;
+            NameValue.Text = operationPattern.Title;
 
-            if (operation is Operation && !string.IsNullOrEmpty(((Operation)operation).Date))
-                DateValue.Date = DateTime.Parse(((Operation)operation).Date);
+            if (operationPattern is Operation && !string.IsNullOrEmpty(((Operation)operationPattern).Date)) {
+                Operation operation = (Operation)operationPattern;
+                DateValue.Date = DateTime.Parse(operation.Date);
+                HideInStatisticsToggle.IsOn = !operation.VisibleInStatistics;
+            }
 
-            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == operation.CategoryId);
-            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operation.SubCategoryId);
-            PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operation.MoneyAccountId);
+            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == operationPattern.CategoryId);
+            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operationPattern.SubCategoryId);
+            PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operationPattern.MoneyAccountId);
 
-            if (!string.IsNullOrEmpty(operation.MoreInfo))
-                MoreInfoValue.Text = operation.MoreInfo;
+            if (!string.IsNullOrEmpty(operationPattern.MoreInfo))
+                MoreInfoValue.Text = operationPattern.MoreInfo;
+           
 
             isLoaded = true;
         }
@@ -98,7 +102,8 @@ namespace Finanse.Dialogs {
                 CategoryId = getCategoryId(),
                 SubCategoryId = getSubCategoryId(),
                 MoreInfo = MoreInfoValue.Text,
-                MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
+                MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
+                VisibleInStatistics = !HideInStatisticsToggle.IsOn,
             };
         }
 
@@ -111,7 +116,7 @@ namespace Finanse.Dialogs {
                 CategoryId = getCategoryId(),
                 SubCategoryId = getSubCategoryId(),
                 MoreInfo = MoreInfoValue.Text,
-                MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag
+                MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
             };
         }
 
@@ -283,6 +288,10 @@ namespace Finanse.Dialogs {
         }
 
         private void MoreInfoValue_TextChanged(object sender, TextChangedEventArgs e) {
+            setPrimaryButtonEnabling();
+        }
+
+        private void HideInStatisticsToggle_Toggled(object sender, RoutedEventArgs e) {
             setPrimaryButtonEnabling();
         }
     }

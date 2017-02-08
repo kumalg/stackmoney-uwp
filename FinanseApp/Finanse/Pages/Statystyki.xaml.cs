@@ -60,17 +60,6 @@ namespace Finanse.Pages {
             }
         }
 
-        private ObservableCollection<ObservableCollection<ChartPart>> categoriesExpensesBySubCategory = new ObservableCollection<ObservableCollection<ChartPart>>();
-        public ObservableCollection<ObservableCollection<ChartPart>> CategoriesExpensesBySubCategory {
-            get {
-                return categoriesExpensesBySubCategory;
-            }
-            set {
-                categoriesExpensesBySubCategory = value;
-                RaisePropertyChanged("CategoriesExpensesBySubCategory");
-            }
-        }
-
         private ObservableCollection<ChartPart> incomesByCategory = new ObservableCollection<ChartPart>();
         public ObservableCollection<ChartPart> IncomesByCategory {
             get {
@@ -82,25 +71,25 @@ namespace Finanse.Pages {
             }
         }
 
-        private ObservableCollection<ChartPart> categoryExpensesBySubCategory = new ObservableCollection<ChartPart>();
-        public ObservableCollection<ChartPart> CategoryExpensesBySubCategory {
+        private ObservableCollection<ChartPart> operationsByCategory = new ObservableCollection<ChartPart>();
+        public ObservableCollection<ChartPart> OperationsByCategory {
             get {
-                return categoryExpensesBySubCategory;
+                return operationsByCategory;
             }
             set {
-                categoryExpensesBySubCategory = value;
-                RaisePropertyChanged("CategoryExpensesBySubCategory");
+                operationsByCategory = value;
+                RaisePropertyChanged("OperationsByCategory");
             }
         }
 
-        private ObservableCollection<SubCategoriesList> expensesFromCategoryGroupedBySubCategory = new ObservableCollection<SubCategoriesList>();
-        public ObservableCollection<SubCategoriesList> ExpensesFromCategoryGroupedBySubCategory {
+        private ObservableCollection<SubCategoriesList> categoriesGroupedBySubCategories = new ObservableCollection<SubCategoriesList>();
+        public ObservableCollection<SubCategoriesList> CategoriesGroupedBySubCategories {
             get {
-                return expensesFromCategoryGroupedBySubCategory;
+                return categoriesGroupedBySubCategories;
             }
             set {
-                expensesFromCategoryGroupedBySubCategory = value;
-                RaisePropertyChanged("ExpensesFromCategoryGroupedBySubCategory");
+                categoriesGroupedBySubCategories = value;
+                RaisePropertyChanged("CategoriesGroupedBySubCategories");
             }
         }
 
@@ -141,9 +130,28 @@ namespace Finanse.Pages {
             ExpensesToIncomes = statisticsData.getExpenseToIncomeComparsion();
             IncomesPercentageText = (100 * ExpensesToIncomes[1].RelativeValue).ToString("0") + "%";
 
-            ExpensesByCategory = statisticsData.getExpensesGroupedByCategoryInRange(minDate, maxDate);
-            IncomesByCategory = statisticsData.getIncomesGroupedByCategoryInRange(minDate, maxDate);
-            ExpensesFromCategoryGroupedBySubCategory = statisticsData.getExpensesFromCategoryGroupedBySubCategoryInRange();
+            if ((bool)ExpensesRadioButton.IsChecked)
+                setExpensesInGraphs();
+            else
+                setIncomesInGraphs();
+        }
+
+        private void ExpensesRadioButton_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
+            setExpensesInGraphs();
+        }
+
+        private void IncomeRadioButton_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
+            setIncomesInGraphs();
+        }
+
+        private void setExpensesInGraphs() {
+            OperationsByCategory = statisticsData.getExpensesGroupedByCategoryInRange(minDate, maxDate);
+            CategoriesGroupedBySubCategories = statisticsData.getExpensesFromCategoryGroupedBySubCategoryInRange();
+        }
+
+        private void setIncomesInGraphs() {
+            OperationsByCategory = statisticsData.getIncomesGroupedByCategoryInRange(minDate, maxDate);
+            CategoriesGroupedBySubCategories = statisticsData.getIncomesFromCategoryGroupedBySubCategoryInRange();
         }
     }
 }

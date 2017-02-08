@@ -68,7 +68,7 @@ namespace Finanse.Pages {
         private async void EditCategory_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
             CategoryWithSubCategories thisCategorys = (CategoryWithSubCategories)datacontext;
-            var ContentDialogItem = new NewCategoryContentDialogNew(thisCategorys.Category);
+            var ContentDialogItem = new NewCategoryContentDialog(thisCategorys.Category);
             var result = await ContentDialogItem.ShowAsync();
 
             if (result == ContentDialogResult.Primary) {
@@ -109,7 +109,7 @@ namespace Finanse.Pages {
         private async void EditSubCategory_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
             OperationSubCategory thisSubCategory = (OperationSubCategory)datacontext;
-            var ContentDialogItem = new NewCategoryContentDialogNew(thisSubCategory);
+            var ContentDialogItem = new NewCategoryContentDialog(thisSubCategory);
             var result = await ContentDialogItem.ShowAsync();
 
             if (result == ContentDialogResult.Primary) {
@@ -176,7 +176,7 @@ namespace Finanse.Pages {
             object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
             CategoryWithSubCategories categoryWithSubCategories = (CategoryWithSubCategories)datacontext;
 
-            NewCategoryContentDialogNew ContentDialogItem = new NewCategoryContentDialogNew(categoryWithSubCategories.Category.Id);
+            NewCategoryContentDialog ContentDialogItem = new NewCategoryContentDialog(categoryWithSubCategories.Category.Id);
             ContentDialogResult result = await ContentDialogItem.ShowAsync();
 
             if (result == ContentDialogResult.Primary)
@@ -184,7 +184,7 @@ namespace Finanse.Pages {
         }
 
         private async void NewCategory_Click(object sender, RoutedEventArgs e) {
-            NewCategoryContentDialogNew ContentDialogItem = new NewCategoryContentDialogNew();
+            NewCategoryContentDialog ContentDialogItem = new NewCategoryContentDialog();
             ContentDialogResult result = await ContentDialogItem.ShowAsync();
 
             if (result == ContentDialogResult.Primary)

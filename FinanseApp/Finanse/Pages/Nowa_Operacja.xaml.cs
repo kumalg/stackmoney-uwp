@@ -39,6 +39,7 @@ namespace Finanse.Pages {
             PayFormValue.SelectedIndex = 0;
             MoreInfoValue.Text = string.Empty;
             SaveAsAssetToggle.IsOn = false;
+            HideInStatisticsToggle.IsOn = false;
             Expense_RadioButton.IsChecked = true;
         }
 
@@ -283,6 +284,7 @@ namespace Finanse.Pages {
             Operation operation = getNewOperationPattern().toOperation();
             operation.isExpense = isExpense;
             operation.Date = DateValue.Date == null ? string.Empty : DateValue.Date.Value.ToString("yyyy.MM.dd");
+            operation.VisibleInStatistics = !HideInStatisticsToggle.IsOn;
             return operation;
         }
 

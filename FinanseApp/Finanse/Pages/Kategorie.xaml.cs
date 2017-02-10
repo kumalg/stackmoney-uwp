@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -16,8 +17,8 @@ namespace Finanse.Pages {
 
     public sealed partial class Kategorie : Page, INotifyPropertyChanged {
 
-        private ObservableCollection<OperationCategory> operationCategories;
-        private ObservableCollection<OperationCategory> OperationCategories {
+        private ObservableCollection<CategoryWithSubCategories> operationCategories;
+        private ObservableCollection<CategoryWithSubCategories> OperationCategories {
             get {
                 return operationCategories;
             }
@@ -38,6 +39,39 @@ namespace Finanse.Pages {
             }
         }
 
+
+
+        private ObservableCollection<CategoryWithSubCategories> expenseCategories;
+        private ObservableCollection<CategoryWithSubCategories> ExpenseCategories {
+            get {
+                if (expenseCategories == null)
+                    expenseCategories = new ObservableCollection<CategoryWithSubCategories>(Dal.getOperationCategoriesWithSubCategoriesInExpenses());
+
+                return expenseCategories;
+            }
+            set {
+                expenseCategories = value;
+                RaisePropertyChanged("ExpenseCategories");
+            }
+        }
+
+        private ObservableCollection<CategoryWithSubCategories> incomeCategories;
+        private ObservableCollection<CategoryWithSubCategories> IncomeCategories {
+            get {
+                if (incomeCategories == null)
+                    incomeCategories = new ObservableCollection<CategoryWithSubCategories>(Dal.getOperationCategoriesWithSubCategoriesInIncomes());
+
+                return incomeCategories;
+            }
+            set {
+                incomeCategories = value;
+                RaisePropertyChanged("IncomeCategories");
+            }
+        }
+
+
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void RaisePropertyChanged(string propertyName) {
@@ -49,6 +83,7 @@ namespace Finanse.Pages {
 
         public Kategorie() {
             this.InitializeComponent();
+            OperationCategories = ExpenseCategories;
         }
 
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
@@ -88,19 +123,33 @@ namespace Finanse.Pages {
                 SubCategories = categoryWithSubCategories.SubCategories
             };
 
-            int index = OperationCategoriesTest.IndexOf(categoryWithSubCategories);
-            OperationCategoriesTest.Remove(categoryWithSubCategories);
+            int indexInExpenses = -1, indexInIncomes = -1;
 
+            if (categoryWithSubCategories.Category.VisibleInExpenses)
+                indexInExpenses = ExpenseCategories.IndexOf(categoryWithSubCategories);
+            if (categoryWithSubCategories.Category.VisibleInIncomes)
+                indexInIncomes = IncomeCategories.IndexOf(categoryWithSubCategories);
+
+            //   int index = OperationCategoriesTest.IndexOf(categoryWithSubCategories);
+            // OperationCategoriesTest.Remove(categoryWithSubCategories);
+            tryRemoveCategoryWithSubCategoriesInList(categoryWithSubCategories);
+            tryInsertCategoryWithSubCategoriesInList(indexInExpenses, indexInIncomes, newCategoryWithSubCategorie);
+
+            /*
             if (isCategoryVisibleInCurrentView(category))
                 OperationCategoriesTest.Insert(index, newCategoryWithSubCategorie);
+                */
 
             Dal.updateOperationCategory(category);
         }
 
         private void updateCategory(CategoryWithSubCategories categoryWithSubCategories, OperationSubCategory subCategory) {
+            /*
             OperationCategoriesTest
                 .Remove(categoryWithSubCategories);
-            tryAddSubCategoryToList(subCategory);
+                */
+            tryRemoveCategoryWithSubCategoriesInList(categoryWithSubCategories);
+            tryAddSubCategoryInList(subCategory);
 
             Dal.deleteCategoryWithSubCategories(categoryWithSubCategories.Category.Id);
             Dal.addOperationSubCategory(subCategory);
@@ -123,24 +172,22 @@ namespace Finanse.Pages {
         }
 
         private void updateSubCategory(OperationSubCategory oldSubCategory, OperationCategory category) {
+            /*
             OperationCategoriesTest
                 .FirstOrDefault(item => item.Category.Id == oldSubCategory.BossCategoryId)
                 .SubCategories
                 .Remove(oldSubCategory);
-
-            tryAddCategoryToList(category);
+                */
+            tryRemoveSubCategoryInList(oldSubCategory);
+            tryAddCategoryInList(category);
 
             Dal.deleteSubCategory(category.Id);
             Dal.addOperationCategory(category);
         }
 
         private void updateSubCategory(OperationSubCategory oldSubCategory, OperationSubCategory subCategory) {
-            OperationCategoriesTest
-                .FirstOrDefault(item => item.Category.Id == oldSubCategory.BossCategoryId)
-                .SubCategories
-                .Remove(oldSubCategory);
-
-            tryAddSubCategoryToList(subCategory);
+            tryRemoveSubCategoryInList(oldSubCategory);
+            tryAddSubCategoryInList(subCategory);
             Dal.updateOperationSubCategory(subCategory);
         }
 
@@ -152,7 +199,8 @@ namespace Finanse.Pages {
             ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
 
             if (result == ContentDialogResult.Primary) {
-                OperationCategoriesTest.Remove(OperationCategoriesTest.FirstOrDefault(item => item.Category == category));
+                //OperationCategoriesTest.Remove(OperationCategoriesTest.FirstOrDefault(item => item.Category == category));
+                tryRemoveCategoryInList(category);
                 Dal.deleteCategoryWithSubCategories(category.Id);
             }
         }
@@ -165,9 +213,12 @@ namespace Finanse.Pages {
             ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
 
             if (result == ContentDialogResult.Primary) {
+                /*
                 OperationCategoriesTest
                     .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
                         .SubCategories.Remove(subCategory);
+                        */
+                tryRemoveSubCategoryInList(subCategory);
                 Dal.deleteSubCategory(subCategory.Id);
             }
         }
@@ -193,31 +244,81 @@ namespace Finanse.Pages {
 
         private void addNewCategoryOrSubCategoryToListAndSQL(OperationCategory newCategoryOrSubCategory) {
             if (newCategoryOrSubCategory is OperationSubCategory) {
-                tryAddSubCategoryToList((OperationSubCategory)newCategoryOrSubCategory);
+                tryAddSubCategoryInList((OperationSubCategory)newCategoryOrSubCategory);
                 Dal.addOperationSubCategory((OperationSubCategory)newCategoryOrSubCategory);
             }
             else {
-                tryAddCategoryToList(newCategoryOrSubCategory);
+                tryAddCategoryInList(newCategoryOrSubCategory);
                 Dal.addOperationCategory(newCategoryOrSubCategory);
             }
         }
 
-        private void tryAddSubCategoryToList(OperationSubCategory subCategory) {
-            if (isCategoryVisibleInCurrentView(subCategory)) {
+        private void tryRemoveSubCategoryInList(OperationSubCategory subCategory) {
+            if (subCategory.VisibleInExpenses)
+                ExpenseCategories
+                    .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
+                    .SubCategories
+                    .Remove(subCategory);
 
-                OperationCategoriesTest
+            if (subCategory.VisibleInIncomes)
+                IncomeCategories
+                    .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
+                    .SubCategories
+                    .Remove(subCategory);
+        }
+
+        private void tryAddSubCategoryInList(OperationSubCategory subCategory) {
+            if (subCategory.VisibleInExpenses)
+                ExpenseCategories
                     .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
                     .SubCategories.Insert(0, subCategory);
+
+            if (subCategory.VisibleInIncomes)
+                IncomeCategories
+                    .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
+                    .SubCategories.Insert(0, subCategory);
+        }
+
+        private void tryRemoveCategoryWithSubCategoriesInList(CategoryWithSubCategories categoryWithSubCategories) {
+            if (categoryWithSubCategories.Category.VisibleInExpenses)
+                ExpenseCategories.Remove(categoryWithSubCategories);
+
+            if (categoryWithSubCategories.Category.VisibleInIncomes)
+                IncomeCategories.Remove(categoryWithSubCategories);
+        }
+
+        private void tryRemoveCategoryInList(OperationCategory operationCategory) {
+            if (operationCategory.VisibleInExpenses)
+                ExpenseCategories.Remove(ExpenseCategories.FirstOrDefault(i => i.Category.Id == operationCategory.Id));
+
+            if (operationCategory.VisibleInIncomes)
+                IncomeCategories.Remove(ExpenseCategories.FirstOrDefault(i => i.Category.Id == operationCategory.Id));
+        }
+
+        private void tryInsertCategoryWithSubCategoriesInList(int indexInExpenses, int indexInIncomes, CategoryWithSubCategories categoryWithSubCategories) {
+            if (categoryWithSubCategories.Category.VisibleInExpenses) {
+                if (indexInExpenses == -1)
+                    indexInExpenses = 0;
+                ExpenseCategories.Insert(indexInExpenses, categoryWithSubCategories);
+            }
+
+            if (categoryWithSubCategories.Category.VisibleInIncomes) {
+                if (indexInIncomes == -1)
+                    indexInIncomes = 0;
+                IncomeCategories.Insert(indexInIncomes, categoryWithSubCategories);
             }
         }
-        
-        private void tryAddCategoryToList(OperationCategory category) {
-            if (isCategoryVisibleInCurrentView(category)) {
 
-                OperationCategoriesTest.Insert(0, new CategoryWithSubCategories {
+        private void tryAddCategoryInList(OperationCategory category) {
+            if (category.VisibleInExpenses)
+                ExpenseCategories.Insert(0, new CategoryWithSubCategories {
                     Category = category
                 });
-            }
+
+            if (category.VisibleInIncomes)
+                IncomeCategories.Insert(0, new CategoryWithSubCategories {
+                    Category = category
+                });
         }
 
         private bool isCategoryVisibleInCurrentView(OperationCategory category) {
@@ -226,12 +327,14 @@ namespace Finanse.Pages {
         }
 
 
-        private void RadioButton_Checked(object sender, RoutedEventArgs e) {
-            OperationCategoriesTest = new ObservableCollection<CategoryWithSubCategories>(Dal.getOperationCategoriesWithSubCategoriesInExpenses());
+        private async void RadioButton_Checked(object sender, RoutedEventArgs e) {
+            await Task.Delay(5);
+            OperationCategories = ExpenseCategories;
         }
 
-        private void RadioButton_Checked_1(object sender, RoutedEventArgs e) {
-            OperationCategoriesTest = new ObservableCollection<CategoryWithSubCategories>(Dal.getOperationCategoriesWithSubCategoriesInIncomes());
+        private async void RadioButton_Checked_1(object sender, RoutedEventArgs e) {
+            await Task.Delay(5);
+            OperationCategories = IncomeCategories;
         }
 
         private void SubOperacjeListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {

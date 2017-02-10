@@ -51,9 +51,9 @@
                 Grid.Column="1"
                 Click="NewMoneyAccount_Click">
                 <FontIcon
-                    FontSize="24"
+                    FontSize="16"
                     Foreground="{ThemeResource AccentText}"
-                    Glyph="" />
+                    Glyph="" />
             </Button>
         </Grid>
         <ListView

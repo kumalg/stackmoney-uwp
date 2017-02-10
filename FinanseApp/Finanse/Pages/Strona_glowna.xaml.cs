@@ -34,6 +34,8 @@ namespace Finanse.Pages {
             set {
                 _operationGroups = value;
                 RaisePropertyChanged("operationGroups");
+                RaisePropertyChanged("ActualOperationsSum");
+                RaisePropertyChanged("ActualMonthText");
             }
         }
         private DateTime actualYearAndMonth;
@@ -58,8 +60,6 @@ namespace Finanse.Pages {
                 else
                     listViewByCategory();
 
-                setActualMonthText();
-                setActualMoneyBar();
                 setEmptyListViewInfoVisibility();
                 
                 base.OnNavigatedTo(e);
@@ -84,6 +84,30 @@ namespace Finanse.Pages {
             var handler = PropertyChanged;
             if (handler != null)
                 handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+        
+        private string ActualOperationsSum {
+            get {
+                decimal actualMoney = operationGroups.Sum(i => i.decimalCost);
+                return actualMoney.ToString("C", Settings.getActualCultureInfo());
+            }
+        }
+
+        private string ActualMonthText {
+            get {
+                string actualMonthText = string.Empty;
+                if (!isFutureMonth(actualYearAndMonth)) {
+                    actualMonthText = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualYearAndMonth.Month).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualYearAndMonth.Month).Substring(1);
+                    if (actualYearAndMonth.Year != DateTime.Today.Year)
+                        actualMonthText += " " + actualYearAndMonth.Year.ToString();
+                }
+                else {
+                    var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+                    actualMonthText = loader.GetString("plannedString");
+                }
+
+                return actualMonthText;
+            }
         }
 
         public Strona_glowna() {
@@ -116,9 +140,7 @@ namespace Finanse.Pages {
 
             ByDateRadioButton.Checked += ByDateRadioButton_Checked;
             ByCategoryRadioButton.Checked += ByCategoryRadioButton_Checked;
-
-            setActualMonthText();
-            setActualMoneyBar();
+            
             setEmptyListViewInfoVisibility();
 
             VisibleAccountsFlyout.Closed += delegate {
@@ -150,34 +172,15 @@ namespace Finanse.Pages {
         }
 
         private bool isFutureMonth(DateTime date) {
-            return date > new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1); //(actualYearAndMonth.Month <= DateTime.Today.Month && actualYearAndMonth.Year == DateTime.Today.Year) || actualYearAndMonth.Year < DateTime.Today.Year;
+            return date > new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
         }
 
         private OperationData setStoreData() {
             return new OperationData(actualYearAndMonth.Month, actualYearAndMonth.Year, isFutureMonth(actualYearAndMonth), visibleAccountsSet);
         }
-
-        private void setActualMonthText() {
-
-            if (!isFutureMonth(actualYearAndMonth)) {
-                actualMonthText.Text = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualYearAndMonth.Month).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualYearAndMonth.Month).Substring(1);
-                if (actualYearAndMonth.Year != DateTime.Today.Year)
-                    actualMonthText.Text += " " + actualYearAndMonth.Year.ToString();
-            } else {
-                var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
-                actualMonthText.Text = loader.GetString("plannedString");
-            }
-        }
-
+        
         private void groupOperations(ObservableCollection<GroupInfoList<Operation>> operationGroupsTYMCZASOWO, OperationData operations) {
-            operationGroups = (bool)ByDateRadioButton.IsChecked ? operations.GroupsByDay : operations.GroupsByCategory;
-            /*
-            operationGroups.Clear();
-
-            foreach (var s in (bool)ByDateRadioButton.IsChecked ? operations.GroupsByDay : operations.GroupsByCategory)
-                operationGroups.Add(s);
-            */
-                
+            operationGroups = (bool)ByDateRadioButton.IsChecked ? operations.GroupsByDay : operations.GroupsByCategory;               
         }
         
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
@@ -222,7 +225,7 @@ namespace Finanse.Pages {
 
             if (result == ContentDialogResult.Primary) {
                 updateOperationInList(operation, editOperationContentDialog.editedOperation());
-                setActualMoneyBar();
+                RaisePropertyChanged("ActualOperationsSum");
             }
         }
         
@@ -235,14 +238,15 @@ namespace Finanse.Pages {
 
             ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
 
-            if (result == ContentDialogResult.Primary)
+            if (result == ContentDialogResult.Primary) {
                 deleteOperation_DialogButtonClick(operation);
+                RaisePropertyChanged("ActualOperationsSum");
+            }
         }
 
         private void deleteOperation_DialogButtonClick(Operation operation) {
             removeOperationFromList(operation);
             Dal.deleteOperation(operation);
-            setActualMoneyBar();
         }
         
         private void updateOperationInList(Operation previous, Operation actual) {
@@ -269,10 +273,12 @@ namespace Finanse.Pages {
             if (!operation.Date.Equals(""))
                 index = operationGroups.IndexOf(operationGroups.First(i => ((GroupHeaderByDay)i.Key).date == operation.Date));
 
-            if (operationGroups.ElementAt(index).Count > 1)
+            if (operationGroups.ElementAt(index).Count > 1) {
                 operationGroups.ElementAt(index).Remove(operation);
-            else
+            }
+            else {
                 operationGroups.RemoveAt(index);
+            }
         }
 
         private void tryAddOperationToListByDay(Operation operation) {
@@ -294,7 +300,8 @@ namespace Finanse.Pages {
             }
             else if (Convert.ToDateTime(operation.Date).Month == actualYearAndMonth.Month && Convert.ToDateTime(operation.Date).Year == actualYearAndMonth.Year) {
                 if (operationGroups.Any(i => ((GroupHeaderByDay)i.Key).date == operation.Date)) {
-                    operationGroups.First(i => ((GroupHeaderByDay)i.Key).date == operation.Date).Insert(0, operation);
+                    GroupInfoList<Operation> group = operationGroups.First(i => ((GroupHeaderByDay)i.Key).date == operation.Date);//.Insert(0, operation);
+                    group.Insert(0, operation);
                 }
                 else {
                     GroupInfoList<Operation> group = new GroupInfoList<Operation>() {
@@ -409,15 +416,12 @@ namespace Finanse.Pages {
         private void setListOfOperations(HashSet<int> visiblePayFormList) {
 
             storeData = setStoreData();
-            setActualMonthText();
             groupOperations(operationGroups, storeData);
 
             // if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
             if ((bool)ByDateRadioButton.IsChecked)
                 (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
-
-            setActualMoneyBar();
-
+            
             setNextMonthButtonEnabling();
             setPreviousMonthButtonEnabling();
 
@@ -457,14 +461,6 @@ namespace Finanse.Pages {
                 Convert.ToDateTime(eldestOperation.Date) < actualYearAndMonth;
         }
 
-        private void setActualMoneyBar() {
-            decimal actualMoney = 0;
-
-            foreach (var group in operationGroups)
-                actualMoney += group.decimalCost;
-
-            ActualMoneyBar.Text = actualMoney.ToString("C", Settings.getActualCultureInfo());
-        }
 
         private void listViewByDate() {
             OperacjeListView.GroupStyle.Clear();

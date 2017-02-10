@@ -6,6 +6,203 @@
     xmlns:models="using:Finanse.Models"
     mc:Ignorable="d">
 
+    <Style x:Key="RadioButtonLikeButtonStyle" TargetType="RadioButton">
+        <Setter
+            Property="Margin"
+            Value="8" />
+        <Setter
+            Property="Background"
+            Value="{ThemeResource RadioButtonBackground}" />
+        <Setter
+            Property="Foreground"
+            Value="{ThemeResource RadioButtonForeground}" />
+        <Setter
+            Property="BorderBrush"
+            Value="{ThemeResource RadioButtonBorderBrush}" />
+        <Setter
+            Property="Padding"
+            Value="32,0" />
+        <Setter
+            Property="HorizontalAlignment"
+            Value="Left" />
+        <Setter
+            Property="VerticalAlignment"
+            Value="Center" />
+        <Setter
+            Property="HorizontalContentAlignment"
+            Value="Center" />
+        <Setter
+            Property="VerticalContentAlignment"
+            Value="Center" />
+        <Setter
+            Property="FontFamily"
+            Value="{StaticResource DefaultFontFamily}" />
+        <Setter
+            Property="FontSize"
+            Value="{ThemeResource ControlContentThemeFontSize}" />
+        <Setter
+            Property="MinWidth"
+            Value="40" />
+        <Setter
+            Property="UseSystemFocusVisuals"
+            Value="True" />
+        <Setter
+            Property="FocusVisualMargin"
+            Value="0" />
+        <Setter
+            Property="Height"
+            Value="40" />
+        <Setter
+            Property="Foreground"
+            Value="{ThemeResource Text-1}" />
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="RadioButton">
+                    <Grid
+                        Height="{TemplateBinding Height}"
+                        x:Name="RootGrid"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Background="{ThemeResource Background+1}">
+
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup
+                                x:Name="CommonStates">
+
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition
+                                        From="Normal"
+                                        To="PointerOver"
+                                        GeneratedDuration="0:0:0.2" />
+
+                                    <VisualTransition
+                                        From="PointerOver"
+                                        To="Normal"
+                                        GeneratedDuration="0:0:0.2" />
+                                    <VisualTransition
+                                        From="PointerOver"
+                                        To="Pressed"
+                                        GeneratedDuration="0:0:0.2" />
+                                    <VisualTransition
+                                        From="PointerOver"
+                                        To="Checked"
+                                        GeneratedDuration="0:0:0.2" />
+                                    <!-- tu kłopot gdy jest checked i pointer over leci (czemu na odwrót?) -->
+                                    <VisualTransition
+                                        From="PointerOver"
+                                        To="Disabled"
+                                        GeneratedDuration="0:0:0.2" />
+
+                                    <VisualTransition
+                                        From="Pressed"
+                                        To="PointerOver"
+                                        GeneratedDuration="0:0:0.2" />
+                                    <VisualTransition
+                                        From="Pressed"
+                                        To="Normal"
+                                        GeneratedDuration="0:0:0.2" />
+                                    <VisualTransition
+                                        From="Pressed"
+                                        To="Checked"
+                                        GeneratedDuration="0" />
+                                    <VisualTransition
+                                        From="Pressed"
+                                        To="Disabled"
+                                        GeneratedDuration="0:0:0.2" />
+
+                                    <VisualTransition
+                                        From="Checked"
+                                        To="PointerOver"
+                                        GeneratedDuration="0" />
+                                    <VisualTransition
+                                        From="Checked"
+                                        To="Pressed"
+                                        GeneratedDuration="0:0:0.2" />
+                                    <VisualTransition
+                                        From="Checked"
+                                        To="Normal"
+                                        GeneratedDuration="0:0:0.2" />
+                                    <VisualTransition
+                                        From="Checked"
+                                        To="Disabled"
+                                        GeneratedDuration="0:0:0.2" />
+                                </VisualStateGroup.Transitions>
+
+                                <VisualState
+                                    x:Name="Normal" />
+                                <VisualState
+                                    x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ColorAnimation
+                                            Storyboard.TargetName="ContentPresenter"
+                                            To="{Binding Source={ThemeResource AccentText},Path=Color}"
+                                            Duration="0"
+                                            Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="RootGrid"
+                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                            Duration="0"
+                                            Storyboard.TargetProperty="(Grid.Background).(SolidColorBrush.Color)" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState
+                                    x:Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimation
+                                            Storyboard.TargetName="ContentPresenter"
+                                            To="{Binding Source={ThemeResource AccentText},Path=Color}"
+                                            Duration="0"
+                                            Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="RootGrid"
+                                            To="{Binding Source={ThemeResource AccentColor+1},Path=Color}"
+                                            Duration="0"
+                                            Storyboard.TargetProperty="(Grid.Background).(SolidColorBrush.Color)" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState
+                                    x:Name="Disabled">
+                                    <Storyboard>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState
+                                    x:Name="Checked">
+                                    <Storyboard>
+                                        <ColorAnimation
+                                            Storyboard.TargetName="ContentPresenter"
+                                            To="{Binding Source={ThemeResource AccentText},Path=Color}"
+                                            Duration="0"
+                                            Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="RootGrid"
+                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                            Duration="0"
+                                            Storyboard.TargetProperty="(Grid.Background).(SolidColorBrush.Color)" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <ContentPresenter
+                            x:Name="ContentPresenter"
+                            AutomationProperties.AccessibilityView="Raw"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            ContentTransitions="{TemplateBinding ContentTransitions}"
+                            Content="{TemplateBinding Content}"
+                            Grid.Column="1"
+                            Foreground="{TemplateBinding Foreground}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            Margin="{TemplateBinding Padding}"
+                            TextWrapping="Wrap"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <Style x:Key="HamburgerRadioButton" TargetType="RadioButton">
         <Setter Property="Background" Value="Transparent" />

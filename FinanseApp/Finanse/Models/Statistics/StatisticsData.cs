@@ -110,7 +110,7 @@ namespace Finanse.Models {
                     OperationCategory operationCategory = Dal.getOperationCategoryById(item.CategoryId);
 
                     SubCategoriesList itemList = new SubCategoriesList {
-                        Name = operationCategory.Name
+                        Category = operationCategory
                     };
                     
                     decimal groupySum = item.SubCategories.Sum(i => i.Cost);
@@ -163,7 +163,7 @@ namespace Finanse.Models {
                     OperationCategory operationCategory = Dal.getOperationCategoryById(item.CategoryId);
 
                     SubCategoriesList itemList = new SubCategoriesList {
-                        Name = operationCategory.Name
+                        Category = operationCategory
                     };
 
                     decimal groupySum = item.SubCategories.Sum(i => i.Cost);

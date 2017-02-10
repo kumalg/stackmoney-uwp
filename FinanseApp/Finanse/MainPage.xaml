@@ -361,7 +361,6 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <RadioButton
-                        IsChecked="True"
                         GroupName="MenuButtons"
                         x:Name="OperationsAppBarRadioButton"
                         Height="40"
@@ -490,7 +489,6 @@
                 <StackPanel>
 
                     <RadioButton
-                        IsChecked="True"
                         Name="Strona_glowna_ListBoxItem"
                         Checked="OperationsAppBarRadioButton_Checked"
                         GroupName="HamburgerRadioButtons"

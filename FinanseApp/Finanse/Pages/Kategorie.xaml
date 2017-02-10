@@ -19,8 +19,157 @@
         </TransitionCollection>
     </Page.Transitions>
 
+    <Page.Resources>
+        <DataTemplate
+            x:Key="CategoryWithSubCategoriesItemTemplate"
+            x:DataType="categories:CategoryWithSubCategories">
+            <Grid
+                Background="Transparent">
+
+                <StackPanel
+                    Margin="0,8">
+
+                    <StackPanel
+                        Background="Transparent"
+                        Tapped="StackPanel_Tapped"
+                        RightTapped="ExpandPanel_RightTapped">
+
+                        <FlyoutBase.AttachedFlyout>
+                            <MenuFlyout
+                                MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
+                                <MenuFlyoutItem
+                                    x:Name="EditCatButton"
+                                    Style="{StaticResource MyMenuFlyoutItem}"
+                                    Tag="&#xE104;"
+                                    Text="Edytuj"
+                                    Click="EditCategory_Click" />
+                                <MenuFlyoutItem
+                                    x:Name="DeleteCatButton"
+                                    Style="{StaticResource MyMenuFlyoutItem}"
+                                    Tag="&#xE107;"
+                                    Text="Usuń"
+                                    Click="DeleteCategory_Click" />
+                                <MenuFlyoutSeparator />
+                                <MenuFlyoutItem
+                                    x:Name="AddSubCatButton"
+                                    Style="{StaticResource MyMenuFlyoutItem}"
+                                    Tag="&#xE109;"
+                                    Text="Dodaj podkategorię"
+                                    Click="AddSubCat_Click" />
+                            </MenuFlyout>
+                        </FlyoutBase.AttachedFlyout>
+
+                        <Button
+                            Margin="0"
+                            Padding="0"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            Background="Transparent">
+                            <data:OperationCategoryTemplate
+                                DataContext="{x:Bind Category}" />
+                        </Button>
+
+                    </StackPanel>
+
+                    <ListView
+                        ScrollViewer.VerticalScrollMode="Disabled"
+                        Name="SubOperacjeListView"
+                        ItemsSource="{x:Bind SubCategories, Mode=OneWay}"
+                        MaxWidth="620"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        SelectionChanged="SubOperacjeListView_SelectionChanged"
+                        SelectionMode="Single">
+
+                        <ListView.ItemContainerStyle>
+                            <Style
+                                TargetType="ListViewItem">
+                                <Setter
+                                    Property="HorizontalContentAlignment"
+                                    Value="Stretch" />
+                                <Setter
+                                    Property="Padding"
+                                    Value="0" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate
+                                x:DataType="models:OperationSubCategory">
+                                <Grid
+                                    Tapped="Grid_Tapped"
+                                    RightTapped="Grid_RightTapped">
+
+                                    <FlyoutBase.AttachedFlyout>
+                                        <MenuFlyout
+                                            MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
+                                            <MenuFlyoutItem
+                                                x:Name="EditSubCatButton"
+                                                Style="{StaticResource MyMenuFlyoutItem}"
+                                                Tag="&#xE104;"
+                                                Text="Edytuj"
+                                                Click="EditSubCategory_Click" />
+                                            <MenuFlyoutItem
+                                                x:Name="DeleteSubCatButton"
+                                                Style="{StaticResource MyMenuFlyoutItem}"
+                                                Tag="&#xE107;"
+                                                Text="Usuń"
+                                                Click="DeleteSubCategory_Click" />
+                                        </MenuFlyout>
+                                    </FlyoutBase.AttachedFlyout>
+
+                                    <data:OperationSubCategoryTemplate />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+
+                </StackPanel>
+
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
     <Grid
         Background="Transparent">
+
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState
+                    x:Name="ThinWindow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger
+                            MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter
+                            Target="OperationCategoriesStackPanel.Visibility"
+                            Value="Visible" />
+                        <Setter
+                            Target="SeparatedOperationCategoriesGrid.Visibility"
+                            Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState
+                    x:Name="WideWindow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger
+                            MinWindowWidth="700" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter
+                            Target="SeparatedOperationCategoriesGrid.Visibility"
+                            Value="Visible" />
+                        <Setter
+                            Target="OperationCategoriesStackPanel.Visibility"
+                            Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
 
         <Grid.RowDefinitions>
             <RowDefinition
@@ -56,212 +205,256 @@
                 Grid.Column="1"
                 Click="NewCategory_Click">
                 <FontIcon
-                    FontSize="24"
+                    FontSize="16"
                     Foreground="{ThemeResource AccentText}"
-                    Glyph="" />
+                    Glyph="" />
             </Button>
         </Grid>
         <ProgressRing
             x:Name="LoadingIndicator" />
-        <Grid
-            Background="{ThemeResource Background-1}"
-            Grid.Row="1"
-            Height="48">
-            <Grid
-                MaxWidth="600">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="*" />
-                    <ColumnDefinition
-                        Width="*" />
-                </Grid.ColumnDefinitions>
-                <RadioButton
-                    Name="ExpenseRadioButton"
-                    GroupName="CategoryExpenseOrIncomeRadioButtons"
-                    HorizontalAlignment="Center"
-                    IsChecked="True"
-                    Checked="RadioButton_Checked"
-                    Style="{StaticResource MyRadioButtonStyle}">
-                    <TextBlock
-                        Text="Wydatki"
-                        x:Uid="expenses" />
-                </RadioButton>
-                <RadioButton
-                    Name="IncomeRadioButton"
-                    GroupName="CategoryExpenseOrIncomeRadioButtons"
-                    Grid.Column="1"
-                    HorizontalAlignment="Center"
-                    Checked="RadioButton_Checked_1"
-                    Style="{StaticResource MyRadioButtonStyle}">
-                    <TextBlock
-                        Text="Wpływy"
-                        x:Uid="incomes" />
-                </RadioButton>
-            </Grid>
-        </Grid>
 
         <ScrollViewer
             Grid.Row="2"
             VerticalScrollBarVisibility="Auto"
             HorizontalScrollBarVisibility="Disabled">
 
-            <StackPanel>
+            <Grid>
 
-                <TextBlock
-                    Text=""
-                    Name="Lista" />
-
-                <ListView
-                    FlowDirection="LeftToRight"
-                    Padding="0,0,0,0"
-                    ScrollViewer.VerticalScrollMode="Disabled"
-                    Name="OperacjeListView"
-                    ItemsSource="{x:Bind OperationCategoriesTest, Mode=OneWay}"
-                    SelectionMode="None"
-                    MaxWidth="620"
-                    BorderThickness="0"
-                    Background="Transparent">
-
-                    <ListView.ItemContainerStyle>
-                        <Style
-                            TargetType="ListViewItem">
-                            <!--
-                            <Setter
-                                Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate
-                                        TargetType="ListViewItem">
-                                        <ListViewItemPresenter
-                                            PointerOverBackground="Transparent"
-                                            PressedBackground="Transparent" />
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            -->
-                            <Setter
-                                Property="HorizontalContentAlignment"
-                                Value="Stretch" />
-                            <Setter
-                                Property="Padding"
-                                Value="0" />
-                        </Style>
-                    </ListView.ItemContainerStyle>
-
-                    <ListView.ItemTemplate>
-                        <DataTemplate
-                            x:DataType="categories:CategoryWithSubCategories">
-                            <Grid
+                <StackPanel
+                    x:DeferLoadStrategy="Lazy"
+                    Visibility="Collapsed"
+                    Name="OperationCategoriesStackPanel">
+                    <!--
+                    <Grid
+                        Background="{ThemeResource AccentColor}"
+                        Height="48">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid
+                            Background="{ThemeResource AccentColor+1}">
+                            <TextBlock
+                                Foreground="{ThemeResource AccentText}"
+                                Text="Wydatki"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+                        </Grid>
+                        <TextBlock
+                            Grid.Column="1"
+                            Foreground="{ThemeResource AccentText}"
+                            Text="Wpływy"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" />
+                    </Grid>
+-->
+                    <Pivot>
+                        <PivotItem>
+                            <PivotItem.Header>
+                                <TextBlock
+                                    Opacity="0.6"
+                                    FontSize="20"
+                                    FontFamily="{StaticResource DefaultFontFamily}"
+                                    HorizontalAlignment="Center"
+                                    Text="Wydatki" />
+                            </PivotItem.Header>
+                            <ListView
+                                Grid.Row="1"
+                                HorizontalContentAlignment="Right"
+                                FlowDirection="LeftToRight"
+                                Padding="0"
+                                ScrollViewer.VerticalScrollMode="Disabled"
+                                ItemsSource="{x:Bind ExpenseCategories, Mode=OneWay}"
+                                ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
+                                SelectionMode="None"
+                                MaxWidth="620"
+                                BorderThickness="0"
                                 Background="Transparent">
+                                <ListView.ItemContainerStyle>
+                                    <Style
+                                        TargetType="ListViewItem">
+                                        <Setter
+                                            Property="HorizontalContentAlignment"
+                                            Value="Stretch" />
+                                        <Setter
+                                            Property="Padding"
+                                            Value="0" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </PivotItem>
 
-                                <StackPanel
-                                    Margin="0,8">
+                        <PivotItem>
+                            <PivotItem.Header>
+                                <TextBlock
+                                    Opacity="0.6"
+                                    FontSize="20"
+                                    FontFamily="{StaticResource DefaultFontFamily}"
+                                    HorizontalAlignment="Center"
+                                    Text="Wpływy" />
+                            </PivotItem.Header>
+                            <ListView
+                                Grid.Row="1"
+                                HorizontalContentAlignment="Right"
+                                FlowDirection="LeftToRight"
+                                Padding="0"
+                                ScrollViewer.VerticalScrollMode="Disabled"
+                                ItemsSource="{x:Bind IncomeCategories, Mode=OneWay}"
+                                ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
+                                SelectionMode="None"
+                                MaxWidth="620"
+                                BorderThickness="0"
+                                Background="Transparent">
+                                <ListView.ItemContainerStyle>
+                                    <Style
+                                        TargetType="ListViewItem">
+                                        <Setter
+                                            Property="HorizontalContentAlignment"
+                                            Value="Stretch" />
+                                        <Setter
+                                            Property="Padding"
+                                            Value="0" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </PivotItem>
+                    </Pivot>
+                    
+                    <StackPanel
+                        Visibility="Collapsed"
+                        Grid.Row="1"
+                        Margin="32"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <RadioButton
+                            Name="ExpenseRadioButton"
+                            GroupName="CategoryExpenseOrIncomeRadioButtons"
+                            HorizontalAlignment="Center"
+                            IsChecked="True"
+                            Checked="RadioButton_Checked"
+                            Style="{StaticResource RadioButtonLikeButtonStyle}">
+                            <TextBlock
+                                Text="Wydatki"
+                                x:Uid="expenses" />
+                        </RadioButton>
+                        <RadioButton
+                            Name="IncomeRadioButton"
+                            GroupName="CategoryExpenseOrIncomeRadioButtons"
+                            HorizontalAlignment="Center"
+                            Checked="RadioButton_Checked_1"
+                            Style="{StaticResource RadioButtonLikeButtonStyle}">
+                            <TextBlock
+                                Text="Wpływy"
+                                x:Uid="incomes" />
+                        </RadioButton>
+                    </StackPanel>
+                    <ListView
+                        Visibility="Collapsed"
+                        FlowDirection="LeftToRight"
+                        Padding="0"
+                        ScrollViewer.VerticalScrollMode="Disabled"
+                        ItemsSource="{x:Bind OperationCategories, Mode=OneWay}"
+                        ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
+                        SelectionMode="None"
+                        MaxWidth="620"
+                        BorderThickness="0"
+                        Background="Transparent">
+                        <ListView.ItemContainerStyle>
+                            <Style
+                                TargetType="ListViewItem">
+                                <Setter
+                                    Property="HorizontalContentAlignment"
+                                    Value="Stretch" />
+                                <Setter
+                                    Property="Padding"
+                                    Value="0" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                    
+                </StackPanel>
 
-                                    <StackPanel
-                                        Background="Transparent"
-                                        Tapped="StackPanel_Tapped"
-                                        RightTapped="ExpandPanel_RightTapped">
+                <Grid
+                    x:DeferLoadStrategy="Lazy"
+                    Visibility="Collapsed"
+                    Name="SeparatedOperationCategoriesGrid" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
 
-                                        <FlyoutBase.AttachedFlyout>
-                                            <MenuFlyout
-                                                MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
-                                                <MenuFlyoutItem
-                                                    x:Name="EditCatButton"
-                                                    Style="{StaticResource MyMenuFlyoutItem}"
-                                                    Tag="&#xE104;"
-                                                    Text="Edytuj"
-                                                    Click="EditCategory_Click" />
-                                                <MenuFlyoutItem
-                                                    x:Name="DeleteCatButton"
-                                                    Style="{StaticResource MyMenuFlyoutItem}"
-                                                    Tag="&#xE107;"
-                                                    Text="Usuń"
-                                                    Click="DeleteCategory_Click" />
-                                                <MenuFlyoutSeparator />
-                                                <MenuFlyoutItem
-                                                    x:Name="AddSubCatButton"
-                                                    Style="{StaticResource MyMenuFlyoutItem}"
-                                                    Tag="&#xE109;"
-                                                    Text="Dodaj podkategorię"
-                                                    Click="AddSubCat_Click" />
-                                            </MenuFlyout>
-                                        </FlyoutBase.AttachedFlyout>
+                    <TextBlock
+                        Margin="16"
+                        FontSize="20"
+                        FontFamily="{StaticResource DefaultFontFamily}"
+                        HorizontalAlignment="Center"
+                        Foreground="{ThemeResource Text-1}"
+                        Text="Wydatki" />
 
-                                        <Button
-                                            Margin="0"
-                                            Padding="0"
-                                            BorderThickness="0"
-                                            HorizontalAlignment="Stretch"
-                                            HorizontalContentAlignment="Stretch"
-                                            Background="Transparent">
-                                            <data:OperationCategoryTemplate
-                                                DataContext="{x:Bind Category}" />
-                                        </Button>
+                    <ListView
+                        Grid.Row="1"
+                        HorizontalContentAlignment="Right"
+                        FlowDirection="LeftToRight"
+                        Padding="0"
+                        ScrollViewer.VerticalScrollMode="Disabled"
+                        ItemsSource="{x:Bind ExpenseCategories, Mode=OneWay}"
+                        ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
+                        SelectionMode="None"
+                        MaxWidth="620"
+                        BorderThickness="0"
+                        Background="Transparent">
+                        <ListView.ItemContainerStyle>
+                            <Style
+                                TargetType="ListViewItem">
+                                <Setter
+                                    Property="HorizontalContentAlignment"
+                                    Value="Stretch" />
+                                <Setter
+                                    Property="Padding"
+                                    Value="0" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
 
-                                    </StackPanel>
+                    <TextBlock
+                        Margin="16"
+                        Grid.Column="1"
+                        FontSize="20"
+                        HorizontalAlignment="Center"
+                        Foreground="{ThemeResource Text-1}"
+                        Text="Wpływy" />
 
-                                    <ListView
-                                        ScrollViewer.VerticalScrollMode="Disabled"
-                                        Name="SubOperacjeListView"
-                                        ItemsSource="{x:Bind SubCategories, Mode=OneWay}"
-                                        MaxWidth="620"
-                                        BorderThickness="0"
-                                        Background="Transparent"
-                                        SelectionChanged="SubOperacjeListView_SelectionChanged"
-                                        SelectionMode="Single">
-
-                                        <ListView.ItemContainerStyle>
-                                            <Style
-                                                TargetType="ListViewItem">
-                                                <Setter
-                                                    Property="HorizontalContentAlignment"
-                                                    Value="Stretch" />
-                                                <Setter
-                                                    Property="Padding"
-                                                    Value="0" />
-                                            </Style>
-                                        </ListView.ItemContainerStyle>
-
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate
-                                                x:DataType="models:OperationSubCategory">
-                                                <Grid
-                                                    Tapped="Grid_Tapped"
-                                                    RightTapped="Grid_RightTapped">
-
-                                                    <FlyoutBase.AttachedFlyout>
-                                                        <MenuFlyout
-                                                            MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
-                                                            <MenuFlyoutItem
-                                                                x:Name="EditSubCatButton"
-                                                                Style="{StaticResource MyMenuFlyoutItem}"
-                                                                Tag="&#xE104;"
-                                                                Text="Edytuj"
-                                                                Click="EditSubCategory_Click" />
-                                                            <MenuFlyoutItem
-                                                                x:Name="DeleteSubCatButton"
-                                                                Style="{StaticResource MyMenuFlyoutItem}"
-                                                                Tag="&#xE107;"
-                                                                Text="Usuń"
-                                                                Click="DeleteSubCategory_Click" />
-                                                        </MenuFlyout>
-                                                    </FlyoutBase.AttachedFlyout>
-
-                                                    <data:OperationSubCategoryTemplate />
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-
-
-                                </StackPanel>
-
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackPanel>
+                    <ListView
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        HorizontalContentAlignment="Left"
+                        FlowDirection="LeftToRight"
+                        Padding="0"
+                        ScrollViewer.VerticalScrollMode="Disabled"
+                        ItemsSource="{x:Bind IncomeCategories, Mode=OneWay}"
+                        ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
+                        SelectionMode="None"
+                        MaxWidth="620"
+                        BorderThickness="0"
+                        Background="Transparent">
+                        <ListView.ItemContainerStyle>
+                            <Style
+                                TargetType="ListViewItem">
+                                <Setter
+                                    Property="HorizontalContentAlignment"
+                                    Value="Stretch" />
+                                <Setter
+                                    Property="Padding"
+                                    Value="0" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </Grid>
+            </Grid>
         </ScrollViewer>
-
     </Grid>
-
 </Page>

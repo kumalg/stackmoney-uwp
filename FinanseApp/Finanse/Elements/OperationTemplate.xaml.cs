@@ -25,6 +25,25 @@ namespace Finanse.Elements {
            
         }
 
+        private OperationCategory category;
+
+        private OperationCategory Category {
+            get {
+                if (category == null) {
+                    OperationCategory cat = Dal.getOperationCategoryById(Operation.CategoryId);
+                    OperationSubCategory subCat = Dal.getOperationSubCategoryById(Operation.SubCategoryId);
+
+                    if (cat != null)
+                        category = cat;
+
+                    if (subCat != null)
+                        category = subCat;
+                }
+                return category;
+            }
+        }
+
+
         public void Operation_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
 
             /* BO PIERDOLI ŻE NULL WCHODZI */

@@ -43,7 +43,7 @@ namespace Finanse.Dialogs {
 
             DateValuePanel.Visibility = Visibility.Collapsed;
             if (!editedOperation.Date.Equals("") && whichOption != "pattern") {
-                DateValue.Text = String.Format("{0:dddd, dd MMMM yyyy HH mm ss}", Convert.ToDateTime(editedOperation.Date));
+                DateValue.Text = String.Format("{0:dddd, dd MMMM yyyy}", Convert.ToDateTime(editedOperation.Date));
                 DateValuePanel.Visibility = Visibility.Visible;
             }
 

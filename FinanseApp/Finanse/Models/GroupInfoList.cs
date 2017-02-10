@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using Windows.UI.Xaml.Media;
 
 namespace Finanse.Models {
@@ -9,7 +11,8 @@ namespace Finanse.Models {
         public object Key { get; set; }
         private decimal _decimalCost;
 
-        public string cost {
+        private string cost;
+        public string Cost {
             get {
                 return decimalCost.ToString("C", Settings.getActualCultureInfo());
             }
@@ -17,17 +20,27 @@ namespace Finanse.Models {
 
         public decimal decimalCost {
             get {
-                _decimalCost = 0;
-
-                foreach (var item in this.Items)
-                    _decimalCost += item.isExpense ? -item.Cost : item.Cost;
-
-                return _decimalCost;
+                return this.Sum(i=>i.SignedCost);
             }
         }
 
         public new IEnumerator<Operation> GetEnumerator() {
             return base.GetEnumerator();
+        }
+
+
+        protected override event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName) {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public GroupInfoList() {
+            this.CollectionChanged += delegate {
+                OnPropertyChanged("Cost");
+            };
         }
     }
 

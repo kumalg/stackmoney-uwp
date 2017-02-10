@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 
 namespace Finanse.Pages {
@@ -122,8 +123,10 @@ namespace Finanse.Pages {
             }
         }
 
-        public void reload() {
-            statisticsData.setNewRangeAndData(minDate, maxDate);
+        public async Task reload() {
+            ProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            await Task.Run(() => statisticsData.setNewRangeAndData(minDate, maxDate));
 
             DateRangeText = statisticsData.getActualDateRangeText(minDate, maxDate);
 
@@ -134,22 +137,26 @@ namespace Finanse.Pages {
                 setExpensesInGraphs();
             else
                 setIncomesInGraphs();
+
+            ProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
-        private void ExpensesRadioButton_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
+        private async void ExpensesRadioButton_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
+            await Task.Delay(5);
             setExpensesInGraphs();
         }
 
-        private void IncomeRadioButton_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
+        private async void IncomeRadioButton_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
+            await Task.Delay(5);
             setIncomesInGraphs();
         }
 
-        private void setExpensesInGraphs() {
+        private async Task setExpensesInGraphs() {
             OperationsByCategory = statisticsData.getExpensesGroupedByCategoryInRange(minDate, maxDate);
             CategoriesGroupedBySubCategories = statisticsData.getExpensesFromCategoryGroupedBySubCategoryInRange();
         }
 
-        private void setIncomesInGraphs() {
+        private async Task setIncomesInGraphs() {
             OperationsByCategory = statisticsData.getIncomesGroupedByCategoryInRange(minDate, maxDate);
             CategoriesGroupedBySubCategories = statisticsData.getIncomesFromCategoryGroupedBySubCategoryInRange();
         }

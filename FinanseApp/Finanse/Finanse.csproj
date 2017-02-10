@@ -150,6 +150,9 @@
     <Compile Include="Elements\CategoryIcon.xaml.cs">
       <DependentUpon>CategoryIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Elements\CategoryWithSubcategories.xaml.cs">
+      <DependentUpon>CategoryWithSubcategories.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Elements\MoneyAccountTemplate.xaml.cs">
       <DependentUpon>MoneyAccountTemplate.xaml</DependentUpon>
     </Compile>
@@ -162,11 +165,17 @@
     <Compile Include="Elements\OperationTemplate.xaml.cs">
       <DependentUpon>OperationTemplate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Elements\PieWithLegend.xaml.cs">
+      <DependentUpon>PieWithLegend.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Elements\PivotHeader.xaml.cs">
       <DependentUpon>PivotHeader.xaml</DependentUpon>
     </Compile>
     <Compile Include="Elements\PivotItemHeaderTemplate.xaml.cs">
       <DependentUpon>PivotItemHeaderTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Elements\SmallPieWithLegend.xaml.cs">
+      <DependentUpon>SmallPieWithLegend.xaml</DependentUpon>
     </Compile>
     <Compile Include="EmptyOrFullSelector.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -285,6 +294,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Elements\CategoryWithSubcategories.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Elements\MoneyAccountTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -301,6 +314,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Elements\PieWithLegend.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Elements\PivotHeader.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -308,6 +325,10 @@
     <Page Include="Elements\PivotItemHeaderTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Elements\SmallPieWithLegend.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -360,6 +381,11 @@
     <Page Include="Styles\RadioButtons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Statistics.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Styles\Styles.xaml">
       <Generator>MSBuild:Compile</Generator>

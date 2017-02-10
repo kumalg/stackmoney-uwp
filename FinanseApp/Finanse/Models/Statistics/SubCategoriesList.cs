@@ -15,8 +15,14 @@ namespace Finanse.Models.Statistics {
                 list = value;
             }
         }
-        public string Name {
+        public OperationCategory Category {
             get; set;
+        }
+
+        public double Sum {
+            get {
+                return List.Sum(i => i.UnrelativeValue);
+            }
         }
     }
 }

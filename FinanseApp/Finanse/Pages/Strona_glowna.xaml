@@ -92,7 +92,7 @@
                                 Grid.Column="2"
                                 Name="SumText"
                                 HorizontalAlignment="Right"
-                                Text="{Binding cost}"
+                                Text="{Binding Path=Cost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontWeight="SemiBold"
                                 Foreground="{ThemeResource Text-1}"
                                 FontSize="12" />
@@ -383,7 +383,7 @@
 
                     <TextBlock
                         Name="targetBlock"
-                        Text="{x:Bind actualMonthText.Text, Mode=TwoWay}"
+                        Text="{x:Bind ActualMonthText, Mode=OneWay}"
                         HorizontalAlignment="Center"
                         Margin="8,0,0,0"
                         Style="{StaticResource PageTitleStyle}">
@@ -392,49 +392,55 @@
                 </StackPanel>
 
                 <StackPanel
-                Grid.Column="1"
-                Orientation="Horizontal"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Right">
-                <TextBlock
+                    Grid.Column="1"
+                    Orientation="Horizontal"
                     VerticalAlignment="Center"
-                    Name="ActualMoneyBar"
-                    Foreground="{ThemeResource AccentText}"
-                    FontFamily="{StaticResource DefaultFontFamily}"
-                    FontWeight="Bold"
-                    FontSize="13" />
-                <Button
-                    BorderThickness="0"
-                    Width="32"
-                    Height="32"
-                    Margin="8,0"
-                    Background="Transparent"
-                    VerticalAlignment="Center">
-                    <Button.Content>
-                        <FontIcon
-                            Foreground="{ThemeResource AccentText}"
-                            Opacity="0.5"
-                            FontSize="13"
-                            Glyph="" />
-                    </Button.Content>
-                    <Button.Flyout>
+                    HorizontalAlignment="Right">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Name="ActualMoneyBar"
+                        Text="{x:Bind Path=ActualOperationsSum, Mode=OneWay}"
+                        Foreground="{ThemeResource AccentText}"
+                        FontFamily="{StaticResource DefaultFontFamily}"
+                        FontWeight="Bold"
+                        FontSize="13" />
+                    <Button
+                        BorderThickness="0"
+                        Width="32"
+                        Height="32"
+                        Margin="8,0"
+                        Background="Transparent"
+                        VerticalAlignment="Center">
+                        <Button.Content>
+                            <FontIcon
+                                Foreground="{ThemeResource AccentText}"
+                                Opacity="0.5"
+                                FontSize="13"
+                                Glyph="" />
+                        </Button.Content>
+                        <Button.Flyout>
                             <Flyout
                                 x:Name="VisibleAccountsFlyout"
                                 Placement="Bottom">
                                 <Flyout.FlyoutPresenterStyle>
-                                    <Style TargetType="FlyoutPresenter">
-                                        <Setter Property="BorderThickness" Value="0" />
-                                        <Setter Property="Background" Value="{ThemeResource Background-1Transparent}" />
+                                    <Style
+                                        TargetType="FlyoutPresenter">
+                                        <Setter
+                                            Property="BorderThickness"
+                                            Value="0" />
+                                        <Setter
+                                            Property="Background"
+                                            Value="{ThemeResource Background-1Transparent}" />
                                     </Style>
                                 </Flyout.FlyoutPresenterStyle>
                                 <ListView
                                     SelectionMode="None" />
                             </Flyout>
                         </Button.Flyout>
-                </Button>
-            </StackPanel>
+                    </Button>
+                </StackPanel>
 
-        </Grid>
+            </Grid>
 
         </Grid>
 

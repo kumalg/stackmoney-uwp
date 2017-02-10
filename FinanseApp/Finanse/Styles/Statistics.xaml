@@ -1,0 +1,123 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="using:Finanse.Converters"
+    xmlns:Charts="using:Finanse.Charts"
+    xmlns:local="using:Finanse.Styles">
+
+    <DataTemplate
+        x:Key="DoughnutChartItemTemplate">
+        <Charts:DoughnutChartItem
+            Value="{Binding RelativeValue}"
+            Color="{Binding SolidColorBrush.Color}" />
+    </DataTemplate>
+
+    <DataTemplate
+        x:Key="DoughnutChartItemTemplate2">
+        <Charts:DoughnutChartItem
+            Value="0.2"
+            Color="Red" />
+    </DataTemplate>
+
+    <conv:DecimalToCurrencyStringConverter
+        x:Name="DecimalToCurrencyStringConverter" />
+
+    <conv:DoubleToPercentStringConverter
+        x:Name="DoubleToPercentStringConverter" />
+
+    <DataTemplate
+        x:Key="LegendItemTemplate">
+        <Grid
+            VerticalAlignment="Center"
+            Width="256">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="32" />
+                <ColumnDefinition
+                    Width="3*" />
+                <ColumnDefinition
+                    Width="*" />
+            </Grid.ColumnDefinitions>
+            <Ellipse
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Width="16"
+                Height="16"
+                Stroke="{Binding SolidColorBrush}"
+                StrokeThickness="2" />
+            <TextBlock
+                Grid.Column="1"
+                FontSize="13"
+                Foreground="{ThemeResource Text}"
+                VerticalAlignment="Center"
+                FontFamily="{StaticResource DefaultFontFamily}"
+                Text="{Binding Name}" />
+            <TextBlock
+                Grid.Column="1"
+                FontSize="13"
+                HorizontalAlignment="Right"
+                Foreground="{ThemeResource AccentColor}"
+                VerticalAlignment="Center"
+                FontFamily="{StaticResource DefaultFontFamily}"
+                Text="{Binding UnrelativeValue, Converter={StaticResource DecimalToCurrencyStringConverter}}" />
+            <TextBlock
+                Grid.Column="3"
+                FontSize="13"
+                Foreground="{ThemeResource Text-1}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                FontFamily="{StaticResource DefaultFontFamily}"
+                Text="{Binding RelativeValue, Converter={StaticResource DoubleToPercentStringConverter}}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate
+        x:Key="LegendThinItemTemplate">
+        <Grid
+            VerticalAlignment="Center"
+            Width="128">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="32" />
+                <ColumnDefinition
+                    Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Ellipse
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Width="12"
+                Height="12"
+                Stroke="{Binding SolidColorBrush}"
+                StrokeThickness="2" />
+            <TextBlock
+                Grid.Column="1"
+                FontSize="13"
+                Foreground="{ThemeResource Text}"
+                VerticalAlignment="Center"
+                FontFamily="{StaticResource DefaultFontFamily}"
+                Text="{Binding Name}" />
+            <TextBlock
+                Grid.Column="1"
+                Grid.Row="1"
+                FontSize="13"
+                HorizontalAlignment="Left"
+                Foreground="{ThemeResource AccentColor}"
+                VerticalAlignment="Center"
+                FontFamily="{StaticResource DefaultFontFamily}"
+                Text="{Binding UnrelativeValue, Converter={StaticResource DecimalToCurrencyStringConverter}}" />
+            <!--<TextBlock
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    FontSize="13"
+                    Foreground="{ThemeResource Text-1}"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource DefaultFontFamily}"
+                    Text="{Binding RelativeValue, Converter={StaticResource DoubleToPercentStringConverter}}" />-->
+        </Grid>
+    </DataTemplate>
+
+</ResourceDictionary>

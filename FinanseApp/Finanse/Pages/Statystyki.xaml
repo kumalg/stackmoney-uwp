@@ -12,6 +12,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Charts="using:Finanse.Charts"
     mc:Ignorable="d">
+    <Page.Resources>
+
+    </Page.Resources>
 
     <Page.Transitions>
         <TransitionCollection>
@@ -21,178 +24,8 @@
         </TransitionCollection>
     </Page.Transitions>
 
-    <Page.Resources>
-        <DataTemplate
-            x:Key="DoughnutChartItemTemplate">
-            <Charts:DoughnutChartItem
-                Value="{Binding RelativeValue}"
-                Color="{Binding SolidColorBrush.Color}" />
-        </DataTemplate>
-
-        <DataTemplate
-            x:Key="DoughnutChartItemTemplate2">
-            <Charts:DoughnutChartItem
-                Value="0.2"
-                Color="Red" />
-        </DataTemplate>
-
-        <conv:DecimalToCurrencyStringConverter
-            x:Name="DecimalToCurrencyStringConverter" />
-
-        <conv:DoubleToPercentStringConverter
-            x:Name="DoubleToPercentStringConverter" />
-
-        <DataTemplate
-            x:Key="LegendItemTemplate">
-            <Grid
-                VerticalAlignment="Center"
-                Width="256">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="32" />
-                    <ColumnDefinition
-                        Width="3*" />
-                    <ColumnDefinition
-                        Width="*" />
-                </Grid.ColumnDefinitions>
-                <Ellipse
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Width="16"
-                    Height="16"
-                    Stroke="{Binding SolidColorBrush}"
-                    StrokeThickness="2" />
-                <TextBlock
-                    Grid.Column="1"
-                    FontSize="13"
-                    Foreground="{ThemeResource Text}"
-                    VerticalAlignment="Center"
-                    FontFamily="{StaticResource DefaultFontFamily}"
-                    Text="{Binding Name}" />
-                <TextBlock
-                    Grid.Column="1"
-                    FontSize="13"
-                    HorizontalAlignment="Right"
-                    Foreground="{ThemeResource AccentColor}"
-                    VerticalAlignment="Center"
-                    FontFamily="{StaticResource DefaultFontFamily}"
-                    Text="{Binding UnrelativeValue, Converter={StaticResource DecimalToCurrencyStringConverter}}" />
-                <TextBlock
-                    Grid.Column="3"
-                    FontSize="13"
-                    Foreground="{ThemeResource Text-1}"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    FontFamily="{StaticResource DefaultFontFamily}"
-                    Text="{Binding RelativeValue, Converter={StaticResource DoubleToPercentStringConverter}}" />
-            </Grid>
-        </DataTemplate>
-
-        <DataTemplate
-            x:Key="LegendThinItemTemplate">
-            <Grid
-                VerticalAlignment="Center"
-                Width="128">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="32" />
-                    <ColumnDefinition
-                        Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Ellipse
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Width="16"
-                    Height="16"
-                    Stroke="{Binding SolidColorBrush}"
-                    StrokeThickness="2" />
-                <TextBlock
-                    Grid.Column="1"
-                    FontSize="13"
-                    Foreground="{ThemeResource Text}"
-                    VerticalAlignment="Center"
-                    FontFamily="{StaticResource DefaultFontFamily}"
-                    Text="{Binding Name}" />
-                <TextBlock
-                    Grid.Column="1"
-                    Grid.Row="1"
-                    FontSize="13"
-                    HorizontalAlignment="Left"
-                    Foreground="{ThemeResource AccentColor}"
-                    VerticalAlignment="Center"
-                    FontFamily="{StaticResource DefaultFontFamily}"
-                    Text="{Binding UnrelativeValue, Converter={StaticResource DecimalToCurrencyStringConverter}}" />
-                <!--<TextBlock
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    FontSize="13"
-                    Foreground="{ThemeResource Text-1}"
-                    VerticalAlignment="Center"
-                    FontFamily="{StaticResource DefaultFontFamily}"
-                    Text="{Binding RelativeValue, Converter={StaticResource DoubleToPercentStringConverter}}" />-->
-            </Grid>
-        </DataTemplate>
-    </Page.Resources>
-
     <Grid
         Background="Transparent">
-
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState
-                    x:Name="Window1">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                            MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter
-                            Target="OperationsByCategoryStackPanel.Orientation"
-                            Value="Vertical" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState
-                    x:Name="Window2">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                            MinWindowWidth="700" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter
-                            Target="OperationsByCategoryStackPanel.Orientation"
-                            Value="Horizontal" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState
-                    x:Name="Window3">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                            MinWindowWidth="800" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter
-                            Target="OperationsByCategoryStackPanel.Orientation"
-                            Value="Vertical" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState
-                    x:Name="Window4">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                            MinWindowWidth="1000" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter
-                            Target="OperationsByCategoryStackPanel.Orientation"
-                            Value="Horizontal" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
 
         <Grid.RowDefinitions>
             <RowDefinition
@@ -293,7 +126,7 @@
             </StackPanel>
 
         </Grid>
-
+        
         <ScrollViewer
             VerticalScrollBarVisibility="Auto"
             Grid.Row="1">
@@ -309,7 +142,7 @@
                         ItemsSource="{x:Bind ExpensesToIncomes, Mode=OneWay}"
                         ItemTemplate="{StaticResource DoughnutChartItemTemplate}"
                         Margin="48" />
-                    
+
                     <TextBlock
                         Text="{x:Bind IncomesPercentageText, Mode=OneWay}"
                         VerticalAlignment="Center"
@@ -318,56 +151,79 @@
                         FontFamily="{StaticResource DefaultFontFamily}"
                         Foreground="{ThemeResource AccentColor}" />
                 </Grid>
-                
+<!--
                 <ListView
                     HorizontalAlignment="Center"
                     ItemsSource="{x:Bind ExpensesToIncomes, Mode=OneWay}"
                     ItemTemplate="{StaticResource LegendItemTemplate}"
                     SelectionMode="None" />
+-->
+                <StackPanel
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+                    <StackPanel
+                        Margin="16,0">
+                        <TextBlock
+                            Foreground="{ThemeResource Text-1}"
+                            FontFamily="{StaticResource DefaultFontFamily}"
+                            HorizontalAlignment="Center"
+                            Text="WPŁYWY" />
+                        <TextBlock
+                            Margin="8"
+                            FontSize="22"
+                            FontFamily="{StaticResource DefaultFontFamily}"
+                            Foreground="{StaticResource GreenColorStyle}"
+                            HorizontalAlignment="Center"
+                            Text="2305,62 zł" />
+                    </StackPanel>
+
+                    <Border
+                        BorderThickness="1,0,0,0"
+                        BorderBrush="{ThemeResource Background+2}" />
+
+                    <StackPanel
+                        Margin="16,0">
+                        <TextBlock
+                            Foreground="{ThemeResource Text-1}"
+                            FontFamily="{StaticResource DefaultFontFamily}"
+                            HorizontalAlignment="Center"
+                            Text="WYDATKI" />
+                        <TextBlock
+                            Margin="8"
+                            FontSize="22"
+                            FontFamily="{StaticResource DefaultFontFamily}"
+                            Foreground="{StaticResource RedColorStyle}"
+                            HorizontalAlignment="Center"
+                            Text="1205,05 zł" />
+                    </StackPanel>
+                </StackPanel>
+                <Border
+                    Margin="16"
+                    BorderThickness="0,1,0,0"
+                    MaxWidth="512"
+                    BorderBrush="{ThemeResource Background+2}" />
 
                 <StackPanel
                     Margin="32"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
                     <RadioButton
-                        Style="{StaticResource MyRadioButtonStyle}"
+                        Style="{StaticResource RadioButtonLikeButtonStyle}"
                         GroupName="ExpenseOrIncome"
                         Name="ExpensesRadioButton"
                         Content="Wydatki"
                         IsChecked="True"
                         Checked="ExpensesRadioButton_Checked" />
                     <RadioButton
-                        Style="{StaticResource MyRadioButtonStyle}"
+                        Style="{StaticResource RadioButtonLikeButtonStyle}"
                         GroupName="ExpenseOrIncome"
                         Name="IncomesRadioButton"
                         Content="Wpływy"
                         Checked="IncomeRadioButton_Checked" />
                 </StackPanel>
 
-                <StackPanel
-                    Name="OperationsByCategoryStackPanel"
-                    Margin="0,32"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-                    <Charts:DoughnutChart
-                        x:Name="DoughnutChart2"
-                        Thickness="128"
-                        Distance="5"
-                        Width="256"
-                        Height="256"
-                        ItemsSource="{x:Bind OperationsByCategory, Mode=OneWay}"
-                        ItemTemplate="{StaticResource DoughnutChartItemTemplate}"
-                        Margin="16" />
-
-                    <ListView
-                        Margin="16"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Name="ExpensesByCategoryLegend"
-                        ItemsSource="{x:Bind OperationsByCategory, Mode=OneWay}"
-                        ItemTemplate="{StaticResource LegendItemTemplate}"
-                        SelectionMode="None" />
-                </StackPanel>
+                <data:PieWithLegend
+                    DataContext="{x:Bind OperationsByCategory, Mode=OneWay}" />
 
                 <GridView
                     HorizontalAlignment="Center"
@@ -379,32 +235,10 @@
                                 HorizontalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 VerticalScrollBarVisibility="Auto">
-                                <StackPanel
-                                    HorizontalAlignment="Center"
-                                    Background="{ThemeResource Background+1}">
 
-                                    <TextBlock
-                                        Margin="0,16"
-                                        HorizontalAlignment="Center"
-                                        FontFamily="{StaticResource DefaultFontFamily}"
-                                        Foreground="{ThemeResource Text}"
-                                        Text="{Binding Name}" />
+                                <data:SmallPieWithLegend
+                                    DataContext="{Binding}" />
 
-                                    <Charts:DoughnutChart
-                                        Thickness="64"
-                                        Width="128"
-                                        Height="128"
-                                        ItemsSource="{Binding List}"
-                                        ItemTemplate="{StaticResource DoughnutChartItemTemplate}"
-                                        Margin="32,16" />
-
-                                    <ListView
-                                        SelectionMode="None"
-                                        HorizontalAlignment="Center"
-                                        ItemsSource="{Binding List}"
-                                        ItemTemplate="{StaticResource LegendThinItemTemplate}" />
-
-                                </StackPanel>
                             </ScrollViewer>
                         </DataTemplate>
                     </GridView.ItemTemplate>
@@ -431,5 +265,12 @@
                 </GridView>
             </StackPanel>
         </ScrollViewer>
+
+        <ProgressRing
+            Grid.Row="1"
+            Name="ProgressRing"
+            Visibility="Visible"
+            IsActive="True" />
+
     </Grid>
 </Page>

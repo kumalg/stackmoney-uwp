@@ -32,10 +32,15 @@ namespace Finanse {
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
             formattableTitleBar.ButtonHoverBackgroundColor = Functions.GetSolidColorBrush("#19000000").Color;
+
+            if (OperationsAppBarRadioButton != null)
+                OperationsAppBarRadioButton.IsChecked = true;
+
+            if (Strona_glowna_ListBoxItem != null)
+                Strona_glowna_ListBoxItem.IsChecked = true;
         }
 
         private void TitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args) {
-            //  throw new NotImplementedException();
             TitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
         }
 

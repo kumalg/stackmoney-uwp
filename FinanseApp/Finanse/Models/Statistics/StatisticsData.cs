@@ -1,4 +1,5 @@
-﻿using Finanse.DataAccessLayer;
+﻿using Finanse.Charts;
+using Finanse.DataAccessLayer;
 using Finanse.Models.Statistics;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,12 @@ namespace Finanse.Models {
         public StatisticsData(List<Operation> AllOperations) {
             this.AllOperations = AllOperations;
         }*/
+        private DateTime minDate;
+        private DateTime maxDate;
 
         public void setNewRangeAndData(DateTime minDate, DateTime maxDate) {
+            this.minDate = minDate;
+            this.maxDate = maxDate;
             AllOperations = Dal.getAllOperationsFromRangeToStatistics(minDate, maxDate);
         }
 
@@ -194,6 +199,109 @@ namespace Finanse.Models {
             return models;
         }
 
+        public ObservableCollection<LineChartItem> lineChartTest() {
+            int days = (maxDate - minDate).Days + 1;
+            // = 9 - 7 + 1// 7,8,9
+
+            LineChartItem[] modelss = new LineChartItem[days];
+            for (int i = 0; i < modelss.Length; i++) {
+                modelss[i] = new LineChartItem {
+                    Key = minDate.AddDays(i).ToString("MM.dd"),
+                    Value = 0,
+                };
+            }
+
+            var dupa = from item in AllOperations
+                       where item.isExpense
+                       group item.Cost by item.Date
+                       into g
+                       select new {
+                           Date = DateTime.Parse(g.Key),
+                           Cost = g.Sum()
+                       };
+
+            foreach (var item in dupa) {
+                int index = days - (maxDate - item.Date).Days - 1;
+                modelss[index] = new LineChartItem {
+                    Key = modelss[index].Key,
+                    Value = (double)item.Cost,
+                };
+            }
+
+            return new ObservableCollection<LineChartItem>(modelss);
+        }
+
+        public ObservableCollection<LineChartItem> lineChartTest2() {
+            int days = (maxDate - minDate).Days + 1;
+            // = 9 - 7 + 1// 7,8,9
+
+            LineChartItem[] modelss = new LineChartItem[days];
+            for (int i = 0; i < modelss.Length; i++) {
+                modelss[i] = new LineChartItem {
+                    Key = minDate.AddDays(i).ToString("MM.dd"),
+                    Value = 0,
+                };
+            }
+
+            var dupa = from item in AllOperations
+                       where !item.isExpense
+                       group item.Cost by item.Date
+                       into g
+                       select new {
+                           Date = DateTime.Parse(g.Key),
+                           Cost = g.Sum()
+                       };
+
+            foreach (var item in dupa) {
+                int index = days - (maxDate - item.Date).Days - 1;
+                modelss[index] = new LineChartItem {
+                    Key = modelss[index].Key,
+                    Value = (double)item.Cost,
+                };
+            }
+
+            return new ObservableCollection<LineChartItem>(modelss);
+        }
+
+        public ObservableCollection<LineChartItem> lineChartTest3() {
+            int days = (maxDate - minDate).Days + 1;
+            // = 9 - 7 + 1// 7,8,9
+
+            LineChartItem[] modelss = new LineChartItem[days];
+            for (int i = 0; i < modelss.Length; i++) {
+                modelss[i] = new LineChartItem {
+                    Key = minDate.AddDays(i).ToString("MM.dd"),
+                    Value = 0,
+                };
+            }
+
+            var dupa = from item in AllOperations
+                       group item.SignedCost by item.Date
+                       into g
+                       select new {
+                           Date = DateTime.Parse(g.Key),
+                           Cost = g.Sum()
+                       };
+
+            if (modelss.Length > 0) {
+                modelss[0].Value = (double)Dal.getBalanceOfCertainDay(maxDate);
+
+                for (int i = 1; i < dupa.Count(); i++) {
+                    int index = days - (maxDate - dupa.ElementAt(i).Date).Days - 1;
+                    modelss[index].Value += modelss[index - 1].Value + (double)dupa.ElementAt(i).Cost;
+                }
+            }
+            /*
+            foreach (var item in dupa) {
+                int index = days - (maxDate - item.Date).Days - 1;
+                modelss[index] = new LineChartItem {
+                    Key = modelss[index].Key,
+                    Value = (double)item.Cost,
+                };
+            }
+            */
+            return new ObservableCollection<LineChartItem>(modelss);
+        }
 
         public ObservableCollection<ChartPart> getExpenseToIncomeComparsion() {
             ObservableCollection<ChartPart> models = new ObservableCollection<ChartPart>();

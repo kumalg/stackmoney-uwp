@@ -1,6 +1,7 @@
 ﻿namespace Finanse.DataAccessLayer {
     using Models;
     using Models.Categories;
+    using Models.Helpers;
     using Models.MoneyAccounts;
     using SQLite.Net;
     using SQLite.Net.Platform.WinRT;
@@ -325,6 +326,16 @@
             return models;
         }
 
+        public static decimal getBalanceOfCertainDay(DateTime dateTime) {
+            using (var db = DbConnection) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+
+                // return db.Query("SELECT CASE WHEN isExpense THEN -Cost ELSE Cost END FROM Operation WHERE Date <= ? AND Date IS NOT NULL AND Date IS NOT ''", dateTime.ToString("yyyy.MM.dd")).Sum();
+                return db.Query<Operation>("SELECT * FROM Operation WHERE Date <= ? AND Date IS NOT NULL AND Date IS NOT ''", dateTime.ToString("yyyy.MM.dd")).Sum(i => i.SignedCost);
+            }
+        }
+
         public static List<Operation> getAllOperations(int month, int year, HashSet<int> visiblePayFormList) {
             List<Operation> models;
 
@@ -336,6 +347,28 @@
                 string settedYearAndMonth = year.ToString() + "." + month.ToString("00") + "*";
 
                 List<Operation> list = db.Query<Operation>("SELECT * FROM Operation WHERE Date GLOB ? AND Date <= ?", settedYearAndMonth, DateTime.Today.ToString("yyyy.MM.dd"));
+
+                if (visiblePayFormList != null) {
+                    models = (from p in list
+                              where visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId) == true
+                              select p).ToList();
+                }
+                else
+                    models = list;
+            }
+
+            return models;
+        }
+
+        public static List<Operation> getAllOperations(DateTime actualMonth, HashSet<int> visiblePayFormList) {
+            List<Operation> models;
+
+            // Create a new connection
+            using (var db = DbConnection) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
+                
+                List<Operation> list = db.Query<Operation>("SELECT * FROM Operation WHERE Date GLOB ? AND Date <= ?", actualMonth.ToString("yyyy.MM*"), DateTime.Today.ToString("yyyy.MM.dd"));
 
                 if (visiblePayFormList != null) {
                     models = (from p in list

@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:Finanse.Elements"
     xmlns:models="using:Finanse.Models"
+    xmlns:animations="using:Microsoft.Toolkit.Uwp.UI.Animations"
     NavigationCacheMode="Enabled"
     mc:Ignorable="d">
 
@@ -72,6 +73,7 @@
                                 <StackPanel
                                     Width="80">
                                     <TextBlock
+                                        FontFamily="{StaticResource DefaultFontFamily}"
                                         Text="{Binding Key.dayNum00}"
                                         FontSize="12"
                                         Foreground="{ThemeResource Text-2}"
@@ -80,6 +82,7 @@
                                         VerticalAlignment="Center" />
                                 </StackPanel>
                                 <TextBlock
+                                    FontFamily="{StaticResource DefaultFontFamily}"
                                     FontWeight="SemiBold"
                                     Foreground="{ThemeResource Text-1}"
                                     Text="{Binding Key.day}"
@@ -87,6 +90,7 @@
                             </StackPanel>
 
                             <TextBlock
+                                FontFamily="{StaticResource DefaultFontFamily}"
                                 Margin="16,0"
                                 VerticalAlignment="Center"
                                 Grid.Column="2"
@@ -228,7 +232,7 @@
                     Grid.Column="2"
                     Name="SumText"
                     HorizontalAlignment="Right"
-                    Text="{Binding cost}"
+                    Text="{Binding Path=Cost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                     FontWeight="SemiBold"
                     Foreground="{ThemeResource Text-1}"
                     FontFamily="{StaticResource DefaultFontFamily}"
@@ -269,7 +273,7 @@
 
         <CollectionViewSource
             x:Name="ContactsCVS"
-            Source="{x:Bind operationGroups, Mode=OneWay}"
+            Source="{x:Bind OperationGroups, Mode=OneWay}"
             IsSourceGrouped="True" />
 
         <local:EmptyOrFullSelector
@@ -279,17 +283,22 @@
 
         <DataTemplate
             x:Key="JumpListGroupTemplate">
-            <Border
-                Margin="8"
-                Width="24"
-                Height="24">
+            <Grid
+                Margin="4"
+                Width="32"
+                Height="32">
+                <Ellipse
+                    Width="32"
+                    Height="32"
+                    Fill="{ThemeResource Background+1}" />
                 <TextBlock
+                    FontSize="13"
                     Text="{Binding Day}"
                     Foreground="{ThemeResource Text}"
                     FontFamily="{StaticResource DefaultFontFamily}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center" />
-            </Border>
+            </Grid>
         </DataTemplate>
         <DataTemplate
             x:Key="JumptListEmptyTemplate">
@@ -298,6 +307,7 @@
                 Width="24"
                 Height="24">
                 <TextBlock
+                    FontSize="13"
                     Text="{Binding Day}"
                     FontFamily="{StaticResource DefaultFontFamily}"
                     Foreground="{ThemeResource Text-1}"
@@ -381,13 +391,43 @@
                     </Button>
                 </Grid>
 
-                    <TextBlock
-                        Name="targetBlock"
-                        Text="{x:Bind ActualMonthText, Mode=OneWay}"
-                        HorizontalAlignment="Center"
-                        Margin="8,0,0,0"
-                        Style="{StaticResource PageTitleStyle}">
-                    </TextBlock>
+                    <Button
+                        Margin="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Content="{x:Bind storeData.ActualMonthText, Mode=OneWay}"
+                        FontFamily="{StaticResource DefaultFontFamily}"
+                        FontWeight="Bold"
+                        FontSize="14"
+                        Foreground="{ThemeResource AccentText}"
+                        Padding="8">
+                        <Button.Flyout>
+                            <Flyout
+                                Placement="Bottom">
+                                <Flyout.FlyoutPresenterStyle>
+                                    <Style
+                                        TargetType="FlyoutPresenter">
+                                        <Setter
+                                            Property="BorderThickness"
+                                            Value="0" />
+                                        <Setter
+                                            Property="Background"
+                                            Value="{ThemeResource Background-1Transparent}" />
+                                    </Style>
+                                </Flyout.FlyoutPresenterStyle>
+                                <TextBlock
+                                    Text="Chuja zmienisz tu miesiąc" />
+                            </Flyout>
+                        </Button.Flyout>
+                        <!--
+                        <TextBlock
+                            Name="targetBlock"
+                            Text="{x:Bind storeData.ActualMonthText, Mode=OneWay}"
+                            HorizontalAlignment="Center"
+                            Margin="0"
+                            Style="{StaticResource PageTitleStyle}">
+                        </TextBlock>-->
+                    </Button>
 
                 </StackPanel>
 
@@ -399,7 +439,7 @@
                     <TextBlock
                         VerticalAlignment="Center"
                         Name="ActualMoneyBar"
-                        Text="{x:Bind Path=ActualOperationsSum, Mode=OneWay}"
+                        Text="{x:Bind storeData.ActualOperationsSum, Mode=OneWay}"
                         Foreground="{ThemeResource AccentText}"
                         FontFamily="{StaticResource DefaultFontFamily}"
                         FontWeight="Bold"
@@ -414,9 +454,10 @@
                         <Button.Content>
                             <FontIcon
                                 Foreground="{ThemeResource AccentText}"
-                                Opacity="0.5"
+                                Opacity="0.75"
                                 FontSize="13"
-                                Glyph="" />
+                                FontFamily="{StaticResource FontAwesome}"
+                                Glyph="" />
                         </Button.Content>
                         <Button.Flyout>
                             <Flyout
@@ -551,30 +592,13 @@
                                         x:Uid="final" />
                                 </Grid>
                                 
-                                <ListView
+                                <ItemsControl
                                     Margin="0"
                                     Padding="0"
                                     x:Name="BalanceListView"
-                                    SelectionMode="None"
                                     ItemsSource="{x:Bind listOfMoneyAccounts()}">
-                                    <ListView.ItemContainerStyle>
-                                        <Style
-                                            TargetType="ListViewItem">
-                                            <Setter
-                                                Property="HorizontalContentAlignment"
-                                                Value="Stretch" />
-                                            <Setter
-                                                Property="Padding"
-                                                Value="0" />
-                                            <Setter
-                                                Property="Margin"
-                                                Value="0" />
-                                            <Setter
-                                                Property="MinHeight"
-                                                Value="16" />
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                    <ListView.ItemTemplate>
+
+                                    <ItemsControl.ItemTemplate>
                                         <DataTemplate
                                             x:DataType="models:MoneyAccountBalance">
                                             <Grid
@@ -624,8 +648,8 @@
                                                     Text="{Binding FinalValue}" />
                                             </Grid>
                                         </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
 
                                 <StackPanel
                                     Margin="0,16"
@@ -754,6 +778,39 @@
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
+
+                    <ListView.GroupStyle>
+
+                        <GroupStyle
+                            HeaderTemplate="{x:Bind HeaderTemplate, Mode=OneWay}">
+                            <GroupStyle.HeaderContainerStyle>
+                                <Style
+                                    TargetType="ListViewHeaderItem">
+                                    <Setter
+                                        Property="FontFamily"
+                                        Value="{StaticResource DefaultFontFamily}" />
+                                    <Setter
+                                        Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate
+                                                TargetType="ListViewHeaderItem">
+
+                                                <ContentPresenter
+                                                    x:Name="ContentPresenter"
+                                                    Padding="0,8,0,0"
+                                                    Content="{TemplateBinding Content}"
+                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                    ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                    HorizontalContentAlignment="Stretch"
+                                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.HeaderContainerStyle>
+                        </GroupStyle>
+                    </ListView.GroupStyle>
                 </ListView>
             </SemanticZoom.ZoomedInView>
 
@@ -762,6 +819,10 @@
                     x:Name="OperacjeListViewGroup"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
+                    ItemsSource="{x:Bind ZoomedOut_ItemsSource, Mode=OneWay}"
+                    ItemsPanel="{x:Bind ZoomedOut_ItemsPanel, Mode=OneWay}"
+                    ItemTemplate="{x:Bind ZoomedOut_ItemTemplate, Mode=OneWay}"
+                    ItemTemplateSelector="{x:Bind ZoomedOut_ItemTemplateSelector, Mode=OneWay}"
                     SelectionMode="Single">
                 </GridView>
             </SemanticZoom.ZoomedOutView>

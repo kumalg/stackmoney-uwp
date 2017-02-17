@@ -1,4 +1,5 @@
-﻿using Finanse.Models;
+﻿using Finanse.Charts;
+using Finanse.Models;
 using Finanse.Models.Helpers;
 using Finanse.Models.Statistics;
 using System;
@@ -15,7 +16,7 @@ namespace Finanse.Pages {
         StatisticsData statisticsData = new StatisticsData();
         
         public DateTime minDate = Date.FirstDayInMonth(DateTime.Today);
-        public DateTime maxDate = Date.LastDayInMonth(DateTime.Today);
+        public DateTime maxDate = DateTime.Today;
 
         private string incomesPercentageText;
         public string IncomesPercentageText {
@@ -36,6 +37,28 @@ namespace Finanse.Pages {
             set {
                 dateRangeText = value;
                 RaisePropertyChanged("DateRangeText");
+            }
+        }
+
+        private string expensesValue = string.Empty;
+        private string ExpensesValue {
+            get {
+                return expensesValue;
+            }
+            set {
+                expensesValue = value;
+                RaisePropertyChanged("ExpensesValue");
+            }
+        }
+
+        private string incomesValue = string.Empty;
+        private string IncomesValue {
+            get {
+                return incomesValue;
+            }
+            set {
+                incomesValue = value;
+                RaisePropertyChanged("IncomesValue");
             }
         }
 
@@ -94,6 +117,39 @@ namespace Finanse.Pages {
             }
         }
 
+        private ObservableCollection<LineChartItem> lineChartTest = new ObservableCollection<LineChartItem>();
+        public ObservableCollection<LineChartItem> LineChartTest {
+            get {
+                return lineChartTest;
+            }
+            set {
+                lineChartTest = value;
+                RaisePropertyChanged("LineChartTest");
+            }
+        }
+
+        private ObservableCollection<LineChartItem> lineChartTest2 = new ObservableCollection<LineChartItem>();
+        public ObservableCollection<LineChartItem> LineChartTest2 {
+            get {
+                return lineChartTest2;
+            }
+            set {
+                lineChartTest2 = value;
+                RaisePropertyChanged("LineChartTest2");
+            }
+        }
+
+        private ObservableCollection<LineChartItem> lineChartTest3 = new ObservableCollection<LineChartItem>();
+        public ObservableCollection<LineChartItem> LineChartTest3 {
+            get {
+                return lineChartTest3;
+            }
+            set {
+                lineChartTest3 = value;
+                RaisePropertyChanged("LineChartTest3");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void RaisePropertyChanged(string propertyName) {
@@ -131,6 +187,12 @@ namespace Finanse.Pages {
             DateRangeText = statisticsData.getActualDateRangeText(minDate, maxDate);
 
             ExpensesToIncomes = statisticsData.getExpenseToIncomeComparsion();
+            ExpensesValue = ExpensesToIncomes[0].UnrelativeValue.ToString("C", Settings.getActualCultureInfo());
+            IncomesValue = ExpensesToIncomes[1].UnrelativeValue.ToString("C", Settings.getActualCultureInfo());
+            LineChartTest = statisticsData.lineChartTest();
+            LineChartTest2 = statisticsData.lineChartTest2();
+            LineChartTest3 = statisticsData.lineChartTest3();
+
             IncomesPercentageText = (100 * ExpensesToIncomes[1].RelativeValue).ToString("0") + "%";
 
             if ((bool)ExpensesRadioButton.IsChecked)

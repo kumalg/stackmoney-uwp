@@ -9,14 +9,13 @@ using Windows.UI.Xaml.Media;
 namespace Finanse.Models {
     public class GroupInfoList<T> : ObservableCollection<Operation> {
         public object Key { get; set; }
-        private decimal _decimalCost;
 
-        private string cost;
         public string Cost {
             get {
                 return decimalCost.ToString("C", Settings.getActualCultureInfo());
             }
         }
+        
 
         public decimal decimalCost {
             get {
@@ -38,7 +37,7 @@ namespace Finanse.Models {
         }
 
         public GroupInfoList() {
-            this.CollectionChanged += delegate {
+            CollectionChanged += delegate {
                 OnPropertyChanged("Cost");
             };
         }
@@ -59,13 +58,20 @@ namespace Finanse.Models {
         public FontFamily iconStyle { get; set; }
         public string color { get; set; }
         public double opacity { get; set; }
+        public override string ToString() {
+            return categoryId.ToString();
+        }
     }
     class GroupHeaderByDay {
+        public DateTime ActualMonth { get; set; }
         public string date { get; set; }
         public string dayNum { get; set; }
         public string dayNum00 { get; set; }
         public string day { get; set; }
         public string month { get; set; }
+        public override string ToString() {
+            return date;
+        }
 
         public GroupHeaderByDay(string date) {
 

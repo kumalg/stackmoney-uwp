@@ -9,7 +9,8 @@
     <FontFamily x:Key="FontAwesome">/Assets/Fonts/FontAwesome.ttf#FontAwesome</FontFamily>  
     <FontFamily x:Key="Bariol">/Assets/Fonts/Bariol.ttf#Bariol</FontFamily>
 
-    <FontFamily x:Key="DefaultFontFamily">/Assets/Fonts/Bariol.ttf#Bariol</FontFamily>
+    <!--<FontFamily x:Key="DefaultFontFamily">/Assets/Fonts/Bariol.ttf#Bariol</FontFamily>-->
+    <FontFamily x:Key="DefaultFontFamily">#Segoe UI</FontFamily>
     <!-- <FontFamily x:Key="DefaultFontFamily">#Bebas Neue</FontFamily> -->
               
 
@@ -1219,7 +1220,7 @@
             Value="False" />
         <Setter
             Property="Padding"
-            Value="{ThemeResource TextControlThemePadding}" />
+            Value="12,5,0,7" />
         <Setter
             Property="Template">
             <Setter.Value>
@@ -2292,7 +2293,7 @@
                             RadiusY="10"
                             Grid.Row="2"
                             RadiusX="10"
-                            Stroke="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                            Stroke="{ThemeResource Text-2}"
                             StrokeThickness="2"
                             Width="44" />
                         <Rectangle
@@ -2303,7 +2304,7 @@
                             RadiusY="10"
                             Grid.Row="2"
                             RadiusX="10"
-                            Stroke="{ThemeResource SystemControlHighlightAltBaseHighBrush}"
+                            Stroke="{ThemeResource Text-2}"
                             StrokeThickness="{ThemeResource ToggleSwitchOnStrokeThickness}"
                             Width="44" />
                         <Grid
@@ -2324,7 +2325,7 @@
                                 Width="10" />
                             <Ellipse
                                 x:Name="SwitchKnobOff"
-                                Fill="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                                Fill="{ThemeResource Text-2}"
                                 Height="10"
                                 Width="10" />
                         </Grid>

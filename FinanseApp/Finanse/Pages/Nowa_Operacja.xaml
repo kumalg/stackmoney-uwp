@@ -124,20 +124,34 @@
                         </RadioButton>
                     </Grid>
 
-                    <TextBox
-                        FontSize="24"
-                        FontWeight="SemiLight"
-                        Foreground="{ThemeResource AccentColor}"
-                        Name="CostValue"
-                        Style="{StaticResource TextBoxStyle1}"
-                        PlaceholderText="Wartość"
-                        x:Uid="valuePlaceholder"
-                        InputScope="CurrencyAmount"
-                        Margin="0,20,0,16"
-                        GotFocus="CostValue_GotFocus"
-                        LostFocus="CostValue_LostFocus"
-                        TextChanging="CostValue_TextChanging"
-                        TextChanged="CostValue_TextChanged" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon
+                            Style="{StaticResource DetailsIconStyle}"
+                            FontFamily="{StaticResource FontAwesome}"
+                            Glyph=""
+                            FontSize="16"
+                            Width="48" />
+                        <TextBox
+                            Grid.Column="1"
+                            FontSize="24"
+                            FontWeight="SemiLight"
+                            Foreground="{ThemeResource AccentColor}"
+                            Name="CostValue"
+                            Style="{StaticResource TextBoxStyle1}"
+                            PlaceholderText="Wartość"
+                            x:Uid="valuePlaceholder"
+                            InputScope="CurrencyAmount"
+                            Margin="0,20,0,16"
+                            GotFocus="CostValue_GotFocus"
+                            LostFocus="CostValue_LostFocus"
+                            TextChanging="CostValue_TextChanging"
+                            TextChanged="CostValue_TextChanged" />
+                    </Grid>
 
                     <Grid
                         x:Name="TransferAccounts_Grid"
@@ -190,64 +204,132 @@
                             HorizontalAlignment="Stretch" />
                     </Grid>
 
-                    <TextBox
-                        Name="NameValue"
-                        Style="{StaticResource TextBoxStyle1}"
-                        PlaceholderText="Nazwa"
-                        x:Uid="namePlaceholder"
-                        Margin="0,16" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon
+                            Style="{StaticResource DetailsIconStyle}"
+                            FontFamily="{StaticResource FontAwesome}"
+                            Glyph=""
+                            FontSize="16"
+                            Width="48" />
+                        <TextBox
+                            Grid.Column="1"
+                            Name="NameValue"
+                            Style="{StaticResource TextBoxStyle1}"
+                            PlaceholderText="Nazwa"
+                            x:Uid="namePlaceholder"
+                            Margin="0,16" />
+                    </Grid>
 
-                    <CalendarDatePicker
-                        Name="DateValue"
-                        Style="{StaticResource CalendarDatePickerStyle1}"
-                        FirstDayOfWeek="{x:Bind firstDayOfWeek()}"
-                        PlaceholderText="Data"
-                        Margin="0,16"
-                        HorizontalAlignment="Stretch"
-                        IsTodayHighlighted="True" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <FontIcon
+                            Width="48"
+                            Style="{StaticResource DetailsIconStyle}"
+                            FontFamily="{StaticResource FontAwesome}"
+                            FontSize="16"
+                            Glyph="" />
+                        <CalendarDatePicker
+                            Grid.Column="1"
+                            Name="DateValue"
+                            Style="{StaticResource CalendarDatePickerStyle1}"
+                            FirstDayOfWeek="{x:Bind firstDayOfWeek()}"
+                            PlaceholderText="Data"
+                            Margin="0,16"
+                            HorizontalAlignment="Stretch"
+                            IsTodayHighlighted="True" />
+                        <Button
+                            Width="32"
+                            Height="32"
+                            Padding="0"
+                            FontSize="13"
+                            Foreground="{ThemeResource Text}"
+                            Background="{ThemeResource Background+1}"
+                            Grid.Column="2"
+                            FontFamily="Segoe MDL2 Assets"
+                            Click="Button_Click"
+                            Content="" />
+                    </Grid>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon
+                            Style="{StaticResource DetailsIconStyle}"
+                            FontFamily="{StaticResource FontAwesome}"
+                            Glyph=""
+                            FontSize="16"
+                            Width="48" />
+                        <ComboBox
+                            Grid.Column="1"
+                            Name="CategoryValue"
+                            Style="{StaticResource ComboBoxStyle1}"
+                            SelectionChanged="ComboBox_SelectionChanged"
+                            SelectedValuePath="ID"
+                            PlaceholderText="Kategoria"
+                            x:Uid="categoryPlaceholder"
+                            Margin="0,16"
+                            HorizontalAlignment="Stretch" />
+                    </Grid>
 
                     <ComboBox
-                        Name="CategoryValue"
-                        Style="{StaticResource ComboBoxStyle1}"
-                        SelectionChanged="ComboBox_SelectionChanged"
-                        SelectedValuePath="ID"
-                        PlaceholderText="Kategoria"
-                        x:Uid="categoryPlaceholder"
-                        Margin="0,16"
-                        HorizontalAlignment="Stretch" />
-
-                    <ComboBox
+                        Grid.Column="1"
                         Name="SubCategoryValue"
                         Style="{StaticResource ComboBoxStyle1}"
                         PlaceholderText="Podkategoria"
                         x:Uid="subCategoryPlaceholder"
-                        Margin="0,16,0,16"
+                        Margin="48,16,0,16"
                         IsEnabled="False"
                         HorizontalAlignment="Stretch"
                         SelectionChanged="SubCategoryValue_SelectionChanged" />
 
-                    <ComboBox
-                        Visibility="Collapsed"
-                        Name="PayFormValue"
-                        Style="{StaticResource ComboBoxStyle1}"
-                        PlaceholderText="Forma płatności"
-                        x:Uid="moneyAccountPlaceholder"
-                        Margin="0,16"
-                        HorizontalAlignment="Stretch">
-                    </ComboBox>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon
+                            Style="{StaticResource DetailsIconStyle}"
+                            FontFamily="{StaticResource FontAwesome}"
+                            Glyph=""
+                            FontSize="16"
+                            Width="48" />
+                        <ComboBox
+                            Grid.Column="1"
+                            Visibility="Collapsed"
+                            Name="PayFormValue"
+                            Style="{StaticResource ComboBoxStyle1}"
+                            PlaceholderText="Forma płatności"
+                            x:Uid="moneyAccountPlaceholder"
+                            Margin="0,16"
+                            HorizontalAlignment="Stretch">
+                        </ComboBox>
+                    </Grid>
 
                     <TextBox
+                        Margin="48,20,0,20"
                         Name="MoreInfoValue"
                         TextWrapping="Wrap"
-                        BorderThickness="1"
                         PlaceholderText="Więcej informacji"
                         x:Uid="moreInfoPlaceholder"
                         Style="{StaticResource TextBoxStyle1}"
+                        BorderThickness="1"
                         Padding="12"
-                        Height="100"
-                        Margin="0,20" />
-                    
+                        Height="100" />
+
                     <StackPanel
+                        Margin="48,0,0,0"
                         x:Name="SaveAsPattern_StackPanel"
                         Visibility="Collapsed">
                         <TextBlock
@@ -260,7 +342,7 @@
                         <ToggleSwitch
                             Name="SaveAsAssetToggle"
                             Style="{StaticResource ToggleSwitchStyle1}"
-                            Margin="10,5,0,0">
+                            Margin="10,0,0,0">
 
                             <ToggleSwitch.OffContent>
                                 <TextBlock
@@ -277,7 +359,8 @@
                         </ToggleSwitch>
                     </StackPanel>
 
-                    <StackPanel>
+                    <StackPanel
+                        Margin="48,8,0,0">
                         <TextBlock
                             Name="HideInStatisticsTitle"
                             Foreground="{ThemeResource Text-1}"
@@ -287,7 +370,7 @@
                         <ToggleSwitch
                             Name="HideInStatisticsToggle"
                             Style="{StaticResource ToggleSwitchStyle1}"
-                            Margin="10,5,0,0">
+                            Margin="10,0,0,0">
 
                             <ToggleSwitch.OffContent>
                                 <TextBlock

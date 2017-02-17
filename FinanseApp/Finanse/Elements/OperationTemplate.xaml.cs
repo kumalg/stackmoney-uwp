@@ -22,7 +22,7 @@ namespace Finanse.Elements {
 
             this.InitializeComponent();
             this.DataContextChanged += (s, e) => Bindings.Update();
-           
+
         }
 
         private OperationCategory category;
@@ -45,7 +45,7 @@ namespace Finanse.Elements {
 
 
         public void Operation_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) {
-
+            
             /* BO PIERDOLI ŻE NULL WCHODZI */
             if (Operation == null)
                 return;
@@ -83,7 +83,7 @@ namespace Finanse.Elements {
                     Title_OperationTemplate.Text = subCat.Name;
                 }
             }
-            
+
             else {
                 CategoryIcon.Color = (SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"];
                 CategoryIcon.Glyph = ((FontIcon)Application.Current.Resources["DefaultEllipseIcon"]).Glyph;

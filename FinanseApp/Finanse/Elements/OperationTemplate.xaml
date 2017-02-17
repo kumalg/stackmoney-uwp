@@ -35,7 +35,7 @@
 
             <data:CategoryIcon
                 x:Name="CategoryIcon" />
-            
+
             <Ellipse
                 Name="MoneyAccountEllipse"
                 Visibility="Collapsed"
@@ -46,7 +46,7 @@
                 Fill="{StaticResource RedColorStyle}"
                 Width="14"
                 Height="14" />
-           
+
         </Grid>
 
         <Border
@@ -70,7 +70,8 @@
                         FontFamily="{StaticResource DefaultFontFamily}"
                         Foreground="{ThemeResource Text}"
                         TextWrapping="Wrap"
-                        FontSize="16" />
+                        FontWeight="SemiLight"
+                        FontSize="14" />
 
                     <StackPanel
                         Name="CategoryNameStackPanel"
@@ -105,7 +106,7 @@
                     </StackPanel>
 
                 </StackPanel>
-                
+
                 <TextBlock
                     Visibility="Visible"
                     FontFamily="{StaticResource DefaultFontFamily}"
@@ -116,7 +117,7 @@
                     Name="Cost_OperationTemplate"
                     Foreground="{Binding isExpense, Converter={StaticResource BooleanToColorConverter}}"
                     Text="{Binding SignedCost, Converter={StaticResource DecimalToCurrencyStringConverter}}" />
-                
+
                 <TextBlock
                     FontFamily="{StaticResource DefaultFontFamily}"
                     Visibility="Collapsed"

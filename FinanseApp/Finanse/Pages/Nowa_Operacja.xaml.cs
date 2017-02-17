@@ -282,6 +282,7 @@ namespace Finanse.Pages {
 
         private Operation getNewOperation(ComboBoxItem moneyAccount, bool isExpense) {
             Operation operation = getNewOperationPattern().toOperation();
+            operation.MoneyAccountId = (int)moneyAccount.Tag;
             operation.isExpense = isExpense;
             operation.Date = DateValue.Date == null ? string.Empty : DateValue.Date.Value.ToString("yyyy.MM.dd");
             operation.VisibleInStatistics = !HideInStatisticsToggle.IsOn;
@@ -330,6 +331,10 @@ namespace Finanse.Pages {
             return DateValue.Date == null || DateValue.Date > DateTime.Today ?
                 DateTime.Today.AddMonths(1) :
                 DateValue.Date.Value.DateTime;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            DateValue.Date = null;
         }
     }
 }

@@ -20,40 +20,30 @@ using Windows.Foundation;
 using Windows.UI.Popups;
 using Windows.UI;
 using System.ComponentModel;
+using Finanse.Models.Helpers;
 
 namespace Finanse.Pages {
     public sealed partial class Strona_glowna : Page, INotifyPropertyChanged {
 
         private HashSet<int> visibleAccountsSet = new HashSet<int>();
-        private OperationData storeData;
-        private ObservableCollection<GroupInfoList<Operation>> _operationGroups = new ObservableCollection<GroupInfoList<Operation>>();
-        private ObservableCollection<GroupInfoList<Operation>> operationGroups {
+        private OperationData storeData = new OperationData();
+        private ObservableCollection<GroupInfoList<Operation>> operationGroups;
+        private ObservableCollection<GroupInfoList<Operation>> OperationGroups {
             get {
-                return _operationGroups;
-            }
-            set {
-                _operationGroups = value;
-                RaisePropertyChanged("operationGroups");
-                RaisePropertyChanged("ActualOperationsSum");
-                RaisePropertyChanged("ActualMonthText");
+                operationGroups = (bool)ByDateRadioButton.IsChecked ? storeData.OperationsByDay : storeData.OperationsByCategory;
+                return operationGroups;
             }
         }
-        private DateTime actualYearAndMonth;
-        private TextBlock actualMonthText = new TextBlock();
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
 
             if (e.Parameter is DateTime) {
                 DateTime dateTimeWithDays = (DateTime)e.Parameter;
-
-                actualYearAndMonth = Functions.dateTimeWithFirstDayOfMonth(dateTimeWithDays);
+                storeData.ActualMonth = Date.FirstDayInMonth(dateTimeWithDays);
+                RaisePropertyChanged("OperationGroups");
 
                 setNextMonthButtonEnabling();
                 setPreviousMonthButtonEnabling();
-
-                storeData = setStoreData();
-
-                groupOperations(operationGroups, storeData);
 
                 if ((bool)ByDateRadioButton.IsChecked)
                     listViewByDate();
@@ -85,30 +75,6 @@ namespace Finanse.Pages {
             if (handler != null)
                 handler(this, new PropertyChangedEventArgs(propertyName));
         }
-        
-        private string ActualOperationsSum {
-            get {
-                decimal actualMoney = operationGroups.Sum(i => i.decimalCost);
-                return actualMoney.ToString("C", Settings.getActualCultureInfo());
-            }
-        }
-
-        private string ActualMonthText {
-            get {
-                string actualMonthText = string.Empty;
-                if (!isFutureMonth(actualYearAndMonth)) {
-                    actualMonthText = DateTimeFormatInfo.CurrentInfo.GetMonthName(actualYearAndMonth.Month).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(actualYearAndMonth.Month).Substring(1);
-                    if (actualYearAndMonth.Year != DateTime.Today.Year)
-                        actualMonthText += " " + actualYearAndMonth.Year.ToString();
-                }
-                else {
-                    var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
-                    actualMonthText = loader.GetString("plannedString");
-                }
-
-                return actualMonthText;
-            }
-        }
 
         public Strona_glowna() {
 
@@ -126,16 +92,11 @@ namespace Finanse.Pages {
                 visibleAccountsSet.Add(item.Id);
                 ((ListView)VisibleAccountsFlyout.Content).Items.Add(itema);
             }
-           
-            actualYearAndMonth = Functions.dateTimeWithFirstDayOfMonth(DateTime.Today);
 
             setNextMonthButtonEnabling();
             setPreviousMonthButtonEnabling();
 
-            storeData = setStoreData();
-
             ByDateRadioButton.IsChecked = true;
-            groupOperations(operationGroups, storeData);
             listViewByDate();
 
             ByDateRadioButton.Checked += ByDateRadioButton_Checked;
@@ -157,8 +118,8 @@ namespace Finanse.Pages {
                     visibleAccountsSet.Add((int)item.Tag);
             
             if (!previousAccountsSet.SetEquals(visibleAccountsSet)) {
-                storeData.SetVisiblePayFormList(visibleAccountsSet);
-                setListOfOperations(visibleAccountsSet);
+                storeData.VisiblePayFormList = visibleAccountsSet;
+                setListOfOperations();
                 
                 //  if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
                 if ((bool)ByDateRadioButton.IsChecked)
@@ -168,19 +129,7 @@ namespace Finanse.Pages {
 
         private List<MoneyAccountBalance> listOfMoneyAccounts() {
             //    return Dal.listOfMoneyAccountBalances(actualYearAndMonth).Where(i => visiblePayFormList.Any(ac => ac == i.MoneyAccount.Id)).ToList();
-            return Dal.listOfMoneyAccountBalances(actualYearAndMonth);
-        }
-
-        private bool isFutureMonth(DateTime date) {
-            return date > new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-        }
-
-        private OperationData setStoreData() {
-            return new OperationData(actualYearAndMonth.Month, actualYearAndMonth.Year, isFutureMonth(actualYearAndMonth), visibleAccountsSet);
-        }
-        
-        private void groupOperations(ObservableCollection<GroupInfoList<Operation>> operationGroupsTYMCZASOWO, OperationData operations) {
-            operationGroups = (bool)ByDateRadioButton.IsChecked ? operations.GroupsByDay : operations.GroupsByCategory;               
+            return Dal.listOfMoneyAccountBalances(storeData.ActualMonth);
         }
         
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
@@ -201,7 +150,7 @@ namespace Finanse.Pages {
             showDetailsContentDialog((Operation)datacontext);
         }
         private async void showDetailsContentDialog(Operation operation) {
-            OperationDetailsContentDialog operationDetailsContentDialog = new OperationDetailsContentDialog(operationGroups, operation, "");
+            OperationDetailsContentDialog operationDetailsContentDialog = new OperationDetailsContentDialog(OperationGroups, operation, "");
 
             operationDetailsContentDialog.MaxHeight = Window.Current.Bounds.Height - 80;
 
@@ -225,7 +174,6 @@ namespace Finanse.Pages {
 
             if (result == ContentDialogResult.Primary) {
                 updateOperationInList(operation, editOperationContentDialog.editedOperation());
-                RaisePropertyChanged("ActualOperationsSum");
             }
         }
         
@@ -240,109 +188,17 @@ namespace Finanse.Pages {
 
             if (result == ContentDialogResult.Primary) {
                 deleteOperation_DialogButtonClick(operation);
-                RaisePropertyChanged("ActualOperationsSum");
             }
         }
 
         private void deleteOperation_DialogButtonClick(Operation operation) {
-            removeOperationFromList(operation);
+            storeData.RemoveOperation(operation);
             Dal.deleteOperation(operation);
         }
         
         private void updateOperationInList(Operation previous, Operation actual) {
-            removeOperationFromList(previous);
-            tryAddOperationToList(actual);
-        }
-
-        private void removeOperationFromList(Operation operation) {
-            if ((bool)ByDateRadioButton.IsChecked)
-                removeOperationFromListByDay(operation);
-            else
-                removeOperationFromListByCategory(operation);
-        }
-
-        private void tryAddOperationToList(Operation operation) {
-            if ((bool)ByDateRadioButton.IsChecked)
-                tryAddOperationToListByDay(operation);
-            else
-                tryAddOperationToListByCategory(operation);
-        }
-
-        private void removeOperationFromListByDay(Operation operation) {
-            int index = operationGroups.Count - 1;  /// głupio bo leci po ostatnim indeksie a nie widzi że jest bez daty
-            if (!operation.Date.Equals(""))
-                index = operationGroups.IndexOf(operationGroups.First(i => ((GroupHeaderByDay)i.Key).date == operation.Date));
-
-            if (operationGroups.ElementAt(index).Count > 1) {
-                operationGroups.ElementAt(index).Remove(operation);
-            }
-            else {
-                operationGroups.RemoveAt(index);
-            }
-        }
-
-        private void tryAddOperationToListByDay(Operation operation) {
-            if (actualYearAndMonth > DateTime.Today.Date) {
-                if (operation.Date.Equals("")) {
-                    if (operationGroups.Any(i => ((GroupHeaderByDay)i.Key).date == ""))
-                        operationGroups.First(i => ((GroupHeaderByDay)i.Key).date == "").Insert(0, operation);
-                    else {
-                        GroupInfoList<Operation> group = new GroupInfoList<Operation>() {
-                            Key = new GroupHeaderByDay(""),
-                        };
-                        group.Add(operation);
-                        operationGroups.Add(group);
-                    }
-                }
-                else if (Convert.ToDateTime(operation.Date).Date > DateTime.Today.Date){
-
-                }
-            }
-            else if (Convert.ToDateTime(operation.Date).Month == actualYearAndMonth.Month && Convert.ToDateTime(operation.Date).Year == actualYearAndMonth.Year) {
-                if (operationGroups.Any(i => ((GroupHeaderByDay)i.Key).date == operation.Date)) {
-                    GroupInfoList<Operation> group = operationGroups.First(i => ((GroupHeaderByDay)i.Key).date == operation.Date);//.Insert(0, operation);
-                    group.Insert(0, operation);
-                }
-                else {
-                    GroupInfoList<Operation> group = new GroupInfoList<Operation>() {
-                        Key = new GroupHeaderByDay(operation.Date),
-                    };
-                    group.Add(operation);
-
-                    int i;
-                    for (i = 0; i < operationGroups.Count; i++)
-                        if (((GroupHeaderByDay)operationGroups.ElementAt(i).Key).date.CompareTo(operation.Date) < 0)
-                            break;
-
-                    operationGroups.Insert(i, group);
-                }
-            }
-        }
-
-        private void removeOperationFromListByCategory(Operation operation) {
-            int index = operationGroups.IndexOf(operationGroups.First(i => ((GroupHeaderByCategory)i.Key).categoryId == operation.CategoryId));
-            if (operationGroups.ElementAt(index).Count > 1)
-                operationGroups.ElementAt(index).Remove(operation);
-            else
-                operationGroups.RemoveAt(index);
-        }
-
-        private void tryAddOperationToListByCategory(Operation operation) {
-            if (Convert.ToDateTime(operation.Date).Date > DateTime.Today.Date) {
-                /// planowany wydatek
-            }
-            else if (Convert.ToDateTime(operation.Date).Month == actualYearAndMonth.Month && Convert.ToDateTime(operation.Date).Year == actualYearAndMonth.Year) {
-                if (operationGroups.Any(i => ((GroupHeaderByCategory)i.Key).categoryId == operation.Id)) {
-                    operationGroups.First(i => ((GroupHeaderByCategory)i.Key).categoryId == operation.Id).Add(operation);
-                }
-                else {
-                    GroupInfoList<Operation> group = new GroupInfoList<Operation>();
-                    /// tu trzeba dodać ikonkę i nazwę kategorii
-                    /// jest pomysł żeby przesyłać wyłącznie Id
-                    group.Add(operation);
-                    operationGroups.Add(group);
-                }
-            }
+            storeData.RemoveOperation(previous);
+            storeData.AddOperation(actual);
         }
 
         private void Grid_DragStarting(UIElement sender, DragStartingEventArgs args) {
@@ -362,7 +218,7 @@ namespace Finanse.Pages {
             if (e.SourceItem.Item.GetType() == typeof(HeaderItem)) {
                 HeaderItem hi = (HeaderItem)e.SourceItem.Item;
 
-                var group = operationGroups.SingleOrDefault(d => ((GroupHeaderByDay)d.Key).dayNum == hi.Day);
+                var group = OperationGroups.SingleOrDefault(d => ((GroupHeaderByDay)d.Key).dayNum == hi.Day);
 
                 if (group != null)
                     e.DestinationItem = new SemanticZoomLocation() { Item = group };
@@ -375,8 +231,8 @@ namespace Finanse.Pages {
             activateProgressRing();
             await Task.Delay(5);
 
-            actualYearAndMonth = actualYearAndMonth.AddMonths(-1);
-            setListOfOperations(visibleAccountsSet);
+            storeData.ActualMonth = storeData.ActualMonth.AddMonths(-1);
+            setListOfOperations();
 
             deactivateProgressRing();
         }
@@ -385,8 +241,8 @@ namespace Finanse.Pages {
             activateProgressRing();
             await Task.Delay(5);
 
-            actualYearAndMonth = actualYearAndMonth.AddMonths(1);
-            setListOfOperations(visibleAccountsSet);
+            storeData.ActualMonth = storeData.ActualMonth.AddMonths(1);
+            setListOfOperations();
 
             deactivateProgressRing();
         }
@@ -395,8 +251,8 @@ namespace Finanse.Pages {
             activateProgressRing();
             await Task.Delay(5);
 
-            actualYearAndMonth = actualYearAndMonth.AddMonths(1);
-            setListOfOperations(visibleAccountsSet);
+            storeData.ActualMonth = storeData.ActualMonth.AddMonths(1);
+            setListOfOperations();
             PrevMonthButton.IsEnabled = true; // ponieważ trzeba wrócić z planowanych do aktualnego miesiąca
             IncomingOperationsButton.Visibility = Visibility.Collapsed;
 
@@ -413,10 +269,9 @@ namespace Finanse.Pages {
             ProgressRing.IsActive = false;
         }
 
-        private void setListOfOperations(HashSet<int> visiblePayFormList) {
-
-            storeData = setStoreData();
-            groupOperations(operationGroups, storeData);
+        private void setListOfOperations() {
+            
+            RaisePropertyChanged("OperationGroups");
 
             // if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
             if ((bool)ByDateRadioButton.IsChecked)
@@ -431,7 +286,7 @@ namespace Finanse.Pages {
         }
 
         private bool setEmptyListViewInfoVisibility() {
-            if (operationGroups.Count == 0) {
+            if (OperationGroups.Count == 0) {
                 semanticZoom.Visibility = Visibility.Collapsed;
                 EmptyListViewInfo.Visibility = Visibility.Visible;
                 return false;
@@ -444,7 +299,7 @@ namespace Finanse.Pages {
         }
 
         private void setNextMonthButtonEnabling() {
-            if (new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1) <= actualYearAndMonth) {
+            if (new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1) <= storeData.ActualMonth) {
                 NextMonthButton.Visibility = Visibility.Collapsed;
                 IncomingOperationsButton.Visibility = Visibility.Visible;
             } else {
@@ -458,20 +313,21 @@ namespace Finanse.Pages {
 
             PrevMonthButton.IsEnabled = eldestOperation == null ? 
                 false : 
-                Convert.ToDateTime(eldestOperation.Date) < actualYearAndMonth;
+                Convert.ToDateTime(eldestOperation.Date) < storeData.ActualMonth;
         }
 
 
         private void listViewByDate() {
             OperacjeListView.GroupStyle.Clear();
             OperacjeListView.GroupStyle.Add(ByDateGroupStyle);
-
+            
             OperacjeListView.SelectionChanged -= OperacjeListView_SelectionChanged;
             OperacjeListView.SelectedItem = null;
-            (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
-            (semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate = null;
-            (semanticZoom.ZoomedOutView as ListViewBase).ItemTemplateSelector = GroupEmptyOrFullSelector;
-            (semanticZoom.ZoomedOutView as ListViewBase).ItemsPanel = ByDateGroupItemsPanelTemplate;
+
+            RaisePropertyChanged("ZoomedOut_ItemsSource");
+            RaisePropertyChanged("ZoomedOut_ItemsPanel");
+            RaisePropertyChanged("ZoomedOut_ItemTemplate");
+            RaisePropertyChanged("ZoomedOut_ItemTemplateSelector");
 
             OperacjeListView.SelectionChanged += OperacjeListView_SelectionChanged;
 
@@ -482,18 +338,38 @@ namespace Finanse.Pages {
         private void listViewByCategory() {
             OperacjeListView.GroupStyle.Clear();
             OperacjeListView.GroupStyle.Add(ByCategoryGroupStyle);
+            
+            RaisePropertyChanged("ZoomedOut_ItemsSource");
+            RaisePropertyChanged("ZoomedOut_ItemsPanel");
+            RaisePropertyChanged("ZoomedOut_ItemTemplate");
+            RaisePropertyChanged("ZoomedOut_ItemTemplateSelector");
+        }
 
-            (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = ContactsCVS.View.CollectionGroups;
-            (semanticZoom.ZoomedOutView as ListViewBase).ItemsPanel = ByCategoryGroupItemsPanelTemplate;
-            (semanticZoom.ZoomedOutView as ListViewBase).ItemTemplateSelector = null;
-            (semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate = ByCategoryGroupItemTemplate;
+        private object ZoomedOut_ItemsSource {
+            get { return (bool)ByDateRadioButton.IsChecked ? storeData.OperationHeaders as object : ContactsCVS.View.CollectionGroups as object; }
+        }
+
+        private DataTemplate HeaderTemplate {
+            get { return (bool)ByDateRadioButton.IsChecked ? ByDateGroupStyle.HeaderTemplate : ByCategoryGroupStyle.HeaderTemplate; }
+        }
+
+        private ItemsPanelTemplate ZoomedOut_ItemsPanel {
+            get { return (bool)ByDateRadioButton.IsChecked ? ByDateGroupItemsPanelTemplate : ByCategoryGroupItemsPanelTemplate; }
+        }
+
+        private DataTemplate ZoomedOut_ItemTemplate {
+            get { return (bool)ByDateRadioButton.IsChecked ? null : ByCategoryGroupItemTemplate; }
+        }
+
+        private DataTemplateSelector ZoomedOut_ItemTemplateSelector {
+            get { return (bool)ByDateRadioButton.IsChecked ? GroupEmptyOrFullSelector : null; }
         }
 
         private async void ByCategoryRadioButton_Checked(object sender, RoutedEventArgs e) {
             activateProgressRing();
             await Task.Delay(1);
-
-            groupOperations(operationGroups, storeData);
+            
+            RaisePropertyChanged("OperationGroups");
             listViewByCategory();
 
             deactivateProgressRing();
@@ -502,8 +378,8 @@ namespace Finanse.Pages {
         private async void ByDateRadioButton_Checked(object sender, RoutedEventArgs e) {
             activateProgressRing();
             await Task.Delay(1);
-
-            groupOperations(operationGroups, storeData);
+            
+            RaisePropertyChanged("OperationGroups");
             listViewByDate();
 
             deactivateProgressRing();

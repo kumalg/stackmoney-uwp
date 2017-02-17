@@ -79,13 +79,12 @@
             ItemTemplate="{StaticResource DoughnutChartItemTemplate}"
             Margin="16" />
 
-        <ListView
+        <ItemsControl
             Margin="16"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             ItemsSource="{Binding}"
-            ItemTemplate="{StaticResource LegendItemTemplate}"
-            SelectionMode="None" />
+            ItemTemplate="{StaticResource LegendItemTemplate}" />
     </StackPanel>
     
     

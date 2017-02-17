@@ -1,17 +1,23 @@
-﻿using Finanse.Charts.Extensions;
+﻿using Finanse.Charts;
+using Finanse.Charts.Extensions;
+using Microsoft.Graphics.Canvas;
+using Microsoft.Graphics.Canvas.Brushes;
 using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.Graphics.Canvas.UI.Xaml;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Numerics;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Shapes;
 
 namespace Finanse.Charts {
-    public class LineChart : UserControl {
+    public class LineChartInterpolated : UserControl {
         public DataTemplate ItemTemplate {
             get; set;
         }
@@ -30,7 +36,7 @@ namespace Finanse.Charts {
         }
 
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            var chart = d as LineChart;
+            var chart = d as LineChartInterpolated;
             var value = e.NewValue as IList;
             if (chart == null || value == null)
                 return;
@@ -53,7 +59,7 @@ namespace Finanse.Charts {
         }
 
         public static readonly DependencyProperty FillProperty =
-            DependencyProperty.Register(nameof(Fill), typeof(SolidColorBrush), typeof(LineChart), new PropertyMetadata(null, PropertyChangedDelegate));
+            DependencyProperty.Register(nameof(Fill), typeof(SolidColorBrush), typeof(LineChart), new PropertyMetadata(new SolidColorBrush(Colors.Green), PropertyChangedDelegate));
 
         public SolidColorBrush Fill {
             get {
@@ -77,7 +83,7 @@ namespace Finanse.Charts {
         // Canvas for line drawing
         private CanvasControl _canvas;
 
-        public LineChart() {
+        public LineChartInterpolated() {
             _root = new Grid();
             _root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100, GridUnitType.Auto) });
             _root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
@@ -105,13 +111,6 @@ namespace Finanse.Charts {
                 return;
             if (ItemsSource == null)
                 return;
-            /*
-            var items = ItemsSource.Select(o => {
-                var item = ItemTemplate.LoadContent() as LineChartItem;
-                item.DataContext = o;
-                return item;
-            }).ToList();
-            */
             List<LineChartItem> items = new List<LineChartItem>();
             foreach (LineChartItem item in ItemsSource)
                 items.Add(item);
@@ -122,7 +121,7 @@ namespace Finanse.Charts {
             var availableWidth = (float)_canvas.ActualWidth;
             var availableHeight = (float)_canvas.ActualHeight;
             var fill = Fill ?? new SolidColorBrush(DefaultColors.GetRandom());
-            var elementWidth = availableWidth / (items.Count - 1);
+            var elementWidth = (availableWidth - (Thickness * 2)) / (items.Count - 1);
             var radius = (float)(Thickness * 2);
 
             var min = items.Min(i => i.Value);
@@ -133,17 +132,17 @@ namespace Finanse.Charts {
             #region Add X captions
             _xCap.Children.Clear();
             _xCap.Children.Add(new TextBlock {
-                Text = "Test",//items.First().Key.ToString(),
+              //  Text = items.First().Key.ToString(),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Stretch
             });
             _xCap.Children.Add(new TextBlock {
-                Text = "Test", //items.Last().Key.ToString(),
+              //  Text = items.Last().Key.ToString(),
                 HorizontalAlignment = HorizontalAlignment.Right,
                 VerticalAlignment = VerticalAlignment.Stretch
             });
             #endregion
-
+            /*
             #region Add Y captions
             _yCap.Children.Clear();
             if (YAxis == YMode.FromMin) {
@@ -173,11 +172,16 @@ namespace Finanse.Charts {
             });
             #endregion
 
+            */
+            
             // Draw lines
             using (var builder = new CanvasPathBuilder(sender)) {
+                IList<Vector2> array = new List<Vector2>();
+                IList<Vector2> controlPoints = new List<Vector2>();
+
                 for (var i = 0; i < items.Count; i++) {
                     var item = items[i];
-                    var x = i * elementWidth;
+                    var x = (float)(i * (elementWidth) + Thickness);
                     var y = availableHeight -
                         (YAxis == YMode.FromMin
                             ? (float)((item.Value - min) * availableHeight / diff)
@@ -187,20 +191,130 @@ namespace Finanse.Charts {
                         y += radius;
                     if (item.Value - min < d)
                         y -= radius;
-                    // Main drawing
-                    if (i == 0)
-                        builder.BeginFigure(x, y);
-                    else
-                        builder.AddLine(x, y);
+
+                    array.Add(new Vector2(x, y));
                 }
+
+                for (int i = 1; i < array.Count - 1; i++) {
+                    Vector2[] controlPoint2 = calculateControlPoints(array[i - 1], array[i], array[i + 1]);
+                    controlPoints.Add(controlPoint2[0]);
+                    controlPoints.Add(controlPoint2[1]);
+                }
+
+                for (int i = 0; i < array.Count; i++) {
+                    if (i == 0)
+                        builder.BeginFigure(array[i]);
+                    else if (i == 1 && array.Count == 2) {
+                        builder.AddCubicBezier(array[0], array[1], array[1]);
+                    }
+                    else if (i == 1 && array.Count > 2) {
+                        builder.AddCubicBezier(array[0], controlPoints[0], array[1]);
+                    }
+                    else if (i < array.Count - 1) {
+                        builder.AddCubicBezier(controlPoints[i * 2 - 3], controlPoints[i * 2 - 2], array[i]);
+                    }
+                    else if (array.Count > 1) {
+                        builder.AddCubicBezier(controlPoints[i * 2 - 3], array[i], array[i]);
+                    }
+                }
+
                 builder.EndFigure(CanvasFigureLoop.Open);
-                using (var geometry = CanvasGeometry.CreatePath(builder))
-                    args.DrawingSession.DrawGeometry(geometry, fill.Color, (float)Thickness);
+
+                args.DrawingSession.DrawLine(0, availableHeight, availableWidth, availableHeight + 16, Color.FromArgb(35, 255, 255, 255), 0.5f);
+                using (var geometry = CanvasGeometry.CreatePath(builder)) {
+                    CanvasStrokeStyle strokeStyle = new CanvasStrokeStyle {
+                        EndCap = CanvasCapStyle.Round,
+                        StartCap = CanvasCapStyle.Round
+                    };
+
+                    Color startColor = Fill.Color;
+                    Color startColor2 = Fill.Color;
+                    startColor2.A = 150;
+
+
+                    CanvasLinearGradientBrush ee = new CanvasLinearGradientBrush(_canvas, startColor, startColor2) {
+                        StartPoint = new Vector2(0, 0),
+                        EndPoint = new Vector2(0, availableHeight)
+                    };
+
+                    args.DrawingSession.DrawGeometry(geometry, ee, (float)Thickness, strokeStyle);
+
+                }
                 // Draw axis
-                var color = ForegroundColor;
-                args.DrawingSession.DrawLine(0, 0, 0, availableHeight, Colors.Black, 1);
-                args.DrawingSession.DrawLine(0, availableHeight, availableWidth, availableHeight, Colors.Black, 1);
+                Color color = ((SolidColorBrush)Foreground).Color;
+                color.A = 40;
+
+                CanvasStrokeStyle strokeStyle2 = new CanvasStrokeStyle {
+                    CustomDashStyle = new float[] { 2, 4},
+                    //DashStyle = CanvasDashStyle.Dot,
+                    //DashOffset = 15
+                };
+
+                float part = (availableHeight - 2 * radius) / 3;
+
+                for (int i = 0; i < 4; i++) {
+                    float yPos = radius + i * part;
+                    args.DrawingSession.DrawLine(0, yPos, availableWidth, yPos, color, 1, strokeStyle2);
+                }
             }
+            /*
+            using (var builder = new CanvasPathBuilder(sender)) {
+                builder.BeginFigure(array[0].X, availableHeight);
+                for (int i = 0; i < array.Count; i++) {
+                    if (i == 0)
+                        builder.AddLine(array[i]);
+                    else if (i == 1 && array.Count == 2) {
+                        builder.AddCubicBezier(array[0], array[1], array[1]);
+                    }
+                    else if (i == 1 && array.Count > 2) {
+                        builder.AddCubicBezier(array[0], controlPoints[0], array[1]);
+                    }
+                    else if (i < array.Count - 1) {
+                        builder.AddCubicBezier(controlPoints[i * 2 - 3], controlPoints[i * 2 - 2], array[i]);
+                    }
+                    else if (array.Count > 1) {
+                        builder.AddCubicBezier(controlPoints[i * 2 - 3], array[i], array[i]);
+                    }
+                }
+                builder.AddLine(array.Last().X, availableHeight);
+                builder.EndFigure(CanvasFigureLoop.Closed);
+
+                using (var geometry = CanvasGeometry.CreatePath(builder)) {
+                    Color startColor = Fill.Color;
+                    startColor.A = 50;
+
+                    CanvasLinearGradientBrush ee = new CanvasLinearGradientBrush(_canvas, startColor, Colors.Transparent) {
+                        StartPoint = new Vector2(0, 0),
+                        EndPoint = new Vector2(0, availableHeight)
+                    };
+                    args.DrawingSession.FillGeometry(geometry, ee);
+                }
+            }*/
+        }
+
+        private Vector2[] calculateControlPoints(Vector2 previousPoint, Vector2 actualPoint, Vector2 nextPoint) {
+
+            var availableHeight = (float)_canvas.ActualHeight;
+
+            float xLenght = (nextPoint.X - previousPoint.X) / 4;
+            float yLenght = (nextPoint.Y - previousPoint.Y) / 4;
+
+            float x1 = actualPoint.X - xLenght;
+            float x2 = actualPoint.X + xLenght;
+            float y1 = actualPoint.Y - yLenght;
+            float y2 = actualPoint.Y + yLenght;
+            
+            if (y1 > availableHeight) {
+                y2 += y1 - availableHeight;
+                y1 = availableHeight - (float)(Thickness * 2);
+            }
+
+            else if (y2 > availableHeight) {
+                y1 += y2 - availableHeight;
+                y2 = availableHeight - (float)(Thickness * 2);
+            }
+
+            return new Vector2[] { new Vector2(x1, y1), new Vector2(x2, y2) };
         }
 
         private Color ForegroundColor => GetBrush("SystemControlForegroundAltMediumHighBrush").Color;
@@ -210,10 +324,6 @@ namespace Finanse.Charts {
 
         private void Redraw() => _canvas.Invalidate();
 
-        private static PropertyChangedCallback PropertyChangedDelegate = (s, a) => (s as LineChart)?.Redraw();
-    }
-
-    public enum YMode {
-        FromZero, FromMin
+        private static PropertyChangedCallback PropertyChangedDelegate = (s, a) => (s as LineChartInterpolated)?.Redraw();
     }
 }

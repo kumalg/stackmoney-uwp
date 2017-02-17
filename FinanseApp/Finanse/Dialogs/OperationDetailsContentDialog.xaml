@@ -169,6 +169,7 @@
         <TextBlock
             Name="CostValue"
             FontSize="36"
+            FontWeight="Light"
             FontFamily="{StaticResource DefaultFontFamily}"
             TextAlignment="Center"
             Foreground="{StaticResource GreenColorStyle}"

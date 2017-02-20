@@ -59,11 +59,11 @@
         <ListView
             Padding="0,16"
             Grid.Row="1"
-            ItemsSource="{x:Bind MoneyAccounts}"
-            SelectionMode="Single"
+            ItemsSource="{x:Bind Accounts, Mode=OneWay}"
+            SelectionMode="None"
             BorderThickness="0"
             Background="Transparent"
-            IsItemClickEnabled="True">
+            IsItemClickEnabled="False">
 
             <ListView.ItemContainerStyle>
                 <Style
@@ -81,41 +81,63 @@
             </ListView.ItemContainerStyle>
 
             <ListView.ItemTemplate>
-                <DataTemplate
-                    x:DataType="models:MoneyAccount">
-
+                <DataTemplate>
                     <Grid
                         Background="Transparent">
+                        <StackPanel>
+                            <Button
+                                Padding="0"
+                                Margin="0"
+                                BorderThickness="0"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                Background="Transparent">
+                                <Button.Flyout>
+                                    <MenuFlyout
+                                        MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
+                                        <MenuFlyoutItem
+                                            x:Name="EditButton"
+                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                            Tag="&#xE104;"
+                                            Text="Edytuj"
+                                            Click="EditButton_Click" />
+                                        <MenuFlyoutItem
+                                            x:Name="DeleteButton"
+                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                            Tag="&#xE107;"
+                                            Text="Usuń"
+                                            Click="DeleteButton_Click" />
+                                    </MenuFlyout>
+                                </Button.Flyout>
+                                <data:MoneyAccountTemplate />
+                            </Button>
 
-                        <FlyoutBase.AttachedFlyout>
-
-                            <MenuFlyout
-                                MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
-
-                                <MenuFlyoutItem
-                                    x:Name="DetailsButton"
-                                    Style="{StaticResource MyMenuFlyoutItem}"
-                                    Tag="&#xEA55;"
-                                    Text="Szczegóły"/>
-
-                                <MenuFlyoutItem
-                                    x:Name="EditButton"
-                                    Style="{StaticResource MyMenuFlyoutItem}"
-                                    Tag="&#xE104;"
-                                    Text="Edytuj"/>
-
-                                <MenuFlyoutItem
-                                    x:Name="DeleteButton"
-                                    Style="{StaticResource MyMenuFlyoutItem}"
-                                    Tag="&#xE107;"
-                                    Text="Usuń"/>
-
-                            </MenuFlyout>
-
-                        </FlyoutBase.AttachedFlyout>
-
-                        <data:MoneyAccountTemplate />
-
+                            <ListView
+                                Margin="32,0,0,0"
+                                IsItemClickEnabled="True"
+                                SelectionMode="None"
+                                ItemsSource="{Binding Cards}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <data:CardAccountTemplate />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ItemContainerStyle>
+                                    <Style
+                                        TargetType="ListViewItem">
+                                        <Setter
+                                            Property="HorizontalContentAlignment"
+                                            Value="Stretch" />
+                                        <Setter
+                                            Property="Padding"
+                                            Value="0" />
+                                        <Setter
+                                            Property="MaxWidth"
+                                            Value="620" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </StackPanel>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

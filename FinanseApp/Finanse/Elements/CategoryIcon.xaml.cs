@@ -1,4 +1,7 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using System.Numerics;
+using Windows.Foundation;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
@@ -35,6 +38,20 @@ namespace Finanse.Elements {
                 SetValue(ColorProperty, value);
             }
         }
+        /*
+        private Point SPOINT {
+            get {
+                double angle = 60 * Math.PI / 180;
+                return new Point(23 * Math.Cos(angle) + 24, 23 * Math.Sin(angle) + 24);
+            }
+        }
+
+        private Point SPOINT2 {
+            get {
+                double angle = 30 * Math.PI / 180;
+                return new Point(23 * Math.Cos(angle) + 24, 23 * Math.Sin(angle) + 24);
+            }
+        }*/
 
         public CategoryIcon() {
             this.InitializeComponent();

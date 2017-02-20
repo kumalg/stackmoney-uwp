@@ -7,6 +7,7 @@
     xmlns:icons="Finanse.Assets.Icons"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
     <Page.Transitions>
@@ -181,6 +182,7 @@
                             Grid.Row="0"
                             Visibility="Visible"
                             Name="InitialAccount"
+                            ItemsSource="{x:Bind AccountsFromComboBox, Mode=OneWay}"
                             PlaceholderText="Konto początkowe"
                             Style="{StaticResource ComboBoxStyle1}"
                             Margin="0,10"
@@ -198,6 +200,7 @@
                             Grid.Row="1"
                             Visibility="Visible"
                             Name="DestinationAccount"
+                            ItemsSource="{x:Bind AccountsToComboBox, Mode=OneWay}"
                             PlaceholderText="Konto docelowe"
                             Style="{StaticResource ComboBoxStyle1}"
                             Margin="0,10"
@@ -310,6 +313,8 @@
                             Visibility="Collapsed"
                             Name="PayFormValue"
                             Style="{StaticResource ComboBoxStyle1}"
+                            ItemsSource="{x:Bind AccountsComboBox, Mode=OneWay}"
+                            SelectionChanged="PayFormValue_SelectionChanged"
                             PlaceholderText="Forma płatności"
                             x:Uid="moneyAccountPlaceholder"
                             Margin="0,16"

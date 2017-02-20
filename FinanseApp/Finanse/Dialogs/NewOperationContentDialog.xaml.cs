@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using Finanse.DataAccessLayer;
 using Finanse.Models;
 using System.Text.RegularExpressions;
+using Finanse.Models.MoneyAccounts;
 
 namespace Finanse.Dialogs {
     public sealed partial class NewOperationContentDialog : ContentDialog {
@@ -38,7 +39,7 @@ namespace Finanse.Dialogs {
 
             SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
 
-            foreach (MoneyAccount account in Dal.getAllMoneyAccounts()) {
+            foreach (Account account in AccountsDal.getAllMoneyAccounts()) {
 
                 PayFormValue.Items.Add(new ComboBoxItem {
                     Content = account.Name,
@@ -67,7 +68,7 @@ namespace Finanse.Dialogs {
 
             SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
 
-            foreach (MoneyAccount account in Dal.getAllMoneyAccounts()) {
+            foreach (Account account in AccountsDal.getAllMoneyAccounts()) {
 
                 PayFormValue.Items.Add(new ComboBoxItem {
                     Content = account.Name,

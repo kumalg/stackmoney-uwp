@@ -72,11 +72,6 @@ namespace Finanse.Pages {
             var result = await ContentDialogItem.ShowAsync();
         }
 
-        private void SzablonyListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            ListView listView = sender as ListView;
-            listView.SelectedIndex = -1;
-        }
-
         private async void SzablonyListView_ItemClick(object sender, ItemClickEventArgs e) {
             OperationPattern thisOperation = (OperationPattern)e.ClickedItem;
 

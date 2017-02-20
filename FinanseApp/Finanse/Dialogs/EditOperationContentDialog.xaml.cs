@@ -6,9 +6,12 @@ using System.Collections.ObjectModel;
 using Finanse.DataAccessLayer;
 using Finanse.Models;
 using System.Text.RegularExpressions;
+using Finanse.Models.MoneyAccounts;
+using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Finanse.Dialogs {
-    public sealed partial class EditOperationContentDialog : ContentDialog {
+    public sealed partial class EditOperationContentDialog : ContentDialog, INotifyPropertyChanged {
 
         private Regex regex = NewOperation.getRegex();
         
@@ -17,6 +20,7 @@ namespace Finanse.Dialogs {
 
         private Operation operationToEdit = null;
         private OperationPattern operationPatternToEdit = null;
+        private OperationPattern dupa;
 
         private string acceptedCostValue = string.Empty;
 
@@ -26,7 +30,8 @@ namespace Finanse.Dialogs {
             this.operationToEdit = operationToEdit;
 
             DateValue.MaxDate = Settings.getMaxDate();
-            setMoneyAccountComboBoxItems();
+            this.dupa = operationToEdit.toOperation();
+            //  setMoneyAccountComboBoxItems();
 
             setEditedOperationValues(operationToEdit);
         }
@@ -37,17 +42,32 @@ namespace Finanse.Dialogs {
             this.operationPatternToEdit = operationPatternToEdit;
 
             DateValue.Visibility = Visibility.Collapsed;
-            setMoneyAccountComboBoxItems();
+            this.dupa = operationPatternToEdit.toOperation();
+            //setMoneyAccountComboBoxItems();
 
             setEditedOperationValues(operationPatternToEdit);
         }
+        
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void RaisePropertyChanged(string propertyName) {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
+        }
 
-        private void setMoneyAccountComboBoxItems() {
-            foreach (MoneyAccount account in Dal.getAllMoneyAccounts()) {
-                PayFormValue.Items.Add(new ComboBoxItem {
-                    Content = account.Name,
-                    Tag = account.Id
-                });
+
+        private List<Account> AccountsWithoutCards = AccountsDal.getAccountsWithoutCards();
+        private List<Account> Accounts = AccountsDal.getAllMoneyAccounts();
+
+
+        private ObservableCollection<Account> AccountsComboBox {
+            get {
+                if ((bool)Income_RadioButton.IsChecked) {
+                    return new ObservableCollection<Account>(AccountsWithoutCards);
+                }
+                else {
+                    return new ObservableCollection<Account>(Accounts);
+                }
             }
         }
 
@@ -70,12 +90,11 @@ namespace Finanse.Dialogs {
 
             CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == operationPattern.CategoryId);
             SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operationPattern.SubCategoryId);
-            PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operationPattern.MoneyAccountId);
+      //      PayFormValue.SelectedItem = PayFormValue.Items.OfType<Account>().SingleOrDefault(item => item.Id == operationPattern.MoneyAccountId);
 
             if (!string.IsNullOrEmpty(operationPattern.MoreInfo))
                 MoreInfoValue.Text = operationPattern.MoreInfo;
            
-
             isLoaded = true;
         }
 
@@ -102,7 +121,7 @@ namespace Finanse.Dialogs {
                 CategoryId = getCategoryId(),
                 SubCategoryId = getSubCategoryId(),
                 MoreInfo = MoreInfoValue.Text,
-                MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
+                MoneyAccountId = ((Account)PayFormValue.SelectedItem).Id,
                 VisibleInStatistics = !HideInStatisticsToggle.IsOn,
             };
         }
@@ -116,7 +135,7 @@ namespace Finanse.Dialogs {
                 CategoryId = getCategoryId(),
                 SubCategoryId = getSubCategoryId(),
                 MoreInfo = MoreInfoValue.Text,
-                MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
+                MoneyAccountId = ((Account)PayFormValue.SelectedItem).Id,
             };
         }
 
@@ -147,6 +166,7 @@ namespace Finanse.Dialogs {
         }
 
         private void TypeOfOperationRadioButton_Checked(object sender, RoutedEventArgs e) {
+            RaisePropertyChanged("AccountsComboBox");
 
             if (CategoryValue.SelectedIndex != -1) {
                 int idOfSelectedCategory = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
@@ -284,6 +304,8 @@ namespace Finanse.Dialogs {
         }
 
         private void PayFormValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (PayFormValue.SelectedItem == null)
+                PayFormValue.SelectedIndex = 0;
             setPrimaryButtonEnabling();
         }
 
@@ -293,6 +315,10 @@ namespace Finanse.Dialogs {
 
         private void HideInStatisticsToggle_Toggled(object sender, RoutedEventArgs e) {
             setPrimaryButtonEnabling();
+        }
+
+        private void PayFormValue_Loaded(object sender, RoutedEventArgs e) {
+            PayFormValue.SelectedItem = PayFormValue.Items.OfType<Account>().SingleOrDefault(item => item.Id == dupa.MoneyAccountId);
         }
     }
 }

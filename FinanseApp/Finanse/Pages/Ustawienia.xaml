@@ -102,53 +102,58 @@
                                 Style="{StaticResource ComboBoxStyle1}">
                             </ComboBox>
 
-
-                            <TextBlock
-                                FontSize="18"
-                                Margin="10,20,0,10"
-                                Text="Powiadomienia"
-                                x:Uid="notifications"
-                                Foreground="{ThemeResource Text}" />
-
-                            <TextBlock
-                                Margin="10,5,0,0"
-                                Text="Wysyłaj przypomnienie o dodaniu nowej operacji"
-                                x:Uid="sendMeNotifications"
-                                Foreground="{ThemeResource Text-1}" />
-
-                            <ToggleSwitch
-                                x:Name="ReminderToggleSwitch"
-                                Margin="10,0"
-                                IsOn="True"
-                                Style="{StaticResource ToggleSwitchStyle1}"
-                                Toggled="ReminderToggleSwitch_Toggled">
-
-                                <ToggleSwitch.OffContent>
-                                    <TextBlock Text="Wyłączone" x:Uid="off"/>
-                                </ToggleSwitch.OffContent>
-
-                                <ToggleSwitch.OnContent>
-                                    <TextBlock Text="Włączone" x:Uid="on"/>
-                                </ToggleSwitch.OnContent>
-
-                            </ToggleSwitch>
-
                             <StackPanel
-                                x:Name="ReminderStackPanel">
+                                Visibility="Collapsed">
                                 <TextBlock
-                                    Margin="10,10,0,10"
-                                    Text="Czas przypomnienia"
-                                    x:Uid="reminderTime"
+                                    FontSize="18"
+                                    Margin="10,20,0,10"
+                                    Text="Powiadomienia"
+                                    x:Uid="notifications"
+                                    Foreground="{ThemeResource Text}" />
+
+                                <TextBlock
+                                    Margin="10,5,0,0"
+                                    Text="Wysyłaj przypomnienie o dodaniu nowej operacji"
+                                    x:Uid="sendMeNotifications"
                                     Foreground="{ThemeResource Text-1}" />
 
-                                <ComboBox
-                                    SelectedIndex="0"
-                                    Style="{StaticResource ComboBoxStyle1}">
-                                    <ComboBoxItem
-                                        Content="20:00" />
-                                </ComboBox>
-                            </StackPanel>
+                                <ToggleSwitch
+                                    x:Name="ReminderToggleSwitch"
+                                    Margin="10,0"
+                                    IsOn="True"
+                                    Style="{StaticResource ToggleSwitchStyle1}"
+                                    Toggled="ReminderToggleSwitch_Toggled">
 
+                                    <ToggleSwitch.OffContent>
+                                        <TextBlock
+                                            Text="Wyłączone"
+                                            x:Uid="off" />
+                                    </ToggleSwitch.OffContent>
+
+                                    <ToggleSwitch.OnContent>
+                                        <TextBlock
+                                            Text="Włączone"
+                                            x:Uid="on" />
+                                    </ToggleSwitch.OnContent>
+
+                                </ToggleSwitch>
+
+                                <StackPanel
+                                    x:Name="ReminderStackPanel">
+                                    <TextBlock
+                                        Margin="10,10,0,10"
+                                        Text="Czas przypomnienia"
+                                        x:Uid="reminderTime"
+                                        Foreground="{ThemeResource Text-1}" />
+
+                                    <ComboBox
+                                        SelectedIndex="0"
+                                        Style="{StaticResource ComboBoxStyle1}">
+                                        <ComboBoxItem
+                                            Content="20:00" />
+                                    </ComboBox>
+                                </StackPanel>
+                            </StackPanel>
                             <Border
                                 Opacity="0.3"
                                 Margin="0,32"
@@ -163,6 +168,7 @@
                                 Foreground="{ThemeResource Text-1}" />
 
                             <Button
+                                Click="Button_Click"
                                 Margin="10,16">
                                 <TextBlock Text="Resetuj dane" x:Uid="resetData" />
                             </Button>
@@ -312,6 +318,7 @@
                                 Foreground="{ThemeResource Text-1}" />
 
                             <ToggleSwitch
+                                IsEnabled="False"
                                 Margin="10,0"
                                 Style="{StaticResource ToggleSwitchStyle1}">
 

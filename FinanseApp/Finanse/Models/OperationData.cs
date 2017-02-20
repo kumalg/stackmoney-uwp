@@ -18,6 +18,8 @@ namespace Finanse.Models {
         private DateTime monthOfCategoryGrouping;
         private HashSet<int> visiblePayFormListOfDayGrouping = new HashSet<int>();
         private HashSet<int> visiblePayFormListOfCategoryGrouping;
+        private bool forceByDayUpdate = false;
+        private bool forceByCategoryUpdate = false;
 
 
         private DateTime actualMonth = Date.FirstDayInMonth(DateTime.Today);
@@ -30,8 +32,6 @@ namespace Finanse.Models {
                 OnPropertyChanged("ActualMonthText");
                 OnPropertyChanged("ActualOperationsSum");
                 SetNewOperationsList();
-
-                OnPropertyChanged("OperationsByDay");
             }
         }
 
@@ -53,6 +53,11 @@ namespace Finanse.Models {
             }
         }
 
+        public void ForceUpdate() {
+            forceByDayUpdate = true;
+            forceByCategoryUpdate = true;
+            SetNewOperationsList();
+        }
 
         public string ActualOperationsSum {
             get {
@@ -65,7 +70,7 @@ namespace Finanse.Models {
         public HashSet<int> VisiblePayFormList {
             get {
                 if (visiblePayFormList == null)
-                    visiblePayFormList = new HashSet<int>(Dal.getAllMoneyAccounts().Select(i => i.Id));
+                    visiblePayFormList = new HashSet<int>(AccountsDal.getAllMoneyAccounts().Select(i => i.Id));
                 return visiblePayFormList;
             }
             set {
@@ -110,7 +115,8 @@ namespace Finanse.Models {
         private ObservableCollection<GroupInfoList<Operation>> operationsByDay;
         public ObservableCollection<GroupInfoList<Operation>> OperationsByDay {
             get {
-                if (operationsByDay == null || monthOfDayGrouping != ActualMonth  || !visiblePayFormList.SetEquals(visiblePayFormListOfDayGrouping) ) {
+                if (operationsByDay == null || monthOfDayGrouping != ActualMonth  || !visiblePayFormList.SetEquals(visiblePayFormListOfDayGrouping) || forceByDayUpdate) {
+                    forceByDayUpdate = false;
                     operationsByDay = new ObservableCollection<GroupInfoList<Operation>>();
                     monthOfDayGrouping = ActualMonth;
                     visiblePayFormListOfDayGrouping = new HashSet<int>(visiblePayFormList);
@@ -217,7 +223,8 @@ namespace Finanse.Models {
         private ObservableCollection<GroupInfoList<Operation>> operationsByCategory;
         public ObservableCollection<GroupInfoList<Operation>> OperationsByCategory {
             get {
-                if (operationsByCategory == null || monthOfCategoryGrouping != ActualMonth || !visiblePayFormList.SetEquals(visiblePayFormListOfCategoryGrouping)) {
+                if (operationsByCategory == null || monthOfCategoryGrouping != ActualMonth || !visiblePayFormList.SetEquals(visiblePayFormListOfCategoryGrouping) || forceByCategoryUpdate) {
+                    forceByCategoryUpdate = false;
                     operationsByCategory = new ObservableCollection<GroupInfoList<Operation>>();
                     monthOfCategoryGrouping = ActualMonth;
                     visiblePayFormListOfCategoryGrouping = new HashSet<int>(visiblePayFormList);

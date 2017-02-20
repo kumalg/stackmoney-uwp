@@ -40,6 +40,7 @@ namespace Finanse.Pages {
             if (e.Parameter is DateTime) {
                 DateTime dateTimeWithDays = (DateTime)e.Parameter;
                 storeData.ActualMonth = Date.FirstDayInMonth(dateTimeWithDays);
+                storeData.ForceUpdate();
                 RaisePropertyChanged("OperationGroups");
 
                 setNextMonthButtonEnabling();
@@ -83,7 +84,7 @@ namespace Finanse.Pages {
             if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile")
                 HardwareButtons.BackPressed += HardwareButtons_BackPressed;
            
-            foreach (var item in Dal.getAllMoneyAccounts()) {
+            foreach (var item in AccountsDal.getAllMoneyAccounts()) {
                 CheckBox itema = new CheckBox {
                     Content = item.Name,
                     Tag = item.Id,
@@ -120,16 +121,12 @@ namespace Finanse.Pages {
             if (!previousAccountsSet.SetEquals(visibleAccountsSet)) {
                 storeData.VisiblePayFormList = visibleAccountsSet;
                 setListOfOperations();
-                
-                //  if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
-                if ((bool)ByDateRadioButton.IsChecked)
-                    (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
             }
         }
 
         private List<MoneyAccountBalance> listOfMoneyAccounts() {
             //    return Dal.listOfMoneyAccountBalances(actualYearAndMonth).Where(i => visiblePayFormList.Any(ac => ac == i.MoneyAccount.Id)).ToList();
-            return Dal.listOfMoneyAccountBalances(storeData.ActualMonth);
+            return AccountsDal.listOfMoneyAccountBalances(storeData.ActualMonth);
         }
         
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
@@ -207,10 +204,6 @@ namespace Finanse.Pages {
             flyoutBase.ShowAt(senderElement);
         }
 
-        private void OperacjeListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            OperacjeListView.SelectedItem = null;
-        }
-
         private void semanticZoom_ViewChangeStarted(object sender, SemanticZoomViewChangedEventArgs e) {
             if (e.SourceItem == null)
                 return;
@@ -272,11 +265,8 @@ namespace Finanse.Pages {
         private void setListOfOperations() {
             
             RaisePropertyChanged("OperationGroups");
+            RaisePropertyChanged("ZoomedOut_ItemsSource");
 
-            // if ((semanticZoom.ZoomedOutView as ListViewBase).ItemTemplate == null)
-            if ((bool)ByDateRadioButton.IsChecked)
-                (semanticZoom.ZoomedOutView as ListViewBase).ItemsSource = storeData.OperationHeaders;
-            
             setNextMonthButtonEnabling();
             setPreviousMonthButtonEnabling();
 
@@ -321,16 +311,11 @@ namespace Finanse.Pages {
             OperacjeListView.GroupStyle.Clear();
             OperacjeListView.GroupStyle.Add(ByDateGroupStyle);
             
-            OperacjeListView.SelectionChanged -= OperacjeListView_SelectionChanged;
-            OperacjeListView.SelectedItem = null;
-
             RaisePropertyChanged("ZoomedOut_ItemsSource");
             RaisePropertyChanged("ZoomedOut_ItemsPanel");
             RaisePropertyChanged("ZoomedOut_ItemTemplate");
             RaisePropertyChanged("ZoomedOut_ItemTemplateSelector");
-
-            OperacjeListView.SelectionChanged += OperacjeListView_SelectionChanged;
-
+            
             semanticZoom.ViewChangeStarted -= semanticZoom_ViewChangeStarted;
             semanticZoom.ViewChangeStarted += semanticZoom_ViewChangeStarted;
         }
@@ -346,7 +331,7 @@ namespace Finanse.Pages {
         }
 
         private object ZoomedOut_ItemsSource {
-            get { return (bool)ByDateRadioButton.IsChecked ? storeData.OperationHeaders as object : ContactsCVS.View.CollectionGroups as object; }
+            get { return (bool)ByDateRadioButton.IsChecked ? storeData.OperationHeaders : ContactsCVS.View.CollectionGroups as object; }
         }
 
         private DataTemplate HeaderTemplate {

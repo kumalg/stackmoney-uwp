@@ -4,6 +4,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Finanse.DataAccessLayer;
 using Finanse.Models;
+using Finanse.Models.MoneyAccounts;
 
 namespace Finanse.Elements {
 
@@ -52,12 +53,12 @@ namespace Finanse.Elements {
 
             if (Settings.getAccountEllipseVisibility()) {
 
-                MoneyAccount moneyAccount = Dal.getMoneyAccountById(Operation.MoneyAccountId);
+                Account moneyAccount = AccountsDal.getAccountById(Operation.MoneyAccountId);
 
                 if (moneyAccount != null)
-                    if (!string.IsNullOrEmpty(moneyAccount.Color)) {
+                    if (!string.IsNullOrEmpty(moneyAccount.ColorKey)) {
                         MoneyAccountEllipse.Visibility = Visibility.Visible;
-                        MoneyAccountEllipse.Fill = Functions.GetSolidColorBrush(moneyAccount.Color);
+                        MoneyAccountEllipse.Fill = moneyAccount.SolidColorBrush;
                     }
             }
 

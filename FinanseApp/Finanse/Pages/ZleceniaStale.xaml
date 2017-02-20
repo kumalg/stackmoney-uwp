@@ -34,6 +34,24 @@
                 x:Uid="standingOrders"
                 Style="{StaticResource PageTitleStyle}" />
         </Grid>
-
+        <TextBlock
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Grid.Row="1"
+            Text="Nic tu nie ma jeszcze :(" />
+        <!--
+        <Grid
+            Grid.Row="1">
+            <Path
+                Stroke="Red"
+                StrokeThickness="4">
+                <Path.Data>
+                    <PathGeometry
+                        Figures="{x:Bind Points}">
+                    </PathGeometry>
+                </Path.Data>
+            </Path>
+        </Grid>
+        -->
     </Grid>
 </Page>

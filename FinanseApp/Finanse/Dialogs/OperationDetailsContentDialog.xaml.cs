@@ -5,6 +5,7 @@ using Windows.UI.Xaml.Media;
 using System.Collections.ObjectModel;
 using Finanse.DataAccessLayer;
 using Finanse.Models;
+using Finanse.Models.MoneyAccounts;
 
 namespace Finanse.Dialogs {
 
@@ -49,7 +50,7 @@ namespace Finanse.Dialogs {
 
             OperationCategory cat = Dal.getOperationCategoryById(editedOperation.CategoryId);
             OperationSubCategory subCat = Dal.getOperationSubCategoryById(editedOperation.SubCategoryId);
-            MoneyAccount account = Dal.getMoneyAccountById(editedOperation.MoneyAccountId);
+            Account account = AccountsDal.getAccountById(editedOperation.MoneyAccountId);
 
             /* KATEGORIA */
             CategoryValuePanel.Visibility = Visibility.Collapsed;
@@ -70,6 +71,13 @@ namespace Finanse.Dialogs {
             if (account != null) {
                 PayForm.Text = account.Name;
                 PayFormPanel.Visibility = Visibility.Visible;
+
+                if (account is CashAccount)
+                    PayFormIcon.Glyph = "";
+                else if (account is BankAccount)
+                    PayFormIcon.Glyph = "";
+                else
+                    PayFormIcon.Glyph = "";
             }
 
             /* WIĘCEJ INFORMACJI */

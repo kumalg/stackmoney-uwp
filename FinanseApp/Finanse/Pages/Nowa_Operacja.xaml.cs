@@ -1,8 +1,11 @@
 ﻿using Finanse.DataAccessLayer;
 using Finanse.Dialogs;
 using Finanse.Models;
+using Finanse.Models.MoneyAccounts;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -17,7 +20,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Finanse.Pages {
 
-    public sealed partial class Nowa_Operacja : Page {
+    public sealed partial class Nowa_Operacja : Page, INotifyPropertyChanged {
 
         private Regex regex = NewOperation.getRegex();
         private string acceptedCostValue = string.Empty;
@@ -25,7 +28,7 @@ namespace Finanse.Pages {
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             setDefaultPageValues();
-            base.OnNavigatedTo(e); 
+            base.OnNavigatedTo(e);
         }
 
         private void setDefaultPageValues() {
@@ -36,22 +39,47 @@ namespace Finanse.Pages {
             CategoryValue.SelectedIndex = -1;
             SubCategoryValue.SelectedIndex = -1;
             SubCategoryValue.IsEnabled = false;
-            PayFormValue.SelectedIndex = 0;
+            // PayFormValue.SelectedIndex = 0;
             MoreInfoValue.Text = string.Empty;
             SaveAsAssetToggle.IsOn = false;
             HideInStatisticsToggle.IsOn = false;
             Expense_RadioButton.IsChecked = true;
         }
 
-        public List<ComboBoxItem> listOfMoneyAccounts() {
-            List<ComboBoxItem> list = new List<ComboBoxItem>();
-            foreach (MoneyAccount account in Dal.getAllMoneyAccounts()) {
-                list.Add(new ComboBoxItem {
-                    Content = account.Name,
-                    Tag = account.Id
-                });
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void RaisePropertyChanged(string propertyName) {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
+        private List<Account> AccountsWithoutCards = AccountsDal.getAccountsWithoutCards();
+        private List<Account> Accounts = AccountsDal.getAllMoneyAccounts();
+
+
+        private ObservableCollection<Account> AccountsComboBox {
+            get {
+                if ((bool)Income_RadioButton.IsChecked) {
+                    return new ObservableCollection<Account>(AccountsWithoutCards);
+                }
+                else {
+                    return new ObservableCollection<Account>(Accounts);
+                }
             }
-            return list;
+        }
+
+        private List<Account> AccountsToComboBox {
+            get {
+                return AccountsWithoutCards.ToList();
+            }
+        }
+
+        private List<Account> AccountsFromComboBox {
+            get {
+                return AccountsWithoutCards.ToList();
+            }
         }
 
         private void setItemSource(ComboBox comboBox, List<ComboBoxItem> list) {
@@ -59,12 +87,14 @@ namespace Finanse.Pages {
         }
 
         public Nowa_Operacja() {
-          
+
             this.InitializeComponent();
 
-            PayFormValue.ItemsSource = listOfMoneyAccounts();
-            InitialAccount.ItemsSource = listOfMoneyAccounts();
-            DestinationAccount.ItemsSource = listOfMoneyAccounts();
+            // PayFormValue.ItemsSource = listOfMoneyAccounts();
+            // InitialAccount.ItemsSource = listOfMoneyAccounts();
+            // DestinationAccount.ItemsSource = listOfMoneyAccounts();
+
+            //    PayFormValue.SelectedIndex = 0;
 
             DateValue.Date = DateTime.Today;
             DateValue.MaxDate = Settings.getMaxDate();
@@ -100,7 +130,7 @@ namespace Finanse.Pages {
                 if (SubCategoryValue.SelectedIndex != -1)
                     selectedSubCategoryId = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
             }
-            
+
             SetCategoryComboBoxItems(true, true);
 
             CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == selectedCategoryId);
@@ -111,6 +141,15 @@ namespace Finanse.Pages {
         }
 
         private void ExpenseOrIncomeRadioButton_Checked(object sender, RoutedEventArgs e) {
+            //Account selectedAccount = (Account)PayFormValue.SelectedItem;
+            RaisePropertyChanged("AccountsComboBox");
+           // PayFormValue.SelectedItem = selectedAccount;
+            /*
+            if (selectedAccount == null || selectedAccount is CardAccount)
+                PayFormValue.SelectedIndex = 0;
+            else
+                PayFormValue.SelectedItem = selectedAccount;
+                */
             TransferAccounts_Grid.Visibility = Visibility.Collapsed;
 
             PayFormValue.Visibility = Visibility.Visible;
@@ -258,7 +297,7 @@ namespace Finanse.Pages {
 
             CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == selectedOperation.CategoryId);
             SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == selectedOperation.SubCategoryId);
-            PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == selectedOperation.MoneyAccountId);
+            PayFormValue.SelectedItem = PayFormValue.Items.OfType<Account>().SingleOrDefault(item => item.Id == selectedOperation.MoneyAccountId);
 
             if (selectedOperation.MoreInfo != null)
                 MoreInfoValue.Text = selectedOperation.MoreInfo;
@@ -276,13 +315,13 @@ namespace Finanse.Pages {
                 CategoryId = getCategoryId(),
                 SubCategoryId = getSubCategoryId(),
                 MoreInfo = MoreInfoValue.Text,
-                MoneyAccountId = (int)((ComboBoxItem)PayFormValue.SelectedItem).Tag,
+                MoneyAccountId = ((Account)PayFormValue.SelectedItem).Id,
             };
         }
 
-        private Operation getNewOperation(ComboBoxItem moneyAccount, bool isExpense) {
+        private Operation getNewOperation(Account moneyAccount, bool isExpense) {
             Operation operation = getNewOperationPattern().toOperation();
-            operation.MoneyAccountId = (int)moneyAccount.Tag;
+            operation.MoneyAccountId = moneyAccount.Id;
             operation.isExpense = isExpense;
             operation.Date = DateValue.Date == null ? string.Empty : DateValue.Date.Value.ToString("yyyy.MM.dd");
             operation.VisibleInStatistics = !HideInStatisticsToggle.IsOn;
@@ -297,11 +336,11 @@ namespace Finanse.Pages {
                     return;
                 }
                 
-                Dal.saveOperation(getNewOperation((ComboBoxItem)InitialAccount.SelectedItem, true));
-                Dal.saveOperation(getNewOperation((ComboBoxItem)DestinationAccount.SelectedItem, false));
+                Dal.saveOperation(getNewOperation((Account)InitialAccount.SelectedItem, true));
+                Dal.saveOperation(getNewOperation((Account)DestinationAccount.SelectedItem, false));
             }
             else {
-                Dal.saveOperation(getNewOperation((ComboBoxItem)PayFormValue.SelectedItem, (bool)Expense_RadioButton.IsChecked));
+                Dal.saveOperation(getNewOperation((Account)PayFormValue.SelectedItem, (bool)Expense_RadioButton.IsChecked));
 
                 if (SaveAsAssetToggle.IsOn)
                     Dal.saveOperationPattern(getNewOperationPattern());
@@ -335,6 +374,15 @@ namespace Finanse.Pages {
 
         private void Button_Click(object sender, RoutedEventArgs e) {
             DateValue.Date = null;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e) {
+            PayFormValue.SelectedIndex = 0;
+        }
+
+        private void PayFormValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (PayFormValue.SelectedItem == null)
+                PayFormValue.SelectedIndex = 0;
         }
     }
 }

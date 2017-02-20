@@ -1,19 +1,11 @@
 ﻿using Finanse.DataAccessLayer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Finanse.Models.MoneyAccounts {
     class CardAccount : Account {
         public int BankAccountId { get; set; }
 
         public override string getActualMoneyValue() {
-            decimal moneyValue = 0;
-            foreach (Operation o in Dal.getAllOperationsOfThisMoneyAccount(this))
-                moneyValue += o.isExpense ? -o.Cost : o.Cost;
-            return moneyValue.ToString("C", Settings.getActualCultureInfo());
+            return AccountsDal.CardAccountExpensesById(Id).ToString("C", Settings.getActualCultureInfo());
         }
     }
 }

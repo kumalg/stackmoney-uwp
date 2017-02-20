@@ -1,4 +1,5 @@
 ﻿using Finanse.DataAccessLayer;
+using Finanse.Models.MoneyAccounts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,19 +8,29 @@ using System.Threading.Tasks;
 
 namespace Finanse.Models {
     class MoneyAccountBalance {
-        MoneyAccount moneyAccount;
+        Account account;
         decimal initialValue;
         decimal finalValue;
 
-        public MoneyAccountBalance(MoneyAccount moneyAccount, decimal initialValue, decimal finalValue) {
-            this.moneyAccount = moneyAccount;
+        public MoneyAccountBalance(Account account, decimal initialValue, decimal finalValue) {
+            this.account = account;
             this.initialValue = initialValue;
             this.finalValue = finalValue;
         }
 
-        public MoneyAccount MoneyAccount {
+        public void JoinBalance(MoneyAccountBalance secondAccount) {
+            finalValue += secondAccount.finalValue;
+            initialValue += secondAccount.initialValue;
+        }
+
+        public void JoinBalance(decimal initialValue, decimal finalValue) {
+            this.initialValue += initialValue;
+            this.finalValue += finalValue;
+        }
+
+        public Account Account {
             get {
-                return moneyAccount;
+                return account;
             }
         }
 

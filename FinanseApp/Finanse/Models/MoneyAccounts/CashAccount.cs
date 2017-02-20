@@ -8,10 +8,7 @@ using System.Threading.Tasks;
 namespace Finanse.Models.MoneyAccounts {
     class CashAccount : Account {
         public override string getActualMoneyValue() {
-            decimal moneyValue = 0;
-            foreach (Operation o in Dal.getAllOperationsOfThisMoneyAccount(this))
-                moneyValue += o.isExpense ? -o.Cost : o.Cost;
-            return moneyValue.ToString("C", Settings.getActualCultureInfo());
+            return AccountsDal.CashAccountBalanceById(Id).ToString("C", Settings.getActualCultureInfo());
         }
     }
 }

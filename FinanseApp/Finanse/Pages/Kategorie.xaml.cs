@@ -336,11 +336,6 @@ namespace Finanse.Pages {
             await Task.Delay(5);
             OperationCategories = IncomeCategories;
         }
-
-        private void SubOperacjeListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            ListView listView = sender as ListView;
-            listView.SelectedIndex = -1;
-        }
         
         private void ExpandPanel_RightTapped(object sender, RightTappedRoutedEventArgs e) {
             showFlyoutBase(sender);

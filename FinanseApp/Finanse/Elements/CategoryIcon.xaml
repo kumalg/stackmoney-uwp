@@ -17,9 +17,29 @@
         <Ellipse
             Opacity="0.15"
             StrokeThickness="2"
+            Stroke="{ThemeResource Text-2}" />
+        <!--
+        <Path
+            Opacity="0.15"
+            StrokeEndLineCap="Round"
+            StrokeStartLineCap="Round"
+            StrokeThickness="2"
             Stroke="{ThemeResource Text-2}">
-        </Ellipse>
-
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure
+                        StartPoint="{x:Bind SPOINT2}">
+                        <ArcSegment
+                            IsLargeArc="True"
+                            RotationAngle="180"
+                            Size="23,23"
+                            Point="{x:Bind SPOINT}"
+                            SweepDirection="Counterclockwise"/>
+                    </PathFigure>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+-->
         <FontIcon
             FontSize="{Binding HalfSize}"
             Glyph="{Binding Glyph}"

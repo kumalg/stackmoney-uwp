@@ -1,7 +1,18 @@
-﻿using Finanse.Models;
+﻿using Finanse.DataAccessLayer;
+using Finanse.Dialogs;
+using Finanse.Models;
+using Finanse.Models.MoneyAccounts;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -92,6 +103,22 @@ namespace Finanse.Pages {
 
             return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            showDeleteAllContentDialog();
+        }
+        private async void showDeleteAllContentDialog() {
+
+            Dialogs.AcceptContentDialog acceptContentDialog = new Dialogs.AcceptContentDialog("Jesteś pewien?");
+
+            ContentDialogResult result = await acceptContentDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary) {
+                Dal.DeleteAll();
+                Dal.AddInitialElements();
+            }
         }
     }
 }

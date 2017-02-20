@@ -38,14 +38,13 @@
 
             <Ellipse
                 Name="MoneyAccountEllipse"
-                Visibility="Collapsed"
+                Visibility="Visible"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Stroke="{ThemeResource Background}"
-                StrokeThickness="4"
+                Margin="5"
                 Fill="{StaticResource RedColorStyle}"
-                Width="14"
-                Height="14" />
+                Width="6"
+                Height="6" />
 
         </Grid>
 

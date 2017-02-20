@@ -12,7 +12,8 @@ namespace Finanse.Models {
         public int SubCategoryId { get; set; }
         public decimal Cost { get; set; }
         public bool isExpense { get; set; }
-        public int MoneyAccountId { get; set; }
+        public int MoneyAccountId { get; set;
+        }
 
         public decimal SignedCost {
             get {
@@ -52,32 +53,6 @@ namespace Finanse.Models {
                 secondOperation.SubCategoryId == SubCategoryId &&
                 secondOperation.MoneyAccountId == MoneyAccountId &&
                 secondOperation.MoreInfo.Equals(MoreInfo);
-
         }
-        /*
-         * public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-
-protected virtual void OnPropertyChanged(string propertyName) {
-    if (PropertyChanged != null) {
-        PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-    }
-}
-*/
-
-            /// <summary>
-            /// może pokazywac błędnie jak edytujesz kategorię
-            /// </summary>
-/*
-        private OperationCategory operationCategory;
-        public OperationCategory OperationCategory {
-            get {
-                if (operationCategory != null) {
-
-                }
-
-                return operationCategory;
-            }
-        }
-        */
     }
 }

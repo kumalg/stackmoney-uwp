@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="Finanse.Elements.MoneyAccountTemplate"
+    x:Class="Finanse.Elements.CardAccountTemplate"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Finanse"
@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    Height="68"
     FontFamily="{StaticResource DefaultFontFamily}">
 
     <Grid
@@ -18,15 +19,13 @@
                 Width="Auto" />
             <ColumnDefinition
                 Width="*" />
+            <ColumnDefinition
+                Width="Auto" />
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="68"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
 
         <data:CategoryIcon
-            Glyph="{x:Bind Glyph}"
-            Color="{x:Bind Account.SolidColorBrush}"
+            Glyph=""
+            Color="{x:Bind CardAccount.SolidColorBrush}"
             RenderTransformOrigin="0.5,0.5">
             <data:CategoryIcon.RenderTransform>
                 <CompositeTransform
@@ -46,28 +45,12 @@
 
         <TextBlock
             FontSize="12"
-            Grid.Column="1"
+            Grid.Column="2"
             FontWeight="SemiBold"
             Name="Cost_OperationTemplate"
-            Text="{x:Bind Account.getActualMoneyValue()}"
+            Text="{x:Bind CardAccount.getActualMoneyValue()}"
             VerticalAlignment="Center"
             HorizontalAlignment="Right"
             Foreground="{ThemeResource Text-1}" />
-<!--
-        <ListView
-            Visibility="{x:Bind isBankAccount, Mode=OneWay}"
-            IsItemClickEnabled="True"
-            SelectionMode="None"
-            Grid.Row="1"
-            Grid.ColumnSpan="2"
-            x:Name="Dupal"
-            ItemsSource="{Binding Cards}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <data:CardAccountTemplate />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>-->
     </Grid>
-
 </UserControl>

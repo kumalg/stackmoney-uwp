@@ -10,12 +10,11 @@ namespace Finanse.Models {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
-
+        
         public string getActualMoneyValue() {
-            decimal moneyValue = 0;
-            foreach (Operation o in Dal.getAllOperationsOfThisMoneyAccount(this))
-                moneyValue += o.isExpense ? -o.Cost : o.Cost;
-            return moneyValue.ToString("C", Settings.getActualCultureInfo());
+            return Dal.getAllOperationsOfThisMoneyAccount(this)
+                .Sum(i => i.SignedCost)
+                .ToString("C", Settings.getActualCultureInfo());
         }
     }
 }

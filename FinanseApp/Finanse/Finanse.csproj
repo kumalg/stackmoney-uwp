@@ -109,15 +109,18 @@
     <Compile Include="Charts\DoughnutChart.cs" />
     <Compile Include="Charts\DoughnutChartItem.cs" />
     <Compile Include="Charts\Extensions\IListExt.cs" />
+    <Compile Include="Charts\LineChart - Copy.cs" />
     <Compile Include="Charts\LineChartInterpolated.cs" />
     <Compile Include="Charts\LineChart.cs" />
     <Compile Include="Charts\LineChartItem.cs" />
     <Compile Include="Charts\Shapes\Arc.cs" />
+    <Compile Include="Converters\ColorKeyToSolidColorBrushConverter.cs" />
     <Compile Include="Converters\ExpenseToggleEnablingByBossCategoryIdConverter.cs" />
     <Compile Include="Converters\BooleanToColorConverter.cs" />
     <Compile Include="Converters\ObjectToSolidColorBrushConverter.cs" />
     <Compile Include="Converters\DecimalToCurrencyStringConverter.cs" />
     <Compile Include="Converters\DoubleToPercentStringConverter.cs" />
+    <Compile Include="DataAccessLayer\AccountsDal.cs" />
     <Compile Include="DataAccessLayer\Dal.cs" />
     <Compile Include="DataAccessLayer\DebugTraceListener.cs" />
     <Compile Include="DataAccessLayer\StatisticsDal.cs" />
@@ -153,6 +156,9 @@
     </Compile>
     <Compile Include="Elements\CategoryWithSubcategories.xaml.cs">
       <DependentUpon>CategoryWithSubcategories.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Elements\CardAccountTemplate.xaml.cs">
+      <DependentUpon>CardAccountTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Elements\MoneyAccountTemplate.xaml.cs">
       <DependentUpon>MoneyAccountTemplate.xaml</DependentUpon>
@@ -192,6 +198,7 @@
     <Compile Include="Models\MoneyAccountBalance.cs" />
     <Compile Include="Models\MoneyAccounts\Account.cs" />
     <Compile Include="Models\MoneyAccounts\BankAccount.cs" />
+    <Compile Include="Models\MoneyAccounts\BankAccountWithCards.cs" />
     <Compile Include="Models\MoneyAccounts\CardAccount.cs" />
     <Compile Include="Models\MoneyAccounts\CashAccount.cs" />
     <Compile Include="Models\NewOperation.cs" />
@@ -298,6 +305,10 @@
     <Page Include="Elements\CategoryWithSubcategories.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Elements\CardAccountTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Elements\MoneyAccountTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>

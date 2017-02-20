@@ -542,13 +542,12 @@
                 <ListView
                     Padding="0,-8,0,0"
                     x:Name="OperacjeListView"
-                    SelectionMode="Single"
+                    SelectionMode="None"
                     BorderThickness="0"
                     Background="Transparent"
                     ItemsSource="{x:Bind ContactsCVS.View, Mode=OneWay}"
                     IsItemClickEnabled="True"
-                    ItemClick="DetailsButton_Click"
-                    SelectionChanged="OperacjeListView_SelectionChanged">
+                    ItemClick="DetailsButton_Click">
 
                     <ListView.Header>
                         <Grid
@@ -616,7 +615,7 @@
                                                 <Ellipse
                                                     Width="8"
                                                     Height="8"
-                                                    Fill="{Binding MoneyAccount.Color}" />
+                                                    Fill="{Binding Account.SolidColorBrush}" />
                                                 <TextBlock
                                                     x:Name="dupa1"
                                                     FontSize="13"
@@ -625,7 +624,7 @@
                                                     Grid.Column="1"
                                                     TextWrapping="Wrap"
                                                     FontFamily="{StaticResource DefaultFontFamily}"
-                                                    Text="{Binding MoneyAccount.Name}" />
+                                                    Text="{Binding Account.Name}" />
                                                 <TextBlock
                                                     x:Name="dupa2"
                                                     HorizontalAlignment="Right"
@@ -823,7 +822,8 @@
                     ItemsPanel="{x:Bind ZoomedOut_ItemsPanel, Mode=OneWay}"
                     ItemTemplate="{x:Bind ZoomedOut_ItemTemplate, Mode=OneWay}"
                     ItemTemplateSelector="{x:Bind ZoomedOut_ItemTemplateSelector, Mode=OneWay}"
-                    SelectionMode="Single">
+                    IsItemClickEnabled="True"
+                    SelectionMode="None">
                 </GridView>
             </SemanticZoom.ZoomedOutView>
         </SemanticZoom>

@@ -442,7 +442,7 @@
 -->
                 <elements:PieWithLegend
                     DataContext="{x:Bind OperationsByCategory, Mode=OneWay}" />
-
+<!--
                 <charts:LineChartInterpolated
                     Fill="{StaticResource RedColorStyle}"
                     Thickness="2"
@@ -458,7 +458,7 @@
                     ItemTemplate="{StaticResource LineChartItemTemplate}"
                     MaxWidth="1024"
                     Margin="16"
-                    Height="256" />
+                    Height="256" />-->
                 <!--
                 <charts:LineChart
                     Fill="{StaticResource AccentColor}"

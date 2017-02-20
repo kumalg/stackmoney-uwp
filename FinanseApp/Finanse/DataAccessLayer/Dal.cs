@@ -17,11 +17,8 @@
         private static string dbPath = string.Empty;
         private static string DbPath {
             get {
-                if (string.IsNullOrEmpty(dbPath)) {
+                if (string.IsNullOrEmpty(dbPath))
                     dbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "db.sqlite");
-                //    dbPath = Path.Combine(ApplicationData.Current.RoamingFolder.Path, "db.sqlite");
-                }
-
                 return dbPath;
             }
         }
@@ -37,57 +34,95 @@
                 // Activate Tracing
                 db.Execute("PRAGMA foreign_keys = ON");
                 db.TraceListener = new DebugTraceListener();
+
+                /*
                 db.Execute("CREATE TABLE IF NOT EXISTS images ( "
                     + "nameRed VARCHAR(20) NOT NULL PRIMARY KEY,"
                     + "patientID INT,"
-                    + "FOREIGN KEY(patientID) REFERENCES patients(id) ) ");
-                db.CreateTable<MoneyAccount>();
+                    + "FOREIGN KEY(patientID) REFERENCES patients(id) ) ");*/
+
+               // db.CreateTable<MoneyAccount>();
                 db.CreateTable<Operation>();
                 db.CreateTable<OperationPattern>();
                 db.CreateTable<OperationCategory>();
                 db.CreateTable<OperationSubCategory>();
-                //db.CreateTable<Settings>();
-                /*
-                if (!db.Table<Settings>().Any())
-                    db.Insert(new Settings {
-                        CultureInfoName = "en-US"
-                    });
-                    */
-                    
-                if (!db.Table<MoneyAccount>().Any()) {
-                    db.Insert(new MoneyAccount {
-                        Name = "Gotówka",
-                        Color = "#FFcfd8dc"
-                    });
-                    db.Insert(new MoneyAccount {
-                        Name = "Karta VISA",
-                        Color = "#FF00e676",
-                    });
-                    db.Insert(new MoneyAccount {
-                        Name = "Student (Karta VISA)",
-                        Color = "#FFe04967"
-                    });
-                    db.Insert(new MoneyAccount {
-                        Name = "Student (Gotówka)",
-                        Color = "#FFe7c64a"
-                    });
+                db.CreateTable<CashAccount>();
+                db.CreateTable<CardAccount>();
+                db.CreateTable<BankAccount>();
+
+                db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
+
+                if (!(db.Table<OperationCategory>().Any())) {
+                    addOperationCategory(new OperationCategory { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });
+                    addOperationCategory(new OperationCategory { Id = 2, Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true });
+                    addOperationCategory(new OperationCategory { Id = 3, Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true });
+                    addOperationCategory(new OperationCategory { Id = 4, Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true });
+                    addOperationCategory(new OperationCategory { Id = 5, Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true });
+                    addOperationCategory(new OperationCategory { Id = 6, Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false});
+
+                    addOperationSubCategory(new OperationSubCategory { Id = 1, Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = 4, VisibleInIncomes = false, VisibleInExpenses = true });
+                    addOperationSubCategory(new OperationSubCategory { Id = 2, Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = 3, VisibleInIncomes = false, VisibleInExpenses = true });
+                }
+
+                if (!(db.Table<CashAccount>().Any() || db.Table<BankAccount>().Any())) {
+                    AccountsDal.addAccount(new CashAccount { Name = "Gotówka", ColorKey = "01" });
+                    AccountsDal.addAccount(new BankAccount { Name = "Konto bankowe", ColorKey = "02", });
+                    AccountsDal.addAccount(new CardAccount { Name = "Karta", ColorKey = "03", BankAccountId = db.ExecuteScalar<int>("SELECT Id FROM BankAccount LIMIT 1")});
                 }
             }
         }
+
+
         /*
-        public static async Task CreateDatabase() {
-            // Create a new connection
+public static async Task CreateDatabase() {
+   // Create a new connection
+   using (var db = DbConnection) {
+       // Activate Tracing
+       db.TraceListener = new DebugTraceListener();
+
+       // Create the table if it does not exist
+       var c = db.CreateTable<Operation>();
+       var info = db.GetMapping(typeof(Operation));
+
+   }
+}
+*/
+
+        public static void DeleteAll() {
             using (var db = DbConnection) {
-                // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
-
-                // Create the table if it does not exist
-                var c = db.CreateTable<Operation>();
-                var info = db.GetMapping(typeof(Operation));
-
+                db.DeleteAll<Operation>();
+                db.DeleteAll<OperationPattern>();
+                db.DeleteAll<OperationCategory>();
+                db.DeleteAll<OperationSubCategory>();
+                db.DeleteAll<CashAccount>();
+                db.DeleteAll<CardAccount>();
+                db.DeleteAll<BankAccount>();
+                db.Execute("DELETE FROM sqlite_sequence");
             }
         }
-        */
+
+        public static void AddInitialElements() {
+            using (var db = DbConnection) {
+                db.TraceListener = new DebugTraceListener();
+
+                db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
+
+                addOperationCategory(new OperationCategory { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });
+                addOperationCategory(new OperationCategory { Id = 2, Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true });
+                addOperationCategory(new OperationCategory { Id = 3, Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true });
+                addOperationCategory(new OperationCategory { Id = 4, Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true });
+                addOperationCategory(new OperationCategory { Id = 5, Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true });
+                addOperationCategory(new OperationCategory { Id = 6, Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false });
+
+                addOperationSubCategory(new OperationSubCategory { Id = 1, Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = 4, VisibleInIncomes = false, VisibleInExpenses = true });
+                addOperationSubCategory(new OperationSubCategory { Id = 2, Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = 3, VisibleInIncomes = false, VisibleInExpenses = true });
+
+                AccountsDal.addAccount(new CashAccount { Name = "Gotówka", ColorKey = "01" });
+                AccountsDal.addAccount(new BankAccount { Name = "Konto bankowe", ColorKey = "02", });
+                AccountsDal.addAccount(new CardAccount { Name = "Karta", ColorKey = "03", BankAccountId = db.ExecuteScalar<int>("SELECT Id FROM BankAccount LIMIT 1") });
+            }
+        }
 
         public static Operation getEldestOperation() {
             using (var db = DbConnection) {
@@ -95,7 +130,7 @@
                 return db.Query<Operation>("SELECT * FROM Operation WHERE Date IS NOT NULL AND Date != '' ORDER BY Date LIMIT 1").FirstOrDefault();
             }
         }
-        
+
         internal static List<Operation> getAllOperationsFromRangeToStatistics(DateTime minDate, DateTime maxDate) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
@@ -103,49 +138,6 @@
             }
         }
 
-        public static List<MoneyAccountBalance> listOfMoneyAccountBalances(DateTime date) {
-            List<MoneyAccountBalance> list = new List<MoneyAccountBalance>();
-
-            using (var db = DbConnection) {
-                db.TraceListener = new DebugTraceListener();
-
-                var query = from p in db.Table<Operation>().ToList()
-                        group p by p.MoneyAccountId into g
-                        select new {
-                            moneyAccount = getMoneyAccountById(g.Key),
-                            initialValue = getInitialValue(g, date),
-                            finalValue = getFinalValue(g,date)
-                        };
-
-                foreach (var item in query) {
-                    list.Add(new MoneyAccountBalance(item.moneyAccount, item.initialValue, item.finalValue));
-                }
-            }
-            return list;
-        }
-
-        private static DateTime maxDateInFinalValue(DateTime date) {
-            return (date.Month == DateTime.Today.Month && date.Year == DateTime.Today.Year) ?
-                DateTime.Today.AddDays(1) :
-                date.AddMonths(1);
-        }
-        private static DateTime maxDateInInitialValue(DateTime date) {
-            return (date > DateTime.Today) ?
-                DateTime.Today.AddDays(1) :
-                date;
-        }
-
-        private static decimal getFinalValue(IGrouping<int,Operation> operations, DateTime date) {
-            if (date.Date > DateTime.Today.Date)
-                return operations.Sum(i => i.isExpense ? -i.Cost : i.Cost);
-            else
-                return operations.Where(i => !string.IsNullOrEmpty(i.Date) && DateTime.Parse(i.Date) < maxDateInFinalValue(date))
-                                    .Sum(i => i.isExpense ? -i.Cost : i.Cost);
-        }
-        private static decimal getInitialValue(IGrouping<int, Operation> operations, DateTime date) {
-                return operations.Where(i => !string.IsNullOrEmpty(i.Date) && DateTime.Parse(i.Date) < maxDateInInitialValue(date))
-                                    .Sum(i => i.isExpense ? -i.Cost : i.Cost);
-        }
 
         /* GET ALL */
 
@@ -191,7 +183,7 @@
                                               BossCategoryId = g.Key,
                                               subCategories = g.ToList()
                                           };
-                                         
+
 
                 HashSet<CategoryWithSubCategories> categoriesWithSubCategories = new HashSet<CategoryWithSubCategories>();
 
@@ -214,26 +206,8 @@
 
         public static HashSet<CategoryWithSubCategories> getOperationCategoriesWithSubCategoriesInIncomes() {
             using (var db = DbConnection) {
-                // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
-                /*
-                var test = from category in db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInIncomes ORDER BY Name")
-                           join subCategory in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInIncomes ORDER BY Name")
-                           on category.Id equals subCategory.BossCategoryId
-                           select new {
-                               category,
-                               subCategory
-                           };
 
-                HashSet<CategoryWithSubCategories> categoryWithSubCategories = new HashSet<CategoryWithSubCategories>();
-
-                foreach (var item in test) {
-                    categoryWithSubCategories.Add(new CategoryWithSubCategories { Category = item.category });
-                    categoryWithSubCategories.FirstOrDefault(i => i.Category == item.category).SubCategories.Add(item.subCategory);
-                }
-
-                return categoryWithSubCategories;
-                */
                 List<OperationCategory> categories = db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInIncomes ORDER BY Name");
                 var subCategoriesGroups = from subCategory in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInIncomes ORDER BY Name")
                                           group subCategory by subCategory.BossCategoryId into g
@@ -262,102 +236,18 @@
             }
         }
 
-        public static List<CardAccount> getListOfLinkedCardAccountToThisBankAccount(BankAccount account) {
-            using (var db = DbConnection) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                List<CardAccount> models = (from p in db.Table<CardAccount>().ToList()
-                              where p.BankAccountId == account.Id
-                              select p).ToList();
-
-                return models;
-            }
-        }
-
-        public static List<Operation> getAllOperationsOfThisMoneyAccount(BankAccount account) {
-
-            // Create a new connection
-            using (var db = DbConnection) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                List<Operation> models = (from p in db.Table<Operation>().ToList()
-                          where p.MoneyAccountId == account.Id 
-                            || getListOfLinkedCardAccountToThisBankAccount(account)
-                            .Any(i => i.BankAccountId == account.Id)
-                          select p).ToList();
-
-                return models;
-            }
-        }
-
-
-        public static List<Operation> getAllOperationsOfThisMoneyAccount(Account account) {
-            List<Operation> models;
-
-            // Create a new connection
-            using (var db = DbConnection) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                if (account is BankAccount)
-                    models = (from p in db.Table<Operation>().ToList()
-                              where p.MoneyAccountId == account.Id || getListOfLinkedCardAccountToThisBankAccount((BankAccount)account).Any(i=>i.BankAccountId == account.Id)
-                              select p).ToList();
-                else
-                    models = db.Query<Operation>("SELECT * FROM Operation WHERE MoneyAccountId == ?", account.Id);
-            }
-
-            return models;
-        }
-
         public static List<Operation> getAllOperationsOfThisMoneyAccount(MoneyAccount account) {
-            List<Operation> models;
-
-            // Create a new connection
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
-
-                models = db.Query<Operation>("SELECT * FROM Operation WHERE MoneyAccountId == ?", account.Id);
+                return db.Query<Operation>("SELECT * FROM Operation WHERE MoneyAccountId == ?", account.Id);
             }
-
-            return models;
         }
 
         public static decimal getBalanceOfCertainDay(DateTime dateTime) {
             using (var db = DbConnection) {
-                // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
-
-                // return db.Query("SELECT CASE WHEN isExpense THEN -Cost ELSE Cost END FROM Operation WHERE Date <= ? AND Date IS NOT NULL AND Date IS NOT ''", dateTime.ToString("yyyy.MM.dd")).Sum();
-                return db.Query<Operation>("SELECT * FROM Operation WHERE Date <= ? AND Date IS NOT NULL AND Date IS NOT ''", dateTime.ToString("yyyy.MM.dd")).Sum(i => i.SignedCost);
+                return db.ExecuteScalar<decimal>("SELECT TOTAL(CASE WHEN isExpense THEN -Cost ELSE Cost END) FROM Operation WHERE Date <= ? AND Date IS NOT NULL AND Date IS NOT ''", dateTime.ToString("yyyy.MM.dd"));
             }
-        }
-
-        public static List<Operation> getAllOperations(int month, int year, HashSet<int> visiblePayFormList) {
-            List<Operation> models;
-
-            // Create a new connection
-            using (var db = DbConnection) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-
-                string settedYearAndMonth = year.ToString() + "." + month.ToString("00") + "*";
-
-                List<Operation> list = db.Query<Operation>("SELECT * FROM Operation WHERE Date GLOB ? AND Date <= ?", settedYearAndMonth, DateTime.Today.ToString("yyyy.MM.dd"));
-
-                if (visiblePayFormList != null) {
-                    models = (from p in list
-                              where visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId) == true
-                              select p).ToList();
-                }
-                else
-                    models = list;
-            }
-
-            return models;
         }
 
         public static List<Operation> getAllOperations(DateTime actualMonth, HashSet<int> visiblePayFormList) {
@@ -417,32 +307,10 @@
                 return db.Table<OperationPattern>().ToList();
             }
         }
-
-        public static List<MoneyAccount> getAllMoneyAccounts() {
-            using (var db = DbConnection) {
-                db.TraceListener = new DebugTraceListener();
-                return db.Query<MoneyAccount>("SELECT * FROM MoneyAccount");
-            }
-        }
+        
 
         /* GET BY ID */
     
-        public static Operation getOperationById(int Id) {
-            using (var db = DbConnection) {
-                db.TraceListener = new DebugTraceListener();
-                return db.Query<Operation>("SELECT * FROM Operation WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
-            }
-        }
-
-        public static MoneyAccount getMoneyAccountById(int Id) {
-            // Create a new connection
-            using (var db = DbConnection) {
-                // Activate Tracing
-                db.TraceListener = new DebugTraceListener();
-                return db.Query<MoneyAccount>("SELECT * FROM MoneyAccount WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
-            }
-        }
-
         public static OperationSubCategory getOperationSubCategoryById(int Id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
@@ -463,6 +331,7 @@
                 return db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
             }
         }
+
 
         /* SAVE */
 
@@ -508,12 +377,14 @@
                 db.Update(operationSubCategory);
             }
         }
+
         public static void addOperationSubCategory(OperationSubCategory operationSubCategory) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
                 db.Insert(operationSubCategory);
             }
         }
+        
 
         /* DELETE */
 

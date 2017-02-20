@@ -38,10 +38,9 @@
             Grid.Row="1"
             Name="SzablonyListView"
             ItemsSource="{x:Bind OperationPatterns}"
-            SelectionMode="Single"
+            SelectionMode="None"
             BorderThickness="0"
             Background="Transparent"
-            SelectionChanged="SzablonyListView_SelectionChanged"
             IsItemClickEnabled="True"
             ItemClick="SzablonyListView_ItemClick">
 

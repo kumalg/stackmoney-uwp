@@ -10,7 +10,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
 namespace Finanse.Models.MoneyAccounts {
-    abstract public class Account {
+    abstract public class Account : ICloneable {
 
         private int id = -1;
 
@@ -40,6 +40,25 @@ namespace Finanse.Models.MoneyAccounts {
 
         public override string ToString() {
             return Name;
+        }
+
+        public Account Clone() {
+            return (Account)MemberwiseClone();
+        }
+
+        public override int GetHashCode() {
+            return Name.GetHashCode() * Id;
+        }
+        public override bool Equals(object o) {
+            if (o == null || !(o is Account))
+                return false;
+
+            Account secondAccount = (Account)o;
+
+            return
+                secondAccount.Id == Id &&
+                secondAccount.Name == Name &&
+                secondAccount.ColorKey == ColorKey;
         }
     }
 }

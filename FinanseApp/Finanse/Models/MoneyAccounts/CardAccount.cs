@@ -7,5 +7,17 @@ namespace Finanse.Models.MoneyAccounts {
         public override string getActualMoneyValue() {
             return AccountsDal.CardAccountExpensesById(Id).ToString("C", Settings.getActualCultureInfo());
         }
+
+        public override int GetHashCode() {
+            return Name.GetHashCode() * Id;
+        }
+        public override bool Equals(object o) {
+            if (o == null || !(o is CardAccount))
+                return false;
+
+            return
+                base.Equals((Account)o) &&
+                ((CardAccount)o).BankAccountId == BankAccountId;
+        }
     }
 }

@@ -1,0 +1,79 @@
+﻿<ContentDialog
+    Style="{StaticResource MyContentDialog}"
+    x:Class="Finanse.Dialogs.EditMoneyAccountContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:data="using:Finanse.Elements"
+    Title="Edycja konta"
+    Background="{ThemeResource BackgroundTransparent}"
+    PrimaryButtonText="Zapisz"
+    SecondaryButtonText="Anuluj"
+    IsPrimaryButtonEnabled="{x:Bind PrimaryButtonEnabling, Mode=OneWay}"
+    PrimaryButtonClick="NewCategory_AddButtonClick">
+
+    <StackPanel
+        Margin="20,20" >
+
+        <TextBox
+            Name="NameValue"
+            Style="{StaticResource TextBoxStyle1}"
+            PlaceholderText="Nazwa"
+            x:Uid="namePlaceholder"
+            TextChanging="NameValue_TextChanging"/>
+
+        <ComboBox
+            Name="BankAccountsComboBox"
+            Margin="0,10"
+            HorizontalAlignment="Stretch"
+            Style="{StaticResource ComboBoxStyle1}"
+            Visibility="{x:Bind BankAccountsComboBoxVisibility, Mode=OneWay}"
+            ItemsSource="{x:Bind BankAccounts, Mode=OneTime}"
+            SelectedItem="{x:Bind SelectedBankAccount, Mode=TwoWay}" />
+
+        <GridView
+            Margin="0,32,0,16"
+            Name="ColorBaseList"
+            SelectionMode="Single"
+            Padding="0"
+            ItemsSource="{x:Bind ColorBase, Mode=OneTime}"
+            SelectedItem="{x:Bind SelectedColor, Mode=TwoWay}">
+
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapGrid
+                        MaximumRowsOrColumns="5"
+                        Orientation="Horizontal"
+                        HorizontalChildrenAlignment="Stretch"
+                        VerticalChildrenAlignment="Stretch" />
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+
+            <GridView.ItemContainerStyle>
+                <Style
+                    TargetType="FrameworkElement">
+                    <Setter
+                        Property="Margin"
+                        Value="6" />
+                </Style>
+            </GridView.ItemContainerStyle>
+
+            <ControlTemplate
+                TargetType="GridViewItem">
+                <GridViewItemPresenter />
+            </ControlTemplate>
+
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Ellipse
+                        Width="40"
+                        Height="40"
+                        Fill="{Binding Value}">
+                    </Ellipse>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+    </StackPanel>
+</ContentDialog>

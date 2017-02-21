@@ -85,14 +85,16 @@
                     <Grid
                         Background="Transparent">
                         <StackPanel>
-                            <Button
+                            <ListViewItem
                                 Padding="0"
                                 Margin="0"
                                 BorderThickness="0"
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch"
-                                Background="Transparent">
-                                <Button.Flyout>
+                                Background="Transparent"
+                                Tapped="ListViewItem_Tapped"
+                                RightTapped="ListViewItem_RightTapped">
+                                <FlyoutBase.AttachedFlyout>
                                     <MenuFlyout
                                         MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
                                         <MenuFlyoutItem
@@ -108,9 +110,9 @@
                                             Text="Usuń"
                                             Click="DeleteButton_Click" />
                                     </MenuFlyout>
-                                </Button.Flyout>
+                                </FlyoutBase.AttachedFlyout>
                                 <data:MoneyAccountTemplate />
-                            </Button>
+                            </ListViewItem>
 
                             <ListView
                                 Margin="32,0,0,0"
@@ -119,7 +121,25 @@
                                 ItemsSource="{Binding Cards}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <data:CardAccountTemplate />
+                                        <data:CardAccountTemplate
+                                            Tapped="ListViewItem_Tapped"
+                                            RightTapped="ListViewItem_RightTapped">
+                                            <FlyoutBase.AttachedFlyout>
+                                                <MenuFlyout
+                                                    MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
+                                                    <MenuFlyoutItem
+                                                        Style="{StaticResource MyMenuFlyoutItem}"
+                                                        Tag="&#xE104;"
+                                                        Text="Edytuj"
+                                                        Click="EditCard_Click" />
+                                                    <MenuFlyoutItem
+                                                        Style="{StaticResource MyMenuFlyoutItem}"
+                                                        Tag="&#xE107;"
+                                                        Text="Usuń"
+                                                        Click="DeleteCard_Click" />
+                                                </MenuFlyout>
+                                            </FlyoutBase.AttachedFlyout>
+                                        </data:CardAccountTemplate>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                                 <ListView.ItemContainerStyle>

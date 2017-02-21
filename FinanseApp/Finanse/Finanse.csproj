@@ -139,6 +139,9 @@
     <Compile Include="Dialogs\NewCategoryContentDialog.xaml.cs">
       <DependentUpon>NewCategoryContentDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\EditMoneyAccountContentDialog.xaml.cs">
+      <DependentUpon>EditMoneyAccountContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\NewMoneyAccountContentDialog.xaml.cs">
       <DependentUpon>NewMoneyAccountContentDialog.xaml</DependentUpon>
     </Compile>
@@ -201,6 +204,7 @@
     <Compile Include="Models\MoneyAccounts\BankAccountWithCards.cs" />
     <Compile Include="Models\MoneyAccounts\CardAccount.cs" />
     <Compile Include="Models\MoneyAccounts\CashAccount.cs" />
+    <Compile Include="Models\MoneyAccounts\ICloneable.cs" />
     <Compile Include="Models\NewOperation.cs" />
     <Compile Include="Models\Operation.cs" />
     <Compile Include="Models\OperationCategory.cs" />
@@ -279,6 +283,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Dialogs\NewCategoryContentDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\EditMoneyAccountContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

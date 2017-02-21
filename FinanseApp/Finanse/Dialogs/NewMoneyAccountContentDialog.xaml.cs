@@ -65,6 +65,32 @@ namespace Finanse.Dialogs {
             }
         }
 
+        private List<BankAccount> BankAccounts = AccountsDal.getAllBankAccounts();
+        
+        private Visibility BankAccountsComboBoxVisibility {
+            get {
+                return (bool)PayCardRadioButton.IsChecked ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        private bool AnyBankAccounts {
+            get {
+                return BankAccounts.Count > 0 ? true : false;
+            }
+        }
+
+        private int ComboBoxSelectedIndex {
+            get {
+                return BankAccounts.Count > 0 ? 0 : -1;
+            }
+        }
+
+        private bool PrimaryButtonEnabling {
+            get {
+                return !string.IsNullOrEmpty(NameValue.Text);
+            }
+        }
+
         public NewMoneyAccountContentDialog() {
             this.InitializeComponent();
         }
@@ -74,25 +100,6 @@ namespace Finanse.Dialogs {
         }
 
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-            /*
-            Account newAccount;
-            AccountType accountType = typeOfAccount();
-
-            if (accountType == AccountType.BankAccount) {
-                newAccount = new BankAccount();
-            }
-            else if (accountType == AccountType.CardAccount) {
-                newAccount = new CardAccount {
-                    BankAccountId = 1,
-                };
-            }
-            else {
-                newAccount = new CashAccount();
-            }
-
-            newAccount.Name = NameValue.Text;
-            newAccount.ColorKey = ColorKey;
-            */
             AccountsDal.addAccount(getNewAccount());
 
             if (!string.IsNullOrEmpty(acceptedCostValue))
@@ -108,7 +115,7 @@ namespace Finanse.Dialogs {
             }
             else if (accountType == AccountType.CardAccount) {
                 newAccount = new CardAccount {
-                    BankAccountId = 20, //TO DO
+                    BankAccountId = ((BankAccount)BankAccountsComboBox.SelectedItem).Id, //TO DO
                 };
             }
             else {
@@ -193,15 +200,21 @@ namespace Finanse.Dialogs {
         }
 
         private void NameValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
-
+            RaisePropertyChanged("PrimaryButtonEnabling");
         }
 
-        private void BankAccountRadioButton_Click(object sender, RoutedEventArgs e) {
-
-        }
 
         private void PayCardRadioButton_Click(object sender, RoutedEventArgs e) {
+            if (!AnyBankAccounts)
+                showFlyout(sender as FrameworkElement);
+        }
 
+        private void showFlyout(FrameworkElement senderElement) {
+            FlyoutBase.GetAttachedFlyout(senderElement).ShowAt(senderElement);
+        }
+
+        private void AccountTypeRadioButton_Click(object sender, RoutedEventArgs e) {
+            RaisePropertyChanged("BankAccountsComboBoxVisibility");
         }
 
         private void CashAccountRadioButton_Click(object sender, RoutedEventArgs e) {
@@ -211,6 +224,21 @@ namespace Finanse.Dialogs {
         private void HyperlinkButton_Click(object sender, RoutedEventArgs e) {
             FrameworkElement s = sender as FrameworkElement;
             Flyout.ShowAttachedFlyout(s);
+        }
+
+        private void ContentDialog_Loaded(object sender, RoutedEventArgs e) {
+            if (BankAccountsComboBox.Items.Count > 0)
+                BankAccountsComboBox.SelectedIndex = 0;
+        }
+
+        private void PayCardRadioButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+           if (!AnyBankAccounts)
+                showFlyout(sender as FrameworkElement);
+        }
+
+        private void PayCardRadioButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e) {
+            if (!AnyBankAccounts)
+                showFlyout(sender as FrameworkElement);
         }
     }
     public enum AccountType {

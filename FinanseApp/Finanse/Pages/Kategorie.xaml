@@ -259,8 +259,9 @@
                                     Text="Wydatki" />
                             </PivotItem.Header>
                             <ListView
-                                Grid.Row="1"
                                 HorizontalContentAlignment="Right"
+                                VerticalContentAlignment="Top"
+                                VerticalAlignment="Top"
                                 FlowDirection="LeftToRight"
                                 Padding="0"
                                 ScrollViewer.VerticalScrollMode="Disabled"
@@ -294,9 +295,7 @@
                                     Text="Wpływy" />
                             </PivotItem.Header>
                             <ListView
-                                Grid.Row="1"
                                 HorizontalContentAlignment="Right"
-                                FlowDirection="LeftToRight"
                                 Padding="0"
                                 ScrollViewer.VerticalScrollMode="Disabled"
                                 ItemsSource="{x:Bind IncomeCategories, Mode=OneWay}"

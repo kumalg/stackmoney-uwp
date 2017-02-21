@@ -105,6 +105,18 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
+        public static List<BankAccount> getAllBankAccounts() {
+            using (var db = DbConnection) {
+                db.TraceListener = new DebugTraceListener();
+                List<BankAccount> lista = new List<BankAccount>();
+                foreach (BankAccount item in db.Query<BankAccount>("SELECT * FROM BankAccount")) {
+                    lista.Add(item);
+                }
+                return lista;
+               // return db.Query<BankAccount>("SELECT * FROM BankAccount");
+            }
+        }
+
         internal static List<Account> getAccountsWithoutCards() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
@@ -178,6 +190,20 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
                 db.Insert(account);
                 db.Execute("UPDATE sqlite_sequence SET seq = seq + 1 WHERE name = 'Account'");
+            }
+        }
+
+        public static void updateAccount(Account account) {
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                db.TraceListener = new DebugTraceListener();
+                if (account is BankAccountWithCards)
+                    db.Update(new BankAccount {
+                        Id = account.Id,
+                        ColorKey = account.ColorKey,
+                        Name = account.Name,
+                    });
+                else
+                    db.Update(account);
             }
         }
 

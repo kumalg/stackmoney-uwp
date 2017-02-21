@@ -90,12 +90,6 @@ namespace Finanse.Pages {
 
             this.InitializeComponent();
 
-            // PayFormValue.ItemsSource = listOfMoneyAccounts();
-            // InitialAccount.ItemsSource = listOfMoneyAccounts();
-            // DestinationAccount.ItemsSource = listOfMoneyAccounts();
-
-            //    PayFormValue.SelectedIndex = 0;
-
             DateValue.Date = DateTime.Today;
             DateValue.MaxDate = Settings.getMaxDate();
             DateValue.MinDate = Settings.getMinDate();
@@ -137,19 +131,10 @@ namespace Finanse.Pages {
 
             if (CategoryValue.SelectedItem != null)
                 SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == selectedSubCategoryId);
-
         }
 
         private void ExpenseOrIncomeRadioButton_Checked(object sender, RoutedEventArgs e) {
-            //Account selectedAccount = (Account)PayFormValue.SelectedItem;
             RaisePropertyChanged("AccountsComboBox");
-           // PayFormValue.SelectedItem = selectedAccount;
-            /*
-            if (selectedAccount == null || selectedAccount is CardAccount)
-                PayFormValue.SelectedIndex = 0;
-            else
-                PayFormValue.SelectedItem = selectedAccount;
-                */
             TransferAccounts_Grid.Visibility = Visibility.Collapsed;
 
             PayFormValue.Visibility = Visibility.Visible;

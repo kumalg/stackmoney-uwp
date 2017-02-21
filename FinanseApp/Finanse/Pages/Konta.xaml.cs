@@ -8,11 +8,13 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace Finanse.Pages {
 
@@ -21,7 +23,6 @@ namespace Finanse.Pages {
         private ObservableCollection<Account> MoneyAccounts = new ObservableCollection<Account>(AccountsDal.getAllMoneyAccounts());
 
         public Konta() {
-
             this.InitializeComponent();
         }
 
@@ -40,6 +41,7 @@ namespace Finanse.Pages {
 
             if (result == ContentDialogResult.Primary) {
                 Account newAccount = ContentDialogItem.getNewAccount();
+                newAccount.Id = AccountsDal.getHighestIdOfAccounts();
 
                 if (newAccount is BankAccount)
                     Accounts.Insert(0, new BankAccountWithCards((BankAccount)newAccount));
@@ -53,34 +55,90 @@ namespace Finanse.Pages {
             }
         }
 
-        private void Grid_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e) {
+        private async void EditButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
+            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            Account oldAccound = (Account)datacontext;
+            EditMoneyAccountContentDialog editMoneyAccountContentDialog = new EditMoneyAccountContentDialog(oldAccound);
+            ContentDialogResult result = await editMoneyAccountContentDialog.ShowAsync();
 
-        }
-
-        private void EditButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
-
+            if (result == ContentDialogResult.Primary) {
+                Account EditedAccound = editMoneyAccountContentDialog.EditedAccount;
+                int index = Accounts.IndexOf(oldAccound);
+                Accounts.Remove(oldAccound);
+                Accounts.Insert(index, EditedAccound);
+            }
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e) {
             object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
             showDeleteAccountContentDialog((Account)datacontext);
         }
-        private async void showDeleteAccountContentDialog(Account account) {
 
-            string message = account is BankAccount ? "Czy chcesz usunąć konto bankowe ze wszystkimi kartami? Zostaną usunięte wszystkie operacje skojażone z tym kontem." : "Czy chcesz usunąć konto? Zostaną usunięte wszystkie operacje skojażone z tym kontem.";
-
-            AcceptContentDialog acceptDeleteOperationContentDialog = new AcceptContentDialog(message);
-
-            ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
+        private async void EditCard_Click(object sender, RoutedEventArgs e) {
+            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            CardAccount oldAccound = (CardAccount)datacontext;
+            EditMoneyAccountContentDialog editMoneyAccountContentDialog = new EditMoneyAccountContentDialog((Account)datacontext);
+            ContentDialogResult result = await editMoneyAccountContentDialog.ShowAsync();
 
             if (result == ContentDialogResult.Primary) {
-                deleteAccountWithOperations(account);
+                CardAccount EditedAccound = (CardAccount)editMoneyAccountContentDialog.EditedAccount;
+                BankAccountWithCards bankAccount = (BankAccountWithCards)Accounts.SingleOrDefault(i => i.Id == oldAccound.BankAccountId);
+                bankAccount.Cards.Remove(oldAccound);
+
+                bankAccount = (BankAccountWithCards)Accounts.SingleOrDefault(i => i.Id == EditedAccound.BankAccountId);
+                bankAccount.Cards.Insert(0, EditedAccound);
             }
         }
 
+        private void DeleteCard_Click(object sender, RoutedEventArgs e) {
+            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            showDeleteCardContentDialog((CardAccount)datacontext);
+        }
+
+        private async void showDeleteAccountContentDialog(Account account) {
+            string message = account is BankAccount ? 
+                "Czy chcesz usunąć konto bankowe ze wszystkimi kartami? Zostaną usunięte wszystkie operacje skojażone z tym kontem." : 
+                "Czy chcesz usunąć konto? Zostaną usunięte wszystkie operacje skojażone z tym kontem.";
+            AcceptContentDialog acceptDeleteOperationContentDialog = new AcceptContentDialog(message);
+            ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+                deleteAccountWithOperations(account);
+        }
+
+        private async void showDeleteCardContentDialog(CardAccount account) {
+            AcceptContentDialog acceptDeleteOperationContentDialog = new AcceptContentDialog("Czy chcesz usunąć kartę płatniczą? Zostaną usunięte wszystkie operacje skojażone z tą kartą.");
+            ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+                deleteAccountWithOperations(account);
+        }
+
         private void deleteAccountWithOperations(Account account) {
-            AccountsDal.removeSingleAccountWithOperations(account.Id);
-            Accounts.Remove(account);
+            if (account is CardAccount)
+                deleteCardWithOperations((CardAccount)account);
+            else
+                Accounts.Remove(account);
+
+            if (account is BankAccount)
+                AccountsDal.removeBankAccountWithCards(account.Id);
+            else
+                AccountsDal.removeSingleAccountWithOperations(account.Id);
+        }
+        private void deleteCardWithOperations(CardAccount cardAccount) {
+            BankAccountWithCards bankAccount = (BankAccountWithCards)Accounts.SingleOrDefault(i => i.Id == cardAccount.BankAccountId);
+            bankAccount.Cards.Remove(cardAccount);
+            AccountsDal.removeSingleAccountWithOperations(cardAccount.Id);
+        }
+
+        private void ListViewItem_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
+            showFlyout(sender as FrameworkElement);
+        }
+
+        private void ListViewItem_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e) {
+            showFlyout(sender as FrameworkElement);
+        }
+
+        private void showFlyout(FrameworkElement senderElement) {
+            FlyoutBase.GetAttachedFlyout(senderElement).ShowAt(senderElement);
         }
     }
 }

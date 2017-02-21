@@ -416,7 +416,7 @@
                                     </Style>
                                 </Flyout.FlyoutPresenterStyle>
                                 <TextBlock
-                                    Text="Chuja zmienisz tu miesiąc" />
+                                    Text="Tu będzie można zmienic miesiąc kiedyś" />
                             </Flyout>
                         </Button.Flyout>
                         <!--

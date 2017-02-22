@@ -20,9 +20,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Finanse.Pages {
 
-    public sealed partial class Nowa_Operacja : Page, INotifyPropertyChanged {
+    public sealed partial class NewOperationPage : Page, INotifyPropertyChanged {
 
-        private Regex regex = NewOperation.getRegex();
+        private Regex regex = NewOperation.GetRegex();
         private string acceptedCostValue = string.Empty;
         private bool isUnfocused = true;
 
@@ -86,7 +86,7 @@ namespace Finanse.Pages {
             comboBox.ItemsSource = list;
         }
 
-        public Nowa_Operacja() {
+        public NewOperationPage() {
 
             this.InitializeComponent();
 
@@ -236,7 +236,7 @@ namespace Finanse.Pages {
             isUnfocused = true;
 
             if (CostValue.Text != "")
-                CostValue.Text = NewOperation.toCurrencyString(CostValue.Text);
+                CostValue.Text = NewOperation.ToCurrencyString(CostValue.Text);
         }
 
         private void CostValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
@@ -275,8 +275,8 @@ namespace Finanse.Pages {
             else
                 Income_RadioButton.IsChecked = true;
 
-            CostValue.Text = NewOperation.toCurrencyString(selectedOperation.Cost);
-            acceptedCostValue = NewOperation.toCurrencyWithoutSymbolString(selectedOperation.Cost);
+            CostValue.Text = NewOperation.ToCurrencyString(selectedOperation.Cost);
+            acceptedCostValue = NewOperation.ToCurrencyWithoutSymbolString(selectedOperation.Cost);
 
             NameValue.Text = selectedOperation.Title;
 
@@ -331,7 +331,7 @@ namespace Finanse.Pages {
                     Dal.saveOperationPattern(getNewOperationPattern());
             }
             
-            Frame.Navigate(typeof(Strona_glowna), navigateToThisMonthAfterSave());
+            Frame.Navigate(typeof(OperationsPage), navigateToThisMonthAfterSave());
         }
 
         private async void showMessageDialog(string message) {

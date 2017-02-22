@@ -11,7 +11,7 @@ using Finanse.Models.MoneyAccounts;
 namespace Finanse.Dialogs {
     public sealed partial class NewOperationContentDialog : ContentDialog {
 
-        private Regex regex = NewOperation.getRegex();
+        private Regex regex = NewOperation.GetRegex();
 
         private bool _isSaved = false;
 
@@ -121,8 +121,8 @@ namespace Finanse.Dialogs {
             SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operationToEdit.SubCategoryId);
             PayFormValue.SelectedItem = PayFormValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operationToEdit.MoneyAccountId);
 
-            CostValue.Text = NewOperation.toCurrencyString(operationToEdit.Cost);//editedOperation.Cost.ToString("C", Settings.getActualCultureInfo());
-            acceptedCostValue = NewOperation.toCurrencyWithoutSymbolString(operationToEdit.Cost);//editedOperation.Cost.ToString(Settings.getActualCultureInfo());
+            CostValue.Text = NewOperation.ToCurrencyString(operationToEdit.Cost);//editedOperation.Cost.ToString("C", Settings.getActualCultureInfo());
+            acceptedCostValue = NewOperation.ToCurrencyWithoutSymbolString(operationToEdit.Cost);//editedOperation.Cost.ToString(Settings.getActualCultureInfo());
 
             if (operationToEdit.MoreInfo != null)
                 MoreInfoValue.Text = operationToEdit.MoreInfo;
@@ -305,7 +305,7 @@ namespace Finanse.Dialogs {
             isUnfocused = true;
 
             if (CostValue.Text != "")
-                CostValue.Text = NewOperation.toCurrencyString(CostValue.Text);
+                CostValue.Text = NewOperation.ToCurrencyString(CostValue.Text);
         }
 
         private void CostValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {

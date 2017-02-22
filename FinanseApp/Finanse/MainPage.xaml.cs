@@ -54,14 +54,14 @@ namespace Finanse {
         }
 
         private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e) {
-            if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(Strona_glowna)) {
+            if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(OperationsPage)) {
                 OperationsAppBarRadioButton.IsChecked = true;// AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
                 e.Handled = true;
             }
         }
         private void BackRequestedEvent(object sender, BackRequestedEventArgs e) {
-            if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(Strona_glowna)) {
-                AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
+            if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(OperationsPage)) {
+                AktualnaStrona_Frame.Navigate(typeof(OperationsPage));
                 e.Handled = true;
             }
         }
@@ -147,8 +147,8 @@ namespace Finanse {
                 OperationsAppBarRadioButton.IsChecked = true;
 
             await Task.Delay(5);
-            if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(Strona_glowna))
-                AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
+            if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(OperationsPage))
+                AktualnaStrona_Frame.Navigate(typeof(OperationsPage));
         }
 
         private async void CategoriesAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
@@ -160,7 +160,7 @@ namespace Finanse {
                 CategoriesAppBarRadioButton.IsChecked = true;
 
             await Task.Delay(5);
-            AktualnaStrona_Frame.Navigate(typeof(Kategorie));
+            AktualnaStrona_Frame.Navigate(typeof(CategoriesPage));
         }
 
         private async void AddNewOperationAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
@@ -172,7 +172,7 @@ namespace Finanse {
                 AddNewOperationAppBarRadioButton.IsChecked = true;
 
             await Task.Delay(5);
-            AktualnaStrona_Frame.Navigate(typeof(Nowa_Operacja));
+            AktualnaStrona_Frame.Navigate(typeof(NewOperationPage));
         }
 
         private async void StatisticsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
@@ -184,7 +184,7 @@ namespace Finanse {
                 StatisticsAppBarRadioButton.IsChecked = true;
 
             await Task.Delay(5);
-            AktualnaStrona_Frame.Navigate(typeof(Statystyki));
+            AktualnaStrona_Frame.Navigate(typeof(StatisticsPage));
         }
         private async void RadioButton_Click(object sender, RoutedEventArgs e) {
             MoreAppBarRadioButton.IsChecked = false;
@@ -192,7 +192,7 @@ namespace Finanse {
             CommandBar.IsOpen = !CommandBar.IsOpen;
         }
 
-        private void navigateIfDifferentPage(Type pageType) {
+        private void NavigateIfDifferentPage(Type pageType) {
             if (AktualnaStrona_Frame.CurrentSourcePageType != pageType)
                 AktualnaStrona_Frame.Navigate(pageType);
         }
@@ -205,7 +205,7 @@ namespace Finanse {
 
             await Task.Delay(5);
             //  (Frame as ThemeAwareFrame).AppTheme = ElementTheme.Light;
-            navigateIfDifferentPage(typeof(Szablony));
+            NavigateIfDifferentPage(typeof(OperationPatternsPage));
         }
 
         private async void ZleceniaStaleAppBarButton_Click(object sender, RoutedEventArgs e) {
@@ -216,7 +216,7 @@ namespace Finanse {
 
             await Task.Delay(5);
             //   (Frame as ThemeAwareFrame).AppTheme = ElementTheme.Dark;
-            navigateIfDifferentPage(typeof(ZleceniaStale));
+            NavigateIfDifferentPage(typeof(StandingOrdersPage));
         }
 
         private async void KontaAppBarButton_Click(object sender, RoutedEventArgs e) {
@@ -226,7 +226,7 @@ namespace Finanse {
                 Konta_ListBoxItem.IsChecked = true;
 
             await Task.Delay(5);
-            navigateIfDifferentPage(typeof(Konta));
+            NavigateIfDifferentPage(typeof(AccountsPage));
         }
 
         private async void UstawieniaAppBarButton_Click(object sender, RoutedEventArgs e) {
@@ -236,7 +236,7 @@ namespace Finanse {
                 Ustawienia_ListBoxItem.IsChecked = true;
 
             await Task.Delay(5);
-            navigateIfDifferentPage(typeof(Ustawienia));
+            NavigateIfDifferentPage(typeof(SettingsPage));
         }
 
         private void CommandBar_Opening(object sender, object e) {
@@ -263,7 +263,7 @@ namespace Finanse {
         }
         
         private void AktualnaStrona_Frame_Navigated(object sender, NavigationEventArgs e) {
-            if (((Frame)sender).SourcePageType == typeof(Strona_glowna)) {
+            if (((Frame)sender).SourcePageType == typeof(OperationsPage)) {
                 SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
                 TitleBar.Margin = new Thickness(16, 0, 0, 0);
                 if (OperationsAppBarRadioButton != null)

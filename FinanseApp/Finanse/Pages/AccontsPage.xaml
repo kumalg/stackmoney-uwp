@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="Finanse.Pages.Konta"
+    x:Class="Finanse.Pages.AccountsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Finanse"

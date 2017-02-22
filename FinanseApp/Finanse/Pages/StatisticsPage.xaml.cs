@@ -11,7 +11,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Finanse.Pages {
 
-    public sealed partial class Statystyki : Page, INotifyPropertyChanged {
+    public sealed partial class StatisticsPage : Page, INotifyPropertyChanged {
 
         StatisticsData statisticsData = new StatisticsData();
         
@@ -158,7 +158,7 @@ namespace Finanse.Pages {
                 handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public Statystyki() {
+        public StatisticsPage() {
 
             this.InitializeComponent();
 

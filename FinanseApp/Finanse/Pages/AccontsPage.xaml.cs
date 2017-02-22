@@ -18,11 +18,11 @@ using Windows.UI.Xaml.Controls.Primitives;
 
 namespace Finanse.Pages {
 
-    public sealed partial class Konta : Page {
+    public sealed partial class AccountsPage : Page {
 
         private ObservableCollection<Account> MoneyAccounts = new ObservableCollection<Account>(AccountsDal.getAllMoneyAccounts());
 
-        public Konta() {
+        public AccountsPage() {
             this.InitializeComponent();
         }
 

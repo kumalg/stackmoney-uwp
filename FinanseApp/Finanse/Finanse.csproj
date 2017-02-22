@@ -209,38 +209,38 @@
     <Compile Include="Models\MoneyAccounts\ICloneable.cs" />
     <Compile Include="Models\NewOperation.cs" />
     <Compile Include="Models\Operation.cs" />
-    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Categories\Category.cs" />
     <Compile Include="Models\OperationData.cs" />
     <Compile Include="Models\OperationPattern.cs" />
-    <Compile Include="Models\SubCategory.cs" />
+    <Compile Include="Models\Categories\SubCategory.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Statistics\CategoryChartPart.cs" />
     <Compile Include="Models\Statistics\ChartPart.cs" />
     <Compile Include="Models\Statistics\StatisticsData.cs" />
     <Compile Include="Models\Statistics\SubCategoriesList.cs" />
-    <Compile Include="Pages\Kategorie.xaml.cs">
-      <DependentUpon>Kategorie.xaml</DependentUpon>
+    <Compile Include="Pages\CategoriesPage.xaml.cs">
+      <DependentUpon>CategoriesPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Konta.xaml.cs">
-      <DependentUpon>Konta.xaml</DependentUpon>
+    <Compile Include="Pages\AccontsPage.xaml.cs">
+      <DependentUpon>AccontsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Nowa_Operacja.xaml.cs">
-      <DependentUpon>Nowa_Operacja.xaml</DependentUpon>
+    <Compile Include="Pages\NewOperationPage.xaml.cs">
+      <DependentUpon>NewOperationPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Statystyki.xaml.cs">
-      <DependentUpon>Statystyki.xaml</DependentUpon>
+    <Compile Include="Pages\StatisticsPage.xaml.cs">
+      <DependentUpon>StatisticsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Strona_glowna.xaml.cs">
-      <DependentUpon>Strona_glowna.xaml</DependentUpon>
+    <Compile Include="Pages\OperationsPage.xaml.cs">
+      <DependentUpon>OperationsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Szablony.xaml.cs">
-      <DependentUpon>Szablony.xaml</DependentUpon>
+    <Compile Include="Pages\OperationPatternsPage.xaml.cs">
+      <DependentUpon>OperationPatternsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Ustawienia.xaml.cs">
-      <DependentUpon>Ustawienia.xaml</DependentUpon>
+    <Compile Include="Pages\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ZleceniaStale.xaml.cs">
-      <DependentUpon>ZleceniaStale.xaml</DependentUpon>
+    <Compile Include="Pages\StandingOrdersPage.xaml.cs">
+      <DependentUpon>StandingOrdersPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThemeAwareFrame.cs" />
@@ -357,35 +357,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Kategorie.xaml">
+    <Page Include="Pages\CategoriesPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Konta.xaml">
+    <Page Include="Pages\AccontsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Nowa_Operacja.xaml">
+    <Page Include="Pages\NewOperationPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Statystyki.xaml">
+    <Page Include="Pages\StatisticsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Strona_glowna.xaml">
+    <Page Include="Pages\OperationsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Szablony.xaml">
+    <Page Include="Pages\OperationPatternsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Ustawienia.xaml">
+    <Page Include="Pages\SettingsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\ZleceniaStale.xaml">
+    <Page Include="Pages\StandingOrdersPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

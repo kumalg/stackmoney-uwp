@@ -11,11 +11,11 @@ using Windows.UI.Xaml.Input;
 
 namespace Finanse.Pages {
 
-    public sealed partial class Szablony : Page {
+    public sealed partial class OperationPatternsPage : Page {
 
         private ObservableCollection<OperationPattern> OperationPatterns = new ObservableCollection<OperationPattern>(Dal.getAllPatterns());
 
-        public Szablony() {
+        public OperationPatternsPage() {
             this.InitializeComponent();
         }
 

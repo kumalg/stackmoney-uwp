@@ -23,7 +23,7 @@ using System.ComponentModel;
 using Finanse.Models.Helpers;
 
 namespace Finanse.Pages {
-    public sealed partial class Strona_glowna : Page, INotifyPropertyChanged {
+    public sealed partial class OperationsPage : Page, INotifyPropertyChanged {
 
         private HashSet<int> visibleAccountsSet = new HashSet<int>();
         private OperationData storeData = new OperationData();
@@ -77,7 +77,7 @@ namespace Finanse.Pages {
                 handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public Strona_glowna() {
+        public OperationsPage() {
 
             this.InitializeComponent();
 

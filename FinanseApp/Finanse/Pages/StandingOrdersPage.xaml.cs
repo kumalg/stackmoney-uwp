@@ -4,9 +4,9 @@ using Windows.UI.Xaml.Media;
 
 namespace Finanse.Pages {
 
-    public sealed partial class ZleceniaStale : Page {
+    public sealed partial class StandingOrdersPage : Page {
 
-        public ZleceniaStale() {
+        public StandingOrdersPage() {
 
             this.InitializeComponent();
         }

@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Input;
 
 namespace Finanse.Pages {
 
-    public sealed partial class Kategorie : Page, INotifyPropertyChanged {
+    public sealed partial class CategoriesPage : Page, INotifyPropertyChanged {
 
         private ObservableCollection<CategoryWithSubCategories> categories;
         private ObservableCollection<CategoryWithSubCategories> Categories {
@@ -81,7 +81,7 @@ namespace Finanse.Pages {
         }
 
 
-        public Kategorie() {
+        public CategoriesPage() {
             this.InitializeComponent();
             Categories = ExpenseCategories;
         }

@@ -42,6 +42,7 @@
                     + "FOREIGN KEY(patientID) REFERENCES patients(id) ) ");*/
 
                 // db.CreateTable<MoneyAccount>();
+
               //  db.Execute("ALTER TABLE OperationCategory RENAME TO Category");
                // db.Execute("ALTER TABLE OperationSubCategory RENAME TO SubCategory");
 

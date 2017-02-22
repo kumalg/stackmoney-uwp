@@ -18,9 +18,9 @@ using Windows.UI.Xaml.Controls;
 
 namespace Finanse.Pages {
 
-    public sealed partial class Ustawienia : Page {
+    public sealed partial class SettingsPage : Page {
        
-        public Ustawienia() {
+        public SettingsPage() {
 
             this.InitializeComponent();
 

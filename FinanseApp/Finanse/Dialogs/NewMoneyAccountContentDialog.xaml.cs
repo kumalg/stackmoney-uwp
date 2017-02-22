@@ -17,7 +17,7 @@ namespace Finanse.Dialogs {
 
     public sealed partial class NewMoneyAccountContentDialog : ContentDialog, INotifyPropertyChanged {
 
-        private Regex regex = NewOperation.getSignedRegex();
+        private Regex regex = NewOperation.GetSignedRegex();
         private string acceptedCostValue = string.Empty;
         private bool isUnfocused = true;
 
@@ -167,7 +167,7 @@ namespace Finanse.Dialogs {
             isUnfocused = true;
 
             if (CostValue.Text != "" && decimal.Parse(CostValue.Text) != 0.0m)
-                CostValue.Text = NewOperation.toCurrencyString(CostValue.Text);
+                CostValue.Text = NewOperation.ToCurrencyString(CostValue.Text);
             else {
                 CostValue.Text = string.Empty;
                 acceptedCostValue = string.Empty;

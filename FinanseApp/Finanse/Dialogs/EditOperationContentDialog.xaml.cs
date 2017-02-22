@@ -13,7 +13,7 @@ using System.ComponentModel;
 namespace Finanse.Dialogs {
     public sealed partial class EditOperationContentDialog : ContentDialog, INotifyPropertyChanged {
 
-        private Regex regex = NewOperation.getRegex();
+        private Regex regex = NewOperation.GetRegex();
         
         private bool isLoaded = false;
         private bool isUnfocused = true;
@@ -77,8 +77,8 @@ namespace Finanse.Dialogs {
                 Expense_RadioButton.IsChecked = true;
             else Income_RadioButton.IsChecked = true;
 
-            CostValue.Text = NewOperation.toCurrencyString(operationPattern.Cost);
-            acceptedCostValue = NewOperation.toCurrencyWithoutSymbolString(operationPattern.Cost);
+            CostValue.Text = NewOperation.ToCurrencyString(operationPattern.Cost);
+            acceptedCostValue = NewOperation.ToCurrencyWithoutSymbolString(operationPattern.Cost);
             
             NameValue.Text = operationPattern.Title;
 
@@ -269,7 +269,7 @@ namespace Finanse.Dialogs {
            isUnfocused = true;
 
             if (!string.IsNullOrEmpty(CostValue.Text))
-                CostValue.Text = NewOperation.toCurrencyString(CostValue.Text);
+                CostValue.Text = NewOperation.ToCurrencyString(CostValue.Text);
         }
 
         private void CostValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {

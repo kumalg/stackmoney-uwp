@@ -50,10 +50,10 @@ namespace Finanse.DataAccessLayer {
                             };
 
                 foreach (var item in query) {
-                    OperationCategory operationCategory = Dal.getOperationCategoryById(item.CategoryId);
+                    Category category = Dal.getCategoryById(item.CategoryId);
                     models.Add(new ChartPart {
-                        SolidColorBrush = operationCategory.Color,
-                        Name = operationCategory.Name,
+                        SolidColorBrush = category.Color,
+                        Name = category.Name,
                         Tag = item.CategoryId,
                         UnrelativeValue = (double)item.Cost
                     });
@@ -83,10 +83,10 @@ namespace Finanse.DataAccessLayer {
                             };
 
                 foreach (var item in query) {
-                    OperationCategory operationCategory = Dal.getOperationCategoryById(item.CategoryId);
+                    Category category = Dal.getCategoryById(item.CategoryId);
                     models.Add(new ChartPart {
-                        SolidColorBrush = operationCategory.Color,
-                        Name = operationCategory.Name,
+                        SolidColorBrush = category.Color,
+                        Name = category.Name,
                         Tag = item.CategoryId,
                         UnrelativeValue = (double)item.Cost
                     });
@@ -117,18 +117,18 @@ namespace Finanse.DataAccessLayer {
                             };
 
                 foreach (var item in query) {
-                    OperationSubCategory operationSubCategory = Dal.getOperationSubCategoryById(item.SubCategoryId);
-                    if (operationSubCategory != null)
+                    SubCategory subCategory = Dal.getSubCategoryById(item.SubCategoryId);
+                    if (subCategory != null)
                         models.Add(new ChartPart {
-                            SolidColorBrush = operationSubCategory.Color,
-                            Name = operationSubCategory.Name,
+                            SolidColorBrush = subCategory.Color,
+                            Name = subCategory.Name,
                             UnrelativeValue = (double)item.Cost
                         });
                     else {
-                        OperationCategory operationCategory = Dal.getOperationCategoryById(CategoryId);
+                        Category category = Dal.getCategoryById(CategoryId);
                         models.Add(new ChartPart {
-                            SolidColorBrush = operationCategory.Color,
-                            Name = operationCategory.Name,
+                            SolidColorBrush = category.Color,
+                            Name = category.Name,
                             UnrelativeValue = (double)item.Cost
                         });
                     }

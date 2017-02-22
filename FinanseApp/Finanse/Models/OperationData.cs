@@ -249,7 +249,7 @@ namespace Finanse.Models {
                             opacity = 0.2,
                         };
 
-                        foreach (OperationCategory item in Dal.getAllCategories()) {
+                        foreach (Category item in Dal.getAllCategories()) {
                             if (item.Id == g.GroupName) {
                                 ((GroupHeaderByCategory)info.Key).categoryId = item.Id;
                                 ((GroupHeaderByCategory)info.Key).icon = item.Icon.Glyph;

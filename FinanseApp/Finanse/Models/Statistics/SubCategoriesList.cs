@@ -15,7 +15,7 @@ namespace Finanse.Models.Statistics {
                 list = value;
             }
         }
-        public OperationCategory Category {
+        public Category Category {
             get; set;
         }
 

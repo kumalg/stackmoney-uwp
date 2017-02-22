@@ -116,7 +116,7 @@
         </data:CategoryIcon>
 
         <TextBlock
-            Name="Category_OperationCategoryTemplate"
+            Name="Category_CategoryTemplate"
             Grid.Column="2"
             VerticalAlignment="Center"
             Text="{Binding Name}"

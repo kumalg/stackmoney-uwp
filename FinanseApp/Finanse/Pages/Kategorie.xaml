@@ -64,7 +64,7 @@
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>
                         
-                        <data:OperationCategoryTemplate
+                        <data:CategoryTemplate
                             DataContext="{x:Bind Category}" />
                         
                     </ListViewItem>
@@ -94,9 +94,9 @@
 
                         <ListView.ItemTemplate>
                             <DataTemplate
-                                x:DataType="models:OperationSubCategory">
+                                x:DataType="models:SubCategory">
 
-                                <data:OperationSubCategoryTemplate
+                                <data:SubCategoryTemplate
                                     Tapped="Grid_Tapped"
                                     RightTapped="Grid_RightTapped">
                                     <FlyoutBase.AttachedFlyout>
@@ -116,7 +116,7 @@
                                                 Click="DeleteSubCategory_Click" />
                                         </MenuFlyout>
                                     </FlyoutBase.AttachedFlyout>
-                                </data:OperationSubCategoryTemplate>
+                                </data:SubCategoryTemplate>
 
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -143,10 +143,10 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter
-                            Target="OperationCategoriesStackPanel.Visibility"
+                            Target="CategoriesStackPanel.Visibility"
                             Value="Visible" />
                         <Setter
-                            Target="SeparatedOperationCategoriesGrid.Visibility"
+                            Target="SeparatedCategoriesGrid.Visibility"
                             Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
@@ -158,10 +158,10 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter
-                            Target="SeparatedOperationCategoriesGrid.Visibility"
+                            Target="SeparatedCategoriesGrid.Visibility"
                             Value="Visible" />
                         <Setter
-                            Target="OperationCategoriesStackPanel.Visibility"
+                            Target="CategoriesStackPanel.Visibility"
                             Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
@@ -221,7 +221,7 @@
                 <StackPanel
                     x:DeferLoadStrategy="Lazy"
                     Visibility="Collapsed"
-                    Name="OperationCategoriesStackPanel">
+                    Name="CategoriesStackPanel">
                     <!--
                     <Grid
                         Background="{ThemeResource AccentColor}"
@@ -350,7 +350,7 @@
                         FlowDirection="LeftToRight"
                         Padding="0"
                         ScrollViewer.VerticalScrollMode="Disabled"
-                        ItemsSource="{x:Bind OperationCategories, Mode=OneWay}"
+                        ItemsSource="{x:Bind Categories, Mode=OneWay}"
                         ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
                         SelectionMode="None"
                         MaxWidth="620"
@@ -374,7 +374,7 @@
                 <Grid
                     x:DeferLoadStrategy="Lazy"
                     Visibility="Collapsed"
-                    Name="SeparatedOperationCategoriesGrid" >
+                    Name="SeparatedCategoriesGrid" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />

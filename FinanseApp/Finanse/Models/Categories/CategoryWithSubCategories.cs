@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Finanse.Models.Categories {
     public class CategoryWithSubCategories : INotifyPropertyChanged {
-        private OperationCategory category;
-        public OperationCategory Category {
+        private Category category;
+        public Category Category {
             get {
                 return category;
             }
@@ -19,7 +19,7 @@ namespace Finanse.Models.Categories {
             }
         }
 
-        public ObservableCollection<OperationSubCategory> SubCategories = new ObservableCollection<OperationSubCategory>();
+        public ObservableCollection<SubCategory> SubCategories = new ObservableCollection<SubCategory>();
 
         public event PropertyChangedEventHandler PropertyChanged;
 

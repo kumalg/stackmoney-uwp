@@ -103,59 +103,59 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private List<OperationCategory> OperationCategories = Dal.getAllCategories();
+        private List<Category> Categories = Dal.getAllCategories();
 
-        private OperationCategory newOperationCategoryItem = new OperationCategory();
-        public OperationCategory NewOperationCategoryItem {
+        private Category newCategoryItem = new Category();
+        public Category NewCategoryItem {
             get {
-                return newOperationCategoryItem;
+                return newCategoryItem;
             }
         }
-        private OperationCategory editedOperationCategoryItem;
-        private OperationSubCategory editedCategiryAlwaysAsSubCategory;
+        private Category editedCategoryItem;
+        private SubCategory editedCategoryAlwaysAsSubCategory;
 
-        private List<ComboBoxItem> operationCategoriesInComboBox;
-        private List<ComboBoxItem> OperationCategoriesInComboBox {
+        private List<ComboBoxItem> categoriesInComboBox;
+        private List<ComboBoxItem> CategoriesInComboBox {
             get {
-                if (operationCategoriesInComboBox == null) {
-                    operationCategoriesInComboBox = new List<ComboBoxItem>();
-                    operationCategoriesInComboBox.Add(new ComboBoxItem {
+                if (categoriesInComboBox == null) {
+                    categoriesInComboBox = new List<ComboBoxItem>();
+                    categoriesInComboBox.Add(new ComboBoxItem {
                         Content = "Brak",
                         Tag = -1,
                     });
-                    foreach (OperationCategory OperationCategories_ComboBox in OperationCategories) {
-                        operationCategoriesInComboBox.Add(new ComboBoxItem {
-                            Content = OperationCategories_ComboBox.Name,
-                            Tag = OperationCategories_ComboBox.Id
+                    foreach (Category categories_ComboBox in Categories) {
+                        categoriesInComboBox.Add(new ComboBoxItem {
+                            Content = categories_ComboBox.Name,
+                            Tag = categories_ComboBox.Id
                         });
                     }
                 }
 
-                return operationCategoriesInComboBox;
+                return categoriesInComboBox;
             }
         }
 
 
 
-        public NewCategoryContentDialog(OperationCategory editedOperationCategoryItem) {
+        public NewCategoryContentDialog(Category editedCategoryItem) {
             this.InitializeComponent();
-            this.editedOperationCategoryItem = new OperationCategory(editedOperationCategoryItem);
-            this.editedCategiryAlwaysAsSubCategory = new OperationSubCategory(editedOperationCategoryItem);
+            this.editedCategoryItem = new Category(editedCategoryItem);
+            this.editedCategoryAlwaysAsSubCategory = new SubCategory(editedCategoryItem);
             Title = "Edytowanie kategorii";
 
-            SelectedColor = ColorBase.FirstOrDefault(i => i.Key.Equals(editedOperationCategoryItem.ColorKey));
-            SelectedIcon = IconBase.FirstOrDefault(i => i.Key.Equals(editedOperationCategoryItem.IconKey));
+            SelectedColor = ColorBase.FirstOrDefault(i => i.Key.Equals(editedCategoryItem.ColorKey));
+            SelectedIcon = IconBase.FirstOrDefault(i => i.Key.Equals(editedCategoryItem.IconKey));
 
-            BossCategoryId = editedCategiryAlwaysAsSubCategory.BossCategoryId;
+            BossCategoryId = editedCategoryAlwaysAsSubCategory.BossCategoryId;
             
-            newOperationCategoryItem = new OperationCategory(editedOperationCategoryItem);
+            newCategoryItem = new Category(editedCategoryItem);
         }
 
         public NewCategoryContentDialog(int BossCategoryId) {
             this.InitializeComponent();
             Title = "Nowa kategoria";
 
-            OperationCategory bossCategory = Dal.getOperationCategoryById(BossCategoryId);
+            Category bossCategory = Dal.getCategoryById(BossCategoryId);
             SelectedColor = ColorBase.FirstOrDefault(i => i.Key.Equals(bossCategory.ColorKey));
             SelectedIcon = IconBase.FirstOrDefault(i => i.Key.Equals(bossCategory.IconKey));
 
@@ -176,39 +176,39 @@ namespace Finanse.Dialogs {
 
         private object SelectedCategory {
             get {
-                return OperationCategoriesInComboBox.FirstOrDefault(i => ((int)i.Tag).Equals(BossCategoryId));
+                return CategoriesInComboBox.FirstOrDefault(i => ((int)i.Tag).Equals(BossCategoryId));
             }
         }
 
         private void SetPrimaryButtonEnabled() {
-            IsPrimaryButtonEnabled = editedCategiryAlwaysAsSubCategory == null ? !string.IsNullOrEmpty(NameValue.Text) : !isNewOperationTheSame();
+            IsPrimaryButtonEnabled = editedCategoryAlwaysAsSubCategory == null ? !string.IsNullOrEmpty(NameValue.Text) : !isNewOperationTheSame();
         }
 
         private bool isNewOperationTheSame() {
            
             return
-                editedCategiryAlwaysAsSubCategory.BossCategoryId == BossCategoryId &&
-                editedCategiryAlwaysAsSubCategory.ColorKey == SelectedColor.Key.ToString() &&
-                editedCategiryAlwaysAsSubCategory.IconKey == SelectedIcon.Key.ToString() &&
-                editedCategiryAlwaysAsSubCategory.Name == NameValue.Text &&
+                editedCategoryAlwaysAsSubCategory.BossCategoryId == BossCategoryId &&
+                editedCategoryAlwaysAsSubCategory.ColorKey == SelectedColor.Key.ToString() &&
+                editedCategoryAlwaysAsSubCategory.IconKey == SelectedIcon.Key.ToString() &&
+                editedCategoryAlwaysAsSubCategory.Name == NameValue.Text &&
                 !string.IsNullOrEmpty(NameValue.Text) &&
-                editedCategiryAlwaysAsSubCategory.VisibleInExpenses == VisibleInExpensesToggleButton.IsOn &&
-                editedCategiryAlwaysAsSubCategory.VisibleInIncomes == VisibleInIncomesToggleButton.IsOn;
+                editedCategoryAlwaysAsSubCategory.VisibleInExpenses == VisibleInExpensesToggleButton.IsOn &&
+                editedCategoryAlwaysAsSubCategory.VisibleInIncomes == VisibleInIncomesToggleButton.IsOn;
         }
 
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
-            newOperationCategoryItem.Name = NameValue.Text;
-            newOperationCategoryItem.ColorKey = SelectedColor.Key.ToString();
-            newOperationCategoryItem.IconKey = SelectedIcon.Key.ToString();
-            newOperationCategoryItem.VisibleInExpenses = VisibleInExpensesToggleButton.IsOn;
-            newOperationCategoryItem.VisibleInIncomes = VisibleInIncomesToggleButton.IsOn;
+            newCategoryItem.Name = NameValue.Text;
+            newCategoryItem.ColorKey = SelectedColor.Key.ToString();
+            newCategoryItem.IconKey = SelectedIcon.Key.ToString();
+            newCategoryItem.VisibleInExpenses = VisibleInExpensesToggleButton.IsOn;
+            newCategoryItem.VisibleInIncomes = VisibleInIncomesToggleButton.IsOn;
 
             if (CategoryValue.SelectedIndex != -1) {
-                OperationSubCategory op = new OperationSubCategory(newOperationCategoryItem);
+                SubCategory op = new SubCategory(newCategoryItem);
                 op.BossCategoryId = BossCategoryId;
 
-                newOperationCategoryItem = op;
+                newCategoryItem = op;
             }
         }
         
@@ -217,8 +217,8 @@ namespace Finanse.Dialogs {
         }
 
         private void setVisibleInExpensesAndIncomesToNewCategory() {
-            newOperationCategoryItem.VisibleInExpenses = VisibleInExpensesToggleButton.IsOn;
-            newOperationCategoryItem.VisibleInIncomes = VisibleInIncomesToggleButton.IsOn;
+            newCategoryItem.VisibleInExpenses = VisibleInExpensesToggleButton.IsOn;
+            newCategoryItem.VisibleInIncomes = VisibleInIncomesToggleButton.IsOn;
         }
 
         private void VisibleInExpensesToggleButton_Toggled(object sender, RoutedEventArgs e) {
@@ -255,7 +255,7 @@ namespace Finanse.Dialogs {
         }
 
         private void setExpenseAndIncomeToggleButtonsEnabling() {
-            OperationCategory bossCategory = Dal.getOperationCategoryById(BossCategoryId);
+            Category bossCategory = Dal.getCategoryById(BossCategoryId);
 
             if (bossCategory != null && (!bossCategory.VisibleInIncomes || !bossCategory.VisibleInExpenses)) {
                 VisibleInExpensesToggleButton.IsEnabled = bossCategory.VisibleInExpenses;

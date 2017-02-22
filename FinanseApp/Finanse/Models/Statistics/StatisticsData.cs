@@ -52,10 +52,10 @@ namespace Finanse.Models {
             decimal sum = query.Sum(item => item.Cost);
 
             foreach (var item in query) {
-                OperationCategory operationCategory = Dal.getOperationCategoryById(item.CategoryId);
+                Category category = Dal.getCategoryById(item.CategoryId);
                 models.Add(new ChartPart {
-                    SolidColorBrush = operationCategory.Color,
-                    Name = operationCategory.Name,
+                    SolidColorBrush = category.Color,
+                    Name = category.Name,
                     Tag = item.CategoryId,
                     UnrelativeValue = (double)item.Cost,
                     RelativeValue = (double)(item.Cost / sum),
@@ -80,10 +80,10 @@ namespace Finanse.Models {
             decimal sum = query.Sum(item => item.Cost);
 
             foreach (var item in query) {
-                OperationCategory operationCategory = Dal.getOperationCategoryById(item.CategoryId);
+                Category category = Dal.getCategoryById(item.CategoryId);
                 models.Add(new ChartPart {
-                    SolidColorBrush = operationCategory.Color,
-                    Name = operationCategory.Name,
+                    SolidColorBrush = category.Color,
+                    Name = category.Name,
                     Tag = item.CategoryId,
                     UnrelativeValue = (double)item.Cost,
                     RelativeValue = (double)(item.Cost / sum),
@@ -112,26 +112,26 @@ namespace Finanse.Models {
 
             foreach (var item in query) {
                 if (item.SubCategories.Count() > 1) {
-                    OperationCategory operationCategory = Dal.getOperationCategoryById(item.CategoryId);
+                    Category category = Dal.getCategoryById(item.CategoryId);
 
                     SubCategoriesList itemList = new SubCategoriesList {
-                        Category = operationCategory
+                        Category = category
                     };
                     
                     decimal groupySum = item.SubCategories.Sum(i => i.Cost);
 
                     foreach (var sitem in item.SubCategories) {
-                        OperationSubCategory operationSubCategory = Dal.getOperationSubCategoryById(sitem.SubCategoryId);
-                        if (operationSubCategory != null)
+                        SubCategory subCategory = Dal.getSubCategoryById(sitem.SubCategoryId);
+                        if (subCategory != null)
                             itemList.List.Add(new ChartPart {
-                                SolidColorBrush = operationSubCategory.Color,
-                                Name = operationSubCategory.Name,
+                                SolidColorBrush = subCategory.Color,
+                                Name = subCategory.Name,
                                 UnrelativeValue = (double)sitem.Cost,
                                 RelativeValue = (double)(sitem.Cost / groupySum)
                             });
                         else {
                             itemList.List.Add(new ChartPart {
-                                SolidColorBrush = operationCategory.Color,
+                                SolidColorBrush = category.Color,
                                 Name = "Bez podkategorii",
                                 UnrelativeValue = (double)sitem.Cost,
                                 RelativeValue = (double)(sitem.Cost / groupySum)
@@ -165,26 +165,26 @@ namespace Finanse.Models {
 
             foreach (var item in query) {
                 if (item.SubCategories.Count() > 1) {
-                    OperationCategory operationCategory = Dal.getOperationCategoryById(item.CategoryId);
+                    Category category = Dal.getCategoryById(item.CategoryId);
 
                     SubCategoriesList itemList = new SubCategoriesList {
-                        Category = operationCategory
+                        Category = category
                     };
 
                     decimal groupySum = item.SubCategories.Sum(i => i.Cost);
 
                     foreach (var sitem in item.SubCategories) {
-                        OperationSubCategory operationSubCategory = Dal.getOperationSubCategoryById(sitem.SubCategoryId);
-                        if (operationSubCategory != null)
+                        SubCategory subCategory = Dal.getSubCategoryById(sitem.SubCategoryId);
+                        if (subCategory != null)
                             itemList.List.Add(new ChartPart {
-                                SolidColorBrush = operationSubCategory.Color,
-                                Name = operationSubCategory.Name,
+                                SolidColorBrush = subCategory.Color,
+                                Name = subCategory.Name,
                                 UnrelativeValue = (double)sitem.Cost,
                                 RelativeValue = (double)(sitem.Cost / groupySum)
                             });
                         else {
                             itemList.List.Add(new ChartPart {
-                                SolidColorBrush = operationCategory.Color,
+                                SolidColorBrush = category.Color,
                                 Name = "Bez podkategorii",
                                 UnrelativeValue = (double)sitem.Cost,
                                 RelativeValue = (double)(sitem.Cost / groupySum)

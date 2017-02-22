@@ -16,7 +16,7 @@ namespace Finanse.Converters {
             if (value == null)
                 return "false";
 
-            return "false";//Dal.getOperationCategoryById((int)value).VisibleInExpenses;
+            return "false";//Dal.getCategoryById((int)value).VisibleInExpenses;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language) {

@@ -26,13 +26,13 @@ namespace Finanse.Elements {
 
         }
 
-        private OperationCategory category;
+        private Category category;
 
-        private OperationCategory Category {
+        private Category Category {
             get {
                 if (category == null) {
-                    OperationCategory cat = Dal.getOperationCategoryById(Operation.CategoryId);
-                    OperationSubCategory subCat = Dal.getOperationSubCategoryById(Operation.SubCategoryId);
+                    Category cat = Dal.getCategoryById(Operation.CategoryId);
+                    SubCategory subCat = Dal.getSubCategoryById(Operation.SubCategoryId);
 
                     if (cat != null)
                         category = cat;
@@ -62,8 +62,8 @@ namespace Finanse.Elements {
                     }
             }
 
-            OperationCategory cat = Dal.getOperationCategoryById(Operation.CategoryId);
-            OperationSubCategory subCat = Dal.getOperationSubCategoryById(Operation.SubCategoryId);
+            Category cat = Dal.getCategoryById(Operation.CategoryId);
+            SubCategory subCat = Dal.getSubCategoryById(Operation.SubCategoryId);
             SubCategoryNameStackPanel.Visibility = Visibility.Collapsed;
 
             /* WCHODZI IKONKA KATEGORII */

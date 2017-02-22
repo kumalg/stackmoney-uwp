@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Finanse.Models {
 
-    public class OperationCategory {
+    public class Category {
 
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; } 
@@ -36,10 +36,10 @@ namespace Finanse.Models {
                     (FontIcon)(((ResourceDictionary)Application.Current.Resources["IconBase"]).FirstOrDefault(i => i.Key.Equals(IconKey)).Value);
             }
         }
-        public OperationCategory() {
+        public Category() {
         }
 
-        public OperationCategory(OperationCategory previousCategory) {
+        public Category(Category previousCategory) {
             Id = previousCategory.Id;
             IconKey = previousCategory.IconKey;
             ColorKey = previousCategory.ColorKey;
@@ -52,10 +52,10 @@ namespace Finanse.Models {
             return Name.GetHashCode() * Id;
         }
         public override bool Equals(object o) {
-            if (o == null || !(o is OperationCategory))
+            if (o == null || !(o is Category))
                 return false;
 
-            OperationCategory secondCategory = o as OperationCategory;
+            Category secondCategory = o as Category;
 
             return
                 ColorKey == secondCategory.ColorKey &&

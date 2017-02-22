@@ -48,8 +48,8 @@ namespace Finanse.Dialogs {
                 DateValuePanel.Visibility = Visibility.Visible;
             }
 
-            OperationCategory cat = Dal.getOperationCategoryById(editedOperation.CategoryId);
-            OperationSubCategory subCat = Dal.getOperationSubCategoryById(editedOperation.SubCategoryId);
+            Category cat = Dal.getCategoryById(editedOperation.CategoryId);
+            SubCategory subCat = Dal.getSubCategoryById(editedOperation.SubCategoryId);
             Account account = AccountsDal.getAccountById(editedOperation.MoneyAccountId);
 
             /* KATEGORIA */

@@ -48,7 +48,7 @@ namespace Finanse.Models {
         public string name {
             get {
                 if (_name.Equals("")) {
-                    _name = categoryId == -1 ? "Nieprzyporządkowane" : Dal.getOperationCategoryById(categoryId).Name;
+                    _name = categoryId == -1 ? "Nieprzyporządkowane" : Dal.getCategoryById(categoryId).Name;
                 }
                 return _name;
             }

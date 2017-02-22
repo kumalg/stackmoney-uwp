@@ -168,11 +168,11 @@
     <Compile Include="Elements\MoneyAccountTemplate.xaml.cs">
       <DependentUpon>MoneyAccountTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Elements\OperationCategoryTemplate.xaml.cs">
-      <DependentUpon>OperationCategoryTemplate.xaml</DependentUpon>
+    <Compile Include="Elements\CategoryTemplate.xaml.cs">
+      <DependentUpon>CategoryTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Elements\OperationSubCategoryTemplate.xaml.cs">
-      <DependentUpon>OperationSubCategoryTemplate.xaml</DependentUpon>
+    <Compile Include="Elements\SubCategoryTemplate.xaml.cs">
+      <DependentUpon>SubCategoryTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Elements\OperationTemplate.xaml.cs">
       <DependentUpon>OperationTemplate.xaml</DependentUpon>
@@ -209,10 +209,10 @@
     <Compile Include="Models\MoneyAccounts\ICloneable.cs" />
     <Compile Include="Models\NewOperation.cs" />
     <Compile Include="Models\Operation.cs" />
-    <Compile Include="Models\OperationCategory.cs" />
+    <Compile Include="Models\Category.cs" />
     <Compile Include="Models\OperationData.cs" />
     <Compile Include="Models\OperationPattern.cs" />
-    <Compile Include="Models\OperationSubCategory.cs" />
+    <Compile Include="Models\SubCategory.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Statistics\CategoryChartPart.cs" />
     <Compile Include="Models\Statistics\ChartPart.cs" />
@@ -325,11 +325,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Elements\OperationCategoryTemplate.xaml">
+    <Page Include="Elements\CategoryTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Elements\OperationSubCategoryTemplate.xaml">
+    <Page Include="Elements\SubCategoryTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -5,13 +5,13 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
 namespace Finanse.Models {
-    public class OperationSubCategory : OperationCategory {
+    public class SubCategory : Category {
 
         public int BossCategoryId { get; set; }
 
-        public OperationSubCategory(OperationCategory category) {
-            if (category is OperationSubCategory)
-                BossCategoryId = ((OperationSubCategory)category).BossCategoryId;
+        public SubCategory(Category category) {
+            if (category is SubCategory)
+                BossCategoryId = ((SubCategory)category).BossCategoryId;
             else
                 BossCategoryId = -1;
 
@@ -23,19 +23,19 @@ namespace Finanse.Models {
             VisibleInIncomes = category.VisibleInIncomes;
         }
 
-        public OperationSubCategory() {
+        public SubCategory() {
         }
 
         public override int GetHashCode() {
             return Name.GetHashCode() * Id;
         }
         public override bool Equals(object o) {
-            if (o == null || !(o is OperationSubCategory))
+            if (o == null || !(o is SubCategory))
                 return false;
 
             return
-                base.Equals((OperationCategory)o) &&
-                ((OperationSubCategory)o).BossCategoryId == BossCategoryId;
+                base.Equals((Category)o) &&
+                ((SubCategory)o).BossCategoryId == BossCategoryId;
         }
     }
 }

@@ -158,8 +158,8 @@ namespace Finanse.Pages {
                     SubCategoryValue.IsEnabled = false;
 
                 if (idOfSelectedSubCategory != -1) {
-                    if (SubCategoryValue.Items.OfType<OperationSubCategory>().Any(i => i.Id == idOfSelectedSubCategory)) {
-                        OperationSubCategory subCatItem = Dal.getOperationSubCategoryById(idOfSelectedSubCategory);
+                    if (SubCategoryValue.Items.OfType<SubCategory>().Any(i => i.Id == idOfSelectedSubCategory)) {
+                        SubCategory subCatItem = Dal.getSubCategoryById(idOfSelectedSubCategory);
                         SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
                     }
                 }
@@ -175,7 +175,7 @@ namespace Finanse.Pages {
 
             CategoryValue.Items.Clear();
 
-            foreach (OperationCategory catItem in Dal.getAllCategories()) {
+            foreach (Category catItem in Dal.getAllCategories()) {
 
                 if ((catItem.VisibleInExpenses && inExpenses)
                     || (catItem.VisibleInIncomes && inIncomes)) {
@@ -194,7 +194,7 @@ namespace Finanse.Pages {
 
             if (CategoryValue.SelectedIndex != -1) {
 
-                foreach (OperationSubCategory subCatItem in Dal.getOperationSubCategoriesByBossId((int)((ComboBoxItem)CategoryValue.SelectedItem).Tag)) {
+                foreach (SubCategory subCatItem in Dal.getSubCategoriesByBossId((int)((ComboBoxItem)CategoryValue.SelectedItem).Tag)) {
 
                     if ((subCatItem.VisibleInExpenses && inExpenses)
                         || (subCatItem.VisibleInIncomes && inIncomes)) {

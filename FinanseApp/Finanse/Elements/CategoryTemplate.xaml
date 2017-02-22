@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="Finanse.Elements.OperationCategoryTemplate"
+    x:Class="Finanse.Elements.CategoryTemplate"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Finanse"
@@ -23,14 +23,14 @@
         </Grid.ColumnDefinitions>
 
         <data:CategoryIcon 
-            Glyph="{x:Bind OperationCategory.Icon.Glyph, Mode=OneWay}"
-            Color="{x:Bind OperationCategory.Color, Mode=OneWay}"/>
+            Glyph="{x:Bind Category.Icon.Glyph, Mode=OneWay}"
+            Color="{x:Bind Category.Color, Mode=OneWay}"/>
 
         <TextBlock
-            Name="Category_OperationCategoryTemplate"
+            Name="Category_CategoryTemplate"
             Grid.Column="1"
             VerticalAlignment="Center"
-            Text="{x:Bind OperationCategory.Name, Mode=OneWay}"
+            Text="{x:Bind Category.Name, Mode=OneWay}"
             Margin="20,0,0,0"
             FontSize="16"
             Foreground="{ThemeResource Text}" />

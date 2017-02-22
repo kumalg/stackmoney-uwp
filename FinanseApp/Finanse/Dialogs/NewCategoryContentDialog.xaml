@@ -20,7 +20,7 @@
         <TextBox
             Name="NameValue"
             Style="{StaticResource TextBoxStyle1}"
-            Text="{x:Bind editedOperationCategoryItem.Name, Mode=OneTime}"
+            Text="{x:Bind editedCategoryItem.Name, Mode=OneTime}"
             TextChanged="NameValue_TextChanged"
             PlaceholderText="Nazwa"
             x:Uid="namePlaceholder"/>
@@ -147,7 +147,7 @@
 
         <ComboBox
             Name="CategoryValue"
-            ItemsSource="{x:Bind OperationCategoriesInComboBox, Mode=OneTime}"
+            ItemsSource="{x:Bind CategoriesInComboBox, Mode=OneTime}"
             SelectedItem="{x:Bind SelectedCategory, Mode=OneWay}"
             Style="{StaticResource ComboBoxStyle1}"
             PlaceholderText="Kategoria nadrzędna"
@@ -165,7 +165,7 @@
             Name="VisibleInExpensesToggleButton"
             Style="{StaticResource ToggleSwitchStyle1}"
             Margin="10,5,0,0"
-            IsOn="{x:Bind editedOperationCategoryItem.VisibleInExpenses, Mode=OneTime}"
+            IsOn="{x:Bind editedCategoryItem.VisibleInExpenses, Mode=OneTime}"
             Toggled="VisibleInExpensesToggleButton_Toggled">
 
             <ToggleSwitch.OffContent>
@@ -187,7 +187,7 @@
             Name="VisibleInIncomesToggleButton"
             Style="{StaticResource ToggleSwitchStyle1}"
             Margin="10,5,0,0"
-            IsOn="{x:Bind editedOperationCategoryItem.VisibleInIncomes, Mode=OneTime}"
+            IsOn="{x:Bind editedCategoryItem.VisibleInIncomes, Mode=OneTime}"
             Toggled="VisibleInIncomesToggleButton_Toggled">
 
             <ToggleSwitch.OffContent>

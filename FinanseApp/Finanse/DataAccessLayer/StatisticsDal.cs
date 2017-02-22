@@ -146,15 +146,15 @@ namespace Finanse.DataAccessLayer {
                 List<ChartPart> models = new List<ChartPart>();
                 var query = db.Query<Operation>("SELECT * FROM Operation WHERE Date >= ? AND Date <= ?", minDate.ToString("yyyy.MM.dd"), maxDate.ToString("yyyy.MM.dd"));
 
-                var dupa = from item in query
+                var query2 = from item in query
                            group item.Cost by item.Date
                            into g select g.Sum();
 
-                for (int i = 0; i < dupa.Count(); i++) {
+                for (int i = 0; i < query2.Count(); i++) {
                     models.Add(new ChartPart {
                         Name = (i + 1).ToString(),
-                        RelativeValue = (double)dupa.ElementAt(i),
-                        UnrelativeValue = (double)dupa.ElementAt(i)
+                        RelativeValue = (double)query2.ElementAt(i),
+                        UnrelativeValue = (double)query2.ElementAt(i)
                     });
                 }
 

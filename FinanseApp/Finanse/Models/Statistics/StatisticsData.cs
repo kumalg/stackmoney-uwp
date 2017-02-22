@@ -211,7 +211,7 @@ namespace Finanse.Models {
                 };
             }
 
-            var dupa = from item in AllOperations
+            var query = from item in AllOperations
                        where item.isExpense
                        group item.Cost by item.Date
                        into g
@@ -220,7 +220,7 @@ namespace Finanse.Models {
                            Cost = g.Sum()
                        };
 
-            foreach (var item in dupa) {
+            foreach (var item in query) {
                 int index = days - (maxDate - item.Date).Days - 1;
                 modelss[index] = new LineChartItem {
                     Key = modelss[index].Key,
@@ -243,7 +243,7 @@ namespace Finanse.Models {
                 };
             }
 
-            var dupa = from item in AllOperations
+            var query = from item in AllOperations
                        where !item.isExpense
                        group item.Cost by item.Date
                        into g
@@ -252,7 +252,7 @@ namespace Finanse.Models {
                            Cost = g.Sum()
                        };
 
-            foreach (var item in dupa) {
+            foreach (var item in query) {
                 int index = days - (maxDate - item.Date).Days - 1;
                 modelss[index] = new LineChartItem {
                     Key = modelss[index].Key,
@@ -275,7 +275,7 @@ namespace Finanse.Models {
                 };
             }
 
-            var dupa = from item in AllOperations
+            var query = from item in AllOperations
                        group item.SignedCost by item.Date
                        into g
                        select new {
@@ -286,9 +286,9 @@ namespace Finanse.Models {
             if (modelss.Length > 0) {
                 modelss[0].Value = (double)Dal.getBalanceOfCertainDay(maxDate);
 
-                for (int i = 1; i < dupa.Count(); i++) {
-                    int index = days - (maxDate - dupa.ElementAt(i).Date).Days - 1;
-                    modelss[index].Value += modelss[index - 1].Value + (double)dupa.ElementAt(i).Cost;
+                for (int i = 1; i < query.Count(); i++) {
+                    int index = days - (maxDate - query.ElementAt(i).Date).Days - 1;
+                    modelss[index].Value += modelss[index - 1].Value + (double)query.ElementAt(i).Cost;
                 }
             }
             /*

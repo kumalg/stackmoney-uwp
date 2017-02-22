@@ -338,6 +338,7 @@ public static async Task CreateDatabase() {
         public static void saveOperation(Operation operation) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
+                operation.LastModifed = DateTime.Now.ToString("yyyy.MM.dd HH.mm.ss");
 
                 if (operation.Id == 0)
                     db.Insert(operation);
@@ -349,6 +350,7 @@ public static async Task CreateDatabase() {
         public static void saveOperationPattern(OperationPattern operationPattern) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
+                operationPattern.LastModifed = DateTime.Now.ToString("yyyy.MM.dd HH.mm.ss");
 
                 if (operationPattern.Id == 0)
                     db.Insert(operationPattern);

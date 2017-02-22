@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="Kumalg-Finanse" Publisher="CN=kumal" Version="1.0.10.0" />
+  <Identity Name="46468kumalg.StackMoneyBeta" Publisher="CN=9AEC792F-DD8F-4FC2-BA28-224DD30B839B" Version="1.1.3.0" />
   <mp:PhoneIdentity PhoneProductId="17736bd1-2787-430d-b1fb-549edd9e20ac" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>Kumalg Finanse</DisplayName>
-    <PublisherDisplayName>Kamil Golec</PublisherDisplayName>
+    <DisplayName>StackMoney</DisplayName>
+    <PublisherDisplayName>kumalg</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
@@ -15,8 +15,8 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Finanse.App">
-      <uap:VisualElements DisplayName="Kumalg Finanse" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Finanse" BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="Kumalg Finanse">
+      <uap:VisualElements DisplayName="StackMoney (Beta)" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Aplikacja do zarządzania finansami" BackgroundColor="transparent">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="StackMoney">
           <uap:ShowNameOnTiles>
             <uap:ShowOn Tile="square150x150Logo" />
             <uap:ShowOn Tile="wide310x150Logo" />

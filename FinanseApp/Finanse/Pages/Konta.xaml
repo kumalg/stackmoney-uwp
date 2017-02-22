@@ -45,6 +45,7 @@
                 Style="{StaticResource PageTitleStyle}" />
 
             <Button
+                BorderThickness="0"
                 Background="Transparent"
                 Width="48"
                 Height="48"
@@ -115,10 +116,11 @@
                             </ListViewItem>
 
                             <ListView
-                                Margin="32,0,0,0"
+                                Margin="0"
                                 IsItemClickEnabled="True"
                                 SelectionMode="None"
                                 ItemsSource="{Binding Cards}">
+                                
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <data:CardAccountTemplate

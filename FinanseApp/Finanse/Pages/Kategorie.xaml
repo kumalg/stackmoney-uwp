@@ -29,7 +29,12 @@
                 <StackPanel
                     Margin="0,8">
 
-                    <StackPanel
+                    <ListViewItem
+                        Margin="0"
+                        Padding="0"
+                        BorderThickness="0"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
                         Background="Transparent"
                         Tapped="StackPanel_Tapped"
                         RightTapped="ExpandPanel_RightTapped">
@@ -58,19 +63,12 @@
                                     Click="AddSubCat_Click" />
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>
+                        
+                        <data:OperationCategoryTemplate
+                            DataContext="{x:Bind Category}" />
+                        
+                    </ListViewItem>
 
-                        <Button
-                            Margin="0"
-                            Padding="0"
-                            BorderThickness="0"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Stretch"
-                            Background="Transparent">
-                            <data:OperationCategoryTemplate
-                                DataContext="{x:Bind Category}" />
-                        </Button>
-
-                    </StackPanel>
 
                     <ListView
                         ScrollViewer.VerticalScrollMode="Disabled"
@@ -97,10 +95,10 @@
                         <ListView.ItemTemplate>
                             <DataTemplate
                                 x:DataType="models:OperationSubCategory">
-                                <Grid
+
+                                <data:OperationSubCategoryTemplate
                                     Tapped="Grid_Tapped"
                                     RightTapped="Grid_RightTapped">
-
                                     <FlyoutBase.AttachedFlyout>
                                         <MenuFlyout
                                             MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
@@ -118,9 +116,8 @@
                                                 Click="DeleteSubCategory_Click" />
                                         </MenuFlyout>
                                     </FlyoutBase.AttachedFlyout>
+                                </data:OperationSubCategoryTemplate>
 
-                                    <data:OperationSubCategoryTemplate />
-                                </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
@@ -199,6 +196,7 @@
                 Style="{StaticResource PageTitleStyle}" />
 
             <Button
+                BorderThickness="0"
                 Background="Transparent"
                 Width="48"
                 Height="48"

@@ -20,7 +20,7 @@ namespace Finanse.Dialogs {
 
         private Operation operationToEdit = null;
         private OperationPattern operationPatternToEdit = null;
-        private OperationPattern dupa;
+        private OperationPattern originalOperationPattern;
 
         private string acceptedCostValue = string.Empty;
 
@@ -30,7 +30,7 @@ namespace Finanse.Dialogs {
             this.operationToEdit = operationToEdit;
 
             DateValue.MaxDate = Settings.getMaxDate();
-            this.dupa = operationToEdit.toOperation();
+            this.originalOperationPattern = operationToEdit.toOperation();
             //  setMoneyAccountComboBoxItems();
 
             setEditedOperationValues(operationToEdit);
@@ -42,7 +42,7 @@ namespace Finanse.Dialogs {
             this.operationPatternToEdit = operationPatternToEdit;
 
             DateValue.Visibility = Visibility.Collapsed;
-            this.dupa = operationPatternToEdit.toOperation();
+            this.originalOperationPattern = operationPatternToEdit.toOperation();
             //setMoneyAccountComboBoxItems();
 
             setEditedOperationValues(operationPatternToEdit);
@@ -318,7 +318,7 @@ namespace Finanse.Dialogs {
         }
 
         private void PayFormValue_Loaded(object sender, RoutedEventArgs e) {
-            PayFormValue.SelectedItem = PayFormValue.Items.OfType<Account>().SingleOrDefault(item => item.Id == dupa.MoneyAccountId);
+            PayFormValue.SelectedItem = PayFormValue.Items.OfType<Account>().SingleOrDefault(item => item.Id == originalOperationPattern.MoneyAccountId);
         }
     }
 }

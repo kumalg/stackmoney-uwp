@@ -12,8 +12,8 @@ namespace Finanse.Models {
         public int SubCategoryId { get; set; }
         public decimal Cost { get; set; }
         public bool isExpense { get; set; }
-        public int MoneyAccountId { get; set;
-        }
+        public int MoneyAccountId { get; set; }
+        public string LastModifed { get; set; }
 
         public decimal SignedCost {
             get {

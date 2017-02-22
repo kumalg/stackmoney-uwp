@@ -19,6 +19,7 @@
 
         <TextBox
             Name="NameValue"
+            Margin="0,10"
             Style="{StaticResource TextBoxStyle1}"
             PlaceholderText="Nazwa"
             x:Uid="namePlaceholder"

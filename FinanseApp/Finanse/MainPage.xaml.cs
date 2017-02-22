@@ -40,6 +40,15 @@ namespace Finanse {
                 Strona_glowna_ListBoxItem.IsChecked = true;
         }
 
+        private string appName;
+        private string AppName {
+            get {
+                if (appName == null)
+                    appName = "StackMoney (Beta)";
+                return appName;
+            }
+        }
+
         private void TitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args) {
             TitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
         }

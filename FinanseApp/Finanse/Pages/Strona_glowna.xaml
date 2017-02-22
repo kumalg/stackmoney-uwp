@@ -50,7 +50,7 @@
 
             <GroupStyle.HeaderTemplate>
                 <DataTemplate>
-                    <Button
+                    <ListViewItem
                         Padding="0"
                         BorderThickness="0"
                         HorizontalAlignment="Stretch"
@@ -100,15 +100,15 @@
                                 FontWeight="SemiBold"
                                 Foreground="{ThemeResource Text-1}"
                                 FontSize="12" />
-
+<!--
                             <Border
-                                Visibility="Collapsed"
                                 Grid.ColumnSpan="3"
                                 Opacity="0.3"
                                 BorderBrush="{ThemeResource Text-2}"
                                 BorderThickness="0,0,0,1" />
+                            -->
                         </Grid>
-                    </Button>
+                    </ListViewItem>
                 </DataTemplate>
             </GroupStyle.HeaderTemplate>
         </GroupStyle>
@@ -191,60 +191,65 @@
 
         <DataTemplate
             x:Name="ByCategoryHeaderTemplate">
+            
+            <ListViewItem
+                Padding="0"
+                BorderThickness="0"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                MaxWidth="620"
+                Background="Transparent">
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="Auto" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-            <Grid
-                Background="Transparent"
-                MaxWidth="620">
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="Auto" />
-                    <ColumnDefinition
-                        Width="*" />
-                    <ColumnDefinition
-                        Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <StackPanel
-                    Margin="0,12"
-                    Orientation="Horizontal">
                     <StackPanel
-                        Width="80">
+                        Margin="0,12"
+                        Orientation="Horizontal">
+                        <StackPanel
+                            Width="80">
+                            <TextBlock
+                                Text="{Binding Key.icon}"
+                                FontFamily="{StaticResource FontAwesome}"
+                                FontSize="12"
+                                Foreground="{ThemeResource Text-2}"
+                                HorizontalAlignment="Center" />
+                        </StackPanel>
                         <TextBlock
-                            Text="{Binding Key.icon}"
-                            FontFamily="{StaticResource FontAwesome}"
-                            FontSize="12"
-                            Foreground="{ThemeResource Text-2}"
                             FontWeight="SemiBold"
-                            HorizontalAlignment="Center" />
+                            Foreground="{ThemeResource Text-1}"
+                            FontFamily="{StaticResource DefaultFontFamily}"
+                            Text="{Binding Key.name}"
+                            FontSize="12" />
                     </StackPanel>
+
                     <TextBlock
+                        Margin="16,0"
+                        VerticalAlignment="Center"
+                        Grid.Column="2"
+                        Name="SumText"
+                        HorizontalAlignment="Right"
+                        Text="{Binding Path=Cost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                         FontWeight="SemiBold"
                         Foreground="{ThemeResource Text-1}"
                         FontFamily="{StaticResource DefaultFontFamily}"
-                        Text="{Binding Key.name}"
                         FontSize="12" />
-                </StackPanel>
-
-                <TextBlock
-                    Margin="16,0"
-                    VerticalAlignment="Center"
-                    Grid.Column="2"
-                    Name="SumText"
-                    HorizontalAlignment="Right"
-                    Text="{Binding Path=Cost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                    FontWeight="SemiBold"
-                    Foreground="{ThemeResource Text-1}"
-                    FontFamily="{StaticResource DefaultFontFamily}"
-                    FontSize="12" />
-
-                <Border
-                    Grid.ColumnSpan="3"
-                    Opacity="0.3"
-                    BorderBrush="{ThemeResource Text-2}"
-                    BorderThickness="0,0,0,1" />
-            </Grid>
-
+<!--
+                    <Border
+                        Grid.ColumnSpan="3"
+                        Opacity="0.3"
+                        BorderBrush="{ThemeResource Text-2}"
+                        BorderThickness="0,0,0,1" />
+                    -->
+                </Grid>
+            </ListViewItem>
         </DataTemplate>
 
         <DataTemplate
@@ -258,7 +263,7 @@
                     Height="50">
                     <data:CategoryIcon
                         Glyph="{Binding Group.Key.icon}"
-                        Color="{Binding Group.Key.color}" />
+                        Color="Gray" />
                 </Grid>
 
                 <TextBlock
@@ -617,7 +622,6 @@
                                                     Height="8"
                                                     Fill="{Binding Account.SolidColorBrush}" />
                                                 <TextBlock
-                                                    x:Name="dupa1"
                                                     FontSize="13"
                                                     Foreground="{ThemeResource Text}"
                                                     Margin="10,5"
@@ -626,7 +630,6 @@
                                                     FontFamily="{StaticResource DefaultFontFamily}"
                                                     Text="{Binding Account.Name}" />
                                                 <TextBlock
-                                                    x:Name="dupa2"
                                                     HorizontalAlignment="Right"
                                                     FontWeight="SemiBold"
                                                     FontSize="13"
@@ -636,7 +639,6 @@
                                                     Grid.Column="2"
                                                     Text="{Binding InitialValue}" />
                                                 <TextBlock
-                                                    x:Name="dupa3"
                                                     HorizontalAlignment="Right"
                                                     FontWeight="SemiBold"
                                                     FontSize="13"

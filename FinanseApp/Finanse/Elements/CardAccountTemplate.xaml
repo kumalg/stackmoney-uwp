@@ -7,7 +7,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Height="68"
     FontFamily="{StaticResource DefaultFontFamily}">
 
     <Grid
@@ -18,12 +17,94 @@
             <ColumnDefinition
                 Width="Auto" />
             <ColumnDefinition
+                Width="Auto" />
+            <ColumnDefinition
                 Width="*" />
             <ColumnDefinition
                 Width="Auto" />
         </Grid.ColumnDefinitions>
+        <Grid
+            Opacity="0.15"
+            Name="SubCategorySymbol"
+            Visibility="Visible"
+            Width="50"
+            Height="40">
+            <!--
+            <Path
+                UseLayoutRounding="True"
+                StrokeEndLineCap="Round"
+                Stroke="{ThemeResource Text-2}"
+                StrokeThickness="2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center">
+                <Path.Data>
+                    <GeometryGroup>
+                        <EllipseGeometry
+                            RadiusX="6"
+                            RadiusY="6" />
+                        <PathGeometry>
+                            <PathGeometry.Figures>
+                                <PathFigureCollection>
+                                    <PathFigure
+                                        StartPoint="6,0">
+                                        <PathFigure.Segments>
+                                            <PathSegmentCollection>
+                                                <LineSegment
+                                                    Point="25,0" />
+                                            </PathSegmentCollection>
+                                        </PathFigure.Segments>
+                                    </PathFigure>
+                                </PathFigureCollection>
+                            </PathGeometry.Figures>
+                        </PathGeometry>
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+         
+            <Rectangle
+                Height="2"
+                Width="19"
+                HorizontalAlignment="Right"
+                Fill="{ThemeResource Text-2}" />
+            -->
+            <Path
+                Margin="0,1,0,0"
+                StrokeEndLineCap="Round"
+                StrokeStartLineCap="Round"
+                Stroke="{ThemeResource Text-2}"
+                StrokeThickness="2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center">
+                <Path.Data>
+                    <PathGeometry>
+                        <PathGeometry.Figures>
+                            <PathFigureCollection>
+                                <PathFigure
+                                    StartPoint="6,0">
+                                    <PathFigure.Segments>
+                                        <PathSegmentCollection>
+                                            <LineSegment
+                                                Point="19,0" />
+                                        </PathSegmentCollection>
+                                    </PathFigure.Segments>
+                                </PathFigure>
+                            </PathFigureCollection>
+                        </PathGeometry.Figures>
+                    </PathGeometry>
+                </Path.Data>
+            </Path>
 
+
+            <Ellipse
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Width="12"
+                Height="12"
+                Stroke="{ThemeResource Text-2}"
+                StrokeThickness="2" />
+        </Grid>
         <data:CategoryIcon
+            Grid.Column="1"
             Glyph=""
             Color="{x:Bind CardAccount.SolidColorBrush}"
             RenderTransformOrigin="0.5,0.5">
@@ -36,7 +117,7 @@
 
         <TextBlock
             Name="Category_OperationCategoryTemplate"
-            Grid.Column="1"
+            Grid.Column="2"
             VerticalAlignment="Center"
             Text="{Binding Name}"
             Margin="20,0,0,0"
@@ -45,7 +126,7 @@
 
         <TextBlock
             FontSize="12"
-            Grid.Column="2"
+            Grid.Column="3"
             FontWeight="SemiBold"
             Name="Cost_OperationTemplate"
             Text="{x:Bind CardAccount.getActualMoneyValue()}"

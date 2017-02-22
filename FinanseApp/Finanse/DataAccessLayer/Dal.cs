@@ -41,27 +41,30 @@
                     + "patientID INT,"
                     + "FOREIGN KEY(patientID) REFERENCES patients(id) ) ");*/
 
-               // db.CreateTable<MoneyAccount>();
+                // db.CreateTable<MoneyAccount>();
+              //  db.Execute("ALTER TABLE OperationCategory RENAME TO Category");
+               // db.Execute("ALTER TABLE OperationSubCategory RENAME TO SubCategory");
+
                 db.CreateTable<Operation>();
                 db.CreateTable<OperationPattern>();
-                db.CreateTable<OperationCategory>();
-                db.CreateTable<OperationSubCategory>();
+                db.CreateTable<Category>();
+                db.CreateTable<SubCategory>();
                 db.CreateTable<CashAccount>();
                 db.CreateTable<CardAccount>();
                 db.CreateTable<BankAccount>();
 
                 db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
 
-                if (!(db.Table<OperationCategory>().Any())) {
-                    addOperationCategory(new OperationCategory { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });
-                    addOperationCategory(new OperationCategory { Id = 2, Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true });
-                    addOperationCategory(new OperationCategory { Id = 3, Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true });
-                    addOperationCategory(new OperationCategory { Id = 4, Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true });
-                    addOperationCategory(new OperationCategory { Id = 5, Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true });
-                    addOperationCategory(new OperationCategory { Id = 6, Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false});
+                if (!(db.Table<Category>().Any())) {
+                    addCategory(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });
+                    addCategory(new Category { Id = 2, Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true });
+                    addCategory(new Category { Id = 3, Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true });
+                    addCategory(new Category { Id = 4, Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true });
+                    addCategory(new Category { Id = 5, Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true });
+                    addCategory(new Category { Id = 6, Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false});
 
-                    addOperationSubCategory(new OperationSubCategory { Id = 1, Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = 4, VisibleInIncomes = false, VisibleInExpenses = true });
-                    addOperationSubCategory(new OperationSubCategory { Id = 2, Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = 3, VisibleInIncomes = false, VisibleInExpenses = true });
+                    addSubCategory(new SubCategory { Id = 1, Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = 4, VisibleInIncomes = false, VisibleInExpenses = true });
+                    addSubCategory(new SubCategory { Id = 2, Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = 3, VisibleInIncomes = false, VisibleInExpenses = true });
                 }
 
                 if (!(db.Table<CashAccount>().Any() || db.Table<BankAccount>().Any())) {
@@ -93,8 +96,8 @@ public static async Task CreateDatabase() {
                 db.TraceListener = new DebugTraceListener();
                 db.DeleteAll<Operation>();
                 db.DeleteAll<OperationPattern>();
-                db.DeleteAll<OperationCategory>();
-                db.DeleteAll<OperationSubCategory>();
+                db.DeleteAll<Category>();
+                db.DeleteAll<SubCategory>();
                 db.DeleteAll<CashAccount>();
                 db.DeleteAll<CardAccount>();
                 db.DeleteAll<BankAccount>();
@@ -108,15 +111,15 @@ public static async Task CreateDatabase() {
 
                 db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
 
-                addOperationCategory(new OperationCategory { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });
-                addOperationCategory(new OperationCategory { Id = 2, Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true });
-                addOperationCategory(new OperationCategory { Id = 3, Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true });
-                addOperationCategory(new OperationCategory { Id = 4, Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true });
-                addOperationCategory(new OperationCategory { Id = 5, Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true });
-                addOperationCategory(new OperationCategory { Id = 6, Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false });
+                addCategory(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });
+                addCategory(new Category { Id = 2, Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true });
+                addCategory(new Category { Id = 3, Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true });
+                addCategory(new Category { Id = 4, Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true });
+                addCategory(new Category { Id = 5, Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true });
+                addCategory(new Category { Id = 6, Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false });
 
-                addOperationSubCategory(new OperationSubCategory { Id = 1, Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = 4, VisibleInIncomes = false, VisibleInExpenses = true });
-                addOperationSubCategory(new OperationSubCategory { Id = 2, Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = 3, VisibleInIncomes = false, VisibleInExpenses = true });
+                addSubCategory(new SubCategory { Id = 1, Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = 4, VisibleInIncomes = false, VisibleInExpenses = true });
+                addSubCategory(new SubCategory { Id = 2, Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = 3, VisibleInIncomes = false, VisibleInExpenses = true });
 
                 AccountsDal.addAccount(new CashAccount { Name = "Gotówka", ColorKey = "01" });
                 AccountsDal.addAccount(new BankAccount { Name = "Konto bankowe", ColorKey = "02", });
@@ -141,34 +144,34 @@ public static async Task CreateDatabase() {
 
         /* GET ALL */
 
-        public static List<OperationCategory> getAllCategories() {
+        public static List<Category> getAllCategories() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<OperationCategory>("SELECT * FROM OperationCategory ORDER BY Name");
+                return db.Query<Category>("SELECT * FROM Category ORDER BY Name");
             }
         }
 
-        public static List<OperationCategory> getAllCategoriesInExpenses() {
+        public static List<Category> getAllCategoriesInExpenses() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInExpenses ORDER BY Name");
+                return db.Query<Category>("SELECT * FROM Category WHERE VisibleInExpenses ORDER BY Name");
             }
         }
-        public static List<OperationCategory> getAllCategoriesInIncomes() {
+        public static List<Category> getAllCategoriesInIncomes() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInIncomes ORDER BY Name");
+                return db.Query<Category>("SELECT * FROM Category WHERE VisibleInIncomes ORDER BY Name");
             }
         }
 
-        public static HashSet<CategoryWithSubCategories> getOperationCategoriesWithSubCategoriesInExpenses() {
+        public static HashSet<CategoryWithSubCategories> getCategoriesWithSubCategoriesInExpenses() {
             using (var db = DbConnection) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
                 /*
-                var test = from category in db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInExpenses ORDER BY Name")
-                           join subCategory in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInExpenses ORDER BY Name")
+                var test = from category in db.Query<Category>("SELECT * FROM Category WHERE VisibleInExpenses ORDER BY Name")
+                           join subCategory in db.Query<SubCategory>("SELECT * FROM SubCategory WHERE VisibleInExpenses ORDER BY Name")
                            on category.Id equals subCategory.BossCategoryId
                            select new {
                                category,
@@ -176,8 +179,8 @@ public static async Task CreateDatabase() {
                            };
                            */
 
-                List<OperationCategory> categories = db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInExpenses ORDER BY Name");
-                var subCategoriesGroups = from subCategory in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInExpenses ORDER BY Name")
+                List<Category> categories = db.Query<Category>("SELECT * FROM Category WHERE VisibleInExpenses ORDER BY Name");
+                var subCategoriesGroups = from subCategory in db.Query<SubCategory>("SELECT * FROM SubCategory WHERE VisibleInExpenses ORDER BY Name")
                                           group subCategory by subCategory.BossCategoryId into g
                                           select new {
                                               BossCategoryId = g.Key,
@@ -195,7 +198,7 @@ public static async Task CreateDatabase() {
                     var yco = subCategoriesGroups.FirstOrDefault(i => i.BossCategoryId == item.Id);//.subCategories;
 
                     if (yco != null)
-                        categoryWithSubCategories.SubCategories = new ObservableCollection<OperationSubCategory>(yco.subCategories);
+                        categoryWithSubCategories.SubCategories = new ObservableCollection<SubCategory>(yco.subCategories);
 
                     categoriesWithSubCategories.Add(categoryWithSubCategories);
                 }
@@ -204,12 +207,12 @@ public static async Task CreateDatabase() {
             }
         }
 
-        public static HashSet<CategoryWithSubCategories> getOperationCategoriesWithSubCategoriesInIncomes() {
+        public static HashSet<CategoryWithSubCategories> getCategoriesWithSubCategoriesInIncomes() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
-                List<OperationCategory> categories = db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE VisibleInIncomes ORDER BY Name");
-                var subCategoriesGroups = from subCategory in db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE VisibleInIncomes ORDER BY Name")
+                List<Category> categories = db.Query<Category>("SELECT * FROM Category WHERE VisibleInIncomes ORDER BY Name");
+                var subCategoriesGroups = from subCategory in db.Query<SubCategory>("SELECT * FROM SubCategory WHERE VisibleInIncomes ORDER BY Name")
                                           group subCategory by subCategory.BossCategoryId into g
                                           select new {
                                               BossCategoryId = g.Key,
@@ -227,7 +230,7 @@ public static async Task CreateDatabase() {
                     var yco = subCategoriesGroups.FirstOrDefault(i => i.BossCategoryId == item.Id);
 
                     if (yco != null)
-                        categoryWithSubCategories.SubCategories = new ObservableCollection<OperationSubCategory>(yco.subCategories);
+                        categoryWithSubCategories.SubCategories = new ObservableCollection<SubCategory>(yco.subCategories);
 
                     categoriesWithSubCategories.Add(categoryWithSubCategories);
                 }
@@ -311,24 +314,24 @@ public static async Task CreateDatabase() {
 
         /* GET BY ID */
     
-        public static OperationSubCategory getOperationSubCategoryById(int Id) {
+        public static SubCategory getSubCategoryById(int Id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
+                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
             }
         }
 
-        public static List<OperationSubCategory> getOperationSubCategoriesByBossId(int Id) {
+        public static List<SubCategory> getSubCategoriesByBossId(int Id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<OperationSubCategory>("SELECT * FROM OperationSubCategory WHERE BossCategoryId == ? ORDER BY Name", Id);
+                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE BossCategoryId == ? ORDER BY Name", Id);
             }
         }
 
-        public static OperationCategory getOperationCategoryById(int Id) {
+        public static Category getCategoryById(int Id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<OperationCategory>("SELECT * FROM OperationCategory WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
+                return db.Query<Category>("SELECT * FROM Category WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
             }
         }
 
@@ -359,31 +362,31 @@ public static async Task CreateDatabase() {
             }
         }
 
-        public static void updateOperationCategory(OperationCategory operationCategory) {
+        public static void updateCategory(Category category) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                db.Update(operationCategory);
+                db.Update(category);
             }
         }
 
-        public static void addOperationCategory(OperationCategory operationCategory) {
+        public static void addCategory(Category category) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                db.Insert(operationCategory);
+                db.Insert(category);
             }
         }
 
-        public static void updateOperationSubCategory(OperationSubCategory operationSubCategory) {
+        public static void updateSubCategory(SubCategory subCategory) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                db.Update(operationSubCategory);
+                db.Update(subCategory);
             }
         }
 
-        public static void addOperationSubCategory(OperationSubCategory operationSubCategory) {
+        public static void addSubCategory(SubCategory subCategory) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
-                db.Insert(operationSubCategory);
+                db.Insert(subCategory);
             }
         }
         
@@ -407,15 +410,15 @@ public static async Task CreateDatabase() {
         public static void deleteCategoryWithSubCategories(int categoryId) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                db.Execute("DELETE FROM OperationCategory WHERE Id = ?", categoryId);
-                db.Execute("DELETE FROM OperationSubCategory WHERE BossCategoryId = ?", categoryId);
+                db.Execute("DELETE FROM Category WHERE Id = ?", categoryId);
+                db.Execute("DELETE FROM SubCategory WHERE BossCategoryId = ?", categoryId);
             }
         }
 
         public static void deleteSubCategory(int subCategoryId) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                db.Execute("DELETE FROM OperationSubCategory WHERE Id = ?", subCategoryId);
+                db.Execute("DELETE FROM SubCategory WHERE Id = ?", subCategoryId);
             }
         }
     }

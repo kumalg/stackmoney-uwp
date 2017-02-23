@@ -10,11 +10,9 @@ namespace Finanse.Models {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
-        
-        public string getActualMoneyValue() {
-            return Dal.getAllOperationsOfThisMoneyAccount(this)
-                .Sum(i => i.SignedCost)
-                .ToString("C", Settings.getActualCultureInfo());
-        }
+
+        public string GetActualMoneyValue() => Dal.GetAllOperationsOfThisMoneyAccount(this)
+            .Sum(i => i.SignedCost)
+            .ToString("C", Settings.GetActualCultureInfo());
     }
 }

@@ -13,84 +13,7 @@
     using System.Linq;
     using Windows.Storage;
 
-    internal static class Dal {
-        private static string dbPath = string.Empty;
-        private static string DbPath {
-            get {
-                if (string.IsNullOrEmpty(dbPath))
-                    dbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "db.sqlite");
-                return dbPath;
-            }
-        }
-
-        private static SQLiteConnection DbConnection {
-            get {
-                return new SQLiteConnection(new SQLitePlatformWinRT(), DbPath);
-            }
-        }
-
-        public static void createDB() {
-            using (var db = DbConnection) {
-                // Activate Tracing
-                db.Execute("PRAGMA foreign_keys = ON");
-                db.TraceListener = new DebugTraceListener();
-
-                /*
-                db.Execute("CREATE TABLE IF NOT EXISTS images ( "
-                    + "nameRed VARCHAR(20) NOT NULL PRIMARY KEY,"
-                    + "patientID INT,"
-                    + "FOREIGN KEY(patientID) REFERENCES patients(id) ) ");*/
-
-                // db.CreateTable<MoneyAccount>();
-
-              //  db.Execute("ALTER TABLE OperationCategory RENAME TO Category");
-               // db.Execute("ALTER TABLE OperationSubCategory RENAME TO SubCategory");
-
-                db.CreateTable<Operation>();
-                db.CreateTable<OperationPattern>();
-                db.CreateTable<Category>();
-                db.CreateTable<SubCategory>();
-                db.CreateTable<CashAccount>();
-                db.CreateTable<CardAccount>();
-                db.CreateTable<BankAccount>();
-
-                db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
-
-                if (!(db.Table<Category>().Any())) {
-                    addCategory(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });
-                    addCategory(new Category { Id = 2, Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true });
-                    addCategory(new Category { Id = 3, Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true });
-                    addCategory(new Category { Id = 4, Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true });
-                    addCategory(new Category { Id = 5, Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true });
-                    addCategory(new Category { Id = 6, Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false});
-
-                    addSubCategory(new SubCategory { Id = 1, Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = 4, VisibleInIncomes = false, VisibleInExpenses = true });
-                    addSubCategory(new SubCategory { Id = 2, Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = 3, VisibleInIncomes = false, VisibleInExpenses = true });
-                }
-
-                if (!(db.Table<CashAccount>().Any() || db.Table<BankAccount>().Any())) {
-                    AccountsDal.addAccount(new CashAccount { Name = "Gotówka", ColorKey = "01" });
-                    AccountsDal.addAccount(new BankAccount { Name = "Konto bankowe", ColorKey = "02", });
-                    AccountsDal.addAccount(new CardAccount { Name = "Karta", ColorKey = "03", BankAccountId = db.ExecuteScalar<int>("SELECT Id FROM BankAccount LIMIT 1")});
-                }
-            }
-        }
-
-
-        /*
-public static async Task CreateDatabase() {
-   // Create a new connection
-   using (var db = DbConnection) {
-       // Activate Tracing
-       db.TraceListener = new DebugTraceListener();
-
-       // Create the table if it does not exist
-       var c = db.CreateTable<Operation>();
-       var info = db.GetMapping(typeof(Operation));
-
-   }
-}
-*/
+    internal class Dal : DalBase{
 
         public static void DeleteAll() {
             using (var db = DbConnection) {
@@ -112,30 +35,30 @@ public static async Task CreateDatabase() {
 
                 db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
 
-                addCategory(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });
-                addCategory(new Category { Id = 2, Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true });
-                addCategory(new Category { Id = 3, Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true });
-                addCategory(new Category { Id = 4, Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true });
-                addCategory(new Category { Id = 5, Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true });
-                addCategory(new Category { Id = 6, Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false });
+                AddCategory(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });
+                AddCategory(new Category { Id = 2, Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true });
+                AddCategory(new Category { Id = 3, Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true });
+                AddCategory(new Category { Id = 4, Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true });
+                AddCategory(new Category { Id = 5, Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true });
+                AddCategory(new Category { Id = 6, Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false });
 
-                addSubCategory(new SubCategory { Id = 1, Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = 4, VisibleInIncomes = false, VisibleInExpenses = true });
-                addSubCategory(new SubCategory { Id = 2, Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = 3, VisibleInIncomes = false, VisibleInExpenses = true });
+                AddSubCategory(new SubCategory { Id = 1, Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = 4, VisibleInIncomes = false, VisibleInExpenses = true });
+                AddSubCategory(new SubCategory { Id = 2, Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = 3, VisibleInIncomes = false, VisibleInExpenses = true });
 
-                AccountsDal.addAccount(new CashAccount { Name = "Gotówka", ColorKey = "01" });
-                AccountsDal.addAccount(new BankAccount { Name = "Konto bankowe", ColorKey = "02", });
-                AccountsDal.addAccount(new CardAccount { Name = "Karta", ColorKey = "03", BankAccountId = db.ExecuteScalar<int>("SELECT Id FROM BankAccount LIMIT 1") });
+                AccountsDal.AddAccount(new CashAccount { Name = "Gotówka", ColorKey = "01" });
+                AccountsDal.AddAccount(new BankAccount { Name = "Konto bankowe", ColorKey = "02", });
+                AccountsDal.AddAccount(new CardAccount { Name = "Karta", ColorKey = "03", BankAccountId = db.ExecuteScalar<int>("SELECT Id FROM BankAccount LIMIT 1") });
             }
         }
 
-        public static Operation getEldestOperation() {
+        public static Operation GetEldestOperation() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 return db.Query<Operation>("SELECT * FROM Operation WHERE Date IS NOT NULL AND Date != '' ORDER BY Date LIMIT 1").FirstOrDefault();
             }
         }
 
-        internal static List<Operation> getAllOperationsFromRangeToStatistics(DateTime minDate, DateTime maxDate) {
+        internal static List<Operation> GetAllOperationsFromRangeToStatistics(DateTime minDate, DateTime maxDate) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 return db.Query<Operation>("SELECT * FROM Operation WHERE (VisibleInStatistics OR VisibleInStatistics ISNULL) AND Date >= ? AND Date <= ?", minDate.ToString("yyyy.MM.dd"), maxDate.ToString("yyyy.MM.dd"));
@@ -145,27 +68,27 @@ public static async Task CreateDatabase() {
 
         /* GET ALL */
 
-        public static List<Category> getAllCategories() {
+        public static List<Category> GetAllCategories() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 return db.Query<Category>("SELECT * FROM Category ORDER BY Name");
             }
         }
 
-        public static List<Category> getAllCategoriesInExpenses() {
+        public static List<Category> GetAllCategoriesInExpenses() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 return db.Query<Category>("SELECT * FROM Category WHERE VisibleInExpenses ORDER BY Name");
             }
         }
-        public static List<Category> getAllCategoriesInIncomes() {
+        public static List<Category> GetAllCategoriesInIncomes() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 return db.Query<Category>("SELECT * FROM Category WHERE VisibleInIncomes ORDER BY Name");
             }
         }
 
-        public static HashSet<CategoryWithSubCategories> getCategoriesWithSubCategoriesInExpenses() {
+        public static HashSet<CategoryWithSubCategories> GetCategoriesWithSubCategoriesInExpenses() {
             using (var db = DbConnection) {
                 // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
@@ -208,7 +131,7 @@ public static async Task CreateDatabase() {
             }
         }
 
-        public static HashSet<CategoryWithSubCategories> getCategoriesWithSubCategoriesInIncomes() {
+        public static HashSet<CategoryWithSubCategories> GetCategoriesWithSubCategoriesInIncomes() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
@@ -240,21 +163,21 @@ public static async Task CreateDatabase() {
             }
         }
 
-        public static List<Operation> getAllOperationsOfThisMoneyAccount(MoneyAccount account) {
+        public static List<Operation> GetAllOperationsOfThisMoneyAccount(MoneyAccount account) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
                 return db.Query<Operation>("SELECT * FROM Operation WHERE MoneyAccountId == ?", account.Id);
             }
         }
 
-        public static decimal getBalanceOfCertainDay(DateTime dateTime) {
+        public static decimal GetBalanceOfCertainDay(DateTime dateTime) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 return db.ExecuteScalar<decimal>("SELECT TOTAL(CASE WHEN isExpense THEN -Cost ELSE Cost END) FROM Operation WHERE Date <= ? AND Date IS NOT NULL AND Date IS NOT ''", dateTime.ToString("yyyy.MM.dd"));
             }
         }
 
-        public static List<Operation> getAllOperations(DateTime actualMonth, HashSet<int> visiblePayFormList) {
+        public static List<Operation> GetAllOperations(DateTime actualMonth, HashSet<int> visiblePayFormList) {
             List<Operation> models;
 
             // Create a new connection
@@ -276,14 +199,14 @@ public static async Task CreateDatabase() {
             return models;
         }
 
-        public static List<Operation> getAllFutureOperations() {
+        public static List<Operation> GetAllFutureOperations() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 return db.Query<Operation>("SELECT * FROM Operation WHERE Date > ? OR Date IS NULL OR Date == ''", DateTime.Today.ToString("yyyy.MM.dd"));
             }
         }
 
-        public static List<Operation> getAllFutureOperations(HashSet<int> visiblePayFormList) {
+        public static List<Operation> GetAllFutureOperations(HashSet<int> visiblePayFormList) {
             List<Operation> models;
 
             // Create a new connection
@@ -305,7 +228,7 @@ public static async Task CreateDatabase() {
             return models;
         }
 
-        public static List<OperationPattern> getAllPatterns() {
+        public static List<OperationPattern> GetAllPatterns() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 return db.Table<OperationPattern>().ToList();
@@ -315,31 +238,31 @@ public static async Task CreateDatabase() {
 
         /* GET BY ID */
     
-        public static SubCategory getSubCategoryById(int Id) {
+        public static SubCategory GetSubCategoryById(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
+                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE Id == ? LIMIT 1", id).FirstOrDefault();
             }
         }
 
-        public static List<SubCategory> getSubCategoriesByBossId(int Id) {
+        public static List<SubCategory> GetSubCategoriesByBossId(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE BossCategoryId == ? ORDER BY Name", Id);
+                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE BossCategoryId == ? ORDER BY Name", id);
             }
         }
 
-        public static Category getCategoryById(int Id) {
+        public static Category GetCategoryById(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<Category>("SELECT * FROM Category WHERE Id == ? LIMIT 1", Id).FirstOrDefault();
+                return db.Query<Category>("SELECT * FROM Category WHERE Id == ? LIMIT 1", id).FirstOrDefault();
             }
         }
 
 
         /* SAVE */
 
-        public static void saveOperation(Operation operation) {
+        public static void SaveOperation(Operation operation) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 operation.LastModifed = DateTime.Now.ToString("yyyy.MM.dd HH.mm.ss");
@@ -351,7 +274,7 @@ public static async Task CreateDatabase() {
             }
         }
 
-        public static void saveOperationPattern(OperationPattern operationPattern) {
+        public static void SaveOperationPattern(OperationPattern operationPattern) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 operationPattern.LastModifed = DateTime.Now.ToString("yyyy.MM.dd HH.mm.ss");
@@ -363,28 +286,28 @@ public static async Task CreateDatabase() {
             }
         }
 
-        public static void updateCategory(Category category) {
+        public static void UpdateCategory(Category category) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 db.Update(category);
             }
         }
 
-        public static void addCategory(Category category) {
+        public static void AddCategory(Category category) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 db.Insert(category);
             }
         }
 
-        public static void updateSubCategory(SubCategory subCategory) {
+        public static void UpdateSubCategory(SubCategory subCategory) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 db.Update(subCategory);
             }
         }
 
-        public static void addSubCategory(SubCategory subCategory) {
+        public static void AddSubCategory(SubCategory subCategory) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
                 db.Insert(subCategory);
@@ -394,21 +317,21 @@ public static async Task CreateDatabase() {
 
         /* DELETE */
 
-        public static void deletePattern(OperationPattern operationPattern) {
+        public static void DeletePattern(OperationPattern operationPattern) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("DELETE FROM OperationPattern WHERE Id = ?", operationPattern.Id);
             }
         }
 
-        public static void deleteOperation(Operation operation) {
+        public static void DeleteOperation(Operation operation) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("DELETE FROM Operation WHERE Id = ?", operation.Id);
             }
         }
 
-        public static void deleteCategoryWithSubCategories(int categoryId) {
+        public static void DeleteCategoryWithSubCategories(int categoryId) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("DELETE FROM Category WHERE Id = ?", categoryId);
@@ -416,7 +339,7 @@ public static async Task CreateDatabase() {
             }
         }
 
-        public static void deleteSubCategory(int subCategoryId) {
+        public static void DeleteSubCategory(int subCategoryId) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("DELETE FROM SubCategory WHERE Id = ?", subCategoryId);

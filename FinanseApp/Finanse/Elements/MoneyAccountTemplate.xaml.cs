@@ -10,12 +10,7 @@ namespace Finanse.Elements {
 
     public sealed partial class MoneyAccountTemplate : UserControl {
 
-        private Models.MoneyAccounts.Account Account {
-
-            get {
-                return this.DataContext as Account;
-            }
-        }
+        private Account Account => DataContext as Account;
 
         public MoneyAccountTemplate() {
 
@@ -23,11 +18,7 @@ namespace Finanse.Elements {
             this.DataContextChanged += (s, e) => Bindings.Update();
         }
 
-        private Visibility isBankAccount {
-            get {
-                return DataContext is BankAccountWithCards ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
+        private Visibility isBankAccount => DataContext is BankAccountWithCards ? Visibility.Visible : Visibility.Collapsed;
 
         private string Glyph {
             get {

@@ -196,7 +196,7 @@ namespace Finanse.Charts {
                 }
 
                 for (int i = 1; i < array.Count - 1; i++) {
-                    Vector2[] controlPoint2 = calculateControlPoints(array[i - 1], array[i], array[i + 1]);
+                    Vector2[] controlPoint2 = CalculateControlPoints(array[i - 1], array[i], array[i + 1]);
                     controlPoints.Add(controlPoint2[0]);
                     controlPoints.Add(controlPoint2[1]);
                 }
@@ -292,7 +292,7 @@ namespace Finanse.Charts {
             }*/
         }
 
-        private Vector2[] calculateControlPoints(Vector2 previousPoint, Vector2 actualPoint, Vector2 nextPoint) {
+        private Vector2[] CalculateControlPoints(Vector2 previousPoint, Vector2 actualPoint, Vector2 nextPoint) {
 
             var availableHeight = (float)_canvas.ActualHeight;
 

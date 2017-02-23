@@ -5,52 +5,45 @@ using Windows.UI.Xaml.Media;
 using System.Collections.ObjectModel;
 using Finanse.DataAccessLayer;
 using Finanse.Models;
+using Finanse.Models.Categories;
 using Finanse.Models.MoneyAccounts;
 
 namespace Finanse.Dialogs {
 
     public sealed partial class OperationDetailsContentDialog : ContentDialog {
+        
 
-        private readonly ObservableCollection<GroupInfoList<Operation>> _source;
-        Operation editedOperation;
-        string whichOption;
-
-        public OperationDetailsContentDialog(ObservableCollection<GroupInfoList<Operation>> _source, Operation editedOperation, string whichOption) {
+        public OperationDetailsContentDialog(OperationPattern editedOperation, string whichOption) {
 
             this.InitializeComponent();
-            this._source = _source;
-            this.editedOperation = editedOperation;
-            this.whichOption = whichOption;
 
             if (whichOption == "pattern")
                 Title = "Szczegóły szablonu";
 
             if (editedOperation.isExpense) {
-                CostValue.Text = (-editedOperation.Cost).ToString("C", Settings.getActualCultureInfo());
-                CostValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"] as SolidColorBrush;
-                //CostValueIcon.Glyph = "";
+                CostValue.Text = (-editedOperation.Cost).ToString("C", Settings.GetActualCultureInfo());
+                CostValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
             }
             else {
-                CostValue.Text = editedOperation.Cost.ToString("C", Settings.getActualCultureInfo());
-                CostValue.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"] as SolidColorBrush;
-               // CostValueIcon.Glyph = "";
+                CostValue.Text = editedOperation.Cost.ToString("C", Settings.GetActualCultureInfo());
+                CostValue.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"];
             }
 
             NameValue.Visibility = Visibility.Collapsed;
-            if (!String.IsNullOrEmpty(editedOperation.Title)) {
+            if (!string.IsNullOrEmpty(editedOperation.Title)) {
                 NameValue.Text = editedOperation.Title;
                 NameValue.Visibility = Visibility.Visible;
             }
 
             DateValuePanel.Visibility = Visibility.Collapsed;
-            if (!editedOperation.Date.Equals("") && whichOption != "pattern") {
-                DateValue.Text = String.Format("{0:dddd, dd MMMM yyyy}", Convert.ToDateTime(editedOperation.Date));
+            if (!string.IsNullOrEmpty((editedOperation as Operation)?.Date)) {
+                DateValue.Text = string.Format("{0:dddd, dd MMMM yyyy}", Convert.ToDateTime(((Operation)editedOperation).Date));
                 DateValuePanel.Visibility = Visibility.Visible;
             }
 
-            Category cat = Dal.getCategoryById(editedOperation.CategoryId);
-            SubCategory subCat = Dal.getSubCategoryById(editedOperation.SubCategoryId);
-            Account account = AccountsDal.getAccountById(editedOperation.MoneyAccountId);
+            Category cat = Dal.GetCategoryById(editedOperation.CategoryId);
+            SubCategory subCat = Dal.GetSubCategoryById(editedOperation.SubCategoryId);
+            Account account = AccountsDal.GetAccountById(editedOperation.MoneyAccountId);
 
             /* KATEGORIA */
             CategoryValuePanel.Visibility = Visibility.Collapsed;
@@ -81,49 +74,15 @@ namespace Finanse.Dialogs {
             }
 
             /* WIĘCEJ INFORMACJI */
-            if (!String.IsNullOrEmpty(editedOperation.MoreInfo)) {
+            if (!string.IsNullOrEmpty(editedOperation.MoreInfo)) {
                 MoreInfo.Text = editedOperation.MoreInfo;
             }
             else
                 MoreInfoPanel.Visibility = Visibility.Collapsed;
         }
-        /*
-        private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
-            Hide();
-            var ContentDialogItem = new Delete_ContentDialog(_source, editedOperation, whichOption);
-            var result = await ContentDialogItem.ShowAsync();
-        }
-
-        private async void DeleteButton_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-            Hide();
-            var ContentDialogItem = new Delete_ContentDialog(_source, editedOperation, whichOption);
-            var result = await ContentDialogItem.ShowAsync();
-        }*/
         
         private void Exit_Click(object sender, RoutedEventArgs e) {
             Hide();
-        }
-
-        private async void EditButton_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-
-            Hide();
-
-            //string whichOptionLocal;
-
-            NewOperationContentDialog ContentDialogItem;
-
-            switch (whichOption) {
-                case "pattern": {
-                        ContentDialogItem = new NewOperationContentDialog(null, editedOperation, true);
-                        break;
-                    }
-                default: {
-                        ContentDialogItem = new NewOperationContentDialog(editedOperation);
-                        break;
-                    }
-            }
-
-            var result = await ContentDialogItem.ShowAsync();
         }
     }
 }

@@ -25,7 +25,6 @@
 
         <Grid
             Opacity="0.15"
-            Name="SubCategorySymbol"
             Visibility="Visible"
             Width="50"
             Height="40">

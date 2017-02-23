@@ -7,20 +7,20 @@ namespace Finanse.Dialogs {
 
     public sealed partial class OperationPatternsContentDialog : ContentDialog {
 
-        private List<OperationPattern> OperationPatterns = Dal.getAllPatterns();
+        private readonly List<OperationPattern> OperationPatterns = Dal.GetAllPatterns();
 
-        public OperationPatternsContentDialog(Operation selectedOperation) {
-            this.InitializeComponent();
+        public OperationPatternsContentDialog() {
+            InitializeComponent();
         }
 
         private void OperationPatternsListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             Hide();
         }
 
-        public Operation setOperation () {
+        public Operation SetOperation () {
             return OperationPatternsListView.SelectedIndex == -1 ?
                 null 
-                : ((OperationPattern)OperationPatternsListView.SelectedItem).toOperation();
+                : ((OperationPattern)OperationPatternsListView.SelectedItem).ToOperation();
         }
     }
 }

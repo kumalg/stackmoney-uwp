@@ -1,15 +1,11 @@
 ﻿using Windows.UI.Xaml.Controls;
+using Finanse.Models.Categories;
 
 namespace Finanse.Elements {
 
     public sealed partial class SubCategoryTemplate : UserControl {
       
-        private Models.SubCategory SubCategory {
-
-            get {
-                return this.DataContext as Models.SubCategory;
-            }
-        }
+        private SubCategory SubCategory => DataContext as SubCategory;
 
         public SubCategoryTemplate() {
             this.InitializeComponent();

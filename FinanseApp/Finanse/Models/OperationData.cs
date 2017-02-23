@@ -62,7 +62,7 @@ namespace Finanse.Models {
         public string ActualOperationsSum {
             get {
                 decimal actualMoney = AllOperations.Sum(i => i.SignedCost);
-                return actualMoney.ToString("C", Settings.getActualCultureInfo());
+                return actualMoney.ToString("C", Settings.GetActualCultureInfo());
             }
         }
 
@@ -70,7 +70,7 @@ namespace Finanse.Models {
         public HashSet<int> VisiblePayFormList {
             get {
                 if (visiblePayFormList == null)
-                    visiblePayFormList = new HashSet<int>(AccountsDal.getAllMoneyAccounts().Select(i => i.Id));
+                    visiblePayFormList = new HashSet<int>(AccountsDal.GetAllMoneyAccounts().Select(i => i.Id));
                 return visiblePayFormList;
             }
             set {
@@ -84,7 +84,7 @@ namespace Finanse.Models {
         private List<Operation> AllOperations {
             get {
                 if (allOperations == null)
-                    allOperations = setOperations();
+                    allOperations = SetOperations();
                 return allOperations;
             }
             set {
@@ -94,23 +94,19 @@ namespace Finanse.Models {
 
 
         private void SetNewOperationsList() {
-            AllOperations = setOperations();
+            AllOperations = SetOperations();
             OnPropertyChanged("OperationsByDay");
             OnPropertyChanged("OperationsByCategory");
             OnPropertyChanged("ActualOperationsSum");
         }
 
 
-        private List<Operation> setOperations() {
-            return IsFuture ? Dal.getAllFutureOperations(VisiblePayFormList) : Dal.getAllOperations(ActualMonth, VisiblePayFormList);
+        private List<Operation> SetOperations() {
+            return IsFuture ? Dal.GetAllFutureOperations(VisiblePayFormList) : Dal.GetAllOperations(ActualMonth, VisiblePayFormList);
         }
 
 
-        public bool IsFuture {
-            get {
-                return ActualMonth > Date.FirstDayInMonth(DateTime.Today);
-            }
-        }
+        public bool IsFuture => ActualMonth > Date.FirstDayInMonth(DateTime.Today);
 
         private ObservableCollection<GroupInfoList<Operation>> operationsByDay;
         public ObservableCollection<GroupInfoList<Operation>> OperationsByDay {
@@ -201,7 +197,7 @@ namespace Finanse.Models {
 
                         int i;
                         for (i = 0; i < operationsByDay.Count; i++)
-                            if (((GroupHeaderByDay)operationsByDay.ElementAt(i).Key).date.CompareTo(operation.Date) < 0)
+                            if (((GroupHeaderByDay)operationsByDay.ElementAt(i).Key).Date.CompareTo(operation.Date) < 0)
                                 break;
 
                         operationsByDay.Insert(i, group);
@@ -239,27 +235,31 @@ namespace Finanse.Models {
                                 };
 
                     foreach (var g in query) {
-                        info = new GroupInfoList<Operation>();
-
-                        info.Key = new GroupHeaderByCategory {
-                            //name = "Nieprzyporządkowane", /// WAŻNE MAXXXXXXXXXXXXXX
-                            categoryId = -1,
-                            icon = ((FontIcon)Application.Current.Resources["DefaultEllipseIcon"]).Glyph,
-                            color = ((SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"]).Color.ToString(),
-                            opacity = 0.2,
+                        info = new GroupInfoList<Operation> {
+                            Key = new GroupHeaderByCategory {
+                                //name = "Nieprzyporządkowane", /// WAŻNE MAXXXXXXXXXXXXXX
+                                CategoryId = -1,
+                                Icon = ((FontIcon)Application.Current.Resources["DefaultEllipseIcon"]).Glyph,
+                                Color =
+                                    ((SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"]).Color
+                                    .ToString(),
+                                Opacity = 0.2,
+                            }
                         };
 
-                        foreach (Category item in Dal.getAllCategories()) {
-                            if (item.Id == g.GroupName) {
-                                ((GroupHeaderByCategory)info.Key).categoryId = item.Id;
-                                ((GroupHeaderByCategory)info.Key).icon = item.Icon.Glyph;
-                                ((GroupHeaderByCategory)info.Key).color = item.Color.ToString(); /// cymczasowe
-                                ((GroupHeaderByCategory)info.Key).opacity = 1;
-                                break;
-                            }
+
+                        foreach (var item in Dal.GetAllCategories()) {
+                            if (item.Id != g.GroupName)
+                                continue;
+
+                            ((GroupHeaderByCategory)info.Key).CategoryId = item.Id;
+                            ((GroupHeaderByCategory)info.Key).Icon = item.Icon.Glyph;
+                            ((GroupHeaderByCategory)info.Key).Color = item.Color.ToString(); /// cymczasowe
+                            ((GroupHeaderByCategory)info.Key).Opacity = 1;
+                            break;
                         }
 
-                        ((GroupHeaderByCategory)info.Key).iconStyle = new FontFamily(Settings.getActualIconStyle());
+                        ((GroupHeaderByCategory)info.Key).IconStyle = new FontFamily(Settings.GetActualIconStyle());
 
                         foreach (var item in g.Items.OrderByDescending(i => i.Id))
                             info.Add(item);
@@ -279,7 +279,7 @@ namespace Finanse.Models {
 
         private int HowManyEmptyCells {
             get {
-                int dayOfWeek = (int)(ActualMonth.DayOfWeek) - (int)Settings.getFirstDayOfWeek();
+                int dayOfWeek = (int)(ActualMonth.DayOfWeek) - (int)Settings.GetFirstDayOfWeek();
                 if (dayOfWeek < 1)
                     dayOfWeek += 7;
                 return dayOfWeek;
@@ -295,14 +295,14 @@ namespace Finanse.Models {
 
                     int dayOfWeek = HowManyEmptyCells;
                     for (int i = 0; i < dayOfWeek; i++)
-                        operationHeaders.Add(new HeaderItem() { Day = String.Empty, IsEnabled = false });
+                        operationHeaders.Add(new HeaderItem() { Day = string.Empty, IsEnabled = false });
 
                     for (int i = 1; i <= DateTime.DaysInMonth(ActualMonth.Year, ActualMonth.Month); i++) {
 
-                        if (this.OperationsByDay.Any(k => ((GroupHeaderByDay)k.Key).dayNum == i.ToString()))
-                            operationHeaders.Add(new HeaderItem() { Day = i.ToString(), IsEnabled = true });
-                        else
-                            operationHeaders.Add(new HeaderItem() { Day = i.ToString(), IsEnabled = false });
+                        operationHeaders.Add(
+                            OperationsByDay.Any(k => ((GroupHeaderByDay)k.Key).DayNum == i.ToString())
+                                ? new HeaderItem() { Day = i.ToString(), IsEnabled = true }
+                                : new HeaderItem() { Day = i.ToString(), IsEnabled = false });
                     }
                 }
 

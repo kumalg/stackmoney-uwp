@@ -1,10 +1,4 @@
-﻿using SQLite.Net.Attributes;
-using System.Linq;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
-
-namespace Finanse.Models {
+﻿namespace Finanse.Models.Categories {
     public class SubCategory : Category {
 
         public int BossCategoryId { get; set; }
@@ -30,7 +24,7 @@ namespace Finanse.Models {
             return Name.GetHashCode() * Id;
         }
         public override bool Equals(object o) {
-            if (o == null || !(o is SubCategory))
+            if (!(o is SubCategory))
                 return false;
 
             return

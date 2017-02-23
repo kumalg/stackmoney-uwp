@@ -251,7 +251,7 @@ namespace Finanse.Charts {
             }
         }
 
-        private Vector2[] calculateControlPoints(Vector2 previousPoint, Vector2 actualPoint, Vector2 nextPoint) {
+        private Vector2[] CalculateControlPoints(Vector2 previousPoint, Vector2 actualPoint, Vector2 nextPoint) {
 
             float xLenght = (nextPoint.X - previousPoint.X) / 4;
             float yLenght = (nextPoint.Y - previousPoint.Y) / 4;

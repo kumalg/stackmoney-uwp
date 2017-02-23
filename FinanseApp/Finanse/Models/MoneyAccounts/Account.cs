@@ -10,7 +10,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
 namespace Finanse.Models.MoneyAccounts {
-    abstract public class Account : ICloneable {
+    public abstract class Account : ICloneable {
 
         private int id = -1;
 
@@ -18,7 +18,7 @@ namespace Finanse.Models.MoneyAccounts {
         public int Id {
             get {
                 if (id == -1)
-                    id = AccountsDal.getHighestIdOfAccounts() + 1;
+                    id = AccountsDal.GetHighestIdOfAccounts() + 1;
                 return id;
             }
             set {
@@ -36,7 +36,7 @@ namespace Finanse.Models.MoneyAccounts {
             }
         }
 
-        public abstract string getActualMoneyValue();
+        public abstract string GetActualMoneyValue();
 
         public override string ToString() {
             return Name;
@@ -50,7 +50,7 @@ namespace Finanse.Models.MoneyAccounts {
             return Name.GetHashCode() * Id;
         }
         public override bool Equals(object o) {
-            if (o == null || !(o is Account))
+            if (!(o is Account))
                 return false;
 
             Account secondAccount = (Account)o;

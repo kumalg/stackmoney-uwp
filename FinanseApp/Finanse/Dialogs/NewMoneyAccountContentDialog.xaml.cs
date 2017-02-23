@@ -17,7 +17,7 @@ namespace Finanse.Dialogs {
 
     public sealed partial class NewMoneyAccountContentDialog : ContentDialog, INotifyPropertyChanged {
 
-        private Regex regex = NewOperation.GetSignedRegex();
+        private readonly Regex regex = NewOperation.GetSignedRegex();
         private string acceptedCostValue = string.Empty;
         private bool isUnfocused = true;
 
@@ -30,25 +30,12 @@ namespace Finanse.Dialogs {
 
 
         private List<KeyValuePair<object, object>> colorBase;
-        private List<KeyValuePair<object, object>> ColorBase {
-            get {
-                if (colorBase == null) {
-                    colorBase = ((ResourceDictionary)Application.Current.Resources["ColorBase"]).ToList();
-                }
-                return colorBase;
-            }
-        }
-        private SolidColorBrush Color {
-            get {
-                return (SolidColorBrush)SelectedColor.Value;
-            }
-        }
+        private List<KeyValuePair<object, object>> ColorBase => colorBase ??
+                                                                (colorBase = ((ResourceDictionary) Application.Current.Resources["ColorBase"]).ToList());
 
-        private string ColorKey {
-            get {
-                return SelectedColor.Key.ToString();
-            }
-        }
+        private SolidColorBrush Color => (SolidColorBrush)SelectedColor.Value;
+
+        private string ColorKey => SelectedColor.Key.ToString();
 
         private KeyValuePair<object, object> selectedColor;
 
@@ -65,61 +52,44 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private List<BankAccount> BankAccounts = AccountsDal.getAllBankAccounts();
+        private readonly List<BankAccount> BankAccounts = AccountsDal.GetAllBankAccounts();
         
-        private Visibility BankAccountsComboBoxVisibility {
-            get {
-                return (bool)PayCardRadioButton.IsChecked ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
+        private Visibility BankAccountsComboBoxVisibility => (bool)PayCardRadioButton.IsChecked ? Visibility.Visible : Visibility.Collapsed;
 
-        private bool AnyBankAccounts {
-            get {
-                return BankAccounts.Count > 0 ? true : false;
-            }
-        }
+        private bool AnyBankAccounts => BankAccounts.Count > 0;
 
-        private int ComboBoxSelectedIndex {
-            get {
-                return BankAccounts.Count > 0 ? 0 : -1;
-            }
-        }
+        private int ComboBoxSelectedIndex => BankAccounts.Count > 0 ? 0 : -1;
 
-        private bool PrimaryButtonEnabling {
-            get {
-                return !string.IsNullOrEmpty(NameValue.Text);
-            }
-        }
+        private bool PrimaryButtonEnabling => !string.IsNullOrEmpty(NameValue.Text);
 
         public NewMoneyAccountContentDialog() {
-            this.InitializeComponent();
-        }
-
-        private void SetPrimaryButtonEnabled() {
-            IsPrimaryButtonEnabled = (NameValue.Text != "");
+            InitializeComponent();
         }
 
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-            AccountsDal.addAccount(getNewAccount());
+            AccountsDal.AddAccount(GetNewAccount());
 
             if (!string.IsNullOrEmpty(acceptedCostValue))
-                Dal.saveOperation(makeOperation(AccountsDal.getHighestIdOfAccounts()));
+                Dal.SaveOperation(MakeOperation(AccountsDal.GetHighestIdOfAccounts()));
         }
 
-        public Account getNewAccount() {
+        public Account GetNewAccount() {
             Account newAccount;
-            AccountType accountType = typeOfAccount();
+            AccountType accountType = TypeOfAccount();
 
-            if (accountType == AccountType.BankAccount) {
-                newAccount = new BankAccount();
-            }
-            else if (accountType == AccountType.CardAccount) {
-                newAccount = new CardAccount {
-                    BankAccountId = ((BankAccount)BankAccountsComboBox.SelectedItem).Id, //TO DO
-                };
-            }
-            else {
-                newAccount = new CashAccount();
+            switch (accountType)
+            {
+                case AccountType.BankAccount:
+                    newAccount = new BankAccount();
+                    break;
+                case AccountType.CardAccount:
+                    newAccount = new CardAccount {
+                        BankAccountId = ((BankAccount)BankAccountsComboBox.SelectedItem).Id, //TO DO
+                    };
+                    break;
+                default:
+                    newAccount = new CashAccount();
+                    break;
             }
 
             newAccount.Name = NameValue.Text;
@@ -128,9 +98,9 @@ namespace Finanse.Dialogs {
             return newAccount;
         }
 
-        private Operation makeOperation(int moneyAccoundId) {
-            var charsToRemove = new string[] { "+", "-"};
-            string cost = acceptedCostValue.ToString();
+        private Operation MakeOperation(int moneyAccoundId) {
+            var charsToRemove = new[] { "+", "-"};
+            string cost = acceptedCostValue;
             foreach (var c in charsToRemove)
                 cost = acceptedCostValue.Replace(c, string.Empty);
 
@@ -145,7 +115,7 @@ namespace Finanse.Dialogs {
             };
         }
 
-        private AccountType typeOfAccount() {
+        private AccountType TypeOfAccount() {
             if ((bool)BankAccountRadioButton.IsChecked)
                 return AccountType.BankAccount;
             else if ((bool)PayCardRadioButton.IsChecked)
@@ -157,10 +127,11 @@ namespace Finanse.Dialogs {
         private void CostValue_GotFocus(object sender, RoutedEventArgs e) {
             isUnfocused = false;
 
-            if (CostValue.Text != "") {
-                CostValue.Text = acceptedCostValue;
-                CostValue.SelectionStart = CostValue.Text.Length;
-            }
+            if (CostValue.Text == "")
+                return;
+
+            CostValue.Text = acceptedCostValue;
+            CostValue.SelectionStart = CostValue.Text.Length;
         }
 
         private void CostValue_LostFocus(object sender, RoutedEventArgs e) {
@@ -180,10 +151,10 @@ namespace Finanse.Dialogs {
                 return;
             }
 
-            else if (isUnfocused)
+            if (isUnfocused)
                 return;
 
-            else if (regex.Match(CostValue.Text).Value != CostValue.Text) {
+            if (regex.Match(CostValue.Text).Value != CostValue.Text) {
                 int whereIsSelection = CostValue.SelectionStart;
                 CostValue.Text = acceptedCostValue;
                 CostValue.SelectionStart = whereIsSelection - 1;
@@ -206,10 +177,10 @@ namespace Finanse.Dialogs {
 
         private void PayCardRadioButton_Click(object sender, RoutedEventArgs e) {
             if (!AnyBankAccounts)
-                showFlyout(sender as FrameworkElement);
+                ShowFlyout(sender as FrameworkElement);
         }
 
-        private void showFlyout(FrameworkElement senderElement) {
+        private static void ShowFlyout(FrameworkElement senderElement) {
             FlyoutBase.GetAttachedFlyout(senderElement).ShowAt(senderElement);
         }
 
@@ -217,13 +188,9 @@ namespace Finanse.Dialogs {
             RaisePropertyChanged("BankAccountsComboBoxVisibility");
         }
 
-        private void CashAccountRadioButton_Click(object sender, RoutedEventArgs e) {
-
-        }
-
         private void HyperlinkButton_Click(object sender, RoutedEventArgs e) {
             FrameworkElement s = sender as FrameworkElement;
-            Flyout.ShowAttachedFlyout(s);
+            FlyoutBase.ShowAttachedFlyout(s);
         }
 
         private void ContentDialog_Loaded(object sender, RoutedEventArgs e) {
@@ -233,12 +200,12 @@ namespace Finanse.Dialogs {
 
         private void PayCardRadioButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
            if (!AnyBankAccounts)
-                showFlyout(sender as FrameworkElement);
+                ShowFlyout(sender as FrameworkElement);
         }
 
         private void PayCardRadioButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e) {
             if (!AnyBankAccounts)
-                showFlyout(sender as FrameworkElement);
+                ShowFlyout(sender as FrameworkElement);
         }
     }
     public enum AccountType {

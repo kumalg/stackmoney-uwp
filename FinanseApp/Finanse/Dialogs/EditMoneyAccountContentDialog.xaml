@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:data="using:Finanse.Elements"
     Title="Edycja konta"
     Background="{ThemeResource BackgroundTransparent}"
     PrimaryButtonText="Zapisz"
@@ -26,7 +25,6 @@
             TextChanging="NameValue_TextChanging"/>
 
         <ComboBox
-            Name="BankAccountsComboBox"
             Margin="0,10"
             HorizontalAlignment="Stretch"
             Style="{StaticResource ComboBoxStyle1}"
@@ -36,7 +34,6 @@
 
         <GridView
             Margin="0,32,0,16"
-            Name="ColorBaseList"
             SelectionMode="Single"
             Padding="0"
             ItemsSource="{x:Bind ColorBase, Mode=OneTime}"

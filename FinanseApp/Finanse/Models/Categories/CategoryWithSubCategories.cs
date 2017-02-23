@@ -29,15 +29,15 @@ namespace Finanse.Models.Categories {
                 handler(this, new PropertyChangedEventArgs(propertyName));
         }
         public override int GetHashCode() {
-            return this.Category.GetHashCode() * this.Category.Id;
+            return Category.GetHashCode() * Category.Id;
         }
         public override bool Equals(object o) {
-            if (o == null || !(o is CategoryWithSubCategories))
+            if (!(o is CategoryWithSubCategories))
                 return false;
 
-            return 
-                this.Category
-                .Equals((o as CategoryWithSubCategories).Category);
+            return
+                Category
+                .Equals(((CategoryWithSubCategories)o).Category);
         }
     }
 }

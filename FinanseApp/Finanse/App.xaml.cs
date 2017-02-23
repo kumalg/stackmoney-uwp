@@ -32,8 +32,8 @@ namespace Finanse {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
-            Settings.setSettings();
-            this.RequestedTheme = Settings.getTheme();
+            Settings.SetSettings();
+            this.RequestedTheme = Settings.GetTheme();
         }
 
         /// <summary>

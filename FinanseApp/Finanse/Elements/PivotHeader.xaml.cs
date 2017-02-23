@@ -30,8 +30,8 @@ namespace Finanse.Elements {
 
 
         public PivotHeader() {
-            this.InitializeComponent();
-            this.DataContext = this;
+            InitializeComponent();
+            DataContext = this;
         }
     }
 }

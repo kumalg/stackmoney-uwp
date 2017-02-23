@@ -16,9 +16,8 @@ using Windows.UI.Xaml.Media;
 namespace Finanse.Dialogs {
 
     public sealed partial class EditMoneyAccountContentDialog : ContentDialog, INotifyPropertyChanged {
-
-        Account accountToEdit;
-        Account editedAccount;
+        public Account EditedAccount { get; }
+        private readonly Account accountToEdit;
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void RaisePropertyChanged(string propertyName) {
@@ -27,25 +26,11 @@ namespace Finanse.Dialogs {
                 handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public Account EditedAccount {
-            get {
-                return editedAccount;
-            }
-        }
-
         private List<KeyValuePair<object, object>> colorBase;
-        private List<KeyValuePair<object, object>> ColorBase {
-            get {
-                if (colorBase == null) {
-                    colorBase = ((ResourceDictionary)Application.Current.Resources["ColorBase"]).ToList();
-                }
-                return colorBase;
-            }
-        }
+        private List<KeyValuePair<object, object>> ColorBase => colorBase ??
+                                                                (colorBase = ((ResourceDictionary) Application.Current.Resources["ColorBase"]).ToList());
 
-        private string ColorKey {
-            get { return SelectedColor.Key.ToString(); }
-        }
+        private string ColorKey => SelectedColor.Key.ToString();
 
         private KeyValuePair<object, object> selectedColor;
 
@@ -58,19 +43,15 @@ namespace Finanse.Dialogs {
             }
             set {
                 selectedColor = value;
-                editedAccount.ColorKey = ColorKey;
+                EditedAccount.ColorKey = ColorKey;
                 RaisePropertyChanged("PrimaryButtonEnabling");
             }
         }
 
-        private List<BankAccount> BankAccounts = AccountsDal.getAllBankAccounts();
+        private readonly List<BankAccount> BankAccounts = AccountsDal.GetAllBankAccounts();
         
-        private Visibility BankAccountsComboBoxVisibility {
-            get {
-                return accountToEdit is CardAccount ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-        
+        private Visibility BankAccountsComboBoxVisibility => accountToEdit is CardAccount ? Visibility.Visible : Visibility.Collapsed;
+
         private BankAccount selectedBankAccount;
 
         public BankAccount SelectedBankAccount {
@@ -81,47 +62,33 @@ namespace Finanse.Dialogs {
             }
             set {
                 selectedBankAccount = value;
-                if (editedAccount is CardAccount)
-                    ((CardAccount)editedAccount).BankAccountId = selectedBankAccount.Id;
+                if (EditedAccount is CardAccount)
+                    ((CardAccount)EditedAccount).BankAccountId = selectedBankAccount.Id;
                 RaisePropertyChanged("PrimaryButtonEnabling");
             }
         }
 
-        private bool PrimaryButtonEnabling {
-            get {
-                return !(string.IsNullOrEmpty(NameValue.Text) || editedAccount.Equals(accountToEdit));
-            }
-        }
+        private bool PrimaryButtonEnabling => !(string.IsNullOrEmpty(NameValue.Text) || EditedAccount.Equals(accountToEdit));
 
         public EditMoneyAccountContentDialog(Account accountToEdit) {
-            this.InitializeComponent();
-            this.accountToEdit = accountToEdit;
-            editedAccount = accountToEdit.Clone();
+            InitializeComponent();
 
-            NameValue.Text = editedAccount.Name.ToString();
+            this.accountToEdit = accountToEdit;
+            EditedAccount = accountToEdit.Clone();
+
+            NameValue.Text = EditedAccount.Name;
             SelectedColor = ColorBase.SingleOrDefault(i => i.Key.ToString() == accountToEdit.ColorKey);
             if (accountToEdit is CardAccount)
                 SelectedBankAccount = BankAccounts.SingleOrDefault(i => i.Id == ((CardAccount)accountToEdit).BankAccountId);
         }
 
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-            AccountsDal.updateAccount(editedAccount);
+            AccountsDal.UpdateAccount(EditedAccount);
         }
         
         private void NameValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
-            editedAccount.Name = sender.Text;
+            EditedAccount.Name = sender.Text;
             RaisePropertyChanged("PrimaryButtonEnabling");
         }
-        
-        /*
-        private void ContentDialog_Loaded(object sender, RoutedEventArgs e) {
-            /*
-            if (BankAccountsComboBox.Items.Count > 0) {
-                if (accountToEdit is CardAccount)
-                    BankAccountsComboBox.SelectedItem = BankAccounts.SingleOrDefault(i => i.Id == ((CardAccount)accountToEdit).BankAccountId);
-                else
-                    BankAccountsComboBox.SelectedIndex = 0;
-            }
-        }*/
     }
 }

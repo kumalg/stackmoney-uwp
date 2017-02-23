@@ -74,7 +74,7 @@
                                     Width="80">
                                     <TextBlock
                                         FontFamily="{StaticResource DefaultFontFamily}"
-                                        Text="{Binding Key.dayNum00}"
+                                        Text="{Binding Key.DayNum00}"
                                         FontSize="12"
                                         Foreground="{ThemeResource Text-2}"
                                         FontWeight="SemiBold"
@@ -85,7 +85,7 @@
                                     FontFamily="{StaticResource DefaultFontFamily}"
                                     FontWeight="SemiBold"
                                     Foreground="{ThemeResource Text-1}"
-                                    Text="{Binding Key.day}"
+                                    Text="{Binding Key.Day}"
                                     FontSize="12" />
                             </StackPanel>
 
@@ -122,39 +122,6 @@
                 VerticalChildrenAlignment="Center">
             </WrapGrid>
         </ItemsPanelTemplate>
-
-        <DataTemplate
-            x:Name="ByDateGroupItemTemplate">
-            <!--Text="{Binding Group.dayNum}"-->
-            <StackPanel
-                Orientation="Horizontal"
-                Margin="16,0,0,5">
-                <StackPanel
-                    Width="48">
-                    <TextBlock
-                        Text="{Binding Group.Key.dayNum}"
-                        FontSize="30"
-                        Foreground="{ThemeResource Text-1}"
-                        FontWeight="SemiLight"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center" />
-                </StackPanel>
-                <StackPanel
-                    VerticalAlignment="Center"
-                    Margin="16,0,0,0">
-                    <TextBlock
-                        Foreground="{ThemeResource Text-1}"
-                        Text="{Binding Group.Key.day}"
-                        FontFamily="{StaticResource DefaultFontFamily}"
-                        FontSize="12" />
-                    <TextBlock
-                        Text="{Binding Group.Key.month}"
-                        FontSize="12"
-                        FontFamily="{StaticResource DefaultFontFamily}"
-                        Foreground="{ThemeResource Text-2}" />
-                </StackPanel>
-            </StackPanel>
-        </DataTemplate>
 
         <ItemsPanelTemplate
             x:Name="ByCategoryGroupItemsPanelTemplate">
@@ -216,7 +183,7 @@
                         <StackPanel
                             Width="80">
                             <TextBlock
-                                Text="{Binding Key.icon}"
+                                Text="{Binding Key.Icon}"
                                 FontFamily="{StaticResource FontAwesome}"
                                 FontSize="12"
                                 Foreground="{ThemeResource Text-2}"
@@ -226,7 +193,7 @@
                             FontWeight="SemiBold"
                             Foreground="{ThemeResource Text-1}"
                             FontFamily="{StaticResource DefaultFontFamily}"
-                            Text="{Binding Key.name}"
+                            Text="{Binding Key.Name}"
                             FontSize="12" />
                     </StackPanel>
 
@@ -262,7 +229,7 @@
                     Width="50"
                     Height="50">
                     <data:CategoryIcon
-                        Glyph="{Binding Group.Key.icon}"
+                        Glyph="{Binding Group.Key.Icon}"
                         Color="Gray" />
                 </Grid>
 
@@ -270,7 +237,7 @@
                     Margin="20,0"
                     VerticalAlignment="Center"
                     FontFamily="{StaticResource DefaultFontFamily}"
-                    Text="{Binding Group.Key.name}"
+                    Text="{Binding Group.Key.Name}"
                     FontSize="16" />
 
             </StackPanel>
@@ -443,7 +410,6 @@
                     HorizontalAlignment="Right">
                     <TextBlock
                         VerticalAlignment="Center"
-                        Name="ActualMoneyBar"
                         Text="{x:Bind storeData.ActualOperationsSum, Mode=OneWay}"
                         Foreground="{ThemeResource AccentText}"
                         FontFamily="{StaticResource DefaultFontFamily}"
@@ -509,9 +475,9 @@
                 x:Uid="addNew"
                 Foreground="{ThemeResource Text}"
                 RelativePanel.AlignHorizontalCenterWithPanel="True"
-                RelativePanel.AlignTopWith="angleToAddButton" />
+                RelativePanel.AlignTopWith="AngleToAddButton" />
             <FontIcon
-                Name="angleToAddButton"
+                Name="AngleToAddButton"
                 Foreground="{ThemeResource Text-1}"
                 Margin="32"
                 RelativePanel.AlignHorizontalCenterWithPanel="True"
@@ -524,7 +490,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <DoubleAnimation
-                                    Storyboard.TargetName="angleToAddButton"
+                                    Storyboard.TargetName="AngleToAddButton"
                                     Storyboard.TargetProperty="(FontIcon.Opacity)"
                                     From="1.0"
                                     To="0.2"
@@ -599,8 +565,7 @@
                                 <ItemsControl
                                     Margin="0"
                                     Padding="0"
-                                    x:Name="BalanceListView"
-                                    ItemsSource="{x:Bind listOfMoneyAccounts()}">
+                                    ItemsSource="{x:Bind ListOfMoneyAccounts, Mode=OneWay}">
 
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate
@@ -706,7 +671,6 @@
                                     <RadioButton
                                         Name="ByCategoryRadioButton"
                                         GroupName="GroupingRadioButtons"
-                                        Grid.Column="1"
                                         FontSize="13"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
@@ -817,7 +781,6 @@
 
             <SemanticZoom.ZoomedOutView>
                 <GridView
-                    x:Name="OperacjeListViewGroup"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     ItemsSource="{x:Bind ZoomedOut_ItemsSource, Mode=OneWay}"

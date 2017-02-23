@@ -13,7 +13,7 @@ namespace Finanse.Pages {
 
     public sealed partial class OperationPatternsPage : Page {
 
-        private ObservableCollection<OperationPattern> OperationPatterns = new ObservableCollection<OperationPattern>(Dal.getAllPatterns());
+        private ObservableCollection<OperationPattern> OperationPatterns = new ObservableCollection<OperationPattern>(Dal.GetAllPatterns());
 
         public OperationPatternsPage() {
             this.InitializeComponent();
@@ -33,51 +33,52 @@ namespace Finanse.Pages {
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-            var ContentDialogItem = new AcceptContentDialog("Czy chcesz usunąć szablon?");
-            var result = await ContentDialogItem.ShowAsync();
+            var contentDialogItem = new AcceptContentDialog("Czy chcesz usunąć szablon?");
+            var result = await contentDialogItem.ShowAsync();
 
-            if (ContentDialogItem.isAccepted()) {
-                removeOperationPatternFromList((OperationPattern)datacontext);
-                Dal.deletePattern((OperationPattern)datacontext);
-            }
+            if (result != ContentDialogResult.Primary)
+                return;
+
+            RemoveOperationPatternFromList((OperationPattern)datacontext);
+            Dal.DeletePattern((OperationPattern)datacontext);
         }
 
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new EditOperationContentDialog(((OperationPattern)datacontext));
-            ContentDialogItem.PrimaryButtonClick += delegate {
-                OperationPattern operationPattern = ContentDialogItem.editedOperationPattern();
+            var contentDialogItem = new EditOperationContentDialog(((OperationPattern)datacontext));
+            contentDialogItem.PrimaryButtonClick += delegate {
+                OperationPattern operationPattern = contentDialogItem.EditedOperationPattern();
                 OperationPatterns[OperationPatterns
                     .IndexOf(OperationPatterns
                     .FirstOrDefault(i => i.Id == operationPattern.Id))] = operationPattern;
             };
 
-            var result = await ContentDialogItem.ShowAsync();
+            var result = await contentDialogItem.ShowAsync();
         }
 
-        public void removeOperationPatternFromList(OperationPattern operationPattern) {
+        public void RemoveOperationPatternFromList(OperationPattern operationPattern) {
             OperationPatterns.Remove(operationPattern);
         }
 
-        public void addOperationPatternToList(OperationPattern operationPattern) {
+        public void AddOperationPatternToList(OperationPattern operationPattern) {
             OperationPatterns.Insert(0, operationPattern);
         }
 
         private async void DetailsButton_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
 
-            var ContentDialogItem = new OperationDetailsContentDialog(null, ((OperationPattern)datacontext).toOperation(), "pattern");
+            var contentDialogItem = new OperationDetailsContentDialog((OperationPattern)datacontext, "pattern");
 
-            var result = await ContentDialogItem.ShowAsync();
+            var result = await contentDialogItem.ShowAsync();
         }
 
         private async void SzablonyListView_ItemClick(object sender, ItemClickEventArgs e) {
-            OperationPattern thisOperation = (OperationPattern)e.ClickedItem;
+            OperationPattern thisPattern = (OperationPattern)e.ClickedItem;
 
-            var ContentDialogItem = new OperationDetailsContentDialog(null, thisOperation.toOperation(), "pattern");
+            var contentDialogItem = new OperationDetailsContentDialog(thisPattern, "pattern");
 
-            var result = await ContentDialogItem.ShowAsync();
+            var result = await contentDialogItem.ShowAsync();
         }
     }
 }

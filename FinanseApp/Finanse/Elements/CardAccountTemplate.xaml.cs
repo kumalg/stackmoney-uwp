@@ -10,17 +10,11 @@ namespace Finanse.Elements {
 
     public sealed partial class CardAccountTemplate : UserControl {
 
-        private Models.MoneyAccounts.CardAccount CardAccount {
-
-            get {
-                return this.DataContext as CardAccount;
-            }
-        }
+        private CardAccount CardAccount => DataContext as CardAccount;
 
         public CardAccountTemplate() {
-
-            this.InitializeComponent();
-            this.DataContextChanged += (s, e) => Bindings.Update();
+            InitializeComponent();
+            DataContextChanged += (s, e) => Bindings.Update();
         }
     }
 }

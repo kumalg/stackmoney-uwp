@@ -51,7 +51,7 @@ namespace Finanse.Models     {
             }
         }
 
-        private void changeVisualState(bool useTransitions) {
+        private void ChangeVisualState(bool useTransitions) {
             if (IsExpanded) {
                 if (contentElement != null) {
                     contentElement.Visibility = Visibility.Visible;
@@ -78,7 +78,7 @@ namespace Finanse.Models     {
                 {
                     IsExpanded = !IsExpanded;
                     toggleExpander.IsChecked = IsExpanded;
-                    changeVisualState(_useTransitions);
+                    ChangeVisualState(_useTransitions);
                 };
             }
             contentElement = (FrameworkElement)GetTemplateChild("Content");
@@ -91,7 +91,7 @@ namespace Finanse.Models     {
                     };
                 }
             }
-            changeVisualState(false);
+            ChangeVisualState(false);
         }
     }
 }

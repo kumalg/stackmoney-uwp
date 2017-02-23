@@ -14,7 +14,7 @@ namespace Finanse.Converters {
             if (value == null)
                 return null;
 
-            return (double.Parse(value.ToString())).ToString("C", Settings.getActualCultureInfo());
+            return (double.Parse(value.ToString())).ToString("C", Settings.GetActualCultureInfo());
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language) {

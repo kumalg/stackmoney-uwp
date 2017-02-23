@@ -44,7 +44,6 @@
             </Grid.ColumnDefinitions>
 
             <data:CategoryIcon
-                x:Name="CategoryIcon"
                 Grid.Column="1"
                 Color="{x:Bind Color, Mode=OneWay}"
                 Glyph="{x:Bind Icon.Glyph, Mode=OneWay}"
@@ -102,8 +101,7 @@
             <Button
                 Grid.Column="2"
                 Style="{StaticResource ButtonWithBottomBorder}"
-                Margin="0,10"
-                HorizontalAlignment="Left">
+                Margin="0,10">
                 <Button.Flyout>
                     <Flyout>
                         <GridView

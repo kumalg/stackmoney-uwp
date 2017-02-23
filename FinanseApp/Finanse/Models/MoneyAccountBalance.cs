@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace Finanse.Models {
     class MoneyAccountBalance {
-        Account account;
         decimal initialValue;
         decimal finalValue;
 
         public MoneyAccountBalance(Account account, decimal initialValue, decimal finalValue) {
-            this.account = account;
+            this.Account = account;
             this.initialValue = initialValue;
             this.finalValue = finalValue;
         }
@@ -28,22 +27,10 @@ namespace Finanse.Models {
             this.finalValue += finalValue;
         }
 
-        public Account Account {
-            get {
-                return account;
-            }
-        }
+        public Account Account { get; }
 
-        public string InitialValue {
-            get {
-                return initialValue.ToString("C", Settings.getActualCultureInfo());
-            }
-        }
+        public string InitialValue => initialValue.ToString("C", Settings.GetActualCultureInfo());
 
-        public string FinalValue {
-            get {
-                return finalValue.ToString("C", Settings.getActualCultureInfo());
-            }
-        }
+        public string FinalValue => finalValue.ToString("C", Settings.GetActualCultureInfo());
     }
 }

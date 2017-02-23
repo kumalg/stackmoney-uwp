@@ -27,7 +27,6 @@
             Color="{x:Bind Category.Color, Mode=OneWay}"/>
 
         <TextBlock
-            Name="Category_CategoryTemplate"
             Grid.Column="1"
             VerticalAlignment="Center"
             Text="{x:Bind Category.Name, Mode=OneWay}"

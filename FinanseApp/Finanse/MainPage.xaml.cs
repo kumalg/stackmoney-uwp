@@ -22,7 +22,7 @@ namespace Finanse {
 
         public MainPage() {
             this.InitializeComponent();
-            Dal.createDB();
+            Dal.CreateDb();
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(360, 530));
 
             CoreApplication.GetCurrentView().TitleBar.IsVisibleChanged += TitleBar_IsVisibleChanged;
@@ -41,29 +41,25 @@ namespace Finanse {
         }
 
         private string appName;
-        private string AppName {
-            get {
-                if (appName == null)
-                    appName = "StackMoney (Beta)";
-                return appName;
-            }
-        }
+        private string AppName => appName ?? (appName = "StackMoney (Beta)");
 
         private void TitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args) {
             TitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e) {
-            if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(OperationsPage)) {
-                OperationsAppBarRadioButton.IsChecked = true;// AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
-                e.Handled = true;
-            }
+            if (AktualnaStrona_Frame.CurrentSourcePageType == typeof(OperationsPage))
+                return;
+
+            OperationsAppBarRadioButton.IsChecked = true;// AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
+            e.Handled = true;
         }
         private void BackRequestedEvent(object sender, BackRequestedEventArgs e) {
-            if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(OperationsPage)) {
-                AktualnaStrona_Frame.Navigate(typeof(OperationsPage));
-                e.Handled = true;
-            }
+            if (AktualnaStrona_Frame.CurrentSourcePageType == typeof(OperationsPage))
+                return;
+
+            AktualnaStrona_Frame.Navigate(typeof(OperationsPage));
+            e.Handled = true;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
@@ -73,22 +69,24 @@ namespace Finanse {
             base.OnNavigatedTo(e);
         }
        
-        private async void ShowStatusBar() {
-            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) {
-                var statusBar = StatusBar.GetForCurrentView();
-                await statusBar.ShowAsync();
-            }
+        private static async void ShowStatusBar() {
+            if (!ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+                return;
+
+            var statusBar = StatusBar.GetForCurrentView();
+            await statusBar.ShowAsync();
         }
 
-        private async void HideStatusBar() {
-            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) {
-                var statusBar = StatusBar.GetForCurrentView();
-                await statusBar.HideAsync();
-            }
+        private static async void HideStatusBar() {
+            if (!ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+                return;
+
+            var statusBar = StatusBar.GetForCurrentView();
+            await statusBar.HideAsync();
         }
 
-        private void whichOrientation() {
-            DisplayInformation info = DisplayInformation.GetForCurrentView();
+        private void WhichOrientation() {
+            var info = DisplayInformation.GetForCurrentView();
 
             if (info.CurrentOrientation == DisplayOrientations.Landscape || info.CurrentOrientation == DisplayOrientations.LandscapeFlipped) {
                 StatusBarAndTitleBar("Background", "Text-1");
@@ -100,7 +98,7 @@ namespace Finanse {
             }
         }
 
-        private void StatusBarAndTitleBar(string statusBarBackgroundColor, string statusBarForegroundColor) {
+        private static void StatusBarAndTitleBar(string statusBarBackgroundColor, string statusBarForegroundColor) {
             //PC customization
             /*
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView")) {
@@ -115,31 +113,32 @@ namespace Finanse {
             }
             */
             //Mobile customization
-            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) {
+            if (!ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+                return;
 
-                var statusBar = StatusBar.GetForCurrentView();
-                if (statusBar != null) {
-                    statusBar.BackgroundOpacity = 1;
-                    statusBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources[statusBarBackgroundColor] as SolidColorBrush).Color;
-                    if (statusBarForegroundColor == "White")
-                        statusBar.ForegroundColor = Colors.White;
-                    else
-                        statusBar.ForegroundColor = ((SolidColorBrush)Application.Current.Resources[statusBarForegroundColor] as SolidColorBrush).Color;
-                }
-            }
+            var statusBar = StatusBar.GetForCurrentView();
+            if (statusBar == null)
+                return;
+
+            statusBar.BackgroundOpacity = 1;
+            statusBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources[statusBarBackgroundColor]).Color;
+
+            statusBar.ForegroundColor = statusBarForegroundColor == "White" ?
+                Colors.White :
+                ((SolidColorBrush)Application.Current.Resources[statusBarForegroundColor] as SolidColorBrush).Color;
         }
 
         private void OperationsAppBarRadioButton_Click(object sender, RoutedEventArgs e) {
 
         }
 
-        private void closeCommandBar() {
+        private void CloseCommandBar() {
             if (CommandBar != null)
                 CommandBar.IsOpen = false;
         }
 
         private async void OperationsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
-            closeCommandBar();
+            CloseCommandBar();
 
             if (Strona_glowna_ListBoxItem != null)
                 Strona_glowna_ListBoxItem.IsChecked = true;
@@ -152,7 +151,7 @@ namespace Finanse {
         }
 
         private async void CategoriesAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
-            closeCommandBar();
+            CloseCommandBar();
 
             if (Kategorie_ListBoxItem != null)
                 Kategorie_ListBoxItem.IsChecked = true;
@@ -164,7 +163,7 @@ namespace Finanse {
         }
 
         private async void AddNewOperationAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
-            closeCommandBar();
+            CloseCommandBar();
 
             if (AddNewOperation_ListBoxItem != null)
                 AddNewOperation_ListBoxItem.IsChecked = true;
@@ -176,7 +175,7 @@ namespace Finanse {
         }
 
         private async void StatisticsAppBarRadioButton_Checked(object sender, RoutedEventArgs e) {
-            closeCommandBar();
+            CloseCommandBar();
 
             if (Statystyki_ListBoxItem != null)
                 Statystyki_ListBoxItem.IsChecked = true;
@@ -186,6 +185,7 @@ namespace Finanse {
             await Task.Delay(5);
             AktualnaStrona_Frame.Navigate(typeof(StatisticsPage));
         }
+
         private async void RadioButton_Click(object sender, RoutedEventArgs e) {
             MoreAppBarRadioButton.IsChecked = false;
             await Task.Delay(5);
@@ -240,10 +240,10 @@ namespace Finanse {
         }
 
         private void CommandBar_Opening(object sender, object e) {
-            OperationsAppBarRadioButton.Height = Double.NaN;
-            CategoriesAppBarRadioButton.Height = Double.NaN;
-            AddNewOperationAppBarRadioButton.Height = Double.NaN;
-            StatisticsAppBarRadioButton.Height = Double.NaN;
+            OperationsAppBarRadioButton.Height = double.NaN;
+            CategoriesAppBarRadioButton.Height = double.NaN;
+            AddNewOperationAppBarRadioButton.Height = double.NaN;
+            StatisticsAppBarRadioButton.Height = double.NaN;
         }
 
         private void CommandBar_Closing(object sender, object e) {
@@ -254,12 +254,13 @@ namespace Finanse {
         }
 
         private void UncheckAllMenuButtons() {
-            if (AddNewOperationAppBarRadioButton != null) {
-                OperationsAppBarRadioButton.IsChecked = false;
-                CategoriesAppBarRadioButton.IsChecked = false;
-                AddNewOperationAppBarRadioButton.IsChecked = false;
-                StatisticsAppBarRadioButton.IsChecked = false;
-            }
+            if (AddNewOperationAppBarRadioButton == null)
+                return;
+
+            OperationsAppBarRadioButton.IsChecked = false;
+            CategoriesAppBarRadioButton.IsChecked = false;
+            AddNewOperationAppBarRadioButton.IsChecked = false;
+            StatisticsAppBarRadioButton.IsChecked = false;
         }
         
         private void AktualnaStrona_Frame_Navigated(object sender, NavigationEventArgs e) {
@@ -278,7 +279,7 @@ namespace Finanse {
         }
 
         private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e) {
-            whichOrientation();
+            WhichOrientation();
         }
     }
 }

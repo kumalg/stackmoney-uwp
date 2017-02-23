@@ -2,7 +2,6 @@
     x:Class="Finanse.Pages.OperationPatternsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Finanse"
     xmlns:data="using:Finanse.Elements"
     xmlns:models="using:Finanse.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"

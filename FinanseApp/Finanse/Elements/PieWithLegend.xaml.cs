@@ -18,7 +18,7 @@ using Windows.UI.Xaml.Navigation;
 namespace Finanse.Elements {
     public sealed partial class PieWithLegend : UserControl {
         public PieWithLegend() {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

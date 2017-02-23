@@ -2,8 +2,6 @@
     x:Class="Finanse.Pages.CategoriesPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Finanse"
-    xmlns:models="using:Finanse.Models"
     xmlns:categories="using:Finanse.Models.Categories"
     NavigationCacheMode="Enabled"
     xmlns:data="using:Finanse.Elements"
@@ -94,7 +92,7 @@
 
                         <ListView.ItemTemplate>
                             <DataTemplate
-                                x:DataType="models:SubCategory">
+                                x:DataType="categories:SubCategory">
 
                                 <data:SubCategoryTemplate
                                     Tapped="Grid_Tapped"
@@ -189,7 +187,6 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock
-                Margin="16,0"
                 Grid.Column="0"
                 x:Uid="categories"
                 Text="Kategorie"

@@ -20,11 +20,7 @@ namespace Finanse.Elements {
             }
         }
 
-        public double HalfSize {
-            get {
-                return Width / 3.0;
-            }
-        }
+        public double HalfSize => Width / 3.0;
 
         public static readonly DependencyProperty ColorProperty = DependencyProperty.Register("Color", typeof(SolidColorBrush), typeof(CategoryIcon), null);
 
@@ -54,8 +50,8 @@ namespace Finanse.Elements {
         }*/
 
         public CategoryIcon() {
-            this.InitializeComponent();
-            this.DataContext = this;
+            InitializeComponent();
+            DataContext = this;
         }
     }
 }

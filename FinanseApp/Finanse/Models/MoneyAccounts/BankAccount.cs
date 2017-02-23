@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 
 namespace Finanse.Models.MoneyAccounts {
     public class BankAccount : Account {
-        public override string getActualMoneyValue() {
-            return AccountsDal.BankAccountBalanceById(Id).ToString("C", Settings.getActualCultureInfo());
-        }
+        public override string GetActualMoneyValue() => AccountsDal.BankAccountBalanceById(Id).ToString("C", Settings.GetActualCultureInfo());
     }
 }

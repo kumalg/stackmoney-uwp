@@ -15,13 +15,9 @@ namespace Finanse.Models {
         public int MoneyAccountId { get; set; }
         public string LastModifed { get; set; }
 
-        public decimal SignedCost {
-            get {
-                return isExpense ? -Cost : Cost;
-            }
-        }
+        public decimal SignedCost => isExpense ? -Cost : Cost;
 
-        public Operation toOperation() {
+        public Operation ToOperation() {
             return new Operation {
                 Title = Title,
                 Cost = Cost,
@@ -39,7 +35,7 @@ namespace Finanse.Models {
             return Title.GetHashCode() * Id;
         }
         public override bool Equals(object o) {
-            if (o == null || !(o is OperationPattern))
+            if (!(o is OperationPattern))
                 return false;
 
             OperationPattern secondOperation = (OperationPattern)o;

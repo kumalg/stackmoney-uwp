@@ -1,18 +1,14 @@
-﻿using Finanse.Charts;
-using Finanse.DataAccessLayer;
-using Finanse.Models.Statistics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
+using Finanse.Charts;
+using Finanse.DataAccessLayer;
+using Finanse.Models.Categories;
 
-namespace Finanse.Models {
+namespace Finanse.Models.Statistics {
     public class StatisticsData {
 
         public List<Operation> AllOperations = new List<Operation>();
@@ -23,13 +19,13 @@ namespace Finanse.Models {
         private DateTime minDate;
         private DateTime maxDate;
 
-        public void setNewRangeAndData(DateTime minDate, DateTime maxDate) {
+        public void SetNewRangeAndData(DateTime minDate, DateTime maxDate) {
             this.minDate = minDate;
             this.maxDate = maxDate;
-            AllOperations = Dal.getAllOperationsFromRangeToStatistics(minDate, maxDate);
+            AllOperations = Dal.GetAllOperationsFromRangeToStatistics(minDate, maxDate);
         }
 
-        public string getActualDateRangeText(DateTime minDate, DateTime maxDate) {
+        public string GetActualDateRangeText(DateTime minDate, DateTime maxDate) {
             return minDate.ToString("d") + "   |   " + maxDate.ToString("d");
         }
 
@@ -37,7 +33,7 @@ namespace Finanse.Models {
          * ZAMIAST NA SQL TO NA LISCIE 
          */
 
-        public ObservableCollection<ChartPart> getExpensesGroupedByCategoryInRange(DateTime minDate, DateTime maxDate) {
+        public ObservableCollection<ChartPart> GetExpensesGroupedByCategoryInRange(DateTime minDate, DateTime maxDate) {
             ObservableCollection<ChartPart> models = new ObservableCollection<ChartPart>();
 
             var query = from item in AllOperations
@@ -52,7 +48,7 @@ namespace Finanse.Models {
             decimal sum = query.Sum(item => item.Cost);
 
             foreach (var item in query) {
-                Category category = Dal.getCategoryById(item.CategoryId);
+                Category category = Dal.GetCategoryById(item.CategoryId);
                 models.Add(new ChartPart {
                     SolidColorBrush = category.Color,
                     Name = category.Name,
@@ -65,7 +61,7 @@ namespace Finanse.Models {
             return models;
         }
 
-        public ObservableCollection<ChartPart> getIncomesGroupedByCategoryInRange(DateTime minDate, DateTime maxDate) {
+        public ObservableCollection<ChartPart> GetIncomesGroupedByCategoryInRange(DateTime minDate, DateTime maxDate) {
             ObservableCollection<ChartPart> models = new ObservableCollection<ChartPart>();
 
             var query = from item in AllOperations
@@ -80,7 +76,7 @@ namespace Finanse.Models {
             decimal sum = query.Sum(item => item.Cost);
 
             foreach (var item in query) {
-                Category category = Dal.getCategoryById(item.CategoryId);
+                Category category = Dal.GetCategoryById(item.CategoryId);
                 models.Add(new ChartPart {
                     SolidColorBrush = category.Color,
                     Name = category.Name,
@@ -93,7 +89,7 @@ namespace Finanse.Models {
             return models;
         }
        
-        public ObservableCollection<SubCategoriesList> getExpensesFromCategoryGroupedBySubCategoryInRange() {
+        public ObservableCollection<SubCategoriesList> GetExpensesFromCategoryGroupedBySubCategoryInRange() {
             ObservableCollection<SubCategoriesList> models = new ObservableCollection<SubCategoriesList>();
 
             var query = from item in AllOperations
@@ -111,42 +107,43 @@ namespace Finanse.Models {
                         };
 
             foreach (var item in query) {
-                if (item.SubCategories.Count() > 1) {
-                    Category category = Dal.getCategoryById(item.CategoryId);
+                if (item.SubCategories.Count() <= 1)
+                    continue;
 
-                    SubCategoriesList itemList = new SubCategoriesList {
-                        Category = category
-                    };
+                Category category = Dal.GetCategoryById(item.CategoryId);
+
+                SubCategoriesList itemList = new SubCategoriesList {
+                    Category = category
+                };
                     
-                    decimal groupySum = item.SubCategories.Sum(i => i.Cost);
+                decimal groupySum = item.SubCategories.Sum(i => i.Cost);
 
-                    foreach (var sitem in item.SubCategories) {
-                        SubCategory subCategory = Dal.getSubCategoryById(sitem.SubCategoryId);
-                        if (subCategory != null)
-                            itemList.List.Add(new ChartPart {
-                                SolidColorBrush = subCategory.Color,
-                                Name = subCategory.Name,
-                                UnrelativeValue = (double)sitem.Cost,
-                                RelativeValue = (double)(sitem.Cost / groupySum)
-                            });
-                        else {
-                            itemList.List.Add(new ChartPart {
-                                SolidColorBrush = category.Color,
-                                Name = "Bez podkategorii",
-                                UnrelativeValue = (double)sitem.Cost,
-                                RelativeValue = (double)(sitem.Cost / groupySum)
-                            });
-                        }
+                foreach (var sitem in item.SubCategories) {
+                    SubCategory subCategory = Dal.GetSubCategoryById(sitem.SubCategoryId);
+                    if (subCategory != null)
+                        itemList.List.Add(new ChartPart {
+                            SolidColorBrush = subCategory.Color,
+                            Name = subCategory.Name,
+                            UnrelativeValue = (double)sitem.Cost,
+                            RelativeValue = (double)(sitem.Cost / groupySum)
+                        });
+                    else {
+                        itemList.List.Add(new ChartPart {
+                            SolidColorBrush = category.Color,
+                            Name = "Bez podkategorii",
+                            UnrelativeValue = (double)sitem.Cost,
+                            RelativeValue = (double)(sitem.Cost / groupySum)
+                        });
                     }
-
-                    models.Add(itemList);
                 }
+
+                models.Add(itemList);
             }
 
             return models;
         }
 
-        public ObservableCollection<SubCategoriesList> getIncomesFromCategoryGroupedBySubCategoryInRange() {
+        public ObservableCollection<SubCategoriesList> GetIncomesFromCategoryGroupedBySubCategoryInRange() {
             ObservableCollection<SubCategoriesList> models = new ObservableCollection<SubCategoriesList>();
 
             var query = from item in AllOperations
@@ -164,42 +161,43 @@ namespace Finanse.Models {
                         };
 
             foreach (var item in query) {
-                if (item.SubCategories.Count() > 1) {
-                    Category category = Dal.getCategoryById(item.CategoryId);
+                if (item.SubCategories.Count() <= 1)
+                    continue;
 
-                    SubCategoriesList itemList = new SubCategoriesList {
-                        Category = category
-                    };
+                Category category = Dal.GetCategoryById(item.CategoryId);
 
-                    decimal groupySum = item.SubCategories.Sum(i => i.Cost);
+                SubCategoriesList itemList = new SubCategoriesList {
+                    Category = category
+                };
 
-                    foreach (var sitem in item.SubCategories) {
-                        SubCategory subCategory = Dal.getSubCategoryById(sitem.SubCategoryId);
-                        if (subCategory != null)
-                            itemList.List.Add(new ChartPart {
-                                SolidColorBrush = subCategory.Color,
-                                Name = subCategory.Name,
-                                UnrelativeValue = (double)sitem.Cost,
-                                RelativeValue = (double)(sitem.Cost / groupySum)
-                            });
-                        else {
-                            itemList.List.Add(new ChartPart {
-                                SolidColorBrush = category.Color,
-                                Name = "Bez podkategorii",
-                                UnrelativeValue = (double)sitem.Cost,
-                                RelativeValue = (double)(sitem.Cost / groupySum)
-                            });
-                        }
+                decimal groupySum = item.SubCategories.Sum(i => i.Cost);
+
+                foreach (var sitem in item.SubCategories) {
+                    SubCategory subCategory = Dal.GetSubCategoryById(sitem.SubCategoryId);
+                    if (subCategory != null)
+                        itemList.List.Add(new ChartPart {
+                            SolidColorBrush = subCategory.Color,
+                            Name = subCategory.Name,
+                            UnrelativeValue = (double)sitem.Cost,
+                            RelativeValue = (double)(sitem.Cost / groupySum)
+                        });
+                    else {
+                        itemList.List.Add(new ChartPart {
+                            SolidColorBrush = category.Color,
+                            Name = "Bez podkategorii",
+                            UnrelativeValue = (double)sitem.Cost,
+                            RelativeValue = (double)(sitem.Cost / groupySum)
+                        });
                     }
-
-                    models.Add(itemList);
                 }
+
+                models.Add(itemList);
             }
 
             return models;
         }
 
-        public ObservableCollection<LineChartItem> lineChartTest() {
+        public ObservableCollection<LineChartItem> LineChartTest() {
             int days = (maxDate - minDate).Days + 1;
             // = 9 - 7 + 1// 7,8,9
 
@@ -231,7 +229,7 @@ namespace Finanse.Models {
             return new ObservableCollection<LineChartItem>(modelss);
         }
 
-        public ObservableCollection<LineChartItem> lineChartTest2() {
+        public ObservableCollection<LineChartItem> LineChartTest2() {
             int days = (maxDate - minDate).Days + 1;
             // = 9 - 7 + 1// 7,8,9
 
@@ -263,7 +261,7 @@ namespace Finanse.Models {
             return new ObservableCollection<LineChartItem>(modelss);
         }
 
-        public ObservableCollection<LineChartItem> lineChartTest3() {
+        public ObservableCollection<LineChartItem> LineChartTest3() {
             int days = (maxDate - minDate).Days + 1;
             // = 9 - 7 + 1// 7,8,9
 
@@ -283,27 +281,20 @@ namespace Finanse.Models {
                            Cost = g.Sum()
                        };
 
-            if (modelss.Length > 0) {
-                modelss[0].Value = (double)Dal.getBalanceOfCertainDay(maxDate);
+            if (modelss.Length <= 0)
+                return new ObservableCollection<LineChartItem>(modelss);
+            
+            modelss[0].Value = (double)Dal.GetBalanceOfCertainDay(maxDate);
 
-                for (int i = 1; i < query.Count(); i++) {
-                    int index = days - (maxDate - query.ElementAt(i).Date).Days - 1;
-                    modelss[index].Value += modelss[index - 1].Value + (double)query.ElementAt(i).Cost;
-                }
+            for (int i = 1; i < query.Count(); i++) {
+                int index = days - (maxDate - query.ElementAt(i).Date).Days - 1;
+                modelss[index].Value += modelss[index - 1].Value + (double)query.ElementAt(i).Cost;
             }
-            /*
-            foreach (var item in dupa) {
-                int index = days - (maxDate - item.Date).Days - 1;
-                modelss[index] = new LineChartItem {
-                    Key = modelss[index].Key,
-                    Value = (double)item.Cost,
-                };
-            }
-            */
+
             return new ObservableCollection<LineChartItem>(modelss);
         }
 
-        public ObservableCollection<ChartPart> getExpenseToIncomeComparsion() {
+        public ObservableCollection<ChartPart> GetExpenseToIncomeComparsion() {
             ObservableCollection<ChartPart> models = new ObservableCollection<ChartPart>();
 
             double expenses = (double)AllOperations.Where(i => i.isExpense).Sum(i => i.Cost);

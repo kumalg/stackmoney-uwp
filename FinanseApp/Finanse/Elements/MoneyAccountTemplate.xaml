@@ -36,10 +36,9 @@
         </data:CategoryIcon>
 
         <TextBlock
-            Name="Category_CategoryTemplate"
             Grid.Column="1"
             VerticalAlignment="Center"
-            Text="{Binding Name}"
+            Text="{x:Bind Account.Name}"
             Margin="20,0,0,0"
             FontSize="14"
             Foreground="{ThemeResource Text}" />
@@ -48,26 +47,10 @@
             FontSize="12"
             Grid.Column="1"
             FontWeight="SemiBold"
-            Name="Cost_OperationTemplate"
-            Text="{x:Bind Account.getActualMoneyValue()}"
+            Text="{x:Bind Account.GetActualMoneyValue()}"
             VerticalAlignment="Center"
             HorizontalAlignment="Right"
             Foreground="{ThemeResource Text-1}" />
-<!--
-        <ListView
-            Visibility="{x:Bind isBankAccount, Mode=OneWay}"
-            IsItemClickEnabled="True"
-            SelectionMode="None"
-            Grid.Row="1"
-            Grid.ColumnSpan="2"
-            x:Name="Dupal"
-            ItemsSource="{Binding Cards}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <data:CardAccountTemplate />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>-->
     </Grid>
 
 </UserControl>

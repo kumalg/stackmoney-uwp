@@ -18,7 +18,7 @@ using Windows.UI.Xaml.Navigation;
 namespace Finanse.Elements {
     public sealed partial class SmallPieWithLegend : UserControl {
         public SmallPieWithLegend() {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

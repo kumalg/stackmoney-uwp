@@ -27,27 +27,15 @@ namespace Finanse.Pages {
                 RaisePropertyChanged("Categories");
             }
         }
-
-        private ObservableCollection<CategoryWithSubCategories> categoriesTest;
-        private ObservableCollection<CategoryWithSubCategories> CategoriesTest {
-            get {
-                return categoriesTest;
-            }
-            set {
-                categoriesTest = value;
-                RaisePropertyChanged("CategoriesTest");
-            }
-        }
-
-
+        
 
         private ObservableCollection<CategoryWithSubCategories> expenseCategories;
         private ObservableCollection<CategoryWithSubCategories> ExpenseCategories {
             get {
-                if (expenseCategories == null)
-                    expenseCategories = new ObservableCollection<CategoryWithSubCategories>(Dal.getCategoriesWithSubCategoriesInExpenses());
-
-                return expenseCategories;
+                return expenseCategories ??
+                       (expenseCategories =
+                           new ObservableCollection<CategoryWithSubCategories>(
+                               Dal.GetCategoriesWithSubCategoriesInExpenses()));
             }
             set {
                 expenseCategories = value;
@@ -58,10 +46,10 @@ namespace Finanse.Pages {
         private ObservableCollection<CategoryWithSubCategories> incomeCategories;
         private ObservableCollection<CategoryWithSubCategories> IncomeCategories {
             get {
-                if (incomeCategories == null)
-                    incomeCategories = new ObservableCollection<CategoryWithSubCategories>(Dal.getCategoriesWithSubCategoriesInIncomes());
-
-                return incomeCategories;
+                return incomeCategories ??
+                       (incomeCategories =
+                           new ObservableCollection<CategoryWithSubCategories>(
+                               Dal.GetCategoriesWithSubCategoriesInIncomes()));
             }
             set {
                 incomeCategories = value;
@@ -87,14 +75,14 @@ namespace Finanse.Pages {
         }
 
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
-            showSubCategoryFlyout(sender);
+            ShowSubCategoryFlyout(sender);
         }
 
         private void Grid_Tapped(object sender, TappedRoutedEventArgs e) {
-            showSubCategoryFlyout(sender);
+            ShowSubCategoryFlyout(sender);
         }
 
-        private void showSubCategoryFlyout(object sender) {
+        private void ShowSubCategoryFlyout(object sender) {
             FrameworkElement senderElement = sender as FrameworkElement;
             FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
             flyoutBase.ShowAt(senderElement);
@@ -103,20 +91,21 @@ namespace Finanse.Pages {
         private async void EditCategory_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
             CategoryWithSubCategories thisCategorys = (CategoryWithSubCategories)datacontext;
-            var ContentDialogItem = new NewCategoryContentDialog(thisCategorys.Category);
-            var result = await ContentDialogItem.ShowAsync();
+            var contentDialogItem = new NewCategoryContentDialog(thisCategorys.Category);
+            var result = await contentDialogItem.ShowAsync();
 
-            if (result == ContentDialogResult.Primary) {
-                Category cat = ContentDialogItem.NewCategoryItem;
+            if (result != ContentDialogResult.Primary)
+                return;
 
-                if (cat is SubCategory)
-                    updateCategory(thisCategorys, cat as SubCategory);
-                else
-                    updateCategory(thisCategorys, cat);
-            }
+            Category cat = contentDialogItem.NewCategoryItem;
+
+            if (cat is SubCategory)
+                UpdateCategory(thisCategorys, cat as SubCategory);
+            else
+                UpdateCategory(thisCategorys, cat);
         }
 
-        private void updateCategory(CategoryWithSubCategories categoryWithSubCategories, Category category) {
+        private void UpdateCategory(CategoryWithSubCategories categoryWithSubCategories, Category category) {
 
             CategoryWithSubCategories newCategoryWithSubCategorie = new CategoryWithSubCategories {
                 Category = category,
@@ -130,65 +119,49 @@ namespace Finanse.Pages {
             if (categoryWithSubCategories.Category.VisibleInIncomes)
                 indexInIncomes = IncomeCategories.IndexOf(categoryWithSubCategories);
 
-            //   int index = CategoriesTest.IndexOf(categoryWithSubCategories);
-            // CategoriesTest.Remove(categoryWithSubCategories);
-            tryRemoveCategoryWithSubCategoriesInList(categoryWithSubCategories);
-            tryInsertCategoryWithSubCategoriesInList(indexInExpenses, indexInIncomes, newCategoryWithSubCategorie);
+            TryRemoveCategoryWithSubCategoriesInList(categoryWithSubCategories);
+            TryInsertCategoryWithSubCategoriesInList(indexInExpenses, indexInIncomes, newCategoryWithSubCategorie);
 
-            /*
-            if (isCategoryVisibleInCurrentView(category))
-                CategoriesTest.Insert(index, newCategoryWithSubCategorie);
-                */
-
-            Dal.updateCategory(category);
+            Dal.UpdateCategory(category);
         }
 
-        private void updateCategory(CategoryWithSubCategories categoryWithSubCategories, SubCategory subCategory) {
-            /*
-            CategoriesTest
-                .Remove(categoryWithSubCategories);
-                */
-            tryRemoveCategoryWithSubCategoriesInList(categoryWithSubCategories);
-            tryAddSubCategoryInList(subCategory);
+        private void UpdateCategory(CategoryWithSubCategories categoryWithSubCategories, SubCategory subCategory) {
+            TryRemoveCategoryWithSubCategoriesInList(categoryWithSubCategories);
+            TryAddSubCategoryInList(subCategory);
 
-            Dal.deleteCategoryWithSubCategories(categoryWithSubCategories.Category.Id);
-            Dal.addSubCategory(subCategory);
+            Dal.DeleteCategoryWithSubCategories(categoryWithSubCategories.Category.Id);
+            Dal.AddSubCategory(subCategory);
         }
 
         private async void EditSubCategory_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
             SubCategory thisSubCategory = (SubCategory)datacontext;
-            var ContentDialogItem = new NewCategoryContentDialog(thisSubCategory);
-            var result = await ContentDialogItem.ShowAsync();
+            var contentDialogItem = new NewCategoryContentDialog(thisSubCategory);
+            var result = await contentDialogItem.ShowAsync();
 
-            if (result == ContentDialogResult.Primary) {
-                Category cat = ContentDialogItem.NewCategoryItem;
+            if (result != ContentDialogResult.Primary)
+                return;
 
-                if (cat is SubCategory)
-                    updateSubCategory(thisSubCategory, cat as SubCategory);
-                else
-                    updateSubCategory(thisSubCategory, cat);
-            }
+            Category cat = contentDialogItem.NewCategoryItem;
+
+            if (cat is SubCategory)
+                UpdateSubCategory(thisSubCategory, cat as SubCategory);
+            else
+                UpdateSubCategory(thisSubCategory, cat);
         }
 
-        private void updateSubCategory(SubCategory oldSubCategory, Category category) {
-            /*
-            CategoriesTest
-                .FirstOrDefault(item => item.Category.Id == oldSubCategory.BossCategoryId)
-                .SubCategories
-                .Remove(oldSubCategory);
-                */
-            tryRemoveSubCategoryInList(oldSubCategory);
-            tryAddCategoryInList(category);
+        private void UpdateSubCategory(SubCategory oldSubCategory, Category category) {
+            TryRemoveSubCategoryInList(oldSubCategory);
+            TryAddCategoryInList(category);
 
-            Dal.deleteSubCategory(category.Id);
-            Dal.addCategory(category);
+            Dal.DeleteSubCategory(category.Id);
+            Dal.AddCategory(category);
         }
 
-        private void updateSubCategory(SubCategory oldSubCategory, SubCategory subCategory) {
-            tryRemoveSubCategoryInList(oldSubCategory);
-            tryAddSubCategoryInList(subCategory);
-            Dal.updateSubCategory(subCategory);
+        private void UpdateSubCategory(SubCategory oldSubCategory, SubCategory subCategory) {
+            TryRemoveSubCategoryInList(oldSubCategory);
+            TryAddSubCategoryInList(subCategory);
+            Dal.UpdateSubCategory(subCategory);
         }
 
         private async void DeleteCategory_Click(object sender, RoutedEventArgs e) {
@@ -198,11 +171,11 @@ namespace Finanse.Pages {
             AcceptContentDialog acceptDeleteOperationContentDialog = new AcceptContentDialog("Czy chcesz usunąć kategorię i wszystkie jej podkategorie?");
             ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
 
-            if (result == ContentDialogResult.Primary) {
-                //CategoriesTest.Remove(OperationCategoriesTest.FirstOrDefault(item => item.Category == category));
-                tryRemoveCategoryInList(category);
-                Dal.deleteCategoryWithSubCategories(category.Id);
-            }
+            if (result != ContentDialogResult.Primary)
+                return;
+            
+            TryRemoveCategoryInList(category);
+            Dal.DeleteCategoryWithSubCategories(category.Id);
         }
 
         private async void DeleteSubCategory_Click(object sender, RoutedEventArgs e) {
@@ -212,48 +185,44 @@ namespace Finanse.Pages {
             AcceptContentDialog acceptDeleteOperationContentDialog = new AcceptContentDialog("Czy chcesz usunąć podkategorię?");
             ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
 
-            if (result == ContentDialogResult.Primary) {
-                /*
-                CategoriesTest
-                    .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
-                        .SubCategories.Remove(subCategory);
-                        */
-                tryRemoveSubCategoryInList(subCategory);
-                Dal.deleteSubCategory(subCategory.Id);
-            }
+            if (result != ContentDialogResult.Primary)
+                return;
+
+            TryRemoveSubCategoryInList(subCategory);
+            Dal.DeleteSubCategory(subCategory.Id);
         }
 
         private async void AddSubCat_Click(object sender, RoutedEventArgs e) {
             object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
             CategoryWithSubCategories categoryWithSubCategories = (CategoryWithSubCategories)datacontext;
 
-            NewCategoryContentDialog ContentDialogItem = new NewCategoryContentDialog(categoryWithSubCategories.Category.Id);
-            ContentDialogResult result = await ContentDialogItem.ShowAsync();
+            NewCategoryContentDialog contentDialogItem = new NewCategoryContentDialog(categoryWithSubCategories.Category.Id);
+            ContentDialogResult result = await contentDialogItem.ShowAsync();
 
             if (result == ContentDialogResult.Primary)
-                addNewCategoryOrSubCategoryToListAndSQL(ContentDialogItem.NewCategoryItem);
+                AddNewCategoryOrSubCategoryToListAndSql(contentDialogItem.NewCategoryItem);
         }
 
         private async void NewCategory_Click(object sender, RoutedEventArgs e) {
-            NewCategoryContentDialog ContentDialogItem = new NewCategoryContentDialog();
-            ContentDialogResult result = await ContentDialogItem.ShowAsync();
+            NewCategoryContentDialog contentDialogItem = new NewCategoryContentDialog();
+            ContentDialogResult result = await contentDialogItem.ShowAsync();
 
             if (result == ContentDialogResult.Primary)
-                addNewCategoryOrSubCategoryToListAndSQL(ContentDialogItem.NewCategoryItem);
+                AddNewCategoryOrSubCategoryToListAndSql(contentDialogItem.NewCategoryItem);
         }
 
-        private void addNewCategoryOrSubCategoryToListAndSQL(Category newCategoryOrSubCategory) {
+        private void AddNewCategoryOrSubCategoryToListAndSql(Category newCategoryOrSubCategory) {
             if (newCategoryOrSubCategory is SubCategory) {
-                tryAddSubCategoryInList((SubCategory)newCategoryOrSubCategory);
-                Dal.addSubCategory((SubCategory)newCategoryOrSubCategory);
+                TryAddSubCategoryInList((SubCategory)newCategoryOrSubCategory);
+                Dal.AddSubCategory((SubCategory)newCategoryOrSubCategory);
             }
             else {
-                tryAddCategoryInList(newCategoryOrSubCategory);
-                Dal.addCategory(newCategoryOrSubCategory);
+                TryAddCategoryInList(newCategoryOrSubCategory);
+                Dal.AddCategory(newCategoryOrSubCategory);
             }
         }
 
-        private void tryRemoveSubCategoryInList(SubCategory subCategory) {
+        private void TryRemoveSubCategoryInList(SubCategory subCategory) {
             if (subCategory.VisibleInExpenses)
                 ExpenseCategories
                     .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
@@ -267,7 +236,7 @@ namespace Finanse.Pages {
                     .Remove(subCategory);
         }
 
-        private void tryAddSubCategoryInList(SubCategory subCategory) {
+        private void TryAddSubCategoryInList(SubCategory subCategory) {
             if (subCategory.VisibleInExpenses)
                 ExpenseCategories
                     .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
@@ -279,7 +248,7 @@ namespace Finanse.Pages {
                     .SubCategories.Insert(0, subCategory);
         }
 
-        private void tryRemoveCategoryWithSubCategoriesInList(CategoryWithSubCategories categoryWithSubCategories) {
+        private void TryRemoveCategoryWithSubCategoriesInList(CategoryWithSubCategories categoryWithSubCategories) {
             if (categoryWithSubCategories.Category.VisibleInExpenses)
                 ExpenseCategories.Remove(categoryWithSubCategories);
 
@@ -287,7 +256,7 @@ namespace Finanse.Pages {
                 IncomeCategories.Remove(categoryWithSubCategories);
         }
 
-        private void tryRemoveCategoryInList(Category category) {
+        private void TryRemoveCategoryInList(Category category) {
             if (category.VisibleInExpenses)
                 ExpenseCategories.Remove(ExpenseCategories.FirstOrDefault(i => i.Category.Id == category.Id));
 
@@ -295,7 +264,7 @@ namespace Finanse.Pages {
                 IncomeCategories.Remove(ExpenseCategories.FirstOrDefault(i => i.Category.Id == category.Id));
         }
 
-        private void tryInsertCategoryWithSubCategoriesInList(int indexInExpenses, int indexInIncomes, CategoryWithSubCategories categoryWithSubCategories) {
+        private void TryInsertCategoryWithSubCategoriesInList(int indexInExpenses, int indexInIncomes, CategoryWithSubCategories categoryWithSubCategories) {
             if (categoryWithSubCategories.Category.VisibleInExpenses) {
                 if (indexInExpenses == -1)
                     indexInExpenses = 0;
@@ -309,7 +278,7 @@ namespace Finanse.Pages {
             }
         }
 
-        private void tryAddCategoryInList(Category category) {
+        private void TryAddCategoryInList(Category category) {
             if (category.VisibleInExpenses)
                 ExpenseCategories.Insert(0, new CategoryWithSubCategories {
                     Category = category
@@ -319,11 +288,6 @@ namespace Finanse.Pages {
                 IncomeCategories.Insert(0, new CategoryWithSubCategories {
                     Category = category
                 });
-        }
-
-        private bool isCategoryVisibleInCurrentView(Category category) {
-            return ((bool)ExpenseRadioButton.IsChecked && category.VisibleInExpenses) ||
-                   ((bool)IncomeRadioButton.IsChecked && category.VisibleInIncomes);
         }
 
 
@@ -338,14 +302,14 @@ namespace Finanse.Pages {
         }
         
         private void ExpandPanel_RightTapped(object sender, RightTappedRoutedEventArgs e) {
-            showFlyoutBase(sender);
+            ShowFlyoutBase(sender);
         }
 
         private void StackPanel_Tapped(object sender, TappedRoutedEventArgs e) {
-            showFlyoutBase(sender);
+            ShowFlyoutBase(sender);
         }
 
-        private void showFlyoutBase(object sender) {
+        private static void ShowFlyoutBase(object sender) {
             FrameworkElement senderElement = sender as FrameworkElement;
             FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
             flyoutBase.ShowAt(senderElement);

@@ -18,20 +18,12 @@ namespace Finanse.Models.MoneyAccounts {
             return name;
         }
         
-        public BankAccountWithCards(BankAccount bankAccount) {
+        public BankAccountWithCards(Account bankAccount) {
             Id = bankAccount.Id;
             ColorKey = bankAccount.ColorKey;
             Name = bankAccount.Name;
         }
 
-        private ObservableCollection<CardAccount> cards = new ObservableCollection<CardAccount>();
-        public ObservableCollection<CardAccount> Cards {
-            get {
-                return cards;
-            }
-            set {
-                cards = value;
-            }
-        }
+        public ObservableCollection<CardAccount> Cards { get; set; } = new ObservableCollection<CardAccount>();
     }
 }

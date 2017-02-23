@@ -4,6 +4,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Finanse.DataAccessLayer;
 using Finanse.Models;
+using Finanse.Models.Categories;
 using Finanse.Models.MoneyAccounts;
 
 namespace Finanse.Elements {
@@ -12,12 +13,7 @@ namespace Finanse.Elements {
 
         public decimal Date = 12;
 
-        private Models.OperationPattern Operation {
-
-            get {
-                return this.DataContext as Models.OperationPattern;
-            }
-        }
+        private Models.OperationPattern Operation => DataContext as OperationPattern;
 
         public OperationTemplate() {
 
@@ -31,8 +27,8 @@ namespace Finanse.Elements {
         private Category Category {
             get {
                 if (category == null) {
-                    Category cat = Dal.getCategoryById(Operation.CategoryId);
-                    SubCategory subCat = Dal.getSubCategoryById(Operation.SubCategoryId);
+                    Category cat = Dal.GetCategoryById(Operation.CategoryId);
+                    SubCategory subCat = Dal.GetSubCategoryById(Operation.SubCategoryId);
 
                     if (cat != null)
                         category = cat;
@@ -51,19 +47,18 @@ namespace Finanse.Elements {
             if (Operation == null)
                 return;
 
-            if (Settings.getAccountEllipseVisibility()) {
+            if (Settings.GetAccountEllipseVisibility()) {
 
-                Account moneyAccount = AccountsDal.getAccountById(Operation.MoneyAccountId);
+                Account moneyAccount = AccountsDal.GetAccountById(Operation.MoneyAccountId);
 
-                if (moneyAccount != null)
-                    if (!string.IsNullOrEmpty(moneyAccount.ColorKey)) {
-                        MoneyAccountEllipse.Visibility = Visibility.Visible;
-                        MoneyAccountEllipse.Fill = moneyAccount.SolidColorBrush;
-                    }
+                if (!string.IsNullOrEmpty(moneyAccount?.ColorKey)) {
+                    MoneyAccountEllipse.Visibility = Visibility.Visible;
+                    MoneyAccountEllipse.Fill = moneyAccount.SolidColorBrush;
+                }
             }
 
-            Category cat = Dal.getCategoryById(Operation.CategoryId);
-            SubCategory subCat = Dal.getSubCategoryById(Operation.SubCategoryId);
+            Category cat = Dal.GetCategoryById(Operation.CategoryId);
+            SubCategory subCat = Dal.GetSubCategoryById(Operation.SubCategoryId);
             SubCategoryNameStackPanel.Visibility = Visibility.Collapsed;
 
             /* WCHODZI IKONKA KATEGORII */
@@ -71,7 +66,7 @@ namespace Finanse.Elements {
                 CategoryIcon.Color = cat.Color;
                 CategoryIcon.Glyph = cat.Icon.Glyph;
 
-                if (String.IsNullOrEmpty(Operation.Title)) {
+                if (string.IsNullOrEmpty(Operation.Title)) {
                     Title_OperationTemplate.Text = cat.Name;
                 }
             }
@@ -80,7 +75,7 @@ namespace Finanse.Elements {
                 CategoryIcon.Color = subCat.Color;
                 CategoryIcon.Glyph = subCat.Icon.Glyph;
 
-                if (String.IsNullOrEmpty(Operation.Title)) {
+                if (string.IsNullOrEmpty(Operation.Title)) {
                     Title_OperationTemplate.Text = subCat.Name;
                 }
             }
@@ -96,17 +91,20 @@ namespace Finanse.Elements {
             Category_OperationTemplate.Text = "";
 
             /* WYGLĄD NAZWY KATEGORII */
-            if (Settings.getCategoryNameVisibility()) {
-                CategoryNameStackPanel.Visibility = Visibility.Visible;
-                Category_OperationTemplate.Text = "Nie znaleziono kategorii";
-                if (cat != null)
-                    Category_OperationTemplate.Text = cat.Name;
+            if (!Settings.GetCategoryNameVisibility())
+                return;
 
-                if (subCat != null) {
-                    SubCategoryNameStackPanel.Visibility = Visibility.Visible;
-                    SubCategory_OperationTemplate.Text = subCat.Name;
-                }
-            }
+            CategoryNameStackPanel.Visibility = Visibility.Visible;
+            Category_OperationTemplate.Text = "Nie znaleziono kategorii";
+
+            if (cat != null)
+                Category_OperationTemplate.Text = cat.Name;
+
+            if (subCat == null)
+                return;
+
+            SubCategoryNameStackPanel.Visibility = Visibility.Visible;
+            SubCategory_OperationTemplate.Text = subCat.Name;
         }
     }
 }

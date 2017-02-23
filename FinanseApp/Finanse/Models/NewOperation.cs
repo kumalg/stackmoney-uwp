@@ -7,21 +7,21 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Finanse.Models {
-    class NewOperation {
+    internal class NewOperation {
         public static string ToCurrencyString(string value) {
-            return decimal.Parse(value, Settings.getActualCultureInfo()).ToString("C", Settings.getActualCultureInfo());
+            return decimal.Parse(value, Settings.GetActualCultureInfo()).ToString("C", Settings.GetActualCultureInfo());
         }
 
         public static string ToCurrencyString(decimal value) {
-            return value.ToString("C", Settings.getActualCultureInfo());
+            return value.ToString("C", Settings.GetActualCultureInfo());
         }
 
         public static string ToCurrencyWithoutSymbolString(decimal value) {
-            return value.ToString(Settings.getActualCultureInfo());
+            return value.ToString(Settings.GetActualCultureInfo());
         }
 
         public static Regex GetRegex() {
-            NumberFormatInfo numberFormatInfo = Settings.getActualCultureInfo().NumberFormat;
+            NumberFormatInfo numberFormatInfo = Settings.GetActualCultureInfo().NumberFormat;
             int decimalDigits = numberFormatInfo.CurrencyDecimalDigits;
             char decimalSeparator = numberFormatInfo.CurrencyDecimalSeparator[0];
 
@@ -33,7 +33,7 @@ namespace Finanse.Models {
         }
 
         public static Regex GetSignedRegex() {
-            NumberFormatInfo numberFormatInfo = Settings.getActualCultureInfo().NumberFormat;
+            NumberFormatInfo numberFormatInfo = Settings.GetActualCultureInfo().NumberFormat;
             int decimalDigits = numberFormatInfo.CurrencyDecimalDigits;
             char decimalSeparator = numberFormatInfo.CurrencyDecimalSeparator[0];
 

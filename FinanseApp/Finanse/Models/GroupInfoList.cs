@@ -10,14 +10,10 @@ namespace Finanse.Models {
     public class GroupInfoList<T> : ObservableCollection<Operation> {
         public object Key { get; set; }
 
-        public string Cost {
-            get {
-                return decimalCost.ToString("C", Settings.getActualCultureInfo());
-            }
-        }
-        
+        public string Cost => DecimalCost.ToString("C", Settings.GetActualCultureInfo());
 
-        public decimal decimalCost {
+
+        public decimal DecimalCost {
             get {
                 return this.Sum(i=>i.SignedCost);
             }
@@ -45,62 +41,62 @@ namespace Finanse.Models {
 
     class GroupHeaderByCategory {
         private string _name = "";
-        public string name {
+        public string Name {
             get {
                 if (_name.Equals("")) {
-                    _name = categoryId == -1 ? "Nieprzyporządkowane" : Dal.getCategoryById(categoryId).Name;
+                    _name = CategoryId == -1 ? "Nieprzyporządkowane" : Dal.GetCategoryById(CategoryId).Name;
                 }
                 return _name;
             }
         }
-        public int categoryId { get; set; }
-        public string icon { get; set; }
-        public FontFamily iconStyle { get; set; }
-        public string color { get; set; }
-        public double opacity { get; set; }
+        public int CategoryId { get; set; }
+        public string Icon { get; set; }
+        public FontFamily IconStyle { get; set; }
+        public string Color { get; set; }
+        public double Opacity { get; set; }
         public override string ToString() {
-            return categoryId.ToString();
+            return CategoryId.ToString();
         }
     }
     class GroupHeaderByDay {
         public DateTime ActualMonth { get; set; }
-        public string date { get; set; }
-        public string dayNum { get; set; }
-        public string dayNum00 { get; set; }
-        public string day { get; set; }
-        public string month { get; set; }
+        public string Date { get; set; }
+        public string DayNum { get; set; }
+        public string DayNum00 { get; set; }
+        public string Day { get; set; }
+        public string Month { get; set; }
         public override string ToString() {
-            return date;
+            return Date;
         }
 
         public GroupHeaderByDay(string date) {
 
             if (date.Equals("")) {
-                this.date = date;
-                dayNum00 = "#";
-                dayNum = "";
-                day = "Bez daty";
-                month = "";
+                this.Date = date;
+                DayNum00 = "#";
+                DayNum = "";
+                Day = "Bez daty";
+                Month = "";
             }
 
             else {
                 DateTime dt = Convert.ToDateTime(date);
                 DateTime dtToday = DateTime.Today;
 
-                this.date = date;
-                month = String.Format("{0:MMMM yyyy}", dt);
-                dayNum00 = String.Format("{0:dd}", dt);
-                dayNum = dt.Day.ToString();
+                this.Date = date;
+                Month = String.Format("{0:MMMM yyyy}", dt);
+                DayNum00 = String.Format("{0:dd}", dt);
+                DayNum = dt.Day.ToString();
                 if (dt.Month == dtToday.Month && dt.Year == dtToday.Year) {
                     if (dt.Day == dtToday.Day)
-                        day = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("today");
+                        Day = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("today");
                     else if (dt.Day == dtToday.Day - 1)
-                        day = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("yesterday");
+                        Day = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("yesterday");
                     else
-                        day = String.Format("{0:dddd}", dt);
+                        Day = String.Format("{0:dddd}", dt);
                 }
                 else
-                    day = String.Format("{0:dddd}", dt);
+                    Day = String.Format("{0:dddd}", dt);
             }
         }
     }

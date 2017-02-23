@@ -4,15 +4,15 @@ namespace Finanse.Models.MoneyAccounts {
     class CardAccount : Account {
         public int BankAccountId { get; set; }
 
-        public override string getActualMoneyValue() {
-            return AccountsDal.CardAccountExpensesById(Id).ToString("C", Settings.getActualCultureInfo());
+        public override string GetActualMoneyValue() {
+            return AccountsDal.CardAccountExpensesById(Id).ToString("C", Settings.GetActualCultureInfo());
         }
 
         public override int GetHashCode() {
             return Name.GetHashCode() * Id;
         }
         public override bool Equals(object o) {
-            if (o == null || !(o is CardAccount))
+            if (!(o is CardAccount))
                 return false;
 
             return

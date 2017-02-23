@@ -9,10 +9,10 @@
         public bool VisibleInStatistics { get; set; }
 
         public override int GetHashCode() {
-            return this.Title.GetHashCode() * this.Id;
+            return Title.GetHashCode() * this.Id;
         }
         public override bool Equals(object o) {
-            if (o == null || !(o is Operation))
+            if (!(o is Operation))
                 return false;
 
             return

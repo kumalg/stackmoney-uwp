@@ -1,15 +1,10 @@
-﻿using Finanse.DataAccessLayer;
-using SQLite.Net.Attributes;
-using System.Collections.ObjectModel;
-using Windows.UI;
-using System.Windows;
+﻿using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using System.Collections.Generic;
-using System.Linq;
+using SQLite.Net.Attributes;
 
-namespace Finanse.Models {
+namespace Finanse.Models.Categories {
 
     public class Category {
 
@@ -52,7 +47,7 @@ namespace Finanse.Models {
             return Name.GetHashCode() * Id;
         }
         public override bool Equals(object o) {
-            if (o == null || !(o is Category))
+            if (!(o is Category))
                 return false;
 
             Category secondCategory = o as Category;

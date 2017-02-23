@@ -123,17 +123,12 @@
     <Compile Include="Converters\DecimalToCurrencyStringConverter.cs" />
     <Compile Include="Converters\DoubleToPercentStringConverter.cs" />
     <Compile Include="DataAccessLayer\AccountsDal.cs" />
+    <Compile Include="DataAccessLayer\DalBase.cs" />
     <Compile Include="DataAccessLayer\Dal.cs" />
     <Compile Include="DataAccessLayer\DebugTraceListener.cs" />
     <Compile Include="DataAccessLayer\StatisticsDal.cs" />
     <Compile Include="Dialogs\AcceptContentDialog.xaml.cs">
       <DependentUpon>AcceptContentDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\DeleteCategory_ContentDialog.xaml.cs">
-      <DependentUpon>DeleteCategory_ContentDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\Delete_ContentDialog.xaml.cs">
-      <DependentUpon>Delete_ContentDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\EditOperationContentDialog.xaml.cs">
       <DependentUpon>EditOperationContentDialog.xaml</DependentUpon>
@@ -147,9 +142,6 @@
     <Compile Include="Dialogs\NewMoneyAccountContentDialog.xaml.cs">
       <DependentUpon>NewMoneyAccountContentDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\NewOperationContentDialog.xaml.cs">
-      <DependentUpon>NewOperationContentDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Dialogs\OperationDetailsContentDialog.xaml.cs">
       <DependentUpon>OperationDetailsContentDialog.xaml</DependentUpon>
     </Compile>
@@ -158,9 +150,6 @@
     </Compile>
     <Compile Include="Elements\CategoryIcon.xaml.cs">
       <DependentUpon>CategoryIcon.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Elements\CategoryWithSubcategories.xaml.cs">
-      <DependentUpon>CategoryWithSubcategories.xaml</DependentUpon>
     </Compile>
     <Compile Include="Elements\CardAccountTemplate.xaml.cs">
       <DependentUpon>CardAccountTemplate.xaml</DependentUpon>
@@ -273,14 +262,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialogs\DeleteCategory_ContentDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Dialogs\Delete_ContentDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Dialogs\EditOperationContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -297,10 +278,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialogs\NewOperationContentDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Dialogs\OperationDetailsContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -312,10 +289,6 @@
     <Page Include="Elements\CategoryIcon.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Elements\CategoryWithSubcategories.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Elements\CardAccountTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>

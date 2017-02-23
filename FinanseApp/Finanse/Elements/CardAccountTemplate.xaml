@@ -25,7 +25,6 @@
         </Grid.ColumnDefinitions>
         <Grid
             Opacity="0.15"
-            Name="SubCategorySymbol"
             Visibility="Visible"
             Width="50"
             Height="40">
@@ -116,10 +115,9 @@
         </data:CategoryIcon>
 
         <TextBlock
-            Name="Category_CategoryTemplate"
             Grid.Column="2"
             VerticalAlignment="Center"
-            Text="{Binding Name}"
+            Text="{x:Bind CardAccount.Name}"
             Margin="20,0,0,0"
             FontSize="14"
             Foreground="{ThemeResource Text}" />
@@ -128,8 +126,7 @@
             FontSize="12"
             Grid.Column="3"
             FontWeight="SemiBold"
-            Name="Cost_OperationTemplate"
-            Text="{x:Bind CardAccount.getActualMoneyValue()}"
+            Text="{x:Bind CardAccount.GetActualMoneyValue()}"
             VerticalAlignment="Center"
             HorizontalAlignment="Right"
             Foreground="{ThemeResource Text-1}" />

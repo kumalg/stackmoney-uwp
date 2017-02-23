@@ -12,11 +12,10 @@ using Windows.UI.Xaml.Controls;
 namespace Finanse.Pages {
 
     public sealed partial class StatisticsPage : Page, INotifyPropertyChanged {
-
-        StatisticsData statisticsData = new StatisticsData();
+        readonly StatisticsData statisticsData = new StatisticsData();
         
-        public DateTime minDate = Date.FirstDayInMonth(DateTime.Today);
-        public DateTime maxDate = DateTime.Today;
+        public DateTime MinDate = Date.FirstDayInMonth(DateTime.Today);
+        public DateTime MaxDate = DateTime.Today;
 
         private string incomesPercentageText;
         public string IncomesPercentageText {
@@ -162,65 +161,65 @@ namespace Finanse.Pages {
 
             this.InitializeComponent();
 
-            MinDatePicker.Date = minDate;
-            MaxDatePicker.Date = maxDate;
+            MinDatePicker.Date = MinDate;
+            MaxDatePicker.Date = MaxDate;
             
-            reload();
+            Reload();
         }
 
 
         private void DateRangeFlyout_Closed(object sender, object e) {
             DateTime newMinDate = MinDatePicker.Date.Date;
             DateTime newMaxDate = MaxDatePicker.Date.Date;
-            if (newMinDate != minDate || newMaxDate != maxDate) {
-                minDate = newMinDate;
-                maxDate = newMaxDate;
-                reload();
+            if (newMinDate != MinDate || newMaxDate != MaxDate) {
+                MinDate = newMinDate;
+                MaxDate = newMaxDate;
+                Reload();
             }
         }
 
-        public async Task reload() {
+        public async Task Reload() {
             ProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
 
-            await Task.Run(() => statisticsData.setNewRangeAndData(minDate, maxDate));
+            await Task.Run(() => statisticsData.SetNewRangeAndData(MinDate, MaxDate));
 
-            DateRangeText = statisticsData.getActualDateRangeText(minDate, maxDate);
+            DateRangeText = statisticsData.GetActualDateRangeText(MinDate, MaxDate);
 
-            ExpensesToIncomes = statisticsData.getExpenseToIncomeComparsion();
-            ExpensesValue = ExpensesToIncomes[0].UnrelativeValue.ToString("C", Settings.getActualCultureInfo());
-            IncomesValue = ExpensesToIncomes[1].UnrelativeValue.ToString("C", Settings.getActualCultureInfo());
-            LineChartTest = statisticsData.lineChartTest();
-            LineChartTest2 = statisticsData.lineChartTest2();
-            LineChartTest3 = statisticsData.lineChartTest3();
+            ExpensesToIncomes = statisticsData.GetExpenseToIncomeComparsion();
+            ExpensesValue = ExpensesToIncomes[0].UnrelativeValue.ToString("C", Settings.GetActualCultureInfo());
+            IncomesValue = ExpensesToIncomes[1].UnrelativeValue.ToString("C", Settings.GetActualCultureInfo());
+            LineChartTest = statisticsData.LineChartTest();
+            LineChartTest2 = statisticsData.LineChartTest2();
+            LineChartTest3 = statisticsData.LineChartTest3();
 
             IncomesPercentageText = (100 * ExpensesToIncomes[1].RelativeValue).ToString("0") + "%";
 
             if ((bool)ExpensesRadioButton.IsChecked)
-                setExpensesInGraphs();
+                SetExpensesInGraphs();
             else
-                setIncomesInGraphs();
+                SetIncomesInGraphs();
 
             ProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
         private async void ExpensesRadioButton_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
             await Task.Delay(5);
-            setExpensesInGraphs();
+            SetExpensesInGraphs();
         }
 
         private async void IncomeRadioButton_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
             await Task.Delay(5);
-            setIncomesInGraphs();
+            SetIncomesInGraphs();
         }
 
-        private async Task setExpensesInGraphs() {
-            OperationsByCategory = statisticsData.getExpensesGroupedByCategoryInRange(minDate, maxDate);
-            CategoriesGroupedBySubCategories = statisticsData.getExpensesFromCategoryGroupedBySubCategoryInRange();
+        private async Task SetExpensesInGraphs() {
+            OperationsByCategory = statisticsData.GetExpensesGroupedByCategoryInRange(MinDate, MaxDate);
+            CategoriesGroupedBySubCategories = statisticsData.GetExpensesFromCategoryGroupedBySubCategoryInRange();
         }
 
-        private async Task setIncomesInGraphs() {
-            OperationsByCategory = statisticsData.getIncomesGroupedByCategoryInRange(minDate, maxDate);
-            CategoriesGroupedBySubCategories = statisticsData.getIncomesFromCategoryGroupedBySubCategoryInRange();
+        private async Task SetIncomesInGraphs() {
+            OperationsByCategory = statisticsData.GetIncomesGroupedByCategoryInRange(MinDate, MaxDate);
+            CategoriesGroupedBySubCategories = statisticsData.GetIncomesFromCategoryGroupedBySubCategoryInRange();
         }
     }
 }

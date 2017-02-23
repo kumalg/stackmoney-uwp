@@ -10,25 +10,12 @@ using System.Linq;
 using Windows.Storage;
 
 namespace Finanse.DataAccessLayer {
-    internal static class AccountsDal {
-        private static string dbPath = string.Empty;
-        private static string DbPath {
-            get {
-                if (string.IsNullOrEmpty(dbPath))
-                    dbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "db.sqlite");
-                return dbPath;
-            }
-        }
-        private static SQLiteConnection DbConnection {
-            get {
-                return new SQLiteConnection(new SQLitePlatformWinRT(), DbPath);
-            }
-        }
+    internal class AccountsDal : DalBase {
 
 
         /* GET BY ID */
 
-        internal static int getHighestIdOfAccounts() {
+        internal static int GetHighestIdOfAccounts() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 return db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'Account' LIMIT 1");
@@ -38,47 +25,54 @@ namespace Finanse.DataAccessLayer {
         public static decimal BankAccountBalanceById(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.ExecuteScalar<decimal>("SELECT TOTAL(CASE WHEN isExpense THEN -Cost ELSE Cost END) FROM Operation WHERE MoneyAccountId = ? AND Date IS NOT NULL AND Date IS NOT '' AND Date <= ?", id, DateTime.Today.Date.ToString("yyyy.MM.dd"));
+                return db.ExecuteScalar<decimal>("SELECT TOTAL(CASE WHEN isExpense THEN -Cost ELSE Cost END) " +
+                                                 "FROM Operation " +
+                                                 "WHERE MoneyAccountId = ? AND Date IS NOT NULL AND Date IS NOT '' AND Date <= ?", 
+                                                 id, DateTime.Today.Date.ToString("yyyy.MM.dd"));
             }
         }
 
         public static decimal CashAccountBalanceById(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.ExecuteScalar<decimal>("SELECT TOTAL(CASE WHEN isExpense THEN -Cost ELSE Cost END) FROM Operation WHERE MoneyAccountId = ? AND Date IS NOT NULL AND Date IS NOT '' AND Date <= ?", id, DateTime.Today.Date.ToString("yyyy.MM.dd"));
+                return db.ExecuteScalar<decimal>("SELECT TOTAL(CASE WHEN isExpense THEN -Cost ELSE Cost END) " +
+                                                 "FROM Operation " +
+                                                 "WHERE MoneyAccountId = ? AND Date IS NOT NULL AND Date IS NOT '' AND Date <= ?", 
+                                                 id, DateTime.Today.Date.ToString("yyyy.MM.dd"));
             }
         }
 
         public static decimal CardAccountExpensesById(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.ExecuteScalar<decimal>("SELECT TOTAL(-Cost) FROM Operation WHERE MoneyAccountId = ? AND isExpense AND Date IS NOT NULL AND Date IS NOT '' AND Date <= ?", id, DateTime.Today.Date.ToString("yyyy.MM.dd"));
+                return db.ExecuteScalar<decimal>("SELECT TOTAL(-Cost) " +
+                                                 "FROM Operation " +
+                                                 "WHERE MoneyAccountId = ? AND isExpense AND Date IS NOT NULL AND Date IS NOT '' AND Date <= ?", 
+                                                 id, DateTime.Today.Date.ToString("yyyy.MM.dd"));
             }
         }
 
-        public static Account getAccountById(int id) {
+        public static Account GetAccountById(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                CashAccount cashAccount = db.Query<CashAccount>("SELECT * FROM CashAccount WHERE Id == ? LIMIT 1", id).FirstOrDefault();
-                BankAccount bankAccount = db.Query<BankAccount>("SELECT * FROM BankAccount WHERE Id == ? LIMIT 1", id).FirstOrDefault();
-                CardAccount cardAccount = db.Query<CardAccount>("SELECT * FROM CardAccount WHERE Id == ? LIMIT 1", id).FirstOrDefault();
+                var cashAccount = db.Query<CashAccount>("SELECT * FROM CashAccount WHERE Id == ? LIMIT 1", id).FirstOrDefault();
+                var bankAccount = db.Query<BankAccount>("SELECT * FROM BankAccount WHERE Id == ? LIMIT 1", id).FirstOrDefault();
+                var cardAccount = db.Query<CardAccount>("SELECT * FROM CardAccount WHERE Id == ? LIMIT 1", id).FirstOrDefault();
 
                 if (cashAccount != null)
                     return cashAccount;
-                else if (bankAccount != null)
+                if (bankAccount != null)
                     return bankAccount;
-                else
-                    return cardAccount;
+                return cardAccount;
             }
         }
 
 
         /* GET ALL */
 
-        public static List<Account> getAllAccounts() {
+        public static List<Account> GetAllAccounts() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                List<Account> accounts = new List<Account>();
 
                 var cashAccounts = db.Query<CashAccount>("SELECT * FROM CashAccount");
                 var bankAccounts = db.Query<BankAccount>("SELECT * FROM BankAccount");
@@ -90,8 +84,7 @@ namespace Finanse.DataAccessLayer {
                                               BankAccountId = g.Key
                                           };
 
-                foreach (CashAccount cashAccount in cashAccounts)
-                    accounts.Add(cashAccount);
+                List<Account> accounts = cashAccounts.Cast<Account>().ToList();
 
                 foreach (BankAccount bankAccount in bankAccounts) {
                     var cardsQuery = cardAccountsGrouped.SingleOrDefault(i => i.BankAccountId == bankAccount.Id);
@@ -105,69 +98,57 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static List<BankAccount> getAllBankAccounts() {
+        public static List<BankAccount> GetAllBankAccounts() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                List<BankAccount> lista = new List<BankAccount>();
-                foreach (BankAccount item in db.Query<BankAccount>("SELECT * FROM BankAccount")) {
-                    lista.Add(item);
-                }
-                return lista;
-               // return db.Query<BankAccount>("SELECT * FROM BankAccount");
+                return db.Query<BankAccount>("SELECT * FROM BankAccount");
             }
         }
 
-        internal static List<Account> getAccountsWithoutCards() {
+        internal static List<Account> GetAccountsWithoutCards() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                List<Account> list = new List<Account>();
                 var cashAccounts = db.Query<CashAccount>("SELECT * FROM CashAccount");
                 var bankAccounts = db.Query<BankAccount>("SELECT * FROM BankAccount");
 
-                foreach (var item in cashAccounts)
-                    list.Add(item);
-                foreach (var item in bankAccounts)
-                    list.Add(item);
+                List<Account> list = cashAccounts.Cast<Account>().ToList();
+                list.AddRange(bankAccounts);
 
                 return list.OrderBy(i => i.Name).ToList();
             }
         }
 
-        public static List<Account> getAllMoneyAccounts() {
+        public static List<Account> GetAllMoneyAccounts() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                List<Account> list = new List<Account>();
                 var cashAccounts = db.Query<CashAccount>("SELECT * FROM CashAccount");
                 var bankAccounts = db.Query<BankAccount>("SELECT * FROM BankAccount");
                 var cardAccounts = db.Query<CardAccount>("SELECT * FROM CardAccount");
 
-                foreach (var item in cashAccounts)
-                    list.Add(item);
-                foreach (var item in bankAccounts)
-                    list.Add(item);
-                foreach (var item in cardAccounts)
-                    list.Add(item);
+                List<Account> list = cashAccounts.Cast<Account>().ToList();
+                list.AddRange(bankAccounts);
+                list.AddRange(cardAccounts);
 
                 return list.OrderBy(i => i.Name).ToList();
-                //return db.Query<MoneyAccount>("SELECT * FROM MoneyAccount");
             }
         }
 
-        public static List<MoneyAccountBalance> listOfMoneyAccountBalances(DateTime date) {
+        public static List<MoneyAccountBalance> ListOfMoneyAccountBalances(DateTime date) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                List<MoneyAccountBalance> list = new List<MoneyAccountBalance>();
 
                 var query = from p in db.Table<Operation>().ToList()
                             group p by p.MoneyAccountId into g
                             select new {
-                                account = getAccountById(g.Key),
-                                initialValue = getInitialValue(g, date),
-                                finalValue = getFinalValue(g, date)
+                                account = GetAccountById(g.Key),
+                                initialValue = GetInitialValue(g, date),
+                                finalValue = GetFinalValue(g, date)
                             };
 
-                foreach (var item in query.Where(i => !(i.account is CardAccount)))
-                    list.Add(new MoneyAccountBalance(item.account, item.initialValue, item.finalValue));
+                List<MoneyAccountBalance> list = query
+                    .Where(i => !(i.account is CardAccount))
+                    .Select(item => new MoneyAccountBalance(item.account, item.initialValue, item.finalValue))
+                    .ToList();
 
                 foreach (var item in query.Where(i => i.account is CardAccount)) {
                     MoneyAccountBalance moneyAccountBalance = list.SingleOrDefault(i => i.Account.Id == ((CardAccount)item.account).BankAccountId);
@@ -175,7 +156,7 @@ namespace Finanse.DataAccessLayer {
                         moneyAccountBalance.JoinBalance(item.initialValue, item.finalValue);
                     }
                     else {
-                        list.Add(new MoneyAccountBalance(AccountsDal.getAccountById(((CardAccount)item.account).BankAccountId), item.initialValue, item.finalValue));
+                        list.Add(new MoneyAccountBalance(GetAccountById(((CardAccount)item.account).BankAccountId), item.initialValue, item.finalValue));
                     }
                 }
                 return list.OrderBy(i => i.Account.Name).ToList();
@@ -185,7 +166,7 @@ namespace Finanse.DataAccessLayer {
 
         /* ADD UPDATE REMOVE */
 
-        public static void addAccount(Account account) {
+        public static void AddAccount(Account account) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
                 db.Insert(account);
@@ -193,7 +174,7 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static void updateAccount(Account account) {
+        public static void UpdateAccount(Account account) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
                 if (account is BankAccountWithCards)
@@ -207,7 +188,7 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static void removeSingleAccountWithOperations(int accountId) {
+        public static void RemoveSingleAccountWithOperations(int accountId) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("DELETE FROM CashAccount WHERE Id = ?", accountId);
@@ -217,7 +198,7 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static void removeBankAccountWithCards(int bankAccountId) {
+        public static void RemoveBankAccountWithCards(int bankAccountId) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("DELETE FROM BankAccount WHERE Id = ?", bankAccountId);
@@ -228,30 +209,28 @@ namespace Finanse.DataAccessLayer {
 
         /* HELPERS */
 
-        private static DateTime maxDateInFinalValue(DateTime date) {
+        private static DateTime MaxDateInFinalValue(DateTime date) {
             return (date.Month == DateTime.Today.Month && date.Year == DateTime.Today.Year) ?
                 DateTime.Today.AddDays(1) :
                 date.AddMonths(1);
         }
 
-        private static DateTime maxDateInInitialValue(DateTime date) {
+        private static DateTime MaxDateInInitialValue(DateTime date) {
             return (date > DateTime.Today) ?
                 DateTime.Today.AddDays(1) :
                 date;
         }
 
-        private static decimal getFinalValue(IGrouping<int, Operation> operations, DateTime date) {
+        private static decimal GetFinalValue(IEnumerable<Operation> operations, DateTime date) {
             if (date.Date > DateTime.Today.Date)
                 return operations.Sum(i => i.isExpense ? -i.Cost : i.Cost);
-            else
-                return operations.Where(i => !string.IsNullOrEmpty(i.Date) && DateTime.Parse(i.Date) < maxDateInFinalValue(date))
-                                    .Sum(i => i.isExpense ? -i.Cost : i.Cost);
+            return operations.Where(i => !string.IsNullOrEmpty(i.Date) && DateTime.Parse(i.Date) < MaxDateInFinalValue(date))
+                .Sum(i => i.isExpense ? -i.Cost : i.Cost);
         }
 
-        private static decimal getInitialValue(IGrouping<int, Operation> operations, DateTime date) {
-            return operations.Where(i => !string.IsNullOrEmpty(i.Date) && DateTime.Parse(i.Date) < maxDateInInitialValue(date))
+        private static decimal GetInitialValue(IEnumerable<Operation> operations, DateTime date) {
+            return operations.Where(i => !string.IsNullOrEmpty(i.Date) && DateTime.Parse(i.Date) < MaxDateInInitialValue(date))
                                 .Sum(i => i.isExpense ? -i.Cost : i.Cost);
         }
-
     }
 }

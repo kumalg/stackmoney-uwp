@@ -105,6 +105,9 @@ namespace Finanse.Pages {
             }
         }
 
+        public string DisplayName => Package.Current.DisplayName;
+        public string PublisherDisplayName => Package.Current.PublisherDisplayName;
+
         private void Button_Click(object sender, RoutedEventArgs e) {
             ShowDeleteAllContentDialog();
         }

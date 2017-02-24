@@ -324,13 +324,7 @@
                         FontFamily="{StaticResource DefaultFontFamily}"
                         Foreground="{ThemeResource AccentColor}" />
                 </Grid>
-                <!--
-                <ListView
-                    HorizontalAlignment="Center"
-                    ItemsSource="{x:Bind ExpensesToIncomes, Mode=OneWay}"
-                    ItemTemplate="{StaticResource LegendItemTemplate}"
-                    SelectionMode="None" />
--->
+
                 <Grid
                     MaxWidth="512"
                     HorizontalAlignment="Stretch">
@@ -420,26 +414,7 @@
                         Checked="IncomeRadioButton_Checked"
                         Style="{StaticResource RadioButtonStyle1}" />
                 </Grid>
-                <!--
-                <StackPanel
-                    Margin="32"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-                    <RadioButton
-                        Style="{StaticResource RadioButtonLikeButtonStyle}"
-                        GroupName="ExpenseOrIncome"
-                        Name="ExpensesRadioButton"
-                        Content="Wydatki"
-                        IsChecked="True"
-                        Checked="ExpensesRadioButton_Checked" />
-                    <RadioButton
-                        Style="{StaticResource RadioButtonLikeButtonStyle}"
-                        GroupName="ExpenseOrIncome"
-                        Name="IncomesRadioButton"
-                        Content="Wpływy"
-                        Checked="IncomeRadioButton_Checked" />
-                </StackPanel>
--->
+
                 <elements:PieWithLegend
                     DataContext="{x:Bind OperationsByCategory, Mode=OneWay}" />
 <!--
@@ -469,9 +444,9 @@
                     Margin="16"
                     Height="256" />
 -->
+
                 <ItemsControl
                     HorizontalAlignment="Center"
-                    Grid.Row="1"
                     ItemsSource="{x:Bind CategoriesGroupedBySubCategories, Mode=OneWay}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

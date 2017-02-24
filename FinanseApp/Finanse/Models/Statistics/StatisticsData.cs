@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Finanse.Charts;
+using Finanse.Charts.Data;
 using Finanse.DataAccessLayer;
 using Finanse.Models.Categories;
 
@@ -33,8 +36,7 @@ namespace Finanse.Models.Statistics {
          * ZAMIAST NA SQL TO NA LISCIE 
          */
 
-        public ObservableCollection<ChartPart> GetExpensesGroupedByCategoryInRange(DateTime minDate, DateTime maxDate) {
-            ObservableCollection<ChartPart> models = new ObservableCollection<ChartPart>();
+        public List<ChartDataItem> GetExpensesGroupedByCategoryInRange(DateTime minDate, DateTime maxDate) {
 
             var query = from item in AllOperations
                         where item.isExpense
@@ -47,23 +49,20 @@ namespace Finanse.Models.Statistics {
 
             decimal sum = query.Sum(item => item.Cost);
 
-            foreach (var item in query) {
-                Category category = Dal.GetCategoryById(item.CategoryId);
-                models.Add(new ChartPart {
-                    SolidColorBrush = category.Color,
-                    Name = category.Name,
-                    Tag = item.CategoryId,
-                    UnrelativeValue = (double)item.Cost,
-                    RelativeValue = (double)(item.Cost / sum),
-                });
-            }
+            List<ChartDataItem> list = new List<ChartDataItem>();
 
-            return models;
+            list.AddRange(from item in query
+                          let category = Dal.GetCategoryById(item.CategoryId)
+                          select new ChartDataItem(
+                              (double) (item.Cost / sum), 
+                              category.Brush, 
+                              category.Name, 
+                              (double) item.Cost));
+
+            return list;
         }
-
-        public ObservableCollection<ChartPart> GetIncomesGroupedByCategoryInRange(DateTime minDate, DateTime maxDate) {
-            ObservableCollection<ChartPart> models = new ObservableCollection<ChartPart>();
-
+        
+        public List<ChartDataItem> GetIncomesGroupedByCategoryInRange(DateTime minDate, DateTime maxDate) {
             var query = from item in AllOperations
                         where !item.isExpense
                         group item.Cost by item.CategoryId into g
@@ -75,22 +74,21 @@ namespace Finanse.Models.Statistics {
 
             decimal sum = query.Sum(item => item.Cost);
 
-            foreach (var item in query) {
-                Category category = Dal.GetCategoryById(item.CategoryId);
-                models.Add(new ChartPart {
-                    SolidColorBrush = category.Color,
-                    Name = category.Name,
-                    Tag = item.CategoryId,
-                    UnrelativeValue = (double)item.Cost,
-                    RelativeValue = (double)(item.Cost / sum),
-                });
-            }
+            List<ChartDataItem> list = new List<ChartDataItem>();
 
-            return models;
+            list.AddRange(from item in query
+                          let category = Dal.GetCategoryById(item.CategoryId)
+                          select new ChartDataItem(
+                              (double) (item.Cost / sum), 
+                              category.Brush, 
+                              category.Name, 
+                              (double) item.Cost));
+
+            return list;
         }
        
-        public ObservableCollection<SubCategoriesList> GetExpensesFromCategoryGroupedBySubCategoryInRange() {
-            ObservableCollection<SubCategoriesList> models = new ObservableCollection<SubCategoriesList>();
+        public List<SubCategoriesList> GetExpensesFromCategoryGroupedBySubCategoryInRange() {
+            List<SubCategoriesList> models = new List<SubCategoriesList>();
 
             var query = from item in AllOperations
                         where item.isExpense
@@ -117,23 +115,26 @@ namespace Finanse.Models.Statistics {
                 };
                     
                 decimal groupySum = item.SubCategories.Sum(i => i.Cost);
-
+                /*
+                var subCategories = item.SubCategories.Where(i => i.Cost / groupySum > (decimal) 0.01);
+                groupySum = subCategories.Sum(i => i.Cost);
+                */
                 foreach (var sitem in item.SubCategories) {
                     SubCategory subCategory = Dal.GetSubCategoryById(sitem.SubCategoryId);
                     if (subCategory != null)
-                        itemList.List.Add(new ChartPart {
-                            SolidColorBrush = subCategory.Color,
-                            Name = subCategory.Name,
-                            UnrelativeValue = (double)sitem.Cost,
-                            RelativeValue = (double)(sitem.Cost / groupySum)
-                        });
+                        itemList.List.Add(new ChartDataItem(
+                            (double)(sitem.Cost / groupySum),
+                            subCategory.Brush,
+                            subCategory.Name,
+                            (double)sitem.Cost
+                            ));
                     else {
-                        itemList.List.Add(new ChartPart {
-                            SolidColorBrush = category.Color,
-                            Name = "Bez podkategorii",
-                            UnrelativeValue = (double)sitem.Cost,
-                            RelativeValue = (double)(sitem.Cost / groupySum)
-                        });
+                        itemList.List.Add(new ChartDataItem(
+                            (double)(sitem.Cost / groupySum),
+                            category.Brush,
+                            "Bez podkategorii",
+                            (double)sitem.Cost
+                            ));
                     }
                 }
 
@@ -143,8 +144,8 @@ namespace Finanse.Models.Statistics {
             return models;
         }
 
-        public ObservableCollection<SubCategoriesList> GetIncomesFromCategoryGroupedBySubCategoryInRange() {
-            ObservableCollection<SubCategoriesList> models = new ObservableCollection<SubCategoriesList>();
+        public List<SubCategoriesList> GetIncomesFromCategoryGroupedBySubCategoryInRange() {
+            List<SubCategoriesList> models = new List<SubCategoriesList>();
 
             var query = from item in AllOperations
                         where !item.isExpense
@@ -175,19 +176,19 @@ namespace Finanse.Models.Statistics {
                 foreach (var sitem in item.SubCategories) {
                     SubCategory subCategory = Dal.GetSubCategoryById(sitem.SubCategoryId);
                     if (subCategory != null)
-                        itemList.List.Add(new ChartPart {
-                            SolidColorBrush = subCategory.Color,
-                            Name = subCategory.Name,
-                            UnrelativeValue = (double)sitem.Cost,
-                            RelativeValue = (double)(sitem.Cost / groupySum)
-                        });
+                        itemList.List.Add(new ChartDataItem(
+                            (double) (sitem.Cost / groupySum),
+                            subCategory.Brush,
+                            subCategory.Name,
+                            (double) sitem.Cost
+                            ));
                     else {
-                        itemList.List.Add(new ChartPart {
-                            SolidColorBrush = category.Color,
-                            Name = "Bez podkategorii",
-                            UnrelativeValue = (double)sitem.Cost,
-                            RelativeValue = (double)(sitem.Cost / groupySum)
-                        });
+                        itemList.List.Add(new ChartDataItem(
+                            (double)(sitem.Cost / groupySum),
+                            category.Brush,
+                            "Bez podkategorii",
+                            (double)sitem.Cost
+                            ));
                     }
                 }
 
@@ -294,28 +295,29 @@ namespace Finanse.Models.Statistics {
             return new ObservableCollection<LineChartItem>(modelss);
         }
 
-        public ObservableCollection<ChartPart> GetExpenseToIncomeComparsion() {
-            ObservableCollection<ChartPart> models = new ObservableCollection<ChartPart>();
+        public List<ChartDataItem> GetExpenseToIncomeComparsion() {
+           //ChartData models = new ObservableCollection<ChartPart>();
+          List<ChartDataItem> list = new List<ChartDataItem>();
 
             double expenses = (double)AllOperations.Where(i => i.isExpense).Sum(i => i.Cost);
             double incomes = (double)AllOperations.Where(i => !i.isExpense).Sum(i => i.Cost);
+
             double sum = expenses + incomes;
 
-            models.Add(new ChartPart {
-                Name = "Wydatki",
-                RelativeValue = expenses / sum,
-                UnrelativeValue = expenses,
-                SolidColorBrush = (SolidColorBrush)Application.Current.Resources["Background+2"]
-            });
+            list.Add(new ChartDataItem(
+                expenses / sum,
+                (SolidColorBrush)Application.Current.Resources["Background+2"],
+                "Wydatki",
+                expenses
+                ));
+            list.Add(new ChartDataItem(
+                incomes / sum,
+                (SolidColorBrush)Application.Current.Resources["AccentColor"],
+                "Wpływy",
+                incomes
+                ));
 
-            models.Add(new ChartPart {
-                Name = "Wpływy",
-                RelativeValue = incomes / sum,
-                UnrelativeValue = incomes,
-                SolidColorBrush = (SolidColorBrush)Application.Current.Resources["AccentColor"]
-            });
-
-            return models;
+            return list;
         }
     }
 }

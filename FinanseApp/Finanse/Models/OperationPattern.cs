@@ -1,4 +1,5 @@
-﻿using SQLite.Net.Attributes;
+﻿using Windows.ApplicationModel.Contacts;
+using SQLite.Net.Attributes;
 
 namespace Finanse.Models {
 
@@ -16,7 +17,7 @@ namespace Finanse.Models {
         public string LastModifed { get; set; }
 
         public decimal SignedCost => isExpense ? -Cost : Cost;
-
+        
         public Operation ToOperation() {
             return new Operation {
                 Title = Title,

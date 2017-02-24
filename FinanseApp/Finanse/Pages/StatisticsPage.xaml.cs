@@ -8,11 +8,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
+using Finanse.Charts.Data;
 
 namespace Finanse.Pages {
 
     public sealed partial class StatisticsPage : Page, INotifyPropertyChanged {
-        readonly StatisticsData statisticsData = new StatisticsData();
+        private readonly StatisticsData _statisticsData = new StatisticsData();
         
         public DateTime MinDate = Date.FirstDayInMonth(DateTime.Today);
         public DateTime MaxDate = DateTime.Today;
@@ -61,8 +62,8 @@ namespace Finanse.Pages {
             }
         }
 
-        private ObservableCollection<ChartPart> expensesToIncomes = new ObservableCollection<ChartPart>();
-        public ObservableCollection<ChartPart> ExpensesToIncomes {
+        private List<ChartDataItem> expensesToIncomes = new List<ChartDataItem>();
+        public List<ChartDataItem> ExpensesToIncomes {
             get {
                 return expensesToIncomes;
             }
@@ -72,39 +73,19 @@ namespace Finanse.Pages {
             }
         }
 
-        private ObservableCollection<ChartPart> expensesByCategory = new ObservableCollection<ChartPart>();
-        public ObservableCollection<ChartPart> ExpensesByCategory {
-            get {
-                return expensesByCategory;
-            }
-            set {
-                expensesByCategory = value;
-                RaisePropertyChanged("ExpensesByCategory");
-            }
-        }
+        public List<ChartDataItem> ExpensesByCategory { get; set; }
+        public List<ChartDataItem> IncomesByCategory { get; set; }
+        public List<ChartDataItem> OperationsByCategory => (bool)IncomesRadioButton.IsChecked 
+            ? IncomesByCategory 
+            : ExpensesByCategory;
 
-        private ObservableCollection<ChartPart> incomesByCategory = new ObservableCollection<ChartPart>();
-        public ObservableCollection<ChartPart> IncomesByCategory {
-            get {
-                return incomesByCategory;
-            }
-            set {
-                incomesByCategory = value;
-                RaisePropertyChanged("IncomesByCategory");
-            }
-        }
 
-        private ObservableCollection<ChartPart> operationsByCategory = new ObservableCollection<ChartPart>();
-        public ObservableCollection<ChartPart> OperationsByCategory {
-            get {
-                return operationsByCategory;
-            }
-            set {
-                operationsByCategory = value;
-                RaisePropertyChanged("OperationsByCategory");
-            }
-        }
-
+        public List<SubCategoriesList> ExpensesFromCategoryGroupedBySubCategory { get; set; }
+        public List<SubCategoriesList> IncomesFromCategoryGroupedBySubCategory { get; set; }
+        public List<SubCategoriesList> CategoriesGroupedBySubCategories => (bool)IncomesRadioButton.IsChecked 
+            ? IncomesFromCategoryGroupedBySubCategory 
+            : ExpensesFromCategoryGroupedBySubCategory;
+        /*
         private ObservableCollection<SubCategoriesList> categoriesGroupedBySubCategories = new ObservableCollection<SubCategoriesList>();
         public ObservableCollection<SubCategoriesList> CategoriesGroupedBySubCategories {
             get {
@@ -114,8 +95,8 @@ namespace Finanse.Pages {
                 categoriesGroupedBySubCategories = value;
                 RaisePropertyChanged("CategoriesGroupedBySubCategories");
             }
-        }
-
+        }*/
+        
         private ObservableCollection<LineChartItem> lineChartTest = new ObservableCollection<LineChartItem>();
         public ObservableCollection<LineChartItem> LineChartTest {
             get {
@@ -126,7 +107,7 @@ namespace Finanse.Pages {
                 RaisePropertyChanged("LineChartTest");
             }
         }
-
+/*
         private ObservableCollection<LineChartItem> lineChartTest2 = new ObservableCollection<LineChartItem>();
         public ObservableCollection<LineChartItem> LineChartTest2 {
             get {
@@ -147,7 +128,7 @@ namespace Finanse.Pages {
                 lineChartTest3 = value;
                 RaisePropertyChanged("LineChartTest3");
             }
-        }
+        }*/
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -171,55 +152,62 @@ namespace Finanse.Pages {
         private void DateRangeFlyout_Closed(object sender, object e) {
             DateTime newMinDate = MinDatePicker.Date.Date;
             DateTime newMaxDate = MaxDatePicker.Date.Date;
-            if (newMinDate != MinDate || newMaxDate != MaxDate) {
-                MinDate = newMinDate;
-                MaxDate = newMaxDate;
-                Reload();
-            }
+
+            if (newMinDate == MinDate && newMaxDate == MaxDate)
+                return;
+
+            MinDate = newMinDate;
+            MaxDate = newMaxDate;
+            Reload();
         }
 
         public async Task Reload() {
             ProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
 
-            await Task.Run(() => statisticsData.SetNewRangeAndData(MinDate, MaxDate));
+             await Task.Run(() => _statisticsData.SetNewRangeAndData(MinDate, MaxDate));
+           // statisticsData.SetNewRangeAndData(MinDate, MaxDate);
 
-            DateRangeText = statisticsData.GetActualDateRangeText(MinDate, MaxDate);
+            DateRangeText = _statisticsData.GetActualDateRangeText(MinDate, MaxDate);
 
-            ExpensesToIncomes = statisticsData.GetExpenseToIncomeComparsion();
-            ExpensesValue = ExpensesToIncomes[0].UnrelativeValue.ToString("C", Settings.GetActualCultureInfo());
-            IncomesValue = ExpensesToIncomes[1].UnrelativeValue.ToString("C", Settings.GetActualCultureInfo());
-            LineChartTest = statisticsData.LineChartTest();
-            LineChartTest2 = statisticsData.LineChartTest2();
-            LineChartTest3 = statisticsData.LineChartTest3();
+            ExpensesToIncomes = _statisticsData.GetExpenseToIncomeComparsion();
+            ExpensesValue = ExpensesToIncomes[0].Value.ToString("C", Settings.GetActualCultureInfo());
+            IncomesValue = ExpensesToIncomes[1].Value.ToString("C", Settings.GetActualCultureInfo());
+              //LineChartTest = statisticsData.LineChartTest();
+            //   LineChartTest2 = statisticsData.LineChartTest2();
+            //  LineChartTest3 = statisticsData.LineChartTest3();
 
-            IncomesPercentageText = (100 * ExpensesToIncomes[1].RelativeValue).ToString("0") + "%";
+            IncomesPercentageText = (100 * ExpensesToIncomes[1].Part).ToString("0") + "%";
 
+
+
+            ExpensesByCategory = _statisticsData.GetExpensesGroupedByCategoryInRange(MinDate, MaxDate);
+            IncomesByCategory = _statisticsData.GetIncomesGroupedByCategoryInRange(MinDate, MaxDate);
+            RaisePropertyChanged("OperationsByCategory");
+
+            ExpensesFromCategoryGroupedBySubCategory = _statisticsData.GetExpensesFromCategoryGroupedBySubCategoryInRange();
+            IncomesFromCategoryGroupedBySubCategory = _statisticsData.GetIncomesFromCategoryGroupedBySubCategoryInRange();
+            RaisePropertyChanged("CategoriesGroupedBySubCategories");
+            /*
             if ((bool)ExpensesRadioButton.IsChecked)
                 SetExpensesInGraphs();
             else
                 SetIncomesInGraphs();
-
+                */
             ProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
         private async void ExpensesRadioButton_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
             await Task.Delay(5);
-            SetExpensesInGraphs();
+            RaisePropertyChanged("OperationsByCategory");
+            RaisePropertyChanged("CategoriesGroupedBySubCategories");
+            //   CategoriesGroupedBySubCategories = statisticsData.GetExpensesFromCategoryGroupedBySubCategoryInRange();
         }
 
         private async void IncomeRadioButton_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
             await Task.Delay(5);
-            SetIncomesInGraphs();
-        }
-
-        private async Task SetExpensesInGraphs() {
-            OperationsByCategory = statisticsData.GetExpensesGroupedByCategoryInRange(MinDate, MaxDate);
-            CategoriesGroupedBySubCategories = statisticsData.GetExpensesFromCategoryGroupedBySubCategoryInRange();
-        }
-
-        private async Task SetIncomesInGraphs() {
-            OperationsByCategory = statisticsData.GetIncomesGroupedByCategoryInRange(MinDate, MaxDate);
-            CategoriesGroupedBySubCategories = statisticsData.GetIncomesFromCategoryGroupedBySubCategoryInRange();
+            RaisePropertyChanged("OperationsByCategory");
+            RaisePropertyChanged("CategoriesGroupedBySubCategories");
+            //   CategoriesGroupedBySubCategories = statisticsData.GetIncomesFromCategoryGroupedBySubCategoryInRange();
         }
     }
 }

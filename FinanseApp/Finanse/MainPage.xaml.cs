@@ -10,19 +10,21 @@ using Finanse.Pages;
 using Windows.Graphics.Display;
 using Finanse.DataAccessLayer;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.Phone.UI.Input;
 using Windows.System.Profile;
 using Windows.UI.Core;
 using Windows.Foundation;
 using Windows.ApplicationModel.Core;
 using Finanse.Models;
+using Microsoft.Toolkit.Uwp.UI.Animations;
 
 namespace Finanse {
     public sealed partial class MainPage : Page {
 
         public MainPage() {
             this.InitializeComponent();
-            Dal.CreateDb();
+            DalBase.CreateDb();
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(360, 530));
 
             CoreApplication.GetCurrentView().TitleBar.IsVisibleChanged += TitleBar_IsVisibleChanged;
@@ -40,8 +42,7 @@ namespace Finanse {
                 Strona_glowna_ListBoxItem.IsChecked = true;
         }
 
-        private string appName;
-        private string AppName => appName ?? (appName = "StackMoney (Beta)");
+        public string DisplayName => Package.Current.DisplayName;
 
         private void TitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args) {
             TitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;

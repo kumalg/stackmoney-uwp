@@ -38,14 +38,14 @@ namespace Finanse.DataAccessLayer {
                     SubCategory subCategory = Dal.GetSubCategoryById(item.SubCategoryId);
                     if (subCategory != null)
                         models.Add(new ChartPart {
-                            SolidColorBrush = subCategory.Color,
+                            SolidColorBrush = subCategory.Brush,
                             Name = subCategory.Name,
                             UnrelativeValue = (double)item.Cost
                         });
                     else {
                         Category category = Dal.GetCategoryById(categoryId);
                         models.Add(new ChartPart {
-                            SolidColorBrush = category.Color,
+                            SolidColorBrush = category.Brush,
                             Name = category.Name,
                             UnrelativeValue = (double)item.Cost
                         });

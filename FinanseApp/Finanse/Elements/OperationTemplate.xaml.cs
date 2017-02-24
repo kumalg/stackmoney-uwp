@@ -63,7 +63,7 @@ namespace Finanse.Elements {
 
             /* WCHODZI IKONKA KATEGORII */
             if (cat != null && subCat == null) {
-                CategoryIcon.Color = cat.Color;
+                CategoryIcon.Color = cat.Brush;
                 CategoryIcon.Glyph = cat.Icon.Glyph;
 
                 if (string.IsNullOrEmpty(Operation.Title)) {
@@ -72,7 +72,7 @@ namespace Finanse.Elements {
             }
 
             else if (cat != null && subCat != null) {
-                CategoryIcon.Color = subCat.Color;
+                CategoryIcon.Color = subCat.Brush;
                 CategoryIcon.Glyph = subCat.Icon.Glyph;
 
                 if (string.IsNullOrEmpty(Operation.Title)) {

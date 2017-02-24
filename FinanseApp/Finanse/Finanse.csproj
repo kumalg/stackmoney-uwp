@@ -108,6 +108,7 @@
     <Compile Include="Charts\Data\ChartData.cs" />
     <Compile Include="Charts\Data\ChartDataItem.cs" />
     <Compile Include="Charts\DefaultColors.cs" />
+    <Compile Include="Charts\DoughnutChart - Copy.cs" />
     <Compile Include="Charts\DoughnutChart.cs" />
     <Compile Include="Charts\DoughnutChartItem.cs" />
     <Compile Include="Charts\Extensions\IListExt.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Charts\LineChart.cs" />
     <Compile Include="Charts\LineChartItem.cs" />
     <Compile Include="Charts\Shapes\Arc.cs" />
+    <Compile Include="Converters\ColorToBrushConverter.cs" />
     <Compile Include="Converters\ColorKeyToSolidColorBrushConverter.cs" />
     <Compile Include="Converters\ExpenseToggleEnablingByBossCategoryIdConverter.cs" />
     <Compile Include="Converters\BooleanToColorConverter.cs" />
@@ -244,6 +246,7 @@
     <Content Include="Assets\angle.png" />
     <Content Include="Assets\angle.svg" />
     <None Include="Package.StoreAssociation.xml" />
+    <Content Include="Assets\logo_gradient.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

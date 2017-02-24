@@ -583,7 +583,7 @@
             Height="32"
             Name="TitleBar">
             <TextBlock
-                Text="{x:Bind AppName, Mode=OneTime}"
+                Text="{x:Bind DisplayName, Mode=OneTime}"
                 Opacity="0.75"
                 FontSize="12"
                 FontWeight="Medium"

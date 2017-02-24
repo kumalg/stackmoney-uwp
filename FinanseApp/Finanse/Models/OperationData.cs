@@ -42,7 +42,7 @@ namespace Finanse.Models {
                 if (!IsFuture) {
                     actualMonthText = DateTimeFormatInfo.CurrentInfo.GetMonthName(ActualMonth.Month).First().ToString().ToUpper() + DateTimeFormatInfo.CurrentInfo.GetMonthName(ActualMonth.Month).Substring(1);
                     if (ActualMonth.Year != DateTime.Today.Year)
-                        actualMonthText += " " + ActualMonth.Year.ToString();
+                        actualMonthText += " " + ActualMonth.Year;
                 }
                 else {
                     var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
@@ -59,12 +59,7 @@ namespace Finanse.Models {
             SetNewOperationsList();
         }
 
-        public string ActualOperationsSum {
-            get {
-                decimal actualMoney = AllOperations.Sum(i => i.SignedCost);
-                return actualMoney.ToString("C", Settings.GetActualCultureInfo());
-            }
-        }
+        public string ActualOperationsSum => AllOperations.Sum(i => i.SignedCost).ToString("C", Settings.GetActualCultureInfo());
 
         private HashSet<int> visiblePayFormList;
         public HashSet<int> VisiblePayFormList {
@@ -83,9 +78,7 @@ namespace Finanse.Models {
         private List<Operation> allOperations;
         private List<Operation> AllOperations {
             get {
-                if (allOperations == null)
-                    allOperations = SetOperations();
-                return allOperations;
+                return allOperations ?? (allOperations = SetOperations());
             }
             set {
                 allOperations = value;
@@ -254,7 +247,7 @@ namespace Finanse.Models {
 
                             ((GroupHeaderByCategory)info.Key).CategoryId = item.Id;
                             ((GroupHeaderByCategory)info.Key).Icon = item.Icon.Glyph;
-                            ((GroupHeaderByCategory)info.Key).Color = item.Color.ToString(); /// cymczasowe
+                            ((GroupHeaderByCategory)info.Key).Color = item.Brush.ToString(); /// cymczasowe
                             ((GroupHeaderByCategory)info.Key).Opacity = 1;
                             break;
                         }

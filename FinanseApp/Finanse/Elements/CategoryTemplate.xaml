@@ -24,7 +24,7 @@
 
         <data:CategoryIcon 
             Glyph="{x:Bind Category.Icon.Glyph, Mode=OneWay}"
-            Color="{x:Bind Category.Color, Mode=OneWay}"/>
+            Color="{x:Bind Category.Brush, Mode=OneWay}"/>
 
         <TextBlock
             Grid.Column="1"

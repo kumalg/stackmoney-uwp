@@ -39,8 +39,8 @@
 
                 // db.CreateTable<MoneyAccount>();
 
-              //  db.Execute("ALTER TABLE OperationCategory RENAME TO Category");
-               // db.Execute("ALTER TABLE OperationSubCategory RENAME TO SubCategory");
+          //      db.Execute("ALTER TABLE OperationCategory RENAME TO Category");
+            //    db.Execute("ALTER TABLE OperationSubCategory RENAME TO SubCategory");
 
                 db.CreateTable<Operation>();
                 db.CreateTable<OperationPattern>();

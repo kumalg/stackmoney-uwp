@@ -7,8 +7,8 @@
     <DataTemplate
         x:Key="DoughnutChartItemTemplate">
         <charts:DoughnutChartItem
-            Value="{Binding RelativeValue}"
-            Color="{Binding SolidColorBrush.Color}" />
+            Value="{Binding Part}"
+            Color="{Binding Brush.Color}" />
     </DataTemplate>
 
     <conv:DecimalToCurrencyStringConverter
@@ -16,6 +16,9 @@
 
     <conv:DoubleToPercentStringConverter
         x:Name="DoubleToPercentStringConverter" />
+    
+    <conv:ColorToBrushConverter
+        x:Name="ColorToBrushConverter" />
 
     <DataTemplate
         x:Key="LegendItemTemplate">
@@ -36,7 +39,7 @@
                 VerticalAlignment="Center"
                 Width="16"
                 Height="16"
-                Stroke="{Binding SolidColorBrush}"
+                Stroke="{Binding Brush}"
                 StrokeThickness="2" />
             <TextBlock
                 Grid.Column="1"
@@ -52,7 +55,7 @@
                 Foreground="{ThemeResource AccentColor}"
                 VerticalAlignment="Center"
                 FontFamily="{StaticResource DefaultFontFamily}"
-                Text="{Binding UnrelativeValue, Converter={StaticResource DecimalToCurrencyStringConverter}}" />
+                Text="{Binding Value, Converter={StaticResource DecimalToCurrencyStringConverter}}" />
             <TextBlock
                 Grid.Column="3"
                 FontSize="13"
@@ -60,7 +63,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 FontFamily="{StaticResource DefaultFontFamily}"
-                Text="{Binding RelativeValue, Converter={StaticResource DoubleToPercentStringConverter}}" />
+                Text="{Binding Part, Converter={StaticResource DoubleToPercentStringConverter}}" />
         </Grid>
     </DataTemplate>
 
@@ -85,7 +88,7 @@
                 VerticalAlignment="Center"
                 Width="12"
                 Height="12"
-                Stroke="{Binding SolidColorBrush}"
+                Stroke="{Binding Brush}"
                 StrokeThickness="2" />
             <TextBlock
                 Grid.Column="1"
@@ -103,7 +106,7 @@
                 Foreground="{ThemeResource AccentColor}"
                 VerticalAlignment="Center"
                 FontFamily="{StaticResource DefaultFontFamily}"
-                Text="{Binding UnrelativeValue, Converter={StaticResource DecimalToCurrencyStringConverter}}" />
+                Text="{Binding Value, Converter={StaticResource DecimalToCurrencyStringConverter}}" />
         </Grid>
     </DataTemplate>
 

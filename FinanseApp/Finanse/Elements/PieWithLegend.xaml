@@ -76,8 +76,15 @@
             Width="256"
             Height="256"
             ItemsSource="{Binding}"
-            ItemTemplate="{StaticResource DoughnutChartItemTemplate}"
-            Margin="16" />
+            Margin="16">
+            <Charts:DoughnutChart.ItemTemplate>
+                <DataTemplate>
+                    <Charts:DoughnutChartItem
+                        Value="{Binding Part}"
+                        Color="{Binding Brush.Color}" />
+                </DataTemplate>
+            </Charts:DoughnutChart.ItemTemplate>
+        </Charts:DoughnutChart>
 
         <ItemsControl
             Margin="16"

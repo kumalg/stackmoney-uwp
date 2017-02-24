@@ -1,13 +1,18 @@
-﻿using Finanse.Charts.Shapes;
-using Finanse.Models.Statistics;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Numerics;
 using System.Linq;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Media;
+using Finanse.Charts.Data;
+using Finanse.Charts.Shapes;
+using Microsoft.Graphics.Canvas.Geometry;
+using Microsoft.Graphics.Canvas.UI.Xaml;
 
 namespace Finanse.Charts {
     public class DoughnutChart : UserControl {
@@ -62,104 +67,74 @@ namespace Finanse.Charts {
             }
         }
 
-        private Grid _root;
+        private readonly Grid _root;
+        private readonly CanvasControl canvas;
 
         public DoughnutChart() {
             _root = new Grid();
             Content = _root;
-
-         //   TextBlock text = new TextBlock();
-        //    text.Text = "Test";
-        //    _root.Children.Add(text);
+            canvas = new CanvasControl();
+            _root.Children.Add(canvas);
+            canvas.Draw += Canvas_Draw;
         }
 
-        private void Redraw() {
+        private void Canvas_Draw(CanvasControl sender, CanvasDrawEventArgs args) {
             if (ItemTemplate == null)
                 return;
             if (ItemsSource == null)
                 return;
-            _root.Children.Clear();
 
-            //double valueSum = 0;
-            List<DoughnutChartItem> Items = new List<DoughnutChartItem>();
-            List<DoughnutChartItem> ItemsGood = new List<DoughnutChartItem>();
-            foreach (ChartPart item in ItemsSource)
-                Items.Add(new DoughnutChartItem {
-                    Value = item.UnrelativeValue,
-                    Color = item.SolidColorBrush.Color,
-                });
 
-            double valueSum = Items.Sum(i => i.Value);
+            var repairedItemsSource = ItemsSource.Cast<ChartDataItem>().Where(item => item.Part > 0.01).ToList();
+            var newSum = repairedItemsSource.Sum(i => i.Value);
+            foreach (var item in repairedItemsSource)
+                item.Part = item.Value / newSum;
 
-            foreach (DoughnutChartItem chartItem in Items)
-                if (chartItem.Value / valueSum > 0.01)
-                    ItemsGood.Add(chartItem);
 
-            valueSum = ItemsGood.Sum(i => i.Value);
+            var d = 0d;
+            foreach (var item in repairedItemsSource) {
+                 var chartItem = (DoughnutChartItem)ItemTemplate.LoadContent();
+                 if (chartItem == null)
+                     return;
 
-            foreach (DoughnutChartItem chartItem in ItemsGood) {
+                chartItem.DataContext = item;
+
                 if (chartItem.Color == default(Color))
                     chartItem.Color = DefaultColors.GetRandom();
-                var arc = new Arc {
-                    Thickness = Thickness,
-                    Distance = Distance
-                };
-                arc.DataContext = chartItem;
 
-                chartItem.Value = chartItem.Value / valueSum;
+                var sweepAngle = chartItem.Angle;
 
-                // Angle
-                var angleBinding = new Binding {
-                    Path = new PropertyPath(nameof(DoughnutChartItem.Angle))
-                };
-                arc.SetBinding(Arc.SweepAngleProperty, angleBinding);
-                // Fill
-                var fillBinding = new Binding {
-                    Path = new PropertyPath(nameof(DoughnutChartItem.Fill))
-                };
-                arc.SetBinding(Arc.FillProperty, fillBinding);
-                _root.Children.Add(arc);
-            }
 
-                /*
-                for (var i = 0; i < ItemsSource.Count; i++) {
-                    var c = i;
-                    var chartItem = ItemTemplate.LoadContent() as DoughnutChartItem;
-                    if (chartItem == null)
-                        return;
-                    chartItem.DataContext = ItemsSource[c];
-                    if (chartItem.Color == default(Color))
-                        chartItem.Color = DefaultColors.GetRandom();
-                    var arc = new Arc {
-                        Thickness = Thickness,
-                        Distance = Distance
-                    };
-                    arc.DataContext = chartItem;
-                    // Angle
-                    var angleBinding = new Binding {
-                        Path = new PropertyPath(nameof(DoughnutChartItem.Angle))
-                    };
-                    arc.SetBinding(Arc.SweepAngleProperty, angleBinding);
-                    // Fill
-                    var fillBinding = new Binding {
-                        Path = new PropertyPath(nameof(DoughnutChartItem.Fill))
-                    };
-                    arc.SetBinding(Arc.FillProperty, fillBinding);
-                    _root.Children.Add(arc);
+                var startAngle = (float)(d - Math.PI / 2);
+                d += sweepAngle;
+
+                var center = new Vector2((float)(ActualWidth / 2), (float)(ActualHeight / 2));
+                var radius = center.X > center.Y
+                    ? new Vector2(center.Y)
+                    : new Vector2(center.X);
+                var startPoint = center + Vector2.Transform(Vector2.UnitX, Matrix3x2.CreateRotation(startAngle)) * radius;
+                
+                var relativeDistance = Distance / radius.X;
+                var relativeSecondDistance = Distance / (radius.X - Thickness / 2);
+                var repairSweepAngle = sweepAngle > relativeDistance ? sweepAngle - relativeDistance : 0;
+                var repairSecondSweepAngle = sweepAngle > relativeSecondDistance / 2 ? sweepAngle - relativeSecondDistance / 2 : 0;
+
+                using (var builder = new CanvasPathBuilder(canvas)) {
+                    builder.BeginFigure(startPoint);
+                    builder.AddArc(center, radius.X, radius.Y, (float)(startAngle + relativeDistance / 2), (float)repairSweepAngle);
+                    builder.AddArc(center, radius.X - (float)Thickness / 2, (float)(radius.Y - Thickness / 2), (float)(startAngle + sweepAngle - relativeSecondDistance / 2), -(float)repairSecondSweepAngle);
+                    builder.EndFigure(CanvasFigureLoop.Closed);
+
+                    args.DrawingSession.FillGeometry(
+                        CanvasGeometry.CreatePath(builder), 
+                        chartItem.Color);
                 }
-                */
-
-                UpdateStartAngles();
-        }
-
-        private void UpdateStartAngles() {
-            var d = 0d;
-            foreach (Arc arc in _root.Children) {
-                arc.StartAngle = d;
-                d += arc.SweepAngle;
             }
         }
 
-        private static PropertyChangedCallback PropertyChangedDelegate = (s, a) => (s as DoughnutChart)?.Redraw();
+        private void Redraw() => canvas.Invalidate();
+
+        private static readonly PropertyChangedCallback PropertyChangedDelegate = (s, a) => (s as DoughnutChart)?.Redraw();
+        
     }
 }

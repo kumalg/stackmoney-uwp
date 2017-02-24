@@ -17,7 +17,7 @@ namespace Finanse.Models.Categories {
         public bool VisibleInExpenses { get; set; }
 
 
-        public SolidColorBrush Color {
+        public SolidColorBrush Brush {
             get {
                 return string.IsNullOrEmpty(ColorKey) ?
                     (SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"] :

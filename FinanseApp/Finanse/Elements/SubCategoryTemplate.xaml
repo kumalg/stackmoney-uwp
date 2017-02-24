@@ -107,7 +107,7 @@
             Margin="0"
             Grid.Column="1"
             Glyph="{x:Bind SubCategory.Icon.Glyph}"
-            Color="{x:Bind SubCategory.Color}"
+            Color="{x:Bind SubCategory.Brush}"
             RenderTransformOrigin="0.5,0.5">
             <data:CategoryIcon.RenderTransform>
                 <CompositeTransform

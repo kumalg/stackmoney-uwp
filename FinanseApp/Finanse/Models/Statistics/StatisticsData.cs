@@ -12,31 +12,39 @@ using Finanse.DataAccessLayer;
 using Finanse.Models.Categories;
 
 namespace Finanse.Models.Statistics {
-    public class StatisticsData {
+    public class StatisticsData
+    {
 
-        public List<Operation> AllOperations = new List<Operation>();
-        /*
-        public StatisticsData(List<Operation> AllOperations) {
-            this.AllOperations = AllOperations;
-        }*/
-        private DateTime minDate;
-        private DateTime maxDate;
+        private List<Operation> _allOperations;
+        public List<Operation> AllOperations {
+            get {
+                return _allOperations ?? (_allOperations = new List<Operation>());
+            }
+            private set {
+                if (_allOperations != value) {
+                    _allOperations = value;
+                }
+            }
+        }
+
+        private DateTime _minDate;
+        private DateTime _maxDate;
 
         public void SetNewRangeAndData(DateTime minDate, DateTime maxDate) {
-            this.minDate = minDate;
-            this.maxDate = maxDate;
+            _minDate = minDate;
+            _maxDate = maxDate;
             AllOperations = Dal.GetAllOperationsFromRangeToStatistics(minDate, maxDate);
         }
 
-        public string GetActualDateRangeText(DateTime minDate, DateTime maxDate) {
-            return minDate.ToString("d") + "   |   " + maxDate.ToString("d");
+        public string GetActualDateRangeText() {
+            return _minDate.ToString("d") + "   |   " + _maxDate.ToString("d");
         }
 
         /*
          * ZAMIAST NA SQL TO NA LISCIE 
          */
-
-        public List<ChartDataItem> GetExpensesGroupedByCategoryInRange(DateTime minDate, DateTime maxDate) {
+         
+        public List<ChartDataItem> GetExpensesGroupedByCategoryInRange() {
 
             var query = from item in AllOperations
                         where item.isExpense
@@ -62,7 +70,7 @@ namespace Finanse.Models.Statistics {
             return list;
         }
         
-        public List<ChartDataItem> GetIncomesGroupedByCategoryInRange(DateTime minDate, DateTime maxDate) {
+        public List<ChartDataItem> GetIncomesGroupedByCategoryInRange() {
             var query = from item in AllOperations
                         where !item.isExpense
                         group item.Cost by item.CategoryId into g
@@ -199,13 +207,13 @@ namespace Finanse.Models.Statistics {
         }
 
         public ObservableCollection<LineChartItem> LineChartTest() {
-            int days = (maxDate - minDate).Days + 1;
+            int days = (_maxDate - _minDate).Days + 1;
             // = 9 - 7 + 1// 7,8,9
 
             LineChartItem[] modelss = new LineChartItem[days];
             for (int i = 0; i < modelss.Length; i++) {
                 modelss[i] = new LineChartItem {
-                    Key = minDate.AddDays(i).ToString("MM.dd"),
+                    Key = _minDate.AddDays(i).ToString("MM.dd"),
                     Value = 0,
                 };
             }
@@ -220,7 +228,7 @@ namespace Finanse.Models.Statistics {
                        };
 
             foreach (var item in query) {
-                int index = days - (maxDate - item.Date).Days - 1;
+                int index = days - (_maxDate - item.Date).Days - 1;
                 modelss[index] = new LineChartItem {
                     Key = modelss[index].Key,
                     Value = (double)item.Cost,
@@ -231,13 +239,13 @@ namespace Finanse.Models.Statistics {
         }
 
         public ObservableCollection<LineChartItem> LineChartTest2() {
-            int days = (maxDate - minDate).Days + 1;
+            int days = (_maxDate - _minDate).Days + 1;
             // = 9 - 7 + 1// 7,8,9
 
             LineChartItem[] modelss = new LineChartItem[days];
             for (int i = 0; i < modelss.Length; i++) {
                 modelss[i] = new LineChartItem {
-                    Key = minDate.AddDays(i).ToString("MM.dd"),
+                    Key = _minDate.AddDays(i).ToString("MM.dd"),
                     Value = 0,
                 };
             }
@@ -252,7 +260,7 @@ namespace Finanse.Models.Statistics {
                        };
 
             foreach (var item in query) {
-                int index = days - (maxDate - item.Date).Days - 1;
+                int index = days - (_maxDate - item.Date).Days - 1;
                 modelss[index] = new LineChartItem {
                     Key = modelss[index].Key,
                     Value = (double)item.Cost,
@@ -263,13 +271,13 @@ namespace Finanse.Models.Statistics {
         }
 
         public ObservableCollection<LineChartItem> LineChartTest3() {
-            int days = (maxDate - minDate).Days + 1;
+            int days = (_maxDate - _minDate).Days + 1;
             // = 9 - 7 + 1// 7,8,9
 
             LineChartItem[] modelss = new LineChartItem[days];
             for (int i = 0; i < modelss.Length; i++) {
                 modelss[i] = new LineChartItem {
-                    Key = minDate.AddDays(i).ToString("MM.dd"),
+                    Key = _minDate.AddDays(i).ToString("MM.dd"),
                     Value = 0,
                 };
             }
@@ -285,10 +293,10 @@ namespace Finanse.Models.Statistics {
             if (modelss.Length <= 0)
                 return new ObservableCollection<LineChartItem>(modelss);
             
-            modelss[0].Value = (double)Dal.GetBalanceOfCertainDay(maxDate);
+            modelss[0].Value = (double)Dal.GetBalanceOfCertainDay(_maxDate);
 
             for (int i = 1; i < query.Count(); i++) {
-                int index = days - (maxDate - query.ElementAt(i).Date).Days - 1;
+                int index = days - (_maxDate - query.ElementAt(i).Date).Days - 1;
                 modelss[index].Value += modelss[index - 1].Value + (double)query.ElementAt(i).Cost;
             }
 

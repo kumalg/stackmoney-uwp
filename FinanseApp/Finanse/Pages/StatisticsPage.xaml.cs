@@ -167,7 +167,7 @@ namespace Finanse.Pages {
              await Task.Run(() => _statisticsData.SetNewRangeAndData(MinDate, MaxDate));
            // statisticsData.SetNewRangeAndData(MinDate, MaxDate);
 
-            DateRangeText = _statisticsData.GetActualDateRangeText(MinDate, MaxDate);
+            DateRangeText = _statisticsData.GetActualDateRangeText();
 
             ExpensesToIncomes = _statisticsData.GetExpenseToIncomeComparsion();
             ExpensesValue = ExpensesToIncomes[0].Value.ToString("C", Settings.GetActualCultureInfo());
@@ -180,8 +180,8 @@ namespace Finanse.Pages {
 
 
 
-            ExpensesByCategory = _statisticsData.GetExpensesGroupedByCategoryInRange(MinDate, MaxDate);
-            IncomesByCategory = _statisticsData.GetIncomesGroupedByCategoryInRange(MinDate, MaxDate);
+            ExpensesByCategory = _statisticsData.GetExpensesGroupedByCategoryInRange();
+            IncomesByCategory = _statisticsData.GetIncomesGroupedByCategoryInRange();
             RaisePropertyChanged("OperationsByCategory");
 
             ExpensesFromCategoryGroupedBySubCategory = _statisticsData.GetExpensesFromCategoryGroupedBySubCategoryInRange();

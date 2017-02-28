@@ -21,19 +21,26 @@ namespace Finanse.Models {
             "en-CA"
         };
 
+        public static List<CultureInfo> AllCurrencies => AllCultures.Select(s => new CultureInfo(s)).ToList();
+        
+        public static DateTime MaxDate => new DateTime(
+                DateTime.Today.Year,
+                DateTime.Today.Month,
+                DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
+            .AddMonths(MaxFutureMonths);
+
+        public static DateTime MinDate => new DateTime(2000, 1, 1);
+
         public static void SetSettings() {
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
             if (localSettings.Values["syncSettings"] == null)
                 localSettings.Values["syncSettings"] = true;
 
-            var actualTypeOfSettings = WhichSettings();
-
-            if (actualTypeOfSettings.Values["iconStyle"] == null)
-                actualTypeOfSettings.Values["iconStyle"] = "Segoe UI Symbol";
+            var actualTypeOfSettings = WhichSettings;
 
             if (actualTypeOfSettings.Values["Theme"] == null)
-                actualTypeOfSettings.Values["Theme"] = 1;
+                actualTypeOfSettings.Values["Theme"] = "Dark";
 
             if (actualTypeOfSettings.Values["maxFutureMonths"] == null)
                 actualTypeOfSettings.Values["maxFutureMonths"] = 6;
@@ -45,27 +52,12 @@ namespace Finanse.Models {
                 actualTypeOfSettings.Values["accountEllipseVisibility"] = true;
 
             if (actualTypeOfSettings.Values["whichCurrency"] == null)
-                actualTypeOfSettings.Values["whichCurrency"] = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
-        }
-
-        public static List<CultureInfo> GetAllCurrencies() => AllCultures.Select(s => new CultureInfo(s)).ToList();
-
-        public static ApplicationTheme GetTheme() {
-            return (int)WhichSettings().Values["Theme"] == 1 ?
-                ApplicationTheme.Dark :
-                ApplicationTheme.Light;
-        }
-        public static void SetTheme(int i) {
-            WhichSettings().Values["Theme"] = i;
-        }
-
-        public static CultureInfo GetActualCultureInfo() {
-            return new CultureInfo(WhichSettings().Values["whichCurrency"].ToString());
+                actualTypeOfSettings.Values["whichCurrency"] = CultureInfo.CurrentCulture.Name;
         }
 
         private static void SetFromRoamingToLocal() {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            var roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
 
             localSettings.Values["iconStyle"] = roamingSettings.Values["iconStyle"];
             localSettings.Values["Theme"] = roamingSettings.Values["Theme"];
@@ -74,67 +66,73 @@ namespace Finanse.Models {
             localSettings.Values["accountEllipseVisibility"] = roamingSettings.Values["accountEllipseVisibility"];
             localSettings.Values["whichCurrency"] = roamingSettings.Values["whichCurrency"];
         }
-        public static void SetSyncSettings(bool syncSettings) {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
-            if ((bool)localSettings.Values["syncSettings"] && !syncSettings)
-                SetFromRoamingToLocal();
+        public static bool SyncSettings {
+            get {
+                var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                return (bool) localSettings.Values["syncSettings"];
+            }
+            set {
+                var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
-            localSettings.Values["syncSettings"] = syncSettings;
-        }
-        public static bool GetSyncSettings() {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            return (bool)localSettings.Values["syncSettings"];
-        }
+                if ((bool) localSettings.Values["syncSettings"] && !value)
+                    SetFromRoamingToLocal();
 
-        private static Windows.Storage.ApplicationDataContainer WhichSettings() {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            return (bool)localSettings.Values["syncSettings"] ?
-                Windows.Storage.ApplicationData.Current.RoamingSettings :
-                Windows.Storage.ApplicationData.Current.LocalSettings;
+                localSettings.Values["syncSettings"] = value;
+            }
         }
-        public static void SetActualCultureInfo(string culture) {
-            WhichSettings().Values["whichCurrency"] = culture;
-        }
-
-        public static Windows.Globalization.DayOfWeek GetFirstDayOfWeek() {
-            return Windows.System.UserProfile.GlobalizationPreferences.WeekStartsOn;
+        
+        private static Windows.Storage.ApplicationDataContainer WhichSettings {
+            get {
+                var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                return (bool)localSettings.Values["syncSettings"]
+                    ? Windows.Storage.ApplicationData.Current.RoamingSettings
+                    : Windows.Storage.ApplicationData.Current.LocalSettings;
+            }
         }
 
-        public static string GetActualIconStyle() {
-            return WhichSettings().Values["iconStyle"].ToString();
+        public static ApplicationTheme Theme {
+            get {
+                return WhichSettings.Values["Theme"].ToString() == ApplicationTheme.Light.ToString()
+                    ? ApplicationTheme.Light
+                    : ApplicationTheme.Dark;
+            }
+            set { WhichSettings.Values["Theme"] = value.ToString(); }
         }
 
-        public static int GetMaxFutureMonths() {
-            return (int)WhichSettings().Values["maxFutureMonths"];
+        public static CultureInfo ActualCultureInfo {
+            get { return new CultureInfo(WhichSettings.Values["whichCurrency"].ToString()); }
+            set { WhichSettings.Values["whichCurrency"] = value.Name; }
         }
 
-        public static DateTime GetMaxDate() {
-            return new DateTime(
-                DateTime.Today.Year, 
-                DateTime.Today.Month, 
-                DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
-                    .AddMonths(Settings.GetMaxFutureMonths());
-        }
-        public static void SetMaxFutureMonths(int months) {
-            WhichSettings().Values["maxFutureMonths"] = months;
-        }
-        public static DateTime GetMinDate() {
-            return new DateTime(2000,1,1);
+        public static Windows.Globalization.DayOfWeek FirstDayOfWeek
+            => Windows.System.UserProfile.GlobalizationPreferences.WeekStartsOn;
+
+        public static int MaxFutureMonths {
+            get {
+                return (int)WhichSettings.Values["maxFutureMonths"];
+            }
+            set {
+                WhichSettings.Values["maxFutureMonths"] = value;
+            }
         }
 
-        public static bool GetCategoryNameVisibility() {
-            return (bool)WhichSettings().Values["categoryNameVisibility"];
-        }
-        public static void SetCategoryNameVisibility(bool value) {
-            WhichSettings().Values["categoryNameVisibility"] = value;
+        public static bool CategoryNameVisibility {
+            get {
+                return (bool)WhichSettings.Values["categoryNameVisibility"];
+            }
+            set {
+                WhichSettings.Values["categoryNameVisibility"] = value;
+            }
         }
 
-        public static bool GetAccountEllipseVisibility() {
-            return (bool)WhichSettings().Values["accountEllipseVisibility"];
-        }
-        public static void SetAccountEllipseVisibility(bool value) {
-            WhichSettings().Values["accountEllipseVisibility"] = value;
+        public static bool AccountEllipseVisibility {
+            get {
+                return (bool)WhichSettings.Values["accountEllipseVisibility"];
+            }
+            set {
+                WhichSettings.Values["accountEllipseVisibility"] = value;
+            }
         }
     }
 }

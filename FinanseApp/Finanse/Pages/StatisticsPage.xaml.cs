@@ -170,8 +170,8 @@ namespace Finanse.Pages {
             DateRangeText = _statisticsData.GetActualDateRangeText();
 
             ExpensesToIncomes = _statisticsData.GetExpenseToIncomeComparsion();
-            ExpensesValue = ExpensesToIncomes[0].Value.ToString("C", Settings.GetActualCultureInfo());
-            IncomesValue = ExpensesToIncomes[1].Value.ToString("C", Settings.GetActualCultureInfo());
+            ExpensesValue = ExpensesToIncomes[0].Value.ToString("C", Settings.ActualCultureInfo);
+            IncomesValue = ExpensesToIncomes[1].Value.ToString("C", Settings.ActualCultureInfo);
               //LineChartTest = statisticsData.LineChartTest();
             //   LineChartTest2 = statisticsData.LineChartTest2();
             //  LineChartTest3 = statisticsData.LineChartTest3();

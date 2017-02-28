@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 namespace Finanse.Models {
     internal class NewOperation {
         public static string ToCurrencyString(string value) {
-            return decimal.Parse(value, Settings.GetActualCultureInfo()).ToString("C", Settings.GetActualCultureInfo());
+            return decimal.Parse(value, Settings.ActualCultureInfo).ToString("C", Settings.ActualCultureInfo);
         }
 
         public static string ToCurrencyString(decimal value) {
-            return value.ToString("C", Settings.GetActualCultureInfo());
+            return value.ToString("C", Settings.ActualCultureInfo);
         }
 
         public static string ToCurrencyWithoutSymbolString(decimal value) {
-            return value.ToString(Settings.GetActualCultureInfo());
+            return value.ToString(Settings.ActualCultureInfo);
         }
 
         public static Regex GetRegex() {
-            NumberFormatInfo numberFormatInfo = Settings.GetActualCultureInfo().NumberFormat;
+            NumberFormatInfo numberFormatInfo = Settings.ActualCultureInfo.NumberFormat;
             int decimalDigits = numberFormatInfo.CurrencyDecimalDigits;
             char decimalSeparator = numberFormatInfo.CurrencyDecimalSeparator[0];
 
@@ -33,7 +33,7 @@ namespace Finanse.Models {
         }
 
         public static Regex GetSignedRegex() {
-            NumberFormatInfo numberFormatInfo = Settings.GetActualCultureInfo().NumberFormat;
+            NumberFormatInfo numberFormatInfo = Settings.ActualCultureInfo.NumberFormat;
             int decimalDigits = numberFormatInfo.CurrencyDecimalDigits;
             char decimalSeparator = numberFormatInfo.CurrencyDecimalSeparator[0];
 

@@ -13,6 +13,6 @@ namespace Finanse.Models {
 
         public string GetActualMoneyValue() => Dal.GetAllOperationsOfThisMoneyAccount(this)
             .Sum(i => i.SignedCost)
-            .ToString("C", Settings.GetActualCultureInfo());
+            .ToString("C", Settings.ActualCultureInfo);
     }
 }

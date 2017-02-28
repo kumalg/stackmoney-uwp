@@ -126,7 +126,7 @@
             FontSize="12"
             Grid.Column="3"
             FontWeight="SemiBold"
-            Text="{x:Bind CardAccount.GetActualMoneyValue()}"
+            Text="{x:Bind CardAccount.ActualMoneyValue}"
             VerticalAlignment="Center"
             HorizontalAlignment="Right"
             Foreground="{ThemeResource Text-1}" />

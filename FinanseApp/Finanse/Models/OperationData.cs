@@ -59,7 +59,7 @@ namespace Finanse.Models {
             SetNewOperationsList();
         }
 
-        public string ActualOperationsSum => AllOperations.Sum(i => i.SignedCost).ToString("C", Settings.GetActualCultureInfo());
+        public string ActualOperationsSum => AllOperations.Sum(i => i.SignedCost).ToString("C", Settings.ActualCultureInfo);
 
         private HashSet<int> visiblePayFormList;
         public HashSet<int> VisiblePayFormList {
@@ -140,9 +140,13 @@ namespace Finanse.Models {
 
             if (operationsByDay != null) {
                 GroupInfoList<Operation> group = operationsByDay.SingleOrDefault(i => i.Key.ToString() == operation.Date);
-                group.Remove(operation);
-                if (group.Count == 0)
-                    operationsByDay.Remove(group);
+                if (group != null) {
+                    if (group.Count == 1)
+                        operationsByDay.Remove(group);
+                    else {
+                        group.Remove(operation);
+                    }
+                }
             }
 
             if (OperationsByCategory != null) {
@@ -217,7 +221,6 @@ namespace Finanse.Models {
                     operationsByCategory = new ObservableCollection<GroupInfoList<Operation>>();
                     monthOfCategoryGrouping = ActualMonth;
                     visiblePayFormListOfCategoryGrouping = new HashSet<int>(visiblePayFormList);
-                    GroupInfoList<Operation> info;
 
                     var query = from item in AllOperations
                                 group item by item.CategoryId into g
@@ -228,7 +231,8 @@ namespace Finanse.Models {
                                 };
 
                     foreach (var g in query) {
-                        info = new GroupInfoList<Operation> {
+                        /*
+                        var info = new GroupInfoList<Operation> {
                             Key = new GroupHeaderByCategory {
                                 //name = "Nieprzyporządkowane", /// WAŻNE MAXXXXXXXXXXXXXX
                                 CategoryId = -1,
@@ -252,11 +256,16 @@ namespace Finanse.Models {
                             break;
                         }
 
-                        ((GroupHeaderByCategory)info.Key).IconStyle = new FontFamily(Settings.GetActualIconStyle());
+                        ((GroupHeaderByCategory)info.Key).IconStyle = new FontFamily(Settings.ActualIconStyle);
+                        */
+
+                        var info = new GroupInfoList<Operation> {
+                            Key = new GroupHeaderByCategory(g.GroupName)
+                        };
 
                         foreach (var item in g.Items.OrderByDescending(i => i.Id))
                             info.Add(item);
-
+                            
                         operationsByCategory.Add(info);
                     }
                 }
@@ -272,7 +281,7 @@ namespace Finanse.Models {
 
         private int HowManyEmptyCells {
             get {
-                int dayOfWeek = (int)(ActualMonth.DayOfWeek) - (int)Settings.GetFirstDayOfWeek();
+                int dayOfWeek = (int)(ActualMonth.DayOfWeek) - (int)Settings.FirstDayOfWeek;
                 if (dayOfWeek < 1)
                     dayOfWeek += 7;
                 return dayOfWeek;

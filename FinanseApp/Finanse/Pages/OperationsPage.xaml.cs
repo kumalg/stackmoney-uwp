@@ -185,11 +185,11 @@ namespace Finanse.Pages {
             ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
 
             if (result == ContentDialogResult.Primary) {
-                deleteOperation_DialogButtonClick(operation);
+                DeleteOperation_DialogButtonClick(operation);
             }
         }
 
-        private void deleteOperation_DialogButtonClick(Operation operation) {
+        private void DeleteOperation_DialogButtonClick(Operation operation) {
             storeData.RemoveOperation(operation);
             Dal.DeleteOperation(operation);
         }
@@ -205,7 +205,7 @@ namespace Finanse.Pages {
             flyoutBase.ShowAt(senderElement);
         }
 
-        private void semanticZoom_ViewChangeStarted(object sender, SemanticZoomViewChangedEventArgs e) {
+        private void SemanticZoom_ViewChangeStarted(object sender, SemanticZoomViewChangedEventArgs e) {
             if (e.SourceItem == null)
                 return;
 
@@ -316,8 +316,8 @@ namespace Finanse.Pages {
             RaisePropertyChanged("ZoomedOut_ItemTemplate");
             RaisePropertyChanged("ZoomedOut_ItemTemplateSelector");
             
-            semanticZoom.ViewChangeStarted -= semanticZoom_ViewChangeStarted;
-            semanticZoom.ViewChangeStarted += semanticZoom_ViewChangeStarted;
+            semanticZoom.ViewChangeStarted -= SemanticZoom_ViewChangeStarted;
+            semanticZoom.ViewChangeStarted += SemanticZoom_ViewChangeStarted;
         }
 
         private void ListViewByCategory() {

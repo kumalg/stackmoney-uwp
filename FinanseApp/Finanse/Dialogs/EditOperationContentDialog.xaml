@@ -14,8 +14,7 @@
     SecondaryButtonText="Anuluj"
     IsPrimaryButtonEnabled="False"
     x:Uid="editOperationContentDialog"
-    PrimaryButtonClick="NowaOperacja_DodajClick"
-    RequestedTheme="Dark">
+    PrimaryButtonClick="NowaOperacja_DodajClick">
 
     <StackPanel 
         Margin="20,20">

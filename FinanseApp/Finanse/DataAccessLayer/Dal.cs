@@ -173,59 +173,49 @@
         public static decimal GetBalanceOfCertainDay(DateTime dateTime) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.ExecuteScalar<decimal>("SELECT TOTAL(CASE WHEN isExpense THEN -Cost ELSE Cost END) FROM Operation WHERE Date <= ? AND Date IS NOT NULL AND Date IS NOT ''", dateTime.ToString("yyyy.MM.dd"));
+                return db.ExecuteScalar<decimal>(
+                    "SELECT TOTAL(CASE WHEN isExpense THEN -Cost ELSE Cost END) FROM Operation " +
+                    "WHERE Date <= ? AND Date IS NOT NULL AND Date IS NOT ''", 
+                    dateTime.ToString("yyyy.MM.dd"));
             }
         }
 
         public static List<Operation> GetAllOperations(DateTime actualMonth, HashSet<int> visiblePayFormList) {
-            List<Operation> models;
-
-            // Create a new connection
             using (var db = DbConnection) {
-                // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
                 
-                List<Operation> list = db.Query<Operation>("SELECT * FROM Operation WHERE Date GLOB ? AND Date <= ?", actualMonth.ToString("yyyy.MM*"), DateTime.Today.ToString("yyyy.MM.dd"));
+                var list = db.Query<Operation>(
+                    "SELECT * FROM Operation WHERE Date GLOB ? AND Date <= ?", 
+                    actualMonth.ToString("yyyy.MM*"), 
+                    DateTime.Today.ToString("yyyy.MM.dd"));
 
-                if (visiblePayFormList != null) {
-                    models = (from p in list
-                              where visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId) == true
-                              select p).ToList();
-                }
-                else
-                    models = list;
+                return visiblePayFormList != null 
+                    ? list.Where(i => visiblePayFormList.Contains(i.MoneyAccountId)).ToList() 
+                    : list;
             }
-
-            return models;
         }
 
         public static List<Operation> GetAllFutureOperations() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<Operation>("SELECT * FROM Operation WHERE Date > ? OR Date IS NULL OR Date == ''", DateTime.Today.ToString("yyyy.MM.dd"));
+                return db.Query<Operation>(
+                    "SELECT * FROM Operation WHERE Date > ? OR Date IS NULL OR Date == ''", 
+                    DateTime.Today.ToString("yyyy.MM.dd"));
             }
         }
 
         public static List<Operation> GetAllFutureOperations(HashSet<int> visiblePayFormList) {
-            List<Operation> models;
-
-            // Create a new connection
             using (var db = DbConnection) {
-                // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                List<Operation> list = db.Query<Operation>("SELECT * FROM Operation WHERE Date > ? OR Date IS NULL OR Date == ''", DateTime.Today.ToString("yyyy.MM.dd"));
+                var list = db.Query<Operation>(
+                    "SELECT * FROM Operation WHERE Date > ? OR Date IS NULL OR Date == ''", 
+                    DateTime.Today.ToString("yyyy.MM.dd"));
 
-                if (visiblePayFormList != null) {
-                    models = (from p in list
-                              where visiblePayFormList.Any(iteme => iteme == p.MoneyAccountId)
-                              select p).ToList();
-                }
-                else
-                    models = list;
+                return visiblePayFormList != null
+                    ? list.Where(i => visiblePayFormList.Contains(i.MoneyAccountId)).ToList()
+                    : list;
             }
-
-            return models;
         }
 
         public static List<OperationPattern> GetAllPatterns() {
@@ -241,21 +231,24 @@
         public static SubCategory GetSubCategoryById(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE Id == ? LIMIT 1", id).FirstOrDefault();
+                return db.Query<SubCategory>(
+                    "SELECT * FROM SubCategory WHERE Id == ? LIMIT 1", id).FirstOrDefault();
             }
         }
 
         public static List<SubCategory> GetSubCategoriesByBossId(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE BossCategoryId == ? ORDER BY Name", id);
+                return db.Query<SubCategory>(
+                    "SELECT * FROM SubCategory WHERE BossCategoryId == ? ORDER BY Name", id);
             }
         }
 
         public static Category GetCategoryById(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<Category>("SELECT * FROM Category WHERE Id == ? LIMIT 1", id).FirstOrDefault();
+                return db.Query<Category>("SELECT * FROM Category WHERE Id == ? LIMIT 1", id)
+                    .FirstOrDefault();
             }
         }
 

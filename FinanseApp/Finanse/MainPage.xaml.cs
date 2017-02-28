@@ -205,7 +205,6 @@ namespace Finanse {
                 Szablony_ListBoxItem.IsChecked = true;
 
             await Task.Delay(5);
-            //  (Frame as ThemeAwareFrame).AppTheme = ElementTheme.Light;
             NavigateIfDifferentPage(typeof(OperationPatternsPage));
         }
 
@@ -216,7 +215,6 @@ namespace Finanse {
                 ZleceniaStale_ListBoxItem.IsChecked = true;
 
             await Task.Delay(5);
-            //   (Frame as ThemeAwareFrame).AppTheme = ElementTheme.Dark;
             NavigateIfDifferentPage(typeof(StandingOrdersPage));
         }
 

@@ -1,10 +1,5 @@
-﻿using Finanse.DataAccessLayer;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Finanse.Models.MoneyAccounts {
     class BankAccountWithCards : BankAccount {
@@ -12,10 +7,8 @@ namespace Finanse.Models.MoneyAccounts {
         public BankAccountWithCards() {}
 
         public override string ToString() {
-            string name = base.ToString();
-            foreach (var item in Cards)
-                name += "\n    " + item.Name;
-            return name;
+            var name = base.ToString();
+            return Cards.Aggregate(name, (current, item) => current + ("\n    " + item.Name));
         }
         
         public BankAccountWithCards(Account bankAccount) {

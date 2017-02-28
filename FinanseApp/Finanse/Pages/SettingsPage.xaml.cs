@@ -24,14 +24,14 @@ namespace Finanse.Pages {
 
             this.InitializeComponent();
 
-            foreach (CultureInfo item in Settings.GetAllCurrencies()) {
+            foreach (CultureInfo item in Settings.AllCurrencies) {
                 CurrencyValue.Items.Add(new ComboBoxItem {
                     Content = new RegionInfo(item.Name).ISOCurrencySymbol,
                     Tag = item.Name
                 });
             }
 
-            if (Settings.GetTheme() == ApplicationTheme.Dark)
+            if (Settings.Theme== ApplicationTheme.Dark)
                 DarkThemeRadioButton.IsChecked = true;
             else
                 LightThemeRadioButton.IsChecked = true;
@@ -42,58 +42,63 @@ namespace Finanse.Pages {
             CurrencyValue.SelectedItem = CurrencyValue
                 .Items
                 .OfType<ComboBoxItem>()
-                .SingleOrDefault(i => i.Tag.Equals(Settings.GetActualCultureInfo().Name));
+                .SingleOrDefault(i => i.Tag.Equals(Settings.ActualCultureInfo.Name));
 
             for (int i = 1; i <= 12; i++)
                 MaxNumberOfNextMonth.Items.Add(new ComboBoxItem {
                     Content = i,
                 });
 
-            MaxNumberOfNextMonth.SelectedIndex = Settings.GetMaxFutureMonths() - 1;
-            CategoryNameVisibilityToggleButton.IsOn = Settings.GetCategoryNameVisibility();
-            AccountEllipseVisibilityToggleButton.IsOn = Settings.GetAccountEllipseVisibility();
+            MaxNumberOfNextMonth.SelectedIndex = Settings.MaxFutureMonths- 1;
+            CategoryNameVisibilityToggleButton.IsOn = Settings.CategoryNameVisibility;
+            AccountEllipseVisibilityToggleButton.IsOn = Settings.AccountEllipseVisibility;
            
-            SyncSettingsToggleButton.IsOn = Settings.GetSyncSettings();
+            SyncSettingsToggleButton.IsOn = Settings.SyncSettings;
             SyncSettingsToggleButton.Toggled += SyncSettingsToggleButton_Toggled;
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            Settings.SetActualCultureInfo((string)((ComboBoxItem)CurrencyValue.SelectedItem).Tag);
+            var cultureString = (string)( (ComboBoxItem)CurrencyValue.SelectedItem ).Tag;
+            Settings.ActualCultureInfo = new CultureInfo(cultureString);
         }
 
         private void MaxNumberOfFutureMonths_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            ComboBoxItem item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
-            Settings.SetMaxFutureMonths((int)item.Content);
+            var item = (ComboBoxItem)( (ComboBox)sender ).SelectedItem;
+            if (item?.Content != null)
+                Settings.MaxFutureMonths = (int)item.Content;
         }
 
         private void CategoryNameVisibilityToggleButton_Toggled(object sender, RoutedEventArgs e) {
-            Settings.SetCategoryNameVisibility(CategoryNameVisibilityToggleButton.IsOn);
+            Settings.CategoryNameVisibility = CategoryNameVisibilityToggleButton.IsOn;
         }
 
         private void AccountEllipseVisibilityToggleButton_Toggled(object sender, RoutedEventArgs e) {
-            Settings.SetAccountEllipseVisibility(AccountEllipseVisibilityToggleButton.IsOn);
+            Settings.AccountEllipseVisibility = AccountEllipseVisibilityToggleButton.IsOn;
         }
 
         private void ReminderToggleSwitch_Toggled(object sender, RoutedEventArgs e) {
             if (ReminderStackPanel != null)
                 ReminderStackPanel.Visibility = ((ToggleSwitch)sender).IsOn ? Visibility.Visible : Visibility.Collapsed;
         }
-        /*
-        private void FirstDayOfWeek_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            ComboBoxItem item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
-         //   Settings.SetFirstDayOfWeek((DayOfWeek)item.Tag);
-        }
-        */
+
         private void SyncSettingsToggleButton_Toggled(object sender, RoutedEventArgs e) {
-            Settings.SetSyncSettings(SyncSettingsToggleButton.IsOn);
+            Settings.SyncSettings = SyncSettingsToggleButton.IsOn;
         }
 
         private void DarkThemeRadioButton_Checked(object sender, RoutedEventArgs e) {
-            Settings.SetTheme(1);
+            Settings.Theme = ApplicationTheme.Dark;
+
+            if (Frame != null) {
+                ( (ThemeAwareFrame)Frame ).AppTheme = ElementTheme.Dark;
+            }
         }
 
         private void LightThemeRadioButton_Checked(object sender, RoutedEventArgs e) {
-            Settings.SetTheme(0);
+            Settings.Theme = ApplicationTheme.Light;
+
+            if (Frame != null) {
+                ( (ThemeAwareFrame)Frame ).AppTheme = ElementTheme.Light;
+            }
         }
         public string AppVersion {
             get {

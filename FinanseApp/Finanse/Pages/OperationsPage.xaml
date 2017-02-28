@@ -183,7 +183,7 @@
                         <StackPanel
                             Width="80">
                             <TextBlock
-                                Text="{Binding Key.Icon}"
+                                Text="{Binding Key.Category.Icon.Glyph}"
                                 FontFamily="{StaticResource FontAwesome}"
                                 FontSize="12"
                                 Foreground="{ThemeResource Text-2}"
@@ -193,7 +193,7 @@
                             FontWeight="SemiBold"
                             Foreground="{ThemeResource Text-1}"
                             FontFamily="{StaticResource DefaultFontFamily}"
-                            Text="{Binding Key.Name}"
+                            Text="{Binding Key.Category.Name}"
                             FontSize="12" />
                     </StackPanel>
 
@@ -229,7 +229,7 @@
                     Width="50"
                     Height="50">
                     <data:CategoryIcon
-                        Glyph="{Binding Group.Key.Icon}"
+                        Glyph="{Binding Group.Key.Category.Icon}"
                         Color="Gray" />
                 </Grid>
 
@@ -237,7 +237,7 @@
                     Margin="20,0"
                     VerticalAlignment="Center"
                     FontFamily="{StaticResource DefaultFontFamily}"
-                    Text="{Binding Group.Key.Name}"
+                    Text="{Binding Group.Key.Category.Name}"
                     FontSize="16" />
 
             </StackPanel>

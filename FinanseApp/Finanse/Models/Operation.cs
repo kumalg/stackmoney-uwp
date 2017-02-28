@@ -6,7 +6,7 @@
     public class Operation : OperationPattern {
 
         public string Date { get; set; }
-        public bool VisibleInStatistics { get; set; }
+        public bool VisibleInStatistics { get; set; } = true;
 
         public override int GetHashCode() {
             return Title.GetHashCode() * this.Id;

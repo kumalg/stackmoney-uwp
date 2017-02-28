@@ -29,8 +29,8 @@ namespace Finanse.Models {
 
         public Account Account { get; }
 
-        public string InitialValue => initialValue.ToString("C", Settings.GetActualCultureInfo());
+        public string InitialValue => initialValue.ToString("C", Settings.ActualCultureInfo);
 
-        public string FinalValue => finalValue.ToString("C", Settings.GetActualCultureInfo());
+        public string FinalValue => finalValue.ToString("C", Settings.ActualCultureInfo);
     }
 }

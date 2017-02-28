@@ -29,7 +29,7 @@ namespace Finanse.Dialogs {
             this.InitializeComponent();
             this.operationToEdit = operationToEdit;
 
-            DateValue.MaxDate = Settings.GetMaxDate();
+            DateValue.MaxDate = Settings.MaxDate;
             this.originalOperationPattern = operationToEdit.ToOperation();
             //  setMoneyAccountComboBoxItems();
 
@@ -118,7 +118,7 @@ namespace Finanse.Dialogs {
                 Id = operationToEdit.Id,
                 Date = GetDate(),
                 Title = NameValue.Text,
-                Cost = decimal.Parse(acceptedCostValue, Settings.GetActualCultureInfo()),
+                Cost = decimal.Parse(acceptedCostValue, Settings.ActualCultureInfo),
                 isExpense = (bool)Expense_RadioButton.IsChecked,
                 CategoryId = GetCategoryId(),
                 SubCategoryId = GetSubCategoryId(),
@@ -132,7 +132,7 @@ namespace Finanse.Dialogs {
             return new OperationPattern {
                 Id = operationPatternToEdit.Id,
                 Title = NameValue.Text,
-                Cost = decimal.Parse(acceptedCostValue, Settings.GetActualCultureInfo()),
+                Cost = decimal.Parse(acceptedCostValue, Settings.ActualCultureInfo),
                 isExpense = (bool)Expense_RadioButton.IsChecked,
                 CategoryId = GetCategoryId(),
                 SubCategoryId = GetSubCategoryId(),

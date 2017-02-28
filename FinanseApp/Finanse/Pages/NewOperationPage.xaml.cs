@@ -80,8 +80,8 @@ namespace Finanse.Pages {
             this.InitializeComponent();
 
             DateValue.Date = DateTime.Today;
-            DateValue.MaxDate = Settings.GetMaxDate();
-            DateValue.MinDate = Settings.GetMinDate();
+            DateValue.MaxDate = Settings.MaxDate;
+            DateValue.MinDate = Settings.MinDate;
 
             Expense_RadioButton.IsChecked = true;
 
@@ -94,7 +94,7 @@ namespace Finanse.Pages {
         }
 
         public Windows.Globalization.DayOfWeek FirstDayOfWeek() {
-            return Settings.GetFirstDayOfWeek();
+            return Settings.FirstDayOfWeek;
         }
 
         private void TransferRadioButton_Checked(object sender, RoutedEventArgs e) {
@@ -284,7 +284,7 @@ namespace Finanse.Pages {
             return new OperationPattern {
                 Title = NameValue.Text,
                 isExpense = (bool)Expense_RadioButton.IsChecked,
-                Cost = decimal.Parse(acceptedCostValue, Settings.GetActualCultureInfo()),
+                Cost = decimal.Parse(acceptedCostValue, Settings.ActualCultureInfo),
                 CategoryId = GetCategoryId(),
                 SubCategoryId = GetSubCategoryId(),
                 MoreInfo = MoreInfoValue.Text,

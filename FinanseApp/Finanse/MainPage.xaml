@@ -562,12 +562,12 @@
             </RadioButton>
         </Grid>
 
-        <Frame
+        <local:ThemeAwareFrame
             Grid.RowSpan="2"
             Grid.Row="1"
             Grid.Column="1"
             Navigated="AktualnaStrona_Frame_Navigated"
-            Name="AktualnaStrona_Frame" />
+            x:Name="AktualnaStrona_Frame"/>
 
         <Grid
             x:Name="ThirdColumnGrid"

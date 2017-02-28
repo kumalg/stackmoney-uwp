@@ -4,9 +4,7 @@ namespace Finanse.Models.MoneyAccounts {
     class CardAccount : Account {
         public int BankAccountId { get; set; }
 
-        public override string GetActualMoneyValue() {
-            return AccountsDal.CardAccountExpensesById(Id).ToString("C", Settings.GetActualCultureInfo());
-        }
+        public override string ActualMoneyValue => AccountsDal.CardAccountExpensesById(Id).ToString("C", Settings.ActualCultureInfo);
 
         public override int GetHashCode() {
             return Name.GetHashCode() * Id;

@@ -1,5 +1,4 @@
-﻿using Windows.ApplicationModel.Contacts;
-using SQLite.Net.Attributes;
+﻿using SQLite.Net.Attributes;
 
 namespace Finanse.Models {
 

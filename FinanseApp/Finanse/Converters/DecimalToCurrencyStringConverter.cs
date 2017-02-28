@@ -11,10 +11,9 @@ using Windows.UI.Xaml.Data;
 namespace Finanse.Converters {
     public class DecimalToCurrencyStringConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, string language) {
-            if (value == null)
-                return null;
-
-            return (double.Parse(value.ToString())).ToString("C", Settings.GetActualCultureInfo());
+            return value == null 
+                ? null 
+                : (double.Parse(value.ToString())).ToString("C", Settings.ActualCultureInfo);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language) {

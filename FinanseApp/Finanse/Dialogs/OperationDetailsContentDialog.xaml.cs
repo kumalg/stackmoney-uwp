@@ -21,11 +21,11 @@ namespace Finanse.Dialogs {
                 Title = "Szczegóły szablonu";
 
             if (editedOperation.isExpense) {
-                CostValue.Text = (-editedOperation.Cost).ToString("C", Settings.GetActualCultureInfo());
+                CostValue.Text = (-editedOperation.Cost).ToString("C", Settings.ActualCultureInfo);
                 CostValue.Foreground = (SolidColorBrush)Application.Current.Resources["RedColorStyle"];
             }
             else {
-                CostValue.Text = editedOperation.Cost.ToString("C", Settings.GetActualCultureInfo());
+                CostValue.Text = editedOperation.Cost.ToString("C", Settings.ActualCultureInfo);
                 CostValue.Foreground = (SolidColorBrush)Application.Current.Resources["GreenColorStyle"];
             }
 

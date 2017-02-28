@@ -47,7 +47,7 @@ namespace Finanse.Elements {
             if (Operation == null)
                 return;
 
-            if (Settings.GetAccountEllipseVisibility()) {
+            if (Settings.AccountEllipseVisibility) {
 
                 Account moneyAccount = AccountsDal.GetAccountById(Operation.MoneyAccountId);
 
@@ -91,7 +91,7 @@ namespace Finanse.Elements {
             Category_OperationTemplate.Text = "";
 
             /* WYGLĄD NAZWY KATEGORII */
-            if (!Settings.GetCategoryNameVisibility())
+            if (!Settings.CategoryNameVisibility)
                 return;
 
             CategoryNameStackPanel.Visibility = Visibility.Visible;

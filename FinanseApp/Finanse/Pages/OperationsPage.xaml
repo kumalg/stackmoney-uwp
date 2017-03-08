@@ -716,6 +716,7 @@
                                             Style="{StaticResource MyMenuFlyoutItem}"
                                             Tag="&#xEA55;"
                                             Text="Szczegóły"
+                                            x:Uid="details"
                                             Click="DetailsButton_Click" />
 
                                         <MenuFlyoutItem
@@ -723,6 +724,7 @@
                                             Style="{StaticResource MyMenuFlyoutItem}"
                                             Tag="&#xE104;"
                                             Text="Edytuj"
+                                            x:Uid="edit"
                                             Click="EditButton_Click" />
 
                                         <MenuFlyoutItem
@@ -730,6 +732,7 @@
                                             Style="{StaticResource MyMenuFlyoutItem}"
                                             Tag="&#xE107;"
                                             Text="Usuń"
+                                            x:Uid="delete"
                                             Click="DeleteButton_Click" />
 
                                     </MenuFlyout>

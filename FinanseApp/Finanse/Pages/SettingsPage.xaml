@@ -5,6 +5,7 @@
     NavigationCacheMode="Enabled"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d">
     
     <Page.Transitions>
@@ -438,11 +439,18 @@
                 <PivotItem.Header>
                     <TextBlock
                         Text="Co nowego"
+                        x:Uid="whatsNew"
                         FontSize="15" />
                 </PivotItem.Header>
                 <ScrollViewer
                     VerticalScrollMode="Enabled"
                     VerticalScrollBarVisibility="Auto">
+                    <controls:MarkdownTextBlock
+                        Text="{x:Bind whatsNewText}"
+                        MarkdownRendered="MarkdownText_MarkdownRendered"
+                        MaxWidth="620"
+                        Margin="16"
+                        Foreground="{ThemeResource Text}" />
                 </ScrollViewer>
             </PivotItem>
         </Pivot>

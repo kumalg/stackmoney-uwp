@@ -18,7 +18,8 @@ namespace Finanse.Dialogs {
             this.InitializeComponent();
 
             if (whichOption == "pattern")
-                Title = "Szczegóły szablonu";
+                Title =
+                    new Windows.ApplicationModel.Resources.ResourceLoader().GetString("patternDetails");
 
             if (editedOperation.isExpense) {
                 CostValue.Text = (-editedOperation.Cost).ToString("C", Settings.ActualCultureInfo);

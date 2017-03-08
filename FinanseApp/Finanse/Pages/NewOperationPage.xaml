@@ -366,6 +366,7 @@
                         <TextBlock
                             Foreground="{ThemeResource Text-1}"
                             Text="Ukryj w statystykach"
+                            x:Uid="hideInStatistics"
                             Margin="10,0" />
 
                         <ToggleSwitch

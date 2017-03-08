@@ -140,7 +140,7 @@ namespace Finanse.Models.Statistics {
                         itemList.List.Add(new ChartDataItem(
                             (double)(sitem.Cost / groupySum),
                             category.Brush,
-                            "Bez podkategorii",
+                            new Windows.ApplicationModel.Resources.ResourceLoader().GetString("withoutSubCategory"),
                             (double)sitem.Cost
                             ));
                     }

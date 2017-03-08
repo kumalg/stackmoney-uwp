@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Windows.Foundation.Metadata;
 using Windows.UI;
 using Windows.UI.ViewManagement;
@@ -16,7 +17,11 @@ using Windows.System.Profile;
 using Windows.UI.Core;
 using Windows.Foundation;
 using Windows.ApplicationModel.Core;
+using Windows.Networking.Connectivity;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Finanse.Models;
+using Microsoft.Toolkit.Uwp.Services.OneDrive;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 
 namespace Finanse {
@@ -40,8 +45,52 @@ namespace Finanse {
 
             if (Strona_glowna_ListBoxItem != null)
                 Strona_glowna_ListBoxItem.IsChecked = true;
+
+            checkSyncBase();
         }
 
+        private static async void checkSyncBase() {
+            var connectionProfile = new NetworkConnectivityLevel();
+            if (connectionProfile != NetworkConnectivityLevel.InternetAccess)
+                return;
+
+            OneDriveService.Instance.Initialize();
+
+            if (!await OneDriveService.Instance.LoginAsync()) {
+                throw new Exception("Unable to sign in");
+            }
+
+            var rootFolder = await OneDriveService.Instance.RootFolderAsync();
+
+            OneDriveStorageFolder stackMoneyFolder;
+            try {
+                stackMoneyFolder = await rootFolder.GetFolderAsync("StackMoney_AppFolder");
+            }
+            catch (Exception) {
+                stackMoneyFolder = await rootFolder.CreateFolderAsync("StackMoney_AppFolder");
+            }
+
+            while (true) {
+                var selectedFile = await StorageFile.GetFileFromPathAsync(DalBase.DbPath);
+                if (selectedFile != null) {
+                    try {
+                        var file = await stackMoneyFolder.GetFileAsync("db.sqlite");
+                        Dal.updateBase(file);
+                        selectedFile = await StorageFile.GetFileFromPathAsync(DalBase.DbPath);
+                        using (var localStream = await selectedFile.OpenReadAsync()) {
+                            await stackMoneyFolder.CreateFileAsync(selectedFile.Name, CreationCollisionOption.ReplaceExisting, localStream);
+                        }
+                    }
+                    catch (Exception) {
+                        using (var localStream = await selectedFile.OpenReadAsync()) {
+                            await stackMoneyFolder.CreateFileAsync(selectedFile.Name, CreationCollisionOption.GenerateUniqueName, localStream);
+                        }
+                    }
+                }
+                await Task.Delay(60000); // 1 minute
+            }
+        }
+        
         public string DisplayName => Package.Current.DisplayName;
 
         private void TitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args) {

@@ -379,4 +379,52 @@
   <data name="addNewOperation14" xml:space="preserve">
     <value>Add new operation</value>
   </data>
+  <data name="expensesUppercase.Text" xml:space="preserve">
+    <value>EXPENSES</value>
+  </data>
+  <data name="hideInStatistics.Text" xml:space="preserve">
+    <value>Hide in statistics</value>
+  </data>
+  <data name="incomesUppercase.Text" xml:space="preserve">
+    <value>INCOMES</value>
+  </data>
+  <data name="no_date" xml:space="preserve">
+    <value>No date</value>
+  </data>
+  <data name="uncategorized" xml:space="preserve">
+    <value>Uncategorized</value>
+  </data>
+  <data name="add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="addSubCategory.Text" xml:space="preserve">
+    <value>Add subcategory</value>
+  </data>
+  <data name="delete.Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="details.Text" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="edit.Text" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="editCategoryString" xml:space="preserve">
+    <value>Edit category</value>
+  </data>
+  <data name="newCategoryString" xml:space="preserve">
+    <value>New category</value>
+  </data>
+  <data name="patternDetails" xml:space="preserve">
+    <value>Pattern details</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="whatsNew.Text" xml:space="preserve">
+    <value>What's new</value>
+  </data>
+  <data name="withoutSubCategory" xml:space="preserve">
+    <value>Without subcategory</value>
+  </data>
 </root>

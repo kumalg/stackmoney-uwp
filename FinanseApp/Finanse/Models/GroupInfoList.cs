@@ -39,7 +39,7 @@ namespace Finanse.Models {
 
         public GroupHeaderByCategory(int categoryId) {
             Category = Dal.GetCategoryById(categoryId) ?? new Category {
-                Name = "Nieprzyporządkowane",
+                Name = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("uncategorized"),
                 Id = -1,
                 ColorKey = "12",
                 IconKey = "FontIcon_19"
@@ -63,9 +63,9 @@ namespace Finanse.Models {
             get {
                 var actualDate = DateTime.Today.Date;
                 return DateTime.Equals(DateTime.MinValue) ?
-                    "Bez daty"
-                    : actualDate.Equals(DateTime.Date) ? "dzisiaj"
-                    : actualDate.AddDays(-1).Equals(DateTime.Date) ? "wczoraj"
+                    new Windows.ApplicationModel.Resources.ResourceLoader().GetString("no_date")
+                    : actualDate.Equals(DateTime.Date) ? new Windows.ApplicationModel.Resources.ResourceLoader().GetString("today")
+                    : actualDate.AddDays(-1).Equals(DateTime.Date) ? new Windows.ApplicationModel.Resources.ResourceLoader().GetString("yesterday")
                     : DateTime.ToString("dddd");
             }
         }

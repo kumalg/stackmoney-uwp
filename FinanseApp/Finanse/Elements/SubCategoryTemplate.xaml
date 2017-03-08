@@ -122,7 +122,9 @@
             VerticalAlignment="Center"
             Text="{x:Bind SubCategory.Name}"
             Margin="20,0,0,0"
-            FontSize="16"
+            TextWrapping="Wrap"
+            FontWeight="SemiLight"
+            FontSize="14"
             Foreground="{ThemeResource Text}" />
     </Grid>
 

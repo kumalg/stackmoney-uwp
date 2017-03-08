@@ -389,4 +389,52 @@
   <data name="addNewOperation14" xml:space="preserve">
     <value>Dodaj operację</value>
   </data>
+  <data name="expensesUppercase.Text" xml:space="preserve">
+    <value>WYDATKI</value>
+  </data>
+  <data name="hideInStatistics.Text" xml:space="preserve">
+    <value>Ukryj w statystykach</value>
+  </data>
+  <data name="incomesUppercase.Text" xml:space="preserve">
+    <value>WPŁYWY</value>
+  </data>
+  <data name="no_date" xml:space="preserve">
+    <value>bez daty</value>
+  </data>
+  <data name="uncategorized" xml:space="preserve">
+    <value>Nieprzyporządkowane</value>
+  </data>
+  <data name="add" xml:space="preserve">
+    <value>Dodaj</value>
+  </data>
+  <data name="addSubCategory.Text" xml:space="preserve">
+    <value>Dodaj podkategorię</value>
+  </data>
+  <data name="delete.Text" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="details.Text" xml:space="preserve">
+    <value>Szczegóły</value>
+  </data>
+  <data name="edit.Text" xml:space="preserve">
+    <value>Edytuj</value>
+  </data>
+  <data name="editCategoryString" xml:space="preserve">
+    <value>Edytuj kategorię</value>
+  </data>
+  <data name="newCategoryString" xml:space="preserve">
+    <value>Nowa kategoria</value>
+  </data>
+  <data name="patternDetails" xml:space="preserve">
+    <value>Szczegóły szablonu</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Zapisz</value>
+  </data>
+  <data name="whatsNew.Text" xml:space="preserve">
+    <value>Co nowego</value>
+  </data>
+  <data name="withoutSubCategory" xml:space="preserve">
+    <value>Bez podkategorii</value>
+  </data>
 </root>

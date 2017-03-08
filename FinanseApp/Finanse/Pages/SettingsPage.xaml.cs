@@ -129,5 +129,18 @@ namespace Finanse.Pages {
             Dal.DeleteAll();
             Dal.AddInitialElements();
         }
+
+        private void MarkdownText_MarkdownRendered(object sender, Microsoft.Toolkit.Uwp.UI.Controls.MarkdownRenderedEventArgs e) {
+
+        }
+
+        private string whatsNewText =
+            "###1.1.4.0\n" +
+            "* poprawki wydajności\n" +
+            "* zabezpieczenie przed dodaniem kategorii albo konta o takiej samej nazwie\n" +
+            "* poprawki w tłumaczeniu\n" +
+            "* podstrona 'Co nowego'\n" +
+            "\n\n\n###1.1.3.0\n" +
+            "* Pierwszy build";
     }
 }

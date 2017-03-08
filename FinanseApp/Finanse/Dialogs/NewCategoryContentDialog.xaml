@@ -9,6 +9,7 @@
     mc:Ignorable="d"
     xmlns:data="using:Finanse.Elements"
     Title="Nowa kategoria"
+    x:Uid="newCategory"
     Background="{ThemeResource BackgroundTransparent}"
     PrimaryButtonText="Dodaj"
     SecondaryButtonText="Anuluj"
@@ -20,10 +21,12 @@
         <TextBox
             Name="NameValue"
             Style="{StaticResource TextBoxStyle1}"
-            Text="{x:Bind editedCategoryItem.Name, Mode=OneTime}"
+            Text="{x:Bind _editedCategoryItem.Name, Mode=OneTime}"
             TextChanged="NameValue_TextChanged"
+            TextChanging="NameValue_OnTextChanging"
             PlaceholderText="Nazwa"
             x:Uid="namePlaceholder"/>
+        
         <Grid
             Margin="0,30,0,0">
 
@@ -163,7 +166,7 @@
             Name="VisibleInExpensesToggleButton"
             Style="{StaticResource ToggleSwitchStyle1}"
             Margin="10,5,0,0"
-            IsOn="{x:Bind editedCategoryItem.VisibleInExpenses, Mode=OneTime}"
+            IsOn="{x:Bind _editedCategoryItem.VisibleInExpenses, Mode=OneTime}"
             Toggled="VisibleInExpensesToggleButton_Toggled">
 
             <ToggleSwitch.OffContent>
@@ -185,7 +188,7 @@
             Name="VisibleInIncomesToggleButton"
             Style="{StaticResource ToggleSwitchStyle1}"
             Margin="10,5,0,0"
-            IsOn="{x:Bind editedCategoryItem.VisibleInIncomes, Mode=OneTime}"
+            IsOn="{x:Bind _editedCategoryItem.VisibleInIncomes, Mode=OneTime}"
             Toggled="VisibleInIncomesToggleButton_Toggled">
 
             <ToggleSwitch.OffContent>

@@ -40,6 +40,8 @@
             VerticalAlignment="Center"
             Text="{x:Bind Account.Name}"
             Margin="20,0,0,0"
+            TextWrapping="Wrap"
+            FontWeight="SemiLight"
             FontSize="14"
             Foreground="{ThemeResource Text}" />
 

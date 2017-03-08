@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 
 namespace Finanse.Models {
-    class MoneyAccount {
+    public class MoneyAccount {
 
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }

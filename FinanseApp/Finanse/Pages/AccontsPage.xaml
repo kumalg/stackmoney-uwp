@@ -102,12 +102,14 @@
                                             Style="{StaticResource MyMenuFlyoutItem}"
                                             Tag="&#xE104;"
                                             Text="Edytuj"
+                                            x:Uid="edit"
                                             Click="EditButton_Click" />
                                         <MenuFlyoutItem
                                             x:Name="DeleteButton"
                                             Style="{StaticResource MyMenuFlyoutItem}"
                                             Tag="&#xE107;"
                                             Text="Usuń"
+                                            x:Uid="delete"
                                             Click="DeleteButton_Click" />
                                     </MenuFlyout>
                                 </FlyoutBase.AttachedFlyout>
@@ -132,11 +134,13 @@
                                                         Style="{StaticResource MyMenuFlyoutItem}"
                                                         Tag="&#xE104;"
                                                         Text="Edytuj"
+                                                        x:Uid="edit"
                                                         Click="EditCard_Click" />
                                                     <MenuFlyoutItem
                                                         Style="{StaticResource MyMenuFlyoutItem}"
                                                         Tag="&#xE107;"
                                                         Text="Usuń"
+                                                        x:Uid="delete"
                                                         Click="DeleteCard_Click" />
                                                 </MenuFlyout>
                                             </FlyoutBase.AttachedFlyout>

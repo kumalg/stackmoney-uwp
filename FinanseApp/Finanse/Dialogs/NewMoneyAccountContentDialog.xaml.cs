@@ -60,8 +60,8 @@ namespace Finanse.Dialogs {
 
         private int ComboBoxSelectedIndex => BankAccounts.Count > 0 ? 0 : -1;
 
-        private bool PrimaryButtonEnabling => !string.IsNullOrEmpty(NameValue.Text);
-
+        private bool PrimaryButtonEnabling => !(string.IsNullOrEmpty(NameValue.Text) || Dal.AccountExistInBaseByName(NameValue.Text, TypeOfAccount()));
+   
         public NewMoneyAccountContentDialog() {
             InitializeComponent();
         }
@@ -118,10 +118,9 @@ namespace Finanse.Dialogs {
         private AccountType TypeOfAccount() {
             if ((bool)BankAccountRadioButton.IsChecked)
                 return AccountType.BankAccount;
-            else if ((bool)PayCardRadioButton.IsChecked)
+            if ((bool)PayCardRadioButton.IsChecked)
                 return AccountType.CardAccount;
-            else
-                return AccountType.CashAccount;
+            return AccountType.CashAccount;
         }
 
         private void CostValue_GotFocus(object sender, RoutedEventArgs e) {
@@ -186,6 +185,7 @@ namespace Finanse.Dialogs {
 
         private void AccountTypeRadioButton_Click(object sender, RoutedEventArgs e) {
             RaisePropertyChanged("BankAccountsComboBoxVisibility");
+            RaisePropertyChanged("PrimaryButtonEnabling");
         }
 
         private void HyperlinkButton_Click(object sender, RoutedEventArgs e) {

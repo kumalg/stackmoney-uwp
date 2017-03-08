@@ -44,19 +44,22 @@
                                     x:Name="EditCatButton"
                                     Style="{StaticResource MyMenuFlyoutItem}"
                                     Tag="&#xE104;"
-                                    Text="Edytuj"
-                                    Click="EditCategory_Click" />
+                                    x:Uid="edit"
+                                    Click="EditCategory_Click">
+                                </MenuFlyoutItem>
                                 <MenuFlyoutItem
                                     x:Name="DeleteCatButton"
                                     Style="{StaticResource MyMenuFlyoutItem}"
                                     Tag="&#xE107;"
                                     Text="Usuń"
+                                    x:Uid="delete"
                                     Click="DeleteCategory_Click" />
                                 <MenuFlyoutSeparator />
                                 <MenuFlyoutItem
                                     x:Name="AddSubCatButton"
                                     Style="{StaticResource MyMenuFlyoutItem}"
                                     Tag="&#xE109;"
+                                    x:Uid="addSubCategory"
                                     Text="Dodaj podkategorię"
                                     Click="AddSubCat_Click" />
                             </MenuFlyout>
@@ -105,12 +108,14 @@
                                                 Style="{StaticResource MyMenuFlyoutItem}"
                                                 Tag="&#xE104;"
                                                 Text="Edytuj"
+                                                x:Uid="edit"
                                                 Click="EditSubCategory_Click" />
                                             <MenuFlyoutItem
                                                 x:Name="DeleteSubCatButton"
                                                 Style="{StaticResource MyMenuFlyoutItem}"
                                                 Tag="&#xE107;"
                                                 Text="Usuń"
+                                                x:Uid="delete"
                                                 Click="DeleteSubCategory_Click" />
                                         </MenuFlyout>
                                     </FlyoutBase.AttachedFlyout>
@@ -251,6 +256,7 @@
                                     FontSize="20"
                                     FontFamily="{StaticResource DefaultFontFamily}"
                                     HorizontalAlignment="Center"
+                                    x:Uid="Expenses"
                                     Text="Wydatki" />
                             </PivotItem.Header>
                             <ListView
@@ -287,6 +293,7 @@
                                     FontSize="20"
                                     FontFamily="{StaticResource DefaultFontFamily}"
                                     HorizontalAlignment="Center"
+                                    x:Uid="Incomes"
                                     Text="Wpływy" />
                             </PivotItem.Header>
                             <ListView

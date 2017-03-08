@@ -1,4 +1,7 @@
-﻿namespace Finanse.DataAccessLayer {
+﻿using Finanse.Dialogs;
+using Microsoft.Toolkit.Uwp.Services.OneDrive;
+
+namespace Finanse.DataAccessLayer {
     using Models;
     using Models.Categories;
     using Models.Helpers;
@@ -13,7 +16,7 @@
     using System.Linq;
     using Windows.Storage;
 
-    internal class Dal : DalBase{
+    public class Dal : DalBase{
 
         public static void DeleteAll() {
             using (var db = DbConnection) {
@@ -224,10 +227,39 @@
                 return db.Table<OperationPattern>().ToList();
             }
         }
-        
+
+        public static bool CategoryExistByName(string name) {
+            using (var db = DbConnection) {
+                return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM Category WHERE LOWER(Name) = ?", 
+                    name.ToLower());
+            }
+        }
+
+        public static bool SubCategoryExistInBaseByName(string name, int bossCategoryId) {
+            using (var db = DbConnection) {
+                return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM SubCategory WHERE LOWER(Name) = ? AND BossCategoryId", 
+                    name.ToLower(), 
+                    bossCategoryId);
+            }
+        }
+
+        public static bool AccountExistInBaseByName(string name, AccountType accountType) {
+            using (var db = DbConnection) {
+                switch (accountType) {
+                    case AccountType.BankAccount:
+                        return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM BankAccount WHERE LOWER(Name) = ?", name.ToLower());
+                    case AccountType.CardAccount:
+                        return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM CardAccount WHERE LOWER(Name) = ?", name.ToLower());
+                    case AccountType.CashAccount:
+                        return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM CashAccount WHERE LOWER(Name) = ?", name.ToLower());
+                    default:
+                        return false;
+                }
+            }
+        }
 
         /* GET BY ID */
-    
+
         public static SubCategory GetSubCategoryById(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
@@ -336,6 +368,12 @@
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("DELETE FROM SubCategory WHERE Id = ?", subCategoryId);
+            }
+        }
+
+        public static void updateBase(OneDriveStorageFile oneDriveStorageFile) {
+            using (var db = DbConnection) {
+                db.TraceListener = new DebugTraceListener();
             }
         }
     }

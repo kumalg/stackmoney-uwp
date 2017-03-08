@@ -3,6 +3,7 @@ using Finanse.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -20,60 +21,60 @@ namespace Finanse.Dialogs {
         }
 
 
-        private List<KeyValuePair<object, object>> colorBase;
-        private List<KeyValuePair<object, object>> ColorBase => colorBase ??
-                                                                (colorBase = ((ResourceDictionary) Application.Current.Resources["ColorBase"]).ToList());
+        private List<KeyValuePair<object, object>> _colorBase;
+        private List<KeyValuePair<object, object>> ColorBase => _colorBase ??
+                                                                (_colorBase = ((ResourceDictionary) Application.Current.Resources["ColorBase"]).ToList());
 
         private SolidColorBrush Color => (SolidColorBrush)SelectedColor.Value;
 
         private string ColorKey => SelectedColor.Key.ToString();
 
-        private KeyValuePair<object, object> selectedColor;
+        private KeyValuePair<object, object> _selectedColor;
 
         public KeyValuePair<object, object> SelectedColor {
             get {
-                if (selectedColor.Key == null || selectedColor.Value == null)
-                    selectedColor = ColorBase.ElementAt(3);
+                if (_selectedColor.Key == null || _selectedColor.Value == null)
+                    _selectedColor = ColorBase.ElementAt(3);
 
-                return selectedColor;
+                return _selectedColor;
             }
             set {
-                selectedColor = value;
+                _selectedColor = value;
                 RaisePropertyChanged("Color");
             }
         }
 
 
-        private List<KeyValuePair<object, object>> iconBase;
-        private List<KeyValuePair<object, object>> IconBase => iconBase ??
-                                                               (iconBase = ((ResourceDictionary) Application.Current.Resources["IconBase"]).ToList());
+        private List<KeyValuePair<object, object>> _iconBase;
+        private List<KeyValuePair<object, object>> IconBase => _iconBase ??
+                                                               (_iconBase = ((ResourceDictionary) Application.Current.Resources["IconBase"]).ToList());
 
         private FontIcon Icon => (FontIcon)SelectedIcon.Value;
 
         private string IconKey => SelectedIcon.Key.ToString();
 
-        private KeyValuePair<object, object> selectedIcon;
+        private KeyValuePair<object, object> _selectedIcon;
 
         public KeyValuePair<object, object> SelectedIcon {
             get {
-                if (selectedIcon.Key == null || selectedIcon.Value == null)
-                    selectedIcon = IconBase.ElementAt(3);
+                if (_selectedIcon.Key == null || _selectedIcon.Value == null)
+                    _selectedIcon = IconBase.ElementAt(3);
 
-                return selectedIcon;
+                return _selectedIcon;
             }
             set {
-                selectedIcon = value;
+                _selectedIcon = value;
                 RaisePropertyChanged("Icon");
             }
         }
 
-        private int bossCategoryId = -1;
+        private int _bossCategoryId = -1;
         private int BossCategoryId {
             get {
-                return bossCategoryId;
+                return _bossCategoryId;
             }
             set {
-                bossCategoryId = value;
+                _bossCategoryId = value;
                 RaisePropertyChanged("BossCategoryId");
             }
         }
@@ -82,29 +83,29 @@ namespace Finanse.Dialogs {
 
         public Category NewCategoryItem { get; private set; } = new Category();
 
-        private readonly Category editedCategoryItem;
-        private readonly SubCategory editedCategoryAlwaysAsSubCategory;
+        private readonly Category _editedCategoryItem;
+        private readonly SubCategory _editedCategoryAlwaysAsSubCategory;
 
-        private List<ComboBoxItem> categoriesInComboBox;
+        private List<ComboBoxItem> _categoriesInComboBox;
         private List<ComboBoxItem> CategoriesInComboBox {
             get {
-                if (categoriesInComboBox != null)
-                    return categoriesInComboBox;
+                if (_categoriesInComboBox != null)
+                    return _categoriesInComboBox;
 
-                categoriesInComboBox = new List<ComboBoxItem>();
-                categoriesInComboBox.Add(new ComboBoxItem {
+                _categoriesInComboBox = new List<ComboBoxItem>();
+                _categoriesInComboBox.Add(new ComboBoxItem {
                     Content = "Brak",
                     Tag = -1,
                 });
 
                 foreach (var categories_ComboBox in Categories) {
-                    categoriesInComboBox.Add(new ComboBoxItem {
+                    _categoriesInComboBox.Add(new ComboBoxItem {
                         Content = categories_ComboBox.Name,
                         Tag = categories_ComboBox.Id
                     });
                 }
 
-                return categoriesInComboBox;
+                return _categoriesInComboBox;
             }
         }
 
@@ -112,34 +113,37 @@ namespace Finanse.Dialogs {
 
         public NewCategoryContentDialog(Category editedCategoryItem) {
             this.InitializeComponent();
-            this.editedCategoryItem = new Category(editedCategoryItem);
-            this.editedCategoryAlwaysAsSubCategory = new SubCategory(editedCategoryItem);
-            Title = "Edytowanie kategorii";
+            this._editedCategoryItem = new Category(editedCategoryItem);
+            this._editedCategoryAlwaysAsSubCategory = new SubCategory(editedCategoryItem);
+            Title = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("editCategoryString");
+            PrimaryButtonText = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("save");
 
             SelectedColor = ColorBase.FirstOrDefault(i => i.Key.Equals(editedCategoryItem.ColorKey));
             SelectedIcon = IconBase.FirstOrDefault(i => i.Key.Equals(editedCategoryItem.IconKey));
 
-            BossCategoryId = editedCategoryAlwaysAsSubCategory.BossCategoryId;
+            BossCategoryId = _editedCategoryAlwaysAsSubCategory.BossCategoryId;
             
             NewCategoryItem = new Category(editedCategoryItem);
         }
 
-        public NewCategoryContentDialog(int BossCategoryId) {
+        public NewCategoryContentDialog(int bossCategoryId) {
             InitializeComponent();
-            Title = "Nowa kategoria";
+            Title = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("newCategoryString");
+            PrimaryButtonText = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("add");
 
-            Category bossCategory = Dal.GetCategoryById(BossCategoryId);
+            Category bossCategory = Dal.GetCategoryById(bossCategoryId);
             SelectedColor = ColorBase.FirstOrDefault(i => i.Key.Equals(bossCategory.ColorKey));
             SelectedIcon = IconBase.FirstOrDefault(i => i.Key.Equals(bossCategory.IconKey));
 
             VisibleInExpensesToggleButton.IsOn = true;
             VisibleInIncomesToggleButton.IsOn = true;
-            this.BossCategoryId = BossCategoryId;
+            this.BossCategoryId = bossCategoryId;
         }
 
         public NewCategoryContentDialog() {
             this.InitializeComponent();
-            Title = "Nowa kategoria";
+            Title = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("newCategoryString");
+            PrimaryButtonText = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("add");
 
             VisibleInExpensesToggleButton.IsOn = true;
             VisibleInIncomesToggleButton.IsOn = true;
@@ -150,19 +154,31 @@ namespace Finanse.Dialogs {
         private object SelectedCategory => CategoriesInComboBox.FirstOrDefault(i => ((int)i.Tag).Equals(BossCategoryId));
 
         private void SetPrimaryButtonEnabled() {
-            IsPrimaryButtonEnabled = editedCategoryAlwaysAsSubCategory == null ? !string.IsNullOrEmpty(NameValue.Text) : !IsNewOperationTheSame();
+            IsPrimaryButtonEnabled = _editedCategoryAlwaysAsSubCategory == null
+                ? NameNotNullAndCategoryNotInBase
+                : OperationNotTheSameAndCategoryNotInBase;
+        }
+
+        private bool NameNotNullAndCategoryNotInBase => !( IsThisCategoryInBase() || string.IsNullOrEmpty(NameValue.Text) );
+
+        private bool OperationNotTheSameAndCategoryNotInBase => !( IsThisCategoryInBase() || IsNewOperationTheSame());
+
+        private bool IsThisCategoryInBase() {
+            return CategoryValue.SelectedIndex == -1 
+                ? Dal.CategoryExistByName(NameValue.Text) 
+                : Dal.SubCategoryExistInBaseByName(NameValue.Text, BossCategoryId);
         }
 
         private bool IsNewOperationTheSame() {
            
             return
-                editedCategoryAlwaysAsSubCategory.BossCategoryId == BossCategoryId &&
-                editedCategoryAlwaysAsSubCategory.ColorKey == SelectedColor.Key.ToString() &&
-                editedCategoryAlwaysAsSubCategory.IconKey == SelectedIcon.Key.ToString() &&
-                editedCategoryAlwaysAsSubCategory.Name == NameValue.Text &&
+                _editedCategoryAlwaysAsSubCategory.BossCategoryId == BossCategoryId &&
+                _editedCategoryAlwaysAsSubCategory.ColorKey == SelectedColor.Key.ToString() &&
+                _editedCategoryAlwaysAsSubCategory.IconKey == SelectedIcon.Key.ToString() &&
+                _editedCategoryAlwaysAsSubCategory.Name == NameValue.Text &&
                 !string.IsNullOrEmpty(NameValue.Text) &&
-                editedCategoryAlwaysAsSubCategory.VisibleInExpenses == VisibleInExpensesToggleButton.IsOn &&
-                editedCategoryAlwaysAsSubCategory.VisibleInIncomes == VisibleInIncomesToggleButton.IsOn;
+                _editedCategoryAlwaysAsSubCategory.VisibleInExpenses == VisibleInExpensesToggleButton.IsOn &&
+                _editedCategoryAlwaysAsSubCategory.VisibleInIncomes == VisibleInIncomesToggleButton.IsOn;
         }
 
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
@@ -223,6 +239,7 @@ namespace Finanse.Dialogs {
             SetExpenseAndIncomeToggleButtonsEnabling();
 
             SetPrimaryButtonEnabled();
+            NameValue.Foreground = NameValueForeground;
         }
 
         private void SetExpenseAndIncomeToggleButtonsEnabling() {
@@ -249,5 +266,13 @@ namespace Finanse.Dialogs {
         private void ColorBaseList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             SetPrimaryButtonEnabled();
         }
+
+        private void NameValue_OnTextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
+            NameValue.Foreground = NameValueForeground;
+        }
+
+        public Brush NameValueForeground => IsThisCategoryInBase()
+            ? (SolidColorBrush)Application.Current.Resources["RedColorStyle"]
+            : (SolidColorBrush)Application.Current.Resources["Text"];
     }
 }

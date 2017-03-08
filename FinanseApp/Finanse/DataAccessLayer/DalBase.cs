@@ -13,9 +13,9 @@
     using System.Linq;
     using Windows.Storage;
 
-    internal class DalBase {
+    public class DalBase {
         private static string dbPath = string.Empty;
-        protected static string DbPath {
+        public static string DbPath {
             get {
                 if (string.IsNullOrEmpty(dbPath))
                     dbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "db.sqlite");
@@ -26,6 +26,7 @@
         protected static SQLiteConnection DbConnection => new SQLiteConnection(new SQLitePlatformWinRT(), DbPath);
 
         public static void CreateDb() {
+
             using (var db = DbConnection) {
                 // Activate Tracing
                 db.Execute("PRAGMA foreign_keys = ON");
@@ -39,8 +40,15 @@
 
                 // db.CreateTable<MoneyAccount>();
 
-          //      db.Execute("ALTER TABLE OperationCategory RENAME TO Category");
-            //    db.Execute("ALTER TABLE OperationSubCategory RENAME TO SubCategory");
+                var OperationCategory =
+                    db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='OperationCategory'");
+                if (!string.IsNullOrEmpty(OperationCategory))
+                    db.Execute("ALTER TABLE OperationCategory RENAME TO Category");
+
+                var OperationSubCategory =
+                    db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='OperationSubCategory'");
+                if (!string.IsNullOrEmpty(OperationSubCategory))
+                    db.Execute("ALTER TABLE OperationSubCategory RENAME TO SubCategory");
 
                 db.CreateTable<Operation>();
                 db.CreateTable<OperationPattern>();

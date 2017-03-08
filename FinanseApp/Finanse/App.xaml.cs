@@ -16,12 +16,18 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Finanse.Elements;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media.Imaging;
 using Finanse.Models;
+using Microsoft.Graph;
+using Microsoft.Toolkit.Uwp.Services.OneDrive;
 
 namespace Finanse {
 
     sealed partial class App : Application {
-        
+
         public App() {
             /*
             Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
@@ -32,6 +38,7 @@ namespace Finanse {
 
             Settings.SetSettings();
             this.RequestedTheme = Settings.Theme;
+         //   OneDriveMethods();
         }
 
         /// <summary>

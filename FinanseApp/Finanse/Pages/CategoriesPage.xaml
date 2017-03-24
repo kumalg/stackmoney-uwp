@@ -210,181 +210,111 @@
                     Glyph="" />
             </Button>
         </Grid>
+        
         <ProgressRing
             x:Name="LoadingIndicator" />
 
-        <ScrollViewer
-            Grid.Row="2"
-            VerticalScrollBarVisibility="Auto"
-            HorizontalScrollBarVisibility="Disabled">
-
-            <Grid>
-
-                <StackPanel
-                    x:DeferLoadStrategy="Lazy"
-                    Visibility="Collapsed"
-                    Name="CategoriesStackPanel">
-                    <!--
-                    <Grid
-                        Background="{ThemeResource AccentColor}"
-                        Height="48">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid
-                            Background="{ThemeResource AccentColor+1}">
-                            <TextBlock
-                                Foreground="{ThemeResource AccentText}"
-                                Text="Wydatki"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center" />
-                        </Grid>
+        <Grid
+            Grid.Row="2">
+            <Pivot
+                x:DeferLoadStrategy="Lazy"
+                Visibility="Collapsed"
+                Name="CategoriesStackPanel">
+                <PivotItem
+                    Margin="0">
+                    <PivotItem.Header>
                         <TextBlock
-                            Grid.Column="1"
-                            Foreground="{ThemeResource AccentText}"
-                            Text="Wpływy"
+                            Opacity="0.6"
+                            FontSize="20"
+                            FontFamily="{StaticResource DefaultFontFamily}"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Center" />
-                    </Grid>
--->
-                    <Pivot>
-                        <PivotItem>
-                            <PivotItem.Header>
-                                <TextBlock
-                                    Opacity="0.6"
-                                    FontSize="20"
-                                    FontFamily="{StaticResource DefaultFontFamily}"
-                                    HorizontalAlignment="Center"
-                                    x:Uid="Expenses"
-                                    Text="Wydatki" />
-                            </PivotItem.Header>
-                            <ListView
-                                HorizontalContentAlignment="Right"
-                                VerticalContentAlignment="Top"
-                                VerticalAlignment="Top"
-                                FlowDirection="LeftToRight"
-                                Padding="0"
-                                ScrollViewer.VerticalScrollMode="Disabled"
-                                ItemsSource="{x:Bind ExpenseCategories, Mode=OneWay}"
-                                ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
-                                SelectionMode="None"
-                                MaxWidth="620"
-                                BorderThickness="0"
-                                Background="Transparent">
-                                <ListView.ItemContainerStyle>
-                                    <Style
-                                        TargetType="ListViewItem">
-                                        <Setter
-                                            Property="HorizontalContentAlignment"
-                                            Value="Stretch" />
-                                        <Setter
-                                            Property="Padding"
-                                            Value="0" />
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-                            </ListView>
-                        </PivotItem>
+                            x:Uid="Expenses"
+                            Text="Wydatki" />
+                    </PivotItem.Header>
+                    <ScrollViewer
+                        VerticalScrollMode="Enabled"
+                        VerticalScrollBarVisibility="Auto">
+                        <ListView
+                            HorizontalContentAlignment="Right"
+                            VerticalContentAlignment="Top"
+                            VerticalAlignment="Top"
+                            FlowDirection="LeftToRight"
+                            Padding="0"
+                            ScrollViewer.VerticalScrollMode="Disabled"
+                            ItemsSource="{x:Bind ExpenseCategories, Mode=OneWay}"
+                            ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
+                            SelectionMode="None"
+                            MaxWidth="620"
+                            BorderThickness="0"
+                            Background="Transparent">
+                            <ListView.ItemContainerStyle>
+                                <Style
+                                    TargetType="ListViewItem">
+                                    <Setter
+                                        Property="HorizontalContentAlignment"
+                                        Value="Stretch" />
+                                    <Setter
+                                        Property="Padding"
+                                        Value="0" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </ScrollViewer>
+                </PivotItem>
 
-                        <PivotItem>
-                            <PivotItem.Header>
-                                <TextBlock
-                                    Opacity="0.6"
-                                    FontSize="20"
-                                    FontFamily="{StaticResource DefaultFontFamily}"
-                                    HorizontalAlignment="Center"
-                                    x:Uid="Incomes"
-                                    Text="Wpływy" />
-                            </PivotItem.Header>
-                            <ListView
-                                HorizontalContentAlignment="Right"
-                                Padding="0"
-                                ScrollViewer.VerticalScrollMode="Disabled"
-                                ItemsSource="{x:Bind IncomeCategories, Mode=OneWay}"
-                                ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
-                                SelectionMode="None"
-                                MaxWidth="620"
-                                BorderThickness="0"
-                                Background="Transparent">
-                                <ListView.ItemContainerStyle>
-                                    <Style
-                                        TargetType="ListViewItem">
-                                        <Setter
-                                            Property="HorizontalContentAlignment"
-                                            Value="Stretch" />
-                                        <Setter
-                                            Property="Padding"
-                                            Value="0" />
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-                            </ListView>
-                        </PivotItem>
-                    </Pivot>
-                    
-                    <StackPanel
-                        Visibility="Collapsed"
-                        Grid.Row="1"
-                        Margin="32"
-                        HorizontalAlignment="Center"
-                        Orientation="Horizontal">
-                        <RadioButton
-                            Name="ExpenseRadioButton"
-                            GroupName="CategoryExpenseOrIncomeRadioButtons"
+                <PivotItem
+                    Margin="0">
+                    <PivotItem.Header>
+                        <TextBlock
+                            Opacity="0.6"
+                            FontSize="20"
+                            FontFamily="{StaticResource DefaultFontFamily}"
                             HorizontalAlignment="Center"
-                            IsChecked="True"
-                            Checked="RadioButton_Checked"
-                            Style="{StaticResource RadioButtonLikeButtonStyle}">
-                            <TextBlock
-                                Text="Wydatki"
-                                x:Uid="expenses" />
-                        </RadioButton>
-                        <RadioButton
-                            Name="IncomeRadioButton"
-                            GroupName="CategoryExpenseOrIncomeRadioButtons"
-                            HorizontalAlignment="Center"
-                            Checked="RadioButton_Checked_1"
-                            Style="{StaticResource RadioButtonLikeButtonStyle}">
-                            <TextBlock
-                                Text="Wpływy"
-                                x:Uid="incomes" />
-                        </RadioButton>
-                    </StackPanel>
-                    <ListView
-                        Visibility="Collapsed"
-                        FlowDirection="LeftToRight"
-                        Padding="0"
-                        ScrollViewer.VerticalScrollMode="Disabled"
-                        ItemsSource="{x:Bind Categories, Mode=OneWay}"
-                        ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
-                        SelectionMode="None"
-                        MaxWidth="620"
-                        BorderThickness="0"
-                        Background="Transparent">
-                        <ListView.ItemContainerStyle>
-                            <Style
-                                TargetType="ListViewItem">
-                                <Setter
-                                    Property="HorizontalContentAlignment"
-                                    Value="Stretch" />
-                                <Setter
-                                    Property="Padding"
-                                    Value="0" />
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                    </ListView>
-                    
-                </StackPanel>
+                            x:Uid="Incomes"
+                            Text="Wpływy" />
+                    </PivotItem.Header>
+                    <ScrollViewer
+                        VerticalScrollMode="Enabled"
+                        VerticalScrollBarVisibility="Auto">
+                        <ListView
+                            HorizontalContentAlignment="Right"
+                            Padding="0"
+                            ScrollViewer.VerticalScrollMode="Disabled"
+                            ItemsSource="{x:Bind IncomeCategories, Mode=OneWay}"
+                            ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
+                            SelectionMode="None"
+                            MaxWidth="620"
+                            BorderThickness="0"
+                            Background="Transparent">
+                            <ListView.ItemContainerStyle>
+                                <Style
+                                    TargetType="ListViewItem">
+                                    <Setter
+                                        Property="HorizontalContentAlignment"
+                                        Value="Stretch" />
+                                    <Setter
+                                        Property="Padding"
+                                        Value="0" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </ScrollViewer>
+                </PivotItem>
+            </Pivot>
 
-                <Grid
-                    x:DeferLoadStrategy="Lazy"
-                    Visibility="Collapsed"
-                    Name="SeparatedCategoriesGrid" >
+            <ScrollViewer
+                x:DeferLoadStrategy="Lazy"
+                Visibility="Collapsed"
+                Name="SeparatedCategoriesGrid"
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition />
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
@@ -455,7 +385,7 @@
                         </ListView.ItemContainerStyle>
                     </ListView>
                 </Grid>
-            </Grid>
-        </ScrollViewer>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </Page>

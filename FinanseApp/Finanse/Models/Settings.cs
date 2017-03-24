@@ -38,9 +38,7 @@ namespace Finanse.Models {
                 return deviceInformation.Id.ToString();
             }
         }
-
-        public static string ActualTimeString => DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss");
-
+        
         public static void SetSettings() {
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 

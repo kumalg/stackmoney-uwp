@@ -142,7 +142,16 @@ namespace Finanse.Pages {
         }
 
         private string whatsNewText =
-            "###1.1.4.0\n" +
+            "###1.1.5.0\n" +
+            "* synchronizacja operacji\n" +
+            "* suma pieniędzy na poczatku i końcu każdego miesiąca\n" +
+            "* poprawiony sposób wyświetlania aktualnego salda na stronie \"Konta\"\n" +
+            "* zabezpieczenie przed usunięciem domyślnej kategorii\n" +
+            "* zabezpieczenie przed usunięciem wszystkich kont\n" +
+            "* zmiana motywu jasny/ciemny następuje natychmiast (jednak wciąż z drobnymi kłopotami)\n" +
+            "* naprawiony brak możliwości scrollowania kategorii dla trybu kompaktowego\n" +
+            "* poprawki drobnych błędów\n" +
+            "\n\n\n###1.1.4.0\n" + 
             "* poprawki wydajności\n" +
             "* zabezpieczenie przed dodaniem kategorii albo konta o takiej samej nazwie\n" +
             "* poprawki w tłumaczeniu\n" +

@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Windows.Storage;
+using Finanse.Models.Helpers;
+using Finanse.Models.Operations;
 
 namespace Finanse.DataAccessLayer {
     internal class AccountsDal : DalBase {
@@ -29,6 +31,16 @@ namespace Finanse.DataAccessLayer {
                                                  "FROM Operation " +
                                                  "WHERE MoneyAccountId = ? AND Date IS NOT NULL AND Date IS NOT '' AND Date <= ? AND IsDeleted = 0", 
                                                  id, DateTime.Today.Date.ToString("yyyy.MM.dd"));
+            }
+        }
+
+        public static decimal BankAccountWithCardsBalanceById(int id) {
+            using (var db = DbConnection) {
+                db.TraceListener = new DebugTraceListener();
+                return db.ExecuteScalar<decimal>("SELECT TOTAL(CASE WHEN isExpense THEN -Cost ELSE Cost END) " +
+                                                 "FROM Operation " +
+                                                 "WHERE MoneyAccountId IN (?, (SELECT DISTINCT Id FROM CardAccount Where BankAccountId = ?)) AND Date IS NOT NULL AND Date IS NOT '' AND Date <= ? AND IsDeleted = 0",
+                                                 id, id, DateTime.Today.Date.ToString("yyyy.MM.dd"));
             }
         }
 
@@ -147,18 +159,17 @@ namespace Finanse.DataAccessLayer {
                             };
 
                 List<MoneyAccountBalance> list = query
-                    .Where(i => !(i.account is CardAccount))
+                    .Where(i => !(i.account == null || i.account is CardAccount))
                     .Select(item => new MoneyAccountBalance(item.account, item.initialValue, item.finalValue))
                     .ToList();
 
                 foreach (var item in query.Where(i => i.account is CardAccount)) {
                     MoneyAccountBalance moneyAccountBalance = list.SingleOrDefault(i => i.Account.Id == ((CardAccount)item.account).BankAccountId);
-                    if (moneyAccountBalance != null) {
+
+                    if (moneyAccountBalance != null)
                         moneyAccountBalance.JoinBalance(item.initialValue, item.finalValue);
-                    }
-                    else {
+                    else
                         list.Add(new MoneyAccountBalance(GetAccountById(((CardAccount)item.account).BankAccountId), item.initialValue, item.finalValue));
-                    }
                 }
                 return list.OrderBy(i => i.Account.Name).ToList();
             }
@@ -170,8 +181,9 @@ namespace Finanse.DataAccessLayer {
         public static void AddAccount(Account account) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
+                account.Id = GetHighestIdOfAccounts() + 1;
                 db.Insert(account);
-                db.Execute("UPDATE sqlite_sequence SET seq = seq + 1 WHERE name = 'Account'");
+             //   db.Execute("UPDATE sqlite_sequence SET seq = seq + 1 WHERE name = 'Account'");
             }
         }
 
@@ -192,10 +204,11 @@ namespace Finanse.DataAccessLayer {
         public static void RemoveSingleAccountWithOperations(int accountId) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
+                db.Execute("UPDATE Operation SET IsDeleted = 1, LastModifed = ? WHERE MoneyAccountId = ?", DateHelper.ActualTimeString, accountId);
+
                 db.Execute("DELETE FROM CashAccount WHERE Id = ?", accountId);
                 db.Execute("DELETE FROM BankAccount WHERE Id = ?", accountId);
                 db.Execute("DELETE FROM CardAccount WHERE Id = ?", accountId);
-                db.Execute("UPDATE Operation SET IsDeleted = 1 WHERE MoneyAccountId = ?", accountId);
             }
         }
 
@@ -203,9 +216,9 @@ namespace Finanse.DataAccessLayer {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("UPDATE Operation " +
-                           "SET IsDeleted = 1 " +
-                           "WHERE MoneyAccountId = ? OR MoneyAccountId IN (SELECT Id FROM CardAccount Where BankAccountId = ?)", bankAccountId, bankAccountId);
-                
+                           "SET IsDeleted = 1, LastModifed = ? " +
+                           "WHERE MoneyAccountId IN (?, (SELECT DISTINCT Id FROM CardAccount Where BankAccountId = ?))", DateHelper.ActualTimeString, bankAccountId, bankAccountId);
+
                 db.Execute("DELETE FROM BankAccount WHERE Id = ?", bankAccountId);
                 db.Execute("DELETE FROM CardAccount WHERE BankAccountId = ?", bankAccountId);
             }

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Finanse.Dialogs;
+using Finanse.Models.Operations;
 using Microsoft.Toolkit.Uwp.Services.OneDrive;
 
 namespace Finanse.DataAccessLayer {
@@ -126,13 +127,6 @@ namespace Finanse.DataAccessLayer {
 
 
 
-        public static List<Operation> GetAllOperationsOfThisMoneyAccount(MoneyAccount account) {
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                db.TraceListener = new DebugTraceListener();
-                return db.Query<Operation>("SELECT * FROM Operation WHERE MoneyAccountId == ? AND IsDeleted = 0", account.Id);
-            }
-        }
-
         public static decimal GetBalanceOfCertainDay(DateTime dateTime) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
@@ -248,7 +242,7 @@ namespace Finanse.DataAccessLayer {
         public static void SaveOperation(Operation operation) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                operation.LastModifed = Settings.ActualTimeString;
+                operation.LastModifed = DateHelper.ActualTimeString;
 
                 if (operation.DeviceId == null)
                     operation.DeviceId = Settings.DeviceId;
@@ -280,7 +274,7 @@ namespace Finanse.DataAccessLayer {
         public static void SaveOperationPattern(OperationPattern operationPattern) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                operationPattern.LastModifed = Settings.ActualTimeString;
+                operationPattern.LastModifed = DateHelper.ActualTimeString;
 
                 if (operationPattern.Id == 0) {
                     operationPattern.RemoteId = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'OperationPattern'") + 1;
@@ -327,7 +321,7 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("UPDATE OperationPattern " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE Id = ?", Settings.ActualTimeString, operationPattern.Id);
+                           "WHERE Id = ?", DateHelper.ActualTimeString, operationPattern.Id);
             }
         }
 
@@ -336,13 +330,16 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("UPDATE Operation " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE Id = ?", Settings.ActualTimeString, operation.Id);
+                           "WHERE Id = ?", DateHelper.ActualTimeString, operation.Id);
             }
         }
 
         public static void DeleteCategoryWithSubCategories(int categoryId) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
+                if (db.ExecuteScalar<bool>("SELECT CantDelete FROM Category WHERE Id = ? LIMIT 1", categoryId))
+                    return;
+
                 db.Execute("DELETE FROM Category WHERE Id = ?", categoryId);
                 db.Execute("DELETE FROM SubCategory WHERE BossCategoryId = ?", categoryId);
             }
@@ -351,6 +348,9 @@ namespace Finanse.DataAccessLayer {
         public static void DeleteSubCategory(int subCategoryId) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
+                if (db.ExecuteScalar<bool>("SELECT CantDelete FROM SubCategory WHERE Id = ? LIMIT 1", subCategoryId))
+                    return;
+
                 db.Execute("DELETE FROM SubCategory WHERE Id = ?", subCategoryId);
             }
         }
@@ -387,7 +387,7 @@ namespace Finanse.DataAccessLayer {
                     continue;
 
                 if (oneDriveOperation.LastModifed == null)
-                    oneDriveOperation.LastModifed = Settings.ActualTimeString;
+                    oneDriveOperation.LastModifed = DateHelper.ActualTimeString;
 
                 UpdateOperation(oneDriveOperation);
             }

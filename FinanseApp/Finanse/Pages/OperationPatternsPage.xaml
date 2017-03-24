@@ -6,6 +6,7 @@
     xmlns:models="using:Finanse.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:operations="using:Finanse.Models.Operations"
     mc:Ignorable="d">
 
     <Page.Transitions>
@@ -60,7 +61,7 @@
 
             <ListView.ItemTemplate>
                 <DataTemplate
-                    x:DataType="models:OperationPattern">
+                    x:DataType="operations:OperationPattern">
 
                     <Grid
                         Background="Transparent"

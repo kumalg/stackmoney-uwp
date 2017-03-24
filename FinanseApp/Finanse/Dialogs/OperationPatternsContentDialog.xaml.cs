@@ -2,6 +2,7 @@
 using Finanse.Models;
 using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
+using Finanse.Models.Operations;
 
 namespace Finanse.Dialogs {
 

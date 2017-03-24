@@ -8,6 +8,8 @@
     xmlns:data="using:Finanse.Elements"
     xmlns:models="using:Finanse.Models"
     xmlns:animations="using:Microsoft.Toolkit.Uwp.UI.Animations"
+    xmlns:operations="using:Finanse.Models.Operations"
+    xmlns:moneyAccounts="using:Finanse.Models.MoneyAccounts"
     NavigationCacheMode="Enabled"
     mc:Ignorable="d">
 
@@ -248,7 +250,7 @@
             Source="{x:Bind OperationGroups, Mode=OneWay}"
             IsSourceGrouped="True" />
 
-        <local:EmptyOrFullSelector
+        <models:EmptyOrFullSelector
             Full="{StaticResource JumpListGroupTemplate}"
             Empty="{StaticResource JumptListEmptyTemplate}"
             x:Name="GroupEmptyOrFullSelector" />
@@ -568,7 +570,7 @@
 
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate
-                                            x:DataType="models:MoneyAccountBalance">
+                                            x:DataType="moneyAccounts:MoneyAccountBalance">
                                             <Grid
                                                 HorizontalAlignment="Stretch">
                                                 <Grid.ColumnDefinitions>
@@ -743,7 +745,7 @@
 
                     <ListView.ItemTemplate>
                         <DataTemplate
-                            x:DataType="models:Operation">
+                            x:DataType="operations:Operation">
 
                             <Grid
                                 Background="Transparent"

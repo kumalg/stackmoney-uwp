@@ -1,4 +1,4 @@
-﻿namespace Finanse.Models {
+﻿namespace Finanse.Models.Operations {
     public class HeaderItem {
         public string Day { get; set; }
         public bool IsEnabled { get; set; }

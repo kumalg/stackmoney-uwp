@@ -7,6 +7,7 @@ using Finanse.DataAccessLayer;
 using Finanse.Models;
 using Finanse.Models.Categories;
 using Finanse.Models.MoneyAccounts;
+using Finanse.Models.Operations;
 
 namespace Finanse.Dialogs {
 

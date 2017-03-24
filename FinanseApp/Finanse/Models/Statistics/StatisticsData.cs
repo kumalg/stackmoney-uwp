@@ -10,6 +10,7 @@ using Finanse.Charts;
 using Finanse.Charts.Data;
 using Finanse.DataAccessLayer;
 using Finanse.Models.Categories;
+using Finanse.Models.Operations;
 
 namespace Finanse.Models.Statistics {
     public class StatisticsData

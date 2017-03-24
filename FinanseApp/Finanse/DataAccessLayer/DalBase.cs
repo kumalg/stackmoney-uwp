@@ -1,4 +1,7 @@
-﻿namespace Finanse.DataAccessLayer {
+﻿using System.Threading.Tasks;
+using Finanse.Models.Operations;
+
+namespace Finanse.DataAccessLayer {
     using Models;
     using Models.Categories;
     using Models.Helpers;
@@ -62,19 +65,31 @@
                 db.CreateTable<CashAccount>();
                 db.CreateTable<CardAccount>();
                 db.CreateTable<BankAccount>();
-                db.CreateTable<Deleted>();
 
                 db.Execute("UPDATE Operation SET RemoteId = Id WHERE RemoteId ISNULL");
                 db.Execute("UPDATE Operation SET DeviceId = ? WHERE DeviceId ISNULL", Settings.DeviceId);
                 db.Execute("UPDATE Operation SET LastModifed = ? WHERE DeviceId ISNULL", Settings.DeviceId);
                 db.Execute("UPDATE Operation SET IsDeleted = 0 WHERE IsDeleted ISNULL");
 
+                db.Execute("UPDATE Category SET CantDelete = 1 WHERE Id = 1");
+                db.Execute("UPDATE Category SET CantDelete = 0 WHERE CantDelete ISNULL");
+                db.Execute("UPDATE SubCategory SET CantDelete = 0 WHERE CantDelete ISNULL");
+
+                db.Execute(AccountQueries.SeqTriggerCashAccount);
+                db.Execute(AccountQueries.SeqTriggerBankAccount);
+                db.Execute(AccountQueries.SeqTriggerCardAccount);
+
+                if (!db.ExecuteScalar<bool>("SELECT * FROM Category WHERE Id = 1 LIMIT 1")) {
+                    db.Execute("INSERT INTO Category (Id) VALUES (1)");
+                    db.Update(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true, CantDelete = true });
+                }
+
                 db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
 
                 db.Execute("UPDATE Operation SET LastModifed = SUBSTR(LastModifed,1,11) || REPLACE(SUBSTR(LastModifed,12),'.',':')");
 
-                if (!(db.Table<Category>().Any())) {
-                    db.Insert(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });
+                if (db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'Category'") == 1) {
+               //     db.Insert(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true, CantDelete = true});
                     db.Insert(new Category { Id = 2, Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true });
                     db.Insert(new Category { Id = 3, Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true });
                     db.Insert(new Category { Id = 4, Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true });
@@ -92,21 +107,19 @@
                 }
             }
         }
-
-
         /*
-public static async Task CreateDatabase() {
-   // Create a new connection
-   using (var db = DbConnection) {
-       // Activate Tracing
-       db.TraceListener = new DebugTraceListener();
+        public static async Task CreateDatabase() {
+            // Create a new connection
+            using (var db = DbConnection) {
+                // Activate Tracing
+                db.TraceListener = new DebugTraceListener();
 
-       // Create the table if it does not exist
-       var c = db.CreateTable<Operation>();
-       var info = db.GetMapping(typeof(Operation));
+                // Create the table if it does not exist
+                var c = db.CreateTable<Operation>();
+                var info = db.GetMapping(typeof(Operation));
 
-   }
-}
-*/
+            }
+        }
+        */
     }
 }

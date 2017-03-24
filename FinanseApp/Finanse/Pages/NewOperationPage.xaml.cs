@@ -20,6 +20,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Finanse.Models.Categories;
+using Finanse.Models.Helpers;
+using Finanse.Models.Operations;
 using Microsoft.Graph;
 
 namespace Finanse.Pages {
@@ -33,6 +35,7 @@ namespace Finanse.Pages {
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             SetDefaultPageValues();
 
+            SetCategoryComboBoxItems(true, false);
             AccountsWithoutCards = AccountsDal.GetAccountsWithoutCards();
             Accounts = AccountsDal.GetAllMoneyAccounts();
             RaisePropertyChanged("AccountsComboBox");

@@ -21,6 +21,8 @@ using Windows.UI.Popups;
 using Windows.UI;
 using System.ComponentModel;
 using Finanse.Models.Helpers;
+using Finanse.Models.MoneyAccounts;
+using Finanse.Models.Operations;
 
 namespace Finanse.Pages {
     public sealed partial class OperationsPage : Page, INotifyPropertyChanged {
@@ -36,25 +38,25 @@ namespace Finanse.Pages {
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
+            if (!( e.Parameter is DateTime ))
+                return;
 
-            if (e.Parameter is DateTime) {
-                DateTime dateTimeWithDays = (DateTime)e.Parameter;
-                storeData.ActualMonth = Date.FirstDayInMonth(dateTimeWithDays);
-                storeData.ForceUpdate();
-                RaisePropertyChanged("OperationGroups");
+            DateTime dateTimeWithDays = (DateTime)e.Parameter;
+            storeData.ActualMonth = DateHelper.FirstDayInMonth(dateTimeWithDays);
+            storeData.ForceUpdate();
+            RaisePropertyChanged("OperationGroups");
 
-                SetNextMonthButtonEnabling();
-                SetPreviousMonthButtonEnabling();
+            SetNextMonthButtonEnabling();
+            SetPreviousMonthButtonEnabling();
 
-                if ((bool)ByDateRadioButton.IsChecked)
-                    ListViewByDate();
-                else
-                    ListViewByCategory();
+            if ((bool)ByDateRadioButton.IsChecked)
+                ListViewByDate();
+            else
+                ListViewByCategory();
 
-                SetEmptyListViewInfoVisibility();
+            SetEmptyListViewInfoVisibility();
                 
-                base.OnNavigatedTo(e);
-            }            
+            base.OnNavigatedTo(e);
         }
 
         private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e) {

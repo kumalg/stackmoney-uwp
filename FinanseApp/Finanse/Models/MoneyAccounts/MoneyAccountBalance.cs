@@ -1,12 +1,4 @@
-﻿using Finanse.DataAccessLayer;
-using Finanse.Models.MoneyAccounts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Finanse.Models {
+﻿namespace Finanse.Models.MoneyAccounts {
     class MoneyAccountBalance {
         public MoneyAccountBalance(Account account, decimal initialValue, decimal finalValue) {
             this.Account = account;

@@ -121,7 +121,7 @@
             Margin="20,0,0,0"
             FontSize="14"
             Foreground="{ThemeResource Text}" />
-
+<!--
         <TextBlock
             FontSize="12"
             Grid.Column="3"
@@ -130,5 +130,6 @@
             VerticalAlignment="Center"
             HorizontalAlignment="Right"
             Foreground="{ThemeResource Text-1}" />
+        -->
     </Grid>
 </UserControl>

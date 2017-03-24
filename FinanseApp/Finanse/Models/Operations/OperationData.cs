@@ -11,7 +11,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
-namespace Finanse.Models {
+namespace Finanse.Models.Operations {
     public class OperationData : INotifyPropertyChanged {
 
         private DateTime monthOfDayGrouping;
@@ -22,7 +22,7 @@ namespace Finanse.Models {
         private bool forceByCategoryUpdate = false;
 
 
-        private DateTime actualMonth = Date.FirstDayInMonth(DateTime.Today);
+        private DateTime actualMonth = DateHelper.FirstDayInMonth(DateTime.Today);
         public DateTime ActualMonth {
             get {
                 return actualMonth;
@@ -99,7 +99,7 @@ namespace Finanse.Models {
         }
 
 
-        public bool IsFuture => ActualMonth > Date.FirstDayInMonth(DateTime.Today);
+        public bool IsFuture => ActualMonth > DateHelper.FirstDayInMonth(DateTime.Today);
 
         private ObservableCollection<GroupInfoList<Operation>> operationsByDay;
         public ObservableCollection<GroupInfoList<Operation>> OperationsByDay {
@@ -167,7 +167,7 @@ namespace Finanse.Models {
             AllOperations.Add(operation);
 
             if (operationsByDay != null) {
-                if (ActualMonth > Date.FirstDayInMonth(DateTime.Today)) {
+                if (ActualMonth > DateHelper.FirstDayInMonth(DateTime.Today)) {
                     if (string.IsNullOrEmpty(operation.Date)) {
                         GroupInfoList<Operation> group = operationsByDay.SingleOrDefault(i => string.IsNullOrEmpty(i.Key.ToString()));
                         if (group != null)

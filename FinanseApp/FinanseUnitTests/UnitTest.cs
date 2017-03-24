@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Finanse.Models;
 using Finanse.DataAccessLayer;
 using Finanse.Models.Categories;
+using Finanse.Models.Operations;
 
 namespace FinanseUnitTests {
     [TestClass]

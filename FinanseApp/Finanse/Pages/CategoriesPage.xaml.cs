@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -168,6 +169,12 @@ namespace Finanse.Pages {
             object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
             Category category = ((CategoryWithSubCategories)datacontext).Category;
 
+            if (category.CantDelete) {
+                MessageDialog messageDialog = new MessageDialog("Nie można usunąć tej kategorii");
+                await messageDialog.ShowAsync();
+                return;
+            }
+
             AcceptContentDialog acceptDeleteOperationContentDialog = new AcceptContentDialog("Czy chcesz usunąć kategorię i wszystkie jej podkategorie?");
             ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
 
@@ -181,6 +188,12 @@ namespace Finanse.Pages {
         private async void DeleteSubCategory_Click(object sender, RoutedEventArgs e) {
             object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
             SubCategory subCategory = (SubCategory)datacontext;
+
+            if (subCategory.CantDelete) {
+                MessageDialog messageDialog = new MessageDialog("Nie można usunąć tej podkategorii");
+                await messageDialog.ShowAsync();
+                return;
+            }
 
             AcceptContentDialog acceptDeleteOperationContentDialog = new AcceptContentDialog("Czy chcesz usunąć podkategorię?");
             ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();

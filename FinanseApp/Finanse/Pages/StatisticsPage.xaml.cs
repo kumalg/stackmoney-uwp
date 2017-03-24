@@ -15,7 +15,7 @@ namespace Finanse.Pages {
     public sealed partial class StatisticsPage : Page, INotifyPropertyChanged {
         private readonly StatisticsData _statisticsData = new StatisticsData();
         
-        public DateTime MinDate = Date.FirstDayInMonth(DateTime.Today);
+        public DateTime MinDate = DateHelper.FirstDayInMonth(DateTime.Today);
         public DateTime MaxDate = DateTime.Today;
 
         private string incomesPercentageText;

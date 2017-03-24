@@ -5,9 +5,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:data="using:Finanse.Elements"
-    xmlns:models="using:Finanse.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:operations="using:Finanse.Models.Operations"
     mc:Ignorable="d"
     Title="Użyj szablonu"
     x:Uid="usePatternContentDialog"
@@ -42,7 +42,7 @@
 
             <ListView.ItemTemplate>
                 <DataTemplate
-                    x:DataType="models:Operation">
+                    x:DataType="operations:Operation">
 
                     <data:OperationTemplate />
 

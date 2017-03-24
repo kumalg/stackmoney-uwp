@@ -6,6 +6,7 @@ using Finanse.DataAccessLayer;
 using Finanse.Models;
 using Finanse.Models.Categories;
 using Finanse.Models.MoneyAccounts;
+using Finanse.Models.Operations;
 
 namespace Finanse.Elements {
 
@@ -13,7 +14,7 @@ namespace Finanse.Elements {
 
         public decimal Date = 12;
 
-        private Models.OperationPattern Operation => DataContext as OperationPattern;
+        private OperationPattern Operation => DataContext as OperationPattern;
 
         public OperationTemplate() {
 

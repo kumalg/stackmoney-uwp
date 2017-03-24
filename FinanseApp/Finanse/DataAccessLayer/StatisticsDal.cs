@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Finanse.Models.Categories;
+using Finanse.Models.Operations;
 
 namespace Finanse.DataAccessLayer {
     class StatisticsDal : DalBase {

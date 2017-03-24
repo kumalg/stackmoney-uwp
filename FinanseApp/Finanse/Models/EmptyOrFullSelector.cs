@@ -1,14 +1,9 @@
-﻿using Finanse.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Finanse.Models.Operations;
 
-namespace Finanse
+namespace Finanse.Models
 {
     public class EmptyOrFullSelector : DataTemplateSelector
     {

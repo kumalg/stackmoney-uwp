@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Finanse.Models.Operations;
 
 namespace Finanse.Models {
     public class ItemCollection : IEnumerable<Operation> {

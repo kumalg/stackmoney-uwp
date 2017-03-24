@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.UI.Xaml.Media;
 
-namespace Finanse.Models {
+namespace Finanse.Models.Helpers {
     public class Functions {
         public static SolidColorBrush GetSolidColorBrush(string hex) {
             hex = hex.Replace("#", string.Empty);

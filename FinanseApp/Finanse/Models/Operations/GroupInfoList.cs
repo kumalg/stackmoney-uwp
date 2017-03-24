@@ -1,12 +1,12 @@
-﻿using Finanse.DataAccessLayer;
-using Finanse.Models.Categories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Finanse.DataAccessLayer;
+using Finanse.Models.Categories;
 
-namespace Finanse.Models {
+namespace Finanse.Models.Operations {
     public class GroupInfoList<T> : ObservableCollection<Operation> {
         public object Key { get; set; }
 

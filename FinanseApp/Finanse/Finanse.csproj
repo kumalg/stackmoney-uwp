@@ -180,29 +180,28 @@
     <Compile Include="Elements\SmallPieWithLegend.xaml.cs">
       <DependentUpon>SmallPieWithLegend.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EmptyOrFullSelector.cs" />
+    <Compile Include="Models\EmptyOrFullSelector.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Categories\CategoryWithSubCategories.cs" />
-    <Compile Include="Models\Deleted.cs" />
-    <Compile Include="Models\Functions.cs" />
-    <Compile Include="Models\GroupInfoList.cs" />
-    <Compile Include="Models\Helpers\Date.cs" />
+    <Compile Include="Models\Helpers\Functions.cs" />
+    <Compile Include="Models\Operations\GroupInfoList.cs" />
+    <Compile Include="Models\Helpers\DateHelper.cs" />
     <Compile Include="Models\ItemCollection.cs" />
-    <Compile Include="Models\MoneyAccount.cs" />
-    <Compile Include="Models\MoneyAccountBalance.cs" />
+    <Compile Include="Models\MoneyAccounts\MoneyAccountBalance.cs" />
     <Compile Include="Models\MoneyAccounts\Account.cs" />
+    <Compile Include="Models\MoneyAccounts\AccountQueries.cs" />
     <Compile Include="Models\MoneyAccounts\BankAccount.cs" />
     <Compile Include="Models\MoneyAccounts\BankAccountWithCards.cs" />
     <Compile Include="Models\MoneyAccounts\CardAccount.cs" />
     <Compile Include="Models\MoneyAccounts\CashAccount.cs" />
     <Compile Include="Models\MoneyAccounts\ICloneable.cs" />
-    <Compile Include="Models\NewOperation.cs" />
-    <Compile Include="Models\Operation.cs" />
+    <Compile Include="Models\Helpers\NewOperation.cs" />
+    <Compile Include="Models\Operations\Operation.cs" />
     <Compile Include="Models\Categories\Category.cs" />
-    <Compile Include="Models\OperationData.cs" />
-    <Compile Include="Models\OperationPattern.cs" />
+    <Compile Include="Models\Operations\OperationData.cs" />
+    <Compile Include="Models\Operations\OperationPattern.cs" />
     <Compile Include="Models\Categories\SubCategory.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Statistics\CategoryChartPart.cs" />
@@ -233,8 +232,10 @@
     <Compile Include="Pages\StandingOrdersPage.xaml.cs">
       <DependentUpon>StandingOrdersPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ThemeAwareFrame.cs" />
+    <Compile Include="Models\Helpers\SyncHelper.cs" />
+    <Compile Include="Models\ThemeAwareFrame.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

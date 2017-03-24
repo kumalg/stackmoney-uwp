@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Finanse.Models.Helpers {
-    public class Date {
+    public class DateHelper {
         public static DateTime FirstDayInMonth(DateTime date) {
             DateTime first = date.AddDays(1 - date.Day);
             return first;
@@ -17,5 +17,7 @@ namespace Finanse.Models.Helpers {
             DateTime last = FirstDayInMonth(date).AddDays(daysInMonth - 1);
             return last;
         }
+        
+        public static string ActualTimeString => DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss");
     }
 }

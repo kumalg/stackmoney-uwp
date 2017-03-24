@@ -10,6 +10,8 @@ using Finanse.Models.MoneyAccounts;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Finanse.Models.Categories;
+using Finanse.Models.Helpers;
+using Finanse.Models.Operations;
 
 namespace Finanse.Dialogs {
     public sealed partial class EditOperationContentDialog : ContentDialog, INotifyPropertyChanged {

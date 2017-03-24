@@ -1,6 +1,6 @@
 ﻿using SQLite.Net.Attributes;
 
-namespace Finanse.Models {
+namespace Finanse.Models.Operations {
 
     public class OperationPattern {
 

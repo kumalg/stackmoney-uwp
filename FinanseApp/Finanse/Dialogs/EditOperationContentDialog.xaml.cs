@@ -116,6 +116,8 @@ namespace Finanse.Dialogs {
         public Operation EditedOperation() {
             return new Operation {
                 Id = operationToEdit.Id,
+                RemoteId = operationToEdit.RemoteId,
+                DeviceId = operationToEdit.DeviceId,
                 Date = GetDate(),
                 Title = NameValue.Text,
                 Cost = decimal.Parse(acceptedCostValue, Settings.ActualCultureInfo),
@@ -131,6 +133,8 @@ namespace Finanse.Dialogs {
         public OperationPattern EditedOperationPattern() {
             return new OperationPattern {
                 Id = operationPatternToEdit.Id,
+                RemoteId = operationPatternToEdit.RemoteId,
+                DeviceId = operationToEdit.DeviceId,
                 Title = NameValue.Text,
                 Cost = decimal.Parse(acceptedCostValue, Settings.ActualCultureInfo),
                 isExpense = (bool)Expense_RadioButton.IsChecked,

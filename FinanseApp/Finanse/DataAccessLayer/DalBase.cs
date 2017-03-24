@@ -14,6 +14,7 @@
     using Windows.Storage;
 
     public class DalBase {
+        public static string dbOneDriveName = "dbOneDrive.sqlite";
         private static string dbPath = string.Empty;
         public static string DbPath {
             get {
@@ -23,7 +24,11 @@
             }
         }
 
+        public static string DBPathLocalFromFileName(string fileName) => Path.Combine(ApplicationData.Current.LocalFolder.Path, fileName);
+
         protected static SQLiteConnection DbConnection => new SQLiteConnection(new SQLitePlatformWinRT(), DbPath);
+
+        protected static SQLiteConnection DbConnectionFromPath(string path) => new SQLiteConnection(new SQLitePlatformWinRT(), path);
 
         public static void CreateDb() {
 
@@ -57,8 +62,16 @@
                 db.CreateTable<CashAccount>();
                 db.CreateTable<CardAccount>();
                 db.CreateTable<BankAccount>();
+                db.CreateTable<Deleted>();
+
+                db.Execute("UPDATE Operation SET RemoteId = Id WHERE RemoteId ISNULL");
+                db.Execute("UPDATE Operation SET DeviceId = ? WHERE DeviceId ISNULL", Settings.DeviceId);
+                db.Execute("UPDATE Operation SET LastModifed = ? WHERE DeviceId ISNULL", Settings.DeviceId);
+                db.Execute("UPDATE Operation SET IsDeleted = 0 WHERE IsDeleted ISNULL");
 
                 db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
+
+                db.Execute("UPDATE Operation SET LastModifed = SUBSTR(LastModifed,1,11) || REPLACE(SUBSTR(LastModifed,12),'.',':')");
 
                 if (!(db.Table<Category>().Any())) {
                     db.Insert(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });

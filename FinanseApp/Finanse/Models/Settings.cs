@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Windows.Security.ExchangeActiveSyncProvisioning;
 using Windows.UI.Xaml;
 
 namespace Finanse.Models {
@@ -31,11 +32,23 @@ namespace Finanse.Models {
 
         public static DateTime MinDate => new DateTime(2000, 1, 1);
 
+        public static string DeviceId {
+            get {
+                var deviceInformation = new EasClientDeviceInformation();
+                return deviceInformation.Id.ToString();
+            }
+        }
+
+        public static string ActualTimeString => DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss");
+
         public static void SetSettings() {
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
             if (localSettings.Values["syncSettings"] == null)
                 localSettings.Values["syncSettings"] = true;
+
+            if (localSettings.Values["syncData"] == null)
+                localSettings.Values["syncData"] = false;
 
             var actualTypeOfSettings = WhichSettings;
 
@@ -81,7 +94,18 @@ namespace Finanse.Models {
                 localSettings.Values["syncSettings"] = value;
             }
         }
-        
+
+        public static bool SyncData {
+            get {
+                var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                return (bool)localSettings.Values["syncData"];
+            }
+            set {
+                var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                localSettings.Values["syncData"] = value;
+            }
+        }
+
         private static Windows.Storage.ApplicationDataContainer WhichSettings {
             get {
                 var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;

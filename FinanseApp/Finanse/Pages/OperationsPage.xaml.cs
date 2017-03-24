@@ -125,9 +125,21 @@ namespace Finanse.Pages {
             SetListOfOperations();
         }
 
-        private List<MoneyAccountBalance> ListOfMoneyAccounts => AccountsDal.ListOfMoneyAccountBalances(storeData.ActualMonth)
-            .Where(i => storeData.VisiblePayFormList.Any(ac => ac == i.Account.Id))
-            .ToList();
+        private List<MoneyAccountBalance> _listOfMoneyAccounts;
+
+        private List<MoneyAccountBalance> ListOfMoneyAccounts {
+            get {
+                _listOfMoneyAccounts = AccountsDal.ListOfMoneyAccountBalances(storeData.ActualMonth)
+                           .Where(i => storeData.VisiblePayFormList.Any(ac => ac == i.Account.Id))
+                           .ToList();
+                RaisePropertyChanged("InitialSum");
+                RaisePropertyChanged("FinalSum");
+                return _listOfMoneyAccounts;
+            }
+        }
+
+        private decimal InitialSum => _listOfMoneyAccounts.Sum(i => i.InitialValue);
+        private decimal FinalSum => _listOfMoneyAccounts.Sum(i => i.FinalValue);
 
 
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {

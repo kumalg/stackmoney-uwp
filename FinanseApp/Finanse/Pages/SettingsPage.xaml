@@ -318,7 +318,7 @@
                                 Foreground="{ThemeResource Text-1}" />
 
                             <ToggleSwitch
-                                IsEnabled="False"
+                                x:Name="SyncDataToggleButton"
                                 Margin="10,0"
                                 Style="{StaticResource ToggleSwitchStyle1}">
 

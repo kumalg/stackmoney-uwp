@@ -64,9 +64,15 @@ namespace Finanse.Pages {
             Accounts.Insert(index, editedAccound);
         }
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e) {
-            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-            ShowDeleteAccountContentDialog((Account)datacontext);
+        private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
+            if (AccountsDal.CountBankAccouns() + AccountsDal.CountCashAccouns() > 1) {
+                object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+                ShowDeleteAccountContentDialog((Account) datacontext);
+            }
+            else {
+                MessageDialog message = new MessageDialog("To ostatnie konto. NIE USUWAJ GO ŚMIESZKU :(");
+                await message.ShowAsync();
+            }
         }
 
         private async void EditCard_Click(object sender, RoutedEventArgs e) {

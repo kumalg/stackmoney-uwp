@@ -14,6 +14,9 @@ namespace Finanse.Models {
         public bool isExpense { get; set; }
         public int MoneyAccountId { get; set; }
         public string LastModifed { get; set; }
+        public string DeviceId { get; set; } //ale prawdopodobie tylko get
+        public int RemoteId { get; set; }
+        public bool IsDeleted { get; set; }
 
         public decimal SignedCost => isExpense ? -Cost : Cost;
         
@@ -27,7 +30,9 @@ namespace Finanse.Models {
                 MoneyAccountId = MoneyAccountId,
                 MoreInfo = MoreInfo,
                 isExpense = isExpense,
-                Id = Id
+                Id = Id,
+                RemoteId = RemoteId,
+                DeviceId = DeviceId
             };
         }
 
@@ -48,7 +53,7 @@ namespace Finanse.Models {
                 secondOperation.CategoryId == CategoryId &&
                 secondOperation.SubCategoryId == SubCategoryId &&
                 secondOperation.MoneyAccountId == MoneyAccountId &&
-                secondOperation.MoreInfo.Equals(MoreInfo);
+                secondOperation.MoreInfo == MoreInfo;
         }
     }
 }

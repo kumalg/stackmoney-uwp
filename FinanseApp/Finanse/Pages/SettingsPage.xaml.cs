@@ -55,6 +55,9 @@ namespace Finanse.Pages {
            
             SyncSettingsToggleButton.IsOn = Settings.SyncSettings;
             SyncSettingsToggleButton.Toggled += SyncSettingsToggleButton_Toggled;
+
+            SyncDataToggleButton.IsOn = Settings.SyncData;
+            SyncDataToggleButton.Toggled += SyncDataToggleButton_Toggled;
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -83,6 +86,10 @@ namespace Finanse.Pages {
 
         private void SyncSettingsToggleButton_Toggled(object sender, RoutedEventArgs e) {
             Settings.SyncSettings = SyncSettingsToggleButton.IsOn;
+        }
+
+        private void SyncDataToggleButton_Toggled(object sender, RoutedEventArgs e) {
+            Settings.SyncData = SyncDataToggleButton.IsOn;
         }
 
         private void DarkThemeRadioButton_Checked(object sender, RoutedEventArgs e) {

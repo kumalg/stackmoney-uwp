@@ -185,6 +185,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Categories\CategoryWithSubCategories.cs" />
+    <Compile Include="Models\Deleted.cs" />
     <Compile Include="Models\Functions.cs" />
     <Compile Include="Models\GroupInfoList.cs" />
     <Compile Include="Models\Helpers\Date.cs" />

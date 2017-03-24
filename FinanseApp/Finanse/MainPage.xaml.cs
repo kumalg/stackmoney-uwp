@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation.Metadata;
 using Windows.UI;
 using Windows.UI.ViewManagement;
@@ -18,8 +20,10 @@ using Windows.UI.Core;
 using Windows.Foundation;
 using Windows.ApplicationModel.Core;
 using Windows.Networking.Connectivity;
+using Windows.Security.ExchangeActiveSyncProvisioning;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Finanse.Models;
 using Microsoft.Toolkit.Uwp.Services.OneDrive;
 using Microsoft.Toolkit.Uwp.UI.Animations;
@@ -46,12 +50,20 @@ namespace Finanse {
             if (Strona_glowna_ListBoxItem != null)
                 Strona_glowna_ListBoxItem.IsChecked = true;
 
-            checkSyncBase();
+            CheckSyncBase();
+
+          //  Guid dupa = new EasClientDeviceInformation().Id;
         }
 
-        private static async void checkSyncBase() {
-            var connectionProfile = new NetworkConnectivityLevel();
-            if (connectionProfile != NetworkConnectivityLevel.InternetAccess)
+
+        private static bool ConnectedToInternet() {
+            var internetConnectionProfile = NetworkInformation.GetInternetConnectionProfile();
+            var level = internetConnectionProfile?.GetNetworkConnectivityLevel();
+            return level == NetworkConnectivityLevel.InternetAccess;
+    }
+
+    public static async void CheckSyncBase() {
+            if (!(ConnectedToInternet() && Settings.SyncData))
                 return;
 
             OneDriveService.Instance.Initialize();
@@ -71,26 +83,52 @@ namespace Finanse {
             }
 
             while (true) {
-                var selectedFile = await StorageFile.GetFileFromPathAsync(DalBase.DbPath);
-                if (selectedFile != null) {
-                    try {
-                        var file = await stackMoneyFolder.GetFileAsync("db.sqlite");
-                        Dal.updateBase(file);
-                        selectedFile = await StorageFile.GetFileFromPathAsync(DalBase.DbPath);
-                        using (var localStream = await selectedFile.OpenReadAsync()) {
-                            await stackMoneyFolder.CreateFileAsync(selectedFile.Name, CreationCollisionOption.ReplaceExisting, localStream);
+                if (ConnectedToInternet() && Settings.SyncData) {
+                    var selectedFile = await StorageFile.GetFileFromPathAsync(DalBase.DbPath);
+                    if (selectedFile != null) {
+                        
+                        try {
+                            var file = await stackMoneyFolder.GetFileAsync("db.sqlite");
+
+                            StorageFile myLocalFile;
+
+                            using (var remoteStream = await file.OpenAsync()) {
+                                byte[] buffer = new byte[remoteStream.Size];
+                                var localBuffer = await remoteStream.ReadAsync(buffer.AsBuffer(), (uint)remoteStream.Size, InputStreamOptions.ReadAhead);
+                                var localFolder = ApplicationData.Current.LocalFolder;
+                                myLocalFile = await localFolder.CreateFileAsync(DalBase.dbOneDriveName, CreationCollisionOption.ReplaceExisting);
+                                using (var localStream = await myLocalFile.OpenAsync(FileAccessMode.ReadWrite)) {
+                                    await localStream.WriteAsync(localBuffer);
+                                    await localStream.FlushAsync();
+                                }
+                            }
+                            
+                            Dal.UpdateBase(DalBase.dbOneDriveName);
+                            await myLocalFile.DeleteAsync();
+                            
+                            selectedFile = await StorageFile.GetFileFromPathAsync(DalBase.DbPath);
+                            try {
+                                using (var localStream = await selectedFile.OpenReadAsync()) {
+                                    await stackMoneyFolder.CreateFileAsync(selectedFile.Name,
+                                        CreationCollisionOption.ReplaceExisting, localStream);
+                                }
+                            }
+                            catch (Exception e) {
+                                Debug.WriteLine("Can't write db to OneDrive. Message: " + e.Message);
+                            }
                         }
-                    }
-                    catch (Exception) {
-                        using (var localStream = await selectedFile.OpenReadAsync()) {
-                            await stackMoneyFolder.CreateFileAsync(selectedFile.Name, CreationCollisionOption.GenerateUniqueName, localStream);
+                        catch (Microsoft.Graph.ServiceException) {
+                            using (var localStream = await selectedFile.OpenReadAsync()) {
+                                await stackMoneyFolder.CreateFileAsync(selectedFile.Name,
+                                    CreationCollisionOption.GenerateUniqueName, localStream);
+                            }
                         }
                     }
                 }
                 await Task.Delay(60000); // 1 minute
             }
         }
-        
+
         public string DisplayName => Package.Current.DisplayName;
 
         private void TitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args) {

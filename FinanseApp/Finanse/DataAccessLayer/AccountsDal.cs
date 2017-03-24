@@ -27,7 +27,7 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
                 return db.ExecuteScalar<decimal>("SELECT TOTAL(CASE WHEN isExpense THEN -Cost ELSE Cost END) " +
                                                  "FROM Operation " +
-                                                 "WHERE MoneyAccountId = ? AND Date IS NOT NULL AND Date IS NOT '' AND Date <= ?", 
+                                                 "WHERE MoneyAccountId = ? AND Date IS NOT NULL AND Date IS NOT '' AND Date <= ? AND IsDeleted = 0", 
                                                  id, DateTime.Today.Date.ToString("yyyy.MM.dd"));
             }
         }
@@ -37,7 +37,7 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
                 return db.ExecuteScalar<decimal>("SELECT TOTAL(CASE WHEN isExpense THEN -Cost ELSE Cost END) " +
                                                  "FROM Operation " +
-                                                 "WHERE MoneyAccountId = ? AND Date IS NOT NULL AND Date IS NOT '' AND Date <= ?", 
+                                                 "WHERE MoneyAccountId = ? AND Date IS NOT NULL AND Date IS NOT '' AND Date <= ? AND IsDeleted = 0", 
                                                  id, DateTime.Today.Date.ToString("yyyy.MM.dd"));
             }
         }
@@ -47,7 +47,7 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
                 return db.ExecuteScalar<decimal>("SELECT TOTAL(-Cost) " +
                                                  "FROM Operation " +
-                                                 "WHERE MoneyAccountId = ? AND isExpense AND Date IS NOT NULL AND Date IS NOT '' AND Date <= ?", 
+                                                 "WHERE MoneyAccountId = ? AND isExpense AND Date IS NOT NULL AND Date IS NOT '' AND Date <= ? AND IsDeleted = 0", 
                                                  id, DateTime.Today.Date.ToString("yyyy.MM.dd"));
             }
         }
@@ -56,13 +56,14 @@ namespace Finanse.DataAccessLayer {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 var cashAccount = db.Query<CashAccount>("SELECT * FROM CashAccount WHERE Id == ? LIMIT 1", id).FirstOrDefault();
-                var bankAccount = db.Query<BankAccount>("SELECT * FROM BankAccount WHERE Id == ? LIMIT 1", id).FirstOrDefault();
-                var cardAccount = db.Query<CardAccount>("SELECT * FROM CardAccount WHERE Id == ? LIMIT 1", id).FirstOrDefault();
-
                 if (cashAccount != null)
                     return cashAccount;
+
+                var bankAccount = db.Query<BankAccount>("SELECT * FROM BankAccount WHERE Id == ? LIMIT 1", id).FirstOrDefault();
                 if (bankAccount != null)
                     return bankAccount;
+
+                var cardAccount = db.Query<CardAccount>("SELECT * FROM CardAccount WHERE Id == ? LIMIT 1", id).FirstOrDefault();
                 return cardAccount;
             }
         }
@@ -137,7 +138,7 @@ namespace Finanse.DataAccessLayer {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
-                var query = from p in db.Table<Operation>().ToList()
+                var query = from p in db.Query<Operation>("SELECT * FROM Operation WHERE IsDeleted = 0")
                             group p by p.MoneyAccountId into g
                             select new {
                                 account = GetAccountById(g.Key),
@@ -194,18 +195,36 @@ namespace Finanse.DataAccessLayer {
                 db.Execute("DELETE FROM CashAccount WHERE Id = ?", accountId);
                 db.Execute("DELETE FROM BankAccount WHERE Id = ?", accountId);
                 db.Execute("DELETE FROM CardAccount WHERE Id = ?", accountId);
-                db.Execute("DELETE FROM Operation WHERE MoneyAccountId = ?", accountId);
+                db.Execute("UPDATE Operation SET IsDeleted = 1 WHERE MoneyAccountId = ?", accountId);
             }
         }
 
         public static void RemoveBankAccountWithCards(int bankAccountId) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
+                db.Execute("UPDATE Operation " +
+                           "SET IsDeleted = 1 " +
+                           "WHERE MoneyAccountId = ? OR MoneyAccountId IN (SELECT Id FROM CardAccount Where BankAccountId = ?)", bankAccountId, bankAccountId);
+                
                 db.Execute("DELETE FROM BankAccount WHERE Id = ?", bankAccountId);
                 db.Execute("DELETE FROM CardAccount WHERE BankAccountId = ?", bankAccountId);
             }
         }
 
+
+        public static int CountBankAccouns() {
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                db.TraceListener = new DebugTraceListener();
+                return db.ExecuteScalar<int>("SELECT COUNT(*) FROM BankAccount");
+            }
+        }
+
+        public static int CountCashAccouns() {
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                db.TraceListener = new DebugTraceListener();
+                return db.ExecuteScalar<int>("SELECT COUNT(*) FROM CashAccount");
+            }
+        }
 
         /* HELPERS */
 

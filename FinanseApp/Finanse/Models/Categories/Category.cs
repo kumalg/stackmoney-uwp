@@ -15,7 +15,7 @@ namespace Finanse.Models.Categories {
         public string IconKey { get; set; }
         public bool VisibleInIncomes { get; set; } 
         public bool VisibleInExpenses { get; set; }
-
+        public bool CanDelete { get; set; }
 
         public SolidColorBrush Brush {
             get {

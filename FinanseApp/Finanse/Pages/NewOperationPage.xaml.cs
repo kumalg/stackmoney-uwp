@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.Devices.Enumeration;
+using Windows.Security.ExchangeActiveSyncProvisioning;
 using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -18,6 +20,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Finanse.Models.Categories;
+using Microsoft.Graph;
 
 namespace Finanse.Pages {
 
@@ -29,6 +32,13 @@ namespace Finanse.Pages {
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             SetDefaultPageValues();
+
+            AccountsWithoutCards = AccountsDal.GetAccountsWithoutCards();
+            Accounts = AccountsDal.GetAllMoneyAccounts();
+            RaisePropertyChanged("AccountsComboBox");
+            RaisePropertyChanged("AccountsToComboBox");
+            RaisePropertyChanged("AccountsFromComboBox");
+
             base.OnNavigatedTo(e);
         }
 
@@ -56,8 +66,8 @@ namespace Finanse.Pages {
         }
 
 
-        private readonly List<Account> AccountsWithoutCards = AccountsDal.GetAccountsWithoutCards();
-        private readonly List<Account> Accounts = AccountsDal.GetAllMoneyAccounts();
+        private List<Account> AccountsWithoutCards = AccountsDal.GetAccountsWithoutCards();
+        private List<Account> Accounts = AccountsDal.GetAllMoneyAccounts();
 
 
         private ObservableCollection<Account> AccountsComboBox {
@@ -65,9 +75,7 @@ namespace Finanse.Pages {
                 if ((bool)Income_RadioButton.IsChecked) {
                     return new ObservableCollection<Account>(AccountsWithoutCards);
                 }
-                else {
-                    return new ObservableCollection<Account>(Accounts);
-                }
+                return new ObservableCollection<Account>(Accounts);
             }
         }
 
@@ -289,6 +297,7 @@ namespace Finanse.Pages {
                 SubCategoryId = GetSubCategoryId(),
                 MoreInfo = MoreInfoValue.Text,
                 MoneyAccountId = ((Account)PayFormValue.SelectedItem).Id,
+                DeviceId = Settings.DeviceId
             };
         }
 

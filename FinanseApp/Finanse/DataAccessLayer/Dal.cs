@@ -1,4 +1,5 @@
-﻿using Finanse.Dialogs;
+﻿using System.Threading.Tasks;
+using Finanse.Dialogs;
 using Microsoft.Toolkit.Uwp.Services.OneDrive;
 
 namespace Finanse.DataAccessLayer {
@@ -57,14 +58,14 @@ namespace Finanse.DataAccessLayer {
         public static Operation GetEldestOperation() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<Operation>("SELECT * FROM Operation WHERE Date IS NOT NULL AND Date != '' ORDER BY Date LIMIT 1").FirstOrDefault();
+                return db.Query<Operation>("SELECT * FROM Operation WHERE Date IS NOT NULL AND Date != '' AND IsDeleted = 0 ORDER BY Date LIMIT 1").FirstOrDefault();
             }
         }
 
         internal static List<Operation> GetAllOperationsFromRangeToStatistics(DateTime minDate, DateTime maxDate) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<Operation>("SELECT * FROM Operation WHERE (VisibleInStatistics OR VisibleInStatistics ISNULL) AND Date >= ? AND Date <= ?", minDate.ToString("yyyy.MM.dd"), maxDate.ToString("yyyy.MM.dd"));
+                return db.Query<Operation>("SELECT * FROM Operation WHERE (VisibleInStatistics OR VisibleInStatistics ISNULL) AND Date >= ? AND Date <= ? AND IsDeleted = 0", minDate.ToString("yyyy.MM.dd"), maxDate.ToString("yyyy.MM.dd"));
             }
         }
 
@@ -91,85 +92,44 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static HashSet<CategoryWithSubCategories> GetCategoriesWithSubCategoriesInExpenses() {
+
+
+        public static IEnumerable<CategoryWithSubCategories> GetCategoriesWithSubCategoriesInExpenses()
+            => GetCategoriesWithSubCategories("VisibleInExpenses");
+
+        public static IEnumerable<CategoryWithSubCategories> GetCategoriesWithSubCategoriesInIncomes()
+            => GetCategoriesWithSubCategories("VisibleInIncomes");
+
+        private static IEnumerable<CategoryWithSubCategories> GetCategoriesWithSubCategories(string visibleIn) {
             using (var db = DbConnection) {
-                // Activate Tracing
                 db.TraceListener = new DebugTraceListener();
 
-                /*
-                var test = from category in db.Query<Category>("SELECT * FROM Category WHERE VisibleInExpenses ORDER BY Name")
-                           join subCategory in db.Query<SubCategory>("SELECT * FROM SubCategory WHERE VisibleInExpenses ORDER BY Name")
-                           on category.Id equals subCategory.BossCategoryId
-                           select new {
-                               category,
-                               subCategory
-                           };
-                           */
-
-                List<Category> categories = db.Query<Category>("SELECT * FROM Category WHERE VisibleInExpenses ORDER BY Name");
-                var subCategoriesGroups = from subCategory in db.Query<SubCategory>("SELECT * FROM SubCategory WHERE VisibleInExpenses ORDER BY Name")
+                var subCategoriesGroups = from subCategory in db.Query<SubCategory>("SELECT * FROM SubCategory WHERE " + visibleIn  + " ORDER BY Name")
                                           group subCategory by subCategory.BossCategoryId into g
                                           select new {
                                               BossCategoryId = g.Key,
                                               subCategories = g.ToList()
                                           };
 
-
-                HashSet<CategoryWithSubCategories> categoriesWithSubCategories = new HashSet<CategoryWithSubCategories>();
-
-                foreach (var item in categories) {
-                    CategoryWithSubCategories categoryWithSubCategories = new CategoryWithSubCategories {
-                        Category = item,
-                    };
-
-                    var yco = subCategoriesGroups.FirstOrDefault(i => i.BossCategoryId == item.Id);//.subCategories;
-
-                    if (yco != null)
-                        categoryWithSubCategories.SubCategories = new ObservableCollection<SubCategory>(yco.subCategories);
-
-                    categoriesWithSubCategories.Add(categoryWithSubCategories);
-                }
-
-                return categoriesWithSubCategories;
+                return from category in db.Query<Category>("SELECT * FROM Category WHERE " + visibleIn + " ORDER BY Name")
+                       join subCategories in subCategoriesGroups on category.Id equals subCategories.BossCategoryId into gj
+                       from secondSubCategories in gj.DefaultIfEmpty()
+                       select new CategoryWithSubCategories {
+                           Category = category,
+                           SubCategories =
+                               secondSubCategories == null
+                                   ? null
+                                   : new ObservableCollection<SubCategory>(secondSubCategories.subCategories)
+                       };
             }
         }
 
-        public static HashSet<CategoryWithSubCategories> GetCategoriesWithSubCategoriesInIncomes() {
-            using (var db = DbConnection) {
-                db.TraceListener = new DebugTraceListener();
 
-                List<Category> categories = db.Query<Category>("SELECT * FROM Category WHERE VisibleInIncomes ORDER BY Name");
-                var subCategoriesGroups = from subCategory in db.Query<SubCategory>("SELECT * FROM SubCategory WHERE VisibleInIncomes ORDER BY Name")
-                                          group subCategory by subCategory.BossCategoryId into g
-                                          select new {
-                                              BossCategoryId = g.Key,
-                                              subCategories = g.ToList()
-                                          };
-
-
-                HashSet<CategoryWithSubCategories> categoriesWithSubCategories = new HashSet<CategoryWithSubCategories>();
-
-                foreach (var item in categories) {
-                    CategoryWithSubCategories categoryWithSubCategories = new CategoryWithSubCategories {
-                        Category = item,
-                    };
-
-                    var yco = subCategoriesGroups.FirstOrDefault(i => i.BossCategoryId == item.Id);
-
-                    if (yco != null)
-                        categoryWithSubCategories.SubCategories = new ObservableCollection<SubCategory>(yco.subCategories);
-
-                    categoriesWithSubCategories.Add(categoryWithSubCategories);
-                }
-
-                return categoriesWithSubCategories;
-            }
-        }
 
         public static List<Operation> GetAllOperationsOfThisMoneyAccount(MoneyAccount account) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<Operation>("SELECT * FROM Operation WHERE MoneyAccountId == ?", account.Id);
+                return db.Query<Operation>("SELECT * FROM Operation WHERE MoneyAccountId == ? AND IsDeleted = 0", account.Id);
             }
         }
 
@@ -178,7 +138,7 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
                 return db.ExecuteScalar<decimal>(
                     "SELECT TOTAL(CASE WHEN isExpense THEN -Cost ELSE Cost END) FROM Operation " +
-                    "WHERE Date <= ? AND Date IS NOT NULL AND Date IS NOT ''", 
+                    "WHERE Date <= ? AND Date IS NOT NULL AND Date IS NOT '' AND IsDeleted = 0", 
                     dateTime.ToString("yyyy.MM.dd"));
             }
         }
@@ -188,7 +148,7 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
                 
                 var list = db.Query<Operation>(
-                    "SELECT * FROM Operation WHERE Date GLOB ? AND Date <= ?", 
+                    "SELECT * FROM Operation WHERE Date GLOB ? AND Date <= ? AND IsDeleted = 0", 
                     actualMonth.ToString("yyyy.MM*"), 
                     DateTime.Today.ToString("yyyy.MM.dd"));
 
@@ -202,7 +162,7 @@ namespace Finanse.DataAccessLayer {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 return db.Query<Operation>(
-                    "SELECT * FROM Operation WHERE Date > ? OR Date IS NULL OR Date == ''", 
+                    "SELECT * FROM Operation WHERE Date > ? OR Date IS NULL OR Date == '' AND IsDeleted = 0", 
                     DateTime.Today.ToString("yyyy.MM.dd"));
             }
         }
@@ -212,7 +172,7 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
 
                 var list = db.Query<Operation>(
-                    "SELECT * FROM Operation WHERE Date > ? OR Date IS NULL OR Date == ''", 
+                    "SELECT * FROM Operation WHERE Date > ? OR Date IS NULL OR Date == '' AND IsDeleted = 0", 
                     DateTime.Today.ToString("yyyy.MM.dd"));
 
                 return visiblePayFormList != null
@@ -263,16 +223,14 @@ namespace Finanse.DataAccessLayer {
         public static SubCategory GetSubCategoryById(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<SubCategory>(
-                    "SELECT * FROM SubCategory WHERE Id == ? LIMIT 1", id).FirstOrDefault();
+                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE Id == ? LIMIT 1", id).FirstOrDefault();
             }
         }
 
         public static List<SubCategory> GetSubCategoriesByBossId(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<SubCategory>(
-                    "SELECT * FROM SubCategory WHERE BossCategoryId == ? ORDER BY Name", id);
+                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE BossCategoryId == ? ORDER BY Name", id);
             }
         }
 
@@ -290,22 +248,44 @@ namespace Finanse.DataAccessLayer {
         public static void SaveOperation(Operation operation) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                operation.LastModifed = DateTime.Now.ToString("yyyy.MM.dd HH.mm.ss");
+                operation.LastModifed = Settings.ActualTimeString;
 
-                if (operation.Id == 0)
+                if (operation.DeviceId == null)
+                    operation.DeviceId = Settings.DeviceId;
+
+                if (operation.Id == 0) {
+                    operation.RemoteId = db.ExecuteScalar<int>("SELECT seq " +
+                                                               "FROM sqlite_sequence " +
+                                                               "WHERE name = 'Operation'") + 1;
                     db.Insert(operation);
+                }
                 else
                     db.Update(operation);
+            }
+        }
+
+        private static void InsertOperation(Operation operation) {
+            using (var db = DbConnection) {
+                db.TraceListener = new DebugTraceListener();
+                db.Insert(operation);
+            }
+        }
+        private static void UpdateOperation(Operation operation) {
+            using (var db = DbConnection) {
+                db.TraceListener = new DebugTraceListener();
+                db.Update(operation);
             }
         }
 
         public static void SaveOperationPattern(OperationPattern operationPattern) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                operationPattern.LastModifed = DateTime.Now.ToString("yyyy.MM.dd HH.mm.ss");
+                operationPattern.LastModifed = Settings.ActualTimeString;
 
-                if (operationPattern.Id == 0)
+                if (operationPattern.Id == 0) {
+                    operationPattern.RemoteId = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'OperationPattern'") + 1;
                     db.Insert(operationPattern);
+                }
                 else
                     db.Update(operationPattern);
             }
@@ -345,14 +325,18 @@ namespace Finanse.DataAccessLayer {
         public static void DeletePattern(OperationPattern operationPattern) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                db.Execute("DELETE FROM OperationPattern WHERE Id = ?", operationPattern.Id);
+                db.Execute("UPDATE OperationPattern " +
+                           "SET IsDeleted = 1, LastModifed = ? " +
+                           "WHERE Id = ?", Settings.ActualTimeString, operationPattern.Id);
             }
         }
 
         public static void DeleteOperation(Operation operation) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                db.Execute("DELETE FROM Operation WHERE Id = ?", operation.Id);
+                db.Execute("UPDATE Operation " +
+                           "SET IsDeleted = 1, LastModifed = ? " +
+                           "WHERE Id = ?", Settings.ActualTimeString, operation.Id);
             }
         }
 
@@ -371,9 +355,41 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static void updateBase(OneDriveStorageFile oneDriveStorageFile) {
+        public static void UpdateBase(string localFileName) {
+            IEnumerable<Operation> oneDriveOperations;
+            IEnumerable<Operation> localOperations;
+
             using (var db = DbConnection) {
-                db.TraceListener = new DebugTraceListener();
+                localOperations = db.Table<Operation>().ToList();
+            }
+            using ( var dbOneDrive = new SQLiteConnection(new SQLitePlatformWinRT(), DBPathLocalFromFileName(localFileName)) ) {
+                oneDriveOperations = dbOneDrive.Table<Operation>().ToList();
+            }
+
+
+            foreach (var oneDriveOperation in oneDriveOperations) {
+                if (string.IsNullOrEmpty(oneDriveOperation.DeviceId))
+                    continue;
+
+                Operation localOperation =
+                                    localOperations.FirstOrDefault(
+                                        item =>
+                                            item.RemoteId == oneDriveOperation.RemoteId &&
+                                            item.DeviceId == oneDriveOperation.DeviceId);
+
+                if (localOperation == null) {
+                    InsertOperation(oneDriveOperation);
+                    continue;
+                }
+
+                if (localOperation.LastModifed != null &&
+                    DateTime.Parse(localOperation.LastModifed) >= DateTime.Parse(oneDriveOperation.LastModifed))
+                    continue;
+
+                if (oneDriveOperation.LastModifed == null)
+                    oneDriveOperation.LastModifed = Settings.ActualTimeString;
+
+                UpdateOperation(oneDriveOperation);
             }
         }
     }

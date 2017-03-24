@@ -8,18 +8,27 @@ using System.Threading.Tasks;
 
 namespace Finanse.Models.Categories {
     public class CategoryWithSubCategories : INotifyPropertyChanged {
-        private Category category;
+        private Category _category;
         public Category Category {
             get {
-                return category;
+                return _category;
             }
             set {
-                category = value;
+                _category = value;
                 OnPropertyChanged("Category");
             }
         }
 
-        public ObservableCollection<SubCategory> SubCategories = new ObservableCollection<SubCategory>();
+        private ObservableCollection<SubCategory> _subCategories;
+        public ObservableCollection<SubCategory> SubCategories {
+            get {
+                return _subCategories ?? ( _subCategories = new ObservableCollection<SubCategory>() );
+            }
+            set {
+                _subCategories = value;
+                OnPropertyChanged("SubCategories");
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

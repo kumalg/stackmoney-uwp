@@ -11,7 +11,7 @@ namespace Finanse.Models {
         public static string ToCurrencyString(string value) {
             return decimal.Parse(value, Settings.ActualCultureInfo).ToString("C", Settings.ActualCultureInfo);
         }
-
+        
         public static string ToCurrencyString(decimal value) {
             return value.ToString("C", Settings.ActualCultureInfo);
         }

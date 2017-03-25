@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation.Metadata;
 using Windows.UI;
 using Windows.UI.ViewManagement;
@@ -18,21 +15,14 @@ using Windows.System.Profile;
 using Windows.UI.Core;
 using Windows.Foundation;
 using Windows.ApplicationModel.Core;
-using Windows.Networking.Connectivity;
-using Windows.Security.ExchangeActiveSyncProvisioning;
-using Windows.Storage;
-using Windows.Storage.Pickers;
-using Windows.Storage.Streams;
+using Windows.UI.Popups;
 using Finanse.Models;
 using Finanse.Models.Helpers;
-using Microsoft.Graph;
-using Microsoft.OneDrive.Sdk;
-using Microsoft.Toolkit.Uwp.Services.OneDrive;
-using Microsoft.Toolkit.Uwp.UI.Animations;
-using Package = Windows.ApplicationModel.Package;
 
 namespace Finanse {
     public sealed partial class MainPage : Page {
+
+        public string DisplayName = Informations.DisplayName;
 
         public MainPage() {
             this.InitializeComponent();
@@ -53,10 +43,23 @@ namespace Finanse {
             if (Strona_glowna_ListBoxItem != null)
                 Strona_glowna_ListBoxItem.IsChecked = true;
 
+            CheckForNewerAppVersion();
+
             SyncHelper.CheckSyncBase();
         }
 
-        public string DisplayName => Package.Current.DisplayName;
+        private static void CheckForNewerAppVersion() {
+            if (Settings.LastAppVersion == Informations.AppVersion)
+                return;
+
+            ShowWhatsNewDialog(Informations.AppVersion);
+            Settings.LastAppVersion = Informations.AppVersion;
+        }
+
+        private static async void ShowWhatsNewDialog(string appVersion) {
+            MessageDialog messageDialog = new MessageDialog("Oj dużo", "Co nowego w wersji " + appVersion);
+            await messageDialog.ShowAsync();
+        }
 
         private void TitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args) {
             TitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;

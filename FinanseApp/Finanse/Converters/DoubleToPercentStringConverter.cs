@@ -1,11 +1,4 @@
-﻿using Finanse.Models;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
+﻿using System;
 using Windows.UI.Xaml.Data;
 
 namespace Finanse.Converters {

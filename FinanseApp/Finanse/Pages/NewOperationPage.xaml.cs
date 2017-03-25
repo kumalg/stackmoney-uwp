@@ -6,23 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Windows.Devices.Enumeration;
-using Windows.Security.ExchangeActiveSyncProvisioning;
-using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Finanse.Models.Categories;
 using Finanse.Models.Helpers;
 using Finanse.Models.Operations;
-using Microsoft.Graph;
 
 namespace Finanse.Pages {
 
@@ -300,7 +292,7 @@ namespace Finanse.Pages {
                 SubCategoryId = GetSubCategoryId(),
                 MoreInfo = MoreInfoValue.Text,
                 MoneyAccountId = ((Account)PayFormValue.SelectedItem).Id,
-                DeviceId = Settings.DeviceId
+                DeviceId = Informations.DeviceId
             };
         }
 

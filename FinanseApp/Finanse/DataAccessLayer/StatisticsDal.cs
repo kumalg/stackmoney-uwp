@@ -1,14 +1,9 @@
-﻿using Finanse.Models;
-using Finanse.Models.Statistics;
+﻿using Finanse.Models.Statistics;
 using SQLite.Net;
 using SQLite.Net.Platform.WinRT;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Storage;
 using Finanse.Models.Categories;
 using Finanse.Models.Operations;
 

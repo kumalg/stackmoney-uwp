@@ -1,9 +1,4 @@
-﻿using System;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
-using Finanse.DataAccessLayer;
-using Finanse.Models;
+﻿using Windows.UI.Xaml.Controls;
 using Finanse.Models.MoneyAccounts;
 
 namespace Finanse.Elements {

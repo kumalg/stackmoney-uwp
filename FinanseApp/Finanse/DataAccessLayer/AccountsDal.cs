@@ -1,13 +1,10 @@
-﻿using Finanse.Models;
-using Finanse.Models.MoneyAccounts;
+﻿using Finanse.Models.MoneyAccounts;
 using SQLite.Net;
 using SQLite.Net.Platform.WinRT;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using Windows.Storage;
 using Finanse.Models.Helpers;
 using Finanse.Models.Operations;
 

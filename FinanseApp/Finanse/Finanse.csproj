@@ -129,6 +129,7 @@
     <Compile Include="DataAccessLayer\Dal.cs" />
     <Compile Include="DataAccessLayer\DebugTraceListener.cs" />
     <Compile Include="DataAccessLayer\StatisticsDal.cs" />
+    <Compile Include="DataAccessLayer\SyncDal.cs" />
     <Compile Include="Dialogs\AcceptContentDialog.xaml.cs">
       <DependentUpon>AcceptContentDialog.xaml</DependentUpon>
     </Compile>
@@ -186,6 +187,8 @@
     </Compile>
     <Compile Include="Models\Categories\CategoryWithSubCategories.cs" />
     <Compile Include="Models\Helpers\Functions.cs" />
+    <Compile Include="Models\Helpers\Informations.cs" />
+    <Compile Include="Models\SyncProperties.cs" />
     <Compile Include="Models\Operations\GroupInfoList.cs" />
     <Compile Include="Models\Helpers\DateHelper.cs" />
     <Compile Include="Models\ItemCollection.cs" />
@@ -392,10 +395,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\TextBlocks.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

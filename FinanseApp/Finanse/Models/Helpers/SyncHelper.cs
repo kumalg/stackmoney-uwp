@@ -45,7 +45,7 @@ namespace Finanse.Models.Helpers {
                                 }
                             }
 
-                            Dal.UpdateBase(DalBase.dbOneDriveName);
+                            SyncDal.UpdateBase(DalBase.dbOneDriveName);
                             await myLocalFile.DeleteAsync();
                         }
                         catch (ServiceException e) {

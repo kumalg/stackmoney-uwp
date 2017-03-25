@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Finanse.Charts;

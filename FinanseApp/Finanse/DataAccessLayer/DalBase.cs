@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Finanse.Models.Operations;
+﻿using Finanse.Models.Operations;
 
 namespace Finanse.DataAccessLayer {
     using Models;
@@ -8,10 +7,6 @@ namespace Finanse.DataAccessLayer {
     using Models.MoneyAccounts;
     using SQLite.Net;
     using SQLite.Net.Platform.WinRT;
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using Windows.Storage;
@@ -66,15 +61,15 @@ namespace Finanse.DataAccessLayer {
                 db.CreateTable<CardAccount>();
                 db.CreateTable<BankAccount>();
 
-                db.Execute("UPDATE Operation SET RemoteId = Id WHERE RemoteId ISNULL");
-                db.Execute("UPDATE Operation SET DeviceId = ? WHERE DeviceId ISNULL", Settings.DeviceId);
-                db.Execute("UPDATE Operation SET LastModifed = ? WHERE DeviceId ISNULL", Settings.DeviceId);
-                db.Execute("UPDATE Operation SET IsDeleted = 0 WHERE IsDeleted ISNULL");
+                CheckSyncColumns(db, "Operation");
+                CheckSyncColumns(db, "OperationPattern");
+                CheckSyncColumns(db, "Category");
+                CheckSyncColumns(db, "SubCategory");
 
                 db.Execute("UPDATE Category SET CantDelete = 1 WHERE Id = 1");
                 db.Execute("UPDATE Category SET CantDelete = 0 WHERE CantDelete ISNULL");
                 db.Execute("UPDATE SubCategory SET CantDelete = 0 WHERE CantDelete ISNULL");
-
+                
                 db.Execute(AccountQueries.SeqTriggerCashAccount);
                 db.Execute(AccountQueries.SeqTriggerBankAccount);
                 db.Execute(AccountQueries.SeqTriggerCardAccount);
@@ -106,6 +101,13 @@ namespace Finanse.DataAccessLayer {
                     AccountsDal.AddAccount(new CardAccount { Name = "Karta", ColorKey = "03", BankAccountId = db.ExecuteScalar<int>("SELECT Id FROM BankAccount LIMIT 1")});
                 }
             }
+        }
+
+        private static void CheckSyncColumns(SQLiteConnection db, string tableName) {
+                db.Execute("UPDATE " + tableName + " SET RemoteId = Id WHERE RemoteId ISNULL");
+                db.Execute("UPDATE " + tableName + " SET DeviceId = ? WHERE DeviceId ISNULL", Informations.DeviceId);
+                db.Execute("UPDATE " + tableName + " SET LastModifed = ? WHERE LastModifed ISNULL", DateHelper.ActualTimeString);
+                db.Execute("UPDATE " + tableName + " SET IsDeleted = 0 WHERE IsDeleted ISNULL");
         }
         /*
         public static async Task CreateDatabase() {

@@ -1,25 +1,22 @@
 ﻿using Finanse.DataAccessLayer;
 using Finanse.Dialogs;
 using Finanse.Models;
-using Finanse.Models.MoneyAccounts;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Finanse.Models.Helpers;
 
 namespace Finanse.Pages {
 
     public sealed partial class SettingsPage : Page {
-       
+
+        public string AppVersion = Informations.AppVersion;
+        public string DisplayName = Informations.DisplayName;
+        public string PublisherDisplayName = Informations.PublisherDisplayName;
+
         public SettingsPage() {
 
             this.InitializeComponent();
@@ -107,18 +104,6 @@ namespace Finanse.Pages {
                 ( (ThemeAwareFrame)Frame ).AppTheme = ElementTheme.Light;
             }
         }
-        public string AppVersion {
-            get {
-                Package package = Package.Current;
-                PackageId packageId = package.Id;
-                PackageVersion version = packageId.Version;
-
-                return $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
-            }
-        }
-
-        public string DisplayName => Package.Current.DisplayName;
-        public string PublisherDisplayName => Package.Current.PublisherDisplayName;
 
         private void Button_Click(object sender, RoutedEventArgs e) {
             ShowDeleteAllContentDialog();

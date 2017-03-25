@@ -1,17 +1,10 @@
 ﻿using Finanse.DataAccessLayer;
-using Finanse.Elements;
-using Finanse.Models;
 using Finanse.Models.MoneyAccounts;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Media;
 
 namespace Finanse.Dialogs {
 

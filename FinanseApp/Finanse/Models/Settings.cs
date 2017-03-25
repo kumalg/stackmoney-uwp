@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Windows.Security.ExchangeActiveSyncProvisioning;
+using Windows.Storage;
+using Windows.System.UserProfile;
 using Windows.UI.Xaml;
+using Finanse.Models.Helpers;
+using DayOfWeek = Windows.Globalization.DayOfWeek;
 
 namespace Finanse.Models {
 
     public class Settings {
+
+        private static readonly ApplicationDataContainer LocalSettings = ApplicationData.Current.LocalSettings;
+        private static readonly ApplicationDataContainer RoamingSettings = ApplicationData.Current.RoamingSettings;
 
         public static string[] AllCultures = {
             "en-US",
@@ -32,21 +38,13 @@ namespace Finanse.Models {
 
         public static DateTime MinDate => new DateTime(2000, 1, 1);
 
-        public static string DeviceId {
-            get {
-                var deviceInformation = new EasClientDeviceInformation();
-                return deviceInformation.Id.ToString();
-            }
-        }
         
         public static void SetSettings() {
-            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            if (LocalSettings.Values["syncSettings"] == null)
+                LocalSettings.Values["syncSettings"] = true;
 
-            if (localSettings.Values["syncSettings"] == null)
-                localSettings.Values["syncSettings"] = true;
-
-            if (localSettings.Values["syncData"] == null)
-                localSettings.Values["syncData"] = false;
+            if (LocalSettings.Values["syncData"] == null)
+                LocalSettings.Values["syncData"] = false;
 
             var actualTypeOfSettings = WhichSettings;
 
@@ -64,54 +62,37 @@ namespace Finanse.Models {
 
             if (actualTypeOfSettings.Values["whichCurrency"] == null)
                 actualTypeOfSettings.Values["whichCurrency"] = CultureInfo.CurrentCulture.Name;
+
+            if (LocalSettings.Values["LastAppVersion"] == null)
+                LocalSettings.Values["LastAppVersion"] = Informations.AppVersion;
         }
 
         private static void SetFromRoamingToLocal() {
-            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            var roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
-
-            localSettings.Values["iconStyle"] = roamingSettings.Values["iconStyle"];
-            localSettings.Values["Theme"] = roamingSettings.Values["Theme"];
-            localSettings.Values["maxFutureMonths"] = roamingSettings.Values["maxFutureMonths"];
-            localSettings.Values["categoryNameVisibility"] = roamingSettings.Values["categoryNameVisibility"];
-            localSettings.Values["accountEllipseVisibility"] = roamingSettings.Values["accountEllipseVisibility"];
-            localSettings.Values["whichCurrency"] = roamingSettings.Values["whichCurrency"];
+            LocalSettings.Values["iconStyle"] = RoamingSettings.Values["iconStyle"];
+            LocalSettings.Values["Theme"] = RoamingSettings.Values["Theme"];
+            LocalSettings.Values["maxFutureMonths"] = RoamingSettings.Values["maxFutureMonths"];
+            LocalSettings.Values["categoryNameVisibility"] = RoamingSettings.Values["categoryNameVisibility"];
+            LocalSettings.Values["accountEllipseVisibility"] = RoamingSettings.Values["accountEllipseVisibility"];
+            LocalSettings.Values["whichCurrency"] = RoamingSettings.Values["whichCurrency"];
         }
 
         public static bool SyncSettings {
-            get {
-                var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-                return (bool) localSettings.Values["syncSettings"];
-            }
+            get { return (bool)LocalSettings.Values["syncSettings"]; }
             set {
-                var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-                if ((bool) localSettings.Values["syncSettings"] && !value)
+                if ((bool) LocalSettings.Values["syncSettings"] && !value)
                     SetFromRoamingToLocal();
-
-                localSettings.Values["syncSettings"] = value;
+                LocalSettings.Values["syncSettings"] = value;
             }
         }
 
         public static bool SyncData {
-            get {
-                var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-                return (bool)localSettings.Values["syncData"];
-            }
-            set {
-                var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-                localSettings.Values["syncData"] = value;
-            }
+            get { return (bool)LocalSettings.Values["syncData"]; }
+            set { LocalSettings.Values["syncData"] = value; }
         }
 
-        private static Windows.Storage.ApplicationDataContainer WhichSettings {
-            get {
-                var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-                return (bool)localSettings.Values["syncSettings"]
-                    ? Windows.Storage.ApplicationData.Current.RoamingSettings
-                    : Windows.Storage.ApplicationData.Current.LocalSettings;
-            }
-        }
+        private static ApplicationDataContainer WhichSettings => (bool)LocalSettings.Values["syncSettings"]
+            ? ApplicationData.Current.RoamingSettings
+            : ApplicationData.Current.LocalSettings;
 
         public static ApplicationTheme Theme {
             get {
@@ -127,34 +108,27 @@ namespace Finanse.Models {
             set { WhichSettings.Values["whichCurrency"] = value.Name; }
         }
 
-        public static Windows.Globalization.DayOfWeek FirstDayOfWeek
-            => Windows.System.UserProfile.GlobalizationPreferences.WeekStartsOn;
+        public static DayOfWeek FirstDayOfWeek
+            => GlobalizationPreferences.WeekStartsOn;
 
         public static int MaxFutureMonths {
-            get {
-                return (int)WhichSettings.Values["maxFutureMonths"];
-            }
-            set {
-                WhichSettings.Values["maxFutureMonths"] = value;
-            }
+            get { return (int)WhichSettings.Values["maxFutureMonths"]; }
+            set { WhichSettings.Values["maxFutureMonths"] = value; }
         }
 
         public static bool CategoryNameVisibility {
-            get {
-                return (bool)WhichSettings.Values["categoryNameVisibility"];
-            }
-            set {
-                WhichSettings.Values["categoryNameVisibility"] = value;
-            }
+            get { return (bool)WhichSettings.Values["categoryNameVisibility"]; }
+            set { WhichSettings.Values["categoryNameVisibility"] = value; }
         }
 
         public static bool AccountEllipseVisibility {
-            get {
-                return (bool)WhichSettings.Values["accountEllipseVisibility"];
-            }
-            set {
-                WhichSettings.Values["accountEllipseVisibility"] = value;
-            }
+            get { return (bool)WhichSettings.Values["accountEllipseVisibility"]; }
+            set { WhichSettings.Values["accountEllipseVisibility"] = value; }
+        }
+
+        public static string LastAppVersion {
+            get { return LocalSettings.Values["LastAppVersion"].ToString(); }
+            set { LocalSettings.Values["LastAppVersion"] = value; }
         }
     }
 }

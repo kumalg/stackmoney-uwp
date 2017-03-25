@@ -1,9 +1,7 @@
 ﻿using Finanse.DataAccessLayer;
 using Finanse.Dialogs;
-using Finanse.Models;
 using Finanse.Models.Categories;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;

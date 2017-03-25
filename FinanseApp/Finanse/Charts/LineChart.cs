@@ -1,5 +1,4 @@
-﻿using Finanse.Charts.Extensions;
-using Microsoft.Graphics.Canvas.Geometry;
+﻿using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using System.Collections;
 using System.Collections.Generic;

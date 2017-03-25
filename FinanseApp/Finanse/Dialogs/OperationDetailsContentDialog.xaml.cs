@@ -2,7 +2,6 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using System.Collections.ObjectModel;
 using Finanse.DataAccessLayer;
 using Finanse.Models;
 using Finanse.Models.Categories;

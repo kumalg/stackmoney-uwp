@@ -2,7 +2,7 @@
 
 namespace Finanse.Models.Operations {
 
-    public class OperationPattern {
+    public class OperationPattern : SyncProperties {
 
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
@@ -13,10 +13,7 @@ namespace Finanse.Models.Operations {
         public decimal Cost { get; set; }
         public bool isExpense { get; set; }
         public int MoneyAccountId { get; set; }
-        public string LastModifed { get; set; }
-        public string DeviceId { get; set; } //ale prawdopodobie tylko get
-        public int RemoteId { get; set; }
-        public bool IsDeleted { get; set; }
+
 
         public decimal SignedCost => isExpense ? -Cost : Cost;
         

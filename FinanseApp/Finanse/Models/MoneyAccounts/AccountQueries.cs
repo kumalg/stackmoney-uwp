@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Finanse.Models.MoneyAccounts {
+﻿namespace Finanse.Models.MoneyAccounts {
     public class AccountQueries {
         private static string SeqTrigger(string tableName) {
             return "CREATE TRIGGER IF NOT EXISTS updateAccountsSeq" + tableName + " " +

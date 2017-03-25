@@ -1,7 +1,5 @@
-﻿using System.Threading.Tasks;
-using Finanse.Dialogs;
+﻿using Finanse.Dialogs;
 using Finanse.Models.Operations;
-using Microsoft.Toolkit.Uwp.Services.OneDrive;
 
 namespace Finanse.DataAccessLayer {
     using Models;
@@ -13,10 +11,7 @@ namespace Finanse.DataAccessLayer {
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Diagnostics;
-    using System.IO;
     using System.Linq;
-    using Windows.Storage;
 
     public class Dal : DalBase{
 
@@ -83,13 +78,13 @@ namespace Finanse.DataAccessLayer {
         public static List<Category> GetAllCategoriesInExpenses() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<Category>("SELECT * FROM Category WHERE VisibleInExpenses ORDER BY Name");
+                return db.Query<Category>("SELECT * FROM Category WHERE VisibleInExpenses AND IsDeleted = 0 ORDER BY Name");
             }
         }
         public static List<Category> GetAllCategoriesInIncomes() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<Category>("SELECT * FROM Category WHERE VisibleInIncomes ORDER BY Name");
+                return db.Query<Category>("SELECT * FROM Category WHERE VisibleInIncomes AND IsDeleted = 0 ORDER BY Name");
             }
         }
 
@@ -105,14 +100,14 @@ namespace Finanse.DataAccessLayer {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
-                var subCategoriesGroups = from subCategory in db.Query<SubCategory>("SELECT * FROM SubCategory WHERE " + visibleIn  + " ORDER BY Name")
+                var subCategoriesGroups = from subCategory in db.Query<SubCategory>("SELECT * FROM SubCategory WHERE " + visibleIn  + " AND IsDeleted = 0 ORDER BY Name")
                                           group subCategory by subCategory.BossCategoryId into g
                                           select new {
                                               BossCategoryId = g.Key,
                                               subCategories = g.ToList()
                                           };
 
-                return from category in db.Query<Category>("SELECT * FROM Category WHERE " + visibleIn + " ORDER BY Name")
+                return from category in db.Query<Category>("SELECT * FROM Category WHERE " + visibleIn + " AND IsDeleted = 0 ORDER BY Name")
                        join subCategories in subCategoriesGroups on category.Id equals subCategories.BossCategoryId into gj
                        from secondSubCategories in gj.DefaultIfEmpty()
                        select new CategoryWithSubCategories {
@@ -178,20 +173,21 @@ namespace Finanse.DataAccessLayer {
         public static List<OperationPattern> GetAllPatterns() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Table<OperationPattern>().ToList();
+                return db.Query<OperationPattern>("SELECT * FROM OperationPattern WHERE IsDeleted = 0");
+                    //db.Table<OperationPattern>().ToList();
             }
         }
 
         public static bool CategoryExistByName(string name) {
             using (var db = DbConnection) {
-                return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM Category WHERE LOWER(Name) = ?", 
+                return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM Category WHERE LOWER(Name) = ? AND IsDeleted = 0", 
                     name.ToLower());
             }
         }
 
         public static bool SubCategoryExistInBaseByName(string name, int bossCategoryId) {
             using (var db = DbConnection) {
-                return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM SubCategory WHERE LOWER(Name) = ? AND BossCategoryId", 
+                return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM SubCategory WHERE LOWER(Name) = ? AND BossCategoryId AND IsDeleted = 0", 
                     name.ToLower(), 
                     bossCategoryId);
             }
@@ -217,21 +213,21 @@ namespace Finanse.DataAccessLayer {
         public static SubCategory GetSubCategoryById(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE Id == ? LIMIT 1", id).FirstOrDefault();
+                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE Id == ? AND IsDeleted = 0 LIMIT 1", id).FirstOrDefault();
             }
         }
 
         public static List<SubCategory> GetSubCategoriesByBossId(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE BossCategoryId == ? ORDER BY Name", id);
+                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE BossCategoryId == ? AND IsDeleted = 0 ORDER BY Name", id);
             }
         }
 
         public static Category GetCategoryById(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<Category>("SELECT * FROM Category WHERE Id == ? LIMIT 1", id)
+                return db.Query<Category>("SELECT * FROM Category WHERE Id == ? AND IsDeleted = 0 LIMIT 1", id)
                     .FirstOrDefault();
             }
         }
@@ -245,7 +241,7 @@ namespace Finanse.DataAccessLayer {
                 operation.LastModifed = DateHelper.ActualTimeString;
 
                 if (operation.DeviceId == null)
-                    operation.DeviceId = Settings.DeviceId;
+                    operation.DeviceId = Informations.DeviceId;
 
                 if (operation.Id == 0) {
                     operation.RemoteId = db.ExecuteScalar<int>("SELECT seq " +
@@ -258,19 +254,7 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        private static void InsertOperation(Operation operation) {
-            using (var db = DbConnection) {
-                db.TraceListener = new DebugTraceListener();
-                db.Insert(operation);
-            }
-        }
-        private static void UpdateOperation(Operation operation) {
-            using (var db = DbConnection) {
-                db.TraceListener = new DebugTraceListener();
-                db.Update(operation);
-            }
-        }
-
+        
         public static void SaveOperationPattern(OperationPattern operationPattern) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
@@ -288,6 +272,9 @@ namespace Finanse.DataAccessLayer {
         public static void UpdateCategory(Category category) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
+
+                category.LastModifed = DateHelper.ActualTimeString;
+
                 db.Update(category);
             }
         }
@@ -295,6 +282,17 @@ namespace Finanse.DataAccessLayer {
         public static void AddCategory(Category category) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
+
+                category.LastModifed = DateHelper.ActualTimeString;
+
+                if (category.DeviceId == null)
+                    category.DeviceId = Informations.DeviceId;
+
+                category.RemoteId = db.ExecuteScalar<int>(
+                    "SELECT seq " +
+                    "FROM sqlite_sequence " +
+                    "WHERE name = 'Category'") + 1;
+
                 db.Insert(category);
             }
         }
@@ -302,6 +300,9 @@ namespace Finanse.DataAccessLayer {
         public static void UpdateSubCategory(SubCategory subCategory) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
+
+                subCategory.LastModifed = DateHelper.ActualTimeString;
+
                 db.Update(subCategory);
             }
         }
@@ -309,6 +310,17 @@ namespace Finanse.DataAccessLayer {
         public static void AddSubCategory(SubCategory subCategory) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
+
+                subCategory.LastModifed = DateHelper.ActualTimeString;
+
+                if (subCategory.DeviceId == null)
+                    subCategory.DeviceId = Informations.DeviceId;
+
+                subCategory.RemoteId = db.ExecuteScalar<int>(
+                    "SELECT seq " +
+                    "FROM sqlite_sequence " +
+                    "WHERE name = 'SubCategory'") + 1;
+
                 db.Insert(subCategory);
             }
         }
@@ -340,8 +352,13 @@ namespace Finanse.DataAccessLayer {
                 if (db.ExecuteScalar<bool>("SELECT CantDelete FROM Category WHERE Id = ? LIMIT 1", categoryId))
                     return;
 
-                db.Execute("DELETE FROM Category WHERE Id = ?", categoryId);
-                db.Execute("DELETE FROM SubCategory WHERE BossCategoryId = ?", categoryId);
+                db.Execute("UPDATE Category " +
+                           "SET IsDeleted = 1, LastModifed = ? " +
+                           "WHERE Id = ?", DateHelper.ActualTimeString, categoryId);
+
+                db.Execute("UPDATE SubCategory " +
+                           "SET IsDeleted = 1, LastModifed = ? " +
+                           "WHERE BossCategoryId = ?", DateHelper.ActualTimeString, categoryId);
             }
         }
 
@@ -351,45 +368,9 @@ namespace Finanse.DataAccessLayer {
                 if (db.ExecuteScalar<bool>("SELECT CantDelete FROM SubCategory WHERE Id = ? LIMIT 1", subCategoryId))
                     return;
 
-                db.Execute("DELETE FROM SubCategory WHERE Id = ?", subCategoryId);
-            }
-        }
-
-        public static void UpdateBase(string localFileName) {
-            IEnumerable<Operation> oneDriveOperations;
-            IEnumerable<Operation> localOperations;
-
-            using (var db = DbConnection) {
-                localOperations = db.Table<Operation>().ToList();
-            }
-            using ( var dbOneDrive = new SQLiteConnection(new SQLitePlatformWinRT(), DBPathLocalFromFileName(localFileName)) ) {
-                oneDriveOperations = dbOneDrive.Table<Operation>().ToList();
-            }
-
-
-            foreach (var oneDriveOperation in oneDriveOperations) {
-                if (string.IsNullOrEmpty(oneDriveOperation.DeviceId))
-                    continue;
-
-                Operation localOperation =
-                                    localOperations.FirstOrDefault(
-                                        item =>
-                                            item.RemoteId == oneDriveOperation.RemoteId &&
-                                            item.DeviceId == oneDriveOperation.DeviceId);
-
-                if (localOperation == null) {
-                    InsertOperation(oneDriveOperation);
-                    continue;
-                }
-
-                if (localOperation.LastModifed != null &&
-                    DateTime.Parse(localOperation.LastModifed) >= DateTime.Parse(oneDriveOperation.LastModifed))
-                    continue;
-
-                if (oneDriveOperation.LastModifed == null)
-                    oneDriveOperation.LastModifed = DateHelper.ActualTimeString;
-
-                UpdateOperation(oneDriveOperation);
+                db.Execute("UPDATE SubCategory " +
+                           "SET IsDeleted = 1, LastModifed = ? " +
+                           "WHERE Id = ?", DateHelper.ActualTimeString, subCategoryId);
             }
         }
     }

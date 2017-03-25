@@ -1,9 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using Windows.UI.Xaml;
-using Finanse.Annotations;
 
 namespace Finanse.Models.MoneyAccounts {
     class BankAccountWithCards : BankAccount, INotifyPropertyChanged {

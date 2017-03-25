@@ -1,10 +1,6 @@
-﻿using Finanse.Charts;
-using Finanse.Charts.Extensions;
-using Microsoft.Graphics.Canvas;
-using Microsoft.Graphics.Canvas.Brushes;
+﻿using Microsoft.Graphics.Canvas.Brushes;
 using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.Graphics.Canvas.UI.Xaml;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -14,7 +10,6 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Shapes;
 
 namespace Finanse.Charts {
     public class LineChartInterpolated : UserControl {

@@ -1,9 +1,7 @@
 ﻿using Finanse.DataAccessLayer;
-using Finanse.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;

@@ -1,16 +1,9 @@
 ﻿using Finanse.DataAccessLayer;
 using Finanse.Dialogs;
-using Finanse.Models;
 using Finanse.Models.MoneyAccounts;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;

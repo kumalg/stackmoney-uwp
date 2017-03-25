@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Numerics;
 using System.Linq;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
 using Finanse.Charts.Data;
-using Finanse.Charts.Shapes;
 using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 

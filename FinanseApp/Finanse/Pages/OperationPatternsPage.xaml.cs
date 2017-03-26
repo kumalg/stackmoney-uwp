@@ -7,32 +7,24 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
+using Finanse.Models.Helpers;
 using Finanse.Models.Operations;
 
 namespace Finanse.Pages {
 
-    public sealed partial class OperationPatternsPage : Page {
+    public sealed partial class OperationPatternsPage {
 
-        private ObservableCollection<OperationPattern> OperationPatterns = new ObservableCollection<OperationPattern>(Dal.GetAllPatterns());
+        private readonly ObservableCollection<OperationPattern> _operationPatterns = new ObservableCollection<OperationPattern>(Dal.GetAllPatterns());
 
         public OperationPatternsPage() {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
-        private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
-            FrameworkElement senderElement = sender as FrameworkElement;
-            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
-            flyoutBase.ShowAt(senderElement);
-        }
-
-        private void Grid_DragStarting(UIElement sender, DragStartingEventArgs args) {
-            FrameworkElement senderElement = sender as FrameworkElement;
-            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
-            flyoutBase.ShowAt(senderElement);
-        }
+        private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) => Flyouts.ShowFlyoutBase(sender);
+        private void Grid_DragStarting(UIElement sender, DragStartingEventArgs args) => Flyouts.ShowFlyoutBase(sender);
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
-            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            var datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
             var contentDialogItem = new AcceptContentDialog("Czy chcesz usunąć szablon?");
             var result = await contentDialogItem.ShowAsync();
 
@@ -44,33 +36,29 @@ namespace Finanse.Pages {
         }
 
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
-            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            var datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
 
             var contentDialogItem = new EditOperationContentDialog(((OperationPattern)datacontext));
             contentDialogItem.PrimaryButtonClick += delegate {
                 OperationPattern operationPattern = contentDialogItem.EditedOperationPattern();
-                OperationPatterns[OperationPatterns
-                    .IndexOf(OperationPatterns
+                _operationPatterns[_operationPatterns
+                    .IndexOf(_operationPatterns
                     .FirstOrDefault(i => i.Id == operationPattern.Id))] = operationPattern;
             };
 
-            var result = await contentDialogItem.ShowAsync();
+            await contentDialogItem.ShowAsync();
         }
 
-        public void RemoveOperationPatternFromList(OperationPattern operationPattern) {
-            OperationPatterns.Remove(operationPattern);
-        }
+        public void RemoveOperationPatternFromList(OperationPattern operationPattern) => _operationPatterns.Remove(operationPattern);
 
-        public void AddOperationPatternToList(OperationPattern operationPattern) {
-            OperationPatterns.Insert(0, operationPattern);
-        }
+        public void AddOperationPatternToList(OperationPattern operationPattern) => _operationPatterns.Insert(0, operationPattern);
 
         private async void DetailsButton_Click(object sender, RoutedEventArgs e) {
-            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            var datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
 
             var contentDialogItem = new OperationDetailsContentDialog((OperationPattern)datacontext, "pattern");
 
-            var result = await contentDialogItem.ShowAsync();
+            await contentDialogItem.ShowAsync();
         }
 
         private async void SzablonyListView_ItemClick(object sender, ItemClickEventArgs e) {
@@ -78,7 +66,7 @@ namespace Finanse.Pages {
 
             var contentDialogItem = new OperationDetailsContentDialog(thisPattern, "pattern");
 
-            var result = await contentDialogItem.ShowAsync();
+            await contentDialogItem.ShowAsync();
         }
     }
 }

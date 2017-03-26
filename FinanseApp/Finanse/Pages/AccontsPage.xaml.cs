@@ -12,16 +12,16 @@ using Windows.UI.Xaml.Input;
 
 namespace Finanse.Pages {
 
-    public sealed partial class AccountsPage : Page {
+    public sealed partial class AccountsPage {
         
         public AccountsPage() {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
-        private ObservableCollection<Account> accounts;
-        private ObservableCollection<Account> Accounts => accounts ?? (accounts = new ObservableCollection<Account>(AccountsDal.GetAllAccounts()));
+        private ObservableCollection<Account> _accounts;
+        private ObservableCollection<Account> Accounts => _accounts ?? (_accounts = new ObservableCollection<Account>(AccountsDal.GetAllAccounts()));
 
-        private async void NewMoneyAccount_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
+        private async void NewMoneyAccount_Click(object sender, RoutedEventArgs e) {
             var contentDialogItem = new NewMoneyAccountContentDialog();
             var result = await contentDialogItem.ShowAsync();
 
@@ -42,8 +42,8 @@ namespace Finanse.Pages {
                 Accounts.Insert(0, newAccount);
         }
 
-        private async void EditButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
-            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+        private async void EditButton_Click(object sender, RoutedEventArgs e) {
+            object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
             Account oldAccound = (Account)datacontext;
             EditMoneyAccountContentDialog editMoneyAccountContentDialog = new EditMoneyAccountContentDialog(oldAccound);
             ContentDialogResult result = await editMoneyAccountContentDialog.ShowAsync();
@@ -59,7 +59,7 @@ namespace Finanse.Pages {
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
             if (AccountsDal.CountBankAccouns() + AccountsDal.CountCashAccouns() > 1) {
-                object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+                object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
                 ShowDeleteAccountContentDialog((Account) datacontext);
             }
             else {
@@ -69,8 +69,11 @@ namespace Finanse.Pages {
         }
 
         private async void EditCard_Click(object sender, RoutedEventArgs e) {
-            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
             CardAccount oldAccound = (CardAccount)datacontext;
+            if (oldAccound == null)
+                return;
+
             EditMoneyAccountContentDialog editMoneyAccountContentDialog = new EditMoneyAccountContentDialog((Account)datacontext);
             ContentDialogResult result = await editMoneyAccountContentDialog.ShowAsync();
 
@@ -86,7 +89,7 @@ namespace Finanse.Pages {
         }
 
         private void DeleteCard_Click(object sender, RoutedEventArgs e) {
-            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
             ShowDeleteCardContentDialog((CardAccount)datacontext);
         }
 

@@ -34,8 +34,8 @@
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Stretch"
                         Background="Transparent"
-                        Tapped="StackPanel_Tapped"
-                        RightTapped="ExpandPanel_RightTapped">
+                        Tapped="Element_RightTapped"
+                        RightTapped="Element_RightTapped">
 
                         <FlyoutBase.AttachedFlyout>
                             <MenuFlyout
@@ -98,8 +98,8 @@
                                 x:DataType="categories:SubCategory">
 
                                 <data:SubCategoryTemplate
-                                    Tapped="Grid_Tapped"
-                                    RightTapped="Grid_RightTapped">
+                                    Tapped="Element_RightTapped"
+                                    RightTapped="Element_RightTapped">
                                     <FlyoutBase.AttachedFlyout>
                                         <MenuFlyout
                                             MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
@@ -210,9 +210,6 @@
                     Glyph="" />
             </Button>
         </Grid>
-        
-        <ProgressRing
-            x:Name="LoadingIndicator" />
 
         <Grid
             Grid.Row="2">
@@ -328,6 +325,7 @@
 
                     <ListView
                         Grid.Row="1"
+                        Grid.Column="0"
                         HorizontalContentAlignment="Right"
                         FlowDirection="LeftToRight"
                         Padding="0"
@@ -353,6 +351,7 @@
 
                     <TextBlock
                         Margin="16"
+                        Grid.Row="0"
                         Grid.Column="1"
                         FontSize="20"
                         HorizontalAlignment="Center"

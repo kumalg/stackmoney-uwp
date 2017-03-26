@@ -1,13 +1,10 @@
 ﻿using System;
-using Windows.Foundation.Metadata;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Finanse.Pages;
-using Windows.Graphics.Display;
 using Finanse.DataAccessLayer;
 using System.Threading.Tasks;
 using Windows.Phone.UI.Input;
@@ -15,27 +12,21 @@ using Windows.System.Profile;
 using Windows.UI.Core;
 using Windows.Foundation;
 using Windows.ApplicationModel.Core;
-using Windows.UI.Popups;
 using Finanse.Models;
 using Finanse.Models.Helpers;
+using Finanse.Models.WhatsNew;
 
 namespace Finanse {
-    public sealed partial class MainPage : Page {
+    public sealed partial class MainPage {
 
         public string DisplayName = Informations.DisplayName;
 
         public MainPage() {
-            this.InitializeComponent();
+            InitializeComponent();
             DalBase.CreateDb();
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(360, 530));
 
-            CoreApplication.GetCurrentView().TitleBar.IsVisibleChanged += TitleBar_IsVisibleChanged;
-
-            ApplicationViewTitleBar formattableTitleBar = ApplicationView.GetForCurrentView().TitleBar;
-            formattableTitleBar.ButtonBackgroundColor = Colors.Transparent;
-            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = true;
-            formattableTitleBar.ButtonHoverBackgroundColor = Functions.GetSolidColorBrush("#19000000").Color;
+            SetTitleBar();
 
             if (OperationsAppBarRadioButton != null)
                 OperationsAppBarRadioButton.IsChecked = true;
@@ -43,24 +34,19 @@ namespace Finanse {
             if (Strona_glowna_ListBoxItem != null)
                 Strona_glowna_ListBoxItem.IsChecked = true;
 
-            CheckForNewerAppVersion();
-
+            WhatsNewMessageDialog.CheckForNewerAppVersion();
             SyncHelper.CheckSyncBase();
         }
 
-        private static void CheckForNewerAppVersion() {
-            if (Settings.LastAppVersion == Informations.AppVersion)
-                return;
+        private void SetTitleBar() {
+            CoreApplication.GetCurrentView().TitleBar.IsVisibleChanged += TitleBar_IsVisibleChanged;
 
-            ShowWhatsNewDialog(Informations.AppVersion);
-            Settings.LastAppVersion = Informations.AppVersion;
+            ApplicationViewTitleBar formattableTitleBar = ApplicationView.GetForCurrentView().TitleBar;
+            formattableTitleBar.ButtonBackgroundColor = Colors.Transparent;
+            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+            formattableTitleBar.ButtonHoverBackgroundColor = Functions.GetSolidColorBrush("#19000000").Color;
         }
-
-        private static async void ShowWhatsNewDialog(string appVersion) {
-            MessageDialog messageDialog = new MessageDialog("Oj dużo", "Co nowego w wersji " + appVersion);
-            await messageDialog.ShowAsync();
-        }
-
         private void TitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args) {
             TitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
         }
@@ -86,66 +72,7 @@ namespace Finanse {
             SystemNavigationManager.GetForCurrentView().BackRequested += BackRequestedEvent;
             base.OnNavigatedTo(e);
         }
-       
-        private static async void ShowStatusBar() {
-            if (!ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-                return;
-
-            var statusBar = StatusBar.GetForCurrentView();
-            await statusBar.ShowAsync();
-        }
-
-        private static async void HideStatusBar() {
-            if (!ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-                return;
-
-            var statusBar = StatusBar.GetForCurrentView();
-            await statusBar.HideAsync();
-        }
-
-        private void WhichOrientation() {
-            var info = DisplayInformation.GetForCurrentView();
-
-            if (info.CurrentOrientation == DisplayOrientations.Landscape || info.CurrentOrientation == DisplayOrientations.LandscapeFlipped) {
-                StatusBarAndTitleBar("Background", "Text-1");
-                HideStatusBar();
-            }
-            else {
-                StatusBarAndTitleBar("AccentColor", "AccentText");
-                ShowStatusBar();
-            }
-        }
-
-        private static void StatusBarAndTitleBar(string statusBarBackgroundColor, string statusBarForegroundColor) {
-            //PC customization
-            /*
-            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView")) {
-                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-                if (titleBar != null) {
-                    titleBar.ButtonBackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentColor"] as SolidColorBrush).Color;
-                    titleBar.ButtonForegroundColor = Colors.White;
-
-                    titleBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentColor"] as SolidColorBrush).Color;
-                    titleBar.ForegroundColor = Colors.White;
-                }
-            }
-            */
-            //Mobile customization
-            if (!ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-                return;
-
-            var statusBar = StatusBar.GetForCurrentView();
-            if (statusBar == null)
-                return;
-
-            statusBar.BackgroundOpacity = 1;
-            statusBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources[statusBarBackgroundColor]).Color;
-
-            statusBar.ForegroundColor = statusBarForegroundColor == "White" ?
-                Colors.White :
-                ((SolidColorBrush)Application.Current.Resources[statusBarForegroundColor] as SolidColorBrush).Color;
-        }
-
+      
         private void OperationsAppBarRadioButton_Click(object sender, RoutedEventArgs e) {
 
         }
@@ -294,8 +221,6 @@ namespace Finanse {
             }
         }
 
-        private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e) {
-            WhichOrientation();
-        }
+        private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e) => StatusBarMethods.WhichOrientation();
     }
 }

@@ -20,15 +20,15 @@ using Finanse.Models.MoneyAccounts;
 using Finanse.Models.Operations;
 
 namespace Finanse.Pages {
-    public sealed partial class OperationsPage : Page, INotifyPropertyChanged {
+    public sealed partial class OperationsPage : INotifyPropertyChanged {
 
-        private HashSet<int> visibleAccountsSet = new HashSet<int>();
-        private OperationData storeData = new OperationData();
-        private ObservableCollection<GroupInfoList<Operation>> operationGroups;
+        private readonly HashSet<int> _visibleAccountsSet = new HashSet<int>();
+        private readonly OperationData _storeData = new OperationData();
+        private ObservableCollection<GroupInfoList<Operation>> _operationGroups;
         private ObservableCollection<GroupInfoList<Operation>> OperationGroups {
             get {
-                operationGroups = (bool)ByDateRadioButton.IsChecked ? storeData.OperationsByDay : storeData.OperationsByCategory;
-                return operationGroups;
+                _operationGroups = (bool)ByDateRadioButton.IsChecked ? _storeData.OperationsByDay : _storeData.OperationsByCategory;
+                return _operationGroups;
             }
         }
 
@@ -37,8 +37,8 @@ namespace Finanse.Pages {
                 return;
 
             DateTime dateTimeWithDays = (DateTime)e.Parameter;
-            storeData.ActualMonth = DateHelper.FirstDayInMonth(dateTimeWithDays);
-            storeData.ForceUpdate();
+            _storeData.ActualMonth = DateHelper.FirstDayInMonth(dateTimeWithDays);
+            _storeData.ForceUpdate();
             RaisePropertyChanged("OperationGroups");
 
             SetNextMonthButtonEnabling();
@@ -70,13 +70,12 @@ namespace Finanse.Pages {
 
         private void RaisePropertyChanged(string propertyName) {
             var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public OperationsPage() {
 
-            this.InitializeComponent();
+            InitializeComponent();
 
             if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile")
                 HardwareButtons.BackPressed += HardwareButtons_BackPressed;
@@ -87,8 +86,8 @@ namespace Finanse.Pages {
                     Tag = item.Id,
                     IsChecked = true,
                 };
-                visibleAccountsSet.Add(item.Id);
-                ((ListView)VisibleAccountsFlyout.Content).Items.Add(itema);
+                _visibleAccountsSet.Add(item.Id);
+                ((ListView)VisibleAccountsFlyout.Content).Items?.Add(itema);
             }
 
             SetNextMonthButtonEnabling();
@@ -108,17 +107,17 @@ namespace Finanse.Pages {
         }
 
         private void ReloadOperationsWithNewVisibleAccounts() {
-            HashSet<int> previousAccountsSet = new HashSet<int>(visibleAccountsSet);
-            visibleAccountsSet.Clear();
+            HashSet<int> previousAccountsSet = new HashSet<int>(_visibleAccountsSet);
+            _visibleAccountsSet.Clear();
 
             foreach (CheckBox item in ((ListView)VisibleAccountsFlyout.Content).Items)
                 if (item.IsChecked == true)
-                    visibleAccountsSet.Add((int)item.Tag);
+                    _visibleAccountsSet.Add((int)item.Tag);
 
-            if (previousAccountsSet.SetEquals(visibleAccountsSet))
+            if (previousAccountsSet.SetEquals(_visibleAccountsSet))
                 return;
 
-            storeData.VisiblePayFormList = visibleAccountsSet;
+            _storeData.VisiblePayFormList = _visibleAccountsSet;
             SetListOfOperations();
         }
 
@@ -126,8 +125,8 @@ namespace Finanse.Pages {
 
         private List<MoneyAccountBalance> ListOfMoneyAccounts {
             get {
-                _listOfMoneyAccounts = AccountsDal.ListOfMoneyAccountBalances(storeData.ActualMonth)
-                           .Where(i => storeData.VisiblePayFormList.Any(ac => ac == i.Account.Id))
+                _listOfMoneyAccounts = AccountsDal.ListOfMoneyAccountBalances(_storeData.ActualMonth)
+                           .Where(i => _storeData.VisiblePayFormList.Any(ac => ac == i.Account.Id))
                            .ToList();
                 RaisePropertyChanged("InitialSum");
                 RaisePropertyChanged("FinalSum");
@@ -139,21 +138,16 @@ namespace Finanse.Pages {
         private decimal FinalSum => _listOfMoneyAccounts.Sum(i => i.FinalValue);
 
 
-        private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
-            FrameworkElement senderElement = sender as FrameworkElement;
-            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
-            flyoutBase.ShowAt(senderElement);
-        }
+        private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) => Flyouts.ShowFlyoutBase(sender);
 
         /**
          * BUTTON CLICKS
          */
 
-        private void DetailsButton_Click(object sender, ItemClickEventArgs e) {
-            ShowDetailsContentDialog((Operation)e.ClickedItem);
-        }
+        private void DetailsButton_Click(object sender, ItemClickEventArgs e) => ShowDetailsContentDialog((Operation)e.ClickedItem);
+
         private void DetailsButton_Click(object sender, RoutedEventArgs e) {
-            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
             ShowDetailsContentDialog((Operation)datacontext);
         }
         private async void ShowDetailsContentDialog(Operation operation) {
@@ -170,7 +164,7 @@ namespace Finanse.Pages {
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e) {
-            Operation operation = (e.OriginalSource as FrameworkElement).DataContext as Operation;
+            Operation operation = (e.OriginalSource as FrameworkElement)?.DataContext as Operation;
             ShowEditContentDialog(operation);
         }
 
@@ -185,7 +179,7 @@ namespace Finanse.Pages {
         }
         
         private void DeleteButton_Click(object sender, RoutedEventArgs e) {
-            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
             ShowDeleteOperationContentDialog((Operation)datacontext);
         }
         private async void ShowDeleteOperationContentDialog(Operation operation) {
@@ -199,13 +193,13 @@ namespace Finanse.Pages {
         }
 
         private void DeleteOperation_DialogButtonClick(Operation operation) {
-            storeData.RemoveOperation(operation);
+            _storeData.RemoveOperation(operation);
             Dal.DeleteOperation(operation);
         }
         
         private void UpdateOperationInList(Operation previous, Operation actual) {
-            storeData.RemoveOperation(previous);
-            storeData.AddOperation(actual);
+            _storeData.RemoveOperation(previous);
+            _storeData.AddOperation(actual);
         }
 
         private void Grid_DragStarting(UIElement sender, DragStartingEventArgs args) {
@@ -234,7 +228,7 @@ namespace Finanse.Pages {
             ActivateProgressRing();
             await Task.Delay(5);
 
-            storeData.ActualMonth = storeData.ActualMonth.AddMonths(-1);
+            _storeData.ActualMonth = _storeData.ActualMonth.AddMonths(-1);
             SetListOfOperations();
 
             DeactivateProgressRing();
@@ -244,7 +238,7 @@ namespace Finanse.Pages {
             ActivateProgressRing();
             await Task.Delay(5);
 
-            storeData.ActualMonth = storeData.ActualMonth.AddMonths(1);
+            _storeData.ActualMonth = _storeData.ActualMonth.AddMonths(1);
             SetListOfOperations();
 
             DeactivateProgressRing();
@@ -254,7 +248,7 @@ namespace Finanse.Pages {
             ActivateProgressRing();
             await Task.Delay(5);
 
-            storeData.ActualMonth = storeData.ActualMonth.AddMonths(1);
+            _storeData.ActualMonth = _storeData.ActualMonth.AddMonths(1);
             SetListOfOperations();
             PrevMonthButton.IsEnabled = true; // ponieważ trzeba wrócić z planowanych do aktualnego miesiąca
             IncomingOperationsButton.Visibility = Visibility.Collapsed;
@@ -300,7 +294,7 @@ namespace Finanse.Pages {
         }
 
         private void SetNextMonthButtonEnabling() {
-            if (new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1) <= storeData.ActualMonth) {
+            if (new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1) <= _storeData.ActualMonth) {
                 NextMonthButton.Visibility = Visibility.Collapsed;
                 IncomingOperationsButton.Visibility = Visibility.Visible;
             }
@@ -312,7 +306,7 @@ namespace Finanse.Pages {
 
         private void SetPreviousMonthButtonEnabling() {
             Operation eldestOperation = Dal.GetEldestOperation();
-            PrevMonthButton.IsEnabled = eldestOperation != null && Convert.ToDateTime(eldestOperation.Date) < storeData.ActualMonth;
+            PrevMonthButton.IsEnabled = eldestOperation != null && Convert.ToDateTime(eldestOperation.Date) < _storeData.ActualMonth;
         }
 
 
@@ -339,7 +333,7 @@ namespace Finanse.Pages {
             RaisePropertyChanged("ZoomedOut_ItemTemplateSelector");
         }
 
-        private object ZoomedOut_ItemsSource => (bool)ByDateRadioButton.IsChecked ? storeData.OperationHeaders : ContactsCVS.View.CollectionGroups as object;
+        private object ZoomedOut_ItemsSource => (bool)ByDateRadioButton.IsChecked ? _storeData.OperationHeaders : ContactsCVS.View.CollectionGroups as object;
 
         private DataTemplate HeaderTemplate => (bool)ByDateRadioButton.IsChecked ? ByDateGroupStyle.HeaderTemplate : ByCategoryGroupStyle.HeaderTemplate;
 

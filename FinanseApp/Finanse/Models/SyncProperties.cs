@@ -1,7 +1,7 @@
 ﻿namespace Finanse.Models {
-    public class SyncProperties {
+    public abstract class SyncProperties {
         public string LastModifed { get; set; }
-        public string DeviceId { get; set; } //ale prawdopodobie tylko get
+        public string DeviceId { get; set; }
         public int RemoteId { get; set; }
         public bool IsDeleted { get; set; }
     }

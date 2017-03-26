@@ -18,18 +18,18 @@ using Finanse.Models.Operations;
 
 namespace Finanse.Pages {
 
-    public sealed partial class NewOperationPage : Page, INotifyPropertyChanged {
+    public sealed partial class NewOperationPage : INotifyPropertyChanged {
 
-        private readonly Regex regex = NewOperation.GetRegex();
-        private string acceptedCostValue = string.Empty;
-        private bool isUnfocused = true;
+        private readonly Regex _regex = NewOperation.GetRegex();
+        private string _acceptedCostValue = string.Empty;
+        private bool _isUnfocused = true;
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             SetDefaultPageValues();
 
             SetCategoryComboBoxItems(true, false);
-            AccountsWithoutCards = AccountsDal.GetAccountsWithoutCards();
-            Accounts = AccountsDal.GetAllMoneyAccounts();
+            _accountsWithoutCards = AccountsDal.GetAccountsWithoutCards();
+            _accounts = AccountsDal.GetAllMoneyAccounts();
             RaisePropertyChanged("AccountsComboBox");
             RaisePropertyChanged("AccountsToComboBox");
             RaisePropertyChanged("AccountsFromComboBox");
@@ -39,7 +39,7 @@ namespace Finanse.Pages {
 
         private void SetDefaultPageValues() {
             CostValue.Text = string.Empty;
-            acceptedCostValue = string.Empty;
+            _acceptedCostValue = string.Empty;
             NameValue.Text = string.Empty;
             DateValue.Date = DateTime.Today;
             CategoryValue.SelectedIndex = -1;
@@ -61,26 +61,25 @@ namespace Finanse.Pages {
         }
 
 
-        private List<Account> AccountsWithoutCards = AccountsDal.GetAccountsWithoutCards();
-        private List<Account> Accounts = AccountsDal.GetAllMoneyAccounts();
+        private List<Account> _accountsWithoutCards = AccountsDal.GetAccountsWithoutCards();
+        private List<Account> _accounts = AccountsDal.GetAllMoneyAccounts();
 
 
         private ObservableCollection<Account> AccountsComboBox {
             get {
-                if ((bool)Income_RadioButton.IsChecked) {
-                    return new ObservableCollection<Account>(AccountsWithoutCards);
-                }
-                return new ObservableCollection<Account>(Accounts);
+                if (Income_RadioButton.IsChecked != null && (bool)Income_RadioButton.IsChecked)
+                    return new ObservableCollection<Account>(_accountsWithoutCards);
+                return new ObservableCollection<Account>(_accounts);
             }
         }
 
-        private List<Account> AccountsToComboBox => AccountsWithoutCards.ToList();
+        private List<Account> AccountsToComboBox => _accountsWithoutCards.ToList();
 
-        private List<Account> AccountsFromComboBox => AccountsWithoutCards.ToList();
+        private List<Account> AccountsFromComboBox => _accountsWithoutCards.ToList();
 
         public NewOperationPage() {
 
-            this.InitializeComponent();
+            InitializeComponent();
 
             DateValue.Date = DateTime.Today;
             DateValue.MaxDate = Settings.MaxDate;
@@ -90,9 +89,9 @@ namespace Finanse.Pages {
 
             SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
 
-            if (PayFormValue.Items.Count > 0)
+            if (PayFormValue.Items != null && PayFormValue.Items.Count > 0)
                 PayFormValue.SelectedIndex = 0;
-            if (InitialAccount.Items.Count > 0)
+            if (InitialAccount.Items != null && InitialAccount.Items.Count > 0)
                 InitialAccount.SelectedIndex = 0;
         }
 
@@ -216,17 +215,17 @@ namespace Finanse.Pages {
         }
 
         private void CostValue_GotFocus(object sender, RoutedEventArgs e) {
-            isUnfocused = false;
+            _isUnfocused = false;
 
             if (CostValue.Text == "")
                 return;
 
-            CostValue.Text = acceptedCostValue;
+            CostValue.Text = _acceptedCostValue;
             CostValue.SelectionStart = CostValue.Text.Length;
         }
 
         private void CostValue_LostFocus(object sender, RoutedEventArgs e) {
-            isUnfocused = true;
+            _isUnfocused = true;
 
             if (CostValue.Text != "")
                 CostValue.Text = NewOperation.ToCurrencyString(CostValue.Text);
@@ -235,19 +234,19 @@ namespace Finanse.Pages {
         private void CostValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
 
             if (string.IsNullOrEmpty(CostValue.Text)) {
-                acceptedCostValue = string.Empty;
+                _acceptedCostValue = string.Empty;
                 return;
             }
 
-            if (isUnfocused)
+            if (_isUnfocused)
                 return;
 
-            if (regex.Match(CostValue.Text).Value != CostValue.Text) {
+            if (_regex.Match(CostValue.Text).Value != CostValue.Text) {
                 int whereIsSelection = CostValue.SelectionStart;
-                CostValue.Text = acceptedCostValue;
+                CostValue.Text = _acceptedCostValue;
                 CostValue.SelectionStart = whereIsSelection - 1;
             }
-            acceptedCostValue = CostValue.Text;
+            _acceptedCostValue = CostValue.Text;
         }
 
         private async void UsePatternButton_Click(object sender, RoutedEventArgs e) {
@@ -267,7 +266,7 @@ namespace Finanse.Pages {
                 Income_RadioButton.IsChecked = true;
 
             CostValue.Text = NewOperation.ToCurrencyString(selectedOperation.Cost);
-            acceptedCostValue = NewOperation.ToCurrencyWithoutSymbolString(selectedOperation.Cost);
+            _acceptedCostValue = NewOperation.ToCurrencyWithoutSymbolString(selectedOperation.Cost);
 
             NameValue.Text = selectedOperation.Title;
 
@@ -287,7 +286,7 @@ namespace Finanse.Pages {
             return new OperationPattern {
                 Title = NameValue.Text,
                 isExpense = (bool)Expense_RadioButton.IsChecked,
-                Cost = decimal.Parse(acceptedCostValue, Settings.ActualCultureInfo),
+                Cost = decimal.Parse(_acceptedCostValue, Settings.ActualCultureInfo),
                 CategoryId = GetCategoryId(),
                 SubCategoryId = GetSubCategoryId(),
                 MoreInfo = MoreInfoValue.Text,

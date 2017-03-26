@@ -1,20 +1,20 @@
 {
 	"defaultCategories" : [
 		{
-		"Id" : 1,
-		"Name" : "Inne",
-		"ColorKey" : "gray",
-		"IconKey" : "FontIcon_2",
-		"VisibleInIncomes" : true,
-		"VisibleInExpenses" : true
+			"Id" : 1,
+			"Name" : "Inne",
+			"ColorKey" : "gray",
+			"IconKey" : "FontIcon_2",
+			"VisibleInIncomes" : true,
+			"VisibleInExpenses" : true
 		},	
 		{
-		"Id" : 2,
-		"Name" : "Transport",
-		"ColorKey" : "darkBlue",
-		"IconKey" : "FontIcon_5",
-		"VisibleInIncomes" : true,
-		"VisibleInExpenses" : true
-		},
+			"Id" : 2,
+			"Name" : "Transport",
+			"ColorKey" : "darkBlue",
+			"IconKey" : "FontIcon_5",
+			"VisibleInIncomes" : true,
+			"VisibleInExpenses" : true
+		}
 	]
 }

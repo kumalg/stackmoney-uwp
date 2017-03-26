@@ -1,6 +1,7 @@
 ﻿using Finanse.DataAccessLayer;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -110,9 +111,9 @@ namespace Finanse.Dialogs {
 
 
         public NewCategoryContentDialog(Category editedCategoryItem) {
-            this.InitializeComponent();
-            this._editedCategoryItem = new Category(editedCategoryItem);
-            this._editedCategoryAlwaysAsSubCategory = new SubCategory(editedCategoryItem);
+            InitializeComponent();
+            _editedCategoryItem = new Category(editedCategoryItem);
+            _editedCategoryAlwaysAsSubCategory = new SubCategory(editedCategoryItem);
             Title = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("editCategoryString");
             PrimaryButtonText = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("save");
 
@@ -122,6 +123,15 @@ namespace Finanse.Dialogs {
             BossCategoryId = _editedCategoryAlwaysAsSubCategory.BossCategoryId;
             
             NewCategoryItem = new Category(editedCategoryItem);
+
+            /// PÓKI CO NIE DZIAŁA
+            /*
+            if (editedCategoryItem.CantDelete) {
+                Debug.WriteLine("NO NIE MOŻNA");
+                CategoryValue.IsEnabled = false;
+                VisibleInExpensesToggleButton.IsEnabled = false;
+                VisibleInIncomesToggleButton.IsEnabled = false;
+            }*/
         }
 
         public NewCategoryContentDialog(int bossCategoryId) {
@@ -135,11 +145,11 @@ namespace Finanse.Dialogs {
 
             VisibleInExpensesToggleButton.IsOn = true;
             VisibleInIncomesToggleButton.IsOn = true;
-            this.BossCategoryId = bossCategoryId;
+            BossCategoryId = bossCategoryId;
         }
 
         public NewCategoryContentDialog() {
-            this.InitializeComponent();
+            InitializeComponent();
             Title = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("newCategoryString");
             PrimaryButtonText = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("add");
 

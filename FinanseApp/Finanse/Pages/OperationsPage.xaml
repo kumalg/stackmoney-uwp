@@ -368,7 +368,7 @@
                         Margin="0"
                         Background="Transparent"
                         BorderThickness="0"
-                        Content="{x:Bind storeData.ActualMonthText, Mode=OneWay}"
+                        Content="{x:Bind _storeData.ActualMonthText, Mode=OneWay}"
                         FontFamily="{StaticResource DefaultFontFamily}"
                         FontWeight="Bold"
                         FontSize="14"
@@ -411,7 +411,7 @@
                     HorizontalAlignment="Right">
                     <TextBlock
                         VerticalAlignment="Center"
-                        Text="{x:Bind storeData.ActualOperationsSum, Mode=OneWay}"
+                        Text="{x:Bind _storeData.ActualOperationsSum, Mode=OneWay}"
                         Foreground="{ThemeResource AccentText}"
                         FontFamily="{StaticResource DefaultFontFamily}"
                         FontWeight="Bold"

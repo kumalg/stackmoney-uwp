@@ -62,7 +62,7 @@ namespace Finanse.Models {
 
             if (actualTypeOfSettings.Values["whichCurrency"] == null)
                 actualTypeOfSettings.Values["whichCurrency"] = CultureInfo.CurrentCulture.Name;
-
+            
             if (LocalSettings.Values["LastAppVersion"] == null)
                 LocalSettings.Values["LastAppVersion"] = Informations.AppVersion;
         }

@@ -446,11 +446,11 @@
                     VerticalScrollMode="Enabled"
                     VerticalScrollBarVisibility="Auto">
                     <controls:MarkdownTextBlock
-                        Text="{x:Bind whatsNewText}"
                         MarkdownRendered="MarkdownText_MarkdownRendered"
                         MaxWidth="620"
                         Margin="16"
-                        Foreground="{ThemeResource Text}" />
+                        Foreground="{ThemeResource Text}"
+                        Loading="MarkdownTextBlock_Loading" />
                 </ScrollViewer>
             </PivotItem>
         </Pivot>

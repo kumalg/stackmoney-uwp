@@ -3,93 +3,47 @@ using Finanse.Dialogs;
 using Finanse.Models.Categories;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
+using Finanse.Models.Helpers;
 
 namespace Finanse.Pages {
 
-    public sealed partial class CategoriesPage : Page, INotifyPropertyChanged {
-
-        private ObservableCollection<CategoryWithSubCategories> categories;
-        private ObservableCollection<CategoryWithSubCategories> Categories {
-            get {
-                return categories;
-            }
-            set {
-                categories = value;
-                RaisePropertyChanged("Categories");
-            }
-        }
+    public sealed partial class CategoriesPage {
         
 
-        private ObservableCollection<CategoryWithSubCategories> expenseCategories;
-        private ObservableCollection<CategoryWithSubCategories> ExpenseCategories {
-            get {
-                return expenseCategories ??
-                       (expenseCategories =
-                           new ObservableCollection<CategoryWithSubCategories>(
-                               Dal.GetCategoriesWithSubCategoriesInExpenses()));
-            }
-            set {
-                expenseCategories = value;
-                RaisePropertyChanged("ExpenseCategories");
-            }
-        }
+        private ObservableCollection<CategoryWithSubCategories> _expenseCategories;
+        private ObservableCollection<CategoryWithSubCategories> ExpenseCategories => _expenseCategories ??
+                                                                                     (_expenseCategories =
+                                                                                         new ObservableCollection<CategoryWithSubCategories>(
+                                                                                             Dal.GetCategoriesWithSubCategoriesInExpenses()));
 
-        private ObservableCollection<CategoryWithSubCategories> incomeCategories;
-        private ObservableCollection<CategoryWithSubCategories> IncomeCategories {
-            get {
-                return incomeCategories ??
-                       (incomeCategories =
-                           new ObservableCollection<CategoryWithSubCategories>(
-                               Dal.GetCategoriesWithSubCategoriesInIncomes()));
-            }
-            set {
-                incomeCategories = value;
-                RaisePropertyChanged("IncomeCategories");
-            }
-        }
+        private ObservableCollection<CategoryWithSubCategories> _incomeCategories;
+        private ObservableCollection<CategoryWithSubCategories> IncomeCategories => _incomeCategories ??
+                                                                                    (_incomeCategories =
+                                                                                        new ObservableCollection<CategoryWithSubCategories>(
+                                                                                            Dal.GetCategoriesWithSubCategoriesInIncomes()));
 
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void RaisePropertyChanged(string propertyName) {
-            var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-
+        
         public CategoriesPage() {
-            this.InitializeComponent();
-            Categories = ExpenseCategories;
-        }
-
-        private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e) {
-            ShowSubCategoryFlyout(sender);
-        }
-
-        private void Grid_Tapped(object sender, TappedRoutedEventArgs e) {
-            ShowSubCategoryFlyout(sender);
-        }
-
-        private void ShowSubCategoryFlyout(object sender) {
-            FrameworkElement senderElement = sender as FrameworkElement;
-            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
-            flyoutBase.ShowAt(senderElement);
+            InitializeComponent();
         }
 
         private async void EditCategory_Click(object sender, RoutedEventArgs e) {
-            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            var datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
             CategoryWithSubCategories thisCategorys = (CategoryWithSubCategories)datacontext;
+
+            if (thisCategorys == null)
+                return;
+
+            if (thisCategorys.Category.CantDelete) {
+                ShowCantEditDialog();
+                return;
+            }
+
             var contentDialogItem = new NewCategoryContentDialog(thisCategorys.Category);
             var result = await contentDialogItem.ShowAsync();
 
@@ -133,8 +87,14 @@ namespace Finanse.Pages {
         }
 
         private async void EditSubCategory_Click(object sender, RoutedEventArgs e) {
-            var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            var datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
             SubCategory thisSubCategory = (SubCategory)datacontext;
+
+            if (thisSubCategory != null && thisSubCategory.CantDelete) {
+                ShowCantEditDialog();
+                return;
+            }
+
             var contentDialogItem = new NewCategoryContentDialog(thisSubCategory);
             var result = await contentDialogItem.ShowAsync();
 
@@ -164,12 +124,14 @@ namespace Finanse.Pages {
         }
 
         private async void DeleteCategory_Click(object sender, RoutedEventArgs e) {
-            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
-            Category category = ((CategoryWithSubCategories)datacontext).Category;
+            object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
+            Category category = ((CategoryWithSubCategories)datacontext)?.Category;
+
+            if (category == null)
+                return;
 
             if (category.CantDelete) {
-                MessageDialog messageDialog = new MessageDialog("Nie można usunąć tej kategorii");
-                await messageDialog.ShowAsync();
+                ShowCantDeleteDialog();
                 return;
             }
 
@@ -183,13 +145,24 @@ namespace Finanse.Pages {
             Dal.DeleteCategoryWithSubCategories(category.Id);
         }
 
+        private async void ShowCantDeleteDialog() {
+            MessageDialog messageDialog = new MessageDialog("Nie można usunąć tej kategorii");
+            await messageDialog.ShowAsync();
+        }
+        private async void ShowCantEditDialog() {
+            MessageDialog messageDialog = new MessageDialog("Nie można edytować tej kategorii");
+            await messageDialog.ShowAsync();
+        }
+
         private async void DeleteSubCategory_Click(object sender, RoutedEventArgs e) {
-            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
             SubCategory subCategory = (SubCategory)datacontext;
 
+            if (subCategory == null)
+                return;
+
             if (subCategory.CantDelete) {
-                MessageDialog messageDialog = new MessageDialog("Nie można usunąć tej podkategorii");
-                await messageDialog.ShowAsync();
+                ShowCantDeleteDialog();
                 return;
             }
 
@@ -204,8 +177,11 @@ namespace Finanse.Pages {
         }
 
         private async void AddSubCat_Click(object sender, RoutedEventArgs e) {
-            object datacontext = (e.OriginalSource as FrameworkElement).DataContext;
+            object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
             CategoryWithSubCategories categoryWithSubCategories = (CategoryWithSubCategories)datacontext;
+
+            if (categoryWithSubCategories == null)
+                return;
 
             NewCategoryContentDialog contentDialogItem = new NewCategoryContentDialog(categoryWithSubCategories.Category.Id);
             ContentDialogResult result = await contentDialogItem.ShowAsync();
@@ -272,7 +248,7 @@ namespace Finanse.Pages {
                 ExpenseCategories.Remove(ExpenseCategories.FirstOrDefault(i => i.Category.Id == category.Id));
 
             if (category.VisibleInIncomes)
-                IncomeCategories.Remove(ExpenseCategories.FirstOrDefault(i => i.Category.Id == category.Id));
+                IncomeCategories.Remove(IncomeCategories.FirstOrDefault(i => i.Category.Id == category.Id));
         }
 
         private void TryInsertCategoryWithSubCategoriesInList(int indexInExpenses, int indexInIncomes, CategoryWithSubCategories categoryWithSubCategories) {
@@ -301,29 +277,7 @@ namespace Finanse.Pages {
                 });
         }
 
-
-        private async void RadioButton_Checked(object sender, RoutedEventArgs e) {
-            await Task.Delay(5);
-            Categories = ExpenseCategories;
-        }
-
-        private async void RadioButton_Checked_1(object sender, RoutedEventArgs e) {
-            await Task.Delay(5);
-            Categories = IncomeCategories;
-        }
-        
-        private void ExpandPanel_RightTapped(object sender, RightTappedRoutedEventArgs e) {
-            ShowFlyoutBase(sender);
-        }
-
-        private void StackPanel_Tapped(object sender, TappedRoutedEventArgs e) {
-            ShowFlyoutBase(sender);
-        }
-
-        private static void ShowFlyoutBase(object sender) {
-            FrameworkElement senderElement = sender as FrameworkElement;
-            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
-            flyoutBase.ShowAt(senderElement);
-        }
+        private void Element_RightTapped(object sender, RightTappedRoutedEventArgs e) => Flyouts.ShowFlyoutBase(sender);
+        private void Element_RightTapped(object sender, TappedRoutedEventArgs e) => Flyouts.ShowFlyoutBase(sender);
     }
 }

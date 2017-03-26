@@ -4,14 +4,15 @@ using Finanse.Models;
 using System;
 using System.Globalization;
 using System.Linq;
-using Windows.ApplicationModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Finanse.Models.Helpers;
+using Finanse.Models.WhatsNew;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 
 namespace Finanse.Pages {
 
-    public sealed partial class SettingsPage : Page {
+    public sealed partial class SettingsPage {
 
         public string AppVersion = Informations.AppVersion;
         public string DisplayName = Informations.DisplayName;
@@ -19,10 +20,10 @@ namespace Finanse.Pages {
 
         public SettingsPage() {
 
-            this.InitializeComponent();
+            InitializeComponent();
 
             foreach (CultureInfo item in Settings.AllCurrencies) {
-                CurrencyValue.Items.Add(new ComboBoxItem {
+                CurrencyValue.Items?.Add(new ComboBoxItem {
                     Content = new RegionInfo(item.Name).ISOCurrencySymbol,
                     Tag = item.Name
                 });
@@ -42,7 +43,7 @@ namespace Finanse.Pages {
                 .SingleOrDefault(i => i.Tag.Equals(Settings.ActualCultureInfo.Name));
 
             for (int i = 1; i <= 12; i++)
-                MaxNumberOfNextMonth.Items.Add(new ComboBoxItem {
+                MaxNumberOfNextMonth.Items?.Add(new ComboBoxItem {
                     Content = i,
                 });
 
@@ -58,7 +59,7 @@ namespace Finanse.Pages {
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            var cultureString = (string)( (ComboBoxItem)CurrencyValue.SelectedItem ).Tag;
+            var cultureString = (string)( (ComboBoxItem)CurrencyValue.SelectedItem )?.Tag;
             Settings.ActualCultureInfo = new CultureInfo(cultureString);
         }
 
@@ -92,17 +93,15 @@ namespace Finanse.Pages {
         private void DarkThemeRadioButton_Checked(object sender, RoutedEventArgs e) {
             Settings.Theme = ApplicationTheme.Dark;
 
-            if (Frame != null) {
+            if (Frame != null)
                 ( (ThemeAwareFrame)Frame ).AppTheme = ElementTheme.Dark;
-            }
         }
 
         private void LightThemeRadioButton_Checked(object sender, RoutedEventArgs e) {
             Settings.Theme = ApplicationTheme.Light;
 
-            if (Frame != null) {
+            if (Frame != null)
                 ( (ThemeAwareFrame)Frame ).AppTheme = ElementTheme.Light;
-            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
@@ -122,26 +121,11 @@ namespace Finanse.Pages {
             Dal.AddInitialElements();
         }
 
-        private void MarkdownText_MarkdownRendered(object sender, Microsoft.Toolkit.Uwp.UI.Controls.MarkdownRenderedEventArgs e) {
+        private void MarkdownText_MarkdownRendered(object sender, MarkdownRenderedEventArgs e) { }
 
+        private async void MarkdownTextBlock_Loading(FrameworkElement sender, object args) {
+            if (sender is MarkdownTextBlock markdownTextBlock)
+                markdownTextBlock.Text = await WhatsNewHelper.GetJsonStringAsync();
         }
-
-        private string whatsNewText =
-            "###1.1.5.0\n" +
-            "* synchronizacja operacji\n" +
-            "* suma pieniędzy na poczatku i końcu każdego miesiąca\n" +
-            "* poprawiony sposób wyświetlania aktualnego salda na stronie \"Konta\"\n" +
-            "* zabezpieczenie przed usunięciem domyślnej kategorii\n" +
-            "* zabezpieczenie przed usunięciem wszystkich kont\n" +
-            "* zmiana motywu jasny/ciemny następuje natychmiast (jednak wciąż z drobnymi kłopotami)\n" +
-            "* naprawiony brak możliwości scrollowania kategorii dla trybu kompaktowego\n" +
-            "* poprawki drobnych błędów\n" +
-            "\n\n\n###1.1.4.0\n" + 
-            "* poprawki wydajności\n" +
-            "* zabezpieczenie przed dodaniem kategorii albo konta o takiej samej nazwie\n" +
-            "* poprawki w tłumaczeniu\n" +
-            "* podstrona 'Co nowego'\n" +
-            "\n\n\n###1.1.3.0\n" +
-            "* Pierwszy build";
     }
 }

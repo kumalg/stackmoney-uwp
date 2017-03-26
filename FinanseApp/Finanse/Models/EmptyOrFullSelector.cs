@@ -3,10 +3,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Finanse.Models.Operations;
 
-namespace Finanse.Models
-{
-    public class EmptyOrFullSelector : DataTemplateSelector
-    {
+namespace Finanse.Models {
+    public class EmptyOrFullSelector : DataTemplateSelector {
         public DataTemplate Full { get; set; }
         public DataTemplate Empty { get; set; }
 
@@ -14,9 +12,10 @@ namespace Finanse.Models
 
             bool isEmpty = true;
 
-            if (item is HeaderItem) {
-                var groupItem = item as HeaderItem;
-                isEmpty = groupItem == null || !groupItem.IsEnabled;
+            var headerItem = item as HeaderItem;
+            if (headerItem != null) {
+                var groupItem = headerItem;
+                isEmpty = !groupItem.IsEnabled;
             }
 
             // Disable empty items
@@ -25,7 +24,7 @@ namespace Finanse.Models
                 selectorItem.IsEnabled = !isEmpty;
             }
 
-            return (!isEmpty) ? Full : Empty;
+            return !isEmpty ? Full : Empty;
         }
     }
 }

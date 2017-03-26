@@ -7,68 +7,67 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Controls;
 using Finanse.Charts.Data;
 
 namespace Finanse.Pages {
 
-    public sealed partial class StatisticsPage : Page, INotifyPropertyChanged {
+    public sealed partial class StatisticsPage : INotifyPropertyChanged {
         private readonly StatisticsData _statisticsData = new StatisticsData();
         
         public DateTime MinDate = DateHelper.FirstDayInMonth(DateTime.Today);
         public DateTime MaxDate = DateTime.Today;
 
-        private string incomesPercentageText;
+        private string _incomesPercentageText;
         public string IncomesPercentageText {
             get {
-                return incomesPercentageText;
+                return _incomesPercentageText;
             }
             set {
-                incomesPercentageText = value;
+                _incomesPercentageText = value;
                 RaisePropertyChanged("IncomesPercentageText");
             }
         }
 
-        private string dateRangeText;
+        private string _dateRangeText;
         public string DateRangeText {
             get {
-                return dateRangeText;
+                return _dateRangeText;
             }
             set {
-                dateRangeText = value;
+                _dateRangeText = value;
                 RaisePropertyChanged("DateRangeText");
             }
         }
 
-        private string expensesValue = string.Empty;
+        private string _expensesValue = string.Empty;
         private string ExpensesValue {
             get {
-                return expensesValue;
+                return _expensesValue;
             }
             set {
-                expensesValue = value;
+                _expensesValue = value;
                 RaisePropertyChanged("ExpensesValue");
             }
         }
 
-        private string incomesValue = string.Empty;
+        private string _incomesValue = string.Empty;
         private string IncomesValue {
             get {
-                return incomesValue;
+                return _incomesValue;
             }
             set {
-                incomesValue = value;
+                _incomesValue = value;
                 RaisePropertyChanged("IncomesValue");
             }
         }
 
-        private List<ChartDataItem> expensesToIncomes = new List<ChartDataItem>();
+        private List<ChartDataItem> _expensesToIncomes = new List<ChartDataItem>();
         public List<ChartDataItem> ExpensesToIncomes {
             get {
-                return expensesToIncomes;
+                return _expensesToIncomes;
             }
             set {
-                expensesToIncomes = value;
+                _expensesToIncomes = value;
                 RaisePropertyChanged("ExpensesToIncomes");
             }
         }
@@ -97,13 +96,13 @@ namespace Finanse.Pages {
             }
         }*/
         
-        private ObservableCollection<LineChartItem> lineChartTest = new ObservableCollection<LineChartItem>();
+        private ObservableCollection<LineChartItem> _lineChartTest = new ObservableCollection<LineChartItem>();
         public ObservableCollection<LineChartItem> LineChartTest {
             get {
-                return lineChartTest;
+                return _lineChartTest;
             }
             set {
-                lineChartTest = value;
+                _lineChartTest = value;
                 RaisePropertyChanged("LineChartTest");
             }
         }
@@ -134,13 +133,12 @@ namespace Finanse.Pages {
 
         private void RaisePropertyChanged(string propertyName) {
             var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public StatisticsPage() {
 
-            this.InitializeComponent();
+            InitializeComponent();
 
             MinDatePicker.Date = MinDate;
             MaxDatePicker.Date = MaxDate;

@@ -37,7 +37,7 @@
             Padding="0,16"
             Grid.Row="1"
             Name="SzablonyListView"
-            ItemsSource="{x:Bind OperationPatterns}"
+            ItemsSource="{x:Bind _operationPatterns}"
             SelectionMode="None"
             BorderThickness="0"
             Background="Transparent"

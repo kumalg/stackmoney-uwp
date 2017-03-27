@@ -120,6 +120,7 @@
     <Compile Include="Charts\LineChart.cs" />
     <Compile Include="Charts\LineChartItem.cs" />
     <Compile Include="Charts\Shapes\Arc.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\ColorToBrushConverter.cs" />
     <Compile Include="Converters\ColorKeyToSolidColorBrushConverter.cs" />
     <Compile Include="Converters\ExpenseToggleEnablingByBossCategoryIdConverter.cs" />

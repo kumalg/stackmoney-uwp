@@ -1,6 +1,7 @@
 ﻿using Finanse.DataAccessLayer;
 using SQLite.Net.Attributes;
 using System.Linq;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
@@ -27,7 +28,7 @@ namespace Finanse.Models.MoneyAccounts {
             get {
                 return string.IsNullOrEmpty(ColorKey) ?
                     (SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"] :
-                    (SolidColorBrush)(((ResourceDictionary)Application.Current.Resources["ColorBase"]).FirstOrDefault(i => i.Key.Equals(ColorKey)).Value);
+                    (SolidColorBrush)( ( (ResourceDictionary)Application.Current.Resources["ColorBase"] ).FirstOrDefault(i => i.Key.Equals(ColorKey)).Value );
             }
         }
 

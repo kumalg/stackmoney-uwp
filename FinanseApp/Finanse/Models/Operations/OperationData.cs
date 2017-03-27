@@ -60,9 +60,8 @@ namespace Finanse.Models.Operations {
         private HashSet<int> visiblePayFormList;
         public HashSet<int> VisiblePayFormList {
             get {
-                if (visiblePayFormList == null)
-                    visiblePayFormList = new HashSet<int>(AccountsDal.GetAllMoneyAccounts().Select(i => i.Id));
-                return visiblePayFormList;
+                return visiblePayFormList ??
+                       (visiblePayFormList = new HashSet<int>(AccountsDal.GetAllMoneyAccounts().Select(i => i.Id)));
             }
             set {
                 if (!visiblePayFormList.Equals(value))
@@ -91,7 +90,9 @@ namespace Finanse.Models.Operations {
 
 
         private List<Operation> SetOperations() {
-            return IsFuture ? Dal.GetAllFutureOperations(VisiblePayFormList) : Dal.GetAllOperations(ActualMonth, VisiblePayFormList);
+            return IsFuture
+                ? Dal.GetAllFutureOperations(VisiblePayFormList)
+                : Dal.GetAllOperations(ActualMonth, VisiblePayFormList);
         }
 
 

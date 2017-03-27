@@ -3,7 +3,7 @@ using Finanse.Models.Categories;
 
 namespace Finanse.Elements {
 
-    public sealed partial class CategoryTemplate : UserControl {
+    public sealed partial class CategoryTemplate {
       
         private Category Category => DataContext as Category;
 

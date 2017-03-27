@@ -14,50 +14,49 @@ using Finanse.Models.Operations;
 
 namespace Finanse.Dialogs {
 
-    public sealed partial class NewMoneyAccountContentDialog : ContentDialog, INotifyPropertyChanged {
+    public sealed partial class NewMoneyAccountContentDialog : INotifyPropertyChanged {
 
-        private readonly Regex regex = NewOperation.GetSignedRegex();
-        private string acceptedCostValue = string.Empty;
-        private bool isUnfocused = true;
+        private readonly Regex _regex = NewOperation.GetSignedRegex();
+        private string _acceptedCostValue = string.Empty;
+        private bool _isUnfocused = true;
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void RaisePropertyChanged(string propertyName) {
             var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
 
-        private List<KeyValuePair<object, object>> colorBase;
-        private List<KeyValuePair<object, object>> ColorBase => colorBase ??
-                                                                (colorBase = ((ResourceDictionary) Application.Current.Resources["ColorBase"]).ToList());
+        private List<KeyValuePair<object, object>> _colorBase;
+        private List<KeyValuePair<object, object>> ColorBase => _colorBase ??
+                                                                (_colorBase = ((ResourceDictionary) Application.Current.Resources["ColorBase"]).ToList());
 
         private SolidColorBrush Color => (SolidColorBrush)SelectedColor.Value;
 
         private string ColorKey => SelectedColor.Key.ToString();
 
-        private KeyValuePair<object, object> selectedColor;
+        private KeyValuePair<object, object> _selectedColor;
 
         public KeyValuePair<object, object> SelectedColor {
             get {
-                if (selectedColor.Key == null || selectedColor.Value == null)
-                    selectedColor = ColorBase.ElementAt(3);
+                if (_selectedColor.Key == null || _selectedColor.Value == null)
+                    _selectedColor = ColorBase.ElementAt(3);
 
-                return selectedColor;
+                return _selectedColor;
             }
             set {
-                selectedColor = value;
+                _selectedColor = value;
                 RaisePropertyChanged("Color");
             }
         }
 
-        private readonly List<BankAccount> BankAccounts = AccountsDal.GetAllBankAccounts();
+        private readonly List<BankAccount> _bankAccounts = AccountsDal.GetAllBankAccounts();
         
         private Visibility BankAccountsComboBoxVisibility => (bool)PayCardRadioButton.IsChecked ? Visibility.Visible : Visibility.Collapsed;
 
-        private bool AnyBankAccounts => BankAccounts.Count > 0;
+        private bool AnyBankAccounts => _bankAccounts.Count > 0;
 
-        private int ComboBoxSelectedIndex => BankAccounts.Count > 0 ? 0 : -1;
+        private int ComboBoxSelectedIndex => _bankAccounts.Count > 0 ? 0 : -1;
 
         private bool PrimaryButtonEnabling => !(string.IsNullOrEmpty(NameValue.Text) || Dal.AccountExistInBaseByName(NameValue.Text, TypeOfAccount()));
    
@@ -68,7 +67,7 @@ namespace Finanse.Dialogs {
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
             AccountsDal.AddAccount(GetNewAccount());
 
-            if (!string.IsNullOrEmpty(acceptedCostValue))
+            if (!string.IsNullOrEmpty(_acceptedCostValue))
                 Dal.SaveOperation(MakeOperation(AccountsDal.GetHighestIdOfAccounts()));
         }
 
@@ -99,13 +98,13 @@ namespace Finanse.Dialogs {
 
         private Operation MakeOperation(int moneyAccoundId) {
             var charsToRemove = new[] { "+", "-"};
-            string cost = acceptedCostValue;
+            string cost = _acceptedCostValue;
             foreach (var c in charsToRemove)
-                cost = acceptedCostValue.Replace(c, string.Empty);
+                cost = _acceptedCostValue.Replace(c, string.Empty);
 
             return new Operation {
                 Cost = decimal.Parse(cost),
-                isExpense = acceptedCostValue.Contains("-"),
+                isExpense = _acceptedCostValue.Contains("-"),
                 MoneyAccountId = moneyAccoundId,
                 Title = NameValue.Text,
                 Date = DateTime.Today.ToString("yyyy.MM.dd"),
@@ -123,63 +122,53 @@ namespace Finanse.Dialogs {
         }
 
         private void CostValue_GotFocus(object sender, RoutedEventArgs e) {
-            isUnfocused = false;
+            _isUnfocused = false;
 
             if (CostValue.Text == "")
                 return;
 
-            CostValue.Text = acceptedCostValue;
+            CostValue.Text = _acceptedCostValue;
             CostValue.SelectionStart = CostValue.Text.Length;
         }
 
         private void CostValue_LostFocus(object sender, RoutedEventArgs e) {
-            isUnfocused = true;
+            _isUnfocused = true;
 
             if (CostValue.Text != "" && decimal.Parse(CostValue.Text) != 0.0m)
                 CostValue.Text = NewOperation.ToCurrencyString(CostValue.Text);
             else {
                 CostValue.Text = string.Empty;
-                acceptedCostValue = string.Empty;
+                _acceptedCostValue = string.Empty;
             }
         }
 
         private void CostValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
             if (string.IsNullOrEmpty(CostValue.Text)) {
-                acceptedCostValue = string.Empty;
+                _acceptedCostValue = string.Empty;
                 return;
             }
 
-            if (isUnfocused)
+            if (_isUnfocused)
                 return;
 
-            if (regex.Match(CostValue.Text).Value != CostValue.Text) {
+            if (_regex.Match(CostValue.Text).Value != CostValue.Text) {
                 int whereIsSelection = CostValue.SelectionStart;
-                CostValue.Text = acceptedCostValue;
+                CostValue.Text = _acceptedCostValue;
                 CostValue.SelectionStart = whereIsSelection - 1;
             }
-            acceptedCostValue = CostValue.Text;
+            _acceptedCostValue = CostValue.Text;
         }
 
-        private void CostValue_SelectionChanged(object sender, RoutedEventArgs e) {
+        private void CostValue_SelectionChanged(object sender, RoutedEventArgs e) { }
 
-        }
+        private void CostValue_TextChanged(object sender, TextChangedEventArgs e) { }
 
-        private void CostValue_TextChanged(object sender, TextChangedEventArgs e) {
-
-        }
-
-        private void NameValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
-            RaisePropertyChanged("PrimaryButtonEnabling");
-        }
+        private void NameValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) => RaisePropertyChanged("PrimaryButtonEnabling");
 
 
         private void PayCardRadioButton_Click(object sender, RoutedEventArgs e) {
             if (!AnyBankAccounts)
-                ShowFlyout(sender as FrameworkElement);
-        }
-
-        private static void ShowFlyout(FrameworkElement senderElement) {
-            FlyoutBase.GetAttachedFlyout(senderElement).ShowAt(senderElement);
+                Flyouts.ShowFlyoutBase(sender);
         }
 
         private void AccountTypeRadioButton_Click(object sender, RoutedEventArgs e) {
@@ -187,10 +176,7 @@ namespace Finanse.Dialogs {
             RaisePropertyChanged("PrimaryButtonEnabling");
         }
 
-        private void HyperlinkButton_Click(object sender, RoutedEventArgs e) {
-            FrameworkElement s = sender as FrameworkElement;
-            FlyoutBase.ShowAttachedFlyout(s);
-        }
+        private void HyperlinkButton_Click(object sender, RoutedEventArgs e) => Flyouts.ShowFlyoutBase(sender);
 
         private void ContentDialog_Loaded(object sender, RoutedEventArgs e) {
             if (BankAccountsComboBox.Items.Count > 0)
@@ -199,12 +185,12 @@ namespace Finanse.Dialogs {
 
         private void PayCardRadioButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e) {
            if (!AnyBankAccounts)
-                ShowFlyout(sender as FrameworkElement);
+                Flyouts.ShowFlyoutBase(sender);
         }
 
         private void PayCardRadioButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e) {
             if (!AnyBankAccounts)
-                ShowFlyout(sender as FrameworkElement);
+                Flyouts.ShowFlyoutBase(sender);
         }
     }
     public enum AccountType {

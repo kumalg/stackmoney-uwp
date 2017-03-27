@@ -8,71 +8,70 @@ using Windows.UI.Xaml.Controls;
 
 namespace Finanse.Dialogs {
 
-    public sealed partial class EditMoneyAccountContentDialog : ContentDialog, INotifyPropertyChanged {
+    public sealed partial class EditMoneyAccountContentDialog : INotifyPropertyChanged {
         public Account EditedAccount { get; }
-        private readonly Account accountToEdit;
+        private readonly Account _accountToEdit;
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void RaisePropertyChanged(string propertyName) {
             var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private List<KeyValuePair<object, object>> colorBase;
-        private List<KeyValuePair<object, object>> ColorBase => colorBase ??
-                                                                (colorBase = ((ResourceDictionary) Application.Current.Resources["ColorBase"]).ToList());
+        private List<KeyValuePair<object, object>> _colorBase;
+        private List<KeyValuePair<object, object>> ColorBase => _colorBase ??
+                                                                (_colorBase = ((ResourceDictionary) Application.Current.Resources["ColorBase"]).ToList());
 
         private string ColorKey => SelectedColor.Key.ToString();
 
-        private KeyValuePair<object, object> selectedColor;
+        private KeyValuePair<object, object> _selectedColor;
 
         public KeyValuePair<object, object> SelectedColor {
             get {
-                if (selectedColor.Key == null || selectedColor.Value == null)
-                    selectedColor = ColorBase.ElementAt(3);
+                if (_selectedColor.Key == null || _selectedColor.Value == null)
+                    _selectedColor = ColorBase.ElementAt(3);
 
-                return selectedColor;
+                return _selectedColor;
             }
             set {
-                selectedColor = value;
+                _selectedColor = value;
                 EditedAccount.ColorKey = ColorKey;
                 RaisePropertyChanged("PrimaryButtonEnabling");
             }
         }
 
-        private readonly List<BankAccount> BankAccounts = AccountsDal.GetAllBankAccounts();
+        private readonly List<BankAccount> _bankAccounts = AccountsDal.GetAllBankAccounts();
         
-        private Visibility BankAccountsComboBoxVisibility => accountToEdit is CardAccount ? Visibility.Visible : Visibility.Collapsed;
+        private Visibility BankAccountsComboBoxVisibility => _accountToEdit is CardAccount ? Visibility.Visible : Visibility.Collapsed;
 
-        private BankAccount selectedBankAccount;
+        private BankAccount _selectedBankAccount;
 
         public BankAccount SelectedBankAccount {
             get {
-                if (selectedBankAccount == null && BankAccounts.Count > 0)
-                    selectedBankAccount = BankAccounts.ElementAt(0);
-                return selectedBankAccount;
+                if (_selectedBankAccount == null && _bankAccounts.Count > 0)
+                    _selectedBankAccount = _bankAccounts.ElementAt(0);
+                return _selectedBankAccount;
             }
             set {
-                selectedBankAccount = value;
+                _selectedBankAccount = value;
                 if (EditedAccount is CardAccount)
-                    ((CardAccount)EditedAccount).BankAccountId = selectedBankAccount.Id;
+                    ((CardAccount)EditedAccount).BankAccountId = _selectedBankAccount.Id;
                 RaisePropertyChanged("PrimaryButtonEnabling");
             }
         }
 
-        private bool PrimaryButtonEnabling => !(string.IsNullOrEmpty(NameValue.Text) || EditedAccount.Equals(accountToEdit));
+        private bool PrimaryButtonEnabling => !(string.IsNullOrEmpty(NameValue.Text) || EditedAccount.Equals(_accountToEdit));
 
         public EditMoneyAccountContentDialog(Account accountToEdit) {
             InitializeComponent();
 
-            this.accountToEdit = accountToEdit;
+            _accountToEdit = accountToEdit;
             EditedAccount = accountToEdit.Clone();
 
             NameValue.Text = EditedAccount.Name;
             SelectedColor = ColorBase.SingleOrDefault(i => i.Key.ToString() == accountToEdit.ColorKey);
             if (accountToEdit is CardAccount)
-                SelectedBankAccount = BankAccounts.SingleOrDefault(i => i.Id == ((CardAccount)accountToEdit).BankAccountId);
+                SelectedBankAccount = _bankAccounts.SingleOrDefault(i => i.Id == ((CardAccount)accountToEdit).BankAccountId);
         }
 
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {

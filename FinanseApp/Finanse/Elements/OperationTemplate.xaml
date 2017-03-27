@@ -11,8 +11,7 @@
 
     <Grid
         MaxWidth="600"
-        Margin="16,0"
-        DataContextChanged="Operation_DataContextChanged">
+        Margin="16,0">
 
         <Grid.Resources>
             <conv:DecimalToCurrencyStringConverter
@@ -33,15 +32,15 @@
             Height="48">
 
             <data:CategoryIcon
-                x:Name="CategoryIcon" />
+                Glyph="{x:Bind Operation.CategoryIcon.Icon.Glyph, Mode=OneTime}"
+                Color="{x:Bind Operation.CategoryIcon.Brush, Mode=OneTime}"/>
 
             <Ellipse
-                Name="MoneyAccountEllipse"
-                Visibility="Collapsed"
+                Visibility="{x:Bind _accountEllipseVisibile}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Margin="5"
-                Fill="{StaticResource RedColorStyle}"
+                Fill="{x:Bind Operation.Account.SolidColorBrush, Mode=OneTime}"
                 Width="6"
                 Height="6" />
         </Grid>
@@ -62,8 +61,7 @@
                     VerticalAlignment="Center">
 
                     <TextBlock
-                        Name="Title_OperationTemplate"
-                        Text="{x:Bind Operation.Title}"
+                        Text="{x:Bind Operation.TitleOrCategoryName, Mode=OneTime}"
                         FontFamily="{StaticResource DefaultFontFamily}"
                         Foreground="{ThemeResource Text}"
                         TextWrapping="Wrap"
@@ -71,19 +69,16 @@
                         FontSize="14" />
 
                     <StackPanel
-                        Name="CategoryNameStackPanel"
-                        Visibility="Collapsed"
+                        Visibility="{x:Bind categoryNameVisibility}"
                         Margin="0,2,0,0"
                         Orientation="Horizontal">
                         <TextBlock
-                            Text="Zakupy"
-                            Name="Category_OperationTemplate"
+                            Text="{x:Bind Operation.Category.Name, Mode=OneTime}"
                             FontFamily="{StaticResource DefaultFontFamily}"
                             FontSize="12"
                             Foreground="{ThemeResource Text-1}" />
                         <StackPanel
-                            Name="SubCategoryNameStackPanel"
-                            Visibility="Collapsed"
+                            Visibility="{x:Bind HaveSubCategory}"
                             Orientation="Horizontal">
                             <TextBlock
                                 Padding="0,2,0,0"
@@ -95,8 +90,7 @@
                                 Foreground="{ThemeResource Text-1}" />
                             <TextBlock
                                 FontFamily="{StaticResource DefaultFontFamily}"
-                                Text="Lidl"
-                                Name="SubCategory_OperationTemplate"
+                                Text="{x:Bind Operation.SubCategory.Name, Mode=OneTime}"
                                 FontSize="12"
                                 Foreground="{ThemeResource Text-1}" />
                         </StackPanel>
@@ -105,25 +99,13 @@
                 </StackPanel>
 
                 <TextBlock
-                    Visibility="Visible"
                     FontFamily="{StaticResource DefaultFontFamily}"
                     FontSize="12"
                     Grid.Column="1"
                     FontWeight="SemiBold"
                     VerticalAlignment="Center"
-                    Name="Cost_OperationTemplate"
-                    Foreground="{Binding isExpense, Converter={StaticResource BooleanToColorConverter}}"
-                    Text="{Binding SignedCost, Converter={StaticResource DecimalToCurrencyStringConverter}}" />
-
-                <TextBlock
-                    FontFamily="{StaticResource DefaultFontFamily}"
-                    Visibility="Collapsed"
-                    FontSize="12"
-                    Grid.Column="1"
-                    FontWeight="SemiBold"
-                    Name="Cost_OperationTemplate2"
-                    VerticalAlignment="Center"
-                    Foreground="{StaticResource RedColorStyle}" />
+                    Foreground="{Binding isExpense, Converter={StaticResource BooleanToColorConverter}, Mode=OneTime}"
+                    Text="{Binding SignedCost, Converter={StaticResource DecimalToCurrencyStringConverter}, Mode=OneTime}" />
             </Grid>
         </Border>
     </Grid>

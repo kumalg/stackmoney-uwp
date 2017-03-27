@@ -29,7 +29,7 @@
             HorizontalAlignment="Stretch"
             Style="{StaticResource ComboBoxStyle1}"
             Visibility="{x:Bind BankAccountsComboBoxVisibility, Mode=OneWay}"
-            ItemsSource="{x:Bind BankAccounts, Mode=OneTime}"
+            ItemsSource="{x:Bind _bankAccounts, Mode=OneTime}"
             SelectedItem="{x:Bind SelectedBankAccount, Mode=TwoWay}" />
 
         <GridView

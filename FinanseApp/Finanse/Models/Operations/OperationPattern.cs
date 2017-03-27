@@ -1,4 +1,7 @@
-﻿using SQLite.Net.Attributes;
+﻿using Finanse.DataAccessLayer;
+using Finanse.Models.Categories;
+using Finanse.Models.MoneyAccounts;
+using SQLite.Net.Attributes;
 
 namespace Finanse.Models.Operations {
 
@@ -14,9 +17,59 @@ namespace Finanse.Models.Operations {
         public bool isExpense { get; set; }
         public int MoneyAccountId { get; set; }
 
-
-        public decimal SignedCost => isExpense ? -Cost : Cost;
         
+        public decimal SignedCost => isExpense ? -Cost : Cost;
+        public string TitleOrCategoryName {
+            get {
+                if (!string.IsNullOrEmpty(Title))
+                    return Title;
+                if (SubCategory != null)
+                    return SubCategory.Name;
+                if (Category != null)
+                    return Category.Name;
+                return string.Empty;
+            }
+        }
+
+
+
+        private Account _account;
+        public Account Account => _account ?? ( _account = AccountsDal.GetAccountById(MoneyAccountId) );
+
+
+        private Category _category;
+        public Category Category => _category ?? ( _category = Dal.GetCategoryById(CategoryId) );
+
+
+        private SubCategory _subCategory;
+        public SubCategory SubCategory {
+            get {
+                if (_subCategory != null)
+                    return _subCategory;
+                if (SubCategoryId == 0)
+                    return _subCategory = null;
+                return _subCategory = Dal.GetSubCategoryById(SubCategoryId);
+            }
+        }
+
+
+        private Category _categoryIcon;
+        public Category CategoryIcon {
+            get {
+                if (_categoryIcon != null)
+                    return _categoryIcon;
+
+                if (SubCategory != null)
+                    return _categoryIcon = SubCategory;
+                if (Category != null)
+                    return _categoryIcon = Category;
+
+                return _categoryIcon = new Category(); //TODO
+            }
+        }
+
+        
+
         public Operation ToOperation() {
             return new Operation {
                 Title = Title,
@@ -33,6 +86,8 @@ namespace Finanse.Models.Operations {
             };
         }
 
+
+
         public override int GetHashCode() {
             return Title.GetHashCode() * Id;
         }
@@ -42,7 +97,7 @@ namespace Finanse.Models.Operations {
 
             OperationPattern secondOperation = (OperationPattern)o;
 
-            return
+            return //TODO trzeba przebudować bo zmieniła się struktura
                 secondOperation.Id == Id &&
                 secondOperation.Cost == Cost &&
                 secondOperation.Title.Equals(Title) &&

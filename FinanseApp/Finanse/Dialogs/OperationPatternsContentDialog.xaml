@@ -19,7 +19,7 @@
 
         <ListView
             Name="OperationPatternsListView"
-            ItemsSource="{x:Bind OperationPatterns}"
+            ItemsSource="{x:Bind _operationPatterns}"
             SelectionMode="Single"
             BorderThickness="0"
             Background="Transparent"

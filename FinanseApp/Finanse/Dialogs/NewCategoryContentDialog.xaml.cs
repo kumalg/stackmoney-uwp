@@ -1,7 +1,6 @@
 ﻿using Finanse.DataAccessLayer;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -10,13 +9,12 @@ using Finanse.Models.Categories;
 
 namespace Finanse.Dialogs {
 
-    public sealed partial class NewCategoryContentDialog : ContentDialog, INotifyPropertyChanged {
+    public sealed partial class NewCategoryContentDialog : INotifyPropertyChanged {
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void RaisePropertyChanged(string propertyName) {
             var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
 
@@ -271,9 +269,7 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private void ColorBaseList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            SetPrimaryButtonEnabled();
-        }
+        private void ColorBaseList_SelectionChanged(object sender, SelectionChangedEventArgs e) => SetPrimaryButtonEnabled();
 
         private void NameValue_OnTextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
             NameValue.Foreground = NameValueForeground;

@@ -5,17 +5,15 @@ using Finanse.Models.Operations;
 
 namespace Finanse.Dialogs {
 
-    public sealed partial class OperationPatternsContentDialog : ContentDialog {
+    public sealed partial class OperationPatternsContentDialog {
 
-        private readonly List<OperationPattern> OperationPatterns = Dal.GetAllPatterns();
+        private readonly List<OperationPattern> _operationPatterns = Dal.GetAllPatterns();
 
         public OperationPatternsContentDialog() {
             InitializeComponent();
         }
 
-        private void OperationPatternsListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            Hide();
-        }
+        private void OperationPatternsListView_SelectionChanged(object sender, SelectionChangedEventArgs e) => Hide();
 
         public Operation SetOperation () {
             return OperationPatternsListView.SelectedIndex == -1 ?

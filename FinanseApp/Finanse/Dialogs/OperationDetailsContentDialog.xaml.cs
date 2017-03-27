@@ -1,6 +1,5 @@
 ﻿using System;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Finanse.DataAccessLayer;
 using Finanse.Models;
@@ -10,12 +9,12 @@ using Finanse.Models.Operations;
 
 namespace Finanse.Dialogs {
 
-    public sealed partial class OperationDetailsContentDialog : ContentDialog {
+    public sealed partial class OperationDetailsContentDialog {
         
 
         public OperationDetailsContentDialog(OperationPattern editedOperation, string whichOption) {
 
-            this.InitializeComponent();
+            InitializeComponent();
 
             if (whichOption == "pattern")
                 Title =

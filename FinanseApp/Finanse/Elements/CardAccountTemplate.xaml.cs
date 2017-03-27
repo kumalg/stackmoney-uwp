@@ -1,9 +1,8 @@
-﻿using Windows.UI.Xaml.Controls;
-using Finanse.Models.MoneyAccounts;
+﻿using Finanse.Models.MoneyAccounts;
 
 namespace Finanse.Elements {
 
-    public sealed partial class CardAccountTemplate : UserControl {
+    public sealed partial class CardAccountTemplate {
 
         private CardAccount CardAccount => DataContext as CardAccount;
 

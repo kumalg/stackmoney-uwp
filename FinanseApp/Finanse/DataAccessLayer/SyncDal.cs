@@ -69,7 +69,7 @@ namespace Finanse.DataAccessLayer {
                 //localCashAccounts = db.Table<CashAccount>().ToList();
                 //localCardAccounts = db.Table<CardAccount>().ToList();
             }
-            using (var dbOneDrive = new SQLiteConnection(new SQLitePlatformWinRT(), DBPathLocalFromFileName(localFileName))) {
+            using (var dbOneDrive = new SQLiteConnection(new SQLitePlatformWinRT(), DbPathLocalFromFileName(localFileName))) {
                 oneDriveOperations = dbOneDrive.Table<Operation>().ToList();
                 oneDriveOperationPatterns = dbOneDrive.Table<OperationPattern>().ToList();
                 oneDriveCategories = dbOneDrive.Table<Category>().ToList();
@@ -92,20 +92,21 @@ namespace Finanse.DataAccessLayer {
                 if (string.IsNullOrEmpty(oneDriveOperation.DeviceId))
                     continue;
 
-                var localOperation =
-                                    localOperations.FirstOrDefault(
-                                        item =>
-                                            item.RemoteId == oneDriveOperation.RemoteId &&
-                                            item.DeviceId == oneDriveOperation.DeviceId);
+                if (localOperations != null) {
+                    var localOperation = localOperations.FirstOrDefault(
+                        item =>
+                            item.RemoteId == oneDriveOperation.RemoteId &&
+                            item.DeviceId == oneDriveOperation.DeviceId);
 
-                if (localOperation == null) {
-                    InsertSyncOperation(oneDriveOperation);
-                    continue;
+                    if (localOperation == null) {
+                        InsertSyncOperation(oneDriveOperation);
+                        continue;
+                    }
+
+                    if (localOperation.LastModifed != null &&
+                        DateTime.Parse(localOperation.LastModifed) >= DateTime.Parse(oneDriveOperation.LastModifed))
+                        continue;
                 }
-
-                if (localOperation.LastModifed != null &&
-                    DateTime.Parse(localOperation.LastModifed) >= DateTime.Parse(oneDriveOperation.LastModifed))
-                    continue;
 
                 if (oneDriveOperation.LastModifed == null)
                     oneDriveOperation.LastModifed = DateHelper.ActualTimeString;
@@ -118,19 +119,21 @@ namespace Finanse.DataAccessLayer {
                 if (string.IsNullOrEmpty(oneDriveCategory.DeviceId))
                     continue;
 
-                var localCategory = localCategories.FirstOrDefault(
-                                        item =>
-                                            item.RemoteId == oneDriveCategory.RemoteId &&
-                                            item.DeviceId == oneDriveCategory.DeviceId);
+                if (localCategories != null) {
+                    var localCategory = localCategories.FirstOrDefault(
+                        item =>
+                            item.RemoteId == oneDriveCategory.RemoteId &&
+                            item.DeviceId == oneDriveCategory.DeviceId);
 
-                if (localCategory == null) {
-                    InsertSyncCategory(oneDriveCategory);
-                    continue;
+                    if (localCategory == null) {
+                        InsertSyncCategory(oneDriveCategory);
+                        continue;
+                    }
+
+                    if (localCategory.LastModifed != null &&
+                        DateTime.Parse(localCategory.LastModifed) >= DateTime.Parse(oneDriveCategory.LastModifed))
+                        continue;
                 }
-
-                if (localCategory.LastModifed != null &&
-                    DateTime.Parse(localCategory.LastModifed) >= DateTime.Parse(oneDriveCategory.LastModifed))
-                    continue;
 
                 if (oneDriveCategory.LastModifed == null)
                     oneDriveCategory.LastModifed = DateHelper.ActualTimeString;

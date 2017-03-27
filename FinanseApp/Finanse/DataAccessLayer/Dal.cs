@@ -135,10 +135,10 @@ namespace Finanse.DataAccessLayer {
         public static List<Operation> GetAllOperations(DateTime actualMonth, HashSet<int> visiblePayFormList) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                
+
                 var list = db.Query<Operation>(
-                    "SELECT * FROM Operation WHERE Date GLOB ? AND Date <= ? AND IsDeleted = 0", 
-                    actualMonth.ToString("yyyy.MM*"), 
+                    "SELECT * FROM Operation WHERE Date GLOB ? AND Date <= ? AND IsDeleted = 0",
+                    actualMonth.ToString("yyyy.MM*"),
                     DateTime.Today.ToString("yyyy.MM.dd"));
 
                 return visiblePayFormList != null 

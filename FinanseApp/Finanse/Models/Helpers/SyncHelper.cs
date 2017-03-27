@@ -37,7 +37,7 @@ namespace Finanse.Models.Helpers {
                                 var localBuffer = await remoteStream.ReadAsync(buffer.AsBuffer(),
                                     (uint)remoteStream.Size, InputStreamOptions.ReadAhead);
                                 var localFolder = ApplicationData.Current.LocalFolder;
-                                myLocalFile = await localFolder.CreateFileAsync(DalBase.dbOneDriveName,
+                                myLocalFile = await localFolder.CreateFileAsync(DalBase.DbOneDriveName,
                                     CreationCollisionOption.ReplaceExisting);
                                 using (var localStream = await myLocalFile.OpenAsync(FileAccessMode.ReadWrite)) {
                                     await localStream.WriteAsync(localBuffer);
@@ -45,7 +45,7 @@ namespace Finanse.Models.Helpers {
                                 }
                             }
 
-                            SyncDal.UpdateBase(DalBase.dbOneDriveName);
+                            SyncDal.UpdateBase(DalBase.DbOneDriveName);
                             await myLocalFile.DeleteAsync();
                         }
                         catch (ServiceException e) {

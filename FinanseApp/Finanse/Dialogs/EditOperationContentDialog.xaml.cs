@@ -14,36 +14,36 @@ using Finanse.Models.Helpers;
 using Finanse.Models.Operations;
 
 namespace Finanse.Dialogs {
-    public sealed partial class EditOperationContentDialog : ContentDialog, INotifyPropertyChanged {
+    public sealed partial class EditOperationContentDialog : INotifyPropertyChanged {
 
-        private readonly Regex regex = NewOperation.GetRegex();
+        private readonly Regex _regex = NewOperation.GetRegex();
         
-        private bool isLoaded = false;
-        private bool isUnfocused = true;
+        private bool _isLoaded;
+        private bool _isUnfocused = true;
 
-        private readonly Operation operationToEdit = null;
-        private readonly OperationPattern operationPatternToEdit = null;
-        private readonly OperationPattern originalOperationPattern;
+        private readonly Operation _operationToEdit;
+        private readonly OperationPattern _operationPatternToEdit;
+        private readonly OperationPattern _originalOperationPattern;
 
-        private string acceptedCostValue = string.Empty;
+        private string _acceptedCostValue = string.Empty;
 
         public EditOperationContentDialog(Operation operationToEdit) {
-            this.InitializeComponent();
-            this.operationToEdit = operationToEdit;
+            InitializeComponent();
+            _operationToEdit = operationToEdit;
 
             DateValue.MaxDate = Settings.MaxDate;
-            this.originalOperationPattern = operationToEdit.ToOperation();
+            _originalOperationPattern = operationToEdit.ToOperation();
             //  setMoneyAccountComboBoxItems();
 
             SetEditedOperationValues(operationToEdit);
         }
 
         public EditOperationContentDialog(OperationPattern operationPatternToEdit) {
-            this.InitializeComponent();
-            this.operationPatternToEdit = operationPatternToEdit;
+            InitializeComponent();
+            _operationPatternToEdit = operationPatternToEdit;
 
             DateValue.Visibility = Visibility.Collapsed;
-            this.originalOperationPattern = operationPatternToEdit.ToOperation();
+            _originalOperationPattern = operationPatternToEdit.ToOperation();
 
             SetEditedOperationValues(operationPatternToEdit);
         }
@@ -51,22 +51,21 @@ namespace Finanse.Dialogs {
         public event PropertyChangedEventHandler PropertyChanged;
         private void RaisePropertyChanged(string propertyName) {
             var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
 
-        private readonly List<Account> AccountsWithoutCards = AccountsDal.GetAccountsWithoutCards();
-        private readonly List<Account> Accounts = AccountsDal.GetAllMoneyAccounts();
+        private readonly List<Account> _accountsWithoutCards = AccountsDal.GetAccountsWithoutCards();
+        private readonly List<Account> _accounts = AccountsDal.GetAllMoneyAccounts();
 
 
         private ObservableCollection<Account> AccountsComboBox {
             get {
                 if ((bool)Income_RadioButton.IsChecked) {
-                    return new ObservableCollection<Account>(AccountsWithoutCards);
+                    return new ObservableCollection<Account>(_accountsWithoutCards);
                 }
                 else {
-                    return new ObservableCollection<Account>(Accounts);
+                    return new ObservableCollection<Account>(_accounts);
                 }
             }
         }
@@ -78,7 +77,7 @@ namespace Finanse.Dialogs {
             else Income_RadioButton.IsChecked = true;
 
             CostValue.Text = NewOperation.ToCurrencyString(operationPattern.Cost);
-            acceptedCostValue = NewOperation.ToCurrencyWithoutSymbolString(operationPattern.Cost);
+            _acceptedCostValue = NewOperation.ToCurrencyWithoutSymbolString(operationPattern.Cost);
             
             NameValue.Text = operationPattern.Title;
 
@@ -95,7 +94,7 @@ namespace Finanse.Dialogs {
             if (!string.IsNullOrEmpty(operationPattern.MoreInfo))
                 MoreInfoValue.Text = operationPattern.MoreInfo;
            
-            isLoaded = true;
+            _isLoaded = true;
         }
 
 
@@ -104,25 +103,25 @@ namespace Finanse.Dialogs {
         }
 
         private bool IsOperationEdited() {
-            if (isLoaded)
+            if (_isLoaded)
                 /*
                  * 
                 return operationPatternToEdit == null ?
                     !operationToEdit.Equals(EditedOperation()) :
                     !operationPatternToEdit.Equals(EditedOperationPattern());
                  */
-                return !operationPatternToEdit?.Equals(EditedOperationPattern()) ?? !operationToEdit.Equals(EditedOperation());
+                return !_operationPatternToEdit?.Equals(EditedOperationPattern()) ?? !_operationToEdit.Equals(EditedOperation());
             return false;
         }
 
         public Operation EditedOperation() {
             return new Operation {
-                Id = operationToEdit.Id,
-                RemoteId = operationToEdit.RemoteId,
-                DeviceId = operationToEdit.DeviceId,
+                Id = _operationToEdit.Id,
+                RemoteId = _operationToEdit.RemoteId,
+                DeviceId = _operationToEdit.DeviceId,
                 Date = GetDate(),
                 Title = NameValue.Text,
-                Cost = decimal.Parse(acceptedCostValue, Settings.ActualCultureInfo),
+                Cost = decimal.Parse(_acceptedCostValue, Settings.ActualCultureInfo),
                 isExpense = (bool)Expense_RadioButton.IsChecked,
                 CategoryId = GetCategoryId(),
                 SubCategoryId = GetSubCategoryId(),
@@ -134,11 +133,11 @@ namespace Finanse.Dialogs {
 
         public OperationPattern EditedOperationPattern() {
             return new OperationPattern {
-                Id = operationPatternToEdit.Id,
-                RemoteId = operationPatternToEdit.RemoteId,
-                DeviceId = operationToEdit.DeviceId,
+                Id = _operationPatternToEdit.Id,
+                RemoteId = _operationPatternToEdit.RemoteId,
+                DeviceId = _operationToEdit.DeviceId,
                 Title = NameValue.Text,
-                Cost = decimal.Parse(acceptedCostValue, Settings.ActualCultureInfo),
+                Cost = decimal.Parse(_acceptedCostValue, Settings.ActualCultureInfo),
                 isExpense = (bool)Expense_RadioButton.IsChecked,
                 CategoryId = GetCategoryId(),
                 SubCategoryId = GetSubCategoryId(),
@@ -154,9 +153,9 @@ namespace Finanse.Dialogs {
         }
 
         private int GetCategoryId() {
-            return CategoryValue.SelectedIndex != -1 ?
-                (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag :
-                1;
+            return CategoryValue.SelectedIndex != -1
+                ? (int) ((ComboBoxItem) CategoryValue.SelectedItem).Tag
+                : 1;
         }
 
         private int GetSubCategoryId() {
@@ -167,7 +166,7 @@ namespace Finanse.Dialogs {
 
         private void NowaOperacja_DodajClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
-             if (operationPatternToEdit == null)
+             if (_operationPatternToEdit == null)
                 Dal.SaveOperation(EditedOperation());
              else
                 Dal.SaveOperationPattern(EditedOperationPattern());
@@ -208,6 +207,8 @@ namespace Finanse.Dialogs {
         }
 
         private void SetCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
+            if (CategoryValue.Items == null)
+                return;
 
             CategoryValue.Items.Clear();
 
@@ -225,6 +226,8 @@ namespace Finanse.Dialogs {
         }
 
         private void SetSubCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
+            if (SubCategoryValue.Items == null)
+                return;
 
             SubCategoryValue.Items.Clear();
 
@@ -264,17 +267,17 @@ namespace Finanse.Dialogs {
         }
 
         private void CostValue_GotFocus(object sender, RoutedEventArgs e) {
-           isUnfocused = false;
+           _isUnfocused = false;
 
             if (string.IsNullOrEmpty(CostValue.Text))
                 return;
 
-            CostValue.Text = acceptedCostValue;
+            CostValue.Text = _acceptedCostValue;
             CostValue.SelectionStart = CostValue.Text.Length;
         }
 
         private void CostValue_LostFocus(object sender, RoutedEventArgs e) {
-           isUnfocused = true;
+           _isUnfocused = true;
 
             if (!string.IsNullOrEmpty(CostValue.Text))
                 CostValue.Text = NewOperation.ToCurrencyString(CostValue.Text);
@@ -283,33 +286,25 @@ namespace Finanse.Dialogs {
         private void CostValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
 
             if (string.IsNullOrEmpty(CostValue.Text)) {
-                acceptedCostValue = string.Empty;
+                _acceptedCostValue = string.Empty;
                 return;
             }
 
-            if (isUnfocused)
+            if (_isUnfocused)
                 return;
 
-            if (regex.Match(CostValue.Text).Value != CostValue.Text) {
+            if (_regex.Match(CostValue.Text).Value != CostValue.Text) {
                 int whereIsSelection = CostValue.SelectionStart;
-                CostValue.Text = acceptedCostValue;
+                CostValue.Text = _acceptedCostValue;
                 CostValue.SelectionStart = whereIsSelection - 1;
             }
             
-            acceptedCostValue = CostValue.Text;
+            _acceptedCostValue = CostValue.Text;
         }
 
-        private void CostValue_TextChanged(object sender, TextChangedEventArgs e) {
-            SetPrimaryButtonEnabling();
-        }
+        private void PayFormValue_Loaded(object sender, RoutedEventArgs e)
+            => PayFormValue.SelectedItem = PayFormValue.Items.OfType<Account>().SingleOrDefault(item => item.Id == _originalOperationPattern.MoneyAccountId);
 
-        private void NameValue_TextChanged(object sender, TextChangedEventArgs e) {
-            SetPrimaryButtonEnabling();
-        }
-
-        private void DateValue_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args) {
-            SetPrimaryButtonEnabling();
-        }
 
         private void PayFormValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (PayFormValue.SelectedItem == null)
@@ -317,16 +312,9 @@ namespace Finanse.Dialogs {
             SetPrimaryButtonEnabling();
         }
 
-        private void MoreInfoValue_TextChanged(object sender, TextChangedEventArgs e) {
-            SetPrimaryButtonEnabling();
-        }
-
-        private void HideInStatisticsToggle_Toggled(object sender, RoutedEventArgs e) {
-            SetPrimaryButtonEnabling();
-        }
-
-        private void PayFormValue_Loaded(object sender, RoutedEventArgs e) {
-            PayFormValue.SelectedItem = PayFormValue.Items.OfType<Account>().SingleOrDefault(item => item.Id == originalOperationPattern.MoneyAccountId);
-        }
+        private void Element_TectChanged(object sender, TextChangedEventArgs e) => SetPrimaryButtonEnabling();
+        private void HideInStatisticsToggle_Toggled(object sender, RoutedEventArgs e) => SetPrimaryButtonEnabling();
+        private void DateValue_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args) => SetPrimaryButtonEnabling();
+        
     }
 }

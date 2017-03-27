@@ -1,7 +1,6 @@
 ﻿using Finanse.Models.Operations;
 
 namespace Finanse.DataAccessLayer {
-    using Models;
     using Models.Categories;
     using Models.Helpers;
     using Models.MoneyAccounts;
@@ -12,17 +11,17 @@ namespace Finanse.DataAccessLayer {
     using Windows.Storage;
 
     public class DalBase {
-        public static string dbOneDriveName = "dbOneDrive.sqlite";
-        private static string dbPath = string.Empty;
+        public static string DbOneDriveName = "dbOneDrive.sqlite";
+        private static string _dbPath = string.Empty;
         public static string DbPath {
             get {
-                if (string.IsNullOrEmpty(dbPath))
-                    dbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "db.sqlite");
-                return dbPath;
+                if (string.IsNullOrEmpty(_dbPath))
+                    _dbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "db.sqlite");
+                return _dbPath;
             }
         }
 
-        public static string DBPathLocalFromFileName(string fileName) => Path.Combine(ApplicationData.Current.LocalFolder.Path, fileName);
+        public static string DbPathLocalFromFileName(string fileName) => Path.Combine(ApplicationData.Current.LocalFolder.Path, fileName);
 
         protected static SQLiteConnection DbConnection => new SQLiteConnection(new SQLitePlatformWinRT(), DbPath);
 
@@ -43,14 +42,14 @@ namespace Finanse.DataAccessLayer {
 
                 // db.CreateTable<MoneyAccount>();
 
-                var OperationCategory =
+                var operationCategory =
                     db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='OperationCategory'");
-                if (!string.IsNullOrEmpty(OperationCategory))
+                if (!string.IsNullOrEmpty(operationCategory))
                     db.Execute("ALTER TABLE OperationCategory RENAME TO Category");
 
-                var OperationSubCategory =
+                var operationSubCategory =
                     db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='OperationSubCategory'");
-                if (!string.IsNullOrEmpty(OperationSubCategory))
+                if (!string.IsNullOrEmpty(operationSubCategory))
                     db.Execute("ALTER TABLE OperationSubCategory RENAME TO SubCategory");
 
                 db.CreateTable<Operation>();

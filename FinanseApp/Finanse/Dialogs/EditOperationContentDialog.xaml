@@ -74,7 +74,7 @@
             PlaceholderText="Nazwa"
             x:Uid="namePlaceholder"
             Margin="0,20,0,0"
-            TextChanged="NameValue_TextChanged" />
+            TextChanged="Element_TectChanged" />
 
         <TextBox
             Name="CostValue"
@@ -86,7 +86,7 @@
             GotFocus="CostValue_GotFocus"
             LostFocus="CostValue_LostFocus"
             TextChanging="CostValue_TextChanging"
-            TextChanged="CostValue_TextChanged" />
+            TextChanged="Element_TectChanged" />
 
         <CalendarDatePicker
             Name="DateValue"
@@ -139,7 +139,7 @@
             Style="{StaticResource TextBoxStyle1}"
             Height="100"
             Margin="0,10"
-            TextChanged="MoreInfoValue_TextChanged" />
+            TextChanged="Element_TectChanged" />
 
         <StackPanel
             Margin="0,10">

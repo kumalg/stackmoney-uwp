@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Finanse.Models.Categories;
 using Finanse.Models.Helpers;
@@ -89,14 +90,12 @@ namespace Finanse.DataAccessLayer {
 
         private static void UpdateOperations(IEnumerable<OperationPattern> localOperations, IEnumerable<OperationPattern> oneDriveOperations) {
             foreach (var oneDriveOperation in oneDriveOperations) {
-                if (string.IsNullOrEmpty(oneDriveOperation.DeviceId))
+                if (string.IsNullOrEmpty(oneDriveOperation.GlobalId))
                     continue;
 
                 if (localOperations != null) {
                     var localOperation = localOperations.FirstOrDefault(
-                        item =>
-                            item.RemoteId == oneDriveOperation.RemoteId &&
-                            item.DeviceId == oneDriveOperation.DeviceId);
+                        item => item.GlobalId == oneDriveOperation.GlobalId);
 
                     if (localOperation == null) {
                         InsertSyncOperation(oneDriveOperation);
@@ -104,26 +103,24 @@ namespace Finanse.DataAccessLayer {
                     }
 
                     if (localOperation.LastModifed != null &&
-                        DateTime.Parse(localOperation.LastModifed) >= DateTime.Parse(oneDriveOperation.LastModifed))
+                        DateTimeOffset.Parse(localOperation.LastModifed) >= DateTimeOffset.Parse(oneDriveOperation.LastModifed))
                         continue;
                 }
 
                 if (oneDriveOperation.LastModifed == null)
-                    oneDriveOperation.LastModifed = DateHelper.ActualTimeString;
+                    oneDriveOperation.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
 
                 UpdateSyncOperation(oneDriveOperation);
             }
         }
         private static void UpdateCategories(IEnumerable<Category> localCategories, IEnumerable<Category> oneDriveCategories) {
             foreach (var oneDriveCategory in oneDriveCategories) {
-                if (string.IsNullOrEmpty(oneDriveCategory.DeviceId))
+                if (string.IsNullOrEmpty(oneDriveCategory.GlobalId))
                     continue;
 
                 if (localCategories != null) {
                     var localCategory = localCategories.FirstOrDefault(
-                        item =>
-                            item.RemoteId == oneDriveCategory.RemoteId &&
-                            item.DeviceId == oneDriveCategory.DeviceId);
+                        item => item.GlobalId == oneDriveCategory.GlobalId);
 
                     if (localCategory == null) {
                         InsertSyncCategory(oneDriveCategory);
@@ -131,12 +128,12 @@ namespace Finanse.DataAccessLayer {
                     }
 
                     if (localCategory.LastModifed != null &&
-                        DateTime.Parse(localCategory.LastModifed) >= DateTime.Parse(oneDriveCategory.LastModifed))
+                        DateTimeOffset.Parse(localCategory.LastModifed) >= DateTimeOffset.Parse(oneDriveCategory.LastModifed))
                         continue;
                 }
 
                 if (oneDriveCategory.LastModifed == null)
-                    oneDriveCategory.LastModifed = DateHelper.ActualTimeString;
+                    oneDriveCategory.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
 
                 UpdateSyncCategory(oneDriveCategory);
             }

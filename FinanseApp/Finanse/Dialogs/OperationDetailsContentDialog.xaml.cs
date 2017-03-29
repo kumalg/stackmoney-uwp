@@ -41,9 +41,9 @@ namespace Finanse.Dialogs {
                 DateValuePanel.Visibility = Visibility.Visible;
             }
 
-            Category cat = Dal.GetCategoryById(editedOperation.CategoryId);
-            SubCategory subCat = Dal.GetSubCategoryById(editedOperation.SubCategoryId);
-            Account account = AccountsDal.GetAccountById(editedOperation.MoneyAccountId);
+            Category cat = editedOperation.Category;
+            SubCategory subCat = editedOperation.SubCategory;
+            Account account = editedOperation.Account;
 
             /* KATEGORIA */
             CategoryValuePanel.Visibility = Visibility.Collapsed;
@@ -74,15 +74,12 @@ namespace Finanse.Dialogs {
             }
 
             /* WIĘCEJ INFORMACJI */
-            if (!string.IsNullOrEmpty(editedOperation.MoreInfo)) {
+            if (!string.IsNullOrEmpty(editedOperation.MoreInfo))
                 MoreInfo.Text = editedOperation.MoreInfo;
-            }
             else
                 MoreInfoPanel.Visibility = Visibility.Collapsed;
         }
         
-        private void Exit_Click(object sender, RoutedEventArgs e) {
-            Hide();
-        }
+        private void Exit_Click(object sender, RoutedEventArgs e) => Hide();
     }
 }

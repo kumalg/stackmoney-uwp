@@ -15,6 +15,7 @@ using Windows.Phone.UI.Input;
 using Windows.UI.Core;
 using Windows.System.Profile;
 using System.ComponentModel;
+using Finanse.Models.DateTimeExtensions;
 using Finanse.Models.Helpers;
 using Finanse.Models.MoneyAccounts;
 using Finanse.Models.Operations;
@@ -37,7 +38,7 @@ namespace Finanse.Pages {
                 return;
 
             DateTime dateTimeWithDays = (DateTime)e.Parameter;
-            _storeData.ActualMonth = DateHelper.FirstDayInMonth(dateTimeWithDays);
+            _storeData.ActualMonth = dateTimeWithDays.First();
             _storeData.ForceUpdate();
             RaisePropertyChanged("OperationGroups");
 
@@ -373,6 +374,10 @@ namespace Finanse.Pages {
             ByDateButton.Foreground = (SolidColorBrush)Application.Current.Resources["Text-1"];
             ByCategoryButton.Foreground = (SolidColorBrush)Application.Current.Resources["AccentColor"];
             ByCategoryRadioButton.IsChecked = true;
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e) {
+            Frame.Navigate(typeof(NewOperationPage));
         }
     }
 }

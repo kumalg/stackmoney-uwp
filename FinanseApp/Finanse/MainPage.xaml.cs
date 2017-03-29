@@ -12,7 +12,9 @@ using Windows.System.Profile;
 using Windows.UI.Core;
 using Windows.Foundation;
 using Windows.ApplicationModel.Core;
+using Windows.UI.Xaml.Media;
 using Finanse.Models;
+using Finanse.Models.DateTimeExtensions;
 using Finanse.Models.Helpers;
 using Finanse.Models.WhatsNew;
 
@@ -214,6 +216,14 @@ namespace Finanse {
                     OperationsAppBarRadioButton.IsChecked = true;
                 if (Strona_glowna_ListBoxItem != null)
                     Strona_glowna_ListBoxItem.IsChecked = true;
+            }
+            else if (( (Frame)sender ).SourcePageType == typeof(NewOperationPage)) {
+                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+                TitleBar.Margin = new Thickness(64, 0, 0, 0);
+                if (AddNewOperationAppBarRadioButton != null)
+                    AddNewOperationAppBarRadioButton.IsChecked = true;
+                if (AddNewOperation_ListBoxItem != null)
+                    AddNewOperation_ListBoxItem.IsChecked = true;
             }
             else {
                 SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;

@@ -115,31 +115,29 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        internal static List<Account> GetAccountsWithoutCards() {
+        internal static IEnumerable<Account> GetAccountsWithoutCards() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 var cashAccounts = db.Query<CashAccount>("SELECT * FROM CashAccount");
                 var bankAccounts = db.Query<BankAccount>("SELECT * FROM BankAccount");
-
-                List<Account> list = cashAccounts.Cast<Account>().ToList();
-                list.AddRange(bankAccounts);
-
-                return list.OrderBy(i => i.Name).ToList();
+                
+                return cashAccounts.Cast<Account>()
+                    .Concat(bankAccounts)
+                    .OrderBy(i => i.Name);
             }
         }
 
-        public static List<Account> GetAllMoneyAccounts() {
+        public static IEnumerable<Account> GetAllMoneyAccounts() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 var cashAccounts = db.Query<CashAccount>("SELECT * FROM CashAccount");
                 var bankAccounts = db.Query<BankAccount>("SELECT * FROM BankAccount");
                 var cardAccounts = db.Query<CardAccount>("SELECT * FROM CardAccount");
 
-                List<Account> list = cashAccounts.Cast<Account>().ToList();
-                list.AddRange(bankAccounts);
-                list.AddRange(cardAccounts);
-
-                return list.OrderBy(i => i.Name).ToList();
+                return cashAccounts.Cast<Account>()
+                    .Concat(bankAccounts)
+                    .Concat(cardAccounts)
+                    .OrderBy(i => i.Name);
             }
         }
 
@@ -201,7 +199,7 @@ namespace Finanse.DataAccessLayer {
         public static void RemoveSingleAccountWithOperations(int accountId) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
-                db.Execute("UPDATE Operation SET IsDeleted = 1, LastModifed = ? WHERE MoneyAccountId = ?", DateHelper.ActualTimeString, accountId);
+                db.Execute("UPDATE Operation SET IsDeleted = 1, LastModifed = ? WHERE MoneyAccountId = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, accountId);
 
                 db.Execute("DELETE FROM CashAccount WHERE Id = ?", accountId);
                 db.Execute("DELETE FROM BankAccount WHERE Id = ?", accountId);
@@ -214,7 +212,7 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("UPDATE Operation " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE MoneyAccountId IN (?, (SELECT DISTINCT Id FROM CardAccount Where BankAccountId = ?))", DateHelper.ActualTimeString, bankAccountId, bankAccountId);
+                           "WHERE MoneyAccountId IN (?, (SELECT DISTINCT Id FROM CardAccount Where BankAccountId = ?))", DateTimeOffsetHelper.DateTimeOffsetNowString, bankAccountId, bankAccountId);
 
                 db.Execute("DELETE FROM BankAccount WHERE Id = ?", bankAccountId);
                 db.Execute("DELETE FROM CardAccount WHERE BankAccountId = ?", bankAccountId);

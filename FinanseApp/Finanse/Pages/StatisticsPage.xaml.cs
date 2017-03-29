@@ -8,13 +8,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Finanse.Charts.Data;
+using Finanse.Models.DateTimeExtensions;
 
 namespace Finanse.Pages {
 
     public sealed partial class StatisticsPage : INotifyPropertyChanged {
         private readonly StatisticsData _statisticsData = new StatisticsData();
         
-        public DateTime MinDate = DateHelper.FirstDayInMonth(DateTime.Today);
+        public DateTime MinDate = DateTime.Today.First();
         public DateTime MaxDate = DateTime.Today;
 
         private string _incomesPercentageText;

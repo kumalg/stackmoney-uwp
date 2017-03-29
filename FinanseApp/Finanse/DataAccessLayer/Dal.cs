@@ -71,7 +71,7 @@ namespace Finanse.DataAccessLayer {
         public static List<Category> GetAllCategories() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<Category>("SELECT * FROM Category ORDER BY Name");
+                return db.Query<Category>("SELECT * FROM Category WHERE IsDeleted = 0 ORDER BY Name");
             }
         }
 
@@ -238,15 +238,14 @@ namespace Finanse.DataAccessLayer {
         public static void SaveOperation(Operation operation) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                operation.LastModifed = DateHelper.ActualTimeString;
+                operation.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
 
-                if (operation.DeviceId == null)
-                    operation.DeviceId = Informations.DeviceId;
+                //if (operation.DeviceId == null)
+                //    operation.DeviceId = Informations.DeviceId;
 
                 if (operation.Id == 0) {
-                    operation.RemoteId = db.ExecuteScalar<int>("SELECT seq " +
-                                                               "FROM sqlite_sequence " +
-                                                               "WHERE name = 'Operation'") + 1;
+                    int id = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'Operation'") + 1;
+                    operation.GlobalId = $"{Informations.DeviceId}_{id}";
                     db.Insert(operation);
                 }
                 else
@@ -258,10 +257,11 @@ namespace Finanse.DataAccessLayer {
         public static void SaveOperationPattern(OperationPattern operationPattern) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                operationPattern.LastModifed = DateHelper.ActualTimeString;
+                operationPattern.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
 
                 if (operationPattern.Id == 0) {
-                    operationPattern.RemoteId = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'OperationPattern'") + 1;
+                    int id = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'OperationPattern'") + 1;
+                    operationPattern.GlobalId = $"{Informations.DeviceId}_{id}";
                     db.Insert(operationPattern);
                 }
                 else
@@ -273,7 +273,7 @@ namespace Finanse.DataAccessLayer {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
-                category.LastModifed = DateHelper.ActualTimeString;
+                category.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
 
                 db.Update(category);
             }
@@ -283,16 +283,10 @@ namespace Finanse.DataAccessLayer {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
-                category.LastModifed = DateHelper.ActualTimeString;
+                category.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
 
-                if (category.DeviceId == null)
-                    category.DeviceId = Informations.DeviceId;
-
-                category.RemoteId = db.ExecuteScalar<int>(
-                    "SELECT seq " +
-                    "FROM sqlite_sequence " +
-                    "WHERE name = 'Category'") + 1;
-
+                int id = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'Category'") + 1;
+                category.GlobalId = $"{Informations.DeviceId}_{id}";
                 db.Insert(category);
             }
         }
@@ -301,7 +295,7 @@ namespace Finanse.DataAccessLayer {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
-                subCategory.LastModifed = DateHelper.ActualTimeString;
+                subCategory.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
 
                 db.Update(subCategory);
             }
@@ -311,16 +305,10 @@ namespace Finanse.DataAccessLayer {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
 
-                subCategory.LastModifed = DateHelper.ActualTimeString;
+                subCategory.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
 
-                if (subCategory.DeviceId == null)
-                    subCategory.DeviceId = Informations.DeviceId;
-
-                subCategory.RemoteId = db.ExecuteScalar<int>(
-                    "SELECT seq " +
-                    "FROM sqlite_sequence " +
-                    "WHERE name = 'SubCategory'") + 1;
-
+                int id = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'SubCategory'") + 1;
+                subCategory.GlobalId = $"{Informations.DeviceId}_{id}";
                 db.Insert(subCategory);
             }
         }
@@ -333,7 +321,7 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("UPDATE OperationPattern " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE Id = ?", DateHelper.ActualTimeString, operationPattern.Id);
+                           "WHERE Id = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, operationPattern.Id);
             }
         }
 
@@ -342,7 +330,7 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("UPDATE Operation " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE Id = ?", DateHelper.ActualTimeString, operation.Id);
+                           "WHERE Id = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, operation.Id);
             }
         }
 
@@ -354,11 +342,11 @@ namespace Finanse.DataAccessLayer {
 
                 db.Execute("UPDATE Category " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE Id = ?", DateHelper.ActualTimeString, categoryId);
+                           "WHERE Id = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, categoryId);
 
                 db.Execute("UPDATE SubCategory " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE BossCategoryId = ?", DateHelper.ActualTimeString, categoryId);
+                           "WHERE BossCategoryId = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, categoryId);
             }
         }
 
@@ -370,7 +358,7 @@ namespace Finanse.DataAccessLayer {
 
                 db.Execute("UPDATE SubCategory " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE Id = ?", DateHelper.ActualTimeString, subCategoryId);
+                           "WHERE Id = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, subCategoryId);
             }
         }
     }

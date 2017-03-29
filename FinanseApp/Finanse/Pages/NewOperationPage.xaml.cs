@@ -4,7 +4,6 @@ using Finanse.Models;
 using Finanse.Models.MoneyAccounts;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -23,13 +22,19 @@ namespace Finanse.Pages {
         private readonly Regex _regex = NewOperation.GetRegex();
         private string _acceptedCostValue = string.Empty;
         private bool _isUnfocused = true;
+        
+        private IEnumerable<Account> _accountsWithoutCards;
+        private IEnumerable<Account> _accounts;
+
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             SetDefaultPageValues();
 
             SetCategoryComboBoxItems(true, false);
-            _accountsWithoutCards = AccountsDal.GetAccountsWithoutCards();
+
             _accounts = AccountsDal.GetAllMoneyAccounts();
+            _accountsWithoutCards = _accounts.Where(i => !(i is CardAccount));
+
             RaisePropertyChanged("AccountsComboBox");
             RaisePropertyChanged("AccountsToComboBox");
             RaisePropertyChanged("AccountsFromComboBox");
@@ -56,26 +61,17 @@ namespace Finanse.Pages {
         public event PropertyChangedEventHandler PropertyChanged;
         private void RaisePropertyChanged(string propertyName) {
             var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private IEnumerable<Account> AccountsComboBox
+            => Income_RadioButton.IsChecked != null && (bool) Income_RadioButton.IsChecked
+                ? _accountsWithoutCards
+                : _accounts;
 
-        private List<Account> _accountsWithoutCards = AccountsDal.GetAccountsWithoutCards();
-        private List<Account> _accounts = AccountsDal.GetAllMoneyAccounts();
+        private IEnumerable<Account> AccountsToComboBox => _accountsWithoutCards;
 
-
-        private ObservableCollection<Account> AccountsComboBox {
-            get {
-                if (Income_RadioButton.IsChecked != null && (bool)Income_RadioButton.IsChecked)
-                    return new ObservableCollection<Account>(_accountsWithoutCards);
-                return new ObservableCollection<Account>(_accounts);
-            }
-        }
-
-        private List<Account> AccountsToComboBox => _accountsWithoutCards.ToList();
-
-        private List<Account> AccountsFromComboBox => _accountsWithoutCards.ToList();
+        private IEnumerable<Account> AccountsFromComboBox => _accountsWithoutCards;
 
         public NewOperationPage() {
 
@@ -95,9 +91,7 @@ namespace Finanse.Pages {
                 InitialAccount.SelectedIndex = 0;
         }
 
-        public Windows.Globalization.DayOfWeek FirstDayOfWeek() {
-            return Settings.FirstDayOfWeek;
-        }
+        public Windows.Globalization.DayOfWeek FirstDayOfWeek() => Settings.FirstDayOfWeek;
 
         private void TransferRadioButton_Checked(object sender, RoutedEventArgs e) {
             TransferAccounts_Grid.Visibility = Visibility.Visible;
@@ -291,7 +285,7 @@ namespace Finanse.Pages {
                 SubCategoryId = GetSubCategoryId(),
                 MoreInfo = MoreInfoValue.Text,
                 MoneyAccountId = ((Account)PayFormValue.SelectedItem).Id,
-                DeviceId = Informations.DeviceId
+              //  DeviceId = Informations.DeviceId
             };
         }
 

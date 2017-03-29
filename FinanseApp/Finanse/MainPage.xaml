@@ -485,7 +485,7 @@
             <ScrollViewer
                 Grid.Row="1"
                 VerticalScrollBarVisibility="Auto">
-                <StackPanel>
+                <StackPanel Margin="0,16,0,0">
 
                     <RadioButton
                         Name="Strona_glowna_ListBoxItem"
@@ -550,6 +550,7 @@
                 </StackPanel>
             </ScrollViewer>
             <RadioButton
+                Margin="0,0,0,16"
                 Grid.Row="2"
                 GroupName="HamburgerRadioButtons"
                 Name="Ustawienia_ListBoxItem"

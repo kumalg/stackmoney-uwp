@@ -54,21 +54,13 @@ namespace Finanse.Dialogs {
             handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private static readonly IEnumerable<Account> Accounts = AccountsDal.GetAllMoneyAccounts();
+        private static readonly IEnumerable<Account> AccountsWithoutCards = Accounts.Where(i => !(i is CardAccount));
 
-        private readonly List<Account> _accountsWithoutCards = AccountsDal.GetAccountsWithoutCards();
-        private readonly List<Account> _accounts = AccountsDal.GetAllMoneyAccounts();
 
-
-        private ObservableCollection<Account> AccountsComboBox {
-            get {
-                if ((bool)Income_RadioButton.IsChecked) {
-                    return new ObservableCollection<Account>(_accountsWithoutCards);
-                }
-                else {
-                    return new ObservableCollection<Account>(_accounts);
-                }
-            }
-        }
+        private IEnumerable<Account> AccountsComboBox => (bool) Income_RadioButton.IsChecked
+            ? AccountsWithoutCards
+            : Accounts;
 
         private void SetEditedOperationValues(OperationPattern operationPattern) {
 
@@ -117,8 +109,7 @@ namespace Finanse.Dialogs {
         public Operation EditedOperation() {
             return new Operation {
                 Id = _operationToEdit.Id,
-                RemoteId = _operationToEdit.RemoteId,
-                DeviceId = _operationToEdit.DeviceId,
+                GlobalId = _operationToEdit.GlobalId,
                 Date = GetDate(),
                 Title = NameValue.Text,
                 Cost = decimal.Parse(_acceptedCostValue, Settings.ActualCultureInfo),
@@ -134,8 +125,7 @@ namespace Finanse.Dialogs {
         public OperationPattern EditedOperationPattern() {
             return new OperationPattern {
                 Id = _operationPatternToEdit.Id,
-                RemoteId = _operationPatternToEdit.RemoteId,
-                DeviceId = _operationToEdit.DeviceId,
+                GlobalId = _operationPatternToEdit.GlobalId,
                 Title = NameValue.Text,
                 Cost = decimal.Parse(_acceptedCostValue, Settings.ActualCultureInfo),
                 isExpense = (bool)Expense_RadioButton.IsChecked,

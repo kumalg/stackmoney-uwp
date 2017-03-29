@@ -132,6 +132,7 @@
     <Compile Include="DataAccessLayer\DalBase.cs" />
     <Compile Include="DataAccessLayer\Dal.cs" />
     <Compile Include="DataAccessLayer\DebugTraceListener.cs" />
+    <Compile Include="DataAccessLayer\MAccountsDal.cs" />
     <Compile Include="DataAccessLayer\StatisticsDal.cs" />
     <Compile Include="DataAccessLayer\SyncDal.cs" />
     <Compile Include="Dialogs\AcceptContentDialog.xaml.cs">
@@ -190,13 +191,18 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Categories\CategoryWithSubCategories.cs" />
+    <Compile Include="Models\Helpers\DateTimeOffsetHelper.cs" />
     <Compile Include="Models\Helpers\Flyouts.cs" />
     <Compile Include="Models\Helpers\Functions.cs" />
     <Compile Include="Models\Helpers\Informations.cs" />
+    <Compile Include="Models\DateTimeExtensions\TimeExtensions.cs" />
+    <Compile Include="Models\MAccounts\MAccount.cs" />
+    <Compile Include="Models\MAccounts\MoAccount.cs" />
+    <Compile Include="Models\MAccounts\SubMAccount.cs" />
     <Compile Include="Models\StatusBarMethods.cs" />
     <Compile Include="Models\SyncProperties.cs" />
     <Compile Include="Models\Operations\GroupInfoList.cs" />
-    <Compile Include="Models\Helpers\DateHelper.cs" />
+    <Compile Include="Models\DateTimeExtensions\DateExtensions.cs" />
     <Compile Include="Models\ItemCollection.cs" />
     <Compile Include="Models\MoneyAccounts\MoneyAccountBalance.cs" />
     <Compile Include="Models\MoneyAccounts\Account.cs" />

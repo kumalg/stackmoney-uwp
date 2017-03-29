@@ -81,8 +81,7 @@ namespace Finanse.Models.Operations {
                 MoreInfo = MoreInfo,
                 isExpense = isExpense,
                 Id = Id,
-                RemoteId = RemoteId,
-                DeviceId = DeviceId
+                GlobalId = GlobalId
             };
         }
 

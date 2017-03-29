@@ -20,6 +20,12 @@ namespace Finanse.Models.Operations {
             };
         }
 
+        public GroupInfoList(IEnumerable<Operation> operations) : base(operations) {
+            CollectionChanged += delegate {
+                OnPropertyChanged("Cost");
+            };
+        }
+
         public new IEnumerator<Operation> GetEnumerator() {
             return base.GetEnumerator();
         }

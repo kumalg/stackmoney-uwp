@@ -457,7 +457,9 @@
 
         </Grid>
 
-        <RelativePanel
+        <StackPanel
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
             Visibility="Collapsed"
             x:Name="EmptyListViewInfo"
             Grid.Row="2">
@@ -471,41 +473,16 @@
                 Text="Brak operacji w tym miesiącu :("
                 x:Uid="noOperationsInThisMonth" />
 
-            <TextBlock
-                Text="Dodaj nową"
-                x:Uid="addNew"
-                Foreground="{ThemeResource Text}"
-                RelativePanel.AlignHorizontalCenterWithPanel="True"
-                RelativePanel.AlignTopWith="AngleToAddButton" />
-            <FontIcon
-                Name="AngleToAddButton"
-                Foreground="{ThemeResource Text-1}"
-                Margin="32"
-                RelativePanel.AlignHorizontalCenterWithPanel="True"
-                RelativePanel.AlignBottomWithPanel="True"
-                Glyph="">
+            <Button
+                Height="48"
+                Padding="16,0"
+                Background="{ThemeResource Background+2}"
+                Margin="16"
+                HorizontalAlignment="Center"
+                Content="Dodaj nową"
+                Click="ButtonBase_OnClick" />
 
-                <FontIcon.Triggers>
-                    <EventTrigger
-                        RoutedEvent="FontIcon.Loaded">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation
-                                    Storyboard.TargetName="AngleToAddButton"
-                                    Storyboard.TargetProperty="(FontIcon.Opacity)"
-                                    From="1.0"
-                                    To="0.2"
-                                    AutoReverse="True"
-                                    RepeatBehavior="Forever"
-                                    Duration="0:0:2" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </FontIcon.Triggers>
-
-            </FontIcon>
-
-        </RelativePanel>
+        </StackPanel>
 
         <SemanticZoom
             x:Name="semanticZoom"

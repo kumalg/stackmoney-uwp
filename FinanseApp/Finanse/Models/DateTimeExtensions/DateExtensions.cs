@@ -46,6 +46,8 @@ namespace Finanse.Models.DateTimeExtensions {
             return result;
         }
 
-       // public static string ActualTimeString => DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss");
+        public static String GetTimestamp(this DateTime value) {
+            return value.ToString("yyyyMMddHHmmssfff");
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Finanse.Dialogs;
+using Finanse.Models.DateTimeExtensions;
 using Finanse.Models.MAccounts;
 using Finanse.Models.Operations;
 
@@ -34,7 +35,7 @@ namespace Finanse.DataAccessLayer {
 
                 db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
 
-                AddCategory(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });
+              //  AddCategory(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });
                 AddCategory(new Category { Id = 2, Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true });
                 AddCategory(new Category { Id = 3, Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true });
                 AddCategory(new Category { Id = 4, Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true });
@@ -234,14 +235,14 @@ namespace Finanse.DataAccessLayer {
         public static void SaveOperation(Operation operation) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                operation.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
+                operation.LastModifed = DateTimeHelper.DateTimeUtcNowString;
 
                 //if (operation.DeviceId == null)
                 //    operation.DeviceId = Informations.DeviceId;
 
                 if (operation.Id == 0) {
-                    int id = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'Operation'") + 1;
-                    operation.GlobalId = $"{Informations.DeviceId}_{id}";
+                    //int id = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'Operation'") + 1;
+                    operation.GlobalId = (GetMaxRowId(typeof(Operation)) + 1 ).NewGlobalIdFromLocal();//$"{Informations.DeviceId}_{id}";
                     db.Insert(operation);
                 }
                 else
@@ -253,11 +254,11 @@ namespace Finanse.DataAccessLayer {
         public static void SaveOperationPattern(OperationPattern operationPattern) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                operationPattern.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
+                operationPattern.LastModifed = DateTimeHelper.DateTimeUtcNowString;
 
                 if (operationPattern.Id == 0) {
-                    int id = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'OperationPattern'") + 1;
-                    operationPattern.GlobalId = $"{Informations.DeviceId}_{id}";
+                    //int id = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'OperationPattern'") + 1;
+                    operationPattern.GlobalId = ( GetMaxRowId(typeof(OperationPattern)) + 1 ).NewGlobalIdFromLocal();//$"{Informations.DeviceId}_{id}";
                     db.Insert(operationPattern);
                 }
                 else
@@ -269,7 +270,7 @@ namespace Finanse.DataAccessLayer {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
-                category.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
+                category.LastModifed = DateTimeHelper.DateTimeUtcNowString;
 
                 db.Update(category);
             }
@@ -279,10 +280,10 @@ namespace Finanse.DataAccessLayer {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
-                category.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
+                category.LastModifed = DateTimeHelper.DateTimeUtcNowString;
 
-                int id = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'Category'") + 1;
-                category.GlobalId = $"{Informations.DeviceId}_{id}";
+                //int id = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'Category'") + 1;
+                category.GlobalId = ( GetMaxRowId(typeof(Category)) + 1 ).NewGlobalIdFromLocal();//$"{Informations.DeviceId}_{id}";
                 db.Insert(category);
             }
         }
@@ -291,7 +292,7 @@ namespace Finanse.DataAccessLayer {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
-                subCategory.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
+                subCategory.LastModifed = DateTimeHelper.DateTimeUtcNowString;
 
                 db.Update(subCategory);
             }
@@ -301,10 +302,10 @@ namespace Finanse.DataAccessLayer {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
 
-                subCategory.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
+                subCategory.LastModifed = DateTimeHelper.DateTimeUtcNowString;
 
-                int id = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'SubCategory'") + 1;
-                subCategory.GlobalId = $"{Informations.DeviceId}_{id}";
+                //int id = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'SubCategory'") + 1;
+                subCategory.GlobalId = (GetMaxRowId(typeof(SubCategory)) + 1).NewGlobalIdFromLocal();// id.NewGlobalIdFromLocal();//$"{Informations.DeviceId}_{id}";
                 db.Insert(subCategory);
             }
         }
@@ -317,7 +318,7 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("UPDATE OperationPattern " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE Id = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, operationPattern.Id);
+                           "WHERE Id = ?", DateTimeHelper.DateTimeUtcNowString, operationPattern.Id);
             }
         }
 
@@ -326,7 +327,7 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("UPDATE Operation " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE Id = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, operation.Id);
+                           "WHERE Id = ?", DateTimeHelper.DateTimeUtcNowString, operation.Id);
             }
         }
 
@@ -338,11 +339,11 @@ namespace Finanse.DataAccessLayer {
 
                 db.Execute("UPDATE Category " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE Id = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, category.Id); //TODO nie wiem czy usuwanie po ID a nie GlobalId nie jest niebezpieczne np. gdy w tym momencie zacznie sie synchronizować baza, ale chyba nie bo ten id już jest w bazie.
+                           "WHERE GlobalId = ?", DateTimeHelper.DateTimeUtcNowString, category.GlobalId); //TODO nie wiem czy usuwanie po ID a nie GlobalId nie jest niebezpieczne np. gdy w tym momencie zacznie sie synchronizować baza, ale chyba nie bo ten id już jest w bazie.
 
                 db.Execute("UPDATE SubCategory " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE BossCategoryId = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, category.GlobalId);
+                           "WHERE BossCategoryId = ?", DateTimeHelper.DateTimeUtcNowString, category.GlobalId);
             }
         }
 
@@ -354,7 +355,7 @@ namespace Finanse.DataAccessLayer {
 
                 db.Execute("UPDATE SubCategory " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE Id = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, subCategoryId);
+                           "WHERE Id = ?", DateTimeHelper.DateTimeUtcNowString, subCategoryId);
             }
         }
 

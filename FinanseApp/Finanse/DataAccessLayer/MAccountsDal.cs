@@ -166,9 +166,9 @@ namespace Finanse.DataAccessLayer {
                 object[] parameters = {
                     account.Name,
                     account.ColorKey,
-                    DateTimeOffsetHelper.DateTimeOffsetNowString,
+                    DateTimeHelper.DateTimeUtcNowString,
                     false,
-                    account.GlobalId ?? SyncProperties.GetGlobalId(typeof(MAccount)),
+                    account.GlobalId ?? (Dal.GetMaxRowId(typeof(MAccount)) + 1).NewGlobalIdFromLocal(),//SyncProperties.GetGlobalId(typeof(MAccount)),
                     ( account as SubMAccount )?.BossAccountGlobalId
                 };
 
@@ -194,7 +194,7 @@ namespace Finanse.DataAccessLayer {
                 object[] parameters = {
                     account.Name,
                     account.ColorKey,
-                    DateTimeOffsetHelper.DateTimeOffsetNowString,
+                    DateTimeHelper.DateTimeUtcNowString,
                     ( account as SubMAccount )?.BossAccountGlobalId,
                     account.GlobalId
                 };
@@ -211,12 +211,12 @@ namespace Finanse.DataAccessLayer {
 
                 db.Execute(
                     "UPDATE Operation SET IsDeleted = 1, LastModifed = ? WHERE MoneyAccountId = ?"
-                        , DateTimeOffsetHelper.DateTimeOffsetNowString
+                        , DateTimeHelper.DateTimeUtcNowString
                         , mAccount.GlobalId);
 
                 db.Execute(
                     "UPDATE MAccount SET IsDeleted = 1, LastModifed = ? WHERE GlobalId = ?"
-                        , DateTimeOffsetHelper.DateTimeOffsetNowString
+                        , DateTimeHelper.DateTimeUtcNowString
                         , mAccount.GlobalId);
             }
         }
@@ -228,18 +228,18 @@ namespace Finanse.DataAccessLayer {
                     "UPDATE Operation " +
                     "SET IsDeleted = 1, LastModifed = ? " +
                     "WHERE MoneyAccountId IN (?, (SELECT DISTINCT GlobalId FROM MAccount Where BossAccountGlobalId = ?))"
-                        , DateTimeOffsetHelper.DateTimeOffsetNowString
+                        , DateTimeHelper.DateTimeUtcNowString
                         , mAccount.GlobalId
                         , mAccount.GlobalId);
 
                 db.Execute(
                     "UPDATE MAccount SET IsDeleted = 1, LastModifed = ? WHERE GlobalId = ?"
-                        , DateTimeOffsetHelper.DateTimeOffsetNowString
+                        , DateTimeHelper.DateTimeUtcNowString
                         , mAccount.GlobalId);
 
                 db.Execute(
                     "UPDATE MAccount SET IsDeleted = 1, LastModifed = ? WHERE BossAccountGlobalId = ?"
-                        , DateTimeOffsetHelper.DateTimeOffsetNowString
+                        , DateTimeHelper.DateTimeUtcNowString
                         , mAccount.GlobalId);
             }
         }

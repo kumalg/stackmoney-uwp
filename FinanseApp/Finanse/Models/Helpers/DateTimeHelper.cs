@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Finanse.Models.Helpers {
-    public class DateTimeOffsetHelper {
-        public static string DateTimeOffsetNowString => DateTimeOffset.Now.ToString();
+    public class DateTimeHelper {
+        public static string DateTimeUtcNowString => DateTime.UtcNow.ToString("yyyy.MM.dd HH:mm:ss");
     }
 }

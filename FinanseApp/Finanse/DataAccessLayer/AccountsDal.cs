@@ -199,7 +199,7 @@ namespace Finanse.DataAccessLayer {
         public static void RemoveSingleAccountWithOperations(int accountId) {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
-                db.Execute("UPDATE Operation SET IsDeleted = 1, LastModifed = ? WHERE MoneyAccountId = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, accountId);
+                db.Execute("UPDATE Operation SET IsDeleted = 1, LastModifed = ? WHERE MoneyAccountId = ?", DateTimeHelper.DateTimeUtcNowString, accountId);
 
                 db.Execute("DELETE FROM CashAccount WHERE Id = ?", accountId);
                 db.Execute("DELETE FROM BankAccount WHERE Id = ?", accountId);
@@ -212,7 +212,7 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
                 db.Execute("UPDATE Operation " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE MoneyAccountId IN (?, (SELECT DISTINCT Id FROM CardAccount Where BankAccountId = ?))", DateTimeOffsetHelper.DateTimeOffsetNowString, bankAccountId, bankAccountId);
+                           "WHERE MoneyAccountId IN (?, (SELECT DISTINCT Id FROM CardAccount Where BankAccountId = ?))", DateTimeHelper.DateTimeUtcNowString, bankAccountId, bankAccountId);
 
                 db.Execute("DELETE FROM BankAccount WHERE Id = ?", bankAccountId);
                 db.Execute("DELETE FROM CardAccount WHERE BankAccountId = ?", bankAccountId);

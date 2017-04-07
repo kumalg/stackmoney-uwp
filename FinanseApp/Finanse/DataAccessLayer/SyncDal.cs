@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Finanse.Models.Categories;
+using Finanse.Models.DateTimeExtensions;
 using Finanse.Models.Helpers;
 using Finanse.Models.MAccounts;
 using Finanse.Models.MoneyAccounts;
@@ -43,6 +44,24 @@ namespace Finanse.DataAccessLayer {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 // db.Insert(account);
+                object[] parameters = {
+                    account.Name,
+                    account.ColorKey,
+                    account.LastModifed ?? DateTimeHelper.DateTimeUtcNowString,
+                    account.IsDeleted,
+                    account.GlobalId,
+                    ( account as SubMAccount )?.BossAccountGlobalId
+                };
+
+                db.Execute(
+                    "INSERT INTO " + typeof(MAccount).Name +
+                    " (Name, ColorKey, LastModifed, IsDeleted, GlobalId, BossAccountGlobalId) VALUES(?,?,?,?,?,?)"
+                        , parameters);
+
+                account.LastModifed = parameters[2] as string;
+                account.GlobalId = parameters[4] as string;
+                if (account is SubMAccount)
+                    ( (SubMAccount)account ).BossAccountGlobalId = parameters[5] as string;
             }
         }
         private static void UpdateSyncAccount(MAccount account) {
@@ -118,12 +137,12 @@ namespace Finanse.DataAccessLayer {
                     }
 
                     if (localOperation.LastModifed != null &&
-                        DateTimeOffset.Parse(localOperation.LastModifed) >= DateTimeOffset.Parse(oneDriveOperation.LastModifed))
+                        DateTime.Parse(localOperation.LastModifed) >= DateTime.Parse(oneDriveOperation.LastModifed))
                         continue;
                 }
 
                 if (oneDriveOperation.LastModifed == null)
-                    oneDriveOperation.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
+                    oneDriveOperation.LastModifed = DateTimeHelper.DateTimeUtcNowString;
 
                 UpdateSyncOperation(oneDriveOperation);
             }
@@ -143,12 +162,12 @@ namespace Finanse.DataAccessLayer {
                     }
 
                     if (localCategory.LastModifed != null &&
-                        DateTimeOffset.Parse(localCategory.LastModifed) >= DateTimeOffset.Parse(oneDriveCategory.LastModifed))
+                        DateTime.Parse(localCategory.LastModifed) >= DateTime.Parse(oneDriveCategory.LastModifed))
                         continue;
                 }
 
                 if (oneDriveCategory.LastModifed == null)
-                    oneDriveCategory.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
+                    oneDriveCategory.LastModifed = DateTimeHelper.DateTimeUtcNowString;
 
                 UpdateSyncCategory(oneDriveCategory);
             }
@@ -168,12 +187,12 @@ namespace Finanse.DataAccessLayer {
                     }
 
                     if (localCategory.LastModifed != null &&
-                        DateTimeOffset.Parse(localCategory.LastModifed) >= DateTimeOffset.Parse(oneDriveAccount.LastModifed))
+                        DateTime.Parse(localCategory.LastModifed) >= DateTime.Parse(oneDriveAccount.LastModifed))
                         continue;
                 }
 
                 if (oneDriveAccount.LastModifed == null)
-                    oneDriveAccount.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
+                    oneDriveAccount.LastModifed = DateTimeHelper.DateTimeUtcNowString;
 
                 UpdateSyncAccount(oneDriveAccount);
             }

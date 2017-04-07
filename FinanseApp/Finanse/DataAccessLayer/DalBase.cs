@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Finanse.Models;
+using Finanse.Models.DateTimeExtensions;
 using Finanse.Models.MAccounts;
 using Finanse.Models.Operations;
 
@@ -115,14 +116,15 @@ namespace Finanse.DataAccessLayer {
                 db.Execute("UPDATE Category SET CantDelete = 0 WHERE CantDelete ISNULL");
                 db.Execute("UPDATE SubCategory SET CantDelete = 0 WHERE CantDelete ISNULL");
 
-                if (!db.ExecuteScalar<bool>("SELECT * FROM Category WHERE Id = 1 LIMIT 1")) {
-                //    db.Execute("INSERT INTO Category (Id, Name, ColorKey, IconKey, VisibleInIncomes, VisibleInExpenses, CantDelete, GlobalId, IsDeleted) VALUES (1, 'Inne', '14', 'FontIcon_2', 1, 1, 1, '1', 0)");
+                if (db.ExecuteScalar<int>("SELECT COUNT(*) FROM Category WHERE Id = 1 LIMIT 1") == 0) {
+                    //    db.Execute("INSERT INTO Category (Id, Name, ColorKey, IconKey, VisibleInIncomes, VisibleInExpenses, CantDelete, GlobalId, IsDeleted) VALUES (1, 'Inne', '14', 'FontIcon_2', 1, 1, 1, '1', 0)");
+                    db.Execute("INSERT INTO Category (Id) VALUES (1)");
                     db.Update(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true, CantDelete = true, GlobalId = "1" });
                 }
 
                // db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
 
-             //   db.Execute("UPDATE Operation SET LastModifed = SUBSTR(LastModifed,1,11) || REPLACE(SUBSTR(LastModifed,12),'.',':')");
+                db.Execute("UPDATE Operation SET LastModifed = SUBSTR(LastModifed,1,11) || REPLACE(SUBSTR(LastModifed,12),'.',':') WHERE SUBSTR(LastModifed,14,1) = '.'");
             }
         }
 
@@ -186,8 +188,8 @@ namespace Finanse.DataAccessLayer {
         }
 
         private static void CheckSyncColumns(SQLiteConnection db, string tableName) {
-                db.Execute("UPDATE " + tableName + " SET GlobalId = ? || '_' || Id WHERE GlobalId ISNULL", Informations.DeviceId);
-                db.Execute("UPDATE " + tableName + " SET LastModifed = ? WHERE LastModifed ISNULL", DateTimeOffsetHelper.DateTimeOffsetNowString);
+                db.Execute("UPDATE " + tableName + " SET GlobalId = ? || '_' || Id || '_' || ? WHERE GlobalId ISNULL", Informations.DeviceId, DateTime.UtcNow.GetTimestamp());
+                db.Execute("UPDATE " + tableName + " SET LastModifed = ? WHERE LastModifed ISNULL", DateTimeHelper.DateTimeUtcNowString);
                 db.Execute("UPDATE " + tableName + " SET IsDeleted = 0 WHERE IsDeleted ISNULL");
         }
 

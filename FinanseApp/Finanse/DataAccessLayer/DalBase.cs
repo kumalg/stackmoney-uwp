@@ -125,6 +125,7 @@ namespace Finanse.DataAccessLayer {
                // db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
 
                 db.Execute("UPDATE Operation SET LastModifed = SUBSTR(LastModifed,1,11) || REPLACE(SUBSTR(LastModifed,12),'.',':') WHERE SUBSTR(LastModifed,14,1) = '.'");
+                db.Execute("UPDATE Category SET IsDeleted = 1 WHERE Id != 1 AND Name = 'Inne' AND CantDelete = 1");
             }
         }
 

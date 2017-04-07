@@ -469,8 +469,7 @@
                 <RowDefinition
                     Height="Auto" />
             </Grid.RowDefinitions>
-
-
+            
             <RadioButton
                 Name="AddNewOperation_ListBoxItem"
                 Checked="AddNewOperationAppBarRadioButton_Checked"

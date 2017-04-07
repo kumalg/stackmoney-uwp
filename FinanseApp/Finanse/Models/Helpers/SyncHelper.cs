@@ -7,6 +7,7 @@ using Windows.Storage;
 using Windows.Storage.Streams;
 using Finanse.DataAccessLayer;
 using Microsoft.Graph;
+using Microsoft.Toolkit.Uwp;
 using Microsoft.Toolkit.Uwp.Services.OneDrive;
 
 namespace Finanse.Models.Helpers {
@@ -67,7 +68,46 @@ namespace Finanse.Models.Helpers {
                 await Task.Delay(60000); // 1 minute
             }
         }
-        
+
+        public static async Task CopyDbFileFromOneDrive() {
+            if (!( ConnectedToInternet() && Settings.SyncData ))
+                return;
+
+            OneDriveService.Instance.Initialize(OneDriveScopes.AppFolder);
+
+            if (!await OneDriveService.Instance.LoginAsync())
+                throw new Exception("Unable to sign in");
+
+            var stackMoneyFolder = await OneDriveService.Instance.AppRootFolderAsync();
+
+
+            if (!ConnectedToInternet() || !Settings.SyncData)
+                return;
+
+            try {
+                var file = await stackMoneyFolder.GetFileAsync("db.sqlite");
+
+                using (var remoteStream = await file.OpenAsync()) {
+                    byte[] buffer = new byte[remoteStream.Size];
+                    var localBuffer = await remoteStream.ReadAsync(buffer.AsBuffer(),
+                        (uint)remoteStream.Size, InputStreamOptions.ReadAhead);
+
+                    var localFolder = ApplicationData.Current.LocalFolder;
+
+                    var myLocalFile = await localFolder.CreateFileAsync("db.sqlite", CreationCollisionOption.FailIfExists);
+                    
+                    using (var localStream = await myLocalFile.OpenAsync(FileAccessMode.ReadWrite)) {
+                        await localStream.WriteAsync(localBuffer);
+                        await localStream.FlushAsync();
+                    }
+                }
+            }
+            catch (ServiceException e) {
+                Debug.WriteLine("Can't update database. Message: " + e.Message);
+            }
+            Debug.WriteLine("Load db from cloud completed");
+        }
+
         private static bool ConnectedToInternet() {
             var internetConnectionProfile = NetworkInformation.GetInternetConnectionProfile();
             var level = internetConnectionProfile?.GetNetworkConnectivityLevel();

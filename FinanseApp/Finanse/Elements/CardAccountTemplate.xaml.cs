@@ -1,10 +1,11 @@
-﻿using Finanse.Models.MoneyAccounts;
+﻿using Finanse.Models.MAccounts;
+using Finanse.Models.MoneyAccounts;
 
 namespace Finanse.Elements {
 
     public sealed partial class CardAccountTemplate {
 
-        private CardAccount CardAccount => DataContext as CardAccount;
+        private SubMAccount SubMAccount => DataContext as SubMAccount;
 
         public CardAccountTemplate() {
             InitializeComponent();

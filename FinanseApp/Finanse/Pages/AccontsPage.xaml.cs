@@ -9,6 +9,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
+using Finanse.Models.MAccounts;
 
 namespace Finanse.Pages {
 
@@ -18,8 +19,8 @@ namespace Finanse.Pages {
             InitializeComponent();
         }
 
-        private ObservableCollection<Account> _accounts;
-        private ObservableCollection<Account> Accounts => _accounts ?? (_accounts = new ObservableCollection<Account>(AccountsDal.GetAllAccounts()));
+        private ObservableCollection<MAccountWithSubMAccounts> _accounts;
+        private ObservableCollection<MAccountWithSubMAccounts> Accounts => _accounts ?? (_accounts = new ObservableCollection<MAccountWithSubMAccounts>(MAccountsDal.GetAllAccountsWithSubAccounts()));
 
         private async void NewMoneyAccount_Click(object sender, RoutedEventArgs e) {
             var contentDialogItem = new NewMoneyAccountContentDialog();
@@ -28,39 +29,40 @@ namespace Finanse.Pages {
             if (result != ContentDialogResult.Primary)
                 return;
 
-            Account newAccount = contentDialogItem.GetNewAccount();
-            newAccount.Id = AccountsDal.GetHighestIdOfAccounts();
-
-            if (newAccount is BankAccount)
-                Accounts.Insert(0, new BankAccountWithCards((BankAccount)newAccount));
-            else if (newAccount is CardAccount) {
-                CardAccount newCardAccount = (CardAccount)newAccount;
-                BankAccountWithCards bankAccount = (BankAccountWithCards)Accounts.SingleOrDefault(i => i.Id == ((CardAccount)newAccount).BankAccountId);
-                bankAccount.Cards.Insert(0, newCardAccount);
+            MAccount newAccount = contentDialogItem.AddedAccount; //TODO Id i GlobalID bo są 0 albo null
+            if (newAccount is SubMAccount) {
+                MAccountWithSubMAccounts mAccountWithSubMAccounts =
+                    Accounts.SingleOrDefault(i => i.MAccount.GlobalId == ((SubMAccount) newAccount).BossAccountGlobalId);
+                mAccountWithSubMAccounts?.SubMAccounts.Insert(0, (SubMAccount)newAccount); //TODO wali NULLem jeżeli kontoi nie ma podkategorii
             }
-            else
-                Accounts.Insert(0, newAccount);
+            else {
+                Accounts.Insert(0, new MAccountWithSubMAccounts {
+                    MAccount = newAccount
+                });
+            }
         }
 
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
-            Account oldAccound = (Account)datacontext;
-            EditMoneyAccountContentDialog editMoneyAccountContentDialog = new EditMoneyAccountContentDialog(oldAccound);
+            MAccountWithSubMAccounts oldAccound = ((MAccountWithSubMAccounts)datacontext);
+            EditMoneyAccountContentDialog editMoneyAccountContentDialog = new EditMoneyAccountContentDialog(oldAccound?.MAccount);
             ContentDialogResult result = await editMoneyAccountContentDialog.ShowAsync();
 
             if (result != ContentDialogResult.Primary)
                 return;
-
-            Account editedAccound = editMoneyAccountContentDialog.EditedAccount;
-            int index = Accounts.IndexOf(oldAccound);
+            
+            MAccount editedAccound = editMoneyAccountContentDialog.EditedAccount;
+            int index = Accounts.IndexOf(oldAccound); //TODO gdyby edytować z karty na konto i na odwró
             Accounts.Remove(oldAccound);
-            Accounts.Insert(index, editedAccound);
+            oldAccound.MAccount = editedAccound;
+            Accounts.Insert(index, oldAccound);
         }
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
-            if (AccountsDal.CountBankAccouns() + AccountsDal.CountCashAccouns() > 1) {
-                object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
-                ShowDeleteAccountContentDialog((Account) datacontext);
+            //if (AccountsDal.CountBankAccouns() + AccountsDal.CountCashAccouns() > 1) {
+            if (MAccountsDal.CountAccounts() > 1) {
+                object datacontext = ( e.OriginalSource as FrameworkElement )?.DataContext;
+                ShowDeleteAccountContentDialog(((MAccountWithSubMAccounts)datacontext)?.MAccount);
             }
             else {
                 MessageDialog message = new MessageDialog("To ostatnie konto. NIE USUWAJ GO ŚMIESZKU :(");
@@ -70,61 +72,61 @@ namespace Finanse.Pages {
 
         private async void EditCard_Click(object sender, RoutedEventArgs e) {
             object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
-            CardAccount oldAccound = (CardAccount)datacontext;
+            SubMAccount oldAccound = (SubMAccount)datacontext;
             if (oldAccound == null)
                 return;
 
-            EditMoneyAccountContentDialog editMoneyAccountContentDialog = new EditMoneyAccountContentDialog((Account)datacontext);
+            EditMoneyAccountContentDialog editMoneyAccountContentDialog = new EditMoneyAccountContentDialog(oldAccound);
             ContentDialogResult result = await editMoneyAccountContentDialog.ShowAsync();
 
             if (result != ContentDialogResult.Primary)
                 return;
 
-            CardAccount editedAccound = (CardAccount)editMoneyAccountContentDialog.EditedAccount;
-            BankAccountWithCards bankAccount = (BankAccountWithCards)Accounts.SingleOrDefault(i => i.Id == oldAccound.BankAccountId);
-            bankAccount.Cards.Remove(oldAccound);
+            MAccount editedAccound = editMoneyAccountContentDialog.EditedAccount;
+            MAccountWithSubMAccounts bankAccount = Accounts.SingleOrDefault(i => i.MAccount.GlobalId == oldAccound.BossAccountGlobalId);
+            bankAccount.SubMAccounts.Remove(oldAccound);
 
-            bankAccount = (BankAccountWithCards)Accounts.SingleOrDefault(i => i.Id == editedAccound.BankAccountId);
-            bankAccount.Cards.Insert(0, editedAccound);
+            bankAccount = Accounts.SingleOrDefault(i => i.MAccount.GlobalId == ((SubMAccount)editedAccound).BossAccountGlobalId);
+            bankAccount.SubMAccounts.Insert(0, (SubMAccount)editedAccound);
         }
 
         private void DeleteCard_Click(object sender, RoutedEventArgs e) {
             object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
-            ShowDeleteCardContentDialog((CardAccount)datacontext);
+            ShowDeleteAccountContentDialog((SubMAccount)datacontext);
         }
 
-        private async void ShowDeleteAccountContentDialog(Account account) {
-            string message = account is BankAccount ? 
-                "Czy chcesz usunąć konto bankowe ze wszystkimi kartami? Zostaną usunięte wszystkie operacje skojażone z tym kontem." : 
-                "Czy chcesz usunąć konto? Zostaną usunięte wszystkie operacje skojażone z tym kontem.";
+        private async void ShowDeleteAccountContentDialog(MAccount account) {
+
+            string message = account is SubMAccount
+                ? "Czy chcesz usunąć to konto ze wszystkimi subkontami? Zostaną usunięte wszystkie operacje skojażone z tym kontem."
+                : "Czy chcesz usunąć to konto? Zostaną usunięte wszystkie operacje skojażone z tym kontem.";
+
             AcceptContentDialog acceptDeleteOperationContentDialog = new AcceptContentDialog(message);
             ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
                 DeleteAccountWithOperations(account);
         }
-
-        private async void ShowDeleteCardContentDialog(CardAccount account) {
+        /*
+        private async void ShowDeleteCardContentDialog(SubMAccount account) {
             AcceptContentDialog acceptDeleteOperationContentDialog = new AcceptContentDialog("Czy chcesz usunąć kartę płatniczą? Zostaną usunięte wszystkie operacje skojażone z tą kartą.");
             ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
                 DeleteAccountWithOperations(account);
         }
-
-        private void DeleteAccountWithOperations(Account account) {
-            if (account is CardAccount)
-                DeleteCardWithOperations((CardAccount)account);
+        */
+        private void DeleteAccountWithOperations(MAccount account) {
+            if (account is SubMAccount)
+                DeleteCardWithOperations((SubMAccount)account);
             else
-                Accounts.Remove(account);
+                Accounts.Remove(Accounts.SingleOrDefault(i => i.MAccount.Id == account.Id));// /Remove(account);
 
-            if (account is BankAccount)
-                AccountsDal.RemoveBankAccountWithCards(account.Id);
-            else
-                AccountsDal.RemoveSingleAccountWithOperations(account.Id);
+            MAccountsDal.RemoveAccountWithSubAccountsAndOperations(account);
         }
-        private void DeleteCardWithOperations(CardAccount cardAccount) {
-            BankAccountWithCards bankAccount = (BankAccountWithCards)Accounts.SingleOrDefault(i => i.Id == cardAccount.BankAccountId);
-            bankAccount.Cards.Remove(cardAccount);
-            AccountsDal.RemoveSingleAccountWithOperations(cardAccount.Id);
+        private void DeleteCardWithOperations(SubMAccount cardAccount) {
+            MAccountWithSubMAccounts bankAccount = Accounts.SingleOrDefault(i => i.MAccount.GlobalId == cardAccount.BossAccountGlobalId);
+            bankAccount.SubMAccounts.Remove(cardAccount);
+
+            MAccountsDal.RemoveSubAccountWithOperations(cardAccount);
         }
 
         private void ListViewItem_Tapped(object sender, TappedRoutedEventArgs e) {

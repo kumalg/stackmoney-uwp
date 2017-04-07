@@ -65,13 +65,13 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private int _bossCategoryId = -1;
-        private int BossCategoryId {
+        private string _bossCategoryGlobalId = string.Empty;
+        private string BossCategoryGlobalId {
             get {
-                return _bossCategoryId;
+                return _bossCategoryGlobalId;
             }
             set {
-                _bossCategoryId = value;
+                _bossCategoryGlobalId = value;
                 RaisePropertyChanged("BossCategoryId");
             }
         }
@@ -98,7 +98,7 @@ namespace Finanse.Dialogs {
                 foreach (var categories_ComboBox in Categories) {
                     _categoriesInComboBox.Add(new ComboBoxItem {
                         Content = categories_ComboBox.Name,
-                        Tag = categories_ComboBox.Id
+                        Tag = categories_ComboBox.GlobalId
                     });
                 }
 
@@ -118,7 +118,7 @@ namespace Finanse.Dialogs {
             SelectedColor = ColorBase.FirstOrDefault(i => i.Key.Equals(editedCategoryItem.ColorKey));
             SelectedIcon = IconBase.FirstOrDefault(i => i.Key.Equals(editedCategoryItem.IconKey));
 
-            BossCategoryId = _editedCategoryAlwaysAsSubCategory.BossCategoryId;
+            BossCategoryGlobalId = _editedCategoryAlwaysAsSubCategory.BossCategoryId;
             
             NewCategoryItem = new Category(editedCategoryItem);
 
@@ -143,7 +143,7 @@ namespace Finanse.Dialogs {
 
             VisibleInExpensesToggleButton.IsOn = true;
             VisibleInIncomesToggleButton.IsOn = true;
-            BossCategoryId = bossCategoryId;
+            BossCategoryGlobalId = bossCategory.GlobalId;
         }
 
         public NewCategoryContentDialog() {
@@ -157,7 +157,7 @@ namespace Finanse.Dialogs {
 
 
 
-        private object SelectedCategory => CategoriesInComboBox.FirstOrDefault(i => ((int)i.Tag).Equals(BossCategoryId));
+        private object SelectedCategory => CategoriesInComboBox.FirstOrDefault(i => i.Tag.ToString() == BossCategoryGlobalId);
 
         private void SetPrimaryButtonEnabled() {
             IsPrimaryButtonEnabled = _editedCategoryAlwaysAsSubCategory == null
@@ -172,13 +172,13 @@ namespace Finanse.Dialogs {
         private bool IsThisCategoryInBase() {
             return CategoryValue.SelectedIndex == -1 
                 ? Dal.CategoryExistByName(NameValue.Text) 
-                : Dal.SubCategoryExistInBaseByName(NameValue.Text, BossCategoryId);
+                : Dal.SubCategoryExistInBaseByName(NameValue.Text, BossCategoryGlobalId);
         }
 
         private bool IsNewOperationTheSame() {
            
             return
-                _editedCategoryAlwaysAsSubCategory.BossCategoryId == BossCategoryId &&
+                _editedCategoryAlwaysAsSubCategory.BossCategoryId == BossCategoryGlobalId &&
                 _editedCategoryAlwaysAsSubCategory.ColorKey == SelectedColor.Key.ToString() &&
                 _editedCategoryAlwaysAsSubCategory.IconKey == SelectedIcon.Key.ToString() &&
                 _editedCategoryAlwaysAsSubCategory.Name == NameValue.Text &&
@@ -199,7 +199,7 @@ namespace Finanse.Dialogs {
                 return;
 
             SubCategory op = new SubCategory(NewCategoryItem) {
-                BossCategoryId = BossCategoryId
+                BossCategoryId = BossCategoryGlobalId
             };
 
             NewCategoryItem = op;
@@ -241,7 +241,7 @@ namespace Finanse.Dialogs {
             if (((ComboBox)sender).SelectedIndex == 0)
                 CategoryValue.SelectedIndex = -1;
 
-            BossCategoryId = (CategoryValue.SelectedIndex == -1) ? -1 : (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
+            BossCategoryGlobalId = (CategoryValue.SelectedIndex == -1) ? string.Empty : ((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString();
             SetExpenseAndIncomeToggleButtonsEnabling();
 
             SetPrimaryButtonEnabled();
@@ -249,7 +249,7 @@ namespace Finanse.Dialogs {
         }
 
         private void SetExpenseAndIncomeToggleButtonsEnabling() {
-            Category bossCategory = Dal.GetCategoryById(BossCategoryId);
+            Category bossCategory = Dal.GetCategoryByGlobalId(BossCategoryGlobalId);
 
             if (bossCategory != null && (!bossCategory.VisibleInIncomes || !bossCategory.VisibleInExpenses)) {
                 VisibleInExpensesToggleButton.IsEnabled = bossCategory.VisibleInExpenses;

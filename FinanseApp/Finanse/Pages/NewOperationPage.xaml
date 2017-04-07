@@ -141,6 +141,7 @@
                             FontWeight="SemiLight"
                             Foreground="{ThemeResource AccentColor}"
                             Name="CostValue"
+                            MaxLength="{x:Bind MaxLength, Mode=OneTime}"
                             Style="{StaticResource TextBoxStyle1}"
                             PlaceholderText="Wartość"
                             x:Uid="valuePlaceholder"

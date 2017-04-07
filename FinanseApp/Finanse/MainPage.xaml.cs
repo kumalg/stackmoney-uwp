@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -12,11 +13,16 @@ using Windows.System.Profile;
 using Windows.UI.Core;
 using Windows.Foundation;
 using Windows.ApplicationModel.Core;
+using Windows.Storage;
+using Windows.UI.Composition;
+using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
 using Finanse.Models;
 using Finanse.Models.DateTimeExtensions;
 using Finanse.Models.Helpers;
 using Finanse.Models.WhatsNew;
+using Microsoft.Graphics.Canvas.Effects;
+using Microsoft.Toolkit.Uwp;
 
 namespace Finanse {
     public sealed partial class MainPage {
@@ -25,7 +31,25 @@ namespace Finanse {
 
         public MainPage() {
             InitializeComponent();
+            Db();
+        }
+
+        private async void Db() {
+            bool exist = await ApplicationData.Current.LocalFolder.FileExistsAsync("db.sqlite");
+            if (!exist)
+                await SyncHelper.CopyDbFileFromOneDrive();
+
+            DalBase.CreateBackup();
             DalBase.CreateDb();
+
+
+          //  if (Settings.LastAppVersion != Informations.AppVersion) {
+                DalBase.ConvertAccounts();
+                DalBase.RepairDb();
+                DalBase.ConvertLocalIdReferenceToGlobal();
+          //  }
+            DalBase.AddItemsIfEmpty();
+
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(360, 530));
 
             SetTitleBar();

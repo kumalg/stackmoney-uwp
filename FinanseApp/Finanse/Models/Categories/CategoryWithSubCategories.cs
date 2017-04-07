@@ -13,8 +13,8 @@ namespace Finanse.Models.Categories {
                 OnPropertyChanged("Category");
             }
         }
-
-        private ObservableCollection<SubCategory> _subCategories;
+        /*
+        private ObservableCollection<SubCategory> _subCategories; //TODO wypierdalal nullem
         public ObservableCollection<SubCategory> SubCategories {
             get {
                 return _subCategories ?? ( _subCategories = new ObservableCollection<SubCategory>() );
@@ -24,6 +24,9 @@ namespace Finanse.Models.Categories {
                 OnPropertyChanged("SubCategories");
             }
         }
+        */
+
+        public ObservableCollection<SubCategory> SubCategories { get; set; } = new ObservableCollection<SubCategory>();
 
         public event PropertyChangedEventHandler PropertyChanged;
 

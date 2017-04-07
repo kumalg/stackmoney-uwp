@@ -1,13 +1,11 @@
 ﻿namespace Finanse.Models.Categories {
     public class SubCategory : Category {
 
-        public int BossCategoryId { get; set; }
+        public string BossCategoryId { get; set; }
 
         public SubCategory(Category category) {
             if (category is SubCategory)
                 BossCategoryId = ((SubCategory)category).BossCategoryId;
-            else
-                BossCategoryId = -1;
 
             ColorKey = category.ColorKey;
             IconKey = category.IconKey;

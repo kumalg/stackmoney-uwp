@@ -105,7 +105,7 @@
         <data:CategoryIcon
             Grid.Column="1"
             Glyph=""
-            Color="{x:Bind CardAccount.SolidColorBrush}"
+            Color="{x:Bind SubMAccount.Brush}"
             RenderTransformOrigin="0.5,0.5">
             <data:CategoryIcon.RenderTransform>
                 <CompositeTransform
@@ -117,7 +117,7 @@
         <TextBlock
             Grid.Column="2"
             VerticalAlignment="Center"
-            Text="{x:Bind CardAccount.Name}"
+            Text="{x:Bind SubMAccount.Name}"
             Margin="20,0,0,0"
             FontSize="14"
             Foreground="{ThemeResource Text}" />

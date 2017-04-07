@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
+using Finanse.DataAccessLayer;
 using SQLite.Net.Attributes;
 using Finanse.Models.MoneyAccounts;
 
@@ -14,9 +15,11 @@ namespace Finanse.Models.MAccounts {
 
 
 
-        public Brush Brush => string.IsNullOrEmpty(ColorKey)
-                    ? (Brush)Application.Current.Resources["DefaultEllipseColor"]
-                    : (Brush)( (ResourceDictionary)Application.Current.Resources["ColorBase"] ).FirstOrDefault(i => i.Key.Equals(ColorKey)).Value;
+        public string ActualMoneyValue => MAccountsDal.AccountWithSubAccountsBalanceByGlobalId(GlobalId).ToString("C", Settings.ActualCultureInfo);
+
+        public SolidColorBrush Brush => string.IsNullOrEmpty(ColorKey)
+                    ? (SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"]
+                    : (SolidColorBrush)( (ResourceDictionary)Application.Current.Resources["ColorBase"] ).FirstOrDefault(i => i.Key.Equals(ColorKey)).Value;
 
 
 

@@ -47,7 +47,16 @@ namespace Finanse.Pages {
                     Content = i,
                 });
 
-            MaxNumberOfNextMonth.SelectedIndex = Settings.MaxFutureMonths- 1;
+
+            for (int i = 1; i <= 7; i++)
+                BackupFrequencyComboBox.Items?.Add(new ComboBoxItem {
+                    Content = i + " dni",
+                    Tag = i
+                });
+
+            MaxNumberOfNextMonth.SelectedIndex = Settings.MaxFutureMonths - 1;
+            BackupFrequencyComboBox.SelectedIndex = Settings.BackupFrequency - 1;
+
             CategoryNameVisibilityToggleButton.IsOn = Settings.CategoryNameVisibility;
             AccountEllipseVisibilityToggleButton.IsOn = Settings.AccountEllipseVisibility;
            
@@ -126,6 +135,12 @@ namespace Finanse.Pages {
         private async void MarkdownTextBlock_Loading(FrameworkElement sender, object args) {
             if (sender is MarkdownTextBlock markdownTextBlock)
                 markdownTextBlock.Text = await WhatsNewHelper.GetJsonStringAsync();
+        }
+
+        private void BackupFrequencyComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var item = ((ComboBoxItem)( (ComboBox)sender ).SelectedItem);
+            if (item?.Tag != null)
+                Settings.BackupFrequency = (int)item.Tag;
         }
     }
 }

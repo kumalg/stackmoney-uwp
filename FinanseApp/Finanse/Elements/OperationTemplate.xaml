@@ -40,7 +40,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Margin="5"
-                Fill="{x:Bind Operation.Account.SolidColorBrush, Mode=OneTime}"
+                Fill="{x:Bind Operation.Account.Brush, Mode=OneTime}"
                 Width="6"
                 Height="6" />
         </Grid>

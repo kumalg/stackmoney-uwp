@@ -82,7 +82,7 @@ namespace Finanse.Pages {
             TryRemoveCategoryWithSubCategoriesInList(categoryWithSubCategories);
             TryAddSubCategoryInList(subCategory);
 
-            Dal.DeleteCategoryWithSubCategories(categoryWithSubCategories.Category.Id);
+            Dal.DeleteCategoryWithSubCategories(categoryWithSubCategories.Category);
             Dal.AddSubCategory(subCategory);
         }
 
@@ -142,7 +142,7 @@ namespace Finanse.Pages {
                 return;
             
             TryRemoveCategoryInList(category);
-            Dal.DeleteCategoryWithSubCategories(category.Id);
+            Dal.DeleteCategoryWithSubCategories(category);
         }
 
         private async void ShowCantDeleteDialog() {
@@ -212,13 +212,13 @@ namespace Finanse.Pages {
         private void TryRemoveSubCategoryInList(SubCategory subCategory) {
             if (subCategory.VisibleInExpenses)
                 ExpenseCategories
-                    .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
+                    .FirstOrDefault(item => item.Category.GlobalId == subCategory.BossCategoryId)
                     .SubCategories
                     .Remove(subCategory);
 
             if (subCategory.VisibleInIncomes)
                 IncomeCategories
-                    .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
+                    .FirstOrDefault(item => item.Category.GlobalId == subCategory.BossCategoryId)
                     .SubCategories
                     .Remove(subCategory);
         }
@@ -226,12 +226,12 @@ namespace Finanse.Pages {
         private void TryAddSubCategoryInList(SubCategory subCategory) {
             if (subCategory.VisibleInExpenses)
                 ExpenseCategories
-                    .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
+                    .FirstOrDefault(item => item.Category.GlobalId == subCategory.BossCategoryId)?
                     .SubCategories.Insert(0, subCategory);
 
             if (subCategory.VisibleInIncomes)
                 IncomeCategories
-                    .FirstOrDefault(item => item.Category.Id == subCategory.BossCategoryId)
+                    .FirstOrDefault(item => item.Category.GlobalId == subCategory.BossCategoryId)?
                     .SubCategories.Insert(0, subCategory);
         }
 

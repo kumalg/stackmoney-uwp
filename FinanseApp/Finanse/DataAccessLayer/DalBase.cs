@@ -1,4 +1,13 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.Net.Sockets;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
+using Finanse.Models;
 using Finanse.Models.MAccounts;
 using Finanse.Models.Operations;
 
@@ -36,19 +45,13 @@ namespace Finanse.DataAccessLayer {
                 db.Execute("PRAGMA foreign_keys = ON");
                 db.TraceListener = new DebugTraceListener();
 
-                /*
-                db.Execute("CREATE TABLE IF NOT EXISTS images ( "
-                    + "nameRed VARCHAR(20) NOT NULL PRIMARY KEY,"
-                    + "patientID INT,"
-                    + "FOREIGN KEY(patientID) REFERENCES patients(id) ) ");*/
-
-                // db.CreateTable<MoneyAccount>();
-
-                var operationCategory = db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='OperationCategory'");
+                var operationCategory =
+                    db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='OperationCategory'");
                 if (!string.IsNullOrEmpty(operationCategory))
                     db.Execute("ALTER TABLE OperationCategory RENAME TO Category");
 
-                var operationSubCategory = db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='OperationSubCategory'");
+                var operationSubCategory =
+                    db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='OperationSubCategory'");
                 if (!string.IsNullOrEmpty(operationSubCategory))
                     db.Execute("ALTER TABLE OperationSubCategory RENAME TO SubCategory");
 
@@ -56,81 +59,130 @@ namespace Finanse.DataAccessLayer {
                 db.CreateTable<OperationPattern>();
                 db.CreateTable<Category>();
                 db.CreateTable<SubCategory>();
-                db.CreateTable<CashAccount>();
-                db.CreateTable<CardAccount>();
-                db.CreateTable<BankAccount>();
-                db.CreateTable<MoAccount>();
+                db.CreateTable<MAccount>();
 
-                ConvertAccounts(db);
+                try {
+                    db.Execute("ALTER TABLE MAccount ADD COLUMN BossAccountGlobalId varchar");
+                }
+                catch {}
+            }
+        }
+
+        public static void AddItemsIfEmpty() {
+            using (var db = DbConnection) {
+                if (db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'Category'") == 1) {
+                    db.Insert(new Category { Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true, GlobalId = "2" });
+                    db.Insert(new Category { Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true, GlobalId = "3" });
+                    db.Insert(new Category { Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true, GlobalId = "4" });
+                    db.Insert(new Category { Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true, GlobalId = "5" });
+                    db.Insert(new Category { Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false, GlobalId = "6" });
+
+                    db.Insert(new SubCategory { Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = "4", VisibleInIncomes = false, VisibleInExpenses = true });
+                    db.Insert(new SubCategory { Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = "3", VisibleInIncomes = false, VisibleInExpenses = true });
+                }
+
+                if (db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'MAccount'") == 0) {
+                    MAccountsDal.AddAccount(new MAccount { Name = "Gotówka", ColorKey = "01", GlobalId = "1" });
+                    MAccountsDal.AddAccount(new MAccount { Name = "Konto bankowe", ColorKey = "02", GlobalId = "2" });
+                    MAccountsDal.AddAccount(new SubMAccount { Name = "Karta", ColorKey = "03", BossAccountGlobalId = "2" });
+                }
+            }
+        }
+
+        public static async void CreateBackup() {
+            using (var db = DbConnection) {
+                DateTime now = DateTime.UtcNow.AddDays(1 - Settings.BackupFrequency);
+                var yco = await ListOfBackupDates();
+                if (yco == null || !yco.Any(i => DateTime.ParseExact(i, "yyyy-MM-dd_HH-mm-ss", null) > now))
+                    await db.BackupDatabase(new SQLitePlatformWinRT(), "Backup");
+            }
+        }
+
+        public static void RepairDb() {
+            using (var db = DbConnection) {
+
+                db.Execute("UPDATE Category SET GlobalId = Id WHERE GlobalId ISNULL AND Id < 7");
+                db.Execute("UPDATE SubCategory SET GlobalId = Id WHERE GlobalId ISNULL AND Id < 3");
+                db.Execute("UPDATE MAccount SET GlobalId = Id WHERE GlobalId ISNULL AND Id < 4");
 
                 CheckSyncColumns(db, "Operation");
                 CheckSyncColumns(db, "OperationPattern");
                 CheckSyncColumns(db, "Category");
                 CheckSyncColumns(db, "SubCategory");
-                CheckSyncColumns(db, "MoAccount");
+                CheckSyncColumns(db, "MAccount");
 
-                db.Execute("UPDATE Category SET CantDelete = 1 WHERE Id = 1");
+                db.Execute("UPDATE Category SET CantDelete = 1, GlobalId = '1' WHERE Id = 1");
                 db.Execute("UPDATE Category SET CantDelete = 0 WHERE CantDelete ISNULL");
                 db.Execute("UPDATE SubCategory SET CantDelete = 0 WHERE CantDelete ISNULL");
 
-                db.Execute(AccountQueries.SeqTriggerCashAccount);
-                db.Execute(AccountQueries.SeqTriggerBankAccount);
-                db.Execute(AccountQueries.SeqTriggerCardAccount);
-
                 if (!db.ExecuteScalar<bool>("SELECT * FROM Category WHERE Id = 1 LIMIT 1")) {
-                    db.Execute("INSERT INTO Category (Id) VALUES (1)");
-                    db.Update(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true, CantDelete = true });
+                //    db.Execute("INSERT INTO Category (Id, Name, ColorKey, IconKey, VisibleInIncomes, VisibleInExpenses, CantDelete, GlobalId, IsDeleted) VALUES (1, 'Inne', '14', 'FontIcon_2', 1, 1, 1, '1', 0)");
+                    db.Update(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true, CantDelete = true, GlobalId = "1" });
                 }
 
-                db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
+               // db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
 
-                db.Execute("UPDATE Operation SET LastModifed = SUBSTR(LastModifed,1,11) || REPLACE(SUBSTR(LastModifed,12),'.',':')");
-
-                if (db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'Category'") == 1) {
-               //     db.Insert(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true, CantDelete = true});
-                    db.Insert(new Category { Id = 2, Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true });
-                    db.Insert(new Category { Id = 3, Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true });
-                    db.Insert(new Category { Id = 4, Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true });
-                    db.Insert(new Category { Id = 5, Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true });
-                    db.Insert(new Category { Id = 6, Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false});
-
-                    db.Insert(new SubCategory { Id = 1, Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = 4, VisibleInIncomes = false, VisibleInExpenses = true });
-                    db.Insert(new SubCategory { Id = 2, Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = 3, VisibleInIncomes = false, VisibleInExpenses = true });
-                }
-
-                if (!(db.Table<CashAccount>().Any() || db.Table<BankAccount>().Any())) {
-                    AccountsDal.AddAccount(new CashAccount { Name = "Gotówka", ColorKey = "01" });
-                    AccountsDal.AddAccount(new BankAccount { Name = "Konto bankowe", ColorKey = "02", });
-                    AccountsDal.AddAccount(new CardAccount { Name = "Karta", ColorKey = "03", BankAccountId = db.ExecuteScalar<int>("SELECT Id FROM BankAccount LIMIT 1")});
-                }
-
-                ConvertLocalIdReferenceToGlobal(db);
+             //   db.Execute("UPDATE Operation SET LastModifed = SUBSTR(LastModifed,1,11) || REPLACE(SUBSTR(LastModifed,12),'.',':')");
             }
         }
 
-        private static void ConvertLocalIdReferenceToGlobal(SQLiteConnection db) {
-            var subMoAccounts = db.Query<SubMAccount>("SELECT * FROM MoAccount WHERE BossAccountGlobalId IS NOT NULL AND IsDeleted = 0");
+        public static void ConvertLocalIdReferenceToGlobal() {
+            using (var db = DbConnection) {
+                var subMoAccounts = db.Query<SubMAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId IS NOT NULL AND IsDeleted = 0");
 
-            foreach (var subMoAccount in subMoAccounts) {
-                var bossMoAccount =
-                    db.Query<MAccount>("SELECT * FROM MoAccount WHERE Id = ? LIMIT 1", subMoAccount.BossAccountGlobalId)
-                        .FirstOrDefault();
+                foreach (var subMoAccount in subMoAccounts) {
+                    var bossMoAccount =
+                        db.Query<MAccount>("SELECT * FROM MAccount WHERE Id = ? LIMIT 1", subMoAccount.BossAccountGlobalId)
+                            .FirstOrDefault();
 
-                if (bossMoAccount != null)
-                    db.Execute("UPDATE MoAccount SET BossAccountGlobalId = ? WHERE Id = ?", bossMoAccount.GlobalId, subMoAccount.Id);
+                    if (bossMoAccount != null)
+                        db.Execute("UPDATE MAccount SET BossAccountGlobalId = ? WHERE Id = ?", bossMoAccount.GlobalId, subMoAccount.Id);
+                }
+
+                var subCategories = db.Query<SubCategory>("SELECT * FROM SubCategory WHERE IsDeleted = 0");
+
+                foreach (var subCategory in subCategories) {
+                    var bossCategory =
+                        db.Query<Category>("SELECT * FROM Category WHERE Id = ? LIMIT 1", subCategory.BossCategoryId)
+                            .FirstOrDefault();
+
+                    if (bossCategory != null)
+                        db.Execute("UPDATE SubCategory SET BossCategoryId = ? WHERE Id = ?", bossCategory.GlobalId, subCategory.Id);
+                }
+
+
+                var categories = db.Query<Category>("SELECT * FROM Category WHERE IsDeleted = 0");
+                foreach (var category in categories) {
+                    db.Execute("UPDATE Operation SET CategoryId = ? WHERE CategoryId = ?", category.GlobalId, category.Id);
+                    db.Execute("UPDATE OperationPattern SET CategoryId = ? WHERE CategoryId = ?", category.GlobalId, category.Id);
+                }
+
+                subCategories = db.Query<SubCategory>("SELECT * FROM SubCategory WHERE IsDeleted = 0");
+                foreach (var subCategory in subCategories) {
+                    db.Execute("UPDATE Operation SET SubCategoryId = ? WHERE SubCategoryId = ?", subCategory.GlobalId, subCategory.Id);
+                    db.Execute("UPDATE OperationPattern SET SubCategoryId = ? WHERE SubCategoryId = ?", subCategory.GlobalId, subCategory.Id);
+                }
+
+                var mAccounts = db.Query<MAccount>("SELECT * FROM MAccount");
+                foreach (var mAccount in mAccounts) {
+                    db.Execute("UPDATE Operation SET MoneyAccountId = ? WHERE MoneyAccountId = ?", mAccount.GlobalId, mAccount.Id);
+                    db.Execute("UPDATE OperationPattern SET MoneyAccountId = ? WHERE MoneyAccountId = ?", mAccount.GlobalId, mAccount.Id);
+                }
             }
+        }
 
-            /*
-            var subCategories = db.Query<SubCategory>("SELECT * FROM SubCategory WHERE IsDeleted = 0");
+        private static async Task<IEnumerable<string>> ListOfBackupDates() {
+            ApplicationData.Current?.LocalFolder.CreateFolderAsync("Backup", CreationCollisionOption.FailIfExists);
+            StorageFolder backupFolder = await ApplicationData.Current?.LocalFolder.GetFolderAsync("Backup");
 
-            foreach (var subCategory in subCategories) {
-                var bossMoAccount =
-                    db.Query<MAccount>("SELECT * FROM MoAccount WHERE Id = ? LIMIT 1", subCategory.BossCategoryId)
-                        .FirstOrDefault();
+            if (backupFolder == null)
+                return null;
 
-                if (bossMoAccount != null)
-                    db.Execute("UPDATE MoAccount SET BossAccountGlobalId = ? WHERE Id = ?", bossMoAccount.GlobalId, subCategory.Id);
-            }*/
+            var backupFiles = await backupFolder.GetFilesAsync();
+
+            return backupFiles?
+                .Select(i => i.Name.Substring(i.Name.IndexOf('.') + 1))
+                .AsEnumerable();
         }
 
         private static void CheckSyncColumns(SQLiteConnection db, string tableName) {
@@ -139,27 +191,45 @@ namespace Finanse.DataAccessLayer {
                 db.Execute("UPDATE " + tableName + " SET IsDeleted = 0 WHERE IsDeleted ISNULL");
         }
 
-        private static void ConvertAccounts(SQLiteConnection db) {
-            var bankAccounts = db.Query<BankAccount>("SELECT * FROM BankAccount");
-            var cashAccounts = db.Query<CashAccount>("SELECT * FROM CashAccount");
-            var cardAccounts = db.Query<CardAccount>("SELECT * FROM CardAccount");
+        public static void ConvertAccounts() {
+            using (var db = DbConnection) {
 
-            foreach (var bankAccount in bankAccounts) {
-                Account account = db.Query<BankAccount>("SELECT * FROM MoAccount WHERE Id = ? LIMIT 1", bankAccount.Id).FirstOrDefault();
-                if (account == null)
-                    db.Execute("INSERT INTO MoAccount (Id, Name, ColorKey, IsDeleted) VALUES(?, ?, ?, 0)", bankAccount.Id, bankAccount.Name, bankAccount.ColorKey);
-            }
+                var bankAccountsTable =
+                    db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='BankAccount'");
+                if (!string.IsNullOrEmpty(bankAccountsTable))
+                    foreach (var bankAccount in db.Table<BankAccount>()) {
+                        Account account =
+                            db.Query<BankAccount>("SELECT * FROM MAccount WHERE Id = ? LIMIT 1", bankAccount.Id)
+                                .FirstOrDefault();
+                        if (account == null)
+                            db.Execute("INSERT INTO MAccount (Id, Name, ColorKey, IsDeleted) VALUES(?, ?, ?, 0)",
+                                bankAccount.Id, bankAccount.Name, bankAccount.ColorKey);
+                    }
 
-            foreach (var cashAccount in cashAccounts) {
-                Account account = db.Query<CashAccount>("SELECT * FROM MoAccount WHERE Id = ? LIMIT 1", cashAccount.Id).FirstOrDefault();
-                if (account == null)
-                    db.Execute("INSERT INTO MoAccount (Id, Name, ColorKey, IsDeleted) VALUES(?, ?, ?, 0)", cashAccount.Id, cashAccount.Name, cashAccount.ColorKey);
-            }
+                var cashAccountsTable =
+                    db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='BankAccount'");
+                if (!string.IsNullOrEmpty(cashAccountsTable))
+                    foreach (var cashAccount in db.Table<CashAccount>()) {
+                        Account account =
+                            db.Query<CashAccount>("SELECT * FROM MAccount WHERE Id = ? LIMIT 1", cashAccount.Id)
+                                .FirstOrDefault();
+                        if (account == null)
+                            db.Execute("INSERT INTO MAccount (Id, Name, ColorKey, IsDeleted) VALUES(?, ?, ?, 0)",
+                                cashAccount.Id, cashAccount.Name, cashAccount.ColorKey);
+                    }
 
-            foreach (var cardAccount in cardAccounts) {
-                Account account = db.Query<CardAccount>("SELECT * FROM MoAccount WHERE Id = ? LIMIT 1", cardAccount.Id).FirstOrDefault();
-                if (account == null)
-                    db.Execute("INSERT INTO MoAccount (Id, Name, ColorKey, BossAccountGlobalId, IsDeleted) VALUES(?, ?, ?, ?, 0)", cardAccount.Id, cardAccount.Name, cardAccount.ColorKey, cardAccount.BankAccountId);
+                var cardAccountsTable =
+                    db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='BankAccount'");
+                if (!string.IsNullOrEmpty(cardAccountsTable))
+                    foreach (var cardAccount in db.Table<CardAccount>()) {
+                        Account account =
+                            db.Query<CardAccount>("SELECT * FROM MAccount WHERE Id = ? LIMIT 1", cardAccount.Id)
+                                .FirstOrDefault();
+                        if (account == null)
+                            db.Execute(
+                                "INSERT INTO MAccount (Id, Name, ColorKey, BossAccountGlobalId, IsDeleted) VALUES(?, ?, ?, ?, 0)",
+                                cardAccount.Id, cardAccount.Name, cardAccount.ColorKey, cardAccount.BankAccountId);
+                    }
             }
         }
         /*

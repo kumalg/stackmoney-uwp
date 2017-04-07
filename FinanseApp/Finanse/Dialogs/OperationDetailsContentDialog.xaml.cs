@@ -4,6 +4,7 @@ using Windows.UI.Xaml.Media;
 using Finanse.DataAccessLayer;
 using Finanse.Models;
 using Finanse.Models.Categories;
+using Finanse.Models.MAccounts;
 using Finanse.Models.MoneyAccounts;
 using Finanse.Models.Operations;
 
@@ -43,7 +44,7 @@ namespace Finanse.Dialogs {
 
             Category cat = editedOperation.Category;
             SubCategory subCat = editedOperation.SubCategory;
-            Account account = editedOperation.Account;
+            MAccount account = editedOperation.Account;
 
             /* KATEGORIA */
             CategoryValuePanel.Visibility = Visibility.Collapsed;
@@ -65,12 +66,10 @@ namespace Finanse.Dialogs {
                 PayForm.Text = account.Name;
                 PayFormPanel.Visibility = Visibility.Visible;
 
-                if (account is CashAccount)
-                    PayFormIcon.Glyph = "";
-                else if (account is BankAccount)
-                    PayFormIcon.Glyph = "";
-                else
+                if (account is SubMAccount)
                     PayFormIcon.Glyph = "";
+                else
+                    PayFormIcon.Glyph = "";
             }
 
             /* WIĘCEJ INFORMACJI */

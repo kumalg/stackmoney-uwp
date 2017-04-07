@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using Windows.Storage;
 using Windows.System.UserProfile;
 using Windows.UI.Xaml;
@@ -40,6 +42,7 @@ namespace Finanse.Models {
 
         
         public static void SetSettings() {
+
             if (LocalSettings.Values["syncSettings"] == null)
                 LocalSettings.Values["syncSettings"] = true;
 
@@ -53,6 +56,9 @@ namespace Finanse.Models {
 
             if (actualTypeOfSettings.Values["maxFutureMonths"] == null)
                 actualTypeOfSettings.Values["maxFutureMonths"] = 6;
+            
+            if (actualTypeOfSettings.Values["BackupFrequency"] == null)
+                actualTypeOfSettings.Values["BackupFrequency"] = 7;
 
             if (actualTypeOfSettings.Values["categoryNameVisibility"] == null)
                 actualTypeOfSettings.Values["categoryNameVisibility"] = false;
@@ -129,6 +135,11 @@ namespace Finanse.Models {
         public static string LastAppVersion {
             get { return LocalSettings.Values["LastAppVersion"].ToString(); }
             set { LocalSettings.Values["LastAppVersion"] = value; }
+        }
+
+        public static int BackupFrequency {
+            get { return (int)LocalSettings.Values["BackupFrequency"]; }
+            set { LocalSettings.Values["BackupFrequency"] = value; }
         }
     }
 }

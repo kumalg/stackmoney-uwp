@@ -5,6 +5,7 @@ using Finanse.Models.MoneyAccounts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Windows.UI.Popups;
@@ -13,6 +14,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Finanse.Models.Categories;
 using Finanse.Models.Helpers;
+using Finanse.Models.MAccounts;
 using Finanse.Models.Operations;
 
 namespace Finanse.Pages {
@@ -22,9 +24,11 @@ namespace Finanse.Pages {
         private readonly Regex _regex = NewOperation.GetRegex();
         private string _acceptedCostValue = string.Empty;
         private bool _isUnfocused = true;
-        
-        private IEnumerable<Account> _accountsWithoutCards;
-        private IEnumerable<Account> _accounts;
+        private readonly int MaxLength = NewOperation.MaxLength;
+
+
+        private IEnumerable<MAccount> _accountsWithoutCards;
+        private IEnumerable<MAccount> _accounts;
 
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
@@ -32,8 +36,8 @@ namespace Finanse.Pages {
 
             SetCategoryComboBoxItems(true, false);
 
-            _accounts = AccountsDal.GetAllMoneyAccounts();
-            _accountsWithoutCards = _accounts.Where(i => !(i is CardAccount));
+            _accounts = MAccountsDal.GetAllAccountsAndSubAccounts();
+            _accountsWithoutCards = _accounts.Where(i => !(i is SubMAccount));
 
             RaisePropertyChanged("AccountsComboBox");
             RaisePropertyChanged("AccountsToComboBox");
@@ -64,14 +68,14 @@ namespace Finanse.Pages {
             handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private IEnumerable<Account> AccountsComboBox
+        private IEnumerable<MAccount> AccountsComboBox
             => Income_RadioButton.IsChecked != null && (bool) Income_RadioButton.IsChecked
                 ? _accountsWithoutCards
                 : _accounts;
 
-        private IEnumerable<Account> AccountsToComboBox => _accountsWithoutCards;
+        private IEnumerable<MAccount> AccountsToComboBox => _accountsWithoutCards;
 
-        private IEnumerable<Account> AccountsFromComboBox => _accountsWithoutCards;
+        private IEnumerable<MAccount> AccountsFromComboBox => _accountsWithoutCards;
 
         public NewOperationPage() {
 
@@ -100,22 +104,22 @@ namespace Finanse.Pages {
             SaveAsPattern_StackPanel.Visibility = Visibility.Collapsed;
             UsePatternButton.Visibility = Visibility.Collapsed;
 
-            int selectedCategoryId = -1;
-            int selectedSubCategoryId = -1;
+            string selectedCategoryId = string.Empty;
+            string selectedSubCategoryId = string.Empty;
 
             if (CategoryValue.SelectedIndex != -1) {
-                selectedCategoryId = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
+                selectedCategoryId = ((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString();
 
                 if (SubCategoryValue.SelectedIndex != -1)
-                    selectedSubCategoryId = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
+                    selectedSubCategoryId = ((ComboBoxItem)SubCategoryValue.SelectedItem).Tag.ToString();
             }
 
             SetCategoryComboBoxItems(true, true);
 
-            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == selectedCategoryId);
+            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => i.Tag.ToString() == selectedCategoryId);
 
             if (CategoryValue.SelectedItem != null)
-                SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == selectedSubCategoryId);
+                SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => i.Tag.ToString() == selectedSubCategoryId);
         }
 
         private void ExpenseOrIncomeRadioButton_Checked(object sender, RoutedEventArgs e) {
@@ -128,26 +132,26 @@ namespace Finanse.Pages {
 
 
             if (CategoryValue.SelectedIndex != -1) {
-                int idOfSelectedCategory = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
-                int idOfSelectedSubCategory = -1;
+                string idOfSelectedCategory = ((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString();
+                string idOfSelectedSubCategory = string.Empty;
 
                 if (SubCategoryValue.SelectedIndex != -1)
-                    idOfSelectedSubCategory = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
+                    idOfSelectedSubCategory = ((ComboBoxItem)SubCategoryValue.SelectedItem).Tag.ToString();
 
                 SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
 
-                if (CategoryValue.Items.OfType<ComboBoxItem>().Any(i => (int)i.Tag == idOfSelectedCategory))
-                    CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(i => (int)i.Tag == idOfSelectedCategory);
+                if (CategoryValue.Items.OfType<ComboBoxItem>().Any(i => i.Tag.ToString() == idOfSelectedCategory))
+                    CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(i => i.Tag.ToString() == idOfSelectedCategory);
                 else
                     SubCategoryValue.IsEnabled = false;
 
-                if (idOfSelectedSubCategory == -1)
+                if (string.IsNullOrEmpty(idOfSelectedSubCategory))
                     return;
 
-                if (SubCategoryValue.Items.OfType<SubCategory>().All(i => i.Id != idOfSelectedSubCategory))
+                if (SubCategoryValue.Items.OfType<SubCategory>().All(i => i.GlobalId != idOfSelectedSubCategory))
                     return;
 
-                SubCategory subCatItem = Dal.GetSubCategoryById(idOfSelectedSubCategory);
+                SubCategory subCatItem = Dal.GetSubCategoryByGlobalId(idOfSelectedSubCategory);
                 SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
             }
 
@@ -159,16 +163,16 @@ namespace Finanse.Pages {
 
         private void SetCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
 
-            CategoryValue.Items.Clear();
+            CategoryValue.Items?.Clear();
 
             foreach (Category catItem in Dal.GetAllCategories()) {
 
                 if ((catItem.VisibleInExpenses && inExpenses)
                     || (catItem.VisibleInIncomes && inIncomes)) {
 
-                    CategoryValue.Items.Add(new ComboBoxItem {
+                    CategoryValue.Items?.Add(new ComboBoxItem {
                         Content = catItem.Name,
-                        Tag = catItem.Id
+                        Tag = catItem.GlobalId
                     });
                 }
             }
@@ -176,12 +180,12 @@ namespace Finanse.Pages {
 
         private void SetSubCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
 
-            SubCategoryValue.Items.Clear();
+            SubCategoryValue.Items?.Clear();
 
             if (CategoryValue.SelectedIndex == -1)
                 return;
 
-            foreach (var subCatItem in Dal.GetSubCategoriesByBossId((int)((ComboBoxItem)CategoryValue.SelectedItem).Tag)) {
+            foreach (var subCatItem in Dal.GetSubCategoriesByBossId(((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString())) {
                 if ((!subCatItem.VisibleInExpenses || !inExpenses) && (!subCatItem.VisibleInIncomes || !inIncomes))
                     continue;
 
@@ -193,7 +197,7 @@ namespace Finanse.Pages {
 
                 SubCategoryValue.Items.Add(new ComboBoxItem {
                     Content = subCatItem.Name,
-                    Tag = subCatItem.Id
+                    Tag = subCatItem.GlobalId
                 });
             }
             SubCategoryValue.IsEnabled = SubCategoryValue.Items.Count != 0;
@@ -264,16 +268,25 @@ namespace Finanse.Pages {
 
             NameValue.Text = selectedOperation.Title;
 
-            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == selectedOperation.CategoryId);
-            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == selectedOperation.SubCategoryId);
-            PayFormValue.SelectedItem = PayFormValue.Items.OfType<Account>().SingleOrDefault(item => item.Id == selectedOperation.MoneyAccountId);
+            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => i.Tag.ToString() == selectedOperation.CategoryId);
+            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => item.Tag.ToString() == selectedOperation.SubCategoryId);
+            PayFormValue.SelectedItem = PayFormValue.Items.OfType<MAccount>().SingleOrDefault(item => item.GlobalId == selectedOperation.MoneyAccountId);
 
             if (selectedOperation.MoreInfo != null)
                 MoreInfoValue.Text = selectedOperation.MoreInfo;
         }
 
         private void CostValue_TextChanged(object sender, TextChangedEventArgs e) {
-            SaveButton.IsEnabled = !string.IsNullOrEmpty(CostValue.Text);
+            decimal value;
+            try {
+                value = decimal.Parse(_acceptedCostValue, Settings.ActualCultureInfo);
+            }
+            catch (Exception ee) {
+                Debug.WriteLine(ee.Message);
+                SaveButton.IsEnabled = false;
+                return;
+            }
+            SaveButton.IsEnabled = value > 0;
         }
        
         private OperationPattern GetNewOperationPattern() {
@@ -284,14 +297,13 @@ namespace Finanse.Pages {
                 CategoryId = GetCategoryId(),
                 SubCategoryId = GetSubCategoryId(),
                 MoreInfo = MoreInfoValue.Text,
-                MoneyAccountId = ((Account)PayFormValue.SelectedItem).Id,
-              //  DeviceId = Informations.DeviceId
+                MoneyAccountId = ((MAccount)PayFormValue.SelectedItem)?.GlobalId
             };
         }
 
-        private Operation GetNewOperation(Account moneyAccount, bool isExpense) {
+        private Operation GetNewOperation(MAccount moneyAccount, bool isExpense) {
             Operation operation = GetNewOperationPattern().ToOperation();
-            operation.MoneyAccountId = moneyAccount.Id;
+            operation.MoneyAccountId = moneyAccount.GlobalId;
             operation.isExpense = isExpense;
             operation.Date = DateValue.Date == null ? string.Empty : DateValue.Date.Value.ToString("yyyy.MM.dd");
             operation.VisibleInStatistics = !HideInStatisticsToggle.IsOn;
@@ -306,11 +318,11 @@ namespace Finanse.Pages {
                     return;
                 }
                 
-                Dal.SaveOperation(GetNewOperation((Account)InitialAccount.SelectedItem, true));
-                Dal.SaveOperation(GetNewOperation((Account)DestinationAccount.SelectedItem, false));
+                Dal.SaveOperation(GetNewOperation((MAccount)InitialAccount.SelectedItem, true));
+                Dal.SaveOperation(GetNewOperation((MAccount)DestinationAccount.SelectedItem, false));
             }
             else {
-                Dal.SaveOperation(GetNewOperation((Account)PayFormValue.SelectedItem, (bool)Expense_RadioButton.IsChecked));
+                Dal.SaveOperation(GetNewOperation((MAccount)PayFormValue.SelectedItem, (bool)Expense_RadioButton.IsChecked));
 
                 if (SaveAsAssetToggle.IsOn)
                     Dal.SaveOperationPattern(GetNewOperationPattern());
@@ -324,18 +336,14 @@ namespace Finanse.Pages {
             var result = await dialog.ShowAsync();
         }
 
-        private int GetCategoryId() {
-            return CategoryValue.SelectedIndex == -1 ?
-                        1 :
-                        (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
-        }
+        private string GetCategoryId() => CategoryValue.SelectedIndex == -1
+            ? Dal.GetDefaultCategory().GlobalId //TODO
+            : ((ComboBoxItem)CategoryValue.SelectedItem)?.Tag.ToString();
 
-        private int GetSubCategoryId() {
-            return SubCategoryValue.SelectedIndex == -1 ?
-                        -1 :
-                        (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
-        }
-       
+        private string GetSubCategoryId() => SubCategoryValue.SelectedIndex == -1
+            ? string.Empty
+            : ((ComboBoxItem)SubCategoryValue.SelectedItem)?.Tag.ToString();
+
         private DateTime NavigateToThisMonthAfterSave() {
             return DateValue.Date == null || DateValue.Date > DateTime.Today ?
                 DateTime.Today.AddMonths(1) :

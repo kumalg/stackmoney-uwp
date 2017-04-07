@@ -1,4 +1,5 @@
 ﻿using Finanse.Dialogs;
+using Finanse.Models.MAccounts;
 using Finanse.Models.Operations;
 
 namespace Finanse.DataAccessLayer {
@@ -22,9 +23,7 @@ namespace Finanse.DataAccessLayer {
                 db.DeleteAll<OperationPattern>();
                 db.DeleteAll<Category>();
                 db.DeleteAll<SubCategory>();
-                db.DeleteAll<CashAccount>();
-                db.DeleteAll<CardAccount>();
-                db.DeleteAll<BankAccount>();
+                db.DeleteAll<MAccount>();
                 db.Execute("DELETE FROM sqlite_sequence");
             }
         }
@@ -42,12 +41,12 @@ namespace Finanse.DataAccessLayer {
                 AddCategory(new Category { Id = 5, Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true });
                 AddCategory(new Category { Id = 6, Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false });
 
-                AddSubCategory(new SubCategory { Id = 1, Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = 4, VisibleInIncomes = false, VisibleInExpenses = true });
-                AddSubCategory(new SubCategory { Id = 2, Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = 3, VisibleInIncomes = false, VisibleInExpenses = true });
+                AddSubCategory(new SubCategory { Id = 1, Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = "4", VisibleInIncomes = false, VisibleInExpenses = true });
+                AddSubCategory(new SubCategory { Id = 2, Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = "3", VisibleInIncomes = false, VisibleInExpenses = true });
 
-                AccountsDal.AddAccount(new CashAccount { Name = "Gotówka", ColorKey = "01" });
-                AccountsDal.AddAccount(new BankAccount { Name = "Konto bankowe", ColorKey = "02", });
-                AccountsDal.AddAccount(new CardAccount { Name = "Karta", ColorKey = "03", BankAccountId = db.ExecuteScalar<int>("SELECT Id FROM BankAccount LIMIT 1") });
+                MAccountsDal.AddAccount(new MAccount { Name = "Gotówka", ColorKey = "01" });
+                MAccountsDal.AddAccount(new MAccount { Name = "Konto bankowe", ColorKey = "02", });
+                MAccountsDal.AddAccount(new SubMAccount { Name = "Karta", ColorKey = "03", BossAccountGlobalId = db.ExecuteScalar<string>("SELECT GlobalId FROM MAccount WHERE Id = 2 LIMIT 1") });
             }
         }
 
@@ -75,20 +74,6 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static List<Category> GetAllCategoriesInExpenses() {
-            using (var db = DbConnection) {
-                db.TraceListener = new DebugTraceListener();
-                return db.Query<Category>("SELECT * FROM Category WHERE VisibleInExpenses AND IsDeleted = 0 ORDER BY Name");
-            }
-        }
-        public static List<Category> GetAllCategoriesInIncomes() {
-            using (var db = DbConnection) {
-                db.TraceListener = new DebugTraceListener();
-                return db.Query<Category>("SELECT * FROM Category WHERE VisibleInIncomes AND IsDeleted = 0 ORDER BY Name");
-            }
-        }
-
-
 
         public static IEnumerable<CategoryWithSubCategories> GetCategoriesWithSubCategoriesInExpenses()
             => GetCategoriesWithSubCategories("VisibleInExpenses");
@@ -108,13 +93,13 @@ namespace Finanse.DataAccessLayer {
                                           };
 
                 return from category in db.Query<Category>("SELECT * FROM Category WHERE " + visibleIn + " AND IsDeleted = 0 ORDER BY Name")
-                       join subCategories in subCategoriesGroups on category.Id equals subCategories.BossCategoryId into gj
+                       join subCategories in subCategoriesGroups on category.GlobalId equals subCategories.BossCategoryId into gj
                        from secondSubCategories in gj.DefaultIfEmpty()
                        select new CategoryWithSubCategories {
                            Category = category,
                            SubCategories =
                                secondSubCategories == null
-                                   ? null
+                                   ? new ObservableCollection<SubCategory>()
                                    : new ObservableCollection<SubCategory>(secondSubCategories.subCategories)
                        };
             }
@@ -132,7 +117,7 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static List<Operation> GetAllOperations(DateTime actualMonth, HashSet<int> visiblePayFormList) {
+        public static List<Operation> GetAllOperations(DateTime actualMonth, HashSet<string> visiblePayFormList) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
@@ -142,21 +127,13 @@ namespace Finanse.DataAccessLayer {
                     DateTime.Today.ToString("yyyy.MM.dd"));
 
                 return visiblePayFormList != null 
-                    ? list.Where(i => visiblePayFormList.Contains(i.MoneyAccountId)).ToList() 
+                    ? list.Where(i => visiblePayFormList.Contains(i.MoneyAccountId.ToString())).ToList() 
                     : list;
             }
         }
 
-        public static List<Operation> GetAllFutureOperations() {
-            using (var db = DbConnection) {
-                db.TraceListener = new DebugTraceListener();
-                return db.Query<Operation>(
-                    "SELECT * FROM Operation WHERE Date > ? OR Date IS NULL OR Date == '' AND IsDeleted = 0", 
-                    DateTime.Today.ToString("yyyy.MM.dd"));
-            }
-        }
 
-        public static List<Operation> GetAllFutureOperations(HashSet<int> visiblePayFormList) {
+        public static List<Operation> GetAllFutureOperations(HashSet<string> visiblePayFormList) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
@@ -165,7 +142,7 @@ namespace Finanse.DataAccessLayer {
                     DateTime.Today.ToString("yyyy.MM.dd"));
 
                 return visiblePayFormList != null
-                    ? list.Where(i => visiblePayFormList.Contains(i.MoneyAccountId)).ToList()
+                    ? list.Where(i => visiblePayFormList.Contains(i.MoneyAccountId.ToString())).ToList()
                     : list;
             }
         }
@@ -185,26 +162,30 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static bool SubCategoryExistInBaseByName(string name, int bossCategoryId) {
+        public static bool SubCategoryExistInBaseByName(string name, string bossCategoryGlobalId) {
             using (var db = DbConnection) {
                 return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM SubCategory WHERE LOWER(Name) = ? AND BossCategoryId AND IsDeleted = 0", 
                     name.ToLower(), 
-                    bossCategoryId);
+                    bossCategoryGlobalId);
             }
         }
-
+        /*
         public static bool AccountExistInBaseByName(string name, AccountType accountType) {
             using (var db = DbConnection) {
                 switch (accountType) {
-                    case AccountType.BankAccount:
-                        return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM BankAccount WHERE LOWER(Name) = ?", name.ToLower());
-                    case AccountType.CardAccount:
-                        return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM CardAccount WHERE LOWER(Name) = ?", name.ToLower());
-                    case AccountType.CashAccount:
-                        return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM CashAccount WHERE LOWER(Name) = ?", name.ToLower());
+                    case AccountType.SubAccount:
+                        return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM MAccount WHERE BossAccountGlobalId IS NOT NULL AND LOWER(Name) = ?", name.ToLower());
+                    case AccountType.Account:
+                        return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM MAccount WHERE BossAccountGlobalId ISNULL AND LOWER(Name) = ?", name.ToLower());
                     default:
                         return false;
                 }
+            }
+        }*/
+
+        public static Category GetDefaultCategory() {
+            using (var db = DbConnection) {
+                return db.Query<Category>("SELECT * FROM Category WHERE CantDelete LIMIT 1").FirstOrDefault();
             }
         }
 
@@ -217,10 +198,25 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static List<SubCategory> GetSubCategoriesByBossId(int id) {
+        public static SubCategory GetSubCategoryByGlobalId(string globalId) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE BossCategoryId == ? AND IsDeleted = 0 ORDER BY Name", id);
+                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE GlobalId == ? AND IsDeleted = 0 LIMIT 1", globalId).FirstOrDefault();
+            }
+        }
+
+        public static List<SubCategory> GetSubCategoriesByBossId(string globalId) {
+            using (var db = DbConnection) {
+                db.TraceListener = new DebugTraceListener();
+                return db.Query<SubCategory>("SELECT * FROM SubCategory WHERE BossCategoryId == ? AND IsDeleted = 0 ORDER BY Name", globalId);
+            }
+        }
+
+        public static Category GetCategoryByGlobalId(string globalId) {
+            using (var db = DbConnection) {
+                db.TraceListener = new DebugTraceListener();
+                return db.Query<Category>("SELECT * FROM Category WHERE GlobalId == ? AND IsDeleted = 0 LIMIT 1", globalId)
+                    .FirstOrDefault();
             }
         }
 
@@ -334,19 +330,19 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static void DeleteCategoryWithSubCategories(int categoryId) {
+        public static void DeleteCategoryWithSubCategories(Category category) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                if (db.ExecuteScalar<bool>("SELECT CantDelete FROM Category WHERE Id = ? LIMIT 1", categoryId))
+                if (db.ExecuteScalar<bool>("SELECT CantDelete FROM Category WHERE Id = ? LIMIT 1", category.Id))
                     return;
 
                 db.Execute("UPDATE Category " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE Id = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, categoryId);
+                           "WHERE Id = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, category.Id); //TODO nie wiem czy usuwanie po ID a nie GlobalId nie jest niebezpieczne np. gdy w tym momencie zacznie sie synchronizować baza, ale chyba nie bo ten id już jest w bazie.
 
                 db.Execute("UPDATE SubCategory " +
                            "SET IsDeleted = 1, LastModifed = ? " +
-                           "WHERE BossCategoryId = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, categoryId);
+                           "WHERE BossCategoryId = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, category.GlobalId);
             }
         }
 
@@ -359,6 +355,13 @@ namespace Finanse.DataAccessLayer {
                 db.Execute("UPDATE SubCategory " +
                            "SET IsDeleted = 1, LastModifed = ? " +
                            "WHERE Id = ?", DateTimeOffsetHelper.DateTimeOffsetNowString, subCategoryId);
+            }
+        }
+
+        public static int GetMaxRowId(Type type) {
+            using (var db = DbConnection) {
+                db.TraceListener = new DebugTraceListener();
+               return db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = ?", type.Name);
             }
         }
     }

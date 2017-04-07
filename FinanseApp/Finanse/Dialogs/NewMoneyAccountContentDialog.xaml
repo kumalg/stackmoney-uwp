@@ -16,7 +16,8 @@
     PrimaryButtonClick="NewCategory_AddButtonClick">
 
     <StackPanel
-        Margin="20,20" >
+        Margin="20,48" >
+        <!--
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
@@ -123,7 +124,7 @@
                 </Flyout>
             </FlyoutBase.AttachedFlyout>
         </HyperlinkButton>
-
+-->
         <TextBox
             Name="NameValue"
             Style="{StaticResource TextBoxStyle1}"
@@ -134,6 +135,7 @@
         <TextBox
             Name="CostValue"
             Style="{StaticResource TextBoxStyle1}"
+            MaxLength="{x:Bind MaxLength, Mode=OneTime}"
             PlaceholderText="Kwota początkowa"
             x:Uid="initialAmountPlaceholder"
             InputScope="CurrencyAmount"
@@ -145,12 +147,13 @@
             TextChanged="CostValue_TextChanged" />
 
         <ComboBox
+            PlaceholderText="Konto nadrzędne"
             Name="BankAccountsComboBox"
             Margin="0,10"
             HorizontalAlignment="Stretch"
             Style="{StaticResource ComboBoxStyle1}"
-            Visibility="{x:Bind BankAccountsComboBoxVisibility, Mode=OneWay}"
-            ItemsSource="{x:Bind _bankAccounts, Mode=OneTime}" />
+            ItemsSource="{x:Bind _bankAccounts, Mode=OneTime}"
+            SelectionChanged="BankAccountsComboBox_SelectionChanged" />
 
         <GridView
             Margin="0,32,0,16"

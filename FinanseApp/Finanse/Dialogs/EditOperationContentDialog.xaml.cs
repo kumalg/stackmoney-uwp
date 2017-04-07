@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Finanse.Models.Categories;
 using Finanse.Models.Helpers;
+using Finanse.Models.MAccounts;
 using Finanse.Models.Operations;
 
 namespace Finanse.Dialogs {
@@ -20,6 +21,7 @@ namespace Finanse.Dialogs {
         
         private bool _isLoaded;
         private bool _isUnfocused = true;
+        private readonly int MaxLength = NewOperation.MaxLength;
 
         private readonly Operation _operationToEdit;
         private readonly OperationPattern _operationPatternToEdit;
@@ -54,11 +56,11 @@ namespace Finanse.Dialogs {
             handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private static readonly IEnumerable<Account> Accounts = AccountsDal.GetAllMoneyAccounts();
-        private static readonly IEnumerable<Account> AccountsWithoutCards = Accounts.Where(i => !(i is CardAccount));
+        private static readonly IEnumerable<MAccount> Accounts = MAccountsDal.GetAllAccountsAndSubAccounts();
+        private static readonly IEnumerable<MAccount> AccountsWithoutCards = Accounts.Where(i => !(i is SubMAccount));
 
 
-        private IEnumerable<Account> AccountsComboBox => (bool) Income_RadioButton.IsChecked
+        private IEnumerable<MAccount> AccountsComboBox => (bool) Income_RadioButton.IsChecked
             ? AccountsWithoutCards
             : Accounts;
 
@@ -79,8 +81,8 @@ namespace Finanse.Dialogs {
                 HideInStatisticsToggle.IsOn = !operation.VisibleInStatistics;
             }
 
-            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => (int)i.Tag == operationPattern.CategoryId);
-            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => (int)item.Tag == operationPattern.SubCategoryId);
+            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => i.Tag.ToString() == operationPattern.CategoryId);
+            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => item.Tag.ToString() == operationPattern.SubCategoryId);
       //      PayFormValue.SelectedItem = PayFormValue.Items.OfType<Account>().SingleOrDefault(item => item.Id == operationPattern.MoneyAccountId);
 
             if (!string.IsNullOrEmpty(operationPattern.MoreInfo))
@@ -117,7 +119,7 @@ namespace Finanse.Dialogs {
                 CategoryId = GetCategoryId(),
                 SubCategoryId = GetSubCategoryId(),
                 MoreInfo = MoreInfoValue.Text,
-                MoneyAccountId = ((Account)PayFormValue.SelectedItem).Id,
+                MoneyAccountId = ((MAccount)PayFormValue.SelectedItem).GlobalId,
                 VisibleInStatistics = !HideInStatisticsToggle.IsOn,
             };
         }
@@ -132,7 +134,7 @@ namespace Finanse.Dialogs {
                 CategoryId = GetCategoryId(),
                 SubCategoryId = GetSubCategoryId(),
                 MoreInfo = MoreInfoValue.Text,
-                MoneyAccountId = ((Account)PayFormValue.SelectedItem).Id,
+                MoneyAccountId = ((MAccount)PayFormValue.SelectedItem).GlobalId,
             };
         }
 
@@ -142,17 +144,13 @@ namespace Finanse.Dialogs {
                 DateValue.Date.Value.ToString("yyyy.MM.dd");
         }
 
-        private int GetCategoryId() {
-            return CategoryValue.SelectedIndex != -1
-                ? (int) ((ComboBoxItem) CategoryValue.SelectedItem).Tag
-                : 1;
-        }
+        private string GetCategoryId() => CategoryValue.SelectedIndex != -1
+            ? ((ComboBoxItem) CategoryValue.SelectedItem).Tag.ToString()
+            : string.Empty;
 
-        private int GetSubCategoryId() {
-            return SubCategoryValue.SelectedIndex != -1 ?
-                (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag :
-                -1;
-        }
+        private string GetSubCategoryId() => SubCategoryValue.SelectedIndex != -1
+            ? (string)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag
+            : string.Empty;
 
         private void NowaOperacja_DodajClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
 
@@ -209,7 +207,7 @@ namespace Finanse.Dialogs {
 
                     CategoryValue.Items.Add(new ComboBoxItem {
                         Content = catItem.Name,
-                        Tag = catItem.Id
+                        Tag = catItem.GlobalId
                     });
                 }
             }
@@ -224,7 +222,7 @@ namespace Finanse.Dialogs {
             if (CategoryValue.SelectedIndex == -1)
                 return;
 
-            foreach (var subCatItem in Dal.GetSubCategoriesByBossId((int)((ComboBoxItem)CategoryValue.SelectedItem).Tag)) {
+            foreach (var subCatItem in Dal.GetSubCategoriesByBossId(((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString())) {
                 if ((!subCatItem.VisibleInExpenses || !inExpenses) && (!subCatItem.VisibleInIncomes || !inIncomes))
                     continue;
 
@@ -236,7 +234,7 @@ namespace Finanse.Dialogs {
 
                 SubCategoryValue.Items.Add(new ComboBoxItem {
                     Content = subCatItem.Name,
-                    Tag = subCatItem.Id
+                    Tag = subCatItem.GlobalId
                 });
             }
 
@@ -293,7 +291,7 @@ namespace Finanse.Dialogs {
         }
 
         private void PayFormValue_Loaded(object sender, RoutedEventArgs e)
-            => PayFormValue.SelectedItem = PayFormValue.Items.OfType<Account>().SingleOrDefault(item => item.Id == _originalOperationPattern.MoneyAccountId);
+            => PayFormValue.SelectedItem = Accounts.SingleOrDefault(item => item.GlobalId == _originalOperationPattern.MoneyAccountId);
 
 
         private void PayFormValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {

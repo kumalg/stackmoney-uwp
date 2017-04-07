@@ -43,8 +43,8 @@ namespace Finanse.Models.Operations {
 
         public Category Category { get; }
 
-        public GroupHeaderByCategory(int categoryId) {
-            Category = Dal.GetCategoryById(categoryId) ?? new Category {
+        public GroupHeaderByCategory(string categoryGlobalId) {
+            Category = Dal.GetCategoryByGlobalId(categoryGlobalId) ?? new Category {
                 Name = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("uncategorized"),
                 Id = -1,
                 ColorKey = "12",

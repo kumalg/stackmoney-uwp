@@ -180,6 +180,7 @@
             Name="NameValue"
             Foreground="{ThemeResource Text}"
             FontFamily="{StaticResource DefaultFontFamily}"
+            FontWeight="SemiLight"
             TextWrapping="Wrap"
             TextAlignment="Center"
             Text="Zwrot podatku"
@@ -294,7 +295,6 @@
                     Foreground="{ThemeResource Text}"
                     FontFamily="{StaticResource DefaultFontFamily}"
                     TextWrapping="Wrap"
-                    TextAlignment="Justify"
                     Text="Więcej informacji"/>
             </Grid>
         </StackPanel>

@@ -379,6 +379,7 @@
         <Setter Property="FontFamily" Value="{StaticResource DefaultFontFamily}"/>
         <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
         <Setter Property="MinWidth" Value="120" />
+        <Setter Property="Height" Value="55"></Setter>
         <Setter Property="UseSystemFocusVisuals" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
@@ -463,9 +464,7 @@
 
                         <Grid
                             Margin="16,0,0,0"
-                            Width="48"
-                            Height="48"
-                            VerticalAlignment="Top">
+                            Width="48">
                             <StackPanel
                                 x:Name="HoverBorder"
                                 VerticalAlignment="Center"

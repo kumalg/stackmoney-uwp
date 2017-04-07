@@ -79,7 +79,7 @@ namespace Finanse.DataAccessLayer {
 
 
         /* GET ALL */
-
+        //
         public static List<Account> GetAllAccounts() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
@@ -107,14 +107,14 @@ namespace Finanse.DataAccessLayer {
                 return accounts;
             }
         }
-
+        //
         public static List<BankAccount> GetAllBankAccounts() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 return db.Query<BankAccount>("SELECT * FROM BankAccount");
             }
         }
-
+        //
         internal static IEnumerable<Account> GetAccountsWithoutCards() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
@@ -126,7 +126,7 @@ namespace Finanse.DataAccessLayer {
                     .OrderBy(i => i.Name);
             }
         }
-
+        //
         public static IEnumerable<Account> GetAllMoneyAccounts() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
@@ -140,7 +140,7 @@ namespace Finanse.DataAccessLayer {
                     .OrderBy(i => i.Name);
             }
         }
-
+        /*
         public static List<MoneyAccountBalance> ListOfMoneyAccountBalances(DateTime date) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
@@ -169,7 +169,7 @@ namespace Finanse.DataAccessLayer {
                 return list.OrderBy(i => i.Account.Name).ToList();
             }
         }
-
+        */
 
         /* ADD UPDATE REMOVE */
 
@@ -219,14 +219,14 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-
+        //
         public static int CountBankAccouns() {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
                 return db.ExecuteScalar<int>("SELECT COUNT(*) FROM BankAccount");
             }
         }
-
+        //
         public static int CountCashAccouns() {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();

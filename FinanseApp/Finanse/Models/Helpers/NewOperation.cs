@@ -2,6 +2,8 @@
 
 namespace Finanse.Models.Helpers {
     internal class NewOperation {
+
+        public static int MaxLength = 12;
         public static string ToCurrencyString(string value) {
             return decimal.Parse(value, Settings.ActualCultureInfo).ToString("C", Settings.ActualCultureInfo);
         }

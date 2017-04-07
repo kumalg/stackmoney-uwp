@@ -1,5 +1,6 @@
 ﻿using Finanse.DataAccessLayer;
 using Finanse.Models.Categories;
+using Finanse.Models.MAccounts;
 using Finanse.Models.MoneyAccounts;
 using SQLite.Net.Attributes;
 
@@ -11,11 +12,11 @@ namespace Finanse.Models.Operations {
         public int Id { get; set; }
         public string Title { get; set; }
         public string MoreInfo { get; set; }
-        public int CategoryId { get; set; }
-        public int SubCategoryId { get; set; }
+        public string CategoryId { get; set; }
+        public string SubCategoryId { get; set; }
         public decimal Cost { get; set; }
         public bool isExpense { get; set; }
-        public int MoneyAccountId { get; set; }
+        public string MoneyAccountId { get; set; }
 
         
         public decimal SignedCost => isExpense ? -Cost : Cost;
@@ -33,22 +34,27 @@ namespace Finanse.Models.Operations {
 
 
 
-        private Account _account;
-        public Account Account => _account ?? ( _account = AccountsDal.GetAccountById(MoneyAccountId) );
+        private MAccount _account;
+        public MAccount Account => _account ?? ( _account = MAccountsDal.GetAccountByGlobalId(MoneyAccountId) );
 
 
         private Category _category;
-        public Category Category => _category ?? ( _category = Dal.GetCategoryById(CategoryId) );
+        public Category Category => _category ?? ( _category = Dal.GetCategoryByGlobalId(CategoryId) );
 
 
+        private bool _subCategoryLoaded;
         private SubCategory _subCategory;
         public SubCategory SubCategory {
             get {
-                if (_subCategory != null)
+                if (_subCategory != null || _subCategoryLoaded)
                     return _subCategory;
-                if (SubCategoryId == 0)
+
+                _subCategoryLoaded = true;
+
+                if (string.IsNullOrEmpty(SubCategoryId))
                     return _subCategory = null;
-                return _subCategory = Dal.GetSubCategoryById(SubCategoryId);
+
+                return _subCategory = Dal.GetSubCategoryByGlobalId(SubCategoryId);
             }
         }
 

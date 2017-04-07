@@ -14,8 +14,8 @@ namespace Finanse.Models.Operations {
 
         private DateTime _monthOfDayGrouping;
         private DateTime _monthOfCategoryGrouping;
-        private HashSet<int> _visiblePayFormListOfDayGrouping = new HashSet<int>();
-        private HashSet<int> _visiblePayFormListOfCategoryGrouping;
+        private HashSet<string> _visiblePayFormListOfDayGrouping = new HashSet<string>();
+        private HashSet<string> _visiblePayFormListOfCategoryGrouping;
         private bool _forceByDayUpdate;
         private bool _forceByCategoryUpdate;
 
@@ -59,11 +59,11 @@ namespace Finanse.Models.Operations {
 
         public string ActualOperationsSum => AllOperations.Sum(i => i.SignedCost).ToString("C", Settings.ActualCultureInfo);
 
-        private HashSet<int> _visiblePayFormList;
-        public HashSet<int> VisiblePayFormList {
+        private HashSet<string> _visiblePayFormList;
+        public HashSet<string> VisiblePayFormList {
             get {
                 return _visiblePayFormList ??
-                       (_visiblePayFormList = new HashSet<int>(AccountsDal.GetAllMoneyAccounts().Select(i => i.Id)));
+                       (_visiblePayFormList = new HashSet<string>(MAccountsDal.GetAllAccountsAndSubAccounts().Select(i => i.GlobalId)));
             }
             set {
                 if (!_visiblePayFormList.Equals(value))
@@ -111,7 +111,7 @@ namespace Finanse.Models.Operations {
 
                 _forceByDayUpdate = false;
                 _monthOfDayGrouping = ActualMonth;
-                _visiblePayFormListOfDayGrouping = new HashSet<int>(_visiblePayFormList);
+                _visiblePayFormListOfDayGrouping = new HashSet<string>(_visiblePayFormList);
 
                 var query = AllOperations.GroupBy(item => item.Date)
                     .OrderByDescending(g => g.Key)
@@ -218,7 +218,7 @@ namespace Finanse.Models.Operations {
 
                 _forceByCategoryUpdate = false;
                 _monthOfCategoryGrouping = ActualMonth;
-                _visiblePayFormListOfCategoryGrouping = new HashSet<int>(_visiblePayFormList);
+                _visiblePayFormListOfCategoryGrouping = new HashSet<string>(_visiblePayFormList);
 
                 var query = AllOperations.GroupBy(item => item.CategoryId)
                     .OrderByDescending(g => g.Key)

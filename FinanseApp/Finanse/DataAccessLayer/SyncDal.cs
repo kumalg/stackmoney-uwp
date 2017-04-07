@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Finanse.Models.Categories;
 using Finanse.Models.Helpers;
+using Finanse.Models.MAccounts;
 using Finanse.Models.MoneyAccounts;
 using Finanse.Models.Operations;
 using SQLite.Net;
@@ -38,13 +39,13 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        private static void InsertSyncAccount(Account account) {
+        private static void InsertSyncAccount(MAccount account) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                db.Insert(account);
+                // db.Insert(account);
             }
         }
-        private static void UpdateSyncAccount(Account account) {
+        private static void UpdateSyncAccount(MAccount account) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 db.Update(account);
@@ -57,6 +58,7 @@ namespace Finanse.DataAccessLayer {
             IEnumerable<OperationPattern> localOperationPatterns, oneDriveOperationPatterns;
             IEnumerable<Category> localCategories, oneDriveCategories;
             IEnumerable<SubCategory> localSubCategories, oneDriveSubCategories;
+            IEnumerable<MAccount> localAccounts, oneDriveAccounts;
             //IEnumerable<BankAccount> localBankAccounts, oneDriveBankAccounts;
             //IEnumerable<CashAccount> localCashAccounts, oneDriveCashAccounts;
             //IEnumerable<CardAccount> localCardAccounts, oneDriveCardAccounts;
@@ -66,6 +68,12 @@ namespace Finanse.DataAccessLayer {
                 localOperationPatterns = db.Table<OperationPattern>().ToList();
                 localCategories = db.Table<Category>().ToList();
                 localSubCategories = db.Table<SubCategory>().ToList();
+
+
+                var localAcc = db.Query<MAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId ISNULL AND IsDeleted = 0");
+                localAcc.AddRange(db.Query<SubMAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId IS NOT NULL AND IsDeleted = 0"));
+
+                localAccounts = localAcc;
                 //localBankAccounts = db.Table<BankAccount>().ToList();
                 //localCashAccounts = db.Table<CashAccount>().ToList();
                 //localCardAccounts = db.Table<CardAccount>().ToList();
@@ -75,6 +83,11 @@ namespace Finanse.DataAccessLayer {
                 oneDriveOperationPatterns = dbOneDrive.Table<OperationPattern>().ToList();
                 oneDriveCategories = dbOneDrive.Table<Category>().ToList();
                 oneDriveSubCategories = dbOneDrive.Table<SubCategory>().ToList();
+
+                var oneDriveAcc = dbOneDrive.Query<MAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId ISNULL AND IsDeleted = 0");
+                oneDriveAcc.AddRange(dbOneDrive.Query<SubMAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId IS NOT NULL AND IsDeleted = 0"));
+
+                oneDriveAccounts = oneDriveAcc;
                 //oneDriveBankAccounts = dbOneDrive.Table<BankAccount>().ToList();
                 //oneDriveCashAccounts = dbOneDrive.Table<CashAccount>().ToList();
                 //oneDriveCardAccounts = dbOneDrive.Table<CardAccount>().ToList();
@@ -85,6 +98,8 @@ namespace Finanse.DataAccessLayer {
 
             UpdateCategories(localCategories, oneDriveCategories);
             UpdateCategories(localSubCategories, oneDriveSubCategories);
+
+            UpdateAccounts(localAccounts, oneDriveAccounts);
         }
 
 
@@ -136,6 +151,31 @@ namespace Finanse.DataAccessLayer {
                     oneDriveCategory.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
 
                 UpdateSyncCategory(oneDriveCategory);
+            }
+        }
+        private static void UpdateAccounts(IEnumerable<MAccount> localAccounts, IEnumerable<MAccount> oneDriveAccounts) {
+            foreach (var oneDriveAccount in oneDriveAccounts) {
+                if (string.IsNullOrEmpty(oneDriveAccount.GlobalId))
+                    continue;
+
+                if (localAccounts != null) {
+                    var localCategory = localAccounts.FirstOrDefault(
+                        item => item.GlobalId == oneDriveAccount.GlobalId);
+
+                    if (localCategory == null) {
+                        InsertSyncAccount(oneDriveAccount);
+                        continue;
+                    }
+
+                    if (localCategory.LastModifed != null &&
+                        DateTimeOffset.Parse(localCategory.LastModifed) >= DateTimeOffset.Parse(oneDriveAccount.LastModifed))
+                        continue;
+                }
+
+                if (oneDriveAccount.LastModifed == null)
+                    oneDriveAccount.LastModifed = DateTimeOffsetHelper.DateTimeOffsetNowString;
+
+                UpdateSyncAccount(oneDriveAccount);
             }
         }
     }

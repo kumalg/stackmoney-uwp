@@ -2,13 +2,14 @@
   {
     "AppVersion": "1.1.5.0",
     "Description": [
-      "synchronizacja operacji i kategorii",
-      "suma pieniędzy na początku i końcu każdego miesiąca",
-      "poprawiony sposób wyświetlania aktualnego salda na stronie Konta",
-      "zabezpieczenie przed usunięciem domyślnej kategorii",
-      "zabezpieczenie przed usunięciem wszystkich kont",
+      "synchronizacja operacji, kategorii, kont",
+      "uproszczenie typów kont do: 'Konto', 'Subkonto'",
+      "poprawki wydajności",
+      "tworzenie kopii zapasowych",
+      "zabezpieczenie przed usunięciem domyślnej kategorii i wszystkich kont",
+      "suma w podsumowaniu na stronie głównej",
+      "poprawiony sposób wyświetlania aktualnego salda na stronie 'Konta'",
       "zmiana motywu jasny/ciemny następuje natychmiast (jednak wciąż z drobnymi kłopotami)",
-      "naprawiony brak możliwości scrollowania kategorii dla trybu kompaktowego",
       "poprawki drobnych błędów"
     ]
   },

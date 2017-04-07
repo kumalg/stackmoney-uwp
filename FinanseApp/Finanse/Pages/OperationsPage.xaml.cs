@@ -17,13 +17,14 @@ using Windows.System.Profile;
 using System.ComponentModel;
 using Finanse.Models.DateTimeExtensions;
 using Finanse.Models.Helpers;
+using Finanse.Models.MAccounts;
 using Finanse.Models.MoneyAccounts;
 using Finanse.Models.Operations;
 
 namespace Finanse.Pages {
     public sealed partial class OperationsPage : INotifyPropertyChanged {
 
-        private readonly HashSet<int> _visibleAccountsSet = new HashSet<int>();
+        private readonly HashSet<string> _visibleAccountsSet = new HashSet<string>();
         private readonly OperationData _storeData = new OperationData();
         private ObservableCollection<GroupInfoList<Operation>> _operationGroups;
         private ObservableCollection<GroupInfoList<Operation>> OperationGroups {
@@ -81,13 +82,13 @@ namespace Finanse.Pages {
             if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile")
                 HardwareButtons.BackPressed += HardwareButtons_BackPressed;
            
-            foreach (var item in AccountsDal.GetAllMoneyAccounts()) {
+            foreach (var item in MAccountsDal.GetAllAccountsAndSubAccounts()) {
                 CheckBox itema = new CheckBox {
                     Content = item.Name,
-                    Tag = item.Id,
+                    Tag = item.GlobalId,
                     IsChecked = true,
                 };
-                _visibleAccountsSet.Add(item.Id);
+                _visibleAccountsSet.Add(item.GlobalId);
                 ((ListView)VisibleAccountsFlyout.Content).Items?.Add(itema);
             }
 
@@ -108,12 +109,12 @@ namespace Finanse.Pages {
         }
 
         private void ReloadOperationsWithNewVisibleAccounts() {
-            HashSet<int> previousAccountsSet = new HashSet<int>(_visibleAccountsSet);
+            HashSet<string> previousAccountsSet = new HashSet<string>(_visibleAccountsSet);
             _visibleAccountsSet.Clear();
 
             foreach (CheckBox item in ((ListView)VisibleAccountsFlyout.Content).Items)
                 if (item.IsChecked == true)
-                    _visibleAccountsSet.Add((int)item.Tag);
+                    _visibleAccountsSet.Add(item.Tag.ToString());
 
             if (previousAccountsSet.SetEquals(_visibleAccountsSet))
                 return;
@@ -122,12 +123,12 @@ namespace Finanse.Pages {
             SetListOfOperations();
         }
 
-        private List<MoneyAccountBalance> _listOfMoneyAccounts;
+        private List<MoneyMAccountBalance> _listOfMoneyAccounts;
 
-        private List<MoneyAccountBalance> ListOfMoneyAccounts {
+        private List<MoneyMAccountBalance> ListOfMoneyAccounts {
             get {
-                _listOfMoneyAccounts = AccountsDal.ListOfMoneyAccountBalances(_storeData.ActualMonth)
-                           .Where(i => _storeData.VisiblePayFormList.Any(ac => ac == i.Account.Id))
+                _listOfMoneyAccounts = MAccountsDal.ListOfMoneyAccountBalances(_storeData.ActualMonth)
+                           .Where(i => _storeData.VisiblePayFormList.Any(ac => ac == i.Account.GlobalId))
                            .ToList();
                 RaisePropertyChanged("InitialSum");
                 RaisePropertyChanged("FinalSum");

@@ -5,12 +5,13 @@ using System.ComponentModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Finanse.Models.MAccounts;
 
 namespace Finanse.Dialogs {
 
     public sealed partial class EditMoneyAccountContentDialog : INotifyPropertyChanged {
-        public Account EditedAccount { get; }
-        private readonly Account _accountToEdit;
+        public MAccount EditedAccount { get; }
+        private readonly MAccount _accountToEdit;
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void RaisePropertyChanged(string propertyName) {
@@ -40,29 +41,29 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private readonly List<BankAccount> _bankAccounts = AccountsDal.GetAllBankAccounts();
+        private readonly IEnumerable<MAccount> _bankAccounts = MAccountsDal.GetAllAccounts();
         
-        private Visibility BankAccountsComboBoxVisibility => _accountToEdit is CardAccount ? Visibility.Visible : Visibility.Collapsed;
+        private Visibility BankAccountsComboBoxVisibility => _accountToEdit is SubMAccount ? Visibility.Visible : Visibility.Collapsed;
 
-        private BankAccount _selectedBankAccount;
+        private MAccount _selectedBankAccount;
 
-        public BankAccount SelectedBankAccount {
+        public MAccount SelectedBankAccount {
             get {
-                if (_selectedBankAccount == null && _bankAccounts.Count > 0)
+                if (_selectedBankAccount == null && _bankAccounts.Any())
                     _selectedBankAccount = _bankAccounts.ElementAt(0);
                 return _selectedBankAccount;
             }
             set {
                 _selectedBankAccount = value;
-                if (EditedAccount is CardAccount)
-                    ((CardAccount)EditedAccount).BankAccountId = _selectedBankAccount.Id;
+                if (EditedAccount is SubMAccount)
+                    ((SubMAccount)EditedAccount).BossAccountGlobalId = _selectedBankAccount.GlobalId;
                 RaisePropertyChanged("PrimaryButtonEnabling");
             }
         }
 
         private bool PrimaryButtonEnabling => !(string.IsNullOrEmpty(NameValue.Text) || EditedAccount.Equals(_accountToEdit));
 
-        public EditMoneyAccountContentDialog(Account accountToEdit) {
+        public EditMoneyAccountContentDialog(MAccount accountToEdit) {
             InitializeComponent();
 
             _accountToEdit = accountToEdit;
@@ -70,12 +71,12 @@ namespace Finanse.Dialogs {
 
             NameValue.Text = EditedAccount.Name;
             SelectedColor = ColorBase.SingleOrDefault(i => i.Key.ToString() == accountToEdit.ColorKey);
-            if (accountToEdit is CardAccount)
-                SelectedBankAccount = _bankAccounts.SingleOrDefault(i => i.Id == ((CardAccount)accountToEdit).BankAccountId);
+            if (accountToEdit is SubMAccount)
+                SelectedBankAccount = _bankAccounts.SingleOrDefault(i => i.GlobalId == ((SubMAccount)accountToEdit).BossAccountGlobalId);
         }
 
         private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-            AccountsDal.UpdateAccount(EditedAccount);
+            MAccountsDal.UpdateAccount(EditedAccount);
         }
         
         private void NameValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {

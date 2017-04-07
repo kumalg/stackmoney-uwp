@@ -102,6 +102,21 @@
                                 Style="{StaticResource ComboBoxStyle1}">
                             </ComboBox>
 
+                            <TextBlock
+                                FontSize="18"
+                                Margin="10,30,0,10"
+                                Text="Kopia zapasowa"
+                                Foreground="{ThemeResource Text}" />
+                            <TextBlock
+                                Margin="10,0,0,10"
+                                Text="Twórz zapasową kopię danych co:"
+                                Foreground="{ThemeResource Text-1}" />
+                            <ComboBox
+                                SelectionChanged="BackupFrequencyComboBox_OnSelectionChanged"
+                                Name="BackupFrequencyComboBox"
+                                Style="{StaticResource ComboBoxStyle1}">
+                            </ComboBox>
+
                             <StackPanel
                                 Visibility="Collapsed">
                                 <TextBlock

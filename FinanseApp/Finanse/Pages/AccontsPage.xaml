@@ -111,14 +111,15 @@
                                             Click="DeleteButton_Click" />
                                     </MenuFlyout>
                                 </FlyoutBase.AttachedFlyout>
-                                <data:MoneyAccountTemplate />
+                                <data:MoneyAccountTemplate 
+                                    DataContext="{Binding MAccount}"/>
                             </ListViewItem>
 
                             <ListView
                                 Margin="0"
                                 IsItemClickEnabled="True"
                                 SelectionMode="None"
-                                ItemsSource="{Binding Cards}">
+                                ItemsSource="{Binding SubMAccounts}">
                                 
                                 <ListView.ItemTemplate>
                                     <DataTemplate>

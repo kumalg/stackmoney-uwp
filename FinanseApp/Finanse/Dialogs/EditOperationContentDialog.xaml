@@ -79,6 +79,7 @@
         <TextBox
             Name="CostValue"
             Style="{StaticResource TextBoxStyle1}"
+            MaxLength="{x:Bind MaxLength, Mode=OneTime}"
             PlaceholderText="Wartość"
             x:Uid="valuePlaceholder"
             InputScope="CurrencyAmount"

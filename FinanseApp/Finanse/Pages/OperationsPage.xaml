@@ -10,6 +10,7 @@
     xmlns:animations="using:Microsoft.Toolkit.Uwp.UI.Animations"
     xmlns:operations="using:Finanse.Models.Operations"
     xmlns:moneyAccounts="using:Finanse.Models.MoneyAccounts"
+    xmlns:mAccounts="using:Finanse.Models.MAccounts"
     NavigationCacheMode="Enabled"
     mc:Ignorable="d">
 
@@ -547,7 +548,7 @@
 
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate
-                                            x:DataType="moneyAccounts:MoneyAccountBalance">
+                                            x:DataType="mAccounts:MoneyMAccountBalance">
                                             <Grid
                                                 HorizontalAlignment="Stretch">
                                                 <Grid.ColumnDefinitions>
@@ -563,7 +564,7 @@
                                                 <Ellipse
                                                     Width="8"
                                                     Height="8"
-                                                    Fill="{Binding Account.SolidColorBrush}" />
+                                                    Fill="{Binding Account.Brush}" />
                                                 <TextBlock
                                                     FontSize="13"
                                                     Foreground="{ThemeResource Text}"

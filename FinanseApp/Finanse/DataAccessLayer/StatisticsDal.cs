@@ -10,7 +10,7 @@ using Finanse.Models.Operations;
 namespace Finanse.DataAccessLayer {
     class StatisticsDal : DalBase {
 
-        public static List<ChartPart> GetExpensesFromCategoryGroupedBySubCategoryInRange(DateTime minDate, DateTime maxDate, int categoryId) {
+        public static List<ChartPart> GetExpensesFromCategoryGroupedBySubCategoryInRange(DateTime minDate, DateTime maxDate, string categoryGlobalId) {
             List<ChartPart> models = new List<ChartPart>();
 
             // Create a new connection
@@ -22,7 +22,7 @@ namespace Finanse.DataAccessLayer {
                             where !String.IsNullOrEmpty(item.Date)
                             && item.isExpense
                             && IsDateInRange(item.Date, minDate, maxDate)
-                            && item.CategoryId == categoryId
+                            && item.CategoryId == categoryGlobalId
                             group item.Cost by item.SubCategoryId into g
                             orderby g.Sum() descending
                             select new {
@@ -31,7 +31,7 @@ namespace Finanse.DataAccessLayer {
                             };
 
                 foreach (var item in query) {
-                    SubCategory subCategory = Dal.GetSubCategoryById(item.SubCategoryId);
+                    SubCategory subCategory = Dal.GetSubCategoryByGlobalId(item.SubCategoryId);
                     if (subCategory != null)
                         models.Add(new ChartPart {
                             SolidColorBrush = subCategory.Brush,
@@ -39,7 +39,7 @@ namespace Finanse.DataAccessLayer {
                             UnrelativeValue = (double)item.Cost
                         });
                     else {
-                        Category category = Dal.GetCategoryById(categoryId);
+                        Category category = Dal.GetCategoryByGlobalId(categoryGlobalId);
                         models.Add(new ChartPart {
                             SolidColorBrush = category.Brush,
                             Name = category.Name,

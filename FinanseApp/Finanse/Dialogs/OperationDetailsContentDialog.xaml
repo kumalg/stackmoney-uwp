@@ -43,7 +43,7 @@
                                     BorderBrush="{ThemeResource SystemControlForegroundAccentBrush}"
                                     MaxWidth="{TemplateBinding MinWidth}"
                                     MaxHeight="{TemplateBinding MaxHeight}"
-                                    MinWidth="{TemplateBinding MinWidth}"
+                                    MinWidth="320"
                                     MinHeight="{TemplateBinding MinHeight}">
 
                                     <Grid

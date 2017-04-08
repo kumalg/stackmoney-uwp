@@ -71,6 +71,9 @@ namespace Finanse.Models {
             
             if (LocalSettings.Values["LastAppVersion"] == null)
                 LocalSettings.Values["LastAppVersion"] = Informations.AppVersion;
+
+            if (LocalSettings.Values["BackupFrequency"] == null)
+                LocalSettings.Values["BackupFrequency"] = 2;
         }
 
         private static void SetFromRoamingToLocal() {

@@ -11,7 +11,8 @@ using Windows.UI.Xaml.Input;
 using Finanse.Models.Helpers;
 
 namespace Finanse.Pages {
-
+    //TODO można zapychać bezsensownie sql przy zamianach z kategorii na podkategorie i w drugą stronę. 
+    //TODO Trzeba sprawdzać, że gdy już w bazie istnieje element z takim GlobalId to tylko ma zaaktualizować
     public sealed partial class CategoriesPage {
         
 

@@ -76,7 +76,7 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private readonly List<Category> Categories = Dal.GetAllCategories();
+        private readonly IEnumerable<Category> Categories = Dal.GetAllCategories();//.Where(i => i.GlobalId != _bossCategoryGlobalId && i.GlobalId != _editedCategoryItem.GlobalId);
 
         public Category NewCategoryItem { get; private set; } = new Category();
 
@@ -119,7 +119,7 @@ namespace Finanse.Dialogs {
             SelectedIcon = IconBase.FirstOrDefault(i => i.Key.Equals(editedCategoryItem.IconKey));
 
             BossCategoryGlobalId = _editedCategoryAlwaysAsSubCategory.BossCategoryId;
-            
+
             NewCategoryItem = new Category(editedCategoryItem);
 
             /// PÓKI CO NIE DZIAŁA
@@ -130,10 +130,13 @@ namespace Finanse.Dialogs {
                 VisibleInExpensesToggleButton.IsEnabled = false;
                 VisibleInIncomesToggleButton.IsEnabled = false;
             }*/
+
+            Categories = Categories.Where(i => i.GlobalId != editedCategoryItem.GlobalId);
         }
 
         public NewCategoryContentDialog(int bossCategoryId) {
             InitializeComponent();
+            
             Title = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("newCategoryString");
             PrimaryButtonText = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("add");
 
@@ -144,6 +147,8 @@ namespace Finanse.Dialogs {
             VisibleInExpensesToggleButton.IsOn = true;
             VisibleInIncomesToggleButton.IsOn = true;
             BossCategoryGlobalId = bossCategory.GlobalId;
+            
+            Categories = Categories.Where(i => i.GlobalId != BossCategoryGlobalId);
         }
 
         public NewCategoryContentDialog() {

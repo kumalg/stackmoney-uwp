@@ -307,6 +307,9 @@ namespace Finanse.DataAccessLayer {
                 //int id = db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'SubCategory'") + 1;
                 subCategory.GlobalId = (GetMaxRowId(typeof(SubCategory)) + 1).NewGlobalIdFromLocal();// id.NewGlobalIdFromLocal();//$"{Informations.DeviceId}_{id}";
                 db.Insert(subCategory);
+
+                //TODO Insert jak nie ma takiego GlobalId, Update jak jest
+                //TODO nie czekaj... no jest kłopot... tak nie mozna 
             }
         }
         

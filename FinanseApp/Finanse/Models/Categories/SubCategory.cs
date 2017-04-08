@@ -7,13 +7,20 @@
             if (category is SubCategory)
                 BossCategoryId = ((SubCategory)category).BossCategoryId;
 
-            ColorKey = category.ColorKey;
-            IconKey = category.IconKey;
             Id = category.Id;
+            IconKey = category.IconKey;
+            ColorKey = category.ColorKey;
             Name = category.Name;
             VisibleInExpenses = category.VisibleInExpenses;
             VisibleInIncomes = category.VisibleInIncomes;
+            GlobalId = category.GlobalId;
+            CantDelete = category.CantDelete;
+            LastModifed = category.LastModifed;
+            IsDeleted = category.IsDeleted;
         }
+
+
+        public new SubCategory Clone() => (SubCategory)MemberwiseClone();
 
         public SubCategory() {
         }

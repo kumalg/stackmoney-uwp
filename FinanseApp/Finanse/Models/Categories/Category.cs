@@ -42,7 +42,13 @@ namespace Finanse.Models.Categories {
             Name = previousCategory.Name;
             VisibleInExpenses = previousCategory.VisibleInExpenses;
             VisibleInIncomes = previousCategory.VisibleInIncomes;
+            GlobalId = previousCategory.GlobalId;
+            CantDelete = previousCategory.CantDelete;
+            LastModifed = previousCategory.LastModifed;
+            IsDeleted = previousCategory.IsDeleted;
         }
+
+        public Category Clone() => (Category)MemberwiseClone();
 
         public override int GetHashCode() {
             return Name.GetHashCode() * Id;

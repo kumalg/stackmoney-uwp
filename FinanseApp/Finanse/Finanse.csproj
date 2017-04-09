@@ -108,6 +108,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BackDrop.cs" />
     <Compile Include="Charts\Data\ChartData.cs" />
     <Compile Include="Charts\Data\ChartDataItem.cs" />
     <Compile Include="Charts\DefaultColors.cs" />

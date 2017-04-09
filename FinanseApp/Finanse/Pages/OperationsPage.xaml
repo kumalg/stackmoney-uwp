@@ -17,7 +17,7 @@
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
-                <EntranceNavigationTransitionInfo />
+                <DrillInNavigationTransitionInfo />
             </NavigationThemeTransition>
         </TransitionCollection>
     </Page.Transitions>
@@ -305,46 +305,58 @@
         </Grid.RowDefinitions>
 
         <Grid
-            Background="{ThemeResource AccentColor}"
             Height="48">
-        
-        <Grid
-            MaxWidth="620">
-   
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition
-                    Width="*" />
-                <ColumnDefinition
-                    Width="Auto" />
-            </Grid.ColumnDefinitions>
+            <Grid.Background>
+                <SolidColorBrush
+                    Color="{ThemeResource SystemBaseHighColor}"
+                    Opacity="0.03" />
+            </Grid.Background>
 
-            <StackPanel
-                Orientation="Horizontal">
-                <Button
-                    x:Name="PrevMonthButton"
-                    BorderThickness="0"
-                    Width="32"
-                    Height="32"
-                    Margin="8,0,0,0"
-                    Foreground="{ThemeResource AccentText}"
-                    Click="PreviousMonthButton_Click"
-                    Background="Transparent">
-                    <FontIcon
-                        FontSize="16"
-                        Glyph=""
-                        FontFamily="{StaticResource FontAwesome}" />
-                </Button>
+            <Grid
+                MaxWidth="620">
 
-                <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel
+                    Orientation="Horizontal">
                     <Button
+                        x:Name="PrevMonthButton"
                         BorderThickness="0"
-                        Background="Transparent"
+                        Width="32"
+                        Height="32"
+                        Margin="8,0,0,0"
+                        Click="PreviousMonthButton_Click"
+                        Background="Transparent">
+                        <Button.Foreground>
+                            <SolidColorBrush
+                                Color="{ThemeResource SystemBaseHighColor}"
+                                Opacity="0.75"/>
+                        </Button.Foreground>
+                        <FontIcon
+                            FontSize="16"
+                            Glyph=""
+                            FontFamily="{StaticResource FontAwesome}" />
+                    </Button>
+
+                    <Grid>
+                        <Button
+                            BorderThickness="0"
+                            Background="Transparent"
                         Width="32"
                         Height="32"
                         x:Name="IncomingOperationsButton"
-                        Foreground="{ThemeResource AccentText}"
                         Click="IncomingOperationsButton_Click">
-                        <FontIcon
+                            <Button.Foreground>
+                                <SolidColorBrush
+                                    Color="{ThemeResource SystemBaseHighColor}"
+                                    Opacity="0.75" />
+                            </Button.Foreground>
+                            <FontIcon
                             FontSize="16"
                             Glyph=""
                             FontFamily="{StaticResource FontAwesome}" />
@@ -356,9 +368,13 @@
                         Background="Transparent"
                         Width="32"
                         x:Name="NextMonthButton"
-                        Foreground="{ThemeResource AccentText}"
-                        Click="NextMonthButton_Click">
-                        <FontIcon
+                            Click="NextMonthButton_Click">
+                            <Button.Foreground>
+                                <SolidColorBrush
+                                    Color="{ThemeResource SystemBaseHighColor}"
+                                    Opacity="0.75" />
+                            </Button.Foreground>
+                            <FontIcon
                             FontSize="16"
                             Glyph=""
                             FontFamily="{StaticResource FontAwesome}" />
@@ -369,11 +385,6 @@
                         Margin="0"
                         Background="Transparent"
                         BorderThickness="0"
-                        Content="{x:Bind _storeData.ActualMonthText, Mode=OneWay}"
-                        FontFamily="{StaticResource DefaultFontFamily}"
-                        FontWeight="Bold"
-                        FontSize="14"
-                        Foreground="{ThemeResource AccentText}"
                         Padding="8">
                         <Button.Flyout>
                             <Flyout
@@ -393,14 +404,13 @@
                                     Text="Tu będzie można zmienic miesiąc kiedyś" />
                             </Flyout>
                         </Button.Flyout>
-                        <!--
+                        
                         <TextBlock
-                            Name="targetBlock"
-                            Text="{x:Bind storeData.ActualMonthText, Mode=OneWay}"
+                            Text="{x:Bind _storeData.ActualMonthText, Mode=OneWay}"
                             HorizontalAlignment="Center"
                             Margin="0"
                             Style="{StaticResource PageTitleStyle}">
-                        </TextBlock>-->
+                        </TextBlock>
                     </Button>
 
                 </StackPanel>
@@ -413,7 +423,8 @@
                     <TextBlock
                         VerticalAlignment="Center"
                         Text="{x:Bind _storeData.ActualOperationsSum, Mode=OneWay}"
-                        Foreground="{ThemeResource AccentText}"
+                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                        Opacity="0.75"
                         FontFamily="{StaticResource DefaultFontFamily}"
                         FontWeight="Bold"
                         FontSize="13" />
@@ -426,7 +437,7 @@
                         VerticalAlignment="Center">
                         <Button.Content>
                             <FontIcon
-                                Foreground="{ThemeResource AccentText}"
+                                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
                                 Opacity="0.75"
                                 FontSize="13"
                                 FontFamily="{StaticResource FontAwesome}"

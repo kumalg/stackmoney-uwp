@@ -11,7 +11,7 @@
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
-                <EntranceNavigationTransitionInfo />
+                <DrillInNavigationTransitionInfo />
             </NavigationThemeTransition>
         </TransitionCollection>
     </Page.Transitions>
@@ -31,8 +31,13 @@
         </Grid.RowDefinitions>
 
         <Grid
-            Background="{ThemeResource AccentColor}"
             MinHeight="48">
+            <Grid.Background>
+                <SolidColorBrush
+                    Color="{ThemeResource SystemBaseHighColor}"
+                    Opacity="0.03" />
+            </Grid.Background>
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
                     Width="Auto" />
@@ -87,11 +92,8 @@
                             Tag="Wydatek"
                             x:Uid="expenseTag"
                             Checked="ExpenseOrIncomeRadioButton_Checked"
+                            Content="{Binding Source={StaticResource ExpenseIcon}, Path=Text}"
                             Style="{StaticResource RadioButtonWithIconStyle}">
-                            <PathIcon
-                                Width="32"
-                                Height="32"
-                                Data="{Binding Source={StaticResource ExpenseIcon}, Path=Text}" />
                         </RadioButton>
 
                         <RadioButton
@@ -101,11 +103,8 @@
                             Tag="Wpływ"
                             x:Uid="incomeTag"
                             Checked="ExpenseOrIncomeRadioButton_Checked"
+                            Content="{Binding Source={StaticResource IncomeIcon}, Path=Text}"
                             Style="{StaticResource RadioButtonWithIconStyle}">
-                            <PathIcon
-                                Width="32"
-                                Height="32"
-                                Data="{Binding Source={StaticResource IncomeIcon}, Path=Text}"/>
                         </RadioButton>
 
                         <RadioButton
@@ -115,11 +114,8 @@
                             Tag="Transfer"
                             x:Uid="transferTag"
                             Checked="TransferRadioButton_Checked"
+                            Content="{Binding Source={StaticResource TransferIcon}, Path=Text}"
                             Style="{StaticResource RadioButtonWithIconStyle}">
-                            <PathIcon
-                                Width="32"
-                                Height="32"
-                                Data="{Binding Source={StaticResource TransferIcon}, Path=Text}" />
                         </RadioButton>
                     </Grid>
 

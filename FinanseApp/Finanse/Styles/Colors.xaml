@@ -53,13 +53,15 @@
             
             <SolidColorBrush x:Key="Background+2" Color="#282e39" />
             <SolidColorBrush x:Key="Background+1" Color="#242830" />
-            <SolidColorBrush x:Key="Background" Color="#202329" />
+            <SolidColorBrush x:Key="Background" Color="#242424" />
             <SolidColorBrush x:Key="Background-1" Color="#1b1d21" />
             <SolidColorBrush x:Key="Background-2" Color="#17181b" />
             
             <SolidColorBrush x:Key="Background+1Transparent" Color="#242830" Opacity="0.8" />
             <SolidColorBrush x:Key="BackgroundTransparent" Color="#202329" Opacity="0.8" />
             <SolidColorBrush x:Key="Background-1Transparent" Color="#1b1d21" Opacity="0.9" />
+            
+            <SolidColorBrush x:Key="NeonBackground" Color="#1f1f1f" />
 
             <SolidColorBrush x:Key="Text+max" Color="White" />
             <SolidColorBrush x:Key="Text" Color="#b9c4da" />
@@ -85,6 +87,8 @@
             <SolidColorBrush x:Key="Background+1Transparent" Color="#e0e5ee" Opacity="0.8" />
             <SolidColorBrush x:Key="BackgroundTransparent" Color="#eaeef6" Opacity="0.8" />
             <SolidColorBrush x:Key="Background-1Transparent" Color="#e0e5ee" Opacity="0.9" />
+
+            <SolidColorBrush x:Key="NeonBackground" Color="White" />
 
             <SolidColorBrush x:Key="Text+max" Color="Black" />
             <SolidColorBrush x:Key="Text" Color="#455471" />

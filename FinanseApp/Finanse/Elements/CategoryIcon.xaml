@@ -15,9 +15,9 @@
         Height="{Binding Width}">
 
         <Ellipse
-            Opacity="0.15"
+            Opacity="0.05"
             StrokeThickness="2"
-            Stroke="{ThemeResource Text-2}" />
+            Stroke="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
         <!--
         <Path
             Opacity="0.15"

@@ -5,10 +5,40 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:Finanse.Models"
+    xmlns:finanse="using:Finanse"
     mc:Ignorable="d"
     FontFamily="{StaticResource DefaultFontFamily}"
     SizeChanged="MainPage_SizeChanged">
     <Page.Resources>
+
+        <Storyboard
+            x:Name="ClosePane">
+            <DoubleAnimation
+                Duration="0:0:0.5"
+                To="96"
+                EnableDependentAnimation="True"
+                Storyboard.TargetProperty="Width"
+                Storyboard.TargetName="Pane" >
+                <DoubleAnimation.EasingFunction>
+                    <QuarticEase />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
+        <Storyboard
+            x:Name="OpenPane">
+            <DoubleAnimation
+                Duration="0:0:0.5"
+                To="320"
+                EnableDependentAnimation="True"
+                Storyboard.TargetProperty="Width"
+                Storyboard.TargetName="Pane">
+                <DoubleAnimation.EasingFunction>
+                    <QuarticEase />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
         <Style
             x:Name="MyAppBarButton"
             TargetType="AppBarButton">
@@ -150,76 +180,6 @@
             </Setter>
         </Style>
 
-        <Style
-            x:Key="HamburgerButtonStyle"
-            TargetType="Button">
-            <Setter
-                Property="Template">
-                <Setter.Value>
-                    <ControlTemplate
-                        TargetType="Button">
-                        <Grid
-                            x:Name="RootGrid"
-                            Background="{TemplateBinding Background}">
-
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup
-                                    x:Name="CommonStates">
-                                    <VisualState
-                                        x:Name="Normal">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Opacity"
-                                                Storyboard.TargetName="ContentPresenter">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="0.6" />
-                                            </ObjectAnimationUsingKeyFrames>
-
-                                            <PointerUpThemeAnimation
-                                                Storyboard.TargetName="RootGrid" />
-
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState
-                                        x:Name="PointerOver">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Opacity"
-                                                Storyboard.TargetName="ContentPresenter">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="0.8" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <PointerUpThemeAnimation
-                                                Storyboard.TargetName="RootGrid" />
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState
-                                        x:Name="Pressed">
-                                       </VisualState>
-                                    <VisualState
-                                        x:Name="Disabled">
-                                        </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-
-                            <ContentPresenter
-                                x:Name="ContentPresenter"
-                                AutomationProperties.AccessibilityView="Raw"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                                ContentTransitions="{TemplateBinding ContentTransitions}"
-                                Content="{TemplateBinding Content}"
-                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                Padding="{TemplateBinding Padding}"
-                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Page.Resources>
 
     <Grid
@@ -281,7 +241,7 @@
         <Grid.RowDefinitions>
             <RowDefinition
                 x:Name="TitleBarRowDefinition"
-                Height="Auto"/>
+                Height="31"/>
             <RowDefinition
                 Height="48" />
             <RowDefinition
@@ -308,8 +268,11 @@
         
         <Grid
             Grid.Column="1"
-            Background="{ThemeResource AccentColor}" />
+            Opacity="0.03"
+            Background="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
+<!--
         <Grid
+            Opacity="0.03"
             Grid.Row="1"
             Grid.Column="1">
             <Grid.Background>
@@ -317,15 +280,15 @@
                     EndPoint="0.5,1"
                     StartPoint="0.5,0">
                     <GradientStop
-                        Color="#078b3e"
+                        Color="{ThemeResource SystemBaseHighColor}"
                         Offset="0" />
                     <GradientStop
-                        Color="#00078b3e"
+                        Color="Transparent"
                         Offset="1" />
                 </LinearGradientBrush>
             </Grid.Background>
         </Grid>
-
+-->
         <Grid
             Grid.Column="2"
             Grid.RowSpan="2"
@@ -457,34 +420,77 @@
             Visibility="Collapsed"
             Name="Pane"
             Width="320"
-            Grid.Row="1"
-            Grid.RowSpan="3"
-            Background="{ThemeResource Background-1}">
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Background="{ThemeResource NeonBackground}">
 
             <Grid.RowDefinitions>
                 <RowDefinition
-                    Height="48" />
+                    Height="79" />
                 <RowDefinition
                     Height="*" />
                 <RowDefinition
                     Height="Auto" />
             </Grid.RowDefinitions>
-            
-            <RadioButton
-                Name="AddNewOperation_ListBoxItem"
-                Checked="AddNewOperationAppBarRadioButton_Checked"
-                GroupName="HamburgerRadioButtons"
-                Style="{StaticResource HamburgerGreenRadioButton}"
-                FontFamily="Segoe MDL2 Assets"
-                Background="{ThemeResource AccentColor-1}"
-                Tag="">
-                <TextBlock Text="Dodaj operację" x:Uid="addNewOperation14" />
-            </RadioButton>
+
+            <finanse:BackDrop
+                Grid.RowSpan="3"/>
+
+            <StackPanel
+                Grid.RowSpan="3"
+                Opacity="0.85"
+                Background="{ThemeResource NeonBackground}" />
+
+            <Grid>
+                <Grid.Background>
+                    <SolidColorBrush
+                        Color="{ThemeResource SystemBaseHighColor}"
+                        Opacity="0.03" />
+                </Grid.Background>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="96"/>
+                    <ColumnDefinition Width="128"/>
+                    <ColumnDefinition Width="96"/>
+                </Grid.ColumnDefinitions>
+                <Button
+                    Style="{StaticResource HamburgerButtonStyle}"
+                    Click="HamburgerButton_Click"
+                    Content="">
+                </Button>
+                <TextBlock
+                    Grid.Column="1"
+                    Text="{x:Bind DisplayName, Mode=OneTime}"
+                    Opacity="0.75"
+                    FontSize="13"
+                    FontWeight="Bold"
+                    FontFamily="Segoe UI"
+                    VerticalAlignment="Center"
+                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
+                <Button
+                    Style="{StaticResource HamburgerButtonStyle}"
+                    Grid.Column="2"
+                    Name="BackButton"
+                    Click="BackButton_Click"
+                    Content="">
+                </Button>
+            </Grid>
 
             <ScrollViewer
                 Grid.Row="1"
                 VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="0,16,0,0">
+
+                    <RadioButton
+                        Name="AddNewOperation_ListBoxItem"
+                        Checked="AddNewOperationAppBarRadioButton_Checked"
+                        GroupName="HamburgerRadioButtons"
+                        Style="{StaticResource HamburgerRadioButton}"
+                        FontFamily="{StaticResource FontAwesome}"
+                        Tag="">
+                        <TextBlock
+                            Text="Dodaj operację"
+                            x:Uid="addNewOperation14" />
+                    </RadioButton>
 
                     <RadioButton
                         Name="Strona_glowna_ListBoxItem"
@@ -581,6 +587,7 @@
             Grid.ColumnSpan="2"
             Height="32"
             Name="TitleBar">
+            <!--
             <TextBlock
                 Text="{x:Bind DisplayName, Mode=OneTime}"
                 Opacity="0.75"
@@ -588,7 +595,7 @@
                 FontWeight="Medium"
                 FontFamily="Segoe UI"
                 VerticalAlignment="Center"
-                Foreground="White" />
+                Foreground="White" />-->
         </Grid>
     </Grid>
 </Page>

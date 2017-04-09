@@ -1184,7 +1184,7 @@
             Value="{ThemeResource TextControlThemeMinHeight}" />
         <Setter
             Property="Foreground"
-            Value="{ThemeResource Text}" />
+            Value="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
         <Setter
             Property="Background"
             Value="Transparent" />
@@ -1392,13 +1392,14 @@
                                                 KeyTime="0"
                                                 Value="{ThemeResource AccentColor}" />
                                         </ObjectAnimationUsingKeyFrames>
+                                        <!--
                                         <ObjectAnimationUsingKeyFrames
                                             Storyboard.TargetProperty="RequestedTheme"
                                             Storyboard.TargetName="ContentElement">
                                             <DiscreteObjectKeyFrame
                                                 KeyTime="0"
                                                 Value="Dark" />
-                                        </ObjectAnimationUsingKeyFrames>
+                                        </ObjectAnimationUsingKeyFrames>-->
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
@@ -1444,7 +1445,8 @@
                             Grid.ColumnSpan="2"
                             ContentTemplate="{TemplateBinding HeaderTemplate}"
                             Content="{TemplateBinding Header}"
-                            Foreground="{ThemeResource Text}"
+                            Foreground="{TemplateBinding Foreground}"
+                            Opacity="0.75"
                             FontWeight="Normal"
                             Margin="0,0,0,8"
                             Grid.Row="0"
@@ -1469,7 +1471,8 @@
                             x:Name="PlaceholderTextContentPresenter"
                             Grid.ColumnSpan="2"
                             Content="{TemplateBinding PlaceholderText}"
-                            Foreground="{ThemeResource Text-1}"
+                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                            Opacity="0.4"
                             IsHitTestVisible="False"
                             IsTabStop="False"
                             Margin="{TemplateBinding BorderThickness}"

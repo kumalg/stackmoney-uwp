@@ -11,7 +11,7 @@
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
-                <EntranceNavigationTransitionInfo />
+                <DrillInNavigationTransitionInfo />
             </NavigationThemeTransition>
         </TransitionCollection>
     </Page.Transitions>
@@ -25,8 +25,12 @@
         </Grid.RowDefinitions>
 
         <Grid
-            Background="{ThemeResource AccentColor}"
             MinHeight="48">
+            <Grid.Background>
+                <SolidColorBrush
+                    Color="{ThemeResource SystemBaseHighColor}"
+                    Opacity="0.03" />
+            </Grid.Background>
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition

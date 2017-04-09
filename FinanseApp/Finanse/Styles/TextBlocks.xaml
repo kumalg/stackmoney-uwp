@@ -12,11 +12,12 @@
     <Style TargetType="TextBlock" x:Key="PageTitleStyle">
         <Setter Property="Grid.Column" Value="1"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Foreground" Value="{ThemeResource AccentText}"/>
+        <Setter Property="Foreground" Value="{ThemeResource SystemControlBackgroundBaseHighBrush}"/>
+        <Setter Property="Opacity" Value="0.75" />
         <!--<Setter Property="Margin" Value="16,0,0,0"/>-->
         <Setter Property="FontFamily" Value="{StaticResource DefaultFontFamily}"/>
         <Setter Property="Margin" Value="16,0"/>
-        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="FontSize" Value="14"/>
     </Style>
     

@@ -19,6 +19,7 @@ namespace Finanse {
             this.Suspending += OnSuspending;
 
             Settings.SetSettings();
+
             this.RequestedTheme = Settings.Theme;
          //   OneDriveMethods();
         }

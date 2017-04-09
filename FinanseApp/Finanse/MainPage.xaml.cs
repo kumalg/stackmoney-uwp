@@ -17,6 +17,7 @@ using Windows.Storage;
 using Windows.UI.Composition;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Finanse.Models;
 using Finanse.Models.DateTimeExtensions;
 using Finanse.Models.Helpers;
@@ -96,9 +97,17 @@ namespace Finanse {
             if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile")
                 HardwareButtons.BackPressed += HardwareButtons_BackPressed;
             SystemNavigationManager.GetForCurrentView().BackRequested += BackRequestedEvent;
+            //BackButton.Click += BackRequest;
             base.OnNavigatedTo(e);
         }
-      
+
+        private void BackRequest(object sender, RoutedEventArgs e) {
+            if (AktualnaStrona_Frame.CurrentSourcePageType == typeof(OperationsPage))
+                return;
+            AktualnaStrona_Frame.Navigate(typeof(OperationsPage));
+        }
+
+
         private void OperationsAppBarRadioButton_Click(object sender, RoutedEventArgs e) {
 
         }
@@ -234,7 +243,9 @@ namespace Finanse {
         
         private void AktualnaStrona_Frame_Navigated(object sender, NavigationEventArgs e) {
             if (((Frame)sender).SourcePageType == typeof(OperationsPage)) {
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+                //SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+                BackButton.Visibility = Visibility.Collapsed;
+
                 TitleBar.Margin = new Thickness(16, 0, 0, 0);
                 if (OperationsAppBarRadioButton != null)
                     OperationsAppBarRadioButton.IsChecked = true;
@@ -242,7 +253,9 @@ namespace Finanse {
                     Strona_glowna_ListBoxItem.IsChecked = true;
             }
             else if (( (Frame)sender ).SourcePageType == typeof(NewOperationPage)) {
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+                //SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+                BackButton.Visibility = Visibility.Visible;
+
                 TitleBar.Margin = new Thickness(64, 0, 0, 0);
                 if (AddNewOperationAppBarRadioButton != null)
                     AddNewOperationAppBarRadioButton.IsChecked = true;
@@ -250,11 +263,27 @@ namespace Finanse {
                     AddNewOperation_ListBoxItem.IsChecked = true;
             }
             else {
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+                //SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+                BackButton.Visibility = Visibility.Visible;
+
                 TitleBar.Margin = new Thickness(64, 0, 0, 0);
             }
         }
 
         private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e) => StatusBarMethods.WhichOrientation();
+
+        private void HamburgerButton_Click(object sender, RoutedEventArgs e) {
+            Storyboard sb = (int) Pane.Width == 320
+                ? this.Resources["ClosePane"] as Storyboard
+                : this.Resources["OpenPane"] as Storyboard;
+
+            sb?.Begin();
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e) {
+            if (AktualnaStrona_Frame.CurrentSourcePageType == typeof(OperationsPage))
+                return;
+            AktualnaStrona_Frame.Navigate(typeof(OperationsPage));
+        }
     }
 }

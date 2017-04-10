@@ -2,21 +2,48 @@
 using Finanse.Dialogs;
 using Finanse.Models;
 using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using Windows.ApplicationModel.Core;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 using Finanse.Models.Helpers;
 using Finanse.Models.WhatsNew;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 
 namespace Finanse.Pages {
 
-    public sealed partial class SettingsPage {
+    public sealed partial class SettingsPage : INotifyPropertyChanged {
 
         public string AppVersion = Informations.AppVersion;
         public string DisplayName = Informations.DisplayName;
         public string PublisherDisplayName = Informations.PublisherDisplayName;
+
+        public string LastBackup { get; set; } = string.Empty;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void RaisePropertyChanged(string propertyName) {
+            var handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private async void SetLastBackupString() {
+            var date = await BackupHelper.LastBackup();
+            LastBackup = date == DateTime.MinValue
+                ? "Brak"
+                : date.ToLocalTime().ToString();
+            RaisePropertyChanged("LastBackup");
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
+            SetLastBackupString();
+            base.OnNavigatedTo(e);
+        }
 
         public SettingsPage() {
 
@@ -104,6 +131,8 @@ namespace Finanse.Pages {
 
             if (Frame != null)
                 ( (ThemeAwareFrame)Frame ).AppTheme = ElementTheme.Dark;
+
+            ApplicationView.GetForCurrentView().TitleBar.ButtonForegroundColor = Colors.White;
         }
 
         private void LightThemeRadioButton_Checked(object sender, RoutedEventArgs e) {
@@ -111,6 +140,8 @@ namespace Finanse.Pages {
 
             if (Frame != null)
                 ( (ThemeAwareFrame)Frame ).AppTheme = ElementTheme.Light;
+            
+            ApplicationView.GetForCurrentView().TitleBar.ButtonForegroundColor = Colors.Black;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {

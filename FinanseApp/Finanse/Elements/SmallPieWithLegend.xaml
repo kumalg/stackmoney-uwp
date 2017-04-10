@@ -48,7 +48,8 @@
                 FontSize="16"
                 HorizontalAlignment="Center"
                 FontFamily="{StaticResource DefaultFontFamily}"
-                Foreground="{ThemeResource Text}"
+                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                Opacity="0.5"
                 Text="{Binding Category.Name}" />
 
             <TextBlock
@@ -64,7 +65,8 @@
                     Glyph="{Binding Category.Icon.Glyph}"
                     FontFamily="{StaticResource FontAwesome}"
                     FontSize="32"
-                    Foreground="{ThemeResource Text-2}" />
+                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                    Opacity="0.25" />
 
                 <Charts:DoughnutChart
                     Thickness="16"

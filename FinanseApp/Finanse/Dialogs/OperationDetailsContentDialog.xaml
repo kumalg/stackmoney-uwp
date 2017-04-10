@@ -8,13 +8,12 @@
     xmlns:data="using:Finanse.Elements"
     mc:Ignorable="d"
     FontFamily="{StaticResource DefaultFontFamily}"
-    Background="{ThemeResource BackgroundTransparent}"
     Title="Szczegóły operacji"
     PrimaryButtonText="Edytuj"
     SecondaryButtonText="Usuń"
     FullSizeDesired="False"
     x:Uid="operationDetailsContentDialog">
-
+    
     <ContentDialog.Style>
         <Style
             TargetType="ContentDialog">
@@ -37,7 +36,6 @@
                                 </Grid.ColumnDefinitions>
                                 <Border
                                     x:Name="BackgroundElement"
-                                    Background="{TemplateBinding Background}"
                                     FlowDirection="{TemplateBinding FlowDirection}"
                                     BorderThickness="0"
                                     BorderBrush="{ThemeResource SystemControlForegroundAccentBrush}"
@@ -45,6 +43,12 @@
                                     MaxHeight="{TemplateBinding MaxHeight}"
                                     MinWidth="320"
                                     MinHeight="{TemplateBinding MinHeight}">
+
+                                    <Border.Background>
+                                        <SolidColorBrush
+                                            Color="{Binding Source={ThemeResource Background}, Path=Color}"
+                                            Opacity="0.75"/>
+                                    </Border.Background>
 
                                     <Grid
                                         x:Name="DialogSpace"
@@ -84,7 +88,8 @@
                                                         FontSize="15"
                                                         FontFamily="{StaticResource DefaultFontFamily}"
                                                         FontWeight="SemiBold"
-                                                        Foreground="{ThemeResource AccentText}"
+                                                        Foreground="White"
+                                                        Opacity="0.85"
                                                         HorizontalAlignment="Left"
                                                         VerticalAlignment="Center"
                                                         IsTabStop="False"
@@ -106,6 +111,7 @@
                                                     </ContentControl>
                                                     <Button
                                                         Style="{StaticResource ButtonStyle1}"
+                                                        Foreground="White"
                                                         ToolTipService.ToolTip="Wyjdź"
                                                         Grid.Column="2"
                                                         Width="48"
@@ -178,7 +184,8 @@
 
         <TextBlock
             Name="NameValue"
-            Foreground="{ThemeResource Text}"
+            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+            Opacity="0.75"
             FontFamily="{StaticResource DefaultFontFamily}"
             FontWeight="SemiLight"
             TextWrapping="Wrap"
@@ -190,7 +197,8 @@
         <Border
             Margin="0,10"
             BorderThickness="0,0,0,1"
-            BorderBrush="{ThemeResource Background+1}" />
+            BorderBrush="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+            Opacity="0.1"/>
 
         <StackPanel
             Name="CategoryValuePanel"
@@ -208,7 +216,9 @@
                 Name="CategoryValue"
                 VerticalAlignment="Center"
                 FontFamily="{StaticResource DefaultFontFamily}"
-                Foreground="{ThemeResource Text}" />
+                FontWeight="SemiBold"
+                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                Opacity="0.5"/>
             <StackPanel
                 VerticalAlignment="Center"
                 Name="SubCategoryValuePanel"
@@ -220,12 +230,14 @@
                     FontFamily="Segoe MDL2 Assets"
                     Text=""
                     FontSize="8"
-                    Foreground="{ThemeResource Text-1}" />
+                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                    Opacity="0.5"/>
                 <TextBlock
                     FontFamily="{StaticResource DefaultFontFamily}"
                     Text="Lidl"
                     Name="SubCategoryValue"
-                    Foreground="{ThemeResource Text}" />
+                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                    Opacity="0.5" />
             </StackPanel>
         </StackPanel>
 
@@ -244,7 +256,8 @@
                 Name="DateValue"
                 VerticalAlignment="Center"
                 FontFamily="{StaticResource DefaultFontFamily}"
-                Foreground="{ThemeResource Text}"
+                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                Opacity="0.5"
                 Text="2016.08.10" />
         </StackPanel>
 
@@ -262,7 +275,8 @@
             <TextBlock
                 Name="PayForm"
                 VerticalAlignment="Center"
-                Foreground="{ThemeResource Text}"
+                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                Opacity="0.5"
                 FontFamily="{StaticResource DefaultFontFamily}"
                 Text="Gotówka"/>
         </StackPanel>
@@ -272,7 +286,8 @@
             <Border
                 Margin="0,10"
                 BorderThickness="0,0,0,1"
-                BorderBrush="{ThemeResource Background+1}" />
+                BorderBrush="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                Opacity="0.1" />
             <Grid
                 Margin="0,10"
                 VerticalAlignment="Stretch">

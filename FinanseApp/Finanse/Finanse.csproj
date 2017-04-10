@@ -193,6 +193,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Categories\CategoryWithSubCategories.cs" />
+    <Compile Include="Models\Helpers\Class1.cs" />
     <Compile Include="Models\Helpers\DateTimeHelper.cs" />
     <Compile Include="Models\Helpers\Flyouts.cs" />
     <Compile Include="Models\Helpers\Functions.cs" />

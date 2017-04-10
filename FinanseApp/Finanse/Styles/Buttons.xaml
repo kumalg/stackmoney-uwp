@@ -336,7 +336,8 @@
                         </VisualStateManager.VisualStateGroups>
                         <FontIcon
                             x:Name="ContentPresenter"
-                            Foreground="{ThemeResource AccentText}"
+                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                            Opacity="0.75"
                             FontSize="13"
                             FontFamily="Segoe MDL2 Assets"
                             Glyph="{TemplateBinding Content}" />

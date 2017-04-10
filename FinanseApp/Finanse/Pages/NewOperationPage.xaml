@@ -170,7 +170,8 @@
                             Grid.Row="0"
                             Margin="10,0,20,0"
                             VerticalAlignment="Center"
-                            Foreground="{ThemeResource Text-1}"
+                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                            Opacity="0.4"
                             Text="Od" />
                         <ComboBox
                             Grid.Column="1"
@@ -188,7 +189,8 @@
                             Grid.Row="1"
                             Margin="10,0,20,0"
                             VerticalAlignment="Center"
-                            Foreground="{ThemeResource Text-1}"
+                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                            Opacity="0.4"
                             Text="Do" />
                         <ComboBox
                             Grid.Column="1"
@@ -333,7 +335,8 @@
                         x:Name="SaveAsPattern_StackPanel"
                         Visibility="Collapsed">
                         <TextBlock
-                            Foreground="{ThemeResource Text-1}"
+                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                            Opacity="0.5"
                             Text="Zapisz jako szablon"
                             x:Uid="saveAsPattern"
                             Margin="10,0" />
@@ -361,7 +364,8 @@
                     <StackPanel
                         Margin="48,8,0,0">
                         <TextBlock
-                            Foreground="{ThemeResource Text-1}"
+                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                            Opacity="0.5"
                             Text="Ukryj w statystykach"
                             x:Uid="hideInStatistics"
                             Margin="10,0" />

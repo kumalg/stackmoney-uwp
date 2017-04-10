@@ -67,12 +67,16 @@ namespace Finanse {
 
         private void SetTitleBar() {
             CoreApplication.GetCurrentView().TitleBar.IsVisibleChanged += TitleBar_IsVisibleChanged;
-
+            
             ApplicationViewTitleBar formattableTitleBar = ApplicationView.GetForCurrentView().TitleBar;
             formattableTitleBar.ButtonBackgroundColor = Colors.Transparent;
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
             formattableTitleBar.ButtonHoverBackgroundColor = Functions.GetSolidColorBrush("#19000000").Color;
+
+            formattableTitleBar.ButtonForegroundColor = Settings.Theme == ApplicationTheme.Dark
+                ? Colors.White
+                : Colors.Black;
         }
         private void TitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args) {
             TitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
@@ -244,7 +248,8 @@ namespace Finanse {
         private void AktualnaStrona_Frame_Navigated(object sender, NavigationEventArgs e) {
             if (((Frame)sender).SourcePageType == typeof(OperationsPage)) {
                 //SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
-                BackButton.Visibility = Visibility.Collapsed;
+                if (BackButton != null)
+                    BackButton.Visibility = Visibility.Collapsed;
 
                 TitleBar.Margin = new Thickness(16, 0, 0, 0);
                 if (OperationsAppBarRadioButton != null)
@@ -254,7 +259,8 @@ namespace Finanse {
             }
             else if (( (Frame)sender ).SourcePageType == typeof(NewOperationPage)) {
                 //SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-                BackButton.Visibility = Visibility.Visible;
+                if (BackButton != null)
+                    BackButton.Visibility = Visibility.Visible;
 
                 TitleBar.Margin = new Thickness(64, 0, 0, 0);
                 if (AddNewOperationAppBarRadioButton != null)
@@ -264,7 +270,8 @@ namespace Finanse {
             }
             else {
                 //SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-                BackButton.Visibility = Visibility.Visible;
+                if (BackButton != null)
+                    BackButton.Visibility = Visibility.Visible;
 
                 TitleBar.Margin = new Thickness(64, 0, 0, 0);
             }

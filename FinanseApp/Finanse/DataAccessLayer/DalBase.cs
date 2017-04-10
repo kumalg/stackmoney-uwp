@@ -92,8 +92,8 @@ namespace Finanse.DataAccessLayer {
 
         public static async void CreateBackup() {
             using (var db = DbConnection) {
-                DateTime now = DateTime.UtcNow.AddDays(1 - Settings.BackupFrequency);
-                var yco = await ListOfBackupDates();
+                DateTime now = DateTime.UtcNow.AddDays( - Settings.BackupFrequency);
+                var yco = await BackupHelper.ListOfBackupDates();//ListOfBackupDates();
                 if (yco == null || !yco.Any(i => DateTime.ParseExact(i, "yyyy-MM-dd_HH-mm-ss", null) > now))
                     await db.BackupDatabase(new SQLitePlatformWinRT(), "Backup");
             }

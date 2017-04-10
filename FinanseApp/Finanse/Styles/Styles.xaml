@@ -513,7 +513,7 @@
                                     HoverBorderBrush="#66E5E5E5"
                                     OutOfScopeForeground="#4FFFFFFF"
                                     OutOfScopeBackground="Transparent"
-                                    TodayForeground="{ThemeResource AccentText}"
+                                    TodayForeground="{ThemeResource Text}"
                                     FontWeight="Normal"
                                     FontSize="10"
                                     DayItemFontSize="15" />
@@ -835,7 +835,7 @@
                                                     FontSize="15"
                                                     FontFamily="XamlAutoFontFamily"
                                                     FontWeight="SemiBold"
-                                                    Foreground="{ThemeResource AccentText}"
+                                                    Foreground="{ThemeResource Text}"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
                                                     IsTabStop="False"
@@ -3774,7 +3774,7 @@
                                 HorizontalContentAlignment="Center"
                                 Width="55"
                                 x:Name="MoreButton"
-                                Foreground="{ThemeResource Text-2}"
+                                Foreground="Red"
                                 Style="{StaticResource EllipsisButton}"
                                 Margin="0"
                                 Padding="0,24,0,0"
@@ -3815,9 +3815,9 @@
                                     <CommandBarOverflowPresenter
                                         BorderBrush="Transparent"
                                         BorderThickness="0"
-                                        Background="{ThemeResource Background-1Transparent}"
                                         x:Name="SecondaryItemsControl"
                                         Style="{TemplateBinding CommandBarOverflowPresenterStyle}"
+                                        Background="{ThemeResource CommandBarOverflowBackground}"
                                         IsEnabled="False"
                                         IsTabStop="False">
                                         <CommandBarOverflowPresenter.RenderTransform>

@@ -27,9 +27,6 @@
                 Property="Background"
                 Value="Transparent" />
             <Setter
-                Property="Foreground"
-                Value="{ThemeResource Text-1}" />
-            <Setter
                 Property="BorderBrush"
                 Value="{ThemeResource AccentColor}" />
             <Setter
@@ -246,7 +243,7 @@
                     VerticalAlignment="Center">
                     <Button.Content>
                         <FontIcon
-                            Foreground="{ThemeResource AccentText}"
+                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
                             Opacity="0.5"
                             FontSize="13"
                             Glyph="" />
@@ -264,7 +261,7 @@
                                         Value="0" />
                                     <Setter
                                         Property="Background"
-                                        Value="{ThemeResource Background-1Transparent}" />
+                                        Value="{ThemeResource Background-1}" />
                                 </Style>
                             </Flyout.FlyoutPresenterStyle>
 
@@ -272,25 +269,25 @@
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     Margin="0,24,0,0"
-                                    Foreground="{ThemeResource Text-1}"
+                                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                    Opacity="0.75"
                                     FontFamily="{StaticResource DefaultFontFamily}"
                                     Text="Data początkowa" />
                                 <DatePicker
                                     x:Name="MinDatePicker"
                                     FontFamily="{StaticResource DefaultFontFamily}"
-                                    Foreground="{ThemeResource Text}"
                                     Margin="16,8,16,0" />
 
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     Margin="0,24,0,0"
-                                    Foreground="{ThemeResource Text-1}"
+                                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                    Opacity="0.75"
                                     FontFamily="{StaticResource DefaultFontFamily}"
                                     Text="Data końcowa" />
                                 <DatePicker
                                     x:Name="MaxDatePicker"
                                     FontFamily="{StaticResource DefaultFontFamily}"
-                                    Foreground="{ThemeResource Text}"
                                     Margin="16,8,16,24" />
                             </StackPanel>
 
@@ -346,7 +343,8 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center">
                         <TextBlock
-                            Foreground="{ThemeResource Text-1}"
+                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                            Opacity="0.5"
                             FontFamily="{StaticResource DefaultFontFamily}"
                             HorizontalAlignment="Center"
                             x:Uid="incomesUppercase"
@@ -363,14 +361,16 @@
                     <Border
                         Grid.Column="1"
                         BorderThickness="1,0,0,0"
-                        BorderBrush="{ThemeResource Background+2}" />
+                        BorderBrush="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                        Opacity="0.1" />
 
                     <StackPanel
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Grid.Column="2">
                         <TextBlock
-                            Foreground="{ThemeResource Text-1}"
+                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                            Opacity="0.5"
                             FontFamily="{StaticResource DefaultFontFamily}"
                             HorizontalAlignment="Center"
                             x:Uid="expensesUppercase"
@@ -388,13 +388,16 @@
                     Margin="16"
                     BorderThickness="0,1,0,0"
                     MaxWidth="512"
-                    BorderBrush="{ThemeResource Background+2}" />
+                    BorderBrush="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                    Opacity="0.1" />
                 <Grid
                     Margin="16,0"
                     MaxWidth="512"
                     BorderThickness="1"
-                    BorderBrush="{ThemeResource Background+2}"
                     Height="48">
+                    <Grid.BorderBrush>
+                        <SolidColorBrush Color="{ThemeResource SystemBaseHighColor}" Opacity="0.1"></SolidColorBrush>
+                    </Grid.BorderBrush>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition
@@ -413,7 +416,8 @@
                     <Border
                         Grid.Column="1"
                         BorderThickness="1,0,0,0"
-                        BorderBrush="{ThemeResource Background+2}" />
+                        BorderBrush="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                        Opacity="0.1" />
                     <RadioButton
                         Grid.Column="2"
                         GroupName="ExpenseOrIncome"

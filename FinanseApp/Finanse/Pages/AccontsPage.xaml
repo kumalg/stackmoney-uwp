@@ -54,7 +54,8 @@
                 Click="NewMoneyAccount_Click">
                 <FontIcon
                     FontSize="16"
-                    Foreground="{ThemeResource AccentText}"
+                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                    Opacity="0.75"
                     Glyph="" />
             </Button>
         </Grid>

@@ -339,7 +339,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+<!--
     <Style x:Key="HamburgerGreenRadioButton" TargetType="RadioButton">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -473,7 +473,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+-->
     <Style x:Key="ColorRadioButton" TargetType="RadioButton">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
@@ -669,7 +669,7 @@
             Value="{ThemeResource RadioButtonBackground}" />
         <Setter
             Property="Foreground"
-            Value="{ThemeResource RadioButtonForeground}" />
+            Value="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
         <Setter
             Property="BorderBrush"
             Value="{ThemeResource RadioButtonBorderBrush}" />
@@ -721,15 +721,15 @@
                                         
                                         <VisualTransition From="PointerOver" To="Normal" GeneratedDuration="0:0:0.2" />
                                         <VisualTransition From="PointerOver" To="Pressed" GeneratedDuration="0:0:0.2" />
-                                        <VisualTransition From="PointerOver" To="Checked" GeneratedDuration="0:0:0.2" /> <!-- tu kłopot gdy jest checked i pointer over leci (czemu na odwrót?) -->
+                                        <VisualTransition From="PointerOver" To="Checked" GeneratedDuration="0" />
                                         <VisualTransition From="PointerOver" To="Disabled" GeneratedDuration="0:0:0.2" />
 
                                         <VisualTransition From="Pressed" To="PointerOver" GeneratedDuration="0:0:0.2" />
                                         <VisualTransition From="Pressed" To="Normal" GeneratedDuration="0:0:0.2" />
-                                        <VisualTransition From="Pressed" To="Checked" GeneratedDuration="0" />
+                                        <VisualTransition From="Pressed" To="Checked" GeneratedDuration="0:0:0.2" />
                                         <VisualTransition From="Pressed" To="Disabled" GeneratedDuration="0:0:0.2" />
 
-                                        <VisualTransition From="Checked" To="PointerOver" GeneratedDuration="0" />
+                                        <VisualTransition From="Checked" To="PointerOver" GeneratedDuration="0:0:0.2" />
                                         <VisualTransition From="Checked" To="Pressed" GeneratedDuration="0:0:0.2" />
                                         <VisualTransition From="Checked" To="Normal" GeneratedDuration="0:0:0.2" />
                                         <VisualTransition From="Checked" To="Disabled" GeneratedDuration="0:0:0.2" />
@@ -739,31 +739,22 @@
                                 <VisualState
                                     x:Name="PointerOver">
                                     <Storyboard>
-                                        <ColorAnimation
+                                        <DoubleAnimation
+                                            Duration="0"
+                                            Storyboard.TargetProperty="Opacity"
                                             Storyboard.TargetName="Content"
-                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                            To="0.5" />
+                                        <DoubleAnimation
                                             Duration="0"
-                                            Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
-                                        <ColorAnimation
+                                            Storyboard.TargetProperty="Opacity"
                                             Storyboard.TargetName="TextLabel"
-                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
-                                            Duration="0"
-                                            Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+                                            To="0.5" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState
                                     x:Name="Pressed">
                                     <Storyboard>
-                                            <ColorAnimation
-                                                Storyboard.TargetName="Content"
-                                                To="{Binding Source={ThemeResource AccentColor+1},Path=Color}"
-                                                Duration="0"
-                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
-                                        <ColorAnimation
-                                            Storyboard.TargetName="TextLabel"
-                                            To="{Binding Source={ThemeResource AccentColor+1},Path=Color}"
-                                            Duration="0"
-                                            Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+
                                     </Storyboard>
                                     </VisualState>
                                 <VisualState
@@ -774,33 +765,31 @@
                                 <VisualState
                                     x:Name="Checked">
                                     <Storyboard>
-                                        <ColorAnimation
+                                        <DoubleAnimation
+                                            Duration="0"
+                                            Storyboard.TargetProperty="Opacity"
                                             Storyboard.TargetName="Content"
-                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                            To="0" />
+                                        <DoubleAnimation
                                             Duration="0"
-                                            Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
-
-                                        <ColorAnimation
+                                            Storyboard.TargetProperty="Opacity"
+                                            Storyboard.TargetName="ContentAccent"
+                                            To="1" />
+                                        <DoubleAnimation
+                                            Duration="0"
+                                            Storyboard.TargetProperty="Opacity"
                                             Storyboard.TargetName="TextLabel"
-                                            To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                            To="0" />
+                                        <DoubleAnimation
                                             Duration="0"
-                                            Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
-
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="Hover"
-                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)"
-                                            To="1"
-                                            Duration="0" />
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="Hover"
-                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)"
-                                            To="1"
-                                            Duration="0" />
+                                            Storyboard.TargetProperty="Opacity"
+                                            Storyboard.TargetName="TextLabelAccent"
+                                            To="1" />
                                     </Storyboard>
                                 </VisualState>
 
                             </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
+                        </VisualStateManager.VisualStateGroups>
 
                         <Grid
                             x:Name="ContentRoot"
@@ -817,26 +806,7 @@
                                 <RowDefinition
                                     Height="Auto" />
                             </Grid.RowDefinitions>
-                            <Ellipse
-                                Visibility="Collapsed"
-                                x:Name="Hover"
-                                VerticalAlignment="Top"
-                                Margin="0,-5,0,0"
-                                Width="10"
-                                Height="10"
-                                Fill="{ThemeResource AccentColor}"
-                                RenderTransformOrigin="0.5,0.5">
-                                <Ellipse.RenderTransform>
-                                    <CompositeTransform
-                                        ScaleX="0"
-                                        ScaleY="0" />
-                                </Ellipse.RenderTransform>
-                                <!--
-                                <Ellipse.Clip>
-                                    <RectangleGeometry
-                                        Rect="0,5,10,5" />
-                                </Ellipse.Clip>-->
-                            </Ellipse>
+
                             <FontIcon
                                 x:Name="Content"
                                 Height="20"
@@ -844,7 +814,19 @@
                                 Glyph="{TemplateBinding Tag}"
                                 FontFamily="{TemplateBinding FontFamily}"
                                 FontSize="{TemplateBinding FontSize}"
-                                Foreground="{ThemeResource Text-2}"
+                                Foreground="{TemplateBinding Foreground}"
+                                Opacity="0.25"
+                                HorizontalAlignment="Stretch"
+                                AutomationProperties.AccessibilityView="Raw" />
+                            <FontIcon
+                                x:Name="ContentAccent"
+                                Height="20"
+                                Margin="0,14,0,4"
+                                Glyph="{TemplateBinding Tag}"
+                                FontFamily="{TemplateBinding FontFamily}"
+                                FontSize="{TemplateBinding FontSize}"
+                                Foreground="{ThemeResource AccentColor}"
+                                Opacity="0"
                                 HorizontalAlignment="Stretch"
                                 AutomationProperties.AccessibilityView="Raw" />
                             <!--
@@ -860,14 +842,31 @@
                                 Margin="2,0,2,6" />
                             -->
                             <!-- MOZNA PRÓBOWAĆ TRIGGERA ŻE JAK ZA WĄSKI EKRAN TO ZMNIEJSZA CZCIONKĘ -->
-                            <ContentPresenter
+                            <TextBlock
                                 x:Name="TextLabel"
-                                Content="{TemplateBinding Content}"
+                                Text="{TemplateBinding Content}"
+                                TextWrapping="Wrap"
+                                TextAlignment="Center"
                                 Grid.Row="1"
-                                Foreground="{ThemeResource Text-1}"
+                                Foreground="{TemplateBinding Foreground}"
+                                Opacity="0.25"
                                 FontSize="11"
                                 FontFamily="{StaticResource DefaultFontFamily}"
                                 HorizontalAlignment="Center"
+                                FontWeight="SemiBold"
+                                Margin="2,0,2,6" />
+                            <TextBlock
+                                x:Name="TextLabelAccent"
+                                Text="{TemplateBinding Content}"
+                                TextWrapping="Wrap"
+                                TextAlignment="Center"
+                                Grid.Row="1"
+                                Foreground="{ThemeResource AccentColor}"
+                                Opacity="0"
+                                FontSize="11"
+                                FontFamily="{StaticResource DefaultFontFamily}"
+                                HorizontalAlignment="Center"
+                                FontWeight="SemiBold"
                                 Margin="2,0,2,6" />
                         </Grid>
                     </Grid>

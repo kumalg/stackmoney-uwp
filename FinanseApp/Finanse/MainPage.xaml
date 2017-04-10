@@ -47,7 +47,7 @@
                 Value="{ThemeResource AppBarButtonBackground}" />
             <Setter
                 Property="Foreground"
-                Value="{ThemeResource Text}" />
+                Value="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
             <Setter
                 Property="BorderBrush"
                 Value="{ThemeResource AppBarButtonBorderBrush}" />
@@ -159,7 +159,8 @@
                                     Glyph="{TemplateBinding Label}"
                                     FontFamily="{TemplateBinding FontFamily}"
                                     FontSize="16"
-                                    Foreground="{ThemeResource Text-1}"
+                                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                    Opacity="0.75"
                                     HorizontalAlignment="Stretch" />
                                 <ContentPresenter
                                     VerticalAlignment="Center"
@@ -260,12 +261,12 @@
                 Width="*" />
         </Grid.ColumnDefinitions>
 
-        
+        <!--
         <Grid
             Grid.Column="0"
             Grid.RowSpan="2"
             Background="{ThemeResource AccentColor-1}" />
-        
+        -->
         <Grid
             Grid.Column="1"
             Opacity="0.03"
@@ -289,11 +290,12 @@
             </Grid.Background>
         </Grid>
 -->
+        <!--
         <Grid
             Grid.Column="2"
             Grid.RowSpan="2"
             Background="{ThemeResource AccentColor-1}" />
-
+-->
 
         <CommandBar
             x:DeferLoadStrategy="Lazy"
@@ -330,9 +332,9 @@
                         Grid.Column="1"
                         FontFamily="{StaticResource FontAwesome}"
                         Tag=""
+                        Content="Operacje"
                         Click="OperationsAppBarRadioButton_Click"
                         Checked="OperationsAppBarRadioButton_Checked">
-                        <TextBlock Text="Operacje" x:Uid="operations" />
                     </RadioButton>
                     <RadioButton
                         GroupName="MenuButtons"
@@ -342,8 +344,8 @@
                         Grid.Column="3"
                         FontFamily="{StaticResource FontAwesome}"
                         Tag=""
+                        Content="Kategorie"
                         Checked="CategoriesAppBarRadioButton_Checked">
-                        <TextBlock Text="Kategorie" x:Uid="categories" />
                     </RadioButton>
                     <RadioButton
                         GroupName="MenuButtons"
@@ -354,8 +356,8 @@
                         FontSize="22"
                         FontFamily="Segoe MDL2 Assets"
                         Tag=""
+                        Content="Dodaj operację"
                         Checked="AddNewOperationAppBarRadioButton_Checked">
-                        <TextBlock TextWrapping="Wrap" TextAlignment="Center" Text="Dodaj operację" x:Uid="addNewOperation" />
                     </RadioButton>
                     <RadioButton
                         GroupName="MenuButtons"
@@ -365,8 +367,8 @@
                         Grid.Column="7"
                         FontFamily="{StaticResource FontAwesome}"
                         Tag=""
+                        Content="Statystyki"
                         Checked="StatisticsAppBarRadioButton_Checked">
-                        <TextBlock Text="Statystyki" x:Uid="statistics" />
                     </RadioButton>
                     <RadioButton
                         x:Name="MoreAppBarRadioButton"
@@ -422,7 +424,7 @@
             Width="320"
             Grid.Row="0"
             Grid.RowSpan="4"
-            Background="{ThemeResource NeonBackground}">
+            Background="{ThemeResource Background-1}">
 
             <Grid.RowDefinitions>
                 <RowDefinition
@@ -439,7 +441,7 @@
             <StackPanel
                 Grid.RowSpan="3"
                 Opacity="0.85"
-                Background="{ThemeResource NeonBackground}" />
+                Background="{ThemeResource Background-1}" />
 
             <Grid>
                 <Grid.Background>
@@ -470,6 +472,7 @@
                     Style="{StaticResource HamburgerButtonStyle}"
                     Grid.Column="2"
                     Name="BackButton"
+                    Visibility="Collapsed"
                     Click="BackButton_Click"
                     Content="">
                 </Button>

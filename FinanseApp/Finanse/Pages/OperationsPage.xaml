@@ -23,13 +23,15 @@
     </Page.Transitions>
 
     <Page.Resources>
-        <!--Use a collection view source for content that presents a list of items that can be grouped or sorted.-->        
+        <!--Use a collection view source for content that presents a list of items that can be grouped or sorted.-->
         <GroupStyle
             x:Name="ByDateGroupStyle">
             <GroupStyle.HeaderContainerStyle>
                 <Style
                     TargetType="ListViewHeaderItem">
-                    <Setter Property="FontFamily" Value="{StaticResource DefaultFontFamily}"/>
+                    <Setter
+                        Property="FontFamily"
+                        Value="{StaticResource DefaultFontFamily}" />
                     <Setter
                         Property="Template">
                         <Setter.Value>
@@ -79,7 +81,8 @@
                                         FontFamily="{StaticResource DefaultFontFamily}"
                                         Text="{Binding Key.DayNum00}"
                                         FontSize="12"
-                                        Foreground="{ThemeResource Text-2}"
+                                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                        Opacity="0.4"
                                         FontWeight="SemiBold"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center" />
@@ -87,7 +90,8 @@
                                 <TextBlock
                                     FontFamily="{StaticResource DefaultFontFamily}"
                                     FontWeight="SemiBold"
-                                    Foreground="{ThemeResource Text-1}"
+                                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                    Opacity="0.4"
                                     Text="{Binding Key.Day}"
                                     FontSize="12" />
                             </StackPanel>
@@ -101,9 +105,10 @@
                                 HorizontalAlignment="Right"
                                 Text="{Binding Path=Cost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontWeight="SemiBold"
-                                Foreground="{ThemeResource Text-1}"
+                                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                Opacity="0.4"
                                 FontSize="12" />
-<!--
+                            <!--
                             <Border
                                 Grid.ColumnSpan="3"
                                 Opacity="0.3"
@@ -161,7 +166,7 @@
 
         <DataTemplate
             x:Name="ByCategoryHeaderTemplate">
-            
+
             <ListViewItem
                 Padding="0"
                 BorderThickness="0"
@@ -169,7 +174,7 @@
                 HorizontalContentAlignment="Stretch"
                 MaxWidth="620"
                 Background="Transparent">
-                
+
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition
@@ -189,12 +194,14 @@
                                 Text="{Binding Key.Category.Icon.Glyph}"
                                 FontFamily="{StaticResource FontAwesome}"
                                 FontSize="12"
-                                Foreground="{ThemeResource Text-2}"
+                                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                Opacity="0.4"
                                 HorizontalAlignment="Center" />
                         </StackPanel>
                         <TextBlock
                             FontWeight="SemiBold"
-                            Foreground="{ThemeResource Text-1}"
+                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                            Opacity="0.4"
                             FontFamily="{StaticResource DefaultFontFamily}"
                             Text="{Binding Key.Category.Name}"
                             FontSize="12" />
@@ -208,10 +215,11 @@
                         HorizontalAlignment="Right"
                         Text="{Binding Path=Cost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                         FontWeight="SemiBold"
-                        Foreground="{ThemeResource Text-1}"
+                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                        Opacity="0.4"
                         FontFamily="{StaticResource DefaultFontFamily}"
                         FontSize="12" />
-<!--
+                    <!--
                     <Border
                         Grid.ColumnSpan="3"
                         Opacity="0.3"
@@ -260,13 +268,18 @@
             x:Key="JumpListGroupTemplate">
             <Grid
                 Margin="0"
-                Background="{ThemeResource Background+1}"
                 Width="44"
                 Height="44">
+                <Grid.Background>
+                    <SolidColorBrush
+                        Color="{ThemeResource SystemBaseHighColor}"
+                        Opacity="0.03"></SolidColorBrush>
+                </Grid.Background>
                 <TextBlock
                     FontSize="13"
                     Text="{Binding Day}"
-                    Foreground="{ThemeResource Text-1}"
+                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                    Opacity="0.4"
                     FontFamily="{StaticResource DefaultFontFamily}"
                     FontWeight="Bold"
                     HorizontalAlignment="Center"
@@ -283,12 +296,296 @@
                     FontSize="13"
                     Text="{Binding Day}"
                     FontFamily="{StaticResource DefaultFontFamily}"
-                    Foreground="{ThemeResource Text-1}"
+                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                    Opacity="0.4"
                     FontWeight="SemiBold"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center" />
             </Border>
         </DataTemplate>
+        <Style
+            x:Key="ActualMonthButton"
+            TargetType="Button">
+            <Setter
+                Property="Height"
+                Value="32" />
+            <Setter
+                Property="Background"
+                Value="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
+            <Setter
+                Property="Foreground"
+                Value="{ThemeResource ButtonForeground}" />
+            <Setter
+                Property="BorderBrush"
+                Value="{ThemeResource ButtonBorderBrush}" />
+            <Setter
+                Property="BorderThickness"
+                Value="{ThemeResource ButtonBorderThemeThickness}" />
+            <Setter
+                Property="Padding"
+                Value="8,4,8,4" />
+            <Setter
+                Property="HorizontalAlignment"
+                Value="Left" />
+            <Setter
+                Property="VerticalAlignment"
+                Value="Center" />
+            <Setter
+                Property="FontFamily"
+                Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter
+                Property="FontWeight"
+                Value="Normal" />
+            <Setter
+                Property="FontSize"
+                Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter
+                Property="UseSystemFocusVisuals"
+                Value="True" />
+            <Setter
+                Property="FocusVisualMargin"
+                Value="-3" />
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="Button">
+                        <Grid
+                            x:Name="RootGrid">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup
+                                    x:Name="CommonStates">
+
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition GeneratedDuration="0:0:0.1" />
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState
+                                        x:Name="Normal">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation
+                                                Storyboard.TargetName="RootGrid" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="PointerOver">
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Hover"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="0.1" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Pressed">
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Hover"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="0.15" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Background"
+                                                Storyboard.TargetName="RootGrid">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource ButtonBackgroundDisabled}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="BorderBrush"
+                                                Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource ButtonBorderBrushDisabled}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Foreground"
+                                                Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource ButtonForegroundDisabled}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            
+                            <Grid
+                                x:Name="Hover"
+                                Opacity="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="16" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition
+                                        Width="16" />
+                                </Grid.ColumnDefinitions>
+                                <Ellipse
+                                    Width="32"
+                                    Grid.Column="0"
+                                    Fill="{TemplateBinding Background}" />
+                                <Rectangle
+                                    Grid.Column="1"
+                                    Fill="{TemplateBinding Background}" />
+                                <Ellipse
+                                    HorizontalAlignment="Right"
+                                    Width="32"
+                                    Grid.Column="2"
+                                    Fill="{TemplateBinding Background}" />
+                            </Grid>
+                            
+                            <ContentPresenter
+                                Margin="16,0"
+                                x:Name="ContentPresenter"
+                                AutomationProperties.AccessibilityView="Raw"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                ContentTransitions="{TemplateBinding ContentTransitions}"
+                                Content="{TemplateBinding Content}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style
+            x:Key="EllipticButton"
+            TargetType="Button">
+            <Setter
+                Property="Height"
+                Value="32" />
+            <Setter
+                Property="Background"
+                Value="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
+            <Setter
+                Property="Foreground"
+                Value="{ThemeResource ButtonForeground}" />
+            <Setter
+                Property="BorderBrush"
+                Value="{ThemeResource ButtonBorderBrush}" />
+            <Setter
+                Property="BorderThickness"
+                Value="{ThemeResource ButtonBorderThemeThickness}" />
+            <Setter
+                Property="Padding"
+                Value="8,4,8,4" />
+            <Setter
+                Property="HorizontalAlignment"
+                Value="Left" />
+            <Setter
+                Property="VerticalAlignment"
+                Value="Center" />
+            <Setter
+                Property="FontFamily"
+                Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter
+                Property="FontWeight"
+                Value="Normal" />
+            <Setter
+                Property="FontSize"
+                Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter
+                Property="UseSystemFocusVisuals"
+                Value="True" />
+            <Setter
+                Property="FocusVisualMargin"
+                Value="-3" />
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="Button">
+                        <Grid
+                            x:Name="RootGrid">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup
+                                    x:Name="CommonStates">
+
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition
+                                            GeneratedDuration="0:0:0.1" />
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState
+                                        x:Name="Normal">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation
+                                                Storyboard.TargetName="RootGrid" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="PointerOver">
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Hover"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="0.1" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Pressed">
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Hover"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="0.15" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState
+                                        x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Background"
+                                                Storyboard.TargetName="RootGrid">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource ButtonBackgroundDisabled}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="BorderBrush"
+                                                Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource ButtonBorderBrushDisabled}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames
+                                                Storyboard.TargetProperty="Foreground"
+                                                Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame
+                                                    KeyTime="0"
+                                                    Value="{ThemeResource ButtonForegroundDisabled}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <Ellipse
+                                x:Name="Hover"
+                                Opacity="0"
+                                Height="{TemplateBinding Height}"
+                                Width="{TemplateBinding Width}"
+                                Fill="{TemplateBinding Background}" />
+
+                            <ContentPresenter
+                                x:Name="ContentPresenter"
+                                AutomationProperties.AccessibilityView="Raw"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                ContentTransitions="{TemplateBinding ContentTransitions}"
+                                Content="{TemplateBinding Content}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
     </Page.Resources>
 
@@ -331,61 +628,51 @@
                         Height="32"
                         Margin="8,0,0,0"
                         Click="PreviousMonthButton_Click"
-                        Background="Transparent">
-                        <Button.Foreground>
-                            <SolidColorBrush
-                                Color="{ThemeResource SystemBaseHighColor}"
-                                Opacity="0.75"/>
-                        </Button.Foreground>
+                        Foreground="{ThemeResource Text}"
+                        Style="{StaticResource EllipticButton}">
                         <FontIcon
-                            FontSize="16"
-                            Glyph=""
-                            FontFamily="{StaticResource FontAwesome}" />
+                            Margin="0,0,2,0"
+                            FontSize="13"
+                            Glyph=""
+                            FontFamily="Segoe MDL2 Assets" />
                     </Button>
 
                     <Grid>
                         <Button
                             BorderThickness="0"
-                            Background="Transparent"
-                        Width="32"
-                        Height="32"
-                        x:Name="IncomingOperationsButton"
-                        Click="IncomingOperationsButton_Click">
-                            <Button.Foreground>
-                                <SolidColorBrush
-                                    Color="{ThemeResource SystemBaseHighColor}"
-                                    Opacity="0.75" />
-                            </Button.Foreground>
+                            Width="32"
+                            Height="32"
+                            x:Name="IncomingOperationsButton"
+                            Foreground="{ThemeResource Text}"
+                            Style="{StaticResource EllipticButton}"
+                            Click="IncomingOperationsButton_Click">
                             <FontIcon
-                            FontSize="16"
-                            Glyph=""
-                            FontFamily="{StaticResource FontAwesome}" />
-                    </Button>
+                                FontSize="16"
+                                Glyph=""
+                                FontFamily="{StaticResource FontAwesome}" />
+                        </Button>
 
-                    <Button
-                        BorderThickness="0"
-                        Height="32"
-                        Background="Transparent"
-                        Width="32"
-                        x:Name="NextMonthButton"
+                        <Button
+                            BorderThickness="0"
+                            Height="32"
+                            Width="32"
+                            x:Name="NextMonthButton"
+                            Foreground="{ThemeResource Text}"
+                            Style="{StaticResource EllipticButton}"
                             Click="NextMonthButton_Click">
-                            <Button.Foreground>
-                                <SolidColorBrush
-                                    Color="{ThemeResource SystemBaseHighColor}"
-                                    Opacity="0.75" />
-                            </Button.Foreground>
                             <FontIcon
-                            FontSize="16"
-                            Glyph=""
-                            FontFamily="{StaticResource FontAwesome}" />
-                    </Button>
-                </Grid>
+                                Margin="2,0,0,0"
+                                FontSize="13"
+                                Glyph=""
+                                FontFamily="Segoe MDL2 Assets" />
+                        </Button>
+                    </Grid>
 
                     <Button
                         Margin="0"
-                        Background="Transparent"
                         BorderThickness="0"
-                        Padding="8">
+                        Padding="8"
+                        Style="{StaticResource ActualMonthButton}">
                         <Button.Flyout>
                             <Flyout
                                 Placement="Bottom">
@@ -397,14 +684,14 @@
                                             Value="0" />
                                         <Setter
                                             Property="Background"
-                                            Value="{ThemeResource Background-1Transparent}" />
+                                            Value="{ThemeResource Background-1}" />
                                     </Style>
                                 </Flyout.FlyoutPresenterStyle>
                                 <TextBlock
                                     Text="Tu będzie można zmienic miesiąc kiedyś" />
                             </Flyout>
                         </Button.Flyout>
-                        
+
                         <TextBlock
                             Text="{x:Bind _storeData.ActualMonthText, Mode=OneWay}"
                             HorizontalAlignment="Center"
@@ -433,12 +720,12 @@
                         Width="32"
                         Height="32"
                         Margin="8,0"
-                        Background="Transparent"
+                        Foreground="{ThemeResource Text}"
+                        Style="{StaticResource EllipticButton}"
                         VerticalAlignment="Center">
                         <Button.Content>
                             <FontIcon
-                                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
-                                Opacity="0.75"
+                                Foreground="{ThemeResource Text}"
                                 FontSize="13"
                                 FontFamily="{StaticResource FontAwesome}"
                                 Glyph="" />
@@ -455,7 +742,7 @@
                                             Value="0" />
                                         <Setter
                                             Property="Background"
-                                            Value="{ThemeResource Background-1Transparent}" />
+                                            Value="{ThemeResource Background-1}" />
                                     </Style>
                                 </Flyout.FlyoutPresenterStyle>
                                 <ListView
@@ -479,7 +766,8 @@
             <TextBlock
                 FontSize="24"
                 FontWeight="Light"
-                Foreground="{ThemeResource Text-1}"
+                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                Opacity="0.75"
                 RelativePanel.AlignHorizontalCenterWithPanel="True"
                 RelativePanel.AlignVerticalCenterWithPanel="True"
                 Text="Brak operacji w tym miesiącu :("
@@ -488,7 +776,6 @@
             <Button
                 Height="48"
                 Padding="16,0"
-                Background="{ThemeResource Background+2}"
                 Margin="16"
                 HorizontalAlignment="Center"
                 Content="Dodaj nową"
@@ -528,7 +815,8 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock
                                         FontSize="13"
-                                        Foreground="{ThemeResource Text-1}"
+                                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                        Opacity="0.5"
                                         Margin="10"
                                         Grid.Column="1"
                                         Text="Konto"
@@ -537,7 +825,8 @@
                                     <TextBlock
                                         HorizontalAlignment="Right"
                                         FontSize="13"
-                                        Foreground="{ThemeResource Text-1}"
+                                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                        Opacity="0.5"
                                         Margin="0,10"
                                         Grid.Column="2"
                                         Text="Początkowe"
@@ -545,7 +834,8 @@
                                     <TextBlock
                                         HorizontalAlignment="Right"
                                         FontSize="13"
-                                        Foreground="{ThemeResource Text-1}"
+                                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                        Opacity="0.5"
                                         Margin="0,10"
                                         Grid.Column="3"
                                         Text="Końcowe"
@@ -578,7 +868,8 @@
                                                     Fill="{Binding Account.Brush}" />
                                                 <TextBlock
                                                     FontSize="13"
-                                                    Foreground="{ThemeResource Text}"
+                                                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                                    Opacity="0.75"
                                                     Margin="10,5"
                                                     Grid.Column="1"
                                                     TextWrapping="Wrap"
@@ -588,7 +879,8 @@
                                                     HorizontalAlignment="Right"
                                                     FontWeight="Normal"
                                                     FontSize="13"
-                                                    Foreground="{ThemeResource Text-1}"
+                                                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                                    Opacity="0.5"
                                                     Margin="0,5"
                                                     FontFamily="{StaticResource DefaultFontFamily}"
                                                     Grid.Column="2"
@@ -597,7 +889,8 @@
                                                     HorizontalAlignment="Right"
                                                     FontWeight="Normal"
                                                     FontSize="13"
-                                                    Foreground="{ThemeResource Text-1}"
+                                                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                                    Opacity="0.5"
                                                     Margin="0,5"
                                                     Grid.Column="3"
                                                     FontFamily="{StaticResource DefaultFontFamily}"
@@ -610,7 +903,8 @@
                                 <Border
                                     Margin="0,16,0,8"
                                     BorderThickness="0,0,0,1"
-                                    BorderBrush="{ThemeResource Background+2}" />
+                                    BorderBrush="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                    Opacity="0.2" />
 
                                 <Grid
                                     HorizontalAlignment="Stretch">
@@ -627,7 +921,8 @@
                                     <TextBlock
                                         FontWeight="SemiBold"
                                         FontSize="13"
-                                        Foreground="{ThemeResource Text-1}"
+                                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                        Opacity="0.5"
                                         Margin="10,5"
                                         FontFamily="{StaticResource DefaultFontFamily}"
                                         Grid.Column="1"
@@ -636,7 +931,8 @@
                                         HorizontalAlignment="Right"
                                         FontWeight="SemiBold"
                                         FontSize="13"
-                                        Foreground="{ThemeResource Text-1}"
+                                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                        Opacity="0.75"
                                         Margin="0,5"
                                         FontFamily="{StaticResource DefaultFontFamily}"
                                         Grid.Column="2"
@@ -645,7 +941,8 @@
                                         HorizontalAlignment="Right"
                                         FontWeight="SemiBold"
                                         FontSize="13"
-                                        Foreground="{ThemeResource Text-1}"
+                                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                        Opacity="0.75"
                                         Margin="0,5"
                                         Grid.Column="3"
                                         FontFamily="{StaticResource DefaultFontFamily}"
@@ -658,7 +955,8 @@
                                     Orientation="Horizontal">
                                     <TextBlock
                                         FontSize="13"
-                                        Foreground="{ThemeResource Text-1}"
+                                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                        Opacity="0.5"
                                         Margin="16,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="Grupuj wg."
@@ -668,9 +966,7 @@
                                         FontSize="13"
                                         Height="38"
                                         Click="ByDateButton_Click"
-                                        Foreground="{ThemeResource AccentColor}"
                                         FontFamily="{StaticResource FontAwesome}"
-                                        Background="{ThemeResource Background+1}"
                                         Width="38"
                                         BorderThickness="0"
                                         Margin="16,0,0,0"
@@ -680,9 +976,7 @@
                                         FontSize="13"
                                         Height="38"
                                         Click="ByCategoryButton_Click"
-                                        Foreground="{ThemeResource Text-1}"
                                         FontFamily="{StaticResource FontAwesome}"
-                                        Background="{ThemeResource Background+1}"
                                         Width="38"
                                         BorderThickness="0"
                                         Margin="16,0,0,0"

@@ -22,7 +22,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid
-            Opacity="0.15"
+            Opacity="0.05"
             Visibility="Visible"
             Width="50"
             Height="40">
@@ -68,7 +68,7 @@
                 Margin="0,1,0,0"
                 StrokeEndLineCap="Round"
                 StrokeStartLineCap="Round"
-                Stroke="{ThemeResource Text-2}"
+                Stroke="{ThemeResource SystemControlBackgroundBaseHighBrush}"
                 StrokeThickness="2"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center">
@@ -97,7 +97,7 @@
                 VerticalAlignment="Center"
                 Width="12"
                 Height="12"
-                Stroke="{ThemeResource Text-2}"
+                Stroke="{ThemeResource SystemControlBackgroundBaseHighBrush}"
                 StrokeThickness="2" />
         </Grid>
 
@@ -123,7 +123,8 @@
             TextWrapping="Wrap"
             FontWeight="SemiLight"
             FontSize="14"
-            Foreground="{ThemeResource Text}" />
+            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+            Opacity="0.75" />
     </Grid>
 
 </UserControl>

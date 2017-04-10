@@ -34,7 +34,8 @@
             TextWrapping="Wrap"
             FontWeight="SemiLight"
             FontSize="14"
-            Foreground="{ThemeResource Text}" />
+            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+            Opacity="0.75" />
     </Grid>
 
 </UserControl>

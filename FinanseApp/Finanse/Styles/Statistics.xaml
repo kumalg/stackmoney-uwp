@@ -44,7 +44,8 @@
             <TextBlock
                 Grid.Column="1"
                 FontSize="13"
-                Foreground="{ThemeResource Text}"
+                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                Opacity="0.75"
                 VerticalAlignment="Center"
                 FontFamily="{StaticResource DefaultFontFamily}"
                 Text="{Binding Name}" />
@@ -59,7 +60,8 @@
             <TextBlock
                 Grid.Column="3"
                 FontSize="13"
-                Foreground="{ThemeResource Text-1}"
+                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                Opacity="0.5"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 FontFamily="{StaticResource DefaultFontFamily}"
@@ -93,7 +95,8 @@
             <TextBlock
                 Grid.Column="1"
                 FontSize="13"
-                Foreground="{ThemeResource Text}"
+                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                Opacity="0.75"
                 VerticalAlignment="Center"
                 FontFamily="{StaticResource DefaultFontFamily}"
                 TextWrapping="Wrap"

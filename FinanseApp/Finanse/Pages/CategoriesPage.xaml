@@ -210,7 +210,8 @@
                 Click="NewCategory_Click">
                 <FontIcon
                     FontSize="16"
-                    Foreground="{ThemeResource AccentText}"
+                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                    Opacity="0.75"
                     Glyph="" />
             </Button>
         </Grid>
@@ -324,7 +325,9 @@
                         FontSize="20"
                         FontFamily="{StaticResource DefaultFontFamily}"
                         HorizontalAlignment="Center"
-                        Foreground="{ThemeResource Text-1}"
+                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                        Opacity="0.5"
+                        FontWeight="SemiLight"
                         Text="Wydatki" />
 
                     <ListView
@@ -359,7 +362,9 @@
                         Grid.Column="1"
                         FontSize="20"
                         HorizontalAlignment="Center"
-                        Foreground="{ThemeResource Text-1}"
+                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                        Opacity="0.5"
+                        FontWeight="SemiLight"
                         Text="Wpływy" />
 
                     <ListView

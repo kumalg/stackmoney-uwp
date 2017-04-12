@@ -538,27 +538,10 @@
                                     <VisualState
                                         x:Name="Disabled">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Background"
-                                                Storyboard.TargetName="RootGrid">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="{ThemeResource ButtonBackgroundDisabled}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="BorderBrush"
-                                                Storyboard.TargetName="ContentPresenter">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="{ThemeResource ButtonBorderBrushDisabled}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetProperty="Foreground"
-                                                Storyboard.TargetName="ContentPresenter">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="{ThemeResource ButtonForegroundDisabled}" />
-                                            </ObjectAnimationUsingKeyFrames>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="ContentPresenter"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="0.15" />
                                         </Storyboard>
                                     </VisualState>
                                 </VisualStateGroup>
@@ -669,13 +652,17 @@
                     </Grid>
 
                     <Button
+                        Click="ActualMonthButton_Click"
                         Margin="0"
                         BorderThickness="0"
                         Padding="8"
                         Style="{StaticResource ActualMonthButton}">
+                        <!--
                         <Button.Flyout>
                             <Flyout
-                                Placement="Bottom">
+                                Placement="Bottom"
+                                Opening="FlyoutBase_OnOpening"
+                                Closed="Flyout_Closed">
                                 <Flyout.FlyoutPresenterStyle>
                                     <Style
                                         TargetType="FlyoutPresenter">
@@ -687,11 +674,34 @@
                                             Value="{ThemeResource Background-1}" />
                                     </Style>
                                 </Flyout.FlyoutPresenterStyle>
-                                <TextBlock
-                                    Text="Tu będzie można zmienic miesiąc kiedyś" />
-                            </Flyout>
-                        </Button.Flyout>
 
+                                <DatePicker
+                                    Name="DatePicker"
+                                    DayVisible="False"
+                                    Margin="16,8"
+                                    MinYear="{x:Bind MinDate}"
+                                    MaxYear="{x:Bind MaxDate}" />
+                                <FlyoutBase.AttachedFlyout>
+                                    <DatePickerFlyout DayVisible="False"/>
+                                </FlyoutBase.AttachedFlyout>
+
+                        <CalendarView
+                            Name="CalendarView"
+                            SelectionMode="Single"
+                            MinDate="{x:Bind MinDate, Mode=OneWay}"
+                            MaxDate="{x:Bind MaxDate, Mode=OneWay}" />
+                        </Flyout>
+                        </Button.Flyout>
+-->
+                        <Button.Flyout>
+                            <DatePickerFlyout
+                                Closed="ActualMonthDatePickerFlyout_Closed"
+                                x:Name="ActualMonthDatePickerFlyout"
+                                MinYear="{x:Bind MinDate, Mode=OneWay}"
+                                MaxYear="{x:Bind MaxDate, Mode=OneWay}"
+                                DayVisible="False"
+                                Placement="Bottom" />
+                        </Button.Flyout>
                         <TextBlock
                             Text="{x:Bind _storeData.ActualMonthText, Mode=OneWay}"
                             HorizontalAlignment="Center"
@@ -721,8 +731,7 @@
                         Height="32"
                         Margin="8,0"
                         Foreground="{ThemeResource Text}"
-                        Style="{StaticResource EllipticButton}"
-                        VerticalAlignment="Center">
+                        Style="{StaticResource EllipticButton}">
                         <Button.Content>
                             <FontIcon
                                 Foreground="{ThemeResource Text}"

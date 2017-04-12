@@ -25,12 +25,38 @@ namespace Finanse.Models.Operations {
             get {
                 return _actualMonth;
             }
-            set {
+            private set {
                 _actualMonth = value;
                 OnPropertyChanged("ActualMonthText");
                 OnPropertyChanged("ActualOperationsSum");
                 SetNewOperationsList();
             }
+        }
+
+        public void PrevMonth() {
+            ActualMonth = ActualMonth.AddMonths(-1);
+        }
+
+        public void NextMonth() {
+            if (ActualMonth > DateTime.Now.Date.First())
+                return;
+            ActualMonth = ActualMonth.AddMonths(1);
+        }
+
+        public bool SetMonth(DateTime newDate) {
+            newDate = newDate.Date.First();
+
+            if (ActualMonth == newDate)
+                return false;
+
+            var thisMonth = DateTime.Now.Date.First();
+            var nextMonth = thisMonth.AddMonths(1).First();
+
+            ActualMonth = newDate > thisMonth
+                ? nextMonth
+                : newDate;
+
+            return true;
         }
 
 

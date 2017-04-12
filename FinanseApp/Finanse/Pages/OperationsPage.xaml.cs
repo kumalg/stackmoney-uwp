@@ -34,17 +34,21 @@ namespace Finanse.Pages {
             }
         }
 
+        private DateTime MinDate => DateTime.Parse(Dal.GetEldestOperation().Date);
+        private DateTime MaxDate => DateTime.Now.AddMonths(1);
+
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             if (!( e.Parameter is DateTime ))
                 return;
 
             DateTime dateTimeWithDays = (DateTime)e.Parameter;
-            _storeData.ActualMonth = dateTimeWithDays.First();
+            _storeData.SetMonth(dateTimeWithDays);// = dateTimeWithDays.First();
             _storeData.ForceUpdate();
             RaisePropertyChanged("OperationGroups");
 
-            SetNextMonthButtonEnabling();
-            SetPreviousMonthButtonEnabling();
+          //  SetNextMonthButtonEnabling();
+          //  SetPreviousMonthButtonEnabling();
+          SetPrevNextIncomingButtons();
 
             if ((bool)ByDateRadioButton.IsChecked)
                 ListViewByDate();
@@ -52,7 +56,7 @@ namespace Finanse.Pages {
                 ListViewByCategory();
 
             SetEmptyListViewInfoVisibility();
-                
+
             base.OnNavigatedTo(e);
         }
 
@@ -92,8 +96,9 @@ namespace Finanse.Pages {
                 ((ListView)VisibleAccountsFlyout.Content).Items?.Add(itema);
             }
 
-            SetNextMonthButtonEnabling();
-            SetPreviousMonthButtonEnabling();
+            //  SetNextMonthButtonEnabling();
+            //  SetPreviousMonthButtonEnabling();
+            SetPrevNextIncomingButtons();
 
             ByDateRadioButton.IsChecked = true;
             ListViewByDate();
@@ -230,7 +235,7 @@ namespace Finanse.Pages {
             ActivateProgressRing();
             await Task.Delay(5);
 
-            _storeData.ActualMonth = _storeData.ActualMonth.AddMonths(-1);
+            _storeData.PrevMonth();// = _storeData.ActualMonth.AddMonths(-1);
             SetListOfOperations();
 
             DeactivateProgressRing();
@@ -240,7 +245,7 @@ namespace Finanse.Pages {
             ActivateProgressRing();
             await Task.Delay(5);
 
-            _storeData.ActualMonth = _storeData.ActualMonth.AddMonths(1);
+            _storeData.NextMonth();// = _storeData.ActualMonth.AddMonths(1);
             SetListOfOperations();
 
             DeactivateProgressRing();
@@ -250,10 +255,10 @@ namespace Finanse.Pages {
             ActivateProgressRing();
             await Task.Delay(5);
 
-            _storeData.ActualMonth = _storeData.ActualMonth.AddMonths(1);
+            _storeData.NextMonth();// = _storeData.ActualMonth.AddMonths(1);
             SetListOfOperations();
-            PrevMonthButton.IsEnabled = true; // ponieważ trzeba wrócić z planowanych do aktualnego miesiąca
-            IncomingOperationsButton.Visibility = Visibility.Collapsed;
+         //   PrevMonthButton.IsEnabled = true; // ponieważ trzeba wrócić z planowanych do aktualnego miesiąca
+         //   IncomingOperationsButton.Visibility = Visibility.Collapsed;
 
             DeactivateProgressRing();
         }
@@ -274,12 +279,42 @@ namespace Finanse.Pages {
             RaisePropertyChanged("ZoomedOut_ItemsSource");
             RaisePropertyChanged("ListOfMoneyAccounts");
 
-            SetNextMonthButtonEnabling();
-            SetPreviousMonthButtonEnabling();
+          //  SetNextMonthButtonEnabling();
+          //  SetPreviousMonthButtonEnabling();
 
             SetEmptyListViewInfoVisibility();
+            SetPrevNextIncomingButtons();
+            //    BalanceListView.ItemsSource = ListOfMoneyAccounts();
+        }
 
-        //    BalanceListView.ItemsSource = ListOfMoneyAccounts();
+        private void SetPrevNextIncomingButtons() {
+            var minMonth = MinDate.Date.First();
+            var thisMonth = DateTime.Now.Date.First();
+            
+            if (_storeData.ActualMonth <= minMonth) {
+                PrevMonthButton.IsEnabled = false;
+                PrevMonthButton.Visibility = Visibility.Visible;
+                NextMonthButton.Visibility = Visibility.Visible;
+                IncomingOperationsButton.Visibility = Visibility.Collapsed;
+            }
+            else if (_storeData.ActualMonth == thisMonth) {
+                PrevMonthButton.IsEnabled = true;
+                PrevMonthButton.Visibility = Visibility.Visible;
+                NextMonthButton.Visibility = Visibility.Collapsed;
+                IncomingOperationsButton.Visibility = Visibility.Visible;
+            }
+            else if (_storeData.ActualMonth > thisMonth) {
+                PrevMonthButton.IsEnabled = true;
+                PrevMonthButton.Visibility = Visibility.Visible;
+                NextMonthButton.Visibility = Visibility.Collapsed;
+                IncomingOperationsButton.Visibility = Visibility.Collapsed;
+            }
+            else {
+                PrevMonthButton.IsEnabled = true;
+                PrevMonthButton.Visibility = Visibility.Visible;
+                NextMonthButton.Visibility = Visibility.Visible;
+                IncomingOperationsButton.Visibility = Visibility.Collapsed;
+            }
         }
 
         private bool SetEmptyListViewInfoVisibility() {
@@ -308,7 +343,7 @@ namespace Finanse.Pages {
 
         private void SetPreviousMonthButtonEnabling() {
             Operation eldestOperation = Dal.GetEldestOperation();
-            PrevMonthButton.IsEnabled = eldestOperation != null && Convert.ToDateTime(eldestOperation.Date) < _storeData.ActualMonth;
+          //  PrevMonthButton.IsEnabled = eldestOperation != null && Convert.ToDateTime(eldestOperation.Date) < _storeData.ActualMonth;
         }
 
 
@@ -379,6 +414,15 @@ namespace Finanse.Pages {
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e) {
             Frame.Navigate(typeof(NewOperationPage));
+        }
+
+        private void ActualMonthDatePickerFlyout_Closed(object sender, object e) {
+            if (_storeData.SetMonth(ActualMonthDatePickerFlyout.Date.Date))
+                SetListOfOperations();
+        }
+
+        private void ActualMonthButton_Click(object sender, object e) {
+            ActualMonthDatePickerFlyout.Date = _storeData.ActualMonth;
         }
     }
 }

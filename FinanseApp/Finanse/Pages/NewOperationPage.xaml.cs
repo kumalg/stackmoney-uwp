@@ -95,7 +95,7 @@ namespace Finanse.Pages {
                 InitialAccount.SelectedIndex = 0;
         }
 
-        public Windows.Globalization.DayOfWeek FirstDayOfWeek() => Settings.FirstDayOfWeek;
+        public Windows.Globalization.DayOfWeek FirstDayOfWeek => Settings.FirstDayOfWeek;
 
         private void TransferRadioButton_Checked(object sender, RoutedEventArgs e) {
             TransferAccounts_Grid.Visibility = Visibility.Visible;

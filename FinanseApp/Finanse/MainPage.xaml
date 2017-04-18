@@ -288,8 +288,7 @@
             Style="{StaticResource lala}"
             Grid.Column="1"
             Grid.Row="3"
-            Background="{ThemeResource Background-1}"
-            OverflowButtonVisibility="Collapsed">
+            Background="{ThemeResource Background-1}" >
             <CommandBar.Content>
                 <Grid HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>

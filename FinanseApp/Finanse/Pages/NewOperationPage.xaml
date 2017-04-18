@@ -249,7 +249,7 @@
                             Grid.Column="1"
                             Name="DateValue"
                             Style="{StaticResource CalendarDatePickerStyle1}"
-                            FirstDayOfWeek="{x:Bind FirstDayOfWeek()}"
+                            FirstDayOfWeek="{x:Bind FirstDayOfWeek}"
                             PlaceholderText="Data"
                             Margin="0,16"
                             HorizontalAlignment="Stretch"

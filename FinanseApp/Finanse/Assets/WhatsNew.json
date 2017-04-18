@@ -2,7 +2,7 @@
   {
     "AppVersion": "1.1.6.0",
     "Description": [
-      "nowy wygląd aplikacji",
+      "nowy wygląd aplikacji z półprzeźroczystym menu",
       "przechodzenie do wskazanego miesiąca przy kliknięciu w nazwę miesiąca",
       "naprawiony błąd przy zmianie typu edytowanej operacji (wydatek/wpływ)"
     ]

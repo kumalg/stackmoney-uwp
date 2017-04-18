@@ -3330,14 +3330,14 @@
                                         From="CompactClosed"
                                         To="CompactOpenUp"
                                         GeneratedDuration="0:0:0.467">
-                                        <Storyboard>
+                                        <Storyboard><!--
                                             <ObjectAnimationUsingKeyFrames
                                                 Storyboard.TargetName="MoreButton"
                                                 Storyboard.TargetProperty="VerticalAlignment">
                                                 <DiscreteObjectKeyFrame
                                                     KeyTime="0:0:0"
                                                     Value="Stretch" />
-                                            </ObjectAnimationUsingKeyFrames>
+                                            </ObjectAnimationUsingKeyFrames>-->
                                             <ObjectAnimationUsingKeyFrames
                                                 Storyboard.TargetName="HighContrastBorder"
                                                 Storyboard.TargetProperty="Visibility">
@@ -3401,14 +3401,14 @@
                                         From="CompactOpenUp"
                                         To="CompactClosed"
                                         GeneratedDuration="0:0:0.167">
-                                        <Storyboard>
+                                        <Storyboard><!--
                                             <ObjectAnimationUsingKeyFrames
                                                 Storyboard.TargetName="MoreButton"
                                                 Storyboard.TargetProperty="VerticalAlignment">
                                                 <DiscreteObjectKeyFrame
                                                     KeyTime="0:0:0"
                                                     Value="Stretch" />
-                                            </ObjectAnimationUsingKeyFrames>
+                                            </ObjectAnimationUsingKeyFrames>-->
                                             <ObjectAnimationUsingKeyFrames
                                                 Storyboard.TargetName="HighContrastBorder"
                                                 Storyboard.TargetProperty="Visibility">
@@ -3472,14 +3472,14 @@
                                         From="CompactClosed"
                                         To="CompactOpenDown"
                                         GeneratedDuration="0:0:0.467">
-                                        <Storyboard>
+                                        <Storyboard><!--
                                             <ObjectAnimationUsingKeyFrames
                                                 Storyboard.TargetName="MoreButton"
                                                 Storyboard.TargetProperty="VerticalAlignment">
                                                 <DiscreteObjectKeyFrame
                                                     KeyTime="0:0:0"
                                                     Value="Stretch" />
-                                            </ObjectAnimationUsingKeyFrames>
+                                            </ObjectAnimationUsingKeyFrames>-->
                                             <ObjectAnimationUsingKeyFrames
                                                 Storyboard.TargetName="HighContrastBorder"
                                                 Storyboard.TargetProperty="Visibility">
@@ -3547,14 +3547,14 @@
                                         From="CompactOpenDown"
                                         To="CompactClosed"
                                         GeneratedDuration="0:0:0.167">
-                                        <Storyboard>
+                                        <Storyboard><!--
                                             <ObjectAnimationUsingKeyFrames
                                                 Storyboard.TargetName="MoreButton"
                                                 Storyboard.TargetProperty="VerticalAlignment">
                                                 <DiscreteObjectKeyFrame
                                                     KeyTime="0:0:0"
                                                     Value="Stretch" />
-                                            </ObjectAnimationUsingKeyFrames>
+                                            </ObjectAnimationUsingKeyFrames>-->
                                             <ObjectAnimationUsingKeyFrames
                                                 Storyboard.TargetName="HighContrastBorder"
                                                 Storyboard.TargetProperty="Visibility">
@@ -3631,14 +3631,14 @@
                                             <DiscreteDoubleKeyFrame
                                                 KeyTime="0:0:0"
                                                 Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
-                                        </DoubleAnimationUsingKeyFrames>
+                                        </DoubleAnimationUsingKeyFrames><!--
                                         <ObjectAnimationUsingKeyFrames
                                             Storyboard.TargetName="MoreButton"
                                             Storyboard.TargetProperty="VerticalAlignment">
                                             <DiscreteObjectKeyFrame
                                                 KeyTime="0:0:0"
                                                 Value="Stretch" />
-                                        </ObjectAnimationUsingKeyFrames>
+                                        </ObjectAnimationUsingKeyFrames>-->
                                         <ObjectAnimationUsingKeyFrames
                                             Storyboard.TargetName="HighContrastBorder"
                                             Storyboard.TargetProperty="Visibility">
@@ -3678,14 +3678,14 @@
                                             <DiscreteDoubleKeyFrame
                                                 KeyTime="0:0:0"
                                                 Value="0" />
-                                        </DoubleAnimationUsingKeyFrames>
+                                        </DoubleAnimationUsingKeyFrames><!--
                                         <ObjectAnimationUsingKeyFrames
                                             Storyboard.TargetName="MoreButton"
                                             Storyboard.TargetProperty="VerticalAlignment">
                                             <DiscreteObjectKeyFrame
                                                 KeyTime="0:0:0"
                                                 Value="Stretch" />
-                                        </ObjectAnimationUsingKeyFrames>
+                                        </ObjectAnimationUsingKeyFrames>-->
                                         <ObjectAnimationUsingKeyFrames
                                             Storyboard.TargetName="HighContrastBorder"
                                             Storyboard.TargetProperty="Visibility">
@@ -3772,7 +3772,7 @@
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>
-
+<!--
                             <Button
                                 HorizontalAlignment="Left"
                                 HorizontalContentAlignment="Center"
@@ -3793,7 +3793,7 @@
                                     FontSize="16"
                                     Glyph=""
                                     Height="{ThemeResource AppBarExpandButtonCircleDiameter}" />
-                            </Button>
+                            </Button>-->
                             <Popup
                                 x:Name="OverflowPopup">
                                 <Popup.RenderTransform>

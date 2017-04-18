@@ -31,8 +31,15 @@ namespace Finanse.Pages {
             }
         }
 
-        private DateTime MinDate => DateTime.Parse(Dal.GetEldestOperation().Date);
+        private DateTime MinDate => GetMinDate();
         private DateTime MaxDate => DateTime.Now.AddMonths(1);
+
+        private DateTime GetMinDate() {
+            Operation eldestOperation = Dal.GetEldestOperation();
+            return eldestOperation == null 
+                ? DateTime.Today 
+                : DateTime.Parse(eldestOperation.Date);
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             if (!( e.Parameter is DateTime ))

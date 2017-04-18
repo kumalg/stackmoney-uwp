@@ -16,48 +16,41 @@
         </TransitionCollection>
     </Page.Transitions>
 
-    <Grid
-        Background="Transparent">
+    <Grid Background="Transparent">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid
-            MinHeight="48">
+        <Grid Height="48">
             <Grid.Background>
-                <SolidColorBrush
-                    Color="{ThemeResource SystemBaseHighColor}"
-                    Opacity="0.03" />
+                <SolidColorBrush Color="{ThemeResource SystemBaseHighColor}" Opacity="0.03" />
             </Grid.Background>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition
-                    Width="*" />
-                <ColumnDefinition
-                    Width="Auto" />
-            </Grid.ColumnDefinitions>
+            <Grid MaxWidth="620">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-            <TextBlock
-                Grid.Column="0"
-                Text="Konta"
-                x:Uid="moneyAccounts"
-                Style="{StaticResource PageTitleStyle}" />
+                <TextBlock
+                    Grid.Column="0"
+                    Text="Konta"
+                    x:Uid="moneyAccounts"
+                    Style="{StaticResource PageTitleStyle}" />
 
-            <Button
-                BorderThickness="0"
-                Background="Transparent"
-                Width="48"
-                Height="48"
-                Grid.Column="1"
-                Click="NewMoneyAccount_Click">
-                <FontIcon
-                    FontSize="16"
-                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
-                    Opacity="0.75"
-                    Glyph="" />
-            </Button>
+                <Button
+                    Margin="8,0"
+                    Grid.Column="1"
+                    Style="{StaticResource EllipticButton}"
+                    Click="NewMoneyAccount_Click">
+                    <FontIcon
+                        FontSize="13"
+                        Glyph=""
+                        FontFamily="Segoe MDL2 Assets" />
+                </Button>
+            </Grid>
         </Grid>
         <ListView
             Padding="0,16"

@@ -24,43 +24,51 @@
         Background="Transparent">
 
         <Grid.RowDefinitions>
-            <RowDefinition
-                Height="Auto" />
-            <RowDefinition
-                Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid
-            MinHeight="48">
+        <Grid MinHeight="48">
             <Grid.Background>
-                <SolidColorBrush
-                    Color="{ThemeResource SystemBaseHighColor}"
-                    Opacity="0.03" />
+                <SolidColorBrush Color="{ThemeResource SystemBaseHighColor}" Opacity="0.03" />
             </Grid.Background>
             
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition
-                    Width="Auto" />
-                <ColumnDefinition
-                    Width="*" />
-                <ColumnDefinition
-                    Width="Auto" />
-            </Grid.ColumnDefinitions>
+            <Grid MaxWidth="620">
 
-            <TextBlock
-                Text="Nowa operacja"
-                x:Uid="newOperation"
-                Style="{StaticResource PageTitleStyle}" />
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-            <Button
-                x:Name="UsePatternButton"
-                Style="{StaticResource ButtonStyle1}"
-                ToolTipService.ToolTip="Użyj szablonu"
-                Grid.Column="2"
-                Width="48"
-                Height="48"
-                Click="UsePatternButton_Click">&#xE8C8;
-            </Button>
+                <TextBlock
+                    Text="Nowa operacja"
+                    x:Uid="newOperation"
+                    Style="{StaticResource PageTitleStyle}" />
+<!--
+                <Button
+                    x:Name="UsePatternButton"
+                    Style="{StaticResource ButtonStyle1}"
+                    ToolTipService.ToolTip="Użyj szablonu"
+                    Grid.Column="2"
+                    Width="48"
+                    Height="48"
+                    Click="UsePatternButton_Click">&#xE8C8;
+                </Button>-->
+
+                <Button
+                    x:Name="UsePatternButton"
+                    Margin="8,0"
+                    Grid.Column="2"
+                    Style="{StaticResource EllipticButton}"
+                    ToolTipService.ToolTip="Użyj szablonu"
+                    Click="UsePatternButton_Click">
+                    <FontIcon
+                        FontSize="13"
+                        Glyph="&#xE8C8;"
+                        FontFamily="Segoe MDL2 Assets" />
+                </Button>
+            </Grid>
         </Grid>
 
         <ScrollViewer
@@ -252,7 +260,8 @@
                             Padding="0"
                             FontSize="13"
                             Foreground="{ThemeResource Text}"
-                            Background="{ThemeResource Background+1}"
+                            Background="Transparent"
+                            BorderThickness="0"
                             Grid.Column="2"
                             FontFamily="Segoe MDL2 Assets"
                             Click="Button_Click"

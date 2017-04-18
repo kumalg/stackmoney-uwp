@@ -299,7 +299,7 @@
     <value>Privacy policy:</value>
   </data>
   <data name="privacyPolicyDesc.Text" xml:space="preserve">
-    <value>Aplikacja "Kumalg Finanse" nie zbiera żadnych danych osobowych. W celu synchronizacji danych aplikacja wykorzystuje informacje przypisane do Twojego konta Microsoft. Jest to konieczne do synchronizacji ustawień.</value>
+    <value>Aplikacja StackMoney nie zbiera żadnych danych osobowych. W celu synchronizacji danych aplikacja poprosi wyłącznie o dostęp do swojego folderu w usłudze OneDrive. Aplikacja nie będzie miała jednak dostępu do innych Twoich plików.</value>
   </data>
   <data name="reminderTime.Text" xml:space="preserve">
     <value>Reminder time</value>

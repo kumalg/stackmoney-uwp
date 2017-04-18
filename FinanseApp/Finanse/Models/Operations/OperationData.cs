@@ -85,11 +85,11 @@ namespace Finanse.Models.Operations {
 
         public string ActualOperationsSum => AllOperations.Sum(i => i.SignedCost).ToString("C", Settings.ActualCultureInfo);
 
-        private HashSet<string> _visiblePayFormList;
-        public HashSet<string> VisiblePayFormList {
+        private List<string> _visiblePayFormList;
+        public List<string> VisiblePayFormList {
             get {
                 return _visiblePayFormList ??
-                       (_visiblePayFormList = new HashSet<string>(MAccountsDal.GetAllAccountsAndSubAccounts().Select(i => i.GlobalId)));
+                       (_visiblePayFormList = new List<string>(MAccountsDal.GetAllAccountsAndSubAccounts().Select(i => i.GlobalId)));
             }
             set {
                 if (!_visiblePayFormList.Equals(value))
@@ -131,7 +131,7 @@ namespace Finanse.Models.Operations {
             get {
                 if (_operationsByDay != null 
                     && _monthOfDayGrouping == ActualMonth 
-                    && _visiblePayFormList.SetEquals(_visiblePayFormListOfDayGrouping) 
+                    && _visiblePayFormList.SequenceEqual(_visiblePayFormListOfDayGrouping) 
                     && !_forceByDayUpdate)
                     return _operationsByDay;
 
@@ -238,7 +238,7 @@ namespace Finanse.Models.Operations {
             get {
                 if (_operationsByCategory != null
                     && _monthOfCategoryGrouping == ActualMonth
-                    && _visiblePayFormList.SetEquals(_visiblePayFormListOfCategoryGrouping)
+                    && _visiblePayFormList.SequenceEqual(_visiblePayFormListOfCategoryGrouping)
                     && !_forceByCategoryUpdate)
                     return _operationsByCategory;
 

@@ -71,7 +71,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SDKVERSION_10586;SDKVERSION_14393;SDKVERSION_15063;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -99,6 +99,7 @@
     <Content Include="Assets\defaultData.json" />
     <Content Include="Assets\Fonts\FontAwesome.ttf" />
     <Content Include="Assets\Fonts\Bariol.ttf" />
+    <None Include="Finanse.props" />
     <None Include="Finanse_StoreKey.pfx" />
     <None Include="project.json" />
     <PRIResource Include="Strings\en-US\Resources.resw" />
@@ -124,6 +125,7 @@
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\ColorToBrushConverter.cs" />
     <Compile Include="Converters\ColorKeyToSolidColorBrushConverter.cs" />
+    <Compile Include="Converters\ScaleValueConverter.cs" />
     <Compile Include="Converters\ExpenseToggleEnablingByBossCategoryIdConverter.cs" />
     <Compile Include="Converters\BooleanToColorConverter.cs" />
     <Compile Include="Converters\ObjectToSolidColorBrushConverter.cs" />
@@ -193,7 +195,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Categories\CategoryWithSubCategories.cs" />
-    <Compile Include="Models\Helpers\Class1.cs" />
+    <Compile Include="Models\Helpers\BackupHelper.cs" />
     <Compile Include="Models\Helpers\DateTimeHelper.cs" />
     <Compile Include="Models\Helpers\Flyouts.cs" />
     <Compile Include="Models\Helpers\Functions.cs" />
@@ -229,6 +231,7 @@
     <Compile Include="Models\Statistics\ChartPart.cs" />
     <Compile Include="Models\Statistics\StatisticsData.cs" />
     <Compile Include="Models\Statistics\SubCategoriesList.cs" />
+    <Compile Include="Models\ThemeExtensions.cs" />
     <Compile Include="Models\WhatsNew\WhatsNew.cs" />
     <Compile Include="Models\WhatsNew\WhatsNewHelper.cs" />
     <Compile Include="Models\WhatsNew\WhatsNewMessageDialog.cs" />

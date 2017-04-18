@@ -29,19 +29,21 @@
         <Grid
             MinHeight="48">
             <Grid.Background>
-                <SolidColorBrush
-                    Color="{ThemeResource SystemBaseHighColor}"
-                    Opacity="0.03" />
+                <SolidColorBrush Color="{ThemeResource SystemBaseHighColor}" Opacity="0.03" />
             </Grid.Background>
-
-            <TextBlock
-                Text="Ustawienia"
-                x:Uid="settings"
-                Style="{StaticResource PageTitleStyle}" />
+            
+            <Grid MaxWidth="620">
+                <TextBlock
+                    Text="Ustawienia"
+                    x:Uid="settings"
+                    Style="{StaticResource PageTitleStyle}" />
+            </Grid>
         </Grid>
 
         <Pivot
-            Grid.Row="1">
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            MaxWidth="620">
             <PivotItem
                 Margin="0">
                 <PivotItem.Header>
@@ -199,9 +201,8 @@
                                 </StackPanel>
                             </StackPanel>
                             <Border
-                                Opacity="0.1"
                                 Margin="0,32"
-                                BorderBrush="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                BorderBrush="{ThemeResource BorderBrush}"
                                 BorderThickness="0,0,0,1" />
 
                             <TextBlock
@@ -463,7 +464,7 @@
                                 Margin="10,0"
                                 FontSize="14"
                                 TextAlignment="Justify"
-                                Text="Aplikacja StackMoney nie zbiera żadnych danych osobowych. W celu synchronizacji danych aplikacja wykorzystuje informacje przypisane do Twojego konta Microsoft. Jest to konieczne do synchronizacji ustawień."
+                                Text="Aplikacja StackMoney nie zbiera żadnych danych osobowych. W celu synchronizacji danych aplikacja poprosi wyłącznie o dostęp do swojego folderu w usłudze OneDrive. Aplikacja nie będzie miała jednak dostępu do innych Twoich plików."
                                 x:Uid="privacyPolicyDesc"
                                 TextWrapping="WrapWholeWords"
                                 Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"

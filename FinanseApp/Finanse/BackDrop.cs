@@ -1,42 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI;
+﻿using Windows.UI;
 using Windows.UI.Composition;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Hosting;
-using Windows.UI.Xaml.Media;
 using Microsoft.Graphics.Canvas.Effects;
 
 namespace Finanse {
     public class BackDrop : Control {
 
-        private Compositor compositor;
-        private GaussianBlurEffect frostEffect;
-        private CompositionEffectFactory effectFactory;
-        private CompositionBackdropBrush backdropBrush;
-        private CompositionEffectBrush effectBrush;
+#if SDKVERSION_15063
+        private Compositor _compositor;
+        private GaussianBlurEffect _frostEffect;
+        private CompositionEffectFactory _effectFactory;
+        private CompositionBackdropBrush _backdropBrush;
+        private CompositionEffectBrush _effectBrush;
 
-        private SpriteVisual frostVisual;
+        private SpriteVisual _frostVisual;
+#endif
 
         public BackDrop() {
+
+#if SDKVERSION_15063
             Initialize();
             this.SizeChanged += FrostHostOnSizeChanged;
+#endif
+
         }
 
+#if SDKVERSION_15063
         private void FrostHostOnSizeChanged(object sender, SizeChangedEventArgs sizeChangedEventArgs) {
-            if (frostVisual != null)
-                frostVisual.Size = new System.Numerics.Vector2((float)ActualWidth, (float)ActualHeight);
+            if (_frostVisual != null)
+                _frostVisual.Size = new System.Numerics.Vector2((float)ActualWidth, (float)ActualHeight);
         }
 
         private void Initialize() {
 
-            compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
+            _compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
 
-            frostEffect = new GaussianBlurEffect() {
+            _frostEffect = new GaussianBlurEffect {
                 Name = "Blur",
                 BlurAmount = 0.0f,
                 BorderMode = EffectBorderMode.Hard,
@@ -45,19 +46,19 @@ namespace Finanse {
             };
 
             // Create an instance of the effect and set its source to a CompositionBackdropBrush
-            effectFactory = compositor.CreateEffectFactory(frostEffect);
-            backdropBrush = compositor.CreateHostBackdropBrush();
-            effectBrush = effectFactory.CreateBrush();
+            _effectFactory = _compositor.CreateEffectFactory(_frostEffect);
+            _backdropBrush = _compositor.CreateHostBackdropBrush();
+            _effectBrush = _effectFactory.CreateBrush();
 
             // Create a Visual to contain the frosted glass effect
-            frostVisual = compositor.CreateSpriteVisual();
-            frostVisual.Brush = effectBrush;
-            frostVisual.Size = new System.Numerics.Vector2((float)ActualWidth, (float)ActualHeight);
+            _frostVisual = _compositor.CreateSpriteVisual();
+            _frostVisual.Brush = _effectBrush;
+            _frostVisual.Size = new System.Numerics.Vector2((float)ActualWidth, (float)ActualHeight);
 
-            effectBrush.SetSourceParameter("backdropBrush", backdropBrush);
+            _effectBrush.SetSourceParameter("backdropBrush", _backdropBrush);
 
             // Add the blur as a child of the host in the visual tree
-            ElementCompositionPreview.SetElementChildVisual(this, frostVisual);
+            ElementCompositionPreview.SetElementChildVisual(this, _frostVisual);
         }
 
         public static readonly DependencyProperty ColorProperty = DependencyProperty.Register("Color", typeof(Color), typeof(BackDrop), new PropertyMetadata(Colors.Blue));
@@ -68,7 +69,7 @@ namespace Finanse {
             }
             set {
                 SetValue(ColorProperty, value);
-                frostEffect = new GaussianBlurEffect() {
+                _frostEffect = new GaussianBlurEffect {
                     Name = "Blur",
                     BlurAmount = 0.0f,
                     BorderMode = EffectBorderMode.Hard,
@@ -77,22 +78,21 @@ namespace Finanse {
                 };
 
                 // Create an instance of the effect and set its source to a CompositionBackdropBrush
-                effectFactory = compositor.CreateEffectFactory(frostEffect);
-                backdropBrush = compositor.CreateHostBackdropBrush();
-                effectBrush = effectFactory.CreateBrush();
+                _effectFactory = _compositor.CreateEffectFactory(_frostEffect);
+                _backdropBrush = _compositor.CreateHostBackdropBrush();
+                _effectBrush = _effectFactory.CreateBrush();
 
                 // Create a Visual to contain the frosted glass effect
-                frostVisual = compositor.CreateSpriteVisual();
-                frostVisual.Brush = effectBrush;
-                frostVisual.Size = new System.Numerics.Vector2((float)ActualWidth, (float)ActualHeight);
+                _frostVisual = _compositor.CreateSpriteVisual();
+                _frostVisual.Brush = _effectBrush;
+                _frostVisual.Size = new System.Numerics.Vector2((float)ActualWidth, (float)ActualHeight);
 
-                effectBrush.SetSourceParameter("backdropBrush", backdropBrush);
+                _effectBrush.SetSourceParameter("backdropBrush", _backdropBrush);
 
                 // Add the blur as a child of the host in the visual tree
-                ElementCompositionPreview.SetElementChildVisual(this, frostVisual);
+                ElementCompositionPreview.SetElementChildVisual(this, _frostVisual);
             }
         }
-
-
+#endif
     }
 }

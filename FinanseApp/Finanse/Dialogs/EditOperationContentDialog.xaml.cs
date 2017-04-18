@@ -164,23 +164,23 @@ namespace Finanse.Dialogs {
             RaisePropertyChanged("AccountsComboBox");
 
             if (CategoryValue.SelectedIndex != -1) {
-                int idOfSelectedCategory = (int)((ComboBoxItem)CategoryValue.SelectedItem).Tag;
-                int idOfSelectedSubCategory = -1;
+                string idOfSelectedCategory = ((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString();
+                string idOfSelectedSubCategory = string.Empty;
 
                 if (SubCategoryValue.SelectedIndex != -1)
-                    idOfSelectedSubCategory = (int)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag;
+                    idOfSelectedSubCategory = ((ComboBoxItem)SubCategoryValue.SelectedItem).Tag.ToString();
 
                 SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
 
-                if (CategoryValue.Items.OfType<ComboBoxItem>().Any(i => (int)i.Tag == idOfSelectedCategory))
-                    CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(i => (int)i.Tag == idOfSelectedCategory);
+                if (CategoryValue.Items.OfType<ComboBoxItem>().Any(i => i.Tag.ToString() == idOfSelectedCategory))
+                    CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(i => i.Tag.ToString() == idOfSelectedCategory);
 
                 else
                     SubCategoryValue.IsEnabled = false;
 
-                if (idOfSelectedSubCategory != -1) {
-                    if (SubCategoryValue.Items.OfType<SubCategory>().Any(i => i.Id == idOfSelectedSubCategory)) {
-                        SubCategory subCatItem = Dal.GetSubCategoryById(idOfSelectedSubCategory);
+                if (!string.IsNullOrEmpty(idOfSelectedSubCategory)) {
+                    if (SubCategoryValue.Items.OfType<SubCategory>().Any(i => i.GlobalId == idOfSelectedSubCategory)) {
+                        SubCategory subCatItem = Dal.GetSubCategoryByGlobalId(idOfSelectedSubCategory);
                         SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
                     }
                 }

@@ -1,5 +1,13 @@
 [
   {
+    "AppVersion": "1.1.6.0",
+    "Description": [
+      "nowy wygląd aplikacji",
+      "przechodzenie do wskazanego miesiąca przy kliknięciu w nazwę miesiąca",
+      "naprawiony błąd przy zmianie typu edytowanej operacji (wydatek/wpływ)"
+    ]
+  },
+  {
     "AppVersion": "1.1.5.0",
     "Description": [
       "synchronizacja operacji, kategorii, kont",

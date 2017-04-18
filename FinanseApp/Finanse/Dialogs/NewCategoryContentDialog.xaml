@@ -10,7 +10,7 @@
     xmlns:data="using:Finanse.Elements"
     Title="Nowa kategoria"
     x:Uid="newCategory"
-    Background="{ThemeResource BackgroundTransparent}"
+    Background="{ThemeResource ContentDialogBackgroundBrush}"
     PrimaryButtonText="Dodaj"
     SecondaryButtonText="Anuluj"
     PrimaryButtonClick="NewCategory_AddButtonClick">

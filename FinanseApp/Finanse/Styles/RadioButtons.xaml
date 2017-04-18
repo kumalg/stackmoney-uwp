@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="using:Finanse.Models"
     mc:Ignorable="d">
 
     <Style x:Key="RadioButtonLikeButtonStyle" TargetType="RadioButton">
@@ -339,141 +338,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-<!--
-    <Style x:Key="HamburgerGreenRadioButton" TargetType="RadioButton">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
-        <Setter Property="VerticalContentAlignment" Value="Top" />
-        <Setter Property="FontFamily" Value="{StaticResource DefaultFontFamily}" />
-        <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
-        <Setter Property="MinWidth" Value="120" />
-        <Setter Property="UseSystemFocusVisuals" Value="True" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="RadioButton">
-                    <Grid
-                        x:Name="HamburgerRadioButtonGrid"
-                        HorizontalAlignment="Stretch"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        Background="{TemplateBinding Background}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
 
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal" />
-                                <VisualState x:Name="PointerOver">
-                                    <VisualState.Setters>
-                                        <Setter
-                                            Target="HamburgerRadioButtonGrid.(Panel.Background)"
-                                            Value="{ThemeResource AccentColor}" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                                <VisualState x:Name="Pressed">
-                                    <VisualState.Setters>
-                                        <Setter
-                                            Target="HamburgerRadioButtonGrid.(Panel.Background)"
-                                            Value="{ThemeResource AccentColor+1}" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                            </VisualStateGroup>
-                            <VisualStateGroup x:Name="CheckStates">
-                                <VisualStateGroup.Transitions>
-                                    <VisualTransition
-                                        From="Checked"
-                                        GeneratedDuration="0:0:0.2"
-                                        To="Unchecked">
-                                        <Storyboard>
-                                            <ColorAnimation
-                                                Storyboard.TargetName="HamburgerIcon"
-                                                To="{Binding Source={ThemeResource AccentText-1},Path=Color}"
-                                                Duration="0:0:0.2"
-                                                Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
-                                            <DoubleAnimation
-                                                Duration="0:0:0.2"
-                                                To="0"
-                                                Storyboard.TargetProperty="(UIElement.Opacity)"
-                                                Storyboard.TargetName="HoverBorder" />
-                                        </Storyboard>
-                                    </VisualTransition>
-                                </VisualStateGroup.Transitions>
-                                <VisualState x:Name="Checked">
-                                    <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="HamburgerIcon"
-                                            To="{Binding Source={ThemeResource AccentText},Path=Color}"
-                                            Duration="0:0:0.2"
-                                            Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
-                                        <DoubleAnimation
-                                            Duration="0:0:0.2"
-                                            To="1"
-                                            Storyboard.TargetProperty="(UIElement.Opacity)"
-                                            Storyboard.TargetName="HoverBorder"
-                                            d:IsOptimized="True" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Unchecked">
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Duration="0"
-                                            To="0"
-                                            Storyboard.TargetProperty="(UIElement.Opacity)"
-                                            Storyboard.TargetName="HoverBorder"
-                                            d:IsOptimized="True" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Indeterminate" />
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-
-                        <Grid
-                            Margin="16,0,0,0"
-                            Width="48"
-                            Height="48"
-                            VerticalAlignment="Top">
-                            <StackPanel
-                                x:Name="HoverBorder"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Left">
-                                <Ellipse
-                                    Width="6"
-                                    Height="6"
-                                    VerticalAlignment="Center"
-                                    Fill="{ThemeResource AccentText}" />
-                            </StackPanel>
-                            <FontIcon
-                                x:Name="HamburgerIcon"
-                                FontSize="16"
-                                Foreground="{ThemeResource AccentText-1}"
-                                FontFamily="{TemplateBinding FontFamily}"
-                                Glyph="{TemplateBinding Tag}"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center" />
-                        </Grid>
-
-                        <ContentPresenter
-                            Margin="0"
-                            FontSize="14"
-                            x:Name="ContentPresenter"
-                            AutomationProperties.AccessibilityView="Raw"
-                            Content="{TemplateBinding Content}"
-                            FontFamily="{StaticResource DefaultFontFamily}"
-                            Grid.Column="1"
-                            Foreground="{ThemeResource AccentText}"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            TextWrapping="Wrap"
-                            VerticalAlignment="Center" />
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
--->
     <Style x:Key="ColorRadioButton" TargetType="RadioButton">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
@@ -1251,4 +1116,126 @@
         </Setter>
     </Style>
 
+        <Style x:Key="GroupByRadioButtoStyle" TargetType="RadioButton">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Background" Value="{ThemeResource RadioButtonBackground}" />
+            <Setter Property="Foreground" Value="{ThemeResource RadioButtonForeground}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource RadioButtonBorderBrush}" />
+            <Setter Property="Padding" Value="16,0" />
+            <Setter Property="Margin" Value="16,0"/>
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter Property="MinWidth" Value="32" />
+            <Setter Property="UseSystemFocusVisuals" Value="True" />
+            <Setter Property="FocusVisualMargin" Value="-7,-3,-7,-3" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Grid x:Name="RootGrid">
+                         
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.2" />
+                                </VisualStateGroup.Transitions>
+
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Duration="0"
+                                            To="0.03"
+                                            Storyboard.TargetProperty="(UIElement.Opacity)"
+                                            Storyboard.TargetName="Hover"
+                                            d:IsOptimized="True" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Duration="0"
+                                            To="0.1"
+                                            Storyboard.TargetProperty="(UIElement.Opacity)"
+                                            Storyboard.TargetName="Hover"
+                                            d:IsOptimized="True" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CheckStates">
+                                
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.2" />
+                                </VisualStateGroup.Transitions>
+
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Duration="0"
+                                            To="0"
+                                            Storyboard.TargetProperty="(UIElement.Opacity)"
+                                            Storyboard.TargetName="Hover"
+                                            d:IsOptimized="True" />
+                                        <DoubleAnimation
+                                            Duration="0"
+                                            To="1"
+                                            Storyboard.TargetProperty="(UIElement.Opacity)"
+                                            Storyboard.TargetName="CheckedHover"
+                                            d:IsOptimized="True" />
+                                        <DoubleAnimation
+                                            Duration="0"
+                                            To="1"
+                                            Storyboard.TargetProperty="Opacity"
+                                            Storyboard.TargetName="CheckedContentPresenter"
+                                            d:IsOptimized="True" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked" />
+                                <VisualState x:Name="Indeterminate" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Rectangle
+                            x:Name="Hover"
+                            Opacity="0"
+                            Fill="{TemplateBinding Background}"
+                            RadiusX="{Binding Height, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=OneWay, Converter={StaticResource ScaleValueConverter}}"
+                            RadiusY="{Binding Height, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=OneWay, Converter={StaticResource ScaleValueConverter}}" />
+
+                        <TextBlock
+                            x:Name="ContentPresenter"
+                            Margin="{TemplateBinding Padding}"
+                            AutomationProperties.AccessibilityView="Raw"
+                            Foreground="{TemplateBinding Foreground}"
+                            Text="{TemplateBinding Content}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            
+                        <Rectangle
+                            x:Name="CheckedHover"
+                            Opacity="0"
+                            Fill="{ThemeResource AccentColor}"
+                            RadiusX="{Binding Height, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=OneWay, Converter={StaticResource ScaleValueConverter}}"
+                            RadiusY="{Binding Height, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=OneWay, Converter={StaticResource ScaleValueConverter}}" />
+
+                        <TextBlock
+                            x:Name="CheckedContentPresenter"
+                            Opacity="0"
+                            Margin="{TemplateBinding Padding}"
+                            AutomationProperties.AccessibilityView="Raw"
+                            Foreground="{ThemeResource AccentText}"
+                            Text="{TemplateBinding Content}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+
+                    </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    
 </ResourceDictionary>

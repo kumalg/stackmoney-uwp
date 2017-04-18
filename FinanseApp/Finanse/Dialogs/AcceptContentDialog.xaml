@@ -1,5 +1,5 @@
 ﻿<ContentDialog
-    Background="{ThemeResource BackgroundTransparent}"
+    Background="{ThemeResource ContentDialogBackgroundBrush}"
     BorderThickness="0"
     BorderBrush="Transparent"
     MaxWidth="{ThemeResource ContentDialogMinWidth}"

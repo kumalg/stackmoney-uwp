@@ -201,101 +201,92 @@
                 Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid
-            MinHeight="48">
+        <Grid MinHeight="48">
             <Grid.Background>
-                <SolidColorBrush
-                    Color="{ThemeResource SystemBaseHighColor}"
-                    Opacity="0.03" />
+                <SolidColorBrush Color="{ThemeResource SystemBaseHighColor}" Opacity="0.03" />
             </Grid.Background>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition
-                    Width="Auto" />
-                <ColumnDefinition
-                    Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <TextBlock
-                Text="Statystyki"
-                x:Uid="statistics"
-                Style="{StaticResource PageTitleStyle}" />
-
-
-            <StackPanel
-                Grid.Column="1"
-                Orientation="Horizontal"
-                HorizontalAlignment="Right">
+            <Grid MaxWidth="620">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="Auto" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
 
                 <TextBlock
-                    x:Name="Zakres"
-                    Style="{StaticResource PageTitleStyle}"
-                    Margin="0"
-                    VerticalAlignment="Center"
-                    Text="{x:Bind DateRangeText, Mode=OneWay}" />
+                    Text="Statystyki"
+                    x:Uid="statistics"
+                    Style="{StaticResource PageTitleStyle}" />
 
-                <Button
-                    BorderThickness="0"
-                    Width="32"
-                    Height="32"
-                    Margin="8,0"
-                    Background="Transparent"
-                    VerticalAlignment="Center">
-                    <Button.Content>
+                <StackPanel
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+
+                    <TextBlock
+                        x:Name="Zakres"
+                        Style="{StaticResource PageTitleStyle}"
+                        Margin="0"
+                        VerticalAlignment="Center"
+                        Text="{x:Bind DateRangeText, Mode=OneWay}" />
+
+                    <Button
+                        Margin="8,0"
+                        Style="{StaticResource EllipticButton}">
                         <FontIcon
-                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
-                            Opacity="0.5"
                             FontSize="13"
-                            Glyph="" />
-                    </Button.Content>
-                    <Button.Flyout>
-                        <Flyout
-                            x:Name="VisibleAccountsFlyout"
-                            Closed="DateRangeFlyout_Closed"
-                            Placement="Bottom">
-                            <Flyout.FlyoutPresenterStyle>
-                                <Style
-                                    TargetType="FlyoutPresenter">
-                                    <Setter
-                                        Property="BorderThickness"
-                                        Value="0" />
-                                    <Setter
-                                        Property="Background"
-                                        Value="{ThemeResource Background-1}" />
-                                </Style>
-                            </Flyout.FlyoutPresenterStyle>
+                            Glyph=""
+                            FontFamily="Segoe MDL2 Assets" />
 
-                            <StackPanel>
-                                <TextBlock
-                                    HorizontalAlignment="Center"
-                                    Margin="0,24,0,0"
-                                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
-                                    Opacity="0.75"
-                                    FontFamily="{StaticResource DefaultFontFamily}"
-                                    Text="Data początkowa" />
-                                <DatePicker
-                                    x:Name="MinDatePicker"
-                                    FontFamily="{StaticResource DefaultFontFamily}"
-                                    Margin="16,8,16,0" />
+                        <Button.Flyout>
+                            <Flyout
+                                x:Name="VisibleAccountsFlyout"
+                                Closed="DateRangeFlyout_Closed"
+                                Placement="Bottom">
+                                <Flyout.FlyoutPresenterStyle>
+                                    <Style
+                                        TargetType="FlyoutPresenter">
+                                        <Setter
+                                            Property="BorderThickness"
+                                            Value="0" />
+                                        <Setter
+                                            Property="Background"
+                                            Value="{ThemeResource FlyoutBackgroundBrush}" />
+                                    </Style>
+                                </Flyout.FlyoutPresenterStyle>
 
-                                <TextBlock
-                                    HorizontalAlignment="Center"
-                                    Margin="0,24,0,0"
-                                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
-                                    Opacity="0.75"
-                                    FontFamily="{StaticResource DefaultFontFamily}"
-                                    Text="Data końcowa" />
-                                <DatePicker
-                                    x:Name="MaxDatePicker"
-                                    FontFamily="{StaticResource DefaultFontFamily}"
-                                    Margin="16,8,16,24" />
-                            </StackPanel>
+                                <StackPanel>
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        Margin="0,24,0,0"
+                                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                        Opacity="0.75"
+                                        FontFamily="{StaticResource DefaultFontFamily}"
+                                        Text="Data początkowa" />
+                                    <DatePicker
+                                        x:Name="MinDatePicker"
+                                        FontFamily="{StaticResource DefaultFontFamily}"
+                                        Margin="16,8,16,0" />
 
-                        </Flyout>
-                    </Button.Flyout>
-                </Button>
-            </StackPanel>
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        Margin="0,24,0,0"
+                                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                                        Opacity="0.75"
+                                        FontFamily="{StaticResource DefaultFontFamily}"
+                                        Text="Data końcowa" />
+                                    <DatePicker
+                                        x:Name="MaxDatePicker"
+                                        FontFamily="{StaticResource DefaultFontFamily}"
+                                        Margin="16,8,16,24" />
+                                </StackPanel>
 
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                </StackPanel>
+            </Grid>
         </Grid>
 
         <ScrollViewer
@@ -361,8 +352,7 @@
                     <Border
                         Grid.Column="1"
                         BorderThickness="1,0,0,0"
-                        BorderBrush="{ThemeResource SystemControlBackgroundBaseHighBrush}"
-                        Opacity="0.1" />
+                        BorderBrush="{ThemeResource BorderBrush}"/>
 
                     <StackPanel
                         VerticalAlignment="Center"
@@ -388,16 +378,13 @@
                     Margin="16"
                     BorderThickness="0,1,0,0"
                     MaxWidth="512"
-                    BorderBrush="{ThemeResource SystemControlBackgroundBaseHighBrush}"
-                    Opacity="0.1" />
+                    BorderBrush="{ThemeResource BorderBrush}" />
                 <Grid
                     Margin="16,0"
                     MaxWidth="512"
                     BorderThickness="1"
+                    BorderBrush="{ThemeResource BorderBrush}"
                     Height="48">
-                    <Grid.BorderBrush>
-                        <SolidColorBrush Color="{ThemeResource SystemBaseHighColor}" Opacity="0.1"></SolidColorBrush>
-                    </Grid.BorderBrush>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition
@@ -416,8 +403,7 @@
                     <Border
                         Grid.Column="1"
                         BorderThickness="1,0,0,0"
-                        BorderBrush="{ThemeResource SystemControlBackgroundBaseHighBrush}"
-                        Opacity="0.1" />
+                        BorderBrush="{ThemeResource BorderBrush}" />
                     <RadioButton
                         Grid.Column="2"
                         GroupName="ExpenseOrIncome"

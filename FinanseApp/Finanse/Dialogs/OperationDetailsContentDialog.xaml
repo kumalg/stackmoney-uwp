@@ -42,13 +42,8 @@
                                     MaxWidth="{TemplateBinding MinWidth}"
                                     MaxHeight="{TemplateBinding MaxHeight}"
                                     MinWidth="320"
+                                    Background="{ThemeResource ContentDialogBackgroundBrush}"
                                     MinHeight="{TemplateBinding MinHeight}">
-
-                                    <Border.Background>
-                                        <SolidColorBrush
-                                            Color="{Binding Source={ThemeResource Background}, Path=Color}"
-                                            Opacity="0.75"/>
-                                    </Border.Background>
 
                                     <Grid
                                         x:Name="DialogSpace"
@@ -197,8 +192,7 @@
         <Border
             Margin="0,10"
             BorderThickness="0,0,0,1"
-            BorderBrush="{ThemeResource SystemControlBackgroundBaseHighBrush}"
-            Opacity="0.1"/>
+            BorderBrush="{ThemeResource BorderBrush}" />
 
         <StackPanel
             Name="CategoryValuePanel"

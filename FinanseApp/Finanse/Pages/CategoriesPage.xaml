@@ -132,8 +132,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid
-        Background="Transparent">
+    <Grid Background="Transparent">
 
 
         <VisualStateManager.VisualStateGroups>
@@ -187,12 +186,10 @@
                     Color="{ThemeResource SystemBaseHighColor}"
                     Opacity="0.03" />
             </Grid.Background>
-
+            
             <Grid.ColumnDefinitions>
-                <ColumnDefinition
-                    Width="*" />
-                <ColumnDefinition
-                    Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <TextBlock
@@ -202,17 +199,14 @@
                 Style="{StaticResource PageTitleStyle}" />
 
             <Button
-                BorderThickness="0"
-                Background="Transparent"
-                Width="48"
-                Height="48"
+                Margin="8,0"
                 Grid.Column="1"
+                Style="{StaticResource EllipticButton}"
                 Click="NewCategory_Click">
                 <FontIcon
-                    FontSize="16"
-                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
-                    Opacity="0.75"
-                    Glyph="" />
+                    FontSize="13"
+                    Glyph=""
+                    FontFamily="Segoe MDL2 Assets" />
             </Button>
         </Grid>
 
@@ -331,6 +325,7 @@
                         Text="Wydatki" />
 
                     <ListView
+                        Name="ExpensesListView"
                         Grid.Row="1"
                         Grid.Column="0"
                         HorizontalContentAlignment="Right"

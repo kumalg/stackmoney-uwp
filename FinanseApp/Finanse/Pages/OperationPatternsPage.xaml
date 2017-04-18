@@ -24,18 +24,18 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid
-            MinHeight="48">
+        <Grid MinHeight="48">
             <Grid.Background>
-                <SolidColorBrush
-                    Color="{ThemeResource SystemBaseHighColor}"
-                    Opacity="0.03" />
+                <SolidColorBrush Color="{ThemeResource SystemBaseHighColor}" Opacity="0.03" />
             </Grid.Background>
 
-            <TextBlock
-                Text="Szablony"
-                x:Uid="patterns"
-                Style="{StaticResource PageTitleStyle}" />
+            <Grid MaxWidth="620">
+                <TextBlock
+                    Text="Szablony"
+                    x:Uid="patterns"
+                    Style="{StaticResource PageTitleStyle}" />
+            </Grid>
+            
         </Grid>
         <ListView
             Padding="0,16"

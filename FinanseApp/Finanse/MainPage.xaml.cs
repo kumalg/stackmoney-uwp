@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -13,16 +12,12 @@ using Windows.System.Profile;
 using Windows.UI.Core;
 using Windows.Foundation;
 using Windows.ApplicationModel.Core;
+using Windows.Foundation.Metadata;
 using Windows.Storage;
-using Windows.UI.Composition;
-using Windows.UI.Xaml.Hosting;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Finanse.Models;
-using Finanse.Models.DateTimeExtensions;
 using Finanse.Models.Helpers;
 using Finanse.Models.WhatsNew;
-using Microsoft.Graphics.Canvas.Effects;
 using Microsoft.Toolkit.Uwp;
 
 namespace Finanse {
@@ -43,12 +38,11 @@ namespace Finanse {
             DalBase.CreateBackup();
             DalBase.CreateDb();
 
-
-          //  if (Settings.LastAppVersion != Informations.AppVersion) {
-                DalBase.ConvertAccounts();
-                DalBase.RepairDb();
-                DalBase.ConvertLocalIdReferenceToGlobal();
-          //  }
+            //  if (Settings.LastAppVersion != Informations.AppVersion) {
+            DalBase.ConvertAccounts();
+            DalBase.RepairDb();
+            DalBase.ConvertLocalIdReferenceToGlobal();
+            //  }
             DalBase.AddItemsIfEmpty();
 
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(360, 530));
@@ -103,12 +97,6 @@ namespace Finanse {
             SystemNavigationManager.GetForCurrentView().BackRequested += BackRequestedEvent;
             //BackButton.Click += BackRequest;
             base.OnNavigatedTo(e);
-        }
-
-        private void BackRequest(object sender, RoutedEventArgs e) {
-            if (AktualnaStrona_Frame.CurrentSourcePageType == typeof(OperationsPage))
-                return;
-            AktualnaStrona_Frame.Navigate(typeof(OperationsPage));
         }
 
 
@@ -277,8 +265,19 @@ namespace Finanse {
             }
         }
 
-        private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e) => StatusBarMethods.WhichOrientation();
+        private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e) {
+            StatusBarMethods.SetStatusBarColors(((ThemeAwareFrame)Frame).AppTheme.ToApplicationTheme());
+            StatusBarMethods.WhichOrientation();
 
+            if (TitleBarRowDefinition != null)
+                TitleBarRowDefinition.Height =( ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar") && ActualWidth < 800)
+                    ? new GridLength(0)
+                    : new GridLength(31);
+
+            TitleBar.Visibility = ActualWidth < 800 
+                ? Visibility.Visible 
+                : Visibility.Collapsed;
+        } 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e) {
             Storyboard sb = (int) Pane.Width == 320
                 ? this.Resources["ClosePane"] as Storyboard

@@ -118,7 +118,7 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static List<Operation> GetAllOperations(DateTime actualMonth, HashSet<string> visiblePayFormList) {
+        public static List<Operation> GetAllOperations(DateTime actualMonth, List<string> visiblePayFormList) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 
@@ -134,7 +134,7 @@ namespace Finanse.DataAccessLayer {
         }
 
 
-        public static List<Operation> GetAllFutureOperations(HashSet<string> visiblePayFormList) {
+        public static List<Operation> GetAllFutureOperations(List<string> visiblePayFormList) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
 

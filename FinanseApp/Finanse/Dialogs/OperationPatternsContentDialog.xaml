@@ -11,7 +11,7 @@
     mc:Ignorable="d"
     Title="Użyj szablonu"
     x:Uid="usePatternContentDialog"
-    Background="{ThemeResource BackgroundTransparent}"
+    Background="{ThemeResource ContentDialogBackgroundBrush}"
     SecondaryButtonText="Anuluj">
 
     <StackPanel

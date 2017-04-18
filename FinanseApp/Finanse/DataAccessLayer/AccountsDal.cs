@@ -171,6 +171,18 @@ namespace Finanse.DataAccessLayer {
         }
         */
 
+
+        public static void Test() {
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                db.BeginTransaction();
+                string cmdText = @"INSERT INTO sqlite_sequence (name, seq) VALUES ('dupa', 1);";
+                var ia = db.CreateCommand(cmdText);
+                ia.CommandText = cmdText;
+                ia.ExecuteNonQuery();
+                db.Commit();
+                db.Close();
+            }
+        }
         /* ADD UPDATE REMOVE */
 
         public static void AddAccount(Account account) {

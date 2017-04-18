@@ -47,11 +47,11 @@
             <SolidColorBrush x:Key="AccentColor" Color="#078b3e" />
             <SolidColorBrush x:Key="AccentColor-1" Color="#067c37" />
 
-            <SolidColorBrush x:Key="AccentText" Color="DeepPink" />
-            <SolidColorBrush x:Key="AccentText-1" Color="DeepPink" />
-            <SolidColorBrush x:Key="AccentText-2" Color="DeepPink" />
+            <SolidColorBrush x:Key="AccentText" Color="White" Opacity="0.75" />
+            <SolidColorBrush x:Key="AccentText-1" Color="White" Opacity="0.5" />
+            <SolidColorBrush x:Key="AccentText-2" Color="White" Opacity="0.25" />
             
-            <SolidColorBrush x:Key="Background+2" Color="DeepPink" />
+            <SolidColorBrush x:Key="Background+2" Color="#2e2e2e" />
             <SolidColorBrush x:Key="Background+1" Color="DeepPink" />
             <SolidColorBrush x:Key="Background" Color="#242424" />
             <SolidColorBrush x:Key="Background-1" Color="#1f1f1f" />
@@ -60,8 +60,6 @@
             <SolidColorBrush x:Key="Background+1Transparent" Color="LimeGreen" Opacity="0.8" />
             <SolidColorBrush x:Key="BackgroundTransparent" Color="LimeGreen" Opacity="0.8" />
             <SolidColorBrush x:Key="Background-1Transparent" Color="LimeGreen" Opacity="0.9" />
-            
-            <SolidColorBrush x:Key="NeonBackground" Color="#1f1f1f" />
 
             <SolidColorBrush x:Key="Text+max" Color="White" />
             <SolidColorBrush x:Key="Text" Color="White" Opacity="0.75" />
@@ -69,6 +67,11 @@
             <SolidColorBrush x:Key="Text-2" Color="White" Opacity="0.3" />
             
             <SolidColorBrush x:Key="CommandBarOverflowBackground" Color="#1f1f1f" Opacity="0.75"/>
+            <SolidColorBrush x:Key="HamburgerMenuBackground" Color="#1f1f1f" Opacity="0.85"/>
+            <SolidColorBrush x:Key="BorderBrush" Color="White" Opacity="0.1" />
+            
+            <SolidColorBrush x:Key="ContentDialogBackgroundBrush" Color="#242424" Opacity="0.75"/>
+            <SolidColorBrush x:Key="FlyoutBackgroundBrush" Color="#1f1f1f" Opacity="0.9"/>
         </ResourceDictionary>
         
         <ResourceDictionary x:Key="Light">
@@ -76,28 +79,31 @@
             <SolidColorBrush x:Key="AccentColor" Color="#078b3e" />
             <SolidColorBrush x:Key="AccentColor-1" Color="#067c37" />
 
-            <SolidColorBrush x:Key="AccentText" Color="#bce3cc" />
-            <SolidColorBrush x:Key="AccentText-1" Color="#66bc8a" />
-            <SolidColorBrush x:Key="AccentText-2" Color="#329d5e" />
+            <SolidColorBrush x:Key="AccentText" Color="White" Opacity="0.75" />
+            <SolidColorBrush x:Key="AccentText-1" Color="White" Opacity="0.5" />
+            <SolidColorBrush x:Key="AccentText-2" Color="White" Opacity="0.25" />
             
             <SolidColorBrush x:Key="Background+2" Color="#d2d8e4" />
             <SolidColorBrush x:Key="Background+1" Color="#e0e5ee" />
-            <SolidColorBrush x:Key="Background" Color="#eaeef6" />
-            <SolidColorBrush x:Key="Background-1" Color="#e0e5ee" />
-            <SolidColorBrush x:Key="Background-2" Color="#d2d8e4" />
+            <SolidColorBrush x:Key="Background" Color="#eeeeee" />
+            <SolidColorBrush x:Key="Background-1" Color="#e5e5e5" />
+            <SolidColorBrush x:Key="Background-2" Color="#d8d8d8" />
             
             <SolidColorBrush x:Key="Background+1Transparent" Color="#e0e5ee" Opacity="0.8" />
-            <SolidColorBrush x:Key="BackgroundTransparent" Color="#eaeef6" Opacity="0.8" />
-            <SolidColorBrush x:Key="Background-1Transparent" Color="#e0e5ee" Opacity="0.9" />
-
-            <SolidColorBrush x:Key="NeonBackground" Color="White" />
+            <SolidColorBrush x:Key="BackgroundTransparent" Color="#eeeeee" Opacity="0.8" />
+            <SolidColorBrush x:Key="Background-1Transparent" Color="#e5e5e5" Opacity="0.9" />
             
             <SolidColorBrush x:Key="Text+max" Color="Black" />
             <SolidColorBrush x:Key="Text" Color="Black" Opacity="0.75" />
             <SolidColorBrush x:Key="Text-1" Color="Black" Opacity="0.5" />
             <SolidColorBrush x:Key="Text-2" Color="Black" Opacity="0.3" />
             
-            <SolidColorBrush x:Key="CommandBarOverflowBackground" Color="#e0e5ee" Opacity="0.75"/>
+            <SolidColorBrush x:Key="CommandBarOverflowBackground" Color="#e5e5e5" Opacity="0.75"/>
+            <SolidColorBrush x:Key="HamburgerMenuBackground" Color="#e5e5e5" Opacity="0.7"/>
+            <SolidColorBrush x:Key="BorderBrush" Color="Black" Opacity="0.1" />
+            
+            <SolidColorBrush x:Key="ContentDialogBackgroundBrush" Color="#eeeeee" Opacity="0.75"/>
+            <SolidColorBrush x:Key="FlyoutBackgroundBrush" Color="#e5e5e5" Opacity="0.9"/>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
    

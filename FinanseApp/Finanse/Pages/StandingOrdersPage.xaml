@@ -24,18 +24,18 @@
                 Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid
-            Height="48">
+        <Grid Height="48">
             <Grid.Background>
-                <SolidColorBrush
-                    Color="{ThemeResource SystemBaseHighColor}"
-                    Opacity="0.03" />
+                <SolidColorBrush Color="{ThemeResource SystemBaseHighColor}" Opacity="0.03" />
             </Grid.Background>
+            
+            <Grid MaxWidth="620">
+                <TextBlock
+                    Text="Zlecenia stałe"
+                    x:Uid="standingOrders"
+                    Style="{StaticResource PageTitleStyle}" />
+            </Grid>
 
-            <TextBlock
-                Text="Zlecenia stałe"
-                x:Uid="standingOrders"
-                Style="{StaticResource PageTitleStyle}" />
         </Grid>
         <TextBlock
             HorizontalAlignment="Center"

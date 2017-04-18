@@ -53,7 +53,7 @@
                 Value="{ThemeResource AppBarButtonBorderBrush}" />
             <Setter
                 Property="HorizontalAlignment"
-                Value="Left" />
+                Value="Stretch" />
             <Setter
                 Property="VerticalAlignment"
                 Value="Top" />
@@ -97,31 +97,21 @@
                                     <VisualState
                                         x:Name="PointerOver">
                                         <Storyboard>
-                                            <ColorAnimation
-                                                Storyboard.TargetName="Content"
-                                                To="{Binding Source={ThemeResource AccentColor},Path=Color}"
-                                                Duration="0"
-                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
-                                            <ColorAnimation
-                                                Storyboard.TargetName="TextLabel"
-                                                To="{Binding Source={ThemeResource AccentColor},Path=Color}"
-                                                Duration="0"
-                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Background"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="0.03"
+                                                Duration="0" />
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState
                                         x:Name="Pressed">
                                         <Storyboard>
-                                            <ColorAnimation
-                                                Storyboard.TargetName="Content"
-                                                To="{Binding Source={ThemeResource AppBarButtonForegroundPressed},Path=Color}"
-                                                Duration="0"
-                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
-                                            <ColorAnimation
-                                                Storyboard.TargetName="TextLabel"
-                                                To="{Binding Source={ThemeResource AppBarButtonForegroundPressed},Path=Color}"
-                                                Duration="0"
-                                                Storyboard.TargetProperty="(FontIcon.Foreground).(SolidColorBrush.Color)" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="Background"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="0.1"
+                                                Duration="0" />
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState
@@ -143,15 +133,19 @@
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
                             <Grid
+                                x:Name="Background"
+                                Opacity="0"
+                                Background="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
+                            <Grid
                                 Margin="32,0"
-                                x:Name="ContentRoot"
-                                HorizontalAlignment="Stretch">
+                                x:Name="ContentRoot">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition
                                         Width="20" />
                                     <ColumnDefinition
                                         Width="*" />
                                 </Grid.ColumnDefinitions>
+                                                               
                                 <FontIcon
                                     Margin="0,16"
                                     VerticalAlignment="Center"
@@ -160,9 +154,10 @@
                                     FontFamily="{TemplateBinding FontFamily}"
                                     FontSize="16"
                                     Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
-                                    Opacity="0.75"
+                                    Opacity="0.5"
                                     HorizontalAlignment="Stretch" />
                                 <ContentPresenter
+                                    Opacity="0.5"
                                     VerticalAlignment="Center"
                                     x:Name="TextLabel"
                                     Grid.Column="1"
@@ -170,10 +165,11 @@
                                     Foreground="{TemplateBinding Foreground}"
                                     FontSize="13"
                                     FontFamily="{StaticResource DefaultFontFamily}"
-                                    HorizontalAlignment="Center"
+                                    HorizontalAlignment="Left"
                                     TextWrapping="Wrap"
                                     Margin="16,0,0,0"
                                     Padding="0" />
+
                             </Grid>
                         </Grid>
                     </ControlTemplate>
@@ -261,41 +257,26 @@
                 Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!--
         <Grid
-            Grid.Column="0"
-            Grid.RowSpan="2"
-            Background="{ThemeResource AccentColor-1}" />
-        -->
+            Name="TitleBar"
+            Visibility="Collapsed"
+            Margin="64,0"
+            Grid.ColumnSpan="2">
+
+            <TextBlock
+                Text="{x:Bind DisplayName, Mode=OneTime}"
+                Opacity="0.75"
+                FontSize="12"
+                FontWeight="Medium"
+                FontFamily="Segoe UI"
+                VerticalAlignment="Center"
+                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
+        </Grid>
+
         <Grid
             Grid.Column="1"
             Opacity="0.03"
             Background="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
-<!--
-        <Grid
-            Opacity="0.03"
-            Grid.Row="1"
-            Grid.Column="1">
-            <Grid.Background>
-                <LinearGradientBrush
-                    EndPoint="0.5,1"
-                    StartPoint="0.5,0">
-                    <GradientStop
-                        Color="{ThemeResource SystemBaseHighColor}"
-                        Offset="0" />
-                    <GradientStop
-                        Color="Transparent"
-                        Offset="1" />
-                </LinearGradientBrush>
-            </Grid.Background>
-        </Grid>
--->
-        <!--
-        <Grid
-            Grid.Column="2"
-            Grid.RowSpan="2"
-            Background="{ThemeResource AccentColor-1}" />
--->
 
         <CommandBar
             x:DeferLoadStrategy="Lazy"
@@ -436,12 +417,11 @@
             </Grid.RowDefinitions>
 
             <finanse:BackDrop
-                Grid.RowSpan="3"/>
-
-            <StackPanel
+                Grid.RowSpan="3" />
+            
+            <Grid
                 Grid.RowSpan="3"
-                Opacity="0.85"
-                Background="{ThemeResource Background-1}" />
+                Background="{ThemeResource HamburgerMenuBackground}" />
 
             <Grid>
                 <Grid.Background>
@@ -570,35 +550,17 @@
             </RadioButton>
         </Grid>
 
-        <models:ThemeAwareFrame
+        <models:ThemeAwareFrame x:Name="AktualnaStrona_Frame"
             Grid.RowSpan="2"
             Grid.Row="1"
             Grid.Column="1"
-            Navigated="AktualnaStrona_Frame_Navigated"
-            x:Name="AktualnaStrona_Frame"/>
+            Navigated="AktualnaStrona_Frame_Navigated"/>
 
         <Grid
             x:Name="ThirdColumnGrid"
             Grid.Row="2"
             Grid.Column="2"
             Background="{ThemeResource Background-1}">
-        </Grid>
-
-        <Grid
-            Visibility="Collapsed"
-            Margin="64,0"
-            Grid.ColumnSpan="2"
-            Height="32"
-            Name="TitleBar">
-            <!--
-            <TextBlock
-                Text="{x:Bind DisplayName, Mode=OneTime}"
-                Opacity="0.75"
-                FontSize="12"
-                FontWeight="Medium"
-                FontFamily="Segoe UI"
-                VerticalAlignment="Center"
-                Foreground="White" />-->
         </Grid>
     </Grid>
 </Page>

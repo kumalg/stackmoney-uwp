@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Title="Edycja konta"
-    Background="{ThemeResource BackgroundTransparent}"
+    Background="{ThemeResource ContentDialogBackgroundBrush}"
     PrimaryButtonText="Zapisz"
     SecondaryButtonText="Anuluj"
     IsPrimaryButtonEnabled="{x:Bind PrimaryButtonEnabling, Mode=OneWay}"

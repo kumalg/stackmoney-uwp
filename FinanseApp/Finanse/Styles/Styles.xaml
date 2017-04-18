@@ -4,6 +4,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:Finanse.Models"
+    xmlns:converters="using:Finanse.Converters"
+    xmlns:mAccounts="using:Finanse.Models.MAccounts"
     mc:Ignorable="d">
 
     <FontFamily x:Key="FontAwesome">/Assets/Fonts/FontAwesome.ttf#FontAwesome</FontFamily>  
@@ -13,6 +15,7 @@
     <FontFamily x:Key="DefaultFontFamily">#Segoe UI</FontFamily>
     <!-- <FontFamily x:Key="DefaultFontFamily">#Bebas Neue</FontFamily> -->
               
+    <converters:ScaleValueConverter x:Name="ScaleValueConverter"/>
 
     <Style x:Key="PivotStyleDynamicHeader" TargetType="Pivot">
         <Setter Property="Margin" Value="0" />
@@ -665,6 +668,7 @@
                             VerticalAlignment="Center" />
                         <FontIcon
                             x:Name="CalendarGlyph"
+                            Visibility="Collapsed"
                             Grid.Column="1"
                             Foreground="{ThemeResource Text-1}"
                             FontSize="16"
@@ -835,7 +839,7 @@
                                                     FontSize="15"
                                                     FontFamily="XamlAutoFontFamily"
                                                     FontWeight="SemiBold"
-                                                    Foreground="{ThemeResource Text}"
+                                                    Foreground="{ThemeResource AccentText}"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
                                                     IsTabStop="False"
@@ -1829,7 +1833,7 @@
                                 x:Name="PopupBorder"
                                 BorderBrush="{ThemeResource SystemControlForegroundChromeHighBrush}"
                                 BorderThickness="0"
-                                Background="{ThemeResource Background-1Transparent}"
+                                Background="{ThemeResource FlyoutBackgroundBrush}"
                                 HorizontalAlignment="Stretch"
                                 Margin="0,-1,0,-1">
                                 <ScrollViewer
@@ -3237,7 +3241,7 @@
             Value="0" />
         <Setter
             Property="Background"
-            Value="{ThemeResource Background-1Transparent}" />
+            Value="{ThemeResource FlyoutBackgroundBrush}" />
     </Style>
 
     <Style x:Key="lala" TargetType="CommandBar">
@@ -3852,5 +3856,250 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+
     
+    <DataTemplate x:Key="AccountBalanceItemTemplate" >
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            <Ellipse
+                Width="8"
+                Height="8"
+                Fill="{Binding Account.Brush}" />
+            <TextBlock
+                FontSize="13"
+                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                Opacity="0.75"
+                Margin="10,5"
+                Grid.Column="1"
+                TextWrapping="Wrap"
+                FontFamily="{StaticResource DefaultFontFamily}"
+                Text="{Binding Account.Name}" />
+            <TextBlock
+                HorizontalAlignment="Right"
+                FontWeight="Normal"
+                FontSize="13"
+                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                Opacity="0.5"
+                Margin="0,5"
+                FontFamily="{StaticResource DefaultFontFamily}"
+                Grid.Column="2"
+                Text="{Binding InitialValue, Converter={StaticResource DecimalToCurrencyStringConverter}}" />
+            <TextBlock
+                HorizontalAlignment="Right"
+                FontWeight="Normal"
+                FontSize="13"
+                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                Opacity="0.5"
+                Margin="0,5"
+                Grid.Column="3"
+                FontFamily="{StaticResource DefaultFontFamily}"
+                Text="{Binding FinalValue, Converter={StaticResource DecimalToCurrencyStringConverter}}" />
+        </Grid>
+    </DataTemplate>
+    
+    
+
+    <Style x:Key="ByDateGroupHeaderContainerStyle" TargetType="ListViewHeaderItem">
+        <Setter Property="FontFamily" Value="{StaticResource DefaultFontFamily}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListViewHeaderItem">
+
+                    <ContentPresenter
+                        x:Name="ContentPresenter"
+                        Padding="0,8,0,0"
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        ContentTransitions="{TemplateBinding ContentTransitions}"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <DataTemplate x:Key="ByDateHeaderTemplate">
+        <ListViewItem
+            Padding="0"
+            BorderThickness="0"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Stretch"
+            MaxWidth="620"
+            Background="Transparent">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="Auto" />
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel
+                    Margin="0,12"
+                    Orientation="Horizontal">
+                    <StackPanel
+                        Width="80">
+                        <TextBlock
+                            FontFamily="{StaticResource DefaultFontFamily}"
+                            Text="{Binding Key.DayNum00}"
+                            FontSize="12"
+                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                            Opacity="0.4"
+                            FontWeight="SemiBold"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBlock
+                        FontFamily="{StaticResource DefaultFontFamily}"
+                        FontWeight="SemiBold"
+                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                        Opacity="0.4"
+                        Text="{Binding Key.Day}"
+                        FontSize="12" />
+                </StackPanel>
+
+                <TextBlock
+                    FontFamily="{StaticResource DefaultFontFamily}"
+                    Margin="16,0"
+                    VerticalAlignment="Center"
+                    Grid.Column="2"
+                    Name="SumText"
+                    HorizontalAlignment="Right"
+                    Text="{Binding Path=Cost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    FontWeight="SemiBold"
+                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                    Opacity="0.4"
+                    FontSize="12" />
+                <!--
+                            <Border
+                                Grid.ColumnSpan="3"
+                                Opacity="0.3"
+                                BorderBrush="{ThemeResource Text-2}"
+                                BorderThickness="0,0,0,1" />
+                            -->
+            </Grid>
+        </ListViewItem>
+    </DataTemplate>
+
+    <Style x:Key="ByCategoryHeaderContainerStyle" TargetType="ListViewHeaderItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListViewHeaderItem">
+
+                    <ContentPresenter
+                        x:Name="ContentPresenter"
+                        Padding="0,8,0,0"
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        ContentTransitions="{TemplateBinding ContentTransitions}"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <DataTemplate x:Key="ByCategoryHeaderTemplate">
+        <ListViewItem
+            Padding="0"
+            BorderThickness="0"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Stretch"
+            MaxWidth="620"
+            Background="Transparent">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel
+                    Margin="0,12"
+                    Orientation="Horizontal">
+                    <StackPanel Width="80">
+                        <TextBlock
+                            Text="{Binding Key.Category.Icon.Glyph}"
+                            FontFamily="{StaticResource FontAwesome}"
+                            FontSize="12"
+                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                            Opacity="0.4"
+                            HorizontalAlignment="Center" />
+                    </StackPanel>
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                        Opacity="0.4"
+                        FontFamily="{StaticResource DefaultFontFamily}"
+                        Text="{Binding Key.Category.Name}"
+                        FontSize="12" />
+                </StackPanel>
+
+                <TextBlock
+                    Margin="16,0"
+                    VerticalAlignment="Center"
+                    Grid.Column="2"
+                    Name="SumText"
+                    HorizontalAlignment="Right"
+                    Text="{Binding Path=Cost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    FontWeight="SemiBold"
+                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                    Opacity="0.4"
+                    FontFamily="{StaticResource DefaultFontFamily}"
+                    FontSize="12" />
+
+            </Grid>
+        </ListViewItem>
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="JumpListGroupTemplate">
+        <Grid
+            Margin="0"
+            Width="44"
+            Height="44">
+            <Grid.Background>
+                <SolidColorBrush
+                    Color="{ThemeResource SystemBaseHighColor}"
+                    Opacity="0.03"></SolidColorBrush>
+            </Grid.Background>
+            <TextBlock
+                FontSize="13"
+                Text="{Binding Day}"
+                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                Opacity="0.4"
+                FontFamily="{StaticResource DefaultFontFamily}"
+                FontWeight="Bold"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
+        </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="JumptListEmptyTemplate">
+        <Border
+            Margin="0"
+            Width="44"
+            Height="44">
+            <TextBlock
+                FontSize="13"
+                Text="{Binding Day}"
+                FontFamily="{StaticResource DefaultFontFamily}"
+                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                Opacity="0.4"
+                FontWeight="SemiBold"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
+        </Border>
+    </DataTemplate>
+
 </ResourceDictionary>

@@ -26,22 +26,19 @@ namespace Finanse.Pages {
         private bool _isUnfocused = true;
         private readonly int MaxLength = NewOperation.MaxLength;
 
-
-        private IEnumerable<MAccount> _accountsWithoutCards;
         private IEnumerable<MAccount> _accounts;
-
+        private IEnumerable<MAccount> Accounts {
+            get { return _accounts; }
+            set {
+                _accounts = value;
+                RaisePropertyChanged("Accounts");
+            }
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             SetDefaultPageValues();
-
             SetCategoryComboBoxItems(true, false);
-
-            _accounts = MAccountsDal.GetAllAccountsAndSubAccounts();
-            _accountsWithoutCards = _accounts.Where(i => !(i is SubMAccount));
-
-            RaisePropertyChanged("AccountsComboBox");
-            RaisePropertyChanged("AccountsToComboBox");
-            RaisePropertyChanged("AccountsFromComboBox");
+            Accounts = MAccountsDal.GetAllAccountsAndSubAccounts();
 
             base.OnNavigatedTo(e);
         }
@@ -54,7 +51,6 @@ namespace Finanse.Pages {
             CategoryValue.SelectedIndex = -1;
             SubCategoryValue.SelectedIndex = -1;
             SubCategoryValue.IsEnabled = false;
-            // PayFormValue.SelectedIndex = 0;
             MoreInfoValue.Text = string.Empty;
             SaveAsAssetToggle.IsOn = false;
             HideInStatisticsToggle.IsOn = false;
@@ -67,15 +63,7 @@ namespace Finanse.Pages {
             var handler = PropertyChanged;
             handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        private IEnumerable<MAccount> AccountsComboBox
-            => Income_RadioButton.IsChecked != null && (bool) Income_RadioButton.IsChecked
-                ? _accountsWithoutCards
-                : _accounts;
-
-        private IEnumerable<MAccount> AccountsToComboBox => _accountsWithoutCards;
-
-        private IEnumerable<MAccount> AccountsFromComboBox => _accountsWithoutCards;
+        
 
         public NewOperationPage() {
 
@@ -91,8 +79,8 @@ namespace Finanse.Pages {
 
             if (PayFormValue.Items != null && PayFormValue.Items.Count > 0)
                 PayFormValue.SelectedIndex = 0;
-            if (InitialAccount.Items != null && InitialAccount.Items.Count > 0)
-                InitialAccount.SelectedIndex = 0;
+            if (AccountsFromComboBox.Items != null && AccountsFromComboBox.Items.Count > 0)
+                AccountsFromComboBox.SelectedIndex = 0;
         }
 
         public Windows.Globalization.DayOfWeek FirstDayOfWeek => Settings.FirstDayOfWeek;
@@ -123,7 +111,6 @@ namespace Finanse.Pages {
         }
 
         private void ExpenseOrIncomeRadioButton_Checked(object sender, RoutedEventArgs e) {
-            RaisePropertyChanged("AccountsComboBox");
             TransferAccounts_Grid.Visibility = Visibility.Collapsed;
 
             PayFormValue.Visibility = Visibility.Visible;
@@ -313,13 +300,13 @@ namespace Finanse.Pages {
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
 
             if ((bool)Transfer_RadioButton.IsChecked) {
-                if (InitialAccount.SelectedItem == null || DestinationAccount.SelectedItem == null) {
+                if (AccountsFromComboBox.SelectedItem == null || AccountsToComboBox.SelectedItem == null) {
                     ShowMessageDialog("Nie wybrano kont");
                     return;
                 }
                 
-                Dal.SaveOperation(GetNewOperation((MAccount)InitialAccount.SelectedItem, true));
-                Dal.SaveOperation(GetNewOperation((MAccount)DestinationAccount.SelectedItem, false));
+                Dal.SaveOperation(GetNewOperation((MAccount)AccountsFromComboBox.SelectedItem, true));
+                Dal.SaveOperation(GetNewOperation((MAccount)AccountsToComboBox.SelectedItem, false));
             }
             else {
                 Dal.SaveOperation(GetNewOperation((MAccount)PayFormValue.SelectedItem, (bool)Expense_RadioButton.IsChecked));
@@ -361,6 +348,23 @@ namespace Finanse.Pages {
         private void PayFormValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (PayFormValue.SelectedItem == null)
                 PayFormValue.SelectedIndex = 0;
+        }
+
+        private void AccountsFromComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) 
+            => SameAccountsInTransfer(sender as ComboBox, AccountsToComboBox);
+
+        private void AccountsToComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) 
+            => SameAccountsInTransfer(sender as ComboBox, AccountsFromComboBox);
+
+        private void SameAccountsInTransfer(ComboBox first, ComboBox second) {
+            if (first.SelectedItem == null)
+                return;
+
+            var destinationSelectedAccount = AccountsToComboBox.SelectedItem;
+            var initialSelectedAccount = AccountsFromComboBox.SelectedItem;
+
+            if (destinationSelectedAccount == initialSelectedAccount)
+                second.SelectedItem = null;
         }
     }
 }

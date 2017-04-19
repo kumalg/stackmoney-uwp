@@ -19,39 +19,34 @@
     <Grid Background="Transparent">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="48" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Height="48">
-            <Grid.Background>
-                <SolidColorBrush Color="{ThemeResource SystemBaseHighColor}" Opacity="0.03" />
-            </Grid.Background>
+        <Grid MaxWidth="620">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-            <Grid MaxWidth="620">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+            <TextBlock
+                Grid.Column="0"
+                Text="Konta"
+                x:Uid="moneyAccounts"
+                Style="{StaticResource PageTitleStyle}" />
 
-                <TextBlock
-                    Grid.Column="0"
-                    Text="Konta"
-                    x:Uid="moneyAccounts"
-                    Style="{StaticResource PageTitleStyle}" />
-
-                <Button
-                    Margin="8,0"
-                    Grid.Column="1"
-                    Style="{StaticResource EllipticButton}"
-                    Click="NewMoneyAccount_Click">
-                    <FontIcon
-                        FontSize="13"
-                        Glyph=""
-                        FontFamily="Segoe MDL2 Assets" />
-                </Button>
-            </Grid>
+            <Button
+                Margin="8,0"
+                Grid.Column="1"
+                Style="{StaticResource EllipticButton}"
+                Click="NewMoneyAccount_Click">
+                <FontIcon
+                    FontSize="13"
+                    Glyph=""
+                    FontFamily="Segoe MDL2 Assets" />
+            </Button>
         </Grid>
+
         <ListView
             Padding="0,16"
             Grid.Row="1"

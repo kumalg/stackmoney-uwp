@@ -171,21 +171,12 @@
         </VisualStateManager.VisualStateGroups>
 
         <Grid.RowDefinitions>
-            <RowDefinition
-                Height="Auto" />
-            <RowDefinition
-                Height="Auto" />
-            <RowDefinition
-                Height="*" />
+            <RowDefinition Height="48" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid
-            Height="48">
-            <Grid.Background>
-                <SolidColorBrush
-                    Color="{ThemeResource SystemBaseHighColor}"
-                    Opacity="0.03" />
-            </Grid.Background>
+        <Grid>
             
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />

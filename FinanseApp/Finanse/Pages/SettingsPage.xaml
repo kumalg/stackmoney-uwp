@@ -16,28 +16,18 @@
         </TransitionCollection>
     </Page.Transitions>
 
-    <Grid
-        Background="Transparent">
+    <Grid Background="Transparent">
 
         <Grid.RowDefinitions>
-            <RowDefinition
-                Height="Auto" />
-            <RowDefinition
-                Height="*" />
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid
-            MinHeight="48">
-            <Grid.Background>
-                <SolidColorBrush Color="{ThemeResource SystemBaseHighColor}" Opacity="0.03" />
-            </Grid.Background>
-            
-            <Grid MaxWidth="620">
-                <TextBlock
-                    Text="Ustawienia"
-                    x:Uid="settings"
-                    Style="{StaticResource PageTitleStyle}" />
-            </Grid>
+        <Grid MaxWidth="620">
+            <TextBlock
+                Text="Ustawienia"
+                x:Uid="settings"
+                Style="{StaticResource PageTitleStyle}" />
         </Grid>
 
         <Pivot

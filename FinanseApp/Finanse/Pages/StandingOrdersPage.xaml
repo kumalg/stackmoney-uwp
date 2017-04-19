@@ -14,47 +14,25 @@
         </TransitionCollection>
     </Page.Transitions>
 
-    <Grid
-        Background="Transparent">
+    <Grid Background="Transparent">
 
         <Grid.RowDefinitions>
-            <RowDefinition
-                Height="Auto" />
-            <RowDefinition
-                Height="*" />
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Height="48">
-            <Grid.Background>
-                <SolidColorBrush Color="{ThemeResource SystemBaseHighColor}" Opacity="0.03" />
-            </Grid.Background>
-            
-            <Grid MaxWidth="620">
-                <TextBlock
-                    Text="Zlecenia stałe"
-                    x:Uid="standingOrders"
-                    Style="{StaticResource PageTitleStyle}" />
-            </Grid>
-
+        <Grid MaxWidth="620">
+            <TextBlock
+                Text="Zlecenia stałe"
+                x:Uid="standingOrders"
+                Style="{StaticResource PageTitleStyle}" />
         </Grid>
+        
         <TextBlock
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Grid.Row="1"
             Text="Nic tu nie ma jeszcze :(" />
-        <!--
-        <Grid
-            Grid.Row="1">
-            <Path
-                Stroke="Red"
-                StrokeThickness="4">
-                <Path.Data>
-                    <PathGeometry
-                        Figures="{x:Bind Points}">
-                    </PathGeometry>
-                </Path.Data>
-            </Path>
-        </Grid>
-        -->
+
     </Grid>
 </Page>

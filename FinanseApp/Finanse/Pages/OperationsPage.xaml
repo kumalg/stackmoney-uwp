@@ -86,118 +86,123 @@
     <Grid Background="Transparent">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="48" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Height="48">
-            <Grid.Background>
-                <SolidColorBrush Color="{ThemeResource SystemBaseHighColor}" Opacity="0.03" />
-            </Grid.Background>
+        <Grid MaxWidth="620">
 
-            <Grid MaxWidth="620">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+            <StackPanel
+                Orientation="Horizontal">
+                <Button
+                    x:Name="PrevMonthButton"
+                    Margin="8,0,0,0"
+                    Click="PreviousMonthButton_Click"
+                    Style="{StaticResource EllipticButton}">
+                    <FontIcon
+                        Margin="0,0,2,0"
+                        FontSize="13"
+                        Glyph=""
+                        FontFamily="Segoe MDL2 Assets" />
+                </Button>
 
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="PrevMonthButton"
-                        Margin="8,0,0,0"
-                        Click="PreviousMonthButton_Click"
-                        Style="{StaticResource EllipticButton}">
+                <Grid>
+                    <Button
+                        x:Name="IncomingOperationsButton"
+                        Style="{StaticResource EllipticButton}"
+                        Click="IncomingOperationsButton_Click">
                         <FontIcon
-                            Margin="0,0,2,0"
+                            FontSize="16"
+                            Glyph=""
+                            FontFamily="{StaticResource FontAwesome}" />
+                    </Button>
+
+                    <Button
+                        x:Name="NextMonthButton"
+                        Style="{StaticResource EllipticButton}"
+                        Click="NextMonthButton_Click">
+                        <FontIcon
+                            Margin="2,0,0,0"
                             FontSize="13"
-                            Glyph=""
+                            Glyph=""
                             FontFamily="Segoe MDL2 Assets" />
                     </Button>
+                </Grid>
 
-                    <Grid>
-                        <Button x:Name="IncomingOperationsButton"
-                            Style="{StaticResource EllipticButton}"
-                            Click="IncomingOperationsButton_Click">
-                            <FontIcon
-                                FontSize="16"
-                                Glyph=""
-                                FontFamily="{StaticResource FontAwesome}" />
-                        </Button>
+                <Button
+                    Click="ActualMonthButton_Click"
+                    Style="{StaticResource ActualMonthButton}">
 
-                        <Button x:Name="NextMonthButton"
-                            Style="{StaticResource EllipticButton}"
-                            Click="NextMonthButton_Click">
-                            <FontIcon
-                                Margin="2,0,0,0"
-                                FontSize="13"
-                                Glyph=""
-                                FontFamily="Segoe MDL2 Assets" />
-                        </Button>
-                    </Grid>
+                    <Button.Flyout>
+                        <DatePickerFlyout
+                            x:Name="ActualMonthDatePickerFlyout"
+                            Closed="ActualMonthDatePickerFlyout_Closed"
+                            MinYear="{x:Bind MinDate, Mode=OneWay}"
+                            MaxYear="{x:Bind MaxDate, Mode=OneWay}"
+                            DayVisible="False"
+                            Placement="Bottom" />
+                    </Button.Flyout>
 
-                    <Button
-                        Click="ActualMonthButton_Click"
-                        Style="{StaticResource ActualMonthButton}">
-
-                        <Button.Flyout>
-                            <DatePickerFlyout x:Name="ActualMonthDatePickerFlyout"
-                                Closed="ActualMonthDatePickerFlyout_Closed"
-                                MinYear="{x:Bind MinDate, Mode=OneWay}"
-                                MaxYear="{x:Bind MaxDate, Mode=OneWay}"
-                                DayVisible="False"
-                                Placement="Bottom" />
-                        </Button.Flyout>
-                        
-                        <TextBlock
-                            Text="{x:Bind _storeData.ActualMonthText, Mode=OneWay}"
-                            HorizontalAlignment="Center"
-                            Margin="0"
-                            Style="{StaticResource PageTitleStyle}">
-                        </TextBlock>
-                    </Button>
-
-                </StackPanel>
-
-                <StackPanel
-                    Grid.Column="1"
-                    Orientation="Horizontal"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Right">
                     <TextBlock
-                        VerticalAlignment="Center"
-                        Text="{x:Bind _storeData.ActualOperationsSum, Mode=OneWay}"
-                        Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
-                        Opacity="0.75"
-                        FontFamily="{StaticResource DefaultFontFamily}"
-                        FontWeight="Bold"
-                        FontSize="13" />
-                    <Button
-                        Margin="8,0"
-                        Style="{StaticResource EllipticButton}">
-                        <Button.Content>
-                            <FontIcon
-                                FontSize="13"
-                                FontFamily="{StaticResource FontAwesome}"
-                                Glyph="" />
-                        </Button.Content>
-                        <Button.Flyout>
-                            <Flyout x:Name="VisibleAccountsFlyout"
-                                Placement="Bottom"
-                                    Closed="VisibleAccountsFlyout_OnClosed">
-                                <Flyout.FlyoutPresenterStyle>
-                                    <Style TargetType="FlyoutPresenter">
-                                        <Setter Property="BorderThickness" Value="0" />
-                                        <Setter Property="Background" Value="{ThemeResource FlyoutBackgroundBrush}" />
-                                    </Style>
-                                </Flyout.FlyoutPresenterStyle>
-                                <ListView SelectionMode="None" />
-                            </Flyout>
-                        </Button.Flyout>
-                    </Button>
-                </StackPanel>
+                        Text="{x:Bind _storeData.ActualMonthText, Mode=OneWay}"
+                        HorizontalAlignment="Center"
+                        Margin="0"
+                        Style="{StaticResource PageTitleStyle}">
+                    </TextBlock>
+                </Button>
 
-            </Grid>
+            </StackPanel>
+
+            <StackPanel
+                Grid.Column="1"
+                Orientation="Horizontal"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text="{x:Bind _storeData.ActualOperationsSum, Mode=OneWay}"
+                    Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                    Opacity="0.75"
+                    FontFamily="{StaticResource DefaultFontFamily}"
+                    FontWeight="Bold"
+                    FontSize="13" />
+                <Button
+                    Margin="8,0"
+                    Style="{StaticResource EllipticButton}">
+                    <Button.Content>
+                        <FontIcon
+                            FontSize="13"
+                            FontFamily="{StaticResource FontAwesome}"
+                            Glyph="" />
+                    </Button.Content>
+                    <Button.Flyout>
+                        <Flyout
+                            x:Name="VisibleAccountsFlyout"
+                            Placement="Bottom"
+                            Closed="VisibleAccountsFlyout_OnClosed">
+                            <Flyout.FlyoutPresenterStyle>
+                                <Style
+                                    TargetType="FlyoutPresenter">
+                                    <Setter
+                                        Property="BorderThickness"
+                                        Value="0" />
+                                    <Setter
+                                        Property="Background"
+                                        Value="{ThemeResource FlyoutBackgroundBrush}" />
+                                </Style>
+                            </Flyout.FlyoutPresenterStyle>
+                            <ListView
+                                SelectionMode="None" />
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+            </StackPanel>
 
         </Grid>
 

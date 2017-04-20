@@ -4,6 +4,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Hosting;
 using Microsoft.Graphics.Canvas.Effects;
+using Finanse.Models.Helpers;
+using Finanse.Models;
 
 namespace Finanse {
     public class BackDrop : Control {
@@ -19,6 +21,8 @@ namespace Finanse {
 #endif
 
         public BackDrop() {
+            if (SystemVersionHelper.Revision < SystemVersions.CreatorsUpdate)
+                return;
 
 #if SDKVERSION_15063
             Initialize();

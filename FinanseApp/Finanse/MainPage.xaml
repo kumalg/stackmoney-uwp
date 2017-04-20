@@ -415,10 +415,10 @@
                 <RowDefinition
                     Height="Auto" />
             </Grid.RowDefinitions>
-
+            
             <finanse:BackDrop
                 Grid.RowSpan="3" />
-            
+
             <Grid
                 Grid.RowSpan="3"
                 Background="{ThemeResource HamburgerMenuBackground}" />

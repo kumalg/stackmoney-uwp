@@ -1,8 +1,14 @@
 [
   {
+    "AppVersion": "1.1.7.0",
+    "Description": [
+      "naprawiony błąd braku menu dla kompilacji systemu 14393 (Anniversary Update) i starszych"
+    ]
+  },
+  {
     "AppVersion": "1.1.6.0",
     "Description": [
-      "nowy wygląd aplikacji z półprzeźroczystym menu",
+      "nowy wygląd aplikacji z półprzeźroczystym menu (Creators Update)",
       "przechodzenie do wskazanego miesiąca przy kliknięciu w nazwę miesiąca",
       "naprawiony błąd przy zmianie typu edytowanej operacji (wydatek/wpływ)"
     ]

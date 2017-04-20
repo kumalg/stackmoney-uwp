@@ -222,7 +222,7 @@
     <Compile Include="Models\Helpers\Informations.cs" />
     <Compile Include="Models\DateTimeExtensions\TimeExtensions.cs" />
     <Compile Include="Models\Helpers\SQLiteNetExtensions.cs" />
-    <Compile Include="Models\Helpers\SystemVersionHelper.cs" />
+    <Compile Include="Models\SystemVersion\SystemCurrentVersion.cs" />
     <Compile Include="Models\MAccounts\MAccountWithSubMAccounts.cs" />
     <Compile Include="Models\MAccounts\MAccount.cs" />
     <Compile Include="Models\MAccounts\MoAccount.cs" />
@@ -252,7 +252,7 @@
     <Compile Include="Models\Statistics\ChartPart.cs" />
     <Compile Include="Models\Statistics\StatisticsData.cs" />
     <Compile Include="Models\Statistics\SubCategoriesList.cs" />
-    <Compile Include="Models\SystemVersions.cs" />
+    <Compile Include="Models\SystemVersion\SystemVersions.cs" />
     <Compile Include="Models\ThemeExtensions.cs" />
     <Compile Include="Models\WhatsNew\WhatsNew.cs" />
     <Compile Include="Models\WhatsNew\WhatsNewHelper.cs" />

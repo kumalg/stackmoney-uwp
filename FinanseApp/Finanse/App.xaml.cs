@@ -8,20 +8,17 @@ using Finanse.Models;
 
 namespace Finanse {
 
-    sealed partial class App : Application {
+    sealed partial class App {
 
         public App() {
-            /*
-            Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
-                Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
-                Microsoft.ApplicationInsights.WindowsCollectors.Session);*/
-            this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            InitializeComponent();
+            Suspending += OnSuspending;
 
             Settings.SetSettings();
 
-            this.RequestedTheme = Settings.Theme;
-         //   OneDriveMethods();
+            var theme = Settings.Theme;
+            RequestedTheme = theme;
+         //   StatusBarMethods.SetStatusBarColors(theme);
         }
 
         /// <summary>

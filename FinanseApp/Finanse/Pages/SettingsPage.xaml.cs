@@ -133,17 +133,17 @@ namespace Finanse.Pages {
                 ( (ThemeAwareFrame)Frame ).AppTheme = ElementTheme.Dark;
 
             ApplicationView.GetForCurrentView().TitleBar.ButtonForegroundColor = Colors.White;
-            StatusBarMethods.SetStatusBarColors(ApplicationTheme.Dark);
+            StatusBarMethods.SetDarkStatusBar();
         }
 
         private void LightThemeRadioButton_Checked(object sender, RoutedEventArgs e) {
             Settings.Theme = ApplicationTheme.Light;
 
             if (Frame != null)
-                ( (ThemeAwareFrame)Frame ).AppTheme = ElementTheme.Light;
-            
+                ((ThemeAwareFrame)Frame).AppTheme = ElementTheme.Light;
+
             ApplicationView.GetForCurrentView().TitleBar.ButtonForegroundColor = Colors.Black;
-            StatusBarMethods.SetStatusBarColors(ApplicationTheme.Light);
+            StatusBarMethods.SetLightStatusBar();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {

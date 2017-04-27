@@ -34,6 +34,9 @@
                                     <ColumnDefinition
                                         Width="Auto" />
                                 </Grid.ColumnDefinitions>
+
+                                <local:BackDropInside />
+
                                 <Border
                                     x:Name="BackgroundElement"
                                     FlowDirection="{TemplateBinding FlowDirection}"

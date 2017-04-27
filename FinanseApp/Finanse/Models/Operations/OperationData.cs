@@ -141,7 +141,7 @@ namespace Finanse.Models.Operations {
 
                 var query = AllOperations.GroupBy(item => item.Date)
                     .OrderByDescending(g => g.Key)
-                    .Select(g => new GroupInfoList<Operation>(g.OrderByDescending(i => i.GlobalId)) {
+                    .Select(g => new GroupInfoList<Operation>(g.OrderByDescending(i => i.LastModifed)) {
                         Key = new GroupHeaderByDay(g.Key),
                     });
 
@@ -247,10 +247,9 @@ namespace Finanse.Models.Operations {
                 _visiblePayFormListOfCategoryGrouping = new HashSet<string>(_visiblePayFormList);
 
                 var query = AllOperations.GroupBy(item => item.CategoryId)
-                    .OrderByDescending(g => g.Key)
-                    .Select(g => new GroupInfoList<Operation>(g.OrderByDescending(i => i.GlobalId)) {
+                    .Select(g => new GroupInfoList<Operation>(g.OrderByDescending(i => i.LastModifed)) {
                         Key = new GroupHeaderByCategory(g.Key),
-                    });
+                    }).OrderBy(i => ((GroupHeaderByCategory)i.Key).Category.Name);
 
                 return _operationsByCategory = new ObservableCollection<GroupInfoList<Operation>>(query);
             }

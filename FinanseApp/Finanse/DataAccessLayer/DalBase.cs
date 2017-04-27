@@ -78,14 +78,14 @@ namespace Finanse.DataAccessLayer {
                     db.Insert(new Category { Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true, GlobalId = "5" });
                     db.Insert(new Category { Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false, GlobalId = "6" });
 
-                    db.Insert(new SubCategory { Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = "4", VisibleInIncomes = false, VisibleInExpenses = true });
-                    db.Insert(new SubCategory { Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = "3", VisibleInIncomes = false, VisibleInExpenses = true });
+                    db.Insert(new SubCategory { Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = "4", VisibleInIncomes = false, VisibleInExpenses = true, GlobalId = "7" });
+                    db.Insert(new SubCategory { Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = "3", VisibleInIncomes = false, VisibleInExpenses = true, GlobalId = "8" });
                 }
 
                 if (db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'MAccount'") == 0) {
                     MAccountsDal.AddAccount(new MAccount { Name = "Gotówka", ColorKey = "01", GlobalId = "1" });
                     MAccountsDal.AddAccount(new MAccount { Name = "Konto bankowe", ColorKey = "02", GlobalId = "2" });
-                    MAccountsDal.AddAccount(new SubMAccount { Name = "Karta", ColorKey = "03", BossAccountGlobalId = "2" });
+                    MAccountsDal.AddAccount(new SubMAccount { Name = "Karta", ColorKey = "03", GlobalId = "3", BossAccountGlobalId = "2" });
                 }
             }
         }

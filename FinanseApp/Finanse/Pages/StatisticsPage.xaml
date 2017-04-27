@@ -93,7 +93,7 @@
                                         <VisualTransition From="Pressed" To="Checked" GeneratedDuration="0" />
                                         <VisualTransition From="Pressed" To="Disabled" GeneratedDuration="0:0:0.2" />
 
-                                        <VisualTransition From="Checked" To="PointerOver" GeneratedDuration="0" />
+                                        <VisualTransition From="Checked" To="PointerOver" GeneratedDuration="0:0:1" />
                                         <VisualTransition From="Checked" To="Pressed" GeneratedDuration="0:0:0.2" />
                                         <VisualTransition From="Checked" To="Normal" GeneratedDuration="0:0:0.2" />
                                         <VisualTransition From="Checked" To="Disabled" GeneratedDuration="0:0:0.2" />
@@ -104,35 +104,21 @@
                                     <VisualState
                                         x:Name="PointerOver">
                                         <Storyboard>
-                                            <ColorAnimation
+                                            <DoubleAnimation
                                                 Storyboard.TargetName="ContentPresenter"
-                                                To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                                To="0.75"
                                                 Duration="0"
-                                                Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetName="Border"
-                                                Storyboard.TargetProperty="BorderThickness">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="0" />
-                                            </ObjectAnimationUsingKeyFrames>
+                                                Storyboard.TargetProperty="Opacity" />
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState
                                         x:Name="Pressed">
                                         <Storyboard>
-                                            <ColorAnimation
+                                            <DoubleAnimation
                                                 Storyboard.TargetName="ContentPresenter"
-                                                To="{Binding Source={ThemeResource AccentColor+1},Path=Color}"
+                                                To="1"
                                                 Duration="0"
-                                                Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetName="Border"
-                                                Storyboard.TargetProperty="BorderThickness">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="0" />
-                                            </ObjectAnimationUsingKeyFrames>
+                                                Storyboard.TargetProperty="Opacity" />
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState
@@ -143,34 +129,51 @@
                                     <VisualState
                                         x:Name="Checked">
                                         <Storyboard>
-                                            <ColorAnimation
+                                            <DoubleAnimation
                                                 Storyboard.TargetName="ContentPresenter"
-                                                To="{Binding Source={ThemeResource AccentColor},Path=Color}"
+                                                To="0"
                                                 Duration="0"
-                                                Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" />
-                                            <ObjectAnimationUsingKeyFrames
-                                                Storyboard.TargetName="Border"
-                                                Storyboard.TargetProperty="BorderThickness">
-                                                <DiscreteObjectKeyFrame
-                                                    KeyTime="0"
-                                                    Value="0,0,0,2" />
-                                            </ObjectAnimationUsingKeyFrames>
+                                                Storyboard.TargetProperty="Opacity" />
+
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="AccentContentPresenter"
+                                                To="1"
+                                                Duration="0"
+                                                Storyboard.TargetProperty="Opacity" />
+                                            
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="AccentBorder"
+                                                Storyboard.TargetProperty="Opacity"
+                                                Duration="0"
+                                                To="1" />
                                         </Storyboard>
                                     </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
 
                             <Border
-                                x:Name="Border"
-                                BorderThickness="0"
+                                x:Name="AccentBorder"
+                                BorderThickness="0,0,0,2"
+                                Opacity="0"
                                 Margin="0,0,0,0"
                                 BorderBrush="{TemplateBinding BorderBrush}" />
-                            <ContentPresenter
-                                x:Name="ContentPresenter"
+
+                            <TextBlock
+                                x:Name="AccentContentPresenter"
                                 AutomationProperties.AccessibilityView="Raw"
-                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                                ContentTransitions="{TemplateBinding ContentTransitions}"
-                                Content="{TemplateBinding Content}"
+                                Text="{TemplateBinding Content}"
+                                Foreground="{ThemeResource AccentColor}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Margin="{TemplateBinding Padding}"
+                                TextWrapping="Wrap"
+                                Opacity="0"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            
+                            <TextBlock
+                                x:Name="ContentPresenter"
+                                Opacity="0.5"
+                                AutomationProperties.AccessibilityView="Raw"
+                                Text="{TemplateBinding Content}"
                                 Foreground="{TemplateBinding Foreground}"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 Margin="{TemplateBinding Padding}"
@@ -320,34 +323,11 @@
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <StackPanel
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center">
-                        <TextBlock
-                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
-                            Opacity="0.5"
-                            FontFamily="{StaticResource DefaultFontFamily}"
-                            HorizontalAlignment="Center"
-                            x:Uid="incomesUppercase"
-                            Text="WPŁYWY" />
-                        <TextBlock
-                            Margin="8"
-                            FontSize="22"
-                            FontFamily="{StaticResource DefaultFontFamily}"
-                            Foreground="{StaticResource GreenColorStyle}"
-                            HorizontalAlignment="Center"
-                            Text="{x:Bind IncomesValue, Mode=OneWay}" />
-                    </StackPanel>
-
-                    <Border
-                        Grid.Column="1"
-                        BorderThickness="1,0,0,0"
-                        BorderBrush="{ThemeResource BorderBrush}"/>
 
                     <StackPanel
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
-                        Grid.Column="2">
+                        Grid.Column="0">
                         <TextBlock
                             Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
                             Opacity="0.5"
@@ -362,6 +342,31 @@
                             Foreground="{StaticResource RedColorStyle}"
                             HorizontalAlignment="Center"
                             Text="{x:Bind ExpensesValue, Mode=OneWay}" />
+                    </StackPanel>
+                    
+                    <Border
+                        Grid.Column="1"
+                        BorderThickness="1,0,0,0"
+                        BorderBrush="{ThemeResource BorderBrush}"/>
+
+                    <StackPanel
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Grid.Column="2">
+                        <TextBlock
+                            Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
+                            Opacity="0.5"
+                            FontFamily="{StaticResource DefaultFontFamily}"
+                            HorizontalAlignment="Center"
+                            x:Uid="incomesUppercase"
+                            Text="WPŁYWY" />
+                        <TextBlock
+                            Margin="8"
+                            FontSize="22"
+                            FontFamily="{StaticResource DefaultFontFamily}"
+                            Foreground="{StaticResource GreenColorStyle}"
+                            HorizontalAlignment="Center"
+                            Text="{x:Bind IncomesValue, Mode=OneWay}" />
                     </StackPanel>
                 </Grid>
                 <Border
@@ -385,10 +390,9 @@
                         GroupName="ExpenseOrIncome"
                         Name="ExpensesRadioButton"
                         IsChecked="True"
+                        Content="Wydatki"
                         Checked="ExpensesRadioButton_Checked"
                         Style="{StaticResource RadioButtonStyle1}">
-                        <TextBlock
-                            x:Uid="Expenses" />
                     </RadioButton>
                     <Border
                         Grid.Column="1"
@@ -398,10 +402,9 @@
                         Grid.Column="2"
                         GroupName="ExpenseOrIncome"
                         Name="IncomesRadioButton"
+                        Content="Wpływy"
                         Checked="IncomeRadioButton_Checked"
                         Style="{StaticResource RadioButtonStyle1}">
-                        <TextBlock
-                            x:Uid="Incomes" />
                     </RadioButton>
                 </Grid>
 

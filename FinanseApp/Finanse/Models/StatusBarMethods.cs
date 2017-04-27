@@ -1,10 +1,8 @@
 ﻿using System;
 using Windows.Foundation.Metadata;
 using Windows.Graphics.Display;
-using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
 using Finanse.Models.Helpers;
 
 namespace Finanse.Models {
@@ -12,81 +10,60 @@ namespace Finanse.Models {
         public static void WhichOrientation() {
             var info = DisplayInformation.GetForCurrentView();
 
-            if (info.CurrentOrientation == DisplayOrientations.Landscape || info.CurrentOrientation == DisplayOrientations.LandscapeFlipped) {
-                //SetStatusBarColors("Background", "Text-1");
+            if (info.CurrentOrientation == DisplayOrientations.Landscape || info.CurrentOrientation == DisplayOrientations.LandscapeFlipped)
                 HideStatusBar();
-            }
-            else {
-                //SetStatusBarColors("AccentColor", "White");
+            else
                 ShowStatusBar();
-            }
         }
 
         private static async void ShowStatusBar() {
-            if (!ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-                return;
-
-            var statusBar = StatusBar.GetForCurrentView();
-            await statusBar.ShowAsync();
+            var statusBar = CurrentStatusBar;
+            if (statusBar != null)
+                await statusBar.ShowAsync();
         }
 
         private static async void HideStatusBar() {
-            if (!ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-                return;
-
-            var statusBar = StatusBar.GetForCurrentView();
-            await statusBar.HideAsync();
+            var statusBar = CurrentStatusBar;
+            if (statusBar != null)
+                await statusBar.HideAsync();
         }
 
-        private static void SetStatusBarColors(string statusBarBackgroundColor, string statusBarForegroundColor) {
-            //PC customization
-            /*
-            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView")) {
-                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-                if (titleBar != null) {
-                    titleBar.ButtonBackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentColor"] as SolidColorBrush).Color;
-                    titleBar.ButtonForegroundColor = Colors.White;
-
-                    titleBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources["AccentColor"] as SolidColorBrush).Color;
-                    titleBar.ForegroundColor = Colors.White;
-                }
-            }
-            */
-            //Mobile customization
-            if (!ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-                return;
-
-            var statusBar = StatusBar.GetForCurrentView();
-            if (statusBar == null)
-                return;
-
-            statusBar.BackgroundOpacity = 1;
-            //e7e7e8
-            statusBar.BackgroundColor = Functions.GetSolidColorBrush("#ff151515").Color;//( (SolidColorBrush)Application.Current.Resources[statusBarBackgroundColor] ).Color;
-
-            statusBar.ForegroundColor = statusBarForegroundColor == "White" ?
-                Colors.White :
-                ((SolidColorBrush)Application.Current.Resources[statusBarForegroundColor]).Color;
-        }
-
-        public static void SetStatusBarColors(ApplicationTheme theme) {
-            //Mobile customization
-            if (!ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-                return;
-
-            var statusBar = StatusBar.GetForCurrentView();
+        public static void SetStatusBarColors() {
+            var statusBar = CurrentStatusBar;
             if (statusBar == null)
                 return;
 
             statusBar.BackgroundOpacity = 1;
 
-            statusBar.BackgroundColor = theme == ApplicationTheme.Light
-                ? Functions.GetSolidColorBrush("#ffe7e7e8").Color
-                : Functions.GetSolidColorBrush("#ff151515").Color;//( (SolidColorBrush)Application.Current.Resources[statusBarBackgroundColor] ).Color;
+            if (Settings.Theme == ApplicationTheme.Light)
+                SetLightStatusBar(statusBar);
+            else
+                SetDarkStatusBar(statusBar);
+        }
+        
+        private static StatusBar CurrentStatusBar => !ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")
+            ? null
+            : StatusBar.GetForCurrentView();
+            
+        public static void SetLightStatusBar() {
+            var statusBar = CurrentStatusBar;
+            if (statusBar != null)
+                SetLightStatusBar(statusBar);
+        }
+        public static void SetDarkStatusBar() {
+            var statusBar = CurrentStatusBar;
+            if (statusBar != null)
+                SetDarkStatusBar(statusBar);
+        }
 
-            statusBar.ForegroundColor = theme == ApplicationTheme.Light
-                ? Colors.Black
-                : Colors.White;
+        private static void SetLightStatusBar(StatusBar statusBar) {
+            statusBar.BackgroundColor = Functions.GetSolidColorBrush("#fff7f7f7").Color;
+            statusBar.ForegroundColor = Functions.GetSolidColorBrush("#ff3e3e3e").Color;
+        }
+
+        private static void SetDarkStatusBar(StatusBar statusBar) {
+            statusBar.BackgroundColor = Functions.GetSolidColorBrush("#ff2b2b2b").Color;
+            statusBar.ForegroundColor = Functions.GetSolidColorBrush("#ffc8c8c8").Color;
         }
     }
 }

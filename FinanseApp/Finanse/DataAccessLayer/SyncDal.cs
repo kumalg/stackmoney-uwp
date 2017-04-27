@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Finanse.Models.Categories;
-using Finanse.Models.DateTimeExtensions;
 using Finanse.Models.Helpers;
 using Finanse.Models.MAccounts;
-using Finanse.Models.MoneyAccounts;
 using Finanse.Models.Operations;
 using SQLite.Net;
 using SQLite.Net.Platform.WinRT;
@@ -67,7 +65,20 @@ namespace Finanse.DataAccessLayer {
         private static void UpdateSyncAccount(MAccount account) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                db.Update(account);
+
+                object[] parameters = {
+                    account.Name,
+                    account.ColorKey,
+                    account.LastModifed ?? DateTimeHelper.DateTimeUtcNowString,
+                    account.IsDeleted,
+                    (account as SubMAccount)?.BossAccountGlobalId,
+                    account.GlobalId
+                };
+
+                db.Execute(
+                    "UPDATE " + typeof(MAccount).Name + " " +
+                    "SET Name = ?, ColorKey = ?, LastModifed = ?, IsDeleted = ?, BossAccountGlobalId = ? WHERE GlobalId = ?"
+                    , parameters);
             }
         }
 
@@ -78,9 +89,6 @@ namespace Finanse.DataAccessLayer {
             IEnumerable<Category> localCategories, oneDriveCategories;
             IEnumerable<SubCategory> localSubCategories, oneDriveSubCategories;
             IEnumerable<MAccount> localAccounts, oneDriveAccounts;
-            //IEnumerable<BankAccount> localBankAccounts, oneDriveBankAccounts;
-            //IEnumerable<CashAccount> localCashAccounts, oneDriveCashAccounts;
-            //IEnumerable<CardAccount> localCardAccounts, oneDriveCardAccounts;
 
             using (var db = DbConnection) {
                 localOperations = db.Table<Operation>().ToList();
@@ -93,9 +101,6 @@ namespace Finanse.DataAccessLayer {
                 localAcc.AddRange(db.Query<SubMAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId IS NOT NULL AND IsDeleted = 0"));
 
                 localAccounts = localAcc;
-                //localBankAccounts = db.Table<BankAccount>().ToList();
-                //localCashAccounts = db.Table<CashAccount>().ToList();
-                //localCardAccounts = db.Table<CardAccount>().ToList();
             }
             using (var dbOneDrive = new SQLiteConnection(new SQLitePlatformWinRT(), DbPathLocalFromFileName(localFileName))) {
                 oneDriveOperations = dbOneDrive.Table<Operation>().ToList();
@@ -107,9 +112,14 @@ namespace Finanse.DataAccessLayer {
                 oneDriveAcc.AddRange(dbOneDrive.Query<SubMAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId IS NOT NULL AND IsDeleted = 0"));
 
                 oneDriveAccounts = oneDriveAcc;
-                //oneDriveBankAccounts = dbOneDrive.Table<BankAccount>().ToList();
-                //oneDriveCashAccounts = dbOneDrive.Table<CashAccount>().ToList();
-                //oneDriveCardAccounts = dbOneDrive.Table<CardAccount>().ToList();
+            }
+
+            foreach (var oneDriveAccount in oneDriveAccounts) {
+                Debug.WriteLine($"{oneDriveAccount.Name} - {oneDriveAccount.LastModifed}");
+            }
+
+            foreach (var localAccount in localAccounts) {
+                Debug.WriteLine($"{localAccount.Name} - {localAccount.LastModifed}");
             }
 
             UpdateOperations(localOperations, oneDriveOperations);
@@ -139,6 +149,8 @@ namespace Finanse.DataAccessLayer {
                     if (localOperation.LastModifed != null &&
                         DateTime.Parse(localOperation.LastModifed) >= DateTime.Parse(oneDriveOperation.LastModifed))
                         continue;
+
+                    oneDriveOperation.Id = localOperation.Id;
                 }
 
                 if (oneDriveOperation.LastModifed == null)
@@ -164,6 +176,8 @@ namespace Finanse.DataAccessLayer {
                     if (localCategory.LastModifed != null &&
                         DateTime.Parse(localCategory.LastModifed) >= DateTime.Parse(oneDriveCategory.LastModifed))
                         continue;
+
+                    oneDriveCategory.Id = localCategory.Id;
                 }
 
                 if (oneDriveCategory.LastModifed == null)
@@ -178,17 +192,19 @@ namespace Finanse.DataAccessLayer {
                     continue;
 
                 if (localAccounts != null) {
-                    var localCategory = localAccounts.FirstOrDefault(
+                    var localAccount = localAccounts.FirstOrDefault(
                         item => item.GlobalId == oneDriveAccount.GlobalId);
 
-                    if (localCategory == null) {
+                    if (localAccount == null) {
                         InsertSyncAccount(oneDriveAccount);
                         continue;
                     }
 
-                    if (localCategory.LastModifed != null &&
-                        DateTime.Parse(localCategory.LastModifed) >= DateTime.Parse(oneDriveAccount.LastModifed))
+                    if (localAccount.LastModifed != null &&
+                        DateTime.Parse(localAccount.LastModifed) >= DateTime.Parse(oneDriveAccount.LastModifed))
                         continue;
+
+                    oneDriveAccount.Id = localAccount.Id;
                 }
 
                 if (oneDriveAccount.LastModifed == null)

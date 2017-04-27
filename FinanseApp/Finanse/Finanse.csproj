@@ -19,7 +19,7 @@
     <PackageCertificateKeyFile>Finanse_StoreKey.pfx</PackageCertificateKeyFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
-    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <AppxBundlePlatforms>arm</AppxBundlePlatforms>
     <PackageCertificateThumbprint>45F69373A3651FFE33E0E48C24A2A4E824619C8C</PackageCertificateThumbprint>
   </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)\CommonBuild.props" />
@@ -129,6 +129,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BackDropInside.cs" />
     <Compile Include="BackDrop.cs" />
     <Compile Include="Charts\Data\ChartData.cs" />
     <Compile Include="Charts\Data\ChartDataItem.cs" />

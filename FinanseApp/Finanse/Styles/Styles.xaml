@@ -6,6 +6,7 @@
     xmlns:models="using:Finanse.Models"
     xmlns:converters="using:Finanse.Converters"
     xmlns:mAccounts="using:Finanse.Models.MAccounts"
+    xmlns:finanse="using:Finanse"
     mc:Ignorable="d">
 
     <FontFamily x:Key="FontAwesome">/Assets/Fonts/FontAwesome.ttf#FontAwesome</FontFamily>  
@@ -797,6 +798,8 @@
                                 <ColumnDefinition
                                     Width="Auto" />
                             </Grid.ColumnDefinitions>
+
+                            <finanse:BackDropInside />
 
                             <Border
                                 x:Name="BackgroundElement"
@@ -3395,6 +3398,17 @@
                                                     KeySpline="0.1,0.9 0.2,1.0"
                                                     Value="0" />
                                             </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames
+                                                Storyboard.TargetName="OverflowContentTransform2"
+                                                Storyboard.TargetProperty="Y">
+                                                <DiscreteDoubleKeyFrame
+                                                    KeyTime="0:0:0"
+                                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHeight}" />
+                                                <SplineDoubleKeyFrame
+                                                    KeyTime="0:0:0.467"
+                                                    KeySpline="0.1,0.9 0.2,1.0"
+                                                    Value="0" />
+                                            </DoubleAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualTransition>
                                     <VisualTransition
@@ -3457,6 +3471,17 @@
                                             </DoubleAnimationUsingKeyFrames>
                                             <DoubleAnimationUsingKeyFrames
                                                 Storyboard.TargetName="OverflowContentTransform"
+                                                Storyboard.TargetProperty="Y">
+                                                <DiscreteDoubleKeyFrame
+                                                    KeyTime="0:0:0"
+                                                    Value="0" />
+                                                <SplineDoubleKeyFrame
+                                                    KeyTime="0:0:0.167"
+                                                    KeySpline="0.2,0 0,1"
+                                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHeight}" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames
+                                                Storyboard.TargetName="OverflowContentTransform2"
                                                 Storyboard.TargetProperty="Y">
                                                 <DiscreteDoubleKeyFrame
                                                     KeyTime="0:0:0"
@@ -3541,6 +3566,17 @@
                                                     KeySpline="0.1,0.9 0.2,1.0"
                                                     Value="0" />
                                             </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames
+                                                Storyboard.TargetName="OverflowContentTransform2"
+                                                Storyboard.TargetProperty="Y">
+                                                <DiscreteDoubleKeyFrame
+                                                    KeyTime="0:0:0"
+                                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
+                                                <SplineDoubleKeyFrame
+                                                    KeyTime="0:0:0.467"
+                                                    KeySpline="0.1,0.9 0.2,1.0"
+                                                    Value="0" />
+                                            </DoubleAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualTransition>
                                     <VisualTransition
@@ -3607,6 +3643,17 @@
                                             </DoubleAnimationUsingKeyFrames>
                                             <DoubleAnimationUsingKeyFrames
                                                 Storyboard.TargetName="OverflowContentTransform"
+                                                Storyboard.TargetProperty="Y">
+                                                <DiscreteDoubleKeyFrame
+                                                    KeyTime="0:0:0"
+                                                    Value="0" />
+                                                <SplineDoubleKeyFrame
+                                                    KeyTime="0:0:0.167"
+                                                    KeySpline="0.2,0 0,1"
+                                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames
+                                                Storyboard.TargetName="OverflowContentTransform2"
                                                 Storyboard.TargetProperty="Y">
                                                 <DiscreteDoubleKeyFrame
                                                     KeyTime="0:0:0"
@@ -3816,17 +3863,24 @@
                                             x:Name="OverflowContentRootTransform"
                                             X="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHorizontalOffset}" />
                                     </Grid.RenderTransform>
+                                    
+                                    <finanse:BackDropInside>
+                                        <finanse:BackDropInside.RenderTransform>
+                                            <TranslateTransform
+                                                x:Name="OverflowContentTransform" />
+                                        </finanse:BackDropInside.RenderTransform>
+                                    </finanse:BackDropInside>
+                                    
                                     <CommandBarOverflowPresenter
-                                        BorderBrush="Transparent"
-                                        BorderThickness="0"
                                         x:Name="SecondaryItemsControl"
                                         Style="{TemplateBinding CommandBarOverflowPresenterStyle}"
+                                        BorderBrush="{ThemeResource CommandBarOverflowBackground}"
                                         Background="{ThemeResource CommandBarOverflowBackground}"
                                         IsEnabled="False"
                                         IsTabStop="False">
                                         <CommandBarOverflowPresenter.RenderTransform>
                                             <TranslateTransform
-                                                x:Name="OverflowContentTransform" />
+                                                x:Name="OverflowContentTransform2" />
                                         </CommandBarOverflowPresenter.RenderTransform>
                                         <CommandBarOverflowPresenter.ItemContainerStyle>
                                             <Style

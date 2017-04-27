@@ -27,10 +27,10 @@ namespace Finanse {
 
         public MainPage() {
             InitializeComponent();
-            Db();
+            Initialize();
         }
 
-        private async void Db() {
+        private async void Initialize() {
             bool exist = await ApplicationData.Current.LocalFolder.FileExistsAsync("db.sqlite");
             if (!exist)
                 await SyncHelper.CopyDbFileFromOneDrive();
@@ -38,11 +38,10 @@ namespace Finanse {
             DalBase.CreateBackup();
             DalBase.CreateDb();
 
-            //  if (Settings.LastAppVersion != Informations.AppVersion) {
             DalBase.ConvertAccounts();
             DalBase.RepairDb();
             DalBase.ConvertLocalIdReferenceToGlobal();
-            //  }
+
             DalBase.AddItemsIfEmpty();
 
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(360, 530));
@@ -80,7 +79,7 @@ namespace Finanse {
             if (AktualnaStrona_Frame.CurrentSourcePageType == typeof(OperationsPage))
                 return;
 
-            OperationsAppBarRadioButton.IsChecked = true;// AktualnaStrona_Frame.Navigate(typeof(Strona_glowna));
+            OperationsAppBarRadioButton.IsChecked = true;
             e.Handled = true;
         }
         private void BackRequestedEvent(object sender, BackRequestedEventArgs e) {
@@ -266,11 +265,11 @@ namespace Finanse {
         }
 
         private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e) {
-            StatusBarMethods.SetStatusBarColors(((ThemeAwareFrame)Frame).AppTheme.ToApplicationTheme());
             StatusBarMethods.WhichOrientation();
+            StatusBarMethods.SetStatusBarColors();
 
             if (TitleBarRowDefinition != null)
-                TitleBarRowDefinition.Height =( ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar") && ActualWidth < 800)
+                TitleBarRowDefinition.Height = ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar") && ActualWidth < 800
                     ? new GridLength(0)
                     : new GridLength(31);
 
@@ -279,17 +278,16 @@ namespace Finanse {
                 : Visibility.Collapsed;
         } 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e) {
-            Storyboard sb = (int) Pane.Width == 320
-                ? this.Resources["ClosePane"] as Storyboard
-                : this.Resources["OpenPane"] as Storyboard;
+            var sb = (int) Pane.Width == 320
+                ? Resources["ClosePane"] as Storyboard
+                : Resources["OpenPane"] as Storyboard;
 
             sb?.Begin();
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e) {
-            if (AktualnaStrona_Frame.CurrentSourcePageType == typeof(OperationsPage))
-                return;
-            AktualnaStrona_Frame.Navigate(typeof(OperationsPage));
+            if (AktualnaStrona_Frame.CurrentSourcePageType != typeof(OperationsPage))
+                AktualnaStrona_Frame.Navigate(typeof(OperationsPage));
         }
     }
 }

@@ -1,5 +1,13 @@
 [
   {
+    "AppVersion": "1.1.9.0",
+    "Description": [
+      "naprawiony błąd przy synchronizacji - istniała możliwość mieszania się elementów",
+      "naprawiony błąd niesynchronizowania subkont",
+      "drobne usprawnienia poprawiające odczucia z użytkowania"
+    ]
+  },
+  {
     "AppVersion": "1.1.7.0",
     "Description": [
       "naprawiony błąd braku menu dla kompilacji systemu 14393 (Anniversary Update) i starszych"

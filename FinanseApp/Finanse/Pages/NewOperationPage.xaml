@@ -212,6 +212,7 @@
                             Style="{StaticResource TextBoxStyle1}"
                             PlaceholderText="Nazwa"
                             x:Uid="namePlaceholder"
+                            LostFocus="_textBoxEvents.TextBox_LostFocus"
                             Margin="0,16" />
                     </Grid>
 
@@ -315,6 +316,7 @@
                         Name="MoreInfoValue"
                         TextWrapping="Wrap"
                         PlaceholderText="Więcej informacji"
+                        LostFocus="_textBoxEvents.TextBox_LostFocus"
                         x:Uid="moreInfoPlaceholder"
                         Style="{StaticResource TextBoxStyle1}"
                         BorderThickness="1"

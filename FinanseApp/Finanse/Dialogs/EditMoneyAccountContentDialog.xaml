@@ -22,6 +22,7 @@
             Style="{StaticResource TextBoxStyle1}"
             PlaceholderText="Nazwa"
             x:Uid="namePlaceholder"
+            LostFocus="_textBoxEvents.TextBox_LostFocus"
             TextChanging="NameValue_TextChanging"/>
 
         <ComboBox

@@ -211,10 +211,8 @@
                     Margin="0">
                     <PivotItem.Header>
                         <TextBlock
-                            Opacity="0.6"
-                            FontSize="20"
+                            FontSize="15"
                             FontFamily="{StaticResource DefaultFontFamily}"
-                            HorizontalAlignment="Center"
                             x:Uid="Expenses"
                             Text="Wydatki" />
                     </PivotItem.Header>
@@ -253,10 +251,8 @@
                     Margin="0">
                     <PivotItem.Header>
                         <TextBlock
-                            Opacity="0.6"
-                            FontSize="20"
+                            FontSize="15"
                             FontFamily="{StaticResource DefaultFontFamily}"
-                            HorizontalAlignment="Center"
                             x:Uid="Incomes"
                             Text="Wpływy" />
                     </PivotItem.Header>

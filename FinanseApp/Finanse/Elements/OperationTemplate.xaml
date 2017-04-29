@@ -32,8 +32,8 @@
             Height="48">
 
             <data:CategoryIcon
-                Glyph="{x:Bind Operation.CategoryIcon.Icon.Glyph, Mode=OneTime}"
-                Color="{x:Bind Operation.CategoryIcon.Brush, Mode=OneTime}"/>
+                Glyph="{x:Bind Operation.GeneralCategory.Icon.Glyph, Mode=OneTime}"
+                Color="{x:Bind Operation.GeneralCategory.Brush, Mode=OneTime}"/>
 
             <Ellipse
                 Visibility="{x:Bind _accountEllipseVisibile}"

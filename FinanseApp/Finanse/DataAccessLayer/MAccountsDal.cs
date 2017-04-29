@@ -98,7 +98,7 @@ namespace Finanse.DataAccessLayer {
 
         public static bool AccountExistInBaseByName(string name) {
             using (var db = DbConnection) {
-                return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM MAccount WHERE LOWER(Name) = ?", name.ToLower());
+                return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM MAccount WHERE LOWER(TRIM(Name)) = ?", name.Trim().ToLower());
             }
         }
 
@@ -233,12 +233,7 @@ namespace Finanse.DataAccessLayer {
                         , mAccount.GlobalId);
 
                 db.Execute(
-                    "UPDATE MAccount SET IsDeleted = 1, LastModifed = ? WHERE GlobalId = ?"
-                        , DateTimeHelper.DateTimeUtcNowString
-                        , mAccount.GlobalId);
-
-                db.Execute(
-                    "UPDATE MAccount SET IsDeleted = 1, LastModifed = ? WHERE BossAccountGlobalId = ?"
+                    "UPDATE MAccount SET IsDeleted = 1, LastModifed = ? WHERE ? IN(GlobalId, BossAccountGlobalId)"
                         , DateTimeHelper.DateTimeUtcNowString
                         , mAccount.GlobalId);
             }

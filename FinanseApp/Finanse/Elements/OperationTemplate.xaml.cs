@@ -1,5 +1,6 @@
 ﻿using Windows.UI.Xaml;
 using Finanse.Models;
+using Finanse.Models.Categories;
 using Finanse.Models.Operations;
 
 namespace Finanse.Elements {
@@ -18,7 +19,7 @@ namespace Finanse.Elements {
             ? Visibility.Visible
             : Visibility.Collapsed;
 
-        private bool HaveSubCategory => Operation?.SubCategory != null;
+        private bool HaveSubCategory => Operation?.GeneralCategory is SubCategory;
 
         public OperationTemplate() {
             InitializeComponent();

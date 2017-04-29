@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Windows.Phone.UI.Input;
 using Windows.System.Profile;
 using System.ComponentModel;
+using Finanse.Models;
 using Finanse.Models.DateTimeExtensions;
 using Finanse.Models.Helpers;
 using Finanse.Models.MAccounts;
@@ -151,7 +152,7 @@ namespace Finanse.Pages {
 
 
         private async void ShowDetailsContentDialog(Operation operation) {
-            var operationDetailsContentDialog = new OperationDetailsContentDialog(operation, "") {
+            var operationDetailsContentDialog = new OperationDetailsContentDialog(operation, "", Settings.Theme) {
                 MaxHeight = Window.Current.Bounds.Height - 80
             };
             

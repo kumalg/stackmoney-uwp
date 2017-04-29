@@ -27,6 +27,8 @@ namespace Finanse.Dialogs {
         private readonly OperationPattern _operationPatternToEdit;
         private readonly OperationPattern _originalOperationPattern;
 
+        private readonly TextBoxEvents _textBoxEvents = new TextBoxEvents();
+
         private string _acceptedCostValue = string.Empty;
 
         public EditOperationContentDialog(Operation operationToEdit) {
@@ -81,8 +83,8 @@ namespace Finanse.Dialogs {
                 HideInStatisticsToggle.IsOn = !operation.VisibleInStatistics;
             }
 
-            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => i.Tag.ToString() == operationPattern.CategoryId);
-            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => item.Tag.ToString() == operationPattern.SubCategoryId);
+            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => i.Tag.ToString() == operationPattern.Category?.GlobalId);
+            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => item.Tag.ToString() == operationPattern.SubCategory?.GlobalId);
       //      PayFormValue.SelectedItem = PayFormValue.Items.OfType<Account>().SingleOrDefault(item => item.Id == operationPattern.MoneyAccountId);
 
             if (!string.IsNullOrEmpty(operationPattern.MoreInfo))
@@ -116,8 +118,9 @@ namespace Finanse.Dialogs {
                 Title = NameValue.Text,
                 Cost = decimal.Parse(_acceptedCostValue, Settings.ActualCultureInfo),
                 isExpense = (bool)Expense_RadioButton.IsChecked,
-                CategoryId = GetCategoryId(),
-                SubCategoryId = GetSubCategoryId(),
+                CategoryGlobalId = !string.IsNullOrEmpty(GetSubCategoryId) ? GetSubCategoryId : GetCategoryId,
+                //CategoryId = GetCategoryId,
+                //SubCategoryId = GetSubCategoryId,
                 MoreInfo = MoreInfoValue.Text,
                 MoneyAccountId = ((MAccount)PayFormValue.SelectedItem).GlobalId,
                 VisibleInStatistics = !HideInStatisticsToggle.IsOn,
@@ -131,8 +134,9 @@ namespace Finanse.Dialogs {
                 Title = NameValue.Text,
                 Cost = decimal.Parse(_acceptedCostValue, Settings.ActualCultureInfo),
                 isExpense = (bool)Expense_RadioButton.IsChecked,
-                CategoryId = GetCategoryId(),
-                SubCategoryId = GetSubCategoryId(),
+                CategoryGlobalId = !string.IsNullOrEmpty(GetSubCategoryId) ? GetSubCategoryId : GetCategoryId,
+                //CategoryId = GetCategoryId,
+                //SubCategoryId = GetSubCategoryId,
                 MoreInfo = MoreInfoValue.Text,
                 MoneyAccountId = ((MAccount)PayFormValue.SelectedItem).GlobalId,
             };
@@ -144,11 +148,11 @@ namespace Finanse.Dialogs {
                 DateValue.Date.Value.ToString("yyyy.MM.dd");
         }
 
-        private string GetCategoryId() => CategoryValue.SelectedIndex != -1
+        private string GetCategoryId => CategoryValue.SelectedIndex != -1
             ? ((ComboBoxItem) CategoryValue.SelectedItem).Tag.ToString()
             : string.Empty;
 
-        private string GetSubCategoryId() => SubCategoryValue.SelectedIndex != -1
+        private string GetSubCategoryId => SubCategoryValue.SelectedIndex != -1
             ? (string)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag
             : string.Empty;
 
@@ -180,7 +184,7 @@ namespace Finanse.Dialogs {
 
                 if (!string.IsNullOrEmpty(idOfSelectedSubCategory)) {
                     if (SubCategoryValue.Items.OfType<SubCategory>().Any(i => i.GlobalId == idOfSelectedSubCategory)) {
-                        SubCategory subCatItem = Dal.GetSubCategoryByGlobalId(idOfSelectedSubCategory);
+                        Category subCatItem = CategoriesDal.GetCategoryByGlobalId(idOfSelectedSubCategory);
                         SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
                     }
                 }
@@ -200,7 +204,7 @@ namespace Finanse.Dialogs {
 
             CategoryValue.Items.Clear();
 
-            foreach (Category catItem in Dal.GetAllCategories()) {
+            foreach (Category catItem in CategoriesDal.GetAllCategories()) {
 
                 if ((catItem.VisibleInExpenses && inExpenses) 
                     || (catItem.VisibleInIncomes && inIncomes)) {
@@ -222,7 +226,7 @@ namespace Finanse.Dialogs {
             if (CategoryValue.SelectedIndex == -1)
                 return;
 
-            foreach (var subCatItem in Dal.GetSubCategoriesByBossId(((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString())) {
+            foreach (var subCatItem in CategoriesDal.GetSubCategoriesByBossId(((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString())) {
                 if ((!subCatItem.VisibleInExpenses || !inExpenses) && (!subCatItem.VisibleInIncomes || !inIncomes))
                     continue;
 

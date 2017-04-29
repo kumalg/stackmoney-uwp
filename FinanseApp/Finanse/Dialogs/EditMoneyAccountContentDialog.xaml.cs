@@ -1,10 +1,13 @@
-﻿using Finanse.DataAccessLayer;
+﻿using System;
+using Finanse.DataAccessLayer;
 using Finanse.Models.MoneyAccounts;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+using Finanse.Models;
 using Finanse.Models.MAccounts;
 
 namespace Finanse.Dialogs {
@@ -12,6 +15,8 @@ namespace Finanse.Dialogs {
     public sealed partial class EditMoneyAccountContentDialog : INotifyPropertyChanged {
         public MAccount EditedAccount { get; }
         private readonly MAccount _accountToEdit;
+
+        private readonly TextBoxEvents _textBoxEvents = new TextBoxEvents();
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void RaisePropertyChanged(string propertyName) {
@@ -61,7 +66,20 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private bool PrimaryButtonEnabling => !(string.IsNullOrEmpty(NameValue.Text) || EditedAccount.Equals(_accountToEdit));
+        private bool PrimaryButtonEnabling => NameNotNullAndCategoryNotInBase;
+
+
+        private bool NameNotNullAndCategoryNotInBase => !(MAccountsDal.AccountExistInBaseByName(NameValue.Text) || string.IsNullOrEmpty(NameValue.Text));
+
+        public Brush NameValueForeground => IsThisCategoryInBase()
+            ? (SolidColorBrush)Application.Current.Resources["RedColorStyle"]
+            : (SolidColorBrush)Application.Current.Resources["Text"];
+
+        private bool IsThisCategoryInBase() {
+            return 
+                !String.Equals(_accountToEdit.Name, NameValue.Text, StringComparison.CurrentCultureIgnoreCase) 
+                && MAccountsDal.AccountExistInBaseByName(NameValue.Text);
+        }
 
         public EditMoneyAccountContentDialog(MAccount accountToEdit) {
             InitializeComponent();
@@ -82,6 +100,7 @@ namespace Finanse.Dialogs {
         private void NameValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
             EditedAccount.Name = sender.Text;
             RaisePropertyChanged("PrimaryButtonEnabling");
+            NameValue.Foreground = NameValueForeground;
         }
     }
 }

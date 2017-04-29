@@ -156,6 +156,7 @@
     <Compile Include="DataAccessLayer\DalBase.cs" />
     <Compile Include="DataAccessLayer\Dal.cs" />
     <Compile Include="DataAccessLayer\DebugTraceListener.cs" />
+    <Compile Include="DataAccessLayer\CategoriesDal.cs" />
     <Compile Include="DataAccessLayer\MAccountsDal.cs" />
     <Compile Include="DataAccessLayer\StatisticsDal.cs" />
     <Compile Include="DataAccessLayer\SyncDal.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Models\Statistics\StatisticsData.cs" />
     <Compile Include="Models\Statistics\SubCategoriesList.cs" />
     <Compile Include="Models\SystemVersion\SystemVersions.cs" />
+    <Compile Include="Models\TextBoxEvents.cs" />
     <Compile Include="Models\ThemeExtensions.cs" />
     <Compile Include="Models\WhatsNew\WhatsNew.cs" />
     <Compile Include="Models\WhatsNew\WhatsNewHelper.cs" />

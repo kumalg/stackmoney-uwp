@@ -5,11 +5,14 @@ using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Finanse.Models;
 using Finanse.Models.Categories;
 
 namespace Finanse.Dialogs {
 
     public sealed partial class NewCategoryContentDialog : INotifyPropertyChanged {
+
+        private TextBoxEvents _textBoxEvents = new TextBoxEvents();
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void RaisePropertyChanged(string propertyName) {
@@ -76,7 +79,7 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private readonly IEnumerable<Category> Categories = Dal.GetAllCategories();//.Where(i => i.GlobalId != _bossCategoryGlobalId && i.GlobalId != _editedCategoryItem.GlobalId);
+        private readonly IEnumerable<Category> Categories = CategoriesDal.GetAllCategories();//.Where(i => i.GlobalId != _bossCategoryGlobalId && i.GlobalId != _editedCategoryItem.GlobalId);
 
         public Category NewCategoryItem { get; private set; } = new Category();
 
@@ -134,21 +137,22 @@ namespace Finanse.Dialogs {
             Categories = Categories.Where(i => i.GlobalId != editedCategoryItem.GlobalId);
         }
 
-        public NewCategoryContentDialog(int bossCategoryId) {
+        public NewCategoryContentDialog(string bossCategoryId) {
             InitializeComponent();
             
             Title = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("newCategoryString");
             PrimaryButtonText = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("add");
 
-            Category bossCategory = Dal.GetCategoryById(bossCategoryId);
+            Category bossCategory = CategoriesDal.GetCategoryByGlobalId(bossCategoryId);
             SelectedColor = ColorBase.FirstOrDefault(i => i.Key.Equals(bossCategory.ColorKey));
             SelectedIcon = IconBase.FirstOrDefault(i => i.Key.Equals(bossCategory.IconKey));
 
             VisibleInExpensesToggleButton.IsOn = true;
             VisibleInIncomesToggleButton.IsOn = true;
             BossCategoryGlobalId = bossCategory.GlobalId;
-            
-            Categories = Categories.Where(i => i.GlobalId != BossCategoryGlobalId);
+
+            CategoryValue.SelectedItem = Categories.FirstOrDefault(i => i.GlobalId == BossCategoryGlobalId);
+            //   Categories = Categories.Where(i => i.GlobalId != BossCategoryGlobalId);
         }
 
         public NewCategoryContentDialog() {
@@ -175,9 +179,13 @@ namespace Finanse.Dialogs {
         private bool OperationNotTheSameAndCategoryNotInBase => !( IsThisCategoryInBase() || IsNewOperationTheSame());
 
         private bool IsThisCategoryInBase() {
+            if (_editedCategoryItem != null && _editedCategoryItem.Name.Trim() == NameValue.Text.Trim())
+                return false;
+            /*
             return CategoryValue.SelectedIndex == -1 
-                ? Dal.CategoryExistByName(NameValue.Text) 
-                : Dal.SubCategoryExistInBaseByName(NameValue.Text, BossCategoryGlobalId);
+                ? CategoriesDal.CategoryExistInBaseByName(NameValue.Text) 
+                : CategoriesDal.SubCategoryExistInBaseByName(NameValue.Text, BossCategoryGlobalId);*/
+            return CategoriesDal.CategoryExistInBaseByName(NameValue.Text);
         }
 
         private bool IsNewOperationTheSame() {
@@ -212,6 +220,7 @@ namespace Finanse.Dialogs {
 
         private void NameValue_TextChanged(object sender, TextChangedEventArgs e) {
             SetPrimaryButtonEnabled();
+            NameValue.Foreground = NameValueForeground;
         }
 
         private void SetVisibleInExpensesAndIncomesToNewCategory() {
@@ -254,7 +263,7 @@ namespace Finanse.Dialogs {
         }
 
         private void SetExpenseAndIncomeToggleButtonsEnabling() {
-            Category bossCategory = Dal.GetCategoryByGlobalId(BossCategoryGlobalId);
+            Category bossCategory = CategoriesDal.GetCategoryByGlobalId(BossCategoryGlobalId);
 
             if (bossCategory != null && (!bossCategory.VisibleInIncomes || !bossCategory.VisibleInExpenses)) {
                 VisibleInExpensesToggleButton.IsEnabled = bossCategory.VisibleInExpenses;
@@ -275,10 +284,6 @@ namespace Finanse.Dialogs {
         }
 
         private void ColorBaseList_SelectionChanged(object sender, SelectionChangedEventArgs e) => SetPrimaryButtonEnabled();
-
-        private void NameValue_OnTextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
-            NameValue.Foreground = NameValueForeground;
-        }
 
         public Brush NameValueForeground => IsThisCategoryInBase()
             ? (SolidColorBrush)Application.Current.Resources["RedColorStyle"]

@@ -39,6 +39,7 @@ namespace Finanse {
             DalBase.CreateDb();
 
             DalBase.ConvertAccounts();
+            DalBase.ConvertCategories();
             DalBase.RepairDb();
             DalBase.ConvertLocalIdReferenceToGlobal();
 

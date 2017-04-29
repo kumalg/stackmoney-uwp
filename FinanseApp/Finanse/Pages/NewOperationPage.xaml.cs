@@ -26,6 +26,8 @@ namespace Finanse.Pages {
         private bool _isUnfocused = true;
         private readonly int MaxLength = NewOperation.MaxLength;
 
+        private readonly TextBoxEvents _textBoxEvents = new TextBoxEvents();
+
         private IEnumerable<MAccount> _accounts;
         private IEnumerable<MAccount> Accounts {
             get { return _accounts; }
@@ -138,7 +140,7 @@ namespace Finanse.Pages {
                 if (SubCategoryValue.Items.OfType<SubCategory>().All(i => i.GlobalId != idOfSelectedSubCategory))
                     return;
 
-                SubCategory subCatItem = Dal.GetSubCategoryByGlobalId(idOfSelectedSubCategory);
+                Category subCatItem = CategoriesDal.GetCategoryByGlobalId(idOfSelectedSubCategory);
                 SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().Single(ri => ri.Content.ToString() == subCatItem.Name);
             }
 
@@ -152,7 +154,7 @@ namespace Finanse.Pages {
 
             CategoryValue.Items?.Clear();
 
-            foreach (Category catItem in Dal.GetAllCategories()) {
+            foreach (Category catItem in CategoriesDal.GetAllCategories()) {
 
                 if ((catItem.VisibleInExpenses && inExpenses)
                     || (catItem.VisibleInIncomes && inIncomes)) {
@@ -172,7 +174,7 @@ namespace Finanse.Pages {
             if (CategoryValue.SelectedIndex == -1)
                 return;
 
-            foreach (var subCatItem in Dal.GetSubCategoriesByBossId(((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString())) {
+            foreach (var subCatItem in CategoriesDal.GetSubCategoriesByBossId(((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString())) {
                 if ((!subCatItem.VisibleInExpenses || !inExpenses) && (!subCatItem.VisibleInIncomes || !inIncomes))
                     continue;
 
@@ -255,8 +257,8 @@ namespace Finanse.Pages {
 
             NameValue.Text = selectedOperation.Title;
 
-            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => i.Tag.ToString() == selectedOperation.CategoryId);
-            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => item.Tag.ToString() == selectedOperation.SubCategoryId);
+            CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(i => i.Tag.ToString() == selectedOperation.Category.GlobalId);
+            SubCategoryValue.SelectedItem = SubCategoryValue.Items.OfType<ComboBoxItem>().SingleOrDefault(item => item.Tag.ToString() == selectedOperation.SubCategory?.GlobalId);
             PayFormValue.SelectedItem = PayFormValue.Items.OfType<MAccount>().SingleOrDefault(item => item.GlobalId == selectedOperation.MoneyAccountId);
 
             if (selectedOperation.MoreInfo != null)
@@ -278,11 +280,12 @@ namespace Finanse.Pages {
        
         private OperationPattern GetNewOperationPattern() {
             return new OperationPattern {
-                Title = NameValue.Text,
+                Title = NameValue.Text.Trim(),
                 isExpense = (bool)Expense_RadioButton.IsChecked,
                 Cost = decimal.Parse(_acceptedCostValue, Settings.ActualCultureInfo),
-                CategoryId = GetCategoryId(),
-                SubCategoryId = GetSubCategoryId(),
+                CategoryGlobalId = !string.IsNullOrEmpty(GetSubCategoryId) ? GetSubCategoryId : GetCategoryId,
+                //CategoryId = GetCategoryId,
+                //SubCategoryId = GetSubCategoryId,
                 MoreInfo = MoreInfoValue.Text,
                 MoneyAccountId = ((MAccount)PayFormValue.SelectedItem)?.GlobalId
             };
@@ -323,11 +326,11 @@ namespace Finanse.Pages {
             var result = await dialog.ShowAsync();
         }
 
-        private string GetCategoryId() => CategoryValue.SelectedIndex == -1
-            ? Dal.GetDefaultCategory().GlobalId //TODO
+        private string GetCategoryId => CategoryValue.SelectedIndex == -1
+            ? CategoriesDal.GetDefaultCategory().GlobalId //TODO
             : ((ComboBoxItem)CategoryValue.SelectedItem)?.Tag.ToString();
 
-        private string GetSubCategoryId() => SubCategoryValue.SelectedIndex == -1
+        private string GetSubCategoryId => SubCategoryValue.SelectedIndex == -1
             ? string.Empty
             : ((ComboBoxItem)SubCategoryValue.SelectedItem)?.Tag.ToString();
 

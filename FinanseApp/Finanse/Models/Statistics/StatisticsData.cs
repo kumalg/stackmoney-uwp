@@ -47,7 +47,7 @@ namespace Finanse.Models.Statistics {
 
             var query = from item in AllOperations
                         where item.isExpense
-                        group item.Cost by item.CategoryId into g
+                        group item.Cost by item.Category?.GlobalId into g
                         orderby g.Sum() descending
                         select new {
                             CategoryId = g.Key,
@@ -59,7 +59,7 @@ namespace Finanse.Models.Statistics {
             List<ChartDataItem> list = new List<ChartDataItem>();
 
             list.AddRange(from item in query
-                          let category = Dal.GetCategoryByGlobalId(item.CategoryId)
+                          let category = CategoriesDal.GetCategoryByGlobalId(item.CategoryId)
                           select new ChartDataItem(
                               (double) (item.Cost / sum), 
                               category.Brush, 
@@ -72,7 +72,7 @@ namespace Finanse.Models.Statistics {
         public List<ChartDataItem> GetIncomesGroupedByCategoryInRange() {
             var query = from item in AllOperations
                         where !item.isExpense
-                        group item.Cost by item.CategoryId into g
+                        group item.Cost by item.Category?.GlobalId into g
                         orderby g.Sum() descending
                         select new {
                             CategoryId = g.Key,
@@ -84,7 +84,7 @@ namespace Finanse.Models.Statistics {
             List<ChartDataItem> list = new List<ChartDataItem>();
 
             list.AddRange(from item in query
-                          let category = Dal.GetCategoryByGlobalId(item.CategoryId)
+                          let category = CategoriesDal.GetCategoryByGlobalId(item.CategoryId)
                           select new ChartDataItem(
                               (double) (item.Cost / sum), 
                               category.Brush, 
@@ -99,11 +99,11 @@ namespace Finanse.Models.Statistics {
 
             var query = from item in AllOperations
                         where item.isExpense
-                        group item by item.CategoryId into g
+                        group item by item.Category?.GlobalId into g
                         select new {
                             CategoryId = g.Key,
                             SubCategories = from stem in g
-                                            group stem.Cost by stem.SubCategoryId into gr
+                                            group stem.Cost by stem.SubCategory?.GlobalId into gr
                                             orderby gr.Sum() descending
                                             select new {
                                                 SubCategoryId = gr.Key,
@@ -115,7 +115,7 @@ namespace Finanse.Models.Statistics {
                 if (item.SubCategories.Count() <= 1)
                     continue;
 
-                Category category = Dal.GetCategoryByGlobalId(item.CategoryId);
+                Category category = CategoriesDal.GetCategoryByGlobalId(item.CategoryId);
 
                 SubCategoriesList itemList = new SubCategoriesList {
                     Category = category
@@ -127,7 +127,7 @@ namespace Finanse.Models.Statistics {
                 groupySum = subCategories.Sum(i => i.Cost);
                 */
                 foreach (var sitem in item.SubCategories) {
-                    SubCategory subCategory = Dal.GetSubCategoryByGlobalId(sitem.SubCategoryId);
+                    Category subCategory = CategoriesDal.GetCategoryByGlobalId(sitem.SubCategoryId);
                     if (subCategory != null)
                         itemList.List.Add(new ChartDataItem(
                             (double)(sitem.Cost / groupySum),
@@ -156,11 +156,11 @@ namespace Finanse.Models.Statistics {
 
             var query = from item in AllOperations
                         where !item.isExpense
-                        group item by item.CategoryId into g
+                        group item by item.Category?.GlobalId into g
                         select new {
                             CategoryId = g.Key,
                             SubCategories = from stem in g
-                                            group stem.Cost by stem.SubCategoryId into gr
+                                            group stem.Cost by stem.SubCategory?.GlobalId into gr
                                             orderby gr.Sum() descending
                                             select new {
                                                 SubCategoryId = gr.Key,
@@ -172,7 +172,7 @@ namespace Finanse.Models.Statistics {
                 if (item.SubCategories.Count() <= 1)
                     continue;
 
-                Category category = Dal.GetCategoryByGlobalId(item.CategoryId);
+                Category category = CategoriesDal.GetCategoryByGlobalId(item.CategoryId);
 
                 SubCategoriesList itemList = new SubCategoriesList {
                     Category = category
@@ -181,7 +181,7 @@ namespace Finanse.Models.Statistics {
                 decimal groupySum = item.SubCategories.Sum(i => i.Cost);
 
                 foreach (var sitem in item.SubCategories) {
-                    SubCategory subCategory = Dal.GetSubCategoryByGlobalId(sitem.SubCategoryId);
+                    Category subCategory = CategoriesDal.GetCategoryByGlobalId(sitem.SubCategoryId);
                     if (subCategory != null)
                         itemList.List.Add(new ChartDataItem(
                             (double) (sitem.Cost / groupySum),

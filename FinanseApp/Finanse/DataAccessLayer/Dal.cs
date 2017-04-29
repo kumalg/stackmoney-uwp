@@ -35,15 +35,15 @@ namespace Finanse.DataAccessLayer {
 
                 db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
 
-              //  AddCategory(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });
-                AddCategory(new Category { Id = 2, Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true });
-                AddCategory(new Category { Id = 3, Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true });
-                AddCategory(new Category { Id = 4, Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true });
-                AddCategory(new Category { Id = 5, Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true });
-                AddCategory(new Category { Id = 6, Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false });
+                //  AddCategory(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true });
+                CategoriesDal.AddCategory(new Category { Id = 2, Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true });
+                CategoriesDal.AddCategory(new Category { Id = 3, Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true });
+                CategoriesDal.AddCategory(new Category { Id = 4, Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true });
+                CategoriesDal.AddCategory(new Category { Id = 5, Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true });
+                CategoriesDal.AddCategory(new Category { Id = 6, Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false });
 
-                AddSubCategory(new SubCategory { Id = 1, Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = "4", VisibleInIncomes = false, VisibleInExpenses = true });
-                AddSubCategory(new SubCategory { Id = 2, Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = "3", VisibleInIncomes = false, VisibleInExpenses = true });
+                CategoriesDal.AddCategory(new SubCategory { Id = 1, Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = "4", VisibleInIncomes = false, VisibleInExpenses = true });
+                CategoriesDal.AddCategory(new SubCategory { Id = 2, Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = "3", VisibleInIncomes = false, VisibleInExpenses = true });
 
                 MAccountsDal.AddAccount(new MAccount { Name = "Gotówka", ColorKey = "01" });
                 MAccountsDal.AddAccount(new MAccount { Name = "Konto bankowe", ColorKey = "02", });
@@ -67,7 +67,7 @@ namespace Finanse.DataAccessLayer {
 
 
         /* GET ALL */
-
+        /*
         public static List<Category> GetAllCategories() {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
@@ -105,7 +105,7 @@ namespace Finanse.DataAccessLayer {
                        };
             }
         }
-
+        */
 
 
         public static decimal GetBalanceOfCertainDay(DateTime dateTime) {
@@ -155,7 +155,7 @@ namespace Finanse.DataAccessLayer {
                     //db.Table<OperationPattern>().ToList();
             }
         }
-
+        /*
         public static bool CategoryExistByName(string name) {
             using (var db = DbConnection) {
                 return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM Category WHERE LOWER(Name) = ? AND IsDeleted = 0", 
@@ -170,6 +170,7 @@ namespace Finanse.DataAccessLayer {
                     bossCategoryGlobalId);
             }
         }
+        */
         /*
         public static bool AccountExistInBaseByName(string name, AccountType accountType) {
             using (var db = DbConnection) {
@@ -183,15 +184,15 @@ namespace Finanse.DataAccessLayer {
                 }
             }
         }*/
-
+        /*
         public static Category GetDefaultCategory() {
             using (var db = DbConnection) {
                 return db.Query<Category>("SELECT * FROM Category WHERE CantDelete LIMIT 1").FirstOrDefault();
             }
         }
-
+        */
         /* GET BY ID */
-
+        /*
         public static SubCategory GetSubCategoryById(int id) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
@@ -228,7 +229,7 @@ namespace Finanse.DataAccessLayer {
                     .FirstOrDefault();
             }
         }
-
+        */
 
         /* SAVE */
 
@@ -265,7 +266,7 @@ namespace Finanse.DataAccessLayer {
                     db.Update(operationPattern);
             }
         }
-
+        /*
         public static void UpdateCategory(Category category) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
@@ -312,7 +313,7 @@ namespace Finanse.DataAccessLayer {
                 //TODO nie czekaj... no jest kłopot... tak nie mozna 
             }
         }
-        
+        */
 
         /* DELETE */
 
@@ -333,7 +334,7 @@ namespace Finanse.DataAccessLayer {
                            "WHERE Id = ?", DateTimeHelper.DateTimeUtcNowString, operation.Id);
             }
         }
-
+        /*
         public static void DeleteCategoryWithSubCategories(Category category) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
@@ -361,11 +362,18 @@ namespace Finanse.DataAccessLayer {
                            "WHERE Id = ?", DateTimeHelper.DateTimeUtcNowString, subCategoryId);
             }
         }
-
+        */
         public static int GetMaxRowId(Type type) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                return db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = ?", type.Name);
+            }
+        }
+
+        public static int GetMaxRowId(string tableName) {
+            using (var db = DbConnection) {
+                db.TraceListener = new DebugTraceListener();
+                return db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = ?", tableName);
             }
         }
     }

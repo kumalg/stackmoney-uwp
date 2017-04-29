@@ -22,8 +22,8 @@ namespace Finanse.DataAccessLayer {
                             where !String.IsNullOrEmpty(item.Date)
                             && item.isExpense
                             && IsDateInRange(item.Date, minDate, maxDate)
-                            && item.CategoryId == categoryGlobalId
-                            group item.Cost by item.SubCategoryId into g
+                            && item.CategoryGlobalId == categoryGlobalId
+                            group item.Cost by item.SubCategory?.GlobalId into g
                             orderby g.Sum() descending
                             select new {
                                 SubCategoryId = g.Key,
@@ -31,7 +31,7 @@ namespace Finanse.DataAccessLayer {
                             };
 
                 foreach (var item in query) {
-                    SubCategory subCategory = Dal.GetSubCategoryByGlobalId(item.SubCategoryId);
+                    SubCategory subCategory = CategoriesDal.GetCategoryByGlobalId(item.SubCategoryId) as SubCategory;
                     if (subCategory != null)
                         models.Add(new ChartPart {
                             SolidColorBrush = subCategory.Brush,
@@ -39,7 +39,7 @@ namespace Finanse.DataAccessLayer {
                             UnrelativeValue = (double)item.Cost
                         });
                     else {
-                        Category category = Dal.GetCategoryByGlobalId(categoryGlobalId);
+                        Category category = CategoriesDal.GetCategoryByGlobalId(categoryGlobalId);
                         models.Add(new ChartPart {
                             SolidColorBrush = category.Brush,
                             Name = category.Name,

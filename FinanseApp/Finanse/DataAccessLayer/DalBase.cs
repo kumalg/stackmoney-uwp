@@ -58,9 +58,13 @@ namespace Finanse.DataAccessLayer {
 
                 db.CreateTable<Operation>();
                 db.CreateTable<OperationPattern>();
-                db.CreateTable<Category>();
-                db.CreateTable<SubCategory>();
+            //    db.CreateTable<Category>();
+            //    db.CreateTable<SubCategory>();
                 db.CreateTable<MAccount>();
+
+                var categoriesTable = db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='Categories'");
+                if (string.IsNullOrEmpty(categoriesTable))
+                    db.Execute(CategoriesDal.CreateCategoriesTableQuery);
 
                 try {
                     db.Execute("ALTER TABLE MAccount ADD COLUMN BossAccountGlobalId varchar");
@@ -96,6 +100,67 @@ namespace Finanse.DataAccessLayer {
                 var yco = await BackupHelper.ListOfBackupDates();//ListOfBackupDates();
                 if (yco == null || !yco.Any(i => DateTime.ParseExact(i, "yyyy-MM-dd_HH-mm-ss", null) > now))
                     await db.BackupDatabase(new SQLitePlatformWinRT(), "Backup");
+            }
+        }
+        /*
+        public static void ConvertCategories() {
+            using (var db = DbConnection) {
+
+                db.Execute(
+                    "UPDATE Operation SET SubCategoryId = SubCategoryId || 'xxx' WHERE SubCategoryId IN(SELECT GlobalId FROM Category)");
+                db.Execute(
+                    "UPDATE OperationPattern SET SubCategoryId = SubCategoryId || 'xxx' WHERE SubCategoryId IN(SELECT GlobalId FROM Category)");
+                db.Execute(
+                    "UPDATE SubCategory SET GlobalId = GlobalId || 'xxx' WHERE GlobalId IN(SELECT GlobalId FROM Category)");
+
+                db.Execute(
+                    "UPDATE Operation SET CategoryGlobalId = (CASE WHEN SubCategoryId IN('-1','') THEN CategoryId ELSE SubCategoryId END) WHERE CategoryGlobalId ISNULL OR CategoryGlobalId = ''");
+                db.Execute(
+                    "UPDATE OperationPattern SET CategoryGlobalId = (CASE WHEN SubCategoryId IN('-1','') THEN CategoryId ELSE SubCategoryId END) WHERE CategoryGlobalId ISNULL OR CategoryGlobalId = ''");
+
+                if (db.ExecuteScalar<int>("SELECT COUNT(*) FROM Categories") != 0)
+                    return;
+
+                db.Execute(
+                    "INSERT INTO Categories(Name, VisibleInIncomes, VisibleInExpenses, ColorKey, IconKey, CantDelete, LastModifed, IsDeleted, GlobalId) " +
+                    "SELECT Name, VisibleInIncomes, VisibleInExpenses, ColorKey, IconKey, CantDelete, LastModifed, IsDeleted, GlobalId " +
+                    "FROM Category");
+
+                db.Execute(
+                    "INSERT INTO Categories(Name, BossCategoryId, VisibleInIncomes, VisibleInExpenses, ColorKey, IconKey, CantDelete, LastModifed, IsDeleted, GlobalId) " +
+                    "SELECT Name, BossCategoryId, VisibleInIncomes, VisibleInExpenses, ColorKey, IconKey, CantDelete, LastModifed, IsDeleted, GlobalId " +
+                    "FROM SubCategory");
+            }
+        }
+        */
+
+        public static void ConvertCategories() {
+            using (var db = DbConnection) {
+
+                db.Execute(
+                    "UPDATE Operation SET SubCategoryId = SubCategoryId || 'xxx' WHERE SubCategoryId IN(SELECT GlobalId FROM Category)");
+                db.Execute(
+                    "UPDATE OperationPattern SET SubCategoryId = SubCategoryId || 'xxx' WHERE SubCategoryId IN(SELECT GlobalId FROM Category)");
+                db.Execute(
+                    "UPDATE SubCategory SET GlobalId = GlobalId || 'xxx' WHERE GlobalId IN(SELECT GlobalId FROM Category)");
+
+                db.Execute(
+                    "UPDATE Operation SET CategoryGlobalId = (CASE WHEN SubCategoryId IN('-1','') THEN CategoryId ELSE SubCategoryId END) WHERE CategoryGlobalId ISNULL OR CategoryGlobalId = ''");
+                db.Execute(
+                    "UPDATE OperationPattern SET CategoryGlobalId = (CASE WHEN SubCategoryId IN('-1','') THEN CategoryId ELSE SubCategoryId END) WHERE CategoryGlobalId ISNULL OR CategoryGlobalId = ''");
+
+                //if (db.ExecuteScalar<int>("SELECT COUNT(*) FROM Categories") != 0)
+                //    return;
+
+                db.Execute(
+                    "INSERT INTO Categories(Name, VisibleInIncomes, VisibleInExpenses, ColorKey, IconKey, CantDelete, LastModifed, IsDeleted, GlobalId) " +
+                    "SELECT Name, VisibleInIncomes, VisibleInExpenses, ColorKey, IconKey, CantDelete, LastModifed, IsDeleted, GlobalId " +
+                    "FROM Category WHERE GlobalId NOT IN(SELECT GlobalId FROM Categories)");
+
+                db.Execute(
+                    "INSERT INTO Categories(Name, BossCategoryId, VisibleInIncomes, VisibleInExpenses, ColorKey, IconKey, CantDelete, LastModifed, IsDeleted, GlobalId) " +
+                    "SELECT Name, BossCategoryId, VisibleInIncomes, VisibleInExpenses, ColorKey, IconKey, CantDelete, LastModifed, IsDeleted, GlobalId " +
+                    "FROM SubCategory WHERE GlobalId NOT IN(SELECT GlobalId FROM Categories)");
             }
         }
 

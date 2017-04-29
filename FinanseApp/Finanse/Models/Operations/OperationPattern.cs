@@ -12,8 +12,9 @@ namespace Finanse.Models.Operations {
         public int Id { get; set; }
         public string Title { get; set; }
         public string MoreInfo { get; set; }
-        public string CategoryId { get; set; }
-        public string SubCategoryId { get; set; }
+        public string CategoryGlobalId { get; set; }
+       // public string CategoryId { get; set; }
+        //public string SubCategoryId { get; set; }
         public decimal Cost { get; set; }
         public bool isExpense { get; set; }
         public string MoneyAccountId { get; set; }
@@ -24,10 +25,8 @@ namespace Finanse.Models.Operations {
             get {
                 if (!string.IsNullOrEmpty(Title))
                     return Title;
-                if (SubCategory != null)
-                    return SubCategory.Name;
-                if (Category != null)
-                    return Category.Name;
+                if (GeneralCategory != null)
+                    return GeneralCategory.Name;
                 return string.Empty;
             }
         }
@@ -38,27 +37,23 @@ namespace Finanse.Models.Operations {
         public MAccount Account => _account ?? ( _account = MAccountsDal.GetAccountByGlobalId(MoneyAccountId) );
 
 
-        private Category _category;
-        public Category Category => _category ?? ( _category = Dal.GetCategoryByGlobalId(CategoryId) );
 
+        private Category _generalCategory;
 
-        private bool _subCategoryLoaded;
-        private SubCategory _subCategory;
-        public SubCategory SubCategory {
-            get {
-                if (_subCategory != null || _subCategoryLoaded)
-                    return _subCategory;
-
-                _subCategoryLoaded = true;
-
-                if (string.IsNullOrEmpty(SubCategoryId))
-                    return _subCategory = null;
-
-                return _subCategory = Dal.GetSubCategoryByGlobalId(SubCategoryId);
-            }
+        [Ignore]
+        public Category GeneralCategory {
+            get => _generalCategory ?? (_generalCategory = CategoriesDal.GetCategoryByGlobalId(CategoryGlobalId));
+            set => _generalCategory = value;
         }
 
+        public Category Category => GeneralCategory is SubCategory
+            ? ((SubCategory)GeneralCategory).ParentCategory
+            : GeneralCategory;
 
+
+        public SubCategory SubCategory => GeneralCategory as SubCategory;
+
+            /*
         private Category _categoryIcon;
         public Category CategoryIcon {
             get {
@@ -72,17 +67,16 @@ namespace Finanse.Models.Operations {
 
                 return _categoryIcon = new Category(); //TODO
             }
-        }
-
-        
+        }*/
 
         public Operation ToOperation() {
             return new Operation {
                 Title = Title,
                 Cost = Cost,
                 Date = "",
-                CategoryId = CategoryId,
-                SubCategoryId = SubCategoryId,
+                CategoryGlobalId = CategoryGlobalId,
+                //CategoryId = CategoryId,
+                //SubCategoryId = SubCategoryId,
                 MoneyAccountId = MoneyAccountId,
                 MoreInfo = MoreInfo,
                 isExpense = isExpense,
@@ -107,8 +101,9 @@ namespace Finanse.Models.Operations {
                 secondOperation.Cost == Cost &&
                 secondOperation.Title.Equals(Title) &&
                 secondOperation.isExpense == isExpense &&
-                secondOperation.CategoryId == CategoryId &&
-                secondOperation.SubCategoryId == SubCategoryId &&
+                secondOperation.CategoryGlobalId == CategoryGlobalId &&
+                //secondOperation.CategoryId == CategoryId &&
+                //secondOperation.SubCategoryId == SubCategoryId &&
                 secondOperation.MoneyAccountId == MoneyAccountId &&
                 secondOperation.MoreInfo == MoreInfo;
         }

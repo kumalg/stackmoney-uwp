@@ -167,7 +167,7 @@ namespace Finanse.Models.Operations {
             if (OperationsByCategory != null) {
                 try {
                     GroupInfoList<Operation> group =
-                        OperationsByCategory.SingleOrDefault(i => i.Key.ToString() == operation.CategoryId.ToString());
+                        OperationsByCategory.SingleOrDefault(i => i.Key.ToString() == operation.Category?.GlobalId.ToString());
                     group.Remove(operation);
                     if (group.Count == 0)
                         OperationsByCategory.Remove(group);
@@ -246,7 +246,7 @@ namespace Finanse.Models.Operations {
                 _monthOfCategoryGrouping = ActualMonth;
                 _visiblePayFormListOfCategoryGrouping = new HashSet<string>(_visiblePayFormList);
 
-                var query = AllOperations.GroupBy(item => item.CategoryId)
+                var query = AllOperations.GroupBy(item => item.Category?.GlobalId)
                     .Select(g => new GroupInfoList<Operation>(g.OrderByDescending(i => i.LastModifed)) {
                         Key = new GroupHeaderByCategory(g.Key),
                     }).OrderBy(i => ((GroupHeaderByCategory)i.Key).Category.Name);

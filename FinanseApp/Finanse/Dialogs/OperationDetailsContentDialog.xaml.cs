@@ -1,11 +1,9 @@
 ﻿using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
-using Finanse.DataAccessLayer;
 using Finanse.Models;
 using Finanse.Models.Categories;
 using Finanse.Models.MAccounts;
-using Finanse.Models.MoneyAccounts;
 using Finanse.Models.Operations;
 
 namespace Finanse.Dialogs {
@@ -13,8 +11,8 @@ namespace Finanse.Dialogs {
     public sealed partial class OperationDetailsContentDialog {
         
 
-        public OperationDetailsContentDialog(OperationPattern editedOperation, string whichOption) {
-
+        public OperationDetailsContentDialog(OperationPattern editedOperation, string whichOption, ApplicationTheme theme) {
+          //  RequestedTheme = theme == ApplicationTheme.Light ? ElementTheme.Light : ElementTheme.Dark;
             InitializeComponent();
 
             if (whichOption == "pattern")

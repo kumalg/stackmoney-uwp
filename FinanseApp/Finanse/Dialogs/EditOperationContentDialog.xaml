@@ -52,6 +52,7 @@
             Style="{StaticResource TextBoxStyle1}"
             PlaceholderText="Nazwa"
             x:Uid="namePlaceholder"
+            LostFocus="_textBoxEvents.TextBox_LostFocus"
             Margin="0,20,0,0"
             TextChanged="Element_TectChanged" />
 
@@ -115,6 +116,7 @@
             TextWrapping="Wrap"
             BorderThickness="1"
             PlaceholderText="Więcej informacji"
+            LostFocus="_textBoxEvents.TextBox_LostFocus"
             x:Uid="moreInfoPlaceholder"
             Style="{StaticResource TextBoxStyle1}"
             Height="100"

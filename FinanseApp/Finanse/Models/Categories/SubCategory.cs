@@ -1,4 +1,6 @@
-﻿namespace Finanse.Models.Categories {
+﻿using Finanse.DataAccessLayer;
+
+namespace Finanse.Models.Categories {
     public class SubCategory : Category {
 
         public string BossCategoryId { get; set; }
@@ -18,6 +20,9 @@
             LastModifed = category.LastModifed;
             IsDeleted = category.IsDeleted;
         }
+
+       // private Category _parentCategory;
+        public Category ParentCategory => CategoriesDal.GetCategoryByGlobalId(BossCategoryId);//_parentCategory ?? (_parentCategory = CategoriesDal.GetCategoryByGlobalId(BossCategoryId));
 
 
         public new SubCategory Clone() => (SubCategory)MemberwiseClone();

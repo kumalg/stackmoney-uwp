@@ -9,7 +9,7 @@ namespace FinanseUnitTests {
     public class OperationTests {
         private SubCategory subCategory = new SubCategory {
             Name = "TestSubCategory",
-            BossCategoryId = 1
+            BossCategoryId = "1"
         };
 
         [TestMethod]
@@ -31,28 +31,28 @@ namespace FinanseUnitTests {
         [TestMethod]
         public void ExistCategoryWithName() {
             DalBase.CreateDb();
-            Assert.IsTrue(Dal.CategoryExistByName("Inne"));
+            Assert.IsTrue(CategoriesDal.CategoryExistInBaseByName("Inne"));
         }
 
 
         [TestMethod]
         public void NotExistCategoryWithName() {
             DalBase.CreateDb();
-            Assert.IsFalse(Dal.CategoryExistByName("Inne2"));
+            Assert.IsFalse(CategoriesDal.CategoryExistInBaseByName("Inne2"));
         }
 
         [TestMethod]
         public void ExistSubCategoryWithName() {
             DalBase.CreateDb();
-            Dal.AddSubCategory(subCategory);
-            Assert.IsTrue(Dal.SubCategoryExistInBaseByName(subCategory.Name, subCategory.BossCategoryId));
+            CategoriesDal.AddCategory(subCategory);
+            Assert.IsTrue(CategoriesDal.CategoryExistInBaseByName(subCategory.Name));
         }
         
         [TestMethod]
         public void NotExistSubCategoryWithName() {
             DalBase.CreateDb();
-            Dal.AddSubCategory(subCategory);
-            Assert.IsFalse(Dal.SubCategoryExistInBaseByName(subCategory.Name + "NotExist", subCategory.BossCategoryId));
+            CategoriesDal.AddCategory(subCategory);
+            Assert.IsFalse(CategoriesDal.CategoryExistInBaseByName(subCategory.Name + "NotExist"));
         }
     }
 }

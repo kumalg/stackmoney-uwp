@@ -23,7 +23,7 @@
             Style="{StaticResource TextBoxStyle1}"
             Text="{x:Bind _editedCategoryItem.Name, Mode=OneTime}"
             TextChanged="NameValue_TextChanged"
-            TextChanging="NameValue_OnTextChanging"
+            LostFocus="_textBoxEvents.TextBox_LostFocus"
             PlaceholderText="Nazwa"
             x:Uid="namePlaceholder"/>
         

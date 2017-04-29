@@ -9,6 +9,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
+using Finanse.Models;
 using Finanse.Models.Helpers;
 using Finanse.Models.MAccounts;
 using Finanse.Models.Operations;
@@ -21,6 +22,8 @@ namespace Finanse.Dialogs {
         private string _acceptedCostValue = string.Empty;
         private bool _isUnfocused = true;
         private readonly int MaxLength = NewOperation.MaxLength;
+
+        private TextBoxEvents _textBoxEvents = new TextBoxEvents();
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void RaisePropertyChanged(string propertyName) {
@@ -98,7 +101,7 @@ namespace Finanse.Dialogs {
                 MoneyAccountId = moneyAccoundId,
                 Title = NameValue.Text,
                 Date = DateTime.Today.ToString("yyyy.MM.dd"),
-                CategoryId = Dal.GetDefaultCategory().GlobalId //TODO trzeba dać warunek żeby nie updateowało tych co nie można usuwać
+                CategoryGlobalId = CategoriesDal.GetDefaultCategory().GlobalId //TODO trzeba dać warunek żeby nie updateowało tych co nie można usuwać
             };
         }
 
@@ -144,7 +147,14 @@ namespace Finanse.Dialogs {
 
         private void CostValue_TextChanged(object sender, TextChangedEventArgs e) { }
 
-        private void NameValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) => RaisePropertyChanged("PrimaryButtonEnabling");
+        private void NameValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
+            RaisePropertyChanged("PrimaryButtonEnabling");
+            NameValue.Foreground = NameValueForeground;
+        }
+
+        public Brush NameValueForeground => MAccountsDal.AccountExistInBaseByName(NameValue.Text)
+            ? (SolidColorBrush)Application.Current.Resources["RedColorStyle"]
+            : (SolidColorBrush)Application.Current.Resources["Text"];
 
         private void AccountTypeRadioButton_Click(object sender, RoutedEventArgs e) {
             RaisePropertyChanged("BankAccountsComboBoxVisibility");

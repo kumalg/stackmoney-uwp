@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Finanse.Models;
 using Finanse.Models.Helpers;
 using Finanse.Models.Operations;
 
@@ -52,7 +53,7 @@ namespace Finanse.Pages {
         }
 
         private async void ShowDetailsContentDialog(OperationPattern operationPattern) {
-            var contentDialogItem = new OperationDetailsContentDialog(operationPattern, "pattern");
+            var contentDialogItem = new OperationDetailsContentDialog(operationPattern, "pattern", Settings.Theme);
             var result = await contentDialogItem.ShowAsync();
 
             if (result == ContentDialogResult.Primary)

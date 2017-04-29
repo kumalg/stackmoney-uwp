@@ -72,7 +72,15 @@
             
             <SolidColorBrush x:Key="ContentDialogBackgroundBrush" Color="#242424" Opacity="0.45"/>
             <SolidColorBrush x:Key="FlyoutBackgroundBrush" Color="#1f1f1f" Opacity="0.9"/>
-            
+
+            <SolidColorBrush
+                x:Key="SystemControlPageBackgroundBaseMediumBrush"
+                Color="Red" />
+
+            <SolidColorBrush
+                x:Key="ContentDialogDimmingThemeBrush"
+                Color="Red" />
+
             <Color x:Key="MaxColor">White</Color>
         </ResourceDictionary>
         
@@ -106,7 +114,15 @@
             
             <SolidColorBrush x:Key="ContentDialogBackgroundBrush" Color="#eeeeee" Opacity="0.45"/>
             <SolidColorBrush x:Key="FlyoutBackgroundBrush" Color="#f0f0f0" Opacity="0.9"/>
-            
+
+            <SolidColorBrush
+                x:Key="SystemControlPageBackgroundBaseMediumBrush"
+                Color="Red" />
+
+            <SolidColorBrush
+                x:Key="ContentDialogDimmingThemeBrush"
+                Color="Red" />
+
             <Color x:Key="MaxColor">Black</Color>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>

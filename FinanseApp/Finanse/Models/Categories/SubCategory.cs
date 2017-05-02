@@ -21,8 +21,23 @@ namespace Finanse.Models.Categories {
             IsDeleted = category.IsDeleted;
         }
 
-       // private Category _parentCategory;
-        public Category ParentCategory => CategoriesDal.GetCategoryByGlobalId(BossCategoryId);//_parentCategory ?? (_parentCategory = CategoriesDal.GetCategoryByGlobalId(BossCategoryId));
+        public Category AsCategory() {
+            return new Category {
+                Id = Id,
+                IconKey = IconKey,
+                ColorKey = ColorKey,
+                Name = Name,
+                VisibleInExpenses = VisibleInExpenses,
+                VisibleInIncomes = VisibleInIncomes,
+                GlobalId = GlobalId,
+                CantDelete = CantDelete,
+                LastModifed = LastModifed,
+                IsDeleted = IsDeleted,
+        };
+        }
+
+        private Category _parentCategory;
+        public Category ParentCategory => _parentCategory ?? (_parentCategory = CategoriesDal.GetCategoryByGlobalId(BossCategoryId));
 
 
         public new SubCategory Clone() => (SubCategory)MemberwiseClone();

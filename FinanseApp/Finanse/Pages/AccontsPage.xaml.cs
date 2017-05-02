@@ -45,17 +45,58 @@ namespace Finanse.Pages {
         private async void EditButton_Click(object sender, RoutedEventArgs e) {
             object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
             MAccountWithSubMAccounts oldAccound = ((MAccountWithSubMAccounts)datacontext);
-            EditMoneyAccountContentDialog editMoneyAccountContentDialog = new EditMoneyAccountContentDialog(oldAccound?.MAccount);
+            EditMAccountContentDialog editMoneyAccountContentDialog = new EditMAccountContentDialog(oldAccound?.MAccount);
             ContentDialogResult result = await editMoneyAccountContentDialog.ShowAsync();
 
             if (result != ContentDialogResult.Primary)
                 return;
             
             MAccount editedAccound = editMoneyAccountContentDialog.EditedAccount;
+            if (editedAccound is SubMAccount)
+                AccountToSubAccount(oldAccound, editedAccound as SubMAccount);
+            else
+                AccountToAccount(oldAccound, editedAccound);
+
+            /*
             int index = Accounts.IndexOf(oldAccound); //TODO gdyby edytować z karty na konto i na odwró
             Accounts.Remove(oldAccound);
             oldAccound.MAccount = editedAccound;
-            Accounts.Insert(index, oldAccound);
+            Accounts.Insert(index, oldAccound);*/
+        }
+
+        private void AccountToAccount(MAccountWithSubMAccounts oldAccount, MAccount newAccount) {
+           // var accountWithSubMAccounts = Accounts.FirstOrDefault(i => Equals(i.MAccount, oldAccount.MAccount));
+           // accountWithSubMAccounts.MAccount = newAccount;
+
+            int index = Accounts.IndexOf(oldAccount);
+            var accountWithSubMAccounts = Accounts.ElementAt(index);
+            accountWithSubMAccounts.MAccount = newAccount;
+
+            Accounts.RemoveAt(index);
+            Accounts.Insert(index, accountWithSubMAccounts);
+        }
+
+        private void AccountToSubAccount(MAccountWithSubMAccounts oldAccount, SubMAccount newSubMAccount) {
+            var accountWithSubMAccounts = Accounts.FirstOrDefault(i => Equals(i.MAccount, oldAccount.MAccount));
+            Accounts.Remove(accountWithSubMAccounts);
+
+            var newAccountWithSubMAccounts = Accounts.FirstOrDefault(i => i.MAccount.GlobalId == newSubMAccount.BossAccountGlobalId);
+            newAccountWithSubMAccounts.SubMAccounts.Insert(0, newSubMAccount);
+        }
+
+        private void SubAccountToSubAccount(SubMAccount oldSubMAccount, SubMAccount newSubMAccount) {
+            var accountWithSubMAccounts = Accounts.FirstOrDefault(i => i.SubMAccounts.Contains(oldSubMAccount));
+            accountWithSubMAccounts.SubMAccounts.Remove(oldSubMAccount);
+            
+            var newAccountWithSubMAccounts = Accounts.FirstOrDefault(i => i.MAccount.GlobalId == newSubMAccount.BossAccountGlobalId);
+            newAccountWithSubMAccounts.SubMAccounts.Insert(0, newSubMAccount);
+        }
+
+        private void SubAccountToAccount(SubMAccount oldSubMAccount, MAccount newMAccount) {
+            var accountWithSubMAccounts = Accounts.FirstOrDefault(i => i.SubMAccounts.Contains(oldSubMAccount));
+            accountWithSubMAccounts.SubMAccounts.Remove(oldSubMAccount);
+
+            Accounts.Insert(0, new MAccountWithSubMAccounts{ MAccount = newMAccount});
         }
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e) {
@@ -76,18 +117,25 @@ namespace Finanse.Pages {
             if (oldAccound == null)
                 return;
 
-            EditMoneyAccountContentDialog editMoneyAccountContentDialog = new EditMoneyAccountContentDialog(oldAccound);
+            EditMAccountContentDialog editMoneyAccountContentDialog = new EditMAccountContentDialog(oldAccound);
             ContentDialogResult result = await editMoneyAccountContentDialog.ShowAsync();
 
             if (result != ContentDialogResult.Primary)
                 return;
 
             MAccount editedAccound = editMoneyAccountContentDialog.EditedAccount;
+
+            if (editedAccound is SubMAccount)
+                SubAccountToSubAccount(oldAccound, editedAccound as SubMAccount);
+            else
+                SubAccountToAccount(oldAccound, editedAccound);
+
+            /*
             MAccountWithSubMAccounts bankAccount = Accounts.SingleOrDefault(i => i.MAccount.GlobalId == oldAccound.BossAccountGlobalId);
             bankAccount.SubMAccounts.Remove(oldAccound);
 
             bankAccount = Accounts.SingleOrDefault(i => i.MAccount.GlobalId == ((SubMAccount)editedAccound).BossAccountGlobalId);
-            bankAccount.SubMAccounts.Insert(0, (SubMAccount)editedAccound);
+            bankAccount.SubMAccounts.Insert(0, (SubMAccount)editedAccound);*/
         }
 
         private void DeleteCard_Click(object sender, RoutedEventArgs e) {

@@ -98,7 +98,7 @@ namespace Finanse.DataAccessLayer {
 
         public static bool AccountExistInBaseByName(string name) {
             using (var db = DbConnection) {
-                return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM MAccount WHERE LOWER(TRIM(Name)) = ?", name.Trim().ToLower());
+                return db.ExecuteScalar<bool>("SELECT COUNT(*) FROM MAccount WHERE LOWER(TRIM(Name)) = ? AND IsDeleted = 0", name.Trim().ToLower());
             }
         }
 

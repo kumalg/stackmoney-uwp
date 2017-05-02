@@ -28,13 +28,48 @@ namespace Finanse.DataAccessLayer {
         private static void InsertSyncCategory(Category category) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                db.Insert(category);
+
+                object[] parameters = {
+                    category.Name,
+                    category.VisibleInIncomes,
+                    category.VisibleInExpenses,
+                    category.ColorKey,
+                    category.IconKey,
+                    category.CantDelete,
+                    category.LastModifed ?? DateTimeHelper.DateTimeUtcNowString,
+                    category.IsDeleted,
+                    ( category as SubCategory )?.BossCategoryId,
+                    category.GlobalId
+                };
+
+                db.Execute(
+                    "INSERT INTO Categories (Name, VisibleInIncomes, VisibleInExpenses, ColorKey, IconKey, CantDelete, LastModifed, IsDeleted, BossCategoryId, GlobalId) " +
+                    "VALUES(?,?,?,?,?,?,?,?,?,?)"
+                    , parameters);
             }
         }
         private static void UpdateSyncCategory(Category category) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                db.Update(category);
+
+                object[] parameters = {
+                    category.Name,
+                    category.VisibleInIncomes,
+                    category.VisibleInExpenses,
+                    category.ColorKey,
+                    category.IconKey,
+                    category.CantDelete,
+                    category.LastModifed ?? DateTimeHelper.DateTimeUtcNowString,
+                    category.IsDeleted,
+                    ( category as SubCategory )?.BossCategoryId,
+                    category.GlobalId
+                };
+
+                db.Execute(
+                    "UPDATE Categories " +
+                    "SET Name = ?, VisibleInIncomes = ?, VisibleInExpenses = ?, ColorKey = ?, IconKey = ?, CantDelete = ?, LastModifed = ?, IsDeleted = ?, BossCategoryId = ? " +
+                    "WHERE GlobalId = ?"
+                    , parameters);
             }
         }
 
@@ -53,13 +88,9 @@ namespace Finanse.DataAccessLayer {
 
                 db.Execute(
                     "INSERT INTO " + typeof(MAccount).Name +
-                    " (Name, ColorKey, LastModifed, IsDeleted, GlobalId, BossAccountGlobalId) VALUES(?,?,?,?,?,?)"
+                    " (Name, ColorKey, LastModifed, IsDeleted, GlobalId, BossAccountGlobalId) " +
+                    "VALUES(?,?,?,?,?,?)"
                         , parameters);
-
-                account.LastModifed = parameters[2] as string;
-                account.GlobalId = parameters[4] as string;
-                if (account is SubMAccount)
-                    ( (SubMAccount)account ).BossAccountGlobalId = parameters[5] as string;
             }
         }
         private static void UpdateSyncAccount(MAccount account) {
@@ -87,46 +118,38 @@ namespace Finanse.DataAccessLayer {
             IEnumerable<Operation> localOperations, oneDriveOperations;
             IEnumerable<OperationPattern> localOperationPatterns, oneDriveOperationPatterns;
             IEnumerable<Category> localCategories, oneDriveCategories;
-            IEnumerable<SubCategory> localSubCategories, oneDriveSubCategories;
             IEnumerable<MAccount> localAccounts, oneDriveAccounts;
 
             using (var db = DbConnection) {
                 localOperations = db.Table<Operation>().ToList();
                 localOperationPatterns = db.Table<OperationPattern>().ToList();
-                localCategories = db.Table<Category>().ToList();
-                localSubCategories = db.Table<SubCategory>().ToList();
+
+                var localCat = db.Query<Category>("SELECT * FROM Categories WHERE BossCategoryId ISNULL");
+                localCat.AddRange(db.Query<SubCategory>("SELECT * FROM Categories WHERE BossCategoryId IS NOT NULL"));
+                localCategories = localCat;
 
 
-                var localAcc = db.Query<MAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId ISNULL AND IsDeleted = 0");
-                localAcc.AddRange(db.Query<SubMAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId IS NOT NULL AND IsDeleted = 0"));
-
+                var localAcc = db.Query<MAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId ISNULL");
+                localAcc.AddRange(db.Query<SubMAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId IS NOT NULL"));
                 localAccounts = localAcc;
             }
             using (var dbOneDrive = new SQLiteConnection(new SQLitePlatformWinRT(), DbPathLocalFromFileName(localFileName))) {
                 oneDriveOperations = dbOneDrive.Table<Operation>().ToList();
                 oneDriveOperationPatterns = dbOneDrive.Table<OperationPattern>().ToList();
-                oneDriveCategories = dbOneDrive.Table<Category>().ToList();
-                oneDriveSubCategories = dbOneDrive.Table<SubCategory>().ToList();
 
-                var oneDriveAcc = dbOneDrive.Query<MAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId ISNULL AND IsDeleted = 0");
-                oneDriveAcc.AddRange(dbOneDrive.Query<SubMAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId IS NOT NULL AND IsDeleted = 0"));
+                var oneDriveCat = dbOneDrive.Query<Category>("SELECT * FROM Categories WHERE BossCategoryId ISNULL");
+                oneDriveCat.AddRange(dbOneDrive.Query<SubCategory>("SELECT * FROM Categories WHERE BossCategoryId IS NOT NULL"));
+                oneDriveCategories = oneDriveCat;
 
+                var oneDriveAcc = dbOneDrive.Query<MAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId ISNULL");
+                oneDriveAcc.AddRange(dbOneDrive.Query<SubMAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId IS NOT NULL"));
                 oneDriveAccounts = oneDriveAcc;
-            }
-
-            foreach (var oneDriveAccount in oneDriveAccounts) {
-                Debug.WriteLine($"{oneDriveAccount.Name} - {oneDriveAccount.LastModifed}");
-            }
-
-            foreach (var localAccount in localAccounts) {
-                Debug.WriteLine($"{localAccount.Name} - {localAccount.LastModifed}");
             }
 
             UpdateOperations(localOperations, oneDriveOperations);
             UpdateOperations(localOperationPatterns, oneDriveOperationPatterns);
 
             UpdateCategories(localCategories, oneDriveCategories);
-            UpdateCategories(localSubCategories, oneDriveSubCategories);
 
             UpdateAccounts(localAccounts, oneDriveAccounts);
         }

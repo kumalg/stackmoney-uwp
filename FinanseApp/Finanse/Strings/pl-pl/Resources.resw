@@ -249,13 +249,13 @@
     <value>Nowa kategoria</value>
   </data>
   <data name="newMoneyAccountContentDialog.PrimaryButtonText" xml:space="preserve">
-    <value>Add</value>
+    <value>Dodaj</value>
   </data>
   <data name="newMoneyAccountContentDialog.SecondaryButtonText" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Anuluj</value>
   </data>
   <data name="newMoneyAccountContentDialog.Title" xml:space="preserve">
-    <value>New money account</value>
+    <value>Nowe konto</value>
   </data>
   <data name="newOperation.Text" xml:space="preserve">
     <value>Nowa operacja</value>
@@ -264,7 +264,7 @@
     <value>Nie</value>
   </data>
   <data name="noOperationsInThisMonth.Text" xml:space="preserve">
-    <value>Brak operacji w tym miesiącu :(</value>
+    <value>Brak operacji w tym miesiącu</value>
   </data>
   <data name="notifications.Text" xml:space="preserve">
     <value>Powiadomienia</value>
@@ -436,5 +436,11 @@
   </data>
   <data name="withoutSubCategory" xml:space="preserve">
     <value>Bez podkategorii</value>
+  </data>
+  <data name="editMoneyAccountContentDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Zapisz</value>
+  </data>
+  <data name="editMoneyAccountContentDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Anuluj</value>
   </data>
 </root>

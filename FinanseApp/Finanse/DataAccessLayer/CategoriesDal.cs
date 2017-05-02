@@ -10,7 +10,7 @@ using Finanse.Models.Helpers;
 namespace Finanse.DataAccessLayer {
     public class CategoriesDal : DalBase {
 
-        public static string CreateCategoriesTableQuery = "CREATE TABLE \"Categories\" ( `Id` integer NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+        public static string CreateCategoriesTableQuery = "CREATE TABLE IF NOT EXISTS \"Categories\" ( `Id` integer NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                                                                                         "`Name` varchar, " +
                                                                                         "`BossCategoryId` varchar, " +
                                                                                         "`VisibleInIncomes` integer, " +
@@ -94,15 +94,24 @@ namespace Finanse.DataAccessLayer {
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
                 db.TraceListener = new DebugTraceListener();
 
-                var item = db.Query<Category>("SELECT * FROM Categories WHERE GlobalId = ? AND BossCategoryId ISNULL AND IsDeleted = 0 LIMIT 1", globalId)
-                    .FirstOrDefault();
+                var item = db.Query<SubCategory>("SELECT * FROM Categories WHERE GlobalId = ? AND IsDeleted = 0 LIMIT 1", globalId).FirstOrDefault();
 
-                if (item != null)
-                    return item;
-
-                return db.Query<SubCategory>("SELECT * FROM Categories WHERE GlobalId = ? AND BossCategoryId IS NOT NULL AND IsDeleted = 0 LIMIT 1", globalId)
-                    .FirstOrDefault();
+                if (item != null && string.IsNullOrEmpty(item.BossCategoryId))
+                    return item.AsCategory();
+                return item;
             }
+        }
+
+        public static Category GetCategoryByGlobalId(string globalId, SQLiteConnection db) {
+          //  using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+                db.TraceListener = new DebugTraceListener();
+
+                var item = db.Query<SubCategory>("SELECT * FROM Categories WHERE GlobalId = ? AND IsDeleted = 0 LIMIT 1", globalId).FirstOrDefault();
+
+                if (item != null && string.IsNullOrEmpty(item.BossCategoryId))
+                    return item.AsCategory();
+                return item;
+          //  }
         }
 
 
@@ -161,11 +170,13 @@ namespace Finanse.DataAccessLayer {
                     category.IconKey,
                     DateTimeHelper.DateTimeUtcNowString,
                     ( category as SubCategory )?.BossCategoryId,
+                    category.CantDelete,
+                    category.IsDeleted,
                     category.GlobalId
                 };
 
                 db.Execute(
-                    "UPDATE Categories SET Name = ?, VisibleInIncomes = ?, VisibleInExpenses = ?, ColorKey = ?, IconKey = ?, LastModifed = ?, BossAccountGlobalId = ? WHERE GlobalId = ?"
+                    "UPDATE Categories SET Name = ?, VisibleInIncomes = ?, VisibleInExpenses = ?, ColorKey = ?, IconKey = ?, LastModifed = ?, BossCategoryId = ?, CantDelete = ?, IsDeleted = ? WHERE GlobalId = ?"
                         , parameters);
             }
         }
@@ -175,8 +186,9 @@ namespace Finanse.DataAccessLayer {
                 db.TraceListener = new DebugTraceListener();
 
                 db.Execute(
-                    "UPDATE Operation SET CategoryGlobalId = ? WHERE CategoryGlobalId = ?"
+                    "UPDATE Operation SET CategoryGlobalId = ?, LastModifed = ? WHERE CategoryGlobalId = ?"
                         , subCategory.BossCategoryId
+                        , DateTimeHelper.DateTimeUtcNowString
                         , subCategory.GlobalId);
 
                 db.Execute(

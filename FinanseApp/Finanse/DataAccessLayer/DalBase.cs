@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Net.Sockets;
-using System.Runtime.Serialization;
-using System.Text;
 using System.Threading.Tasks;
 using Finanse.Models;
-using Finanse.Models.DateTimeExtensions;
 using Finanse.Models.MAccounts;
 using Finanse.Models.Operations;
 
@@ -46,44 +39,29 @@ namespace Finanse.DataAccessLayer {
                 db.Execute("PRAGMA foreign_keys = ON");
                 db.TraceListener = new DebugTraceListener();
 
-                var operationCategory =
-                    db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='OperationCategory'");
-                if (!string.IsNullOrEmpty(operationCategory))
-                    db.Execute("ALTER TABLE OperationCategory RENAME TO Category");
-
-                var operationSubCategory =
-                    db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='OperationSubCategory'");
-                if (!string.IsNullOrEmpty(operationSubCategory))
-                    db.Execute("ALTER TABLE OperationSubCategory RENAME TO SubCategory");
-
                 db.CreateTable<Operation>();
                 db.CreateTable<OperationPattern>();
-            //    db.CreateTable<Category>();
-            //    db.CreateTable<SubCategory>();
                 db.CreateTable<MAccount>();
 
-                var categoriesTable = db.ExecuteScalar<string>("SELECT name FROM sqlite_master WHERE name='Categories'");
-                if (string.IsNullOrEmpty(categoriesTable))
-                    db.Execute(CategoriesDal.CreateCategoriesTableQuery);
-
-                try {
+                db.Execute(CategoriesDal.CreateCategoriesTableQuery);
+                
+                var columnExists = db.ExecuteScalar<string>("SELECT sql FROM sqlite_master where name = 'MAccount' and sql like('%BossAccountGlobalId%')");
+                if (string.IsNullOrEmpty(columnExists))
                     db.Execute("ALTER TABLE MAccount ADD COLUMN BossAccountGlobalId varchar");
-                }
-                catch {}
             }
         }
 
         public static void AddItemsIfEmpty() {
             using (var db = DbConnection) {
-                if (db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'Category'") == 1) {
-                    db.Insert(new Category { Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true, GlobalId = "2" });
-                    db.Insert(new Category { Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true, GlobalId = "3" });
-                    db.Insert(new Category { Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true, GlobalId = "4" });
-                    db.Insert(new Category { Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true, GlobalId = "5" });
-                    db.Insert(new Category { Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false, GlobalId = "6" });
+                if (db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'Categories'") == 1) {
+                    CategoriesDal.AddCategory(new Category { Name = "Jedzenie", ColorKey = "04", IconKey = "FontIcon_6", VisibleInExpenses = true, VisibleInIncomes = true, GlobalId = "2" });
+                    CategoriesDal.AddCategory(new Category { Name = "Rozrywka", ColorKey = "12", IconKey = "FontIcon_20", VisibleInIncomes = false, VisibleInExpenses = true, GlobalId = "3" });
+                    CategoriesDal.AddCategory(new Category { Name = "Rachunki", ColorKey = "08", IconKey = "FontIcon_21", VisibleInIncomes = false, VisibleInExpenses = true, GlobalId = "4" });
+                    CategoriesDal.AddCategory(new Category { Name = "Prezenty", ColorKey = "05", IconKey = "FontIcon_13", VisibleInIncomes = true, VisibleInExpenses = true, GlobalId = "5" });
+                    CategoriesDal.AddCategory(new Category { Name = "Praca", ColorKey = "14", IconKey = "FontIcon_9", VisibleInIncomes = true, VisibleInExpenses = false, GlobalId = "6" });
 
-                    db.Insert(new SubCategory { Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = "4", VisibleInIncomes = false, VisibleInExpenses = true, GlobalId = "7" });
-                    db.Insert(new SubCategory { Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = "3", VisibleInIncomes = false, VisibleInExpenses = true, GlobalId = "8" });
+                    CategoriesDal.AddCategory(new SubCategory { Name = "Prąd", ColorKey = "07", IconKey = "FontIcon_19", BossCategoryId = "4", VisibleInIncomes = false, VisibleInExpenses = true, GlobalId = "7" });
+                    CategoriesDal.AddCategory(new SubCategory { Name = "Imprezy", ColorKey = "11", IconKey = "FontIcon_17", BossCategoryId = "3", VisibleInIncomes = false, VisibleInExpenses = true, GlobalId = "8" });
                 }
 
                 if (db.ExecuteScalar<int>("SELECT seq FROM sqlite_sequence WHERE name = 'MAccount'") == 0) {
@@ -102,42 +80,14 @@ namespace Finanse.DataAccessLayer {
                     await db.BackupDatabase(new SQLitePlatformWinRT(), "Backup");
             }
         }
-        /*
+
         public static void ConvertCategories() {
             using (var db = DbConnection) {
-
-                db.Execute(
-                    "UPDATE Operation SET SubCategoryId = SubCategoryId || 'xxx' WHERE SubCategoryId IN(SELECT GlobalId FROM Category)");
-                db.Execute(
-                    "UPDATE OperationPattern SET SubCategoryId = SubCategoryId || 'xxx' WHERE SubCategoryId IN(SELECT GlobalId FROM Category)");
-                db.Execute(
-                    "UPDATE SubCategory SET GlobalId = GlobalId || 'xxx' WHERE GlobalId IN(SELECT GlobalId FROM Category)");
-
-                db.Execute(
-                    "UPDATE Operation SET CategoryGlobalId = (CASE WHEN SubCategoryId IN('-1','') THEN CategoryId ELSE SubCategoryId END) WHERE CategoryGlobalId ISNULL OR CategoryGlobalId = ''");
-                db.Execute(
-                    "UPDATE OperationPattern SET CategoryGlobalId = (CASE WHEN SubCategoryId IN('-1','') THEN CategoryId ELSE SubCategoryId END) WHERE CategoryGlobalId ISNULL OR CategoryGlobalId = ''");
-
-                if (db.ExecuteScalar<int>("SELECT COUNT(*) FROM Categories") != 0)
+                var columnExists = db.ExecuteScalar<string>("SELECT sql FROM sqlite_master where name = 'Operation' and sql like('%SubCategoryId%')");
+                if (string.IsNullOrEmpty(columnExists))
                     return;
 
                 db.Execute(
-                    "INSERT INTO Categories(Name, VisibleInIncomes, VisibleInExpenses, ColorKey, IconKey, CantDelete, LastModifed, IsDeleted, GlobalId) " +
-                    "SELECT Name, VisibleInIncomes, VisibleInExpenses, ColorKey, IconKey, CantDelete, LastModifed, IsDeleted, GlobalId " +
-                    "FROM Category");
-
-                db.Execute(
-                    "INSERT INTO Categories(Name, BossCategoryId, VisibleInIncomes, VisibleInExpenses, ColorKey, IconKey, CantDelete, LastModifed, IsDeleted, GlobalId) " +
-                    "SELECT Name, BossCategoryId, VisibleInIncomes, VisibleInExpenses, ColorKey, IconKey, CantDelete, LastModifed, IsDeleted, GlobalId " +
-                    "FROM SubCategory");
-            }
-        }
-        */
-
-        public static void ConvertCategories() {
-            using (var db = DbConnection) {
-
-                db.Execute(
                     "UPDATE Operation SET SubCategoryId = SubCategoryId || 'xxx' WHERE SubCategoryId IN(SELECT GlobalId FROM Category)");
                 db.Execute(
                     "UPDATE OperationPattern SET SubCategoryId = SubCategoryId || 'xxx' WHERE SubCategoryId IN(SELECT GlobalId FROM Category)");
@@ -148,9 +98,6 @@ namespace Finanse.DataAccessLayer {
                     "UPDATE Operation SET CategoryGlobalId = (CASE WHEN SubCategoryId IN('-1','') THEN CategoryId ELSE SubCategoryId END) WHERE CategoryGlobalId ISNULL OR CategoryGlobalId = ''");
                 db.Execute(
                     "UPDATE OperationPattern SET CategoryGlobalId = (CASE WHEN SubCategoryId IN('-1','') THEN CategoryId ELSE SubCategoryId END) WHERE CategoryGlobalId ISNULL OR CategoryGlobalId = ''");
-
-                //if (db.ExecuteScalar<int>("SELECT COUNT(*) FROM Categories") != 0)
-                //    return;
 
                 db.Execute(
                     "INSERT INTO Categories(Name, VisibleInIncomes, VisibleInExpenses, ColorKey, IconKey, CantDelete, LastModifed, IsDeleted, GlobalId) " +
@@ -166,76 +113,16 @@ namespace Finanse.DataAccessLayer {
 
         public static void RepairDb() {
             using (var db = DbConnection) {
+                
+                db.Execute("UPDATE Categories SET CantDelete = 1, GlobalId = '1' WHERE Id = 1");
 
-                db.Execute("UPDATE Category SET GlobalId = Id WHERE GlobalId ISNULL AND Id < 7");
-                db.Execute("UPDATE SubCategory SET GlobalId = Id WHERE GlobalId ISNULL AND Id < 3");
-                db.Execute("UPDATE MAccount SET GlobalId = Id WHERE GlobalId ISNULL AND Id < 4");
-
-                CheckSyncColumns(db, "Operation");
-                CheckSyncColumns(db, "OperationPattern");
-                CheckSyncColumns(db, "Category");
-                CheckSyncColumns(db, "SubCategory");
-                CheckSyncColumns(db, "MAccount");
-
-                db.Execute("UPDATE Category SET CantDelete = 1, GlobalId = '1' WHERE Id = 1");
-                db.Execute("UPDATE Category SET CantDelete = 0 WHERE CantDelete ISNULL");
-                db.Execute("UPDATE SubCategory SET CantDelete = 0 WHERE CantDelete ISNULL");
-
-                if (db.ExecuteScalar<int>("SELECT COUNT(*) FROM Category WHERE Id = 1 LIMIT 1") == 0) {
-                    //    db.Execute("INSERT INTO Category (Id, Name, ColorKey, IconKey, VisibleInIncomes, VisibleInExpenses, CantDelete, GlobalId, IsDeleted) VALUES (1, 'Inne', '14', 'FontIcon_2', 1, 1, 1, '1', 0)");
-                    db.Execute("INSERT INTO Category (Id) VALUES (1)");
-                    db.Update(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true, CantDelete = true, GlobalId = "1" });
+                if (db.ExecuteScalar<int>("SELECT COUNT(*) FROM Categories WHERE Id = 1 LIMIT 1") == 0) {
+                    db.Execute("INSERT INTO Categories (Id, GlobalId) VALUES (1, 1)");
+                    CategoriesDal.UpdateCategory(new Category { Id = 1, Name = "Inne", ColorKey = "14", IconKey = "FontIcon_2", VisibleInIncomes = true, VisibleInExpenses = true, CantDelete = true, GlobalId = "1", IsDeleted = false});
                 }
-
-               // db.Execute("INSERT INTO sqlite_sequence (name, seq) SELECT 'Account', 0 WHERE NOT EXISTS(SELECT 1 FROM sqlite_sequence WHERE name = 'Account')");
 
                 db.Execute("UPDATE Operation SET LastModifed = SUBSTR(LastModifed,1,11) || REPLACE(SUBSTR(LastModifed,12),'.',':') WHERE LastModifed IS NOT NULL AND SUBSTR(LastModifed,14,1) = '.'");
-                db.Execute("UPDATE Category SET IsDeleted = 1 WHERE Id != 1 AND Name = 'Inne' AND CantDelete = 1");
-            }
-        }
-
-        public static void ConvertLocalIdReferenceToGlobal() {
-            using (var db = DbConnection) {
-                var subMoAccounts = db.Query<SubMAccount>("SELECT * FROM MAccount WHERE BossAccountGlobalId IS NOT NULL AND IsDeleted = 0");
-
-                foreach (var subMoAccount in subMoAccounts) {
-                    var bossMoAccount =
-                        db.Query<MAccount>("SELECT * FROM MAccount WHERE Id = ? LIMIT 1", subMoAccount.BossAccountGlobalId)
-                            .FirstOrDefault();
-
-                    if (bossMoAccount != null)
-                        db.Execute("UPDATE MAccount SET BossAccountGlobalId = ? WHERE Id = ?", bossMoAccount.GlobalId, subMoAccount.Id);
-                }
-
-                var subCategories = db.Query<SubCategory>("SELECT * FROM SubCategory WHERE IsDeleted = 0");
-
-                foreach (var subCategory in subCategories) {
-                    var bossCategory =
-                        db.Query<Category>("SELECT * FROM Category WHERE Id = ? LIMIT 1", subCategory.BossCategoryId)
-                            .FirstOrDefault();
-
-                    if (bossCategory != null)
-                        db.Execute("UPDATE SubCategory SET BossCategoryId = ? WHERE Id = ?", bossCategory.GlobalId, subCategory.Id);
-                }
-
-
-                var categories = db.Query<Category>("SELECT * FROM Category WHERE IsDeleted = 0");
-                foreach (var category in categories) {
-                    db.Execute("UPDATE Operation SET CategoryId = ? WHERE CategoryId = ?", category.GlobalId, category.Id);
-                    db.Execute("UPDATE OperationPattern SET CategoryId = ? WHERE CategoryId = ?", category.GlobalId, category.Id);
-                }
-
-                subCategories = db.Query<SubCategory>("SELECT * FROM SubCategory WHERE IsDeleted = 0");
-                foreach (var subCategory in subCategories) {
-                    db.Execute("UPDATE Operation SET SubCategoryId = ? WHERE SubCategoryId = ?", subCategory.GlobalId, subCategory.Id);
-                    db.Execute("UPDATE OperationPattern SET SubCategoryId = ? WHERE SubCategoryId = ?", subCategory.GlobalId, subCategory.Id);
-                }
-
-                var mAccounts = db.Query<MAccount>("SELECT * FROM MAccount");
-                foreach (var mAccount in mAccounts) {
-                    db.Execute("UPDATE Operation SET MoneyAccountId = ? WHERE MoneyAccountId = ?", mAccount.GlobalId, mAccount.Id);
-                    db.Execute("UPDATE OperationPattern SET MoneyAccountId = ? WHERE MoneyAccountId = ?", mAccount.GlobalId, mAccount.Id);
-                }
+                db.Execute("UPDATE Categories SET IsDeleted = 1 WHERE Id != 1 AND Name = 'Inne' AND CantDelete = 1");
             }
         }
 
@@ -251,12 +138,6 @@ namespace Finanse.DataAccessLayer {
             return backupFiles?
                 .Select(i => i.Name.Substring(i.Name.IndexOf('.') + 1))
                 .AsEnumerable();
-        }
-
-        private static void CheckSyncColumns(SQLiteConnection db, string tableName) {
-                db.Execute("UPDATE " + tableName + " SET GlobalId = ? || '_' || Id || '_' || ? WHERE GlobalId ISNULL", Informations.DeviceId, DateTime.UtcNow.GetTimestamp());
-                db.Execute("UPDATE " + tableName + " SET LastModifed = ? WHERE LastModifed ISNULL", DateTimeHelper.DateTimeUtcNowString);
-                db.Execute("UPDATE " + tableName + " SET IsDeleted = 0 WHERE IsDeleted ISNULL");
         }
 
         public static void ConvertAccounts() {

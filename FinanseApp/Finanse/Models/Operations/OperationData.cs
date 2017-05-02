@@ -1,5 +1,4 @@
 ﻿using Finanse.DataAccessLayer;
-using Finanse.Models.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,9 +21,7 @@ namespace Finanse.Models.Operations {
 
         private DateTime _actualMonth = DateTime.Today.First(); //DateHelper.First(DateTime.Today);
         public DateTime ActualMonth {
-            get {
-                return _actualMonth;
-            }
+            get => _actualMonth;
             private set {
                 _actualMonth = value;
                 OnPropertyChanged("ActualMonthText");
@@ -100,12 +97,8 @@ namespace Finanse.Models.Operations {
 
         private List<Operation> _allOperations;
         private List<Operation> AllOperations {
-            get {
-                return _allOperations ?? (_allOperations = SetOperations());
-            }
-            set {
-                _allOperations = value;
-            }
+            get => _allOperations ?? (_allOperations = SetOperations());
+            set => _allOperations = value;
         }
 
 
@@ -119,8 +112,8 @@ namespace Finanse.Models.Operations {
 
         private List<Operation> SetOperations() {
             return IsFuture
-                ? Dal.GetAllFutureOperations(VisiblePayFormList)
-                : Dal.GetAllOperations(ActualMonth, VisiblePayFormList);
+                ? Dal.GetAllFutureOperations(VisiblePayFormList)//.LinkCategories()
+                : Dal.GetAllOperations(ActualMonth, VisiblePayFormList);//.LinkCategories();
         }
 
 

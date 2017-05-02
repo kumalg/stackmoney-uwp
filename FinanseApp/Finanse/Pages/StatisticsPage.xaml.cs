@@ -6,8 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 using Finanse.Charts.Data;
+using Finanse.DataAccessLayer;
+using Finanse.Models.Categories;
 using Finanse.Models.DateTimeExtensions;
 
 namespace Finanse.Pages {
@@ -167,25 +171,35 @@ namespace Finanse.Pages {
            // statisticsData.SetNewRangeAndData(MinDate, MaxDate);
 
             DateRangeText = _statisticsData.GetActualDateRangeText();
-
+//
+            if (!_statisticsData.AllOperations.Any()) {
+                ScrollViewer.Visibility = Visibility.Collapsed;
+                EmptyListViewInfo.Visibility = Visibility.Visible;
+            }
+            else {
+                ScrollViewer.Visibility = Visibility.Visible;
+                EmptyListViewInfo.Visibility = Visibility.Collapsed;
+            }
             ExpensesToIncomes = _statisticsData.GetExpenseToIncomeComparsion();
-            ExpensesValue = ExpensesToIncomes[0].Value.ToString("C", Settings.ActualCultureInfo);
-            IncomesValue = ExpensesToIncomes[1].Value.ToString("C", Settings.ActualCultureInfo);
-              //LineChartTest = statisticsData.LineChartTest();
-            //   LineChartTest2 = statisticsData.LineChartTest2();
-            //  LineChartTest3 = statisticsData.LineChartTest3();
+                ExpensesValue = ExpensesToIncomes[0].Value.ToString("C", Settings.ActualCultureInfo);
+                IncomesValue = ExpensesToIncomes[1].Value.ToString("C", Settings.ActualCultureInfo);
+                //LineChartTest = statisticsData.LineChartTest();
+                //   LineChartTest2 = statisticsData.LineChartTest2();
+                //  LineChartTest3 = statisticsData.LineChartTest3();
 
-            IncomesPercentageText = (100 * ExpensesToIncomes[1].Part).ToString("0") + "%";
+                IncomesPercentageText = (100 * ExpensesToIncomes[1].Part).ToString("0") + "%";
 
 
 
-            ExpensesByCategory = _statisticsData.GetExpensesGroupedByCategoryInRange();
-            IncomesByCategory = _statisticsData.GetIncomesGroupedByCategoryInRange();
-            RaisePropertyChanged("OperationsByCategory");
+                ExpensesByCategory = _statisticsData.GetExpensesGroupedByCategoryInRange();
+                IncomesByCategory = _statisticsData.GetIncomesGroupedByCategoryInRange();
+                RaisePropertyChanged("OperationsByCategory");
 
-            ExpensesFromCategoryGroupedBySubCategory = _statisticsData.GetExpensesFromCategoryGroupedBySubCategoryInRange();
-            IncomesFromCategoryGroupedBySubCategory = _statisticsData.GetIncomesFromCategoryGroupedBySubCategoryInRange();
-            RaisePropertyChanged("CategoriesGroupedBySubCategories");
+                ExpensesFromCategoryGroupedBySubCategory = _statisticsData.GetExpensesFromCategoryGroupedBySubCategoryInRange();
+                IncomesFromCategoryGroupedBySubCategory = _statisticsData.GetIncomesFromCategoryGroupedBySubCategoryInRange();
+                RaisePropertyChanged("CategoriesGroupedBySubCategories");
+           // }
+
             /*
             if ((bool)ExpensesRadioButton.IsChecked)
                 SetExpensesInGraphs();

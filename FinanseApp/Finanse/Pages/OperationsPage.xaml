@@ -209,30 +209,35 @@
         <StackPanel x:Name="EmptyListViewInfo"
             VerticalAlignment="Center"
             HorizontalAlignment="Center"
-            Visibility="Collapsed"
+            Visibility="Visible"
             Grid.Row="2">
+            
+            <FontIcon
+                Glyph=""
+                Foreground="{ThemeResource Text}"
+                FontSize="42"/>
 
             <TextBlock
-                FontSize="24"
-                FontWeight="Light"
-                Foreground="{ThemeResource SystemControlBackgroundBaseHighBrush}"
-                Opacity="0.75"
+                Margin="0,24"
+                FontSize="18"
+                FontWeight="SemiLight"
+                Foreground="{ThemeResource Text}"
                 RelativePanel.AlignHorizontalCenterWithPanel="True"
                 RelativePanel.AlignVerticalCenterWithPanel="True"
-                Text="Brak operacji w tym miesiącu :("
+                Text="Brak operacji w tym miesiącu"
                 x:Uid="noOperationsInThisMonth" />
 
             <Button
-                Height="48"
-                Padding="16,0"
-                Margin="16"
+                Height="38"
+                Width="160"
                 HorizontalAlignment="Center"
+                Foreground="{ThemeResource Text}"
                 Content="Dodaj nową"
                 Click="ButtonBase_OnClick" />
 
         </StackPanel>
 
-        <SemanticZoom x:Name="SemanticZoom" Grid.Row="2">
+        <SemanticZoom x:Name="SemanticZoom" Grid.Row="2" Visibility="Collapsed">
             <SemanticZoom.ZoomedInView>
                 <ListView x:Name="OperacjeListView"
                     Padding="0,-8,0,0"

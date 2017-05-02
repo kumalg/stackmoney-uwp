@@ -61,7 +61,9 @@ namespace Finanse.DataAccessLayer {
         internal static List<Operation> GetAllOperationsFromRangeToStatistics(DateTime minDate, DateTime maxDate) {
             using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
-                return db.Query<Operation>("SELECT * FROM Operation WHERE (VisibleInStatistics OR VisibleInStatistics ISNULL) AND Date >= ? AND Date <= ? AND IsDeleted = 0", minDate.ToString("yyyy.MM.dd"), maxDate.ToString("yyyy.MM.dd"));
+                var operations = db.Query<Operation>("SELECT * FROM Operation WHERE (VisibleInStatistics OR VisibleInStatistics ISNULL) AND Date >= ? AND Date <= ? AND IsDeleted = 0", minDate.ToString("yyyy.MM.dd"), maxDate.ToString("yyyy.MM.dd"));
+                //operations.ForEach(i => i.GeneralCategory = CategoriesDal.GetCategoryByGlobalId(i.CategoryGlobalId, db));
+                return operations;
             }
         }
 

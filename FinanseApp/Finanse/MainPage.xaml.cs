@@ -41,7 +41,6 @@ namespace Finanse {
             DalBase.ConvertAccounts();
             DalBase.ConvertCategories();
             DalBase.RepairDb();
-            DalBase.ConvertLocalIdReferenceToGlobal();
 
             DalBase.AddItemsIfEmpty();
 
@@ -67,6 +66,8 @@ namespace Finanse {
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
             formattableTitleBar.ButtonHoverBackgroundColor = Functions.GetSolidColorBrush("#19000000").Color;
+           // formattableTitleBar.BackgroundColor = Colors.Transparent;
+            formattableTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
 
             formattableTitleBar.ButtonForegroundColor = Settings.Theme == ApplicationTheme.Dark
                 ? Colors.White

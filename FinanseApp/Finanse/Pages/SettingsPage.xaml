@@ -204,6 +204,9 @@
                                 Opacity="0.75" />
 
                             <Button
+                                Background="{StaticResource RedColorStyle}"
+                                Height="38"
+                                Width="160"
                                 Click="Button_Click"
                                 Margin="10,16">
                                 <TextBlock Text="Resetuj dane" x:Uid="resetData" />

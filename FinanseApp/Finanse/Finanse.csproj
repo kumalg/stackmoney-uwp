@@ -17,9 +17,9 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>Finanse_StoreKey.pfx</PackageCertificateKeyFile>
-    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
-    <AppxBundlePlatforms>arm</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <PackageCertificateThumbprint>45F69373A3651FFE33E0E48C24A2A4E824619C8C</PackageCertificateThumbprint>
   </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)\CommonBuild.props" />
@@ -172,6 +172,9 @@
     <Compile Include="Dialogs\EditMoneyAccountContentDialog.xaml.cs">
       <DependentUpon>EditMoneyAccountContentDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\EditMAccountContentDialog.xaml.cs">
+      <DependentUpon>EditMAccountContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\NewMoneyAccountContentDialog.xaml.cs">
       <DependentUpon>NewMoneyAccountContentDialog.xaml</DependentUpon>
     </Compile>
@@ -211,6 +214,7 @@
     <Compile Include="Elements\SmallPieWithLegend.xaml.cs">
       <DependentUpon>SmallPieWithLegend.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\DateTimeExtensions\DateExtensions - Copy.cs" />
     <Compile Include="Models\DateTimeExtensions\SyncExtensions.cs" />
     <Compile Include="Models\EmptyOrFullSelector.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -327,6 +331,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Dialogs\EditMoneyAccountContentDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\EditMAccountContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

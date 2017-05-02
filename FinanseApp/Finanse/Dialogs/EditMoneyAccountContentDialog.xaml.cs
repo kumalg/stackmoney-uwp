@@ -46,9 +46,11 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private readonly IEnumerable<MAccount> _bankAccounts = MAccountsDal.GetAllAccounts();
-        
-        private Visibility BankAccountsComboBoxVisibility => _accountToEdit is SubMAccount ? Visibility.Visible : Visibility.Collapsed;
+        //  private readonly IEnumerable<MAccount> _bankAccounts = MAccountsDal.GetAllAccounts();
+        private readonly IEnumerable<MAccount> _bankAccounts =
+            new List<MAccount> { new MAccount { Name = "Brak", Id = -1 } }.AsEnumerable().Concat(MAccountsDal.GetAllAccounts());//MAccountsDal.GetAllAccounts().Concat();
+
+   //     private Visibility BankAccountsComboBoxVisibility => _accountToEdit is SubMAccount ? Visibility.Visible : Visibility.Collapsed;
 
         private MAccount _selectedBankAccount;
 
@@ -59,9 +61,14 @@ namespace Finanse.Dialogs {
                 return _selectedBankAccount;
             }
             set {
-                _selectedBankAccount = value;
-                if (EditedAccount is SubMAccount)
-                    ((SubMAccount)EditedAccount).BossAccountGlobalId = _selectedBankAccount.GlobalId;
+                if (value.Id == -1) {
+                    SelectedBankAccount = null;
+                }
+                else {
+                    _selectedBankAccount = value;
+                    if (EditedAccount is SubMAccount)
+                        ((SubMAccount)EditedAccount).BossAccountGlobalId = _selectedBankAccount.GlobalId;
+                }
                 RaisePropertyChanged("PrimaryButtonEnabling");
             }
         }

@@ -36,7 +36,7 @@ namespace Finanse.Models.MAccounts {
             var secondAccount = (MAccount)o;
 
             return
-                secondAccount.Id == Id &&
+                //secondAccount.GlobalId == GlobalId &&
                 secondAccount.Name == Name &&
                 secondAccount.ColorKey == ColorKey;
         }

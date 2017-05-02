@@ -282,7 +282,29 @@
             </StackPanel>
         </Grid>
 
+        <StackPanel
+            x:Name="EmptyListViewInfo"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Visibility="Visible"
+            Grid.Row="1">
+
+            <FontIcon
+                Glyph=""
+                Foreground="{ThemeResource Text}"
+                FontSize="42" />
+
+            <TextBlock
+                Margin="0,24"
+                FontSize="18"
+                FontWeight="SemiLight"
+                Foreground="{ThemeResource Text}"
+                Text="Brak operacji w danym okresie"  />
+
+        </StackPanel>
+
         <ScrollViewer
+            x:Name="ScrollViewer"
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Stretch"
             VerticalScrollBarVisibility="Auto"

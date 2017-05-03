@@ -1,6 +1,5 @@
 ﻿using System;
 using Finanse.DataAccessLayer;
-using Finanse.Models.MoneyAccounts;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;

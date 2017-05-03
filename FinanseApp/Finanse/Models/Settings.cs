@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Reflection.PortableExecutable;
 using Windows.Storage;
 using Windows.System.UserProfile;
 using Windows.UI.Xaml;
@@ -86,7 +84,7 @@ namespace Finanse.Models {
         }
 
         public static bool SyncSettings {
-            get { return (bool)LocalSettings.Values["syncSettings"]; }
+            get => (bool)LocalSettings.Values["syncSettings"];
             set {
                 if ((bool) LocalSettings.Values["syncSettings"] && !value)
                     SetFromRoamingToLocal();
@@ -95,8 +93,8 @@ namespace Finanse.Models {
         }
 
         public static bool SyncData {
-            get { return (bool)LocalSettings.Values["syncData"]; }
-            set { LocalSettings.Values["syncData"] = value; }
+            get => (bool)LocalSettings.Values["syncData"];
+            set => LocalSettings.Values["syncData"] = value;
         }
 
         private static ApplicationDataContainer WhichSettings => (bool)LocalSettings.Values["syncSettings"]
@@ -104,45 +102,43 @@ namespace Finanse.Models {
             : ApplicationData.Current.LocalSettings;
 
         public static ApplicationTheme Theme {
-            get {
-                return WhichSettings.Values["Theme"].ToString() == ApplicationTheme.Light.ToString()
-                    ? ApplicationTheme.Light
-                    : ApplicationTheme.Dark;
-            }
-            set { WhichSettings.Values["Theme"] = value.ToString(); }
+            get => WhichSettings.Values["Theme"].ToString() == ApplicationTheme.Light.ToString()
+                ? ApplicationTheme.Light
+                : ApplicationTheme.Dark;
+            set => WhichSettings.Values["Theme"] = value.ToString();
         }
 
         public static CultureInfo ActualCultureInfo {
-            get { return new CultureInfo(WhichSettings.Values["whichCurrency"].ToString()); }
-            set { WhichSettings.Values["whichCurrency"] = value.Name; }
+            get => new CultureInfo(WhichSettings.Values["whichCurrency"].ToString());
+            set => WhichSettings.Values["whichCurrency"] = value.Name;
         }
 
         public static DayOfWeek FirstDayOfWeek
             => GlobalizationPreferences.WeekStartsOn;
 
         public static int MaxFutureMonths {
-            get { return (int)WhichSettings.Values["maxFutureMonths"]; }
-            set { WhichSettings.Values["maxFutureMonths"] = value; }
+            get => (int)WhichSettings.Values["maxFutureMonths"];
+            set => WhichSettings.Values["maxFutureMonths"] = value;
         }
 
         public static bool CategoryNameVisibility {
-            get { return (bool)WhichSettings.Values["categoryNameVisibility"]; }
-            set { WhichSettings.Values["categoryNameVisibility"] = value; }
+            get => (bool)WhichSettings.Values["categoryNameVisibility"];
+            set => WhichSettings.Values["categoryNameVisibility"] = value;
         }
 
         public static bool AccountEllipseVisibility {
-            get { return (bool)WhichSettings.Values["accountEllipseVisibility"]; }
-            set { WhichSettings.Values["accountEllipseVisibility"] = value; }
+            get => (bool)WhichSettings.Values["accountEllipseVisibility"];
+            set => WhichSettings.Values["accountEllipseVisibility"] = value;
         }
 
         public static string LastAppVersion {
-            get { return LocalSettings.Values["LastAppVersion"].ToString(); }
-            set { LocalSettings.Values["LastAppVersion"] = value; }
+            get => LocalSettings.Values["LastAppVersion"].ToString();
+            set => LocalSettings.Values["LastAppVersion"] = value;
         }
 
         public static int BackupFrequency {
-            get { return (int)LocalSettings.Values["BackupFrequency"]; }
-            set { LocalSettings.Values["BackupFrequency"] = value; }
+            get => (int)LocalSettings.Values["BackupFrequency"];
+            set => LocalSettings.Values["BackupFrequency"] = value;
         }
     }
 }

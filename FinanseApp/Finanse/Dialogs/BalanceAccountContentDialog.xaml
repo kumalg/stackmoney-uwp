@@ -1,0 +1,52 @@
+﻿<ContentDialog
+    Style="{StaticResource MyContentDialog}"
+    x:Class="Finanse.Dialogs.BalanceAccountContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Aktualizacja salda"
+    Background="{ThemeResource ContentDialogBackgroundBrush}"
+    PrimaryButtonText="Zapisz"
+    SecondaryButtonText="Anuluj"
+    PrimaryButtonClick="BalanceAccountContentDialog_OnPrimaryButtonClick"
+    IsPrimaryButtonEnabled="{x:Bind PrimaryButtonEnabling, Mode=OneWay}" >
+
+    <StackPanel
+        Margin="20,30" >
+
+        <TextBlock
+            Foreground="{ThemeResource Text}"
+            FontSize="36"
+            FontWeight="Light"
+            TextWrapping="Wrap"
+            Text="{x:Bind _account.Name}" />
+        <TextBlock
+            Visibility="Collapsed"
+            Name="ParentAccountNameTextBlock"
+            Foreground="{ThemeResource Text-1}"
+            TextWrapping="Wrap" />
+
+        <TextBlock
+            Margin="0,24,0,0"
+            Foreground="{ThemeResource Text-1}"
+            Text="Aktualne saldo"/>
+        <TextBlock
+            Margin="10,5"
+            Foreground="{ThemeResource Text}"
+            Text="{x:Bind _actualMoneyValue}" />
+        
+        <TextBlock
+            Margin="0,16,0,0"
+            Foreground="{ThemeResource Text-1}"
+            Text="Nowe saldo" />
+        <TextBox
+            Name="NewBalanceValue"
+            Style="{StaticResource TextBoxStyle1}"
+            GotFocus="CostValue_GotFocus"
+            LostFocus="CostValue_LostFocus"
+            TextChanging="CostValue_TextChanging"
+            PlaceholderText="Wartość" />
+    </StackPanel>
+</ContentDialog>

@@ -1,18 +1,12 @@
-﻿using Finanse.Dialogs;
-using Finanse.Models.DateTimeExtensions;
+﻿using Finanse.Models.DateTimeExtensions;
 using Finanse.Models.MAccounts;
 using Finanse.Models.Operations;
 
 namespace Finanse.DataAccessLayer {
-    using Models;
     using Models.Categories;
     using Models.Helpers;
-    using Models.MoneyAccounts;
-    using SQLite.Net;
-    using SQLite.Net.Platform.WinRT;
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
 
     public class Dal : DalBase{

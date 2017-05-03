@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
-using Windows.UI.Xaml;
 
 namespace Finanse.Models.Helpers {
     public class BackupHelper {
@@ -23,7 +22,7 @@ namespace Finanse.Models.Helpers {
         }
 
         public static async Task<DateTime> LastBackup() {
-            var yco = await ListOfBackupDates();//.Result.Select(i => DateTime.Parse(i)).OrderByDescending(i => i.Date).FirstOrDefault();
+            var yco = await ListOfBackupDates();
             return !yco.Any() 
                 ? DateTime.MinValue
                 : yco.Select(i => DateTime.ParseExact(i, "yyyy-MM-dd_HH-mm-ss", null)).OrderByDescending(i => i.Date).FirstOrDefault();

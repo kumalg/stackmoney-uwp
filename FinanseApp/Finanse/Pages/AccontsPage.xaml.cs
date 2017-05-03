@@ -1,6 +1,5 @@
 ﻿using Finanse.DataAccessLayer;
 using Finanse.Dialogs;
-using Finanse.Models.MoneyAccounts;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -187,6 +186,23 @@ namespace Finanse.Pages {
 
         private static void ShowFlyout(FrameworkElement senderElement) {
             FlyoutBase.GetAttachedFlyout(senderElement).ShowAt(senderElement);
+        }
+
+        private void NewAccountBalance_Click(object sender, RoutedEventArgs e) {
+            object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
+            MAccountWithSubMAccounts accountWithSubMAccounts = ((MAccountWithSubMAccounts)datacontext);
+            ShowNewBalanceContentDialog(accountWithSubMAccounts?.MAccount);
+        }
+
+        private void NewSubAccountBalance_Click(object sender, RoutedEventArgs e) {
+            object datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
+            SubMAccount subMAccount = (SubMAccount)datacontext;
+            ShowNewBalanceContentDialog(subMAccount);
+        }
+
+        private async void ShowNewBalanceContentDialog(MAccount account) {
+            BalanceAccountContentDialog acceptDeleteOperationContentDialog = new BalanceAccountContentDialog(account);
+            ContentDialogResult result = await acceptDeleteOperationContentDialog.ShowAsync();
         }
     }
 }

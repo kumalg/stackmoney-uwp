@@ -37,10 +37,9 @@ namespace Finanse {
 
             DalBase.CreateBackup();
             DalBase.CreateDb();
-
-            DalBase.ConvertAccounts();
+            
             DalBase.ConvertCategories();
-            DalBase.RepairDb();
+            DalBase.CheckDefaultCategory();
 
             DalBase.AddItemsIfEmpty();
 

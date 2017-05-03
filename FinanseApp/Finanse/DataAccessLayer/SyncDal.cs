@@ -124,7 +124,7 @@ namespace Finanse.DataAccessLayer {
                 localOperations = db.Table<Operation>().ToList();
                 localOperationPatterns = db.Table<OperationPattern>().ToList();
 
-                var localCat = db.Query<Category>("SELECT * FROM Categories WHERE BossCategoryId ISNULL");
+                var localCat = db.Query<Category>("SELECT * FROM Categories WHERE BossCategoryId ISNULL AND GlobalId != '1'");
                 localCat.AddRange(db.Query<SubCategory>("SELECT * FROM Categories WHERE BossCategoryId IS NOT NULL"));
                 localCategories = localCat;
 
@@ -137,7 +137,7 @@ namespace Finanse.DataAccessLayer {
                 oneDriveOperations = dbOneDrive.Table<Operation>().ToList();
                 oneDriveOperationPatterns = dbOneDrive.Table<OperationPattern>().ToList();
 
-                var oneDriveCat = dbOneDrive.Query<Category>("SELECT * FROM Categories WHERE BossCategoryId ISNULL");
+                var oneDriveCat = dbOneDrive.Query<Category>("SELECT * FROM Categories WHERE BossCategoryId ISNULL AND GlobalId != '1'");
                 oneDriveCat.AddRange(dbOneDrive.Query<SubCategory>("SELECT * FROM Categories WHERE BossCategoryId IS NOT NULL"));
                 oneDriveCategories = oneDriveCat;
 

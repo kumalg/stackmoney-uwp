@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 using Finanse.DataAccessLayer;
 using Finanse.Models;
 using System.Text.RegularExpressions;
-using Finanse.Models.MoneyAccounts;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Finanse.Models.Categories;

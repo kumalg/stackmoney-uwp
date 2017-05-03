@@ -3,7 +3,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Finanse.DataAccessLayer;
 using SQLite.Net.Attributes;
-using Finanse.Models.MoneyAccounts;
 
 namespace Finanse.Models.MAccounts {
     public class MAccount : SyncProperties, ICloneable {
@@ -14,8 +13,8 @@ namespace Finanse.Models.MAccounts {
         public string ColorKey { get; set; }
 
 
-
         public string ActualMoneyValue => MAccountsDal.AccountWithSubAccountsBalanceByGlobalId(GlobalId).ToString("C", Settings.ActualCultureInfo);
+        public decimal ActualMoneyValueDecimal => MAccountsDal.AccountWithSubAccountsBalanceByGlobalId(GlobalId);
 
         public SolidColorBrush Brush => string.IsNullOrEmpty(ColorKey)
                     ? (SolidColorBrush)Application.Current.Resources["DefaultEllipseColor"]
@@ -40,5 +39,8 @@ namespace Finanse.Models.MAccounts {
                 secondAccount.Name == Name &&
                 secondAccount.ColorKey == ColorKey;
         }
+    }
+
+    public interface ICloneable {
     }
 }

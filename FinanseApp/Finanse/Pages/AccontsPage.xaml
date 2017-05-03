@@ -89,14 +89,18 @@
                                     <MenuFlyout
                                         MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
                                         <MenuFlyoutItem
-                                            x:Name="EditButton"
+                                            Style="{StaticResource MyMenuFlyoutItem}"
+                                            Tag="&#xE104;"
+                                            Text="Aktualizuj saldo"
+                                            Click="NewAccountBalance_Click" />
+                                        <MenuFlyoutSeparator />
+                                        <MenuFlyoutItem
                                             Style="{StaticResource MyMenuFlyoutItem}"
                                             Tag="&#xE104;"
                                             Text="Edytuj"
                                             x:Uid="edit"
                                             Click="EditButton_Click" />
                                         <MenuFlyoutItem
-                                            x:Name="DeleteButton"
                                             Style="{StaticResource MyMenuFlyoutItem}"
                                             Tag="&#xE107;"
                                             Text="Usuń"
@@ -122,6 +126,12 @@
                                             <FlyoutBase.AttachedFlyout>
                                                 <MenuFlyout
                                                     MenuFlyoutPresenterStyle="{StaticResource MyMenyFlyoutPresenter}">
+                                                    <MenuFlyoutItem
+                                                        Style="{StaticResource MyMenuFlyoutItem}"
+                                                        Tag="&#xE104;"
+                                                        Text="Aktualizuj saldo"
+                                                        Click="NewSubAccountBalance_Click" />
+                                                    <MenuFlyoutSeparator />
                                                     <MenuFlyoutItem
                                                         Style="{StaticResource MyMenuFlyoutItem}"
                                                         Tag="&#xE104;"

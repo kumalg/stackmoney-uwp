@@ -1,8 +1,11 @@
-﻿namespace Finanse.Models.MAccounts {
+﻿using Finanse.DataAccessLayer;
+
+namespace Finanse.Models.MAccounts {
     public class SubMAccount : MAccount {
 
         public string BossAccountGlobalId { get; set; }
 
+        public MAccount ParentAccount => MAccountsDal.GetAccountByGlobalId(BossAccountGlobalId);
 
 
         public override int GetHashCode() => Name.GetHashCode() * Id;

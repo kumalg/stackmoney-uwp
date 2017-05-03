@@ -152,7 +152,6 @@
     <Compile Include="Converters\ObjectToSolidColorBrushConverter.cs" />
     <Compile Include="Converters\DecimalToCurrencyStringConverter.cs" />
     <Compile Include="Converters\DoubleToPercentStringConverter.cs" />
-    <Compile Include="DataAccessLayer\AccountsDal.cs" />
     <Compile Include="DataAccessLayer\DalBase.cs" />
     <Compile Include="DataAccessLayer\Dal.cs" />
     <Compile Include="DataAccessLayer\DebugTraceListener.cs" />
@@ -162,6 +161,9 @@
     <Compile Include="DataAccessLayer\SyncDal.cs" />
     <Compile Include="Dialogs\AcceptContentDialog.xaml.cs">
       <DependentUpon>AcceptContentDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\BalanceAccountContentDialog.xaml.cs">
+      <DependentUpon>BalanceAccountContentDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\EditOperationContentDialog.xaml.cs">
       <DependentUpon>EditOperationContentDialog.xaml</DependentUpon>
@@ -231,7 +233,6 @@
     <Compile Include="Models\SystemVersion\SystemCurrentVersion.cs" />
     <Compile Include="Models\MAccounts\MAccountWithSubMAccounts.cs" />
     <Compile Include="Models\MAccounts\MAccount.cs" />
-    <Compile Include="Models\MAccounts\MoAccount.cs" />
     <Compile Include="Models\MAccounts\MoneyAccountBalance.cs" />
     <Compile Include="Models\MAccounts\SubMAccount.cs" />
     <Compile Include="Models\StatusBarMethods.cs" />
@@ -239,14 +240,6 @@
     <Compile Include="Models\Operations\GroupInfoList.cs" />
     <Compile Include="Models\DateTimeExtensions\DateExtensions.cs" />
     <Compile Include="Models\ItemCollection.cs" />
-    <Compile Include="Models\MoneyAccounts\MoneyAccountBalance.cs" />
-    <Compile Include="Models\MoneyAccounts\Account.cs" />
-    <Compile Include="Models\MoneyAccounts\AccountQueries.cs" />
-    <Compile Include="Models\MoneyAccounts\BankAccount.cs" />
-    <Compile Include="Models\MoneyAccounts\BankAccountWithCards.cs" />
-    <Compile Include="Models\MoneyAccounts\CardAccount.cs" />
-    <Compile Include="Models\MoneyAccounts\CashAccount.cs" />
-    <Compile Include="Models\MoneyAccounts\ICloneable.cs" />
     <Compile Include="Models\Helpers\NewOperation.cs" />
     <Compile Include="Models\Operations\Operation.cs" />
     <Compile Include="Models\Categories\Category.cs" />
@@ -319,6 +312,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Dialogs\AcceptContentDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\BalanceAccountContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

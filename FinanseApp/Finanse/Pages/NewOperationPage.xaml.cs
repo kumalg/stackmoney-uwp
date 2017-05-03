@@ -1,7 +1,6 @@
 ﻿using Finanse.DataAccessLayer;
 using Finanse.Dialogs;
 using Finanse.Models;
-using Finanse.Models.MoneyAccounts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

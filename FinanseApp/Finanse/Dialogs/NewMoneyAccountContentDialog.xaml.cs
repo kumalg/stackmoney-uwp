@@ -1,5 +1,4 @@
 ﻿using Finanse.DataAccessLayer;
-using Finanse.Models.MoneyAccounts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

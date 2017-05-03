@@ -1,8 +1,14 @@
 [
   {
+    "AppVersion": "1.1.15.0",
+    "Description": [
+      "możliwość aktualizacji salda dla każdego konta",
+    ]
+  },
+  {
     "AppVersion": "1.1.14.0",
     "Description": [
-      "naprawione błędy synchronizacji:" ,
+      "naprawione błędy synchronizacji:",
       "  istniała możliwość mieszania się elementów",
       "  naprawiony błąd braku synchronizacji subkont",
       "  naprawiony błąd braku możliwości usunięcia konta",

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using System.Threading.Tasks;
 using Windows.Storage;
 using Finanse.Annotations;
 using SQLite.Net;
@@ -8,7 +7,7 @@ using SQLite.Net.Interop;
 
 namespace Finanse.Models.Helpers {
     public static class SQLiteNetExtensions {
-        public static async Task<string> BackupDatabase(this SQLiteConnection conn, ISQLitePlatform platform, string folderName = null) {
+        public static string BackupDatabase(this SQLiteConnection conn, ISQLitePlatform platform, string folderName = null) {
             ISQLiteApiExt sqliteApi = platform.SQLiteApi as ISQLiteApiExt;
 
             if (sqliteApi == null)
@@ -17,31 +16,31 @@ namespace Finanse.Models.Helpers {
             string additionalPath = string.Empty;
             if (!string.IsNullOrEmpty(folderName)) {
                 ApplicationData.Current?.LocalFolder.CreateFolderAsync(folderName, CreationCollisionOption.FailIfExists);
-              //  if (asyncOperation != null)
-              //      await asyncOperation;
+                //  if (asyncOperation != null)
+                //      await asyncOperation;
                 additionalPath = "\\" + folderName;
             }
 
-            string destDBPath = ApplicationData.Current?.LocalFolder.Path + additionalPath + "\\db." + DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss");
+            string destDbPath = ApplicationData.Current?.LocalFolder.Path + additionalPath + "\\db." + DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss");
 
-            IDbHandle destDB;
-            byte[] databasePathAsBytes = GetNullTerminatedUtf8(destDBPath);
-            Result r = sqliteApi.Open(databasePathAsBytes, out destDB,
-                (int)( SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite ), IntPtr.Zero);
+            IDbHandle destDb;
+            byte[] databasePathAsBytes = GetNullTerminatedUtf8(destDbPath);
+            Result r = sqliteApi.Open(databasePathAsBytes, out destDb,
+                (int)(SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite), IntPtr.Zero);
 
             if (r != Result.OK) {
-                throw SQLiteException.New(r, String.Format("Could not open backup database file: {0} ({1})", destDBPath, r));
+                throw SQLiteException.New(r, String.Format("Could not open backup database file: {0} ({1})", destDbPath, r));
             }
 
             /* Open the backup object used to accomplish the transfer */
-            IDbBackupHandle bHandle = sqliteApi.BackupInit(destDB, "main", conn.Handle, "main");
-            
+            IDbBackupHandle bHandle = sqliteApi.BackupInit(destDb, "main", conn.Handle, "main");
+
 
             if (bHandle == null) {
                 // Close the database connection 
-                sqliteApi.Close(destDB);
+                sqliteApi.Close(destDb);
 
-                throw SQLiteException.New(r, String.Format("Could not initiate backup process: {0}", destDBPath));
+                throw SQLiteException.New(r, String.Format("Could not initiate backup process: {0}", destDbPath));
             }
 
             /* Each iteration of this loop copies 5 database pages from database
@@ -61,15 +60,15 @@ namespace Finanse.Models.Helpers {
 
             if (r != Result.OK) {
                 // Close the database connection 
-                sqliteApi.Close(destDB);
+                sqliteApi.Close(destDb);
 
-                throw SQLiteException.New(r, String.Format("Could not finish backup process: {0} ({1})", destDBPath, r));
+                throw SQLiteException.New(r, String.Format("Could not finish backup process: {0} ({1})", destDbPath, r));
             }
 
             // Close the database connection 
-            sqliteApi.Close(destDB);
+            sqliteApi.Close(destDb);
 
-            return destDBPath;
+            return destDbPath;
         }
 
         [NotNull]

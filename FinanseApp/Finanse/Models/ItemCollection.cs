@@ -13,10 +13,5 @@ namespace Finanse.Models {
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
             return GetEnumerator();
         }
-        /*
-        public void Addy(Operation item) {
-            _itemCollection.Add(item);
-        }
-        */
     }
 }

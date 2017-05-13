@@ -1,5 +1,4 @@
 ﻿using System;
-using Windows.UI.Xaml.Media;
 
 /*
  * http://datetimeextensions.codeplex.com/SourceControl/latest#DayExtensions.cs

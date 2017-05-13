@@ -13,12 +13,8 @@ namespace Finanse.Models {
 
 
         public ElementTheme AppTheme {
-            get {
-                return (ElementTheme)GetValue(AppThemeProperty);
-            }
-            set {
-                SetValue(AppThemeProperty, value);
-            }
+            get => (ElementTheme)GetValue(AppThemeProperty);
+            set => SetValue(AppThemeProperty, value);
         }
 
         public ThemeAwareFrame() {
@@ -31,9 +27,7 @@ namespace Finanse.Models {
             private ElementTheme _theme;
 
             public ElementTheme Theme {
-                get {
-                    return _theme;
-                }
+                get => _theme;
                 set {
                     _theme = value;
                     OnPropertyChanged();

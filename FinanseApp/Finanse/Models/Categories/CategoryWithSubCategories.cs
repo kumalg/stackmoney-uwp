@@ -5,9 +5,7 @@ namespace Finanse.Models.Categories {
     public class CategoryWithSubCategories : INotifyPropertyChanged {
         private Category _category;
         public Category Category {
-            get {
-                return _category;
-            }
+            get => _category;
             set {
                 _category = value;
                 OnPropertyChanged("Category");
@@ -32,8 +30,7 @@ namespace Finanse.Models.Categories {
 
         protected virtual void OnPropertyChanged(string propertyName) {
             var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         public override int GetHashCode() {
             return Category.GetHashCode() * Category.Id;

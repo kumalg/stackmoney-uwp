@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Popups;
 using Finanse.Models.Helpers;
-using Finanse.Models.WhatsNew;
 
 namespace Finanse.Models.WhatsNew {
     public class WhatsNewMessageDialog {

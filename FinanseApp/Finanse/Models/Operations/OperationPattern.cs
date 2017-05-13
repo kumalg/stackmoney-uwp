@@ -2,6 +2,7 @@
 using Finanse.Models.Categories;
 using Finanse.Models.MAccounts;
 using SQLite.Net.Attributes;
+//using SQLiteNetExtensions.Attributes;
 
 namespace Finanse.Models.Operations {
 
@@ -11,12 +12,15 @@ namespace Finanse.Models.Operations {
         public int Id { get; set; }
         public string Title { get; set; }
         public string MoreInfo { get; set; }
+        //[ForeignKey(typeof(Category))]
         public string CategoryGlobalId { get; set; }
+        //[OneToOne]
+        //public Category Category { get; set; }
         public decimal Cost { get; set; }
         public bool isExpense { get; set; }
         public string MoneyAccountId { get; set; }
 
-        
+
         public decimal SignedCost => isExpense ? -Cost : Cost;
         public string TitleOrCategoryName {
             get {

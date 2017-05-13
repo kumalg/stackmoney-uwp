@@ -7,7 +7,6 @@ using Windows.Storage;
 using Windows.Storage.Streams;
 using Finanse.DataAccessLayer;
 using Microsoft.Graph;
-using Microsoft.Toolkit.Uwp;
 using Microsoft.Toolkit.Uwp.Services.OneDrive;
 
 namespace Finanse.Models.Helpers {

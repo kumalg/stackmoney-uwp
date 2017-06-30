@@ -3,7 +3,7 @@ using System.Linq;
 using Finanse.DataAccessLayer;
 using Finanse.Models.Operations;
 
-namespace Finanse.Models.DateTimeExtensions {
+namespace Finanse.Models.Extensions {
     public static class ListExtensions {
 
         public static List<Operation> LinkCategories(this List<Operation> operations) {

@@ -5,12 +5,15 @@ using Finanse.DataAccessLayer;
 using SQLite.Net.Attributes;
 
 namespace Finanse.Models.MAccounts {
-    public class MAccount : SyncProperties, ICloneable {
+    public class MAccount : ISync, ICloneable {
 
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         public string Name { get; set; }
         public string ColorKey { get; set; }
+        public string LastModifed { get; set; }
+        public bool IsDeleted { get; set; }
+        public string GlobalId { get; set; }
 
 
         public string ActualMoneyValue => MAccountsDal.AccountWithSubAccountsBalanceByGlobalId(GlobalId).ToString("C", Settings.ActualCultureInfo);

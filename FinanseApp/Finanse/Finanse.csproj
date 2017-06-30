@@ -216,7 +216,7 @@
     <Compile Include="Elements\SmallPieWithLegend.xaml.cs">
       <DependentUpon>SmallPieWithLegend.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\ListExtensions.cs" />
+    <Compile Include="Models\Extensions\ListExtensions.cs" />
     <Compile Include="Models\DateTimeExtensions\SyncExtensions.cs" />
     <Compile Include="Models\EmptyOrFullSelector.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -236,7 +236,7 @@
     <Compile Include="Models\MAccounts\MoneyAccountBalance.cs" />
     <Compile Include="Models\MAccounts\SubMAccount.cs" />
     <Compile Include="Models\StatusBarMethods.cs" />
-    <Compile Include="Models\SyncProperties.cs" />
+    <Compile Include="Models\ISync.cs" />
     <Compile Include="Models\Operations\GroupInfoList.cs" />
     <Compile Include="Models\DateTimeExtensions\DateExtensions.cs" />
     <Compile Include="Models\ItemCollection.cs" />
@@ -253,7 +253,7 @@
     <Compile Include="Models\Statistics\SubCategoriesList.cs" />
     <Compile Include="Models\SystemVersion\SystemVersions.cs" />
     <Compile Include="Models\TextBoxEvents.cs" />
-    <Compile Include="Models\ThemeExtensions.cs" />
+    <Compile Include="Models\Extensions\ThemeExtensions.cs" />
     <Compile Include="Models\WhatsNew\WhatsNew.cs" />
     <Compile Include="Models\WhatsNew\WhatsNewHelper.cs" />
     <Compile Include="Models\WhatsNew\WhatsNewMessageDialog.cs" />
@@ -460,8 +460,8 @@
     <SDKReference Include="Microsoft.VCLibs, Version=14.0">
       <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
     </SDKReference>
-    <SDKReference Include="SQLite.UWP.2015, Version=3.18.0">
-      <Name>SQLite for Universal Windows Platform %28SQLite.UWP.2015, Version=3.18.0%29</Name>
+    <SDKReference Include="SQLite.UWP.2015, Version=3.19.3">
+      <Name>SQLite for Universal Windows Platform %28SQLite.UWP.2015, Version=3.19.3%29</Name>
     </SDKReference>
     <SDKReference Include="WindowsDesktop, Version=10.0.15063.0">
       <Name>Windows Desktop Extensions for the UWP</Name>

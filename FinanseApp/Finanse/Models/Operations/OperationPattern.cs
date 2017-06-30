@@ -6,7 +6,7 @@ using SQLite.Net.Attributes;
 
 namespace Finanse.Models.Operations {
 
-    public class OperationPattern : SyncProperties {
+    public class OperationPattern : ISync {
 
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
@@ -19,6 +19,9 @@ namespace Finanse.Models.Operations {
         public decimal Cost { get; set; }
         public bool isExpense { get; set; }
         public string MoneyAccountId { get; set; }
+        public string LastModifed { get; set; }
+        public bool IsDeleted { get; set; }
+        public string GlobalId { get; set; }
 
 
         public decimal SignedCost => isExpense ? -Cost : Cost;

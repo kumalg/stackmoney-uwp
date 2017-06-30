@@ -9,6 +9,7 @@ using Finanse.Charts.Data;
 using Finanse.DataAccessLayer;
 using Finanse.Models.Categories;
 using Finanse.Models.DateTimeExtensions;
+using Finanse.Models.Extensions;
 using Finanse.Models.Operations;
 
 namespace Finanse.Models.Statistics {

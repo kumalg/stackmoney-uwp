@@ -1,6 +1,6 @@
 ﻿using Windows.UI.Xaml;
 
-namespace Finanse.Models
+namespace Finanse.Models.Extensions
 {
     public static class ThemeExtensions
     {

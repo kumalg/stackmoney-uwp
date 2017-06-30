@@ -1,6 +1,5 @@
 ﻿using Finanse.Charts;
 using Finanse.Models;
-using Finanse.Models.Helpers;
 using Finanse.Models.Statistics;
 using System;
 using System.Collections.Generic;
@@ -10,8 +9,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Finanse.Charts.Data;
-using Finanse.DataAccessLayer;
-using Finanse.Models.Categories;
 using Finanse.Models.DateTimeExtensions;
 
 namespace Finanse.Pages {
@@ -24,9 +21,7 @@ namespace Finanse.Pages {
 
         private string _incomesPercentageText;
         public string IncomesPercentageText {
-            get {
-                return _incomesPercentageText;
-            }
+            get => _incomesPercentageText;
             set {
                 _incomesPercentageText = value;
                 RaisePropertyChanged("IncomesPercentageText");
@@ -35,9 +30,7 @@ namespace Finanse.Pages {
 
         private string _dateRangeText;
         public string DateRangeText {
-            get {
-                return _dateRangeText;
-            }
+            get => _dateRangeText;
             set {
                 _dateRangeText = value;
                 RaisePropertyChanged("DateRangeText");
@@ -46,9 +39,7 @@ namespace Finanse.Pages {
 
         private string _expensesValue = string.Empty;
         private string ExpensesValue {
-            get {
-                return _expensesValue;
-            }
+            get => _expensesValue;
             set {
                 _expensesValue = value;
                 RaisePropertyChanged("ExpensesValue");
@@ -57,9 +48,7 @@ namespace Finanse.Pages {
 
         private string _incomesValue = string.Empty;
         private string IncomesValue {
-            get {
-                return _incomesValue;
-            }
+            get => _incomesValue;
             set {
                 _incomesValue = value;
                 RaisePropertyChanged("IncomesValue");
@@ -68,9 +57,7 @@ namespace Finanse.Pages {
 
         private List<ChartDataItem> _expensesToIncomes = new List<ChartDataItem>();
         public List<ChartDataItem> ExpensesToIncomes {
-            get {
-                return _expensesToIncomes;
-            }
+            get => _expensesToIncomes;
             set {
                 _expensesToIncomes = value;
                 RaisePropertyChanged("ExpensesToIncomes");
@@ -103,9 +90,7 @@ namespace Finanse.Pages {
         
         private ObservableCollection<LineChartItem> _lineChartTest = new ObservableCollection<LineChartItem>();
         public ObservableCollection<LineChartItem> LineChartTest {
-            get {
-                return _lineChartTest;
-            }
+            get => _lineChartTest;
             set {
                 _lineChartTest = value;
                 RaisePropertyChanged("LineChartTest");

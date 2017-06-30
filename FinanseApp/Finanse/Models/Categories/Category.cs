@@ -6,7 +6,7 @@ using SQLite.Net.Attributes;
 
 namespace Finanse.Models.Categories {
 
-    public class Category : SyncProperties {
+    public class Category : ISync {
 
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; } 
@@ -16,6 +16,9 @@ namespace Finanse.Models.Categories {
         public bool VisibleInIncomes { get; set; } 
         public bool VisibleInExpenses { get; set; }
         public bool CantDelete { get; set; }
+        public string LastModifed { get; set; }
+        public bool IsDeleted { get; set; }
+        public string GlobalId { get; set; }
 
 
         public SolidColorBrush Brush {

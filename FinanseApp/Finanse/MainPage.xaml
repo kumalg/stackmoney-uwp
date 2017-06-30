@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:Finanse.Models"
     xmlns:finanse="using:Finanse"
+    xmlns:visuals="using:Finanse.Models.Visuals"
     mc:Ignorable="d"
     FontFamily="{StaticResource DefaultFontFamily}"
     SizeChanged="MainPage_SizeChanged">
@@ -416,7 +417,7 @@
                     Height="Auto" />
             </Grid.RowDefinitions>
             
-            <finanse:BackDrop
+            <visuals:HostBackDrop
                 Grid.RowSpan="3" />
 
             <Grid

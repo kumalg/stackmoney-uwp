@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Finanse.Models.DateTimeExtensions {
+namespace Finanse.Models.Extensions.DateTimeExtensions {
     public static class TimeExtensions {
         public static DateTime Midnight(this DateTime current) {
             DateTime midnight = new DateTime(current.Year, current.Month, current.Day);

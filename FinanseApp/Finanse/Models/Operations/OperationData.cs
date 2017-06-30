@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using Finanse.Models.DateTimeExtensions;
+using Finanse.Models.Extensions.DateTimeExtensions;
 
 namespace Finanse.Models.Operations {
     public class OperationData : INotifyPropertyChanged {

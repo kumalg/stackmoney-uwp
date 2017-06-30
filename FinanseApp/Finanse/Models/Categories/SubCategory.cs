@@ -21,7 +21,7 @@ namespace Finanse.Models.Categories {
             IsDeleted = category.IsDeleted;
         }
 
-        public Category AsCategory() {
+        public Category ToCategory() {
             return new Category {
                 Id = Id,
                 IconKey = IconKey,
@@ -33,7 +33,7 @@ namespace Finanse.Models.Categories {
                 CantDelete = CantDelete,
                 LastModifed = LastModifed,
                 IsDeleted = IsDeleted,
-        };
+            };
         }
 
         private Category _parentCategory;
@@ -42,8 +42,7 @@ namespace Finanse.Models.Categories {
 
         public new SubCategory Clone() => (SubCategory)MemberwiseClone();
 
-        public SubCategory() {
-        }
+        public SubCategory() { }
 
         public override int GetHashCode() {
             return Name.GetHashCode() * Id;

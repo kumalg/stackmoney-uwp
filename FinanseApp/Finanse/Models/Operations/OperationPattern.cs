@@ -1,5 +1,6 @@
 ﻿using Finanse.DataAccessLayer;
 using Finanse.Models.Categories;
+using Finanse.Models.Interfaces;
 using Finanse.Models.MAccounts;
 using SQLite.Net.Attributes;
 //using SQLiteNetExtensions.Attributes;

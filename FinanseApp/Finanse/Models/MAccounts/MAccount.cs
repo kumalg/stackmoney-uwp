@@ -2,6 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Finanse.DataAccessLayer;
+using Finanse.Models.Interfaces;
 using SQLite.Net.Attributes;
 
 namespace Finanse.Models.MAccounts {
@@ -42,8 +43,5 @@ namespace Finanse.Models.MAccounts {
                 secondAccount.Name == Name &&
                 secondAccount.ColorKey == ColorKey;
         }
-    }
-
-    public interface ICloneable {
     }
 }

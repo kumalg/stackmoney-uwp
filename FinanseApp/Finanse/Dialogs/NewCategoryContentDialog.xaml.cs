@@ -113,7 +113,7 @@ namespace Finanse.Dialogs {
 
         public NewCategoryContentDialog(Category editedCategoryItem) {
             InitializeComponent();
-            _editedCategoryItem = new Category(editedCategoryItem);
+            _editedCategoryItem = editedCategoryItem.Clone();
             _editedCategoryAlwaysAsSubCategory = new SubCategory(editedCategoryItem);
             Title = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("editCategoryString");
             PrimaryButtonText = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("save");
@@ -123,7 +123,7 @@ namespace Finanse.Dialogs {
 
             BossCategoryGlobalId = _editedCategoryAlwaysAsSubCategory.BossCategoryId;
 
-            NewCategoryItem = new Category(editedCategoryItem);
+            NewCategoryItem = editedCategoryItem.Clone();
 
             /// PÓKI CO NIE DZIAŁA
             /*

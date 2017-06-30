@@ -8,7 +8,7 @@ using Finanse.Models.MAccounts;
 using Finanse.Models.Operations;
 using SQLite.Net;
 using SQLite.Net.Platform.WinRT;
-using Finanse.Models.DateTimeExtensions;
+using Finanse.Models.Extensions;
 using Finanse.Models.Helpers;
 
 namespace Finanse.DataAccessLayer {

@@ -20,7 +20,7 @@ namespace Finanse.Dialogs {
         
         private bool _isLoaded;
         private bool _isUnfocused = true;
-        private readonly int MaxLength = NewOperation.MaxLength;
+        private readonly int MaxLength = NewOperation.MaxLengthOfValue;
 
         private readonly Operation _operationToEdit;
         private readonly OperationPattern _operationPatternToEdit;

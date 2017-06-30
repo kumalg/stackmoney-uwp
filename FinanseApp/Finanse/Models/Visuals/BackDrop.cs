@@ -2,18 +2,19 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Hosting;
-using Microsoft.Graphics.Canvas.Effects;
 using Finanse.Models.SystemVersion;
+using Microsoft.Graphics.Canvas.Effects;
+using System.Numerics;
 
-namespace Finanse {
-    public class BackDropInside : Canvas {
+namespace Finanse.Models.Visuals {
+    public class BackDrop : Canvas {
 
 #if SDKVERSION_15063
         private SpriteVisual _hostVisual;
         private Compositor _compositor;
 #endif
 
-        public BackDropInside() {
+        public BackDrop() {
             if (SystemCurrentVersion.Revision < SystemVersions.AnniversaryUpdate)
                 return;
 
@@ -27,7 +28,7 @@ namespace Finanse {
 #if SDKVERSION_15063
         private void FrostHostOnSizeChanged(object sender, SizeChangedEventArgs sizeChangedEventArgs) {
             if (_hostVisual != null)
-                _hostVisual.Size = new System.Numerics.Vector2((float)ActualWidth, (float)ActualHeight);
+                _hostVisual.Size = new Vector2((float)ActualWidth, (float)ActualHeight);
         }
 
         private void Initialize() {
@@ -49,7 +50,7 @@ namespace Finanse {
             // Create a Visual to contain the frosted glass effect
             _hostVisual = _compositor.CreateSpriteVisual();
             _hostVisual.Brush = effectBrush;
-            _hostVisual.Size = new System.Numerics.Vector2((float)ActualWidth,(float)ActualHeight);
+            _hostVisual.Size = new Vector2((float)ActualWidth,(float)ActualHeight);
 
             // Add the blur as a child of the host in the visual tree
             ElementCompositionPreview.SetElementChildVisual(this, _hostVisual);

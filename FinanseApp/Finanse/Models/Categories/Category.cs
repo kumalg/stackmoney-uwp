@@ -2,6 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Finanse.Models.Interfaces;
 using SQLite.Net.Attributes;
 
 namespace Finanse.Models.Categories {
@@ -34,21 +35,6 @@ namespace Finanse.Models.Categories {
                     (FontIcon)Application.Current.Resources["DefaultEllipseIcon"] :
                     (FontIcon)(((ResourceDictionary)Application.Current.Resources["IconBase"]).FirstOrDefault(i => i.Key.Equals(IconKey)).Value);
             }
-        }
-        public Category() {
-        }
-
-        public Category(Category previousCategory) {
-            Id = previousCategory.Id;
-            IconKey = previousCategory.IconKey;
-            ColorKey = previousCategory.ColorKey;
-            Name = previousCategory.Name;
-            VisibleInExpenses = previousCategory.VisibleInExpenses;
-            VisibleInIncomes = previousCategory.VisibleInIncomes;
-            GlobalId = previousCategory.GlobalId;
-            CantDelete = previousCategory.CantDelete;
-            LastModifed = previousCategory.LastModifed;
-            IsDeleted = previousCategory.IsDeleted;
         }
 
         public Category Clone() => (Category)MemberwiseClone();

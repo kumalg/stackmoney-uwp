@@ -129,8 +129,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BackDropInside.cs" />
-    <Compile Include="BackDrop.cs" />
+    <Compile Include="Models\Visuals\BackDrop.cs" />
+    <Compile Include="Models\Visuals\HostBackDrop.cs" />
     <Compile Include="Charts\Data\ChartData.cs" />
     <Compile Include="Charts\Data\ChartDataItem.cs" />
     <Compile Include="Charts\DefaultColors.cs" />
@@ -217,7 +217,7 @@
       <DependentUpon>SmallPieWithLegend.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Extensions\ListExtensions.cs" />
-    <Compile Include="Models\DateTimeExtensions\SyncExtensions.cs" />
+    <Compile Include="Models\Extensions\SyncExtensions.cs" />
     <Compile Include="Models\EmptyOrFullSelector.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -228,18 +228,18 @@
     <Compile Include="Models\Helpers\Flyouts.cs" />
     <Compile Include="Models\Helpers\Functions.cs" />
     <Compile Include="Models\Helpers\Informations.cs" />
-    <Compile Include="Models\DateTimeExtensions\TimeExtensions.cs" />
+    <Compile Include="Models\Extensions\DateTimeExtensions\TimeExtensions.cs" />
     <Compile Include="Models\Helpers\SQLiteNetExtensions.cs" />
+    <Compile Include="Models\Interfaces\ICloneable.cs" />
     <Compile Include="Models\SystemVersion\SystemCurrentVersion.cs" />
     <Compile Include="Models\MAccounts\MAccountWithSubMAccounts.cs" />
     <Compile Include="Models\MAccounts\MAccount.cs" />
     <Compile Include="Models\MAccounts\MoneyAccountBalance.cs" />
     <Compile Include="Models\MAccounts\SubMAccount.cs" />
     <Compile Include="Models\StatusBarMethods.cs" />
-    <Compile Include="Models\ISync.cs" />
+    <Compile Include="Models\Interfaces\ISync.cs" />
     <Compile Include="Models\Operations\GroupInfoList.cs" />
-    <Compile Include="Models\DateTimeExtensions\DateExtensions.cs" />
-    <Compile Include="Models\ItemCollection.cs" />
+    <Compile Include="Models\Extensions\DateTimeExtensions\DateExtensions.cs" />
     <Compile Include="Models\Helpers\NewOperation.cs" />
     <Compile Include="Models\Operations\Operation.cs" />
     <Compile Include="Models\Categories\Category.cs" />

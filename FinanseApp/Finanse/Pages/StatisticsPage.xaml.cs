@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Finanse.Charts.Data;
-using Finanse.Models.DateTimeExtensions;
+using Finanse.Models.Extensions.DateTimeExtensions;
 
 namespace Finanse.Pages {
 

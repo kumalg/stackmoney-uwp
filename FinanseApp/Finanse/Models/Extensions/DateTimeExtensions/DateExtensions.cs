@@ -4,7 +4,7 @@
  * http://datetimeextensions.codeplex.com/SourceControl/latest#DayExtensions.cs
  */
 
-namespace Finanse.Models.DateTimeExtensions {
+namespace Finanse.Models.Extensions.DateTimeExtensions {
     public static class DateExtensions {
 
         public static DateTime First(this DateTime current) {

@@ -1,13 +1,14 @@
-﻿using Windows.UI;
+﻿using System.Numerics;
+using Windows.UI;
 using Windows.UI.Composition;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Hosting;
-using Microsoft.Graphics.Canvas.Effects;
 using Finanse.Models.SystemVersion;
+using Microsoft.Graphics.Canvas.Effects;
 
-namespace Finanse {
-    public class BackDrop : Control {
+namespace Finanse.Models.Visuals {
+    public class HostBackDrop : Control {
 
 #if SDKVERSION_15063
         private Compositor _compositor;
@@ -19,7 +20,7 @@ namespace Finanse {
         private SpriteVisual _frostVisual;
 #endif
 
-        public BackDrop() {
+        public HostBackDrop() {
             if (SystemCurrentVersion.Revision < SystemVersions.CreatorsUpdate)
                 return;
 
@@ -33,7 +34,7 @@ namespace Finanse {
 #if SDKVERSION_15063
         private void FrostHostOnSizeChanged(object sender, SizeChangedEventArgs sizeChangedEventArgs) {
             if (_frostVisual != null)
-                _frostVisual.Size = new System.Numerics.Vector2((float)ActualWidth, (float)ActualHeight);
+                _frostVisual.Size = new Vector2((float)ActualWidth, (float)ActualHeight);
         }
 
         private void Initialize() {
@@ -56,7 +57,7 @@ namespace Finanse {
             // Create a Visual to contain the frosted glass effect
             _frostVisual = _compositor.CreateSpriteVisual();
             _frostVisual.Brush = _effectBrush;
-            _frostVisual.Size = new System.Numerics.Vector2((float)ActualWidth, (float)ActualHeight);
+            _frostVisual.Size = new Vector2((float)ActualWidth, (float)ActualHeight);
 
             _effectBrush.SetSourceParameter("backdropBrush", _backdropBrush);
 
@@ -64,7 +65,7 @@ namespace Finanse {
             ElementCompositionPreview.SetElementChildVisual(this, _frostVisual);
         }
 
-        public static readonly DependencyProperty ColorProperty = DependencyProperty.Register("Color", typeof(Color), typeof(BackDrop), new PropertyMetadata(Colors.Blue));
+        public static readonly DependencyProperty ColorProperty = DependencyProperty.Register("Color", typeof(Color), typeof(HostBackDrop), new PropertyMetadata(Colors.Blue));
 
         public Color Color {
             get {
@@ -88,7 +89,7 @@ namespace Finanse {
                 // Create a Visual to contain the frosted glass effect
                 _frostVisual = _compositor.CreateSpriteVisual();
                 _frostVisual.Brush = _effectBrush;
-                _frostVisual.Size = new System.Numerics.Vector2((float)ActualWidth, (float)ActualHeight);
+                _frostVisual.Size = new Vector2((float)ActualWidth, (float)ActualHeight);
 
                 _effectBrush.SetSourceParameter("backdropBrush", _backdropBrush);
 

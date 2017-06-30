@@ -19,7 +19,7 @@ namespace Finanse.Dialogs {
         private readonly Regex _regex = NewOperation.GetSignedRegex();
         private string _acceptedCostValue = string.Empty;
         private bool _isUnfocused = true;
-        private readonly int MaxLength = NewOperation.MaxLength;
+        private readonly int MaxLength = NewOperation.MaxLengthOfValue;
 
         private readonly TextBoxEvents _textBoxEvents = new TextBoxEvents();
 

@@ -13,7 +13,7 @@ using Windows.Phone.UI.Input;
 using Windows.System.Profile;
 using System.ComponentModel;
 using Finanse.Models;
-using Finanse.Models.DateTimeExtensions;
+using Finanse.Models.Extensions.DateTimeExtensions;
 using Finanse.Models.Helpers;
 using Finanse.Models.MAccounts;
 using Finanse.Models.Operations;

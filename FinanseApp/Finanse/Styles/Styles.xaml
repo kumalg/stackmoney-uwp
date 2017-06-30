@@ -7,6 +7,7 @@
     xmlns:converters="using:Finanse.Converters"
     xmlns:mAccounts="using:Finanse.Models.MAccounts"
     xmlns:finanse="using:Finanse"
+    xmlns:visuals="using:Finanse.Models.Visuals"
     mc:Ignorable="d">
 
     <FontFamily x:Key="FontAwesome">/Assets/Fonts/FontAwesome.ttf#FontAwesome</FontFamily>  
@@ -799,7 +800,7 @@
                                     Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <finanse:BackDropInside />
+                            <visuals:BackDrop />
 
                             <Border
                                 x:Name="BackgroundElement"
@@ -3864,12 +3865,12 @@
                                             X="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHorizontalOffset}" />
                                     </Grid.RenderTransform>
                                     
-                                    <finanse:BackDropInside>
-                                        <finanse:BackDropInside.RenderTransform>
+                                    <visuals:BackDrop>
+                                        <visuals:BackDrop.RenderTransform>
                                             <TranslateTransform
                                                 x:Name="OverflowContentTransform" />
-                                        </finanse:BackDropInside.RenderTransform>
-                                    </finanse:BackDropInside>
+                                        </visuals:BackDrop.RenderTransform>
+                                    </visuals:BackDrop>
                                     
                                     <CommandBarOverflowPresenter
                                         x:Name="SecondaryItemsControl"
@@ -4157,3 +4158,10 @@
     </DataTemplate>
 
 </ResourceDictionary>
+
+
+
+
+
+
+

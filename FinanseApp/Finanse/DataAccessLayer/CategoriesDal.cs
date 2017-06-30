@@ -4,7 +4,7 @@ using System.Linq;
 using Finanse.Models.Categories;
 using SQLite.Net;
 using SQLite.Net.Platform.WinRT;
-using Finanse.Models.DateTimeExtensions;
+using Finanse.Models.Extensions;
 using Finanse.Models.Helpers;
 
 namespace Finanse.DataAccessLayer {
@@ -97,7 +97,7 @@ namespace Finanse.DataAccessLayer {
                 var item = db.Query<SubCategory>("SELECT * FROM Categories WHERE GlobalId = ? AND IsDeleted = 0 LIMIT 1", globalId).FirstOrDefault();
 
                 if (item != null && string.IsNullOrEmpty(item.BossCategoryId))
-                    return item.AsCategory();
+                    return item.ToCategory();
                 return item;
             }
         }
@@ -109,7 +109,7 @@ namespace Finanse.DataAccessLayer {
                 var item = db.Query<SubCategory>("SELECT * FROM Categories WHERE GlobalId = ? AND IsDeleted = 0 LIMIT 1", globalId).FirstOrDefault();
 
                 if (item != null && string.IsNullOrEmpty(item.BossCategoryId))
-                    return item.AsCategory();
+                    return item.ToCategory();
                 return item;
           //  }
         }

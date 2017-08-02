@@ -3,6 +3,7 @@ using Finanse.Dialogs;
 using Finanse.Models.Categories;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -13,24 +14,60 @@ using Finanse.Models.Helpers;
 namespace Finanse.Pages {
     //TODO można zapychać bezsensownie sql przy zamianach z kategorii na podkategorie i w drugą stronę. 
     //TODO Trzeba sprawdzać, że gdy już w bazie istnieje element z takim GlobalId to tylko ma zaaktualizować
-    public sealed partial class CategoriesPage {
-        
+    public sealed partial class CategoriesPage : INotifyPropertyChanged {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void RaisePropertyChanged(string propertyName) {
+            var handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         private ObservableCollection<CategoryWithSubCategories> _expenseCategories;
-        private ObservableCollection<CategoryWithSubCategories> ExpenseCategories => _expenseCategories ??
-                                                                                     (_expenseCategories =
-                                                                                         new ObservableCollection<CategoryWithSubCategories>(
-                                                                                             CategoriesDal.GetCategoriesWithSubCategoriesInExpenses()));
+        private ObservableCollection<CategoryWithSubCategories> ExpenseCategories {
+            get => _expenseCategories;
+            set {
+                _expenseCategories = value;
+                RaisePropertyChanged(nameof(ExpenseCategories));
+            }
+        }
 
         private ObservableCollection<CategoryWithSubCategories> _incomeCategories;
-        private ObservableCollection<CategoryWithSubCategories> IncomeCategories => _incomeCategories ??
-                                                                                    (_incomeCategories =
-                                                                                        new ObservableCollection<CategoryWithSubCategories>(
-                                                                                            CategoriesDal.GetCategoriesWithSubCategoriesInIncomes()));
+        private ObservableCollection<CategoryWithSubCategories> IncomeCategories {
+            get => _incomeCategories;
+            set {
+                _incomeCategories = value;
+                RaisePropertyChanged(nameof(IncomeCategories));
+            }
+        }
 
-        
         public CategoriesPage() {
             InitializeComponent();
+            Loaded += CategoriesPage_Loaded;
+        }
+
+        private async void CategoriesPage_Loaded(object sender, RoutedEventArgs e) {
+            if (ExpenseCategories == null)
+                ExpensesProgressRingActivity(true);
+
+            if (IncomeCategories == null)
+                IncomesProgressRingActivity(true);
+
+            var expenses = await CategoriesDal.GetCategoriesWithSubCategoriesInExpenses();
+            ExpenseCategories = new ObservableCollection<CategoryWithSubCategories>(expenses);
+            ExpensesProgressRingActivity(false);
+
+            var incomes = await CategoriesDal.GetCategoriesWithSubCategoriesInIncomes();
+            IncomeCategories = new ObservableCollection<CategoryWithSubCategories>(incomes);
+            IncomesProgressRingActivity(false);
+        }
+
+        private void ExpensesProgressRingActivity(bool active) {
+            ExpensesProgressRing.IsActive = active;
+            ExpensesPivotProgressRing.IsActive = active;
+        }
+
+        private void IncomesProgressRingActivity(bool active) {
+            IncomesProgressRing.IsActive = active;
+            IncomesPivotProgressRing.IsActive = active;
         }
 
         private async void EditCategory_Click(object sender, RoutedEventArgs e) {
@@ -243,11 +280,15 @@ namespace Finanse.Pages {
         }
 
         private void TryRemoveCategoryInList(Category category) {
+            var expenseCategories =  ExpenseCategories;
+
             if (category.VisibleInExpenses)
-                ExpenseCategories.Remove(ExpenseCategories.FirstOrDefault(i => i.Category.Id == category.Id));
+                expenseCategories.Remove(expenseCategories.FirstOrDefault(i => i.Category.Id == category.Id));
+
+            var incomeCategories = IncomeCategories;
 
             if (category.VisibleInIncomes)
-                IncomeCategories.Remove(IncomeCategories.FirstOrDefault(i => i.Category.Id == category.Id));
+                incomeCategories.Remove(incomeCategories.FirstOrDefault(i => i.Category.Id == category.Id));
         }
 
         private void TryInsertCategoryWithSubCategoriesInList(int indexInExpenses, int indexInIncomes, CategoryWithSubCategories categoryWithSubCategories) {

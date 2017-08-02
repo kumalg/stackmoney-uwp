@@ -2,6 +2,8 @@
 using Finanse.Models;
 using Finanse.Models.MAccounts;
 using Finanse.Models.Operations;
+using SQLite.Net.Async;
+using SQLite.Net.Interop;
 
 namespace Finanse.DataAccessLayer {
     using Models.Categories;
@@ -26,6 +28,18 @@ namespace Finanse.DataAccessLayer {
         public static string DbPathLocalFromFileName(string fileName) => Path.Combine(ApplicationData.Current.LocalFolder.Path, fileName);
 
         protected static SQLiteConnection DbConnection => new SQLiteConnection(new SQLitePlatformWinRT(), DbPath);
+
+        public static SQLiteAsyncConnection GetConnection(string path, ISQLitePlatform sqlitePlatform) {
+            var connectionFactory = new Func<SQLiteConnectionWithLock>(() => new SQLiteConnectionWithLock(sqlitePlatform, new SQLiteConnectionString(path, storeDateTimeAsTicks: false)));
+            return new SQLiteAsyncConnection(connectionFactory);
+        }
+
+        public static SQLiteAsyncConnection DbAsyncConnection {
+            get {
+                var connectionFactory = new Func<SQLiteConnectionWithLock>(() => new SQLiteConnectionWithLock(new SQLitePlatformWinRT(), new SQLiteConnectionString(DbPath, storeDateTimeAsTicks: false)));
+                return new SQLiteAsyncConnection(connectionFactory);
+            }
+        }
 
         protected static SQLiteConnection DbConnectionFromPath(string path) => new SQLiteConnection(new SQLitePlatformWinRT(), path);
 

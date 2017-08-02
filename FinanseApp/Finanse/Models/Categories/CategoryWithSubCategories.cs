@@ -14,9 +14,7 @@ namespace Finanse.Models.Categories {
             if (!(o is CategoryWithSubCategories))
                 return false;
 
-            return
-                Category
-                .Equals(((CategoryWithSubCategories)o).Category);
+            return Category.Equals(((CategoryWithSubCategories)o).Category);
         }
     }
 }

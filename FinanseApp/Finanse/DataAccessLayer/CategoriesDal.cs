@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Finanse.Models.Categories;
 using SQLite.Net;
 using SQLite.Net.Platform.WinRT;
@@ -45,34 +46,33 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static IEnumerable<CategoryWithSubCategories> GetCategoriesWithSubCategoriesInExpenses()
-            => GetCategoriesWithSubCategories("VisibleInExpenses");
+        public static async Task<IEnumerable<CategoryWithSubCategories>> GetCategoriesWithSubCategoriesInExpenses()
+            => await GetCategoriesWithSubCategories("VisibleInExpenses");
 
-        public static IEnumerable<CategoryWithSubCategories> GetCategoriesWithSubCategoriesInIncomes()
-            => GetCategoriesWithSubCategories("VisibleInIncomes");
+        public static async Task<IEnumerable<CategoryWithSubCategories>> GetCategoriesWithSubCategoriesInIncomes()
+            => await GetCategoriesWithSubCategories("VisibleInIncomes");
 
-        private static IEnumerable<CategoryWithSubCategories> GetCategoriesWithSubCategories(string visibleIn) {
-            using (var db = DbConnection) {
-                db.TraceListener = new DebugTraceListener();
+        private static async Task<IEnumerable<CategoryWithSubCategories>> GetCategoriesWithSubCategories(string visibleIn) {
+            var db = DbAsyncConnection;
+            //db.TraceListener = new DebugTraceListener();
 
-                var subCategoriesGroups = from subCategory in db.Query<SubCategory>("SELECT * FROM Categories WHERE " + visibleIn + " AND IsDeleted = 0 AND BossCategoryId IS NOT NULL ORDER BY Name")
-                    group subCategory by subCategory.BossCategoryId into g
-                    select new {
-                        BossCategoryId = g.Key,
-                        subCategories = g.AsEnumerable()
-                    };
+            var subCategoriesGroups = from subCategory in await db.QueryAsync<SubCategory>("SELECT * FROM Categories WHERE " + visibleIn + " AND IsDeleted = 0 AND BossCategoryId IS NOT NULL ORDER BY Name")
+                group subCategory by subCategory.BossCategoryId into g
+                select new {
+                    BossCategoryId = g.Key,
+                    subCategories = g.AsEnumerable()
+                };
 
-                return from category in db.Query<Category>("SELECT * FROM Categories WHERE " + visibleIn + " AND IsDeleted = 0 AND BossCategoryId ISNULL ORDER BY Name")
-                    join subCategories in subCategoriesGroups on category.GlobalId equals subCategories.BossCategoryId into gj
-                    from secondSubCategories in gj.DefaultIfEmpty()
-                    select new CategoryWithSubCategories {
-                        Category = category,
-                        SubCategories =
-                            secondSubCategories == null
-                                ? new ObservableCollection<SubCategory>()
-                                : new ObservableCollection<SubCategory>(secondSubCategories.subCategories)
-                    };
-            }
+            return from category in await db.QueryAsync<Category>("SELECT * FROM Categories WHERE " + visibleIn + " AND IsDeleted = 0 AND BossCategoryId ISNULL ORDER BY Name")
+                join subCategories in subCategoriesGroups on category.GlobalId equals subCategories.BossCategoryId into gj
+                from secondSubCategories in gj.DefaultIfEmpty()
+                select new CategoryWithSubCategories {
+                    Category = category,
+                    SubCategories =
+                        secondSubCategories == null
+                            ? new ObservableCollection<SubCategory>()
+                            : new ObservableCollection<SubCategory>(secondSubCategories.subCategories)
+                };
         }
 
         public static IEnumerable<SubCategory> GetSubCategoriesByBossId(string globalId) {

@@ -103,6 +103,7 @@ namespace Finanse.Models.Operations {
 
 
         private void SetNewOperationsList() {
+            _allOperations?.Clear();
             AllOperations = SetOperations();
             OnPropertyChanged("OperationsByDay");
             OnPropertyChanged("OperationsByCategory");
@@ -138,6 +139,7 @@ namespace Finanse.Models.Operations {
                         Key = new GroupHeaderByDay(g.Key),
                     });
 
+                _operationsByDay?.Clear();
                 return _operationsByDay = new ObservableCollection<GroupInfoList<Operation>>(query);
             }
         }
@@ -244,6 +246,7 @@ namespace Finanse.Models.Operations {
                         Key = new GroupHeaderByCategory(g.Key),
                     }).OrderBy(i => ((GroupHeaderByCategory)i.Key).Category.Name);
 
+                _operationsByCategory?.Clear();
                 return _operationsByCategory = new ObservableCollection<GroupInfoList<Operation>>(query);
             }
         }

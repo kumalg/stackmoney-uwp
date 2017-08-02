@@ -219,31 +219,39 @@
                     <ScrollViewer
                         VerticalScrollMode="Enabled"
                         VerticalScrollBarVisibility="Auto">
-                        <ListView
-                            HorizontalContentAlignment="Right"
-                            VerticalContentAlignment="Top"
-                            VerticalAlignment="Top"
-                            FlowDirection="LeftToRight"
-                            Padding="0"
-                            ScrollViewer.VerticalScrollMode="Disabled"
-                            ItemsSource="{x:Bind ExpenseCategories, Mode=OneWay}"
-                            ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
-                            SelectionMode="None"
-                            MaxWidth="620"
-                            BorderThickness="0"
-                            Background="Transparent">
-                            <ListView.ItemContainerStyle>
-                                <Style
-                                    TargetType="ListViewItem">
-                                    <Setter
-                                        Property="HorizontalContentAlignment"
-                                        Value="Stretch" />
-                                    <Setter
-                                        Property="Padding"
-                                        Value="0" />
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
+                        <Grid>
+                            <ProgressRing
+                                Grid.RowSpan="2"
+                                VerticalAlignment="Top"
+                                IsActive="False"
+                                Name="ExpensesPivotProgressRing" />
+                            
+                            <ListView
+                                HorizontalContentAlignment="Right"
+                                VerticalContentAlignment="Top"
+                                VerticalAlignment="Top"
+                                FlowDirection="LeftToRight"
+                                Padding="0"
+                                ScrollViewer.VerticalScrollMode="Disabled"
+                                ItemsSource="{x:Bind ExpenseCategories, Mode=OneWay}"
+                                ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
+                                SelectionMode="None"
+                                MaxWidth="620"
+                                BorderThickness="0"
+                                Background="Transparent">
+                                <ListView.ItemContainerStyle>
+                                    <Style
+                                        TargetType="ListViewItem">
+                                        <Setter
+                                            Property="HorizontalContentAlignment"
+                                            Value="Stretch" />
+                                        <Setter
+                                            Property="Padding"
+                                            Value="0" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </Grid>
                     </ScrollViewer>
                 </PivotItem>
 
@@ -259,28 +267,36 @@
                     <ScrollViewer
                         VerticalScrollMode="Enabled"
                         VerticalScrollBarVisibility="Auto">
-                        <ListView
-                            HorizontalContentAlignment="Right"
-                            Padding="0"
-                            ScrollViewer.VerticalScrollMode="Disabled"
-                            ItemsSource="{x:Bind IncomeCategories, Mode=OneWay}"
-                            ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
-                            SelectionMode="None"
-                            MaxWidth="620"
-                            BorderThickness="0"
-                            Background="Transparent">
-                            <ListView.ItemContainerStyle>
-                                <Style
-                                    TargetType="ListViewItem">
-                                    <Setter
-                                        Property="HorizontalContentAlignment"
-                                        Value="Stretch" />
-                                    <Setter
-                                        Property="Padding"
-                                        Value="0" />
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
+                        <Grid>
+                            <ProgressRing
+                                Grid.RowSpan="2"
+                                VerticalAlignment="Top"
+                                IsActive="False"
+                                Name="IncomesPivotProgressRing" />
+
+                            <ListView
+                                HorizontalContentAlignment="Right"
+                                Padding="0"
+                                ScrollViewer.VerticalScrollMode="Disabled"
+                                ItemsSource="{x:Bind IncomeCategories, Mode=OneWay}"
+                                ItemTemplate="{StaticResource CategoryWithSubCategoriesItemTemplate}"
+                                SelectionMode="None"
+                                MaxWidth="620"
+                                BorderThickness="0"
+                                Background="Transparent">
+                                <ListView.ItemContainerStyle>
+                                    <Style
+                                        TargetType="ListViewItem">
+                                        <Setter
+                                            Property="HorizontalContentAlignment"
+                                            Value="Stretch" />
+                                        <Setter
+                                            Property="Padding"
+                                            Value="0" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </Grid>
                     </ScrollViewer>
                 </PivotItem>
             </Pivot>
@@ -300,6 +316,19 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition />
                     </Grid.RowDefinitions>
+
+                    <ProgressRing
+                        Grid.RowSpan="2"
+                        VerticalAlignment="Top"
+                        IsActive="False"
+                        Name="ExpensesProgressRing" />
+
+                    <ProgressRing
+                        Grid.RowSpan="2"
+                        Grid.Column="1"
+                        VerticalAlignment="Top"
+                        IsActive="False"
+                        Name="IncomesProgressRing" />
 
                     <TextBlock
                         Margin="16"

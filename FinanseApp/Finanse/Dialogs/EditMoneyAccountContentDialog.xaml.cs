@@ -41,7 +41,7 @@ namespace Finanse.Dialogs {
             set {
                 _selectedColor = value;
                 EditedAccount.ColorKey = ColorKey;
-                RaisePropertyChanged("PrimaryButtonEnabling");
+                RaisePropertyChanged(nameof(PrimaryButtonEnabling));
             }
         }
 
@@ -68,7 +68,7 @@ namespace Finanse.Dialogs {
                     if (EditedAccount is SubMAccount)
                         ((SubMAccount)EditedAccount).BossAccountGlobalId = _selectedBankAccount.GlobalId;
                 }
-                RaisePropertyChanged("PrimaryButtonEnabling");
+                RaisePropertyChanged(nameof(PrimaryButtonEnabling));
             }
         }
 
@@ -105,7 +105,7 @@ namespace Finanse.Dialogs {
         
         private void NameValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
             EditedAccount.Name = sender.Text;
-            RaisePropertyChanged("PrimaryButtonEnabling");
+            RaisePropertyChanged(nameof(PrimaryButtonEnabling));
             NameValue.Foreground = NameValueForeground;
         }
     }

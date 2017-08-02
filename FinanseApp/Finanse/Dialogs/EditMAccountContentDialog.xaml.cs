@@ -37,8 +37,8 @@ namespace Finanse.Dialogs {
             }
             set {
                 _selectedColor = value;
-                RaisePropertyChanged("Color");
-                RaisePropertyChanged("PrimaryButtonEnabling");
+                //RaisePropertyChanged(nameof(Color));
+                RaisePropertyChanged(nameof(PrimaryButtonEnabling));
             }
         }
 
@@ -52,7 +52,7 @@ namespace Finanse.Dialogs {
                 }
                 else
                     _selectedBankAccount = value;
-                RaisePropertyChanged("PrimaryButtonEnabling");
+                RaisePropertyChanged(nameof(PrimaryButtonEnabling));
             }
         }
 
@@ -116,7 +116,7 @@ namespace Finanse.Dialogs {
             : (SolidColorBrush)Application.Current.Resources["Text"];
 
         private void NameValue_OnTextChanged(object sender, TextChangedEventArgs e) {
-            RaisePropertyChanged("PrimaryButtonEnabling");
+            RaisePropertyChanged(nameof(PrimaryButtonEnabling));
             NameValue.Foreground = NameValueForeground;
         }
     }

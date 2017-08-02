@@ -40,7 +40,7 @@ namespace Finanse.Dialogs {
             }
             set {
                 _selectedColor = value;
-                RaisePropertyChanged("Color");
+                RaisePropertyChanged(nameof(Color));
             }
         }
 
@@ -64,18 +64,16 @@ namespace Finanse.Dialogs {
             }
             set {
                 _selectedIcon = value;
-                RaisePropertyChanged("Icon");
+                RaisePropertyChanged(nameof(Icon));
             }
         }
 
         private string _bossCategoryGlobalId = string.Empty;
         private string BossCategoryGlobalId {
-            get {
-                return _bossCategoryGlobalId;
-            }
+            get => _bossCategoryGlobalId;
             set {
                 _bossCategoryGlobalId = value;
-                RaisePropertyChanged("BossCategoryId");
+                RaisePropertyChanged(nameof(BossCategoryGlobalId));
             }
         }
 

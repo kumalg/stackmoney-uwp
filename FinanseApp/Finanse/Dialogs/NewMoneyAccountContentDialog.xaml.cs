@@ -50,7 +50,7 @@ namespace Finanse.Dialogs {
             }
             set {
                 _selectedColor = value;
-                RaisePropertyChanged("Color");
+                RaisePropertyChanged(nameof(Color));
             }
         }
 
@@ -147,7 +147,7 @@ namespace Finanse.Dialogs {
         private void CostValue_TextChanged(object sender, TextChangedEventArgs e) { }
 
         private void NameValue_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args) {
-            RaisePropertyChanged("PrimaryButtonEnabling");
+            RaisePropertyChanged(nameof(PrimaryButtonEnabling));
             NameValue.Foreground = NameValueForeground;
         }
 
@@ -155,10 +155,10 @@ namespace Finanse.Dialogs {
             ? (SolidColorBrush)Application.Current.Resources["RedColorStyle"]
             : (SolidColorBrush)Application.Current.Resources["Text"];
 
-        private void AccountTypeRadioButton_Click(object sender, RoutedEventArgs e) {
-            RaisePropertyChanged("BankAccountsComboBoxVisibility");
-            RaisePropertyChanged("PrimaryButtonEnabling");
-        }
+        //private void AccountTypeRadioButton_Click(object sender, RoutedEventArgs e) {
+        //    RaisePropertyChanged(nameof(BankAccountsComboBoxVisibility));
+        //    RaisePropertyChanged(nameof(PrimaryButtonEnabling));
+        //}
 
         private void ContentDialog_Loaded(object sender, RoutedEventArgs e) {
             if (BankAccountsComboBox.Items.Count > 0)

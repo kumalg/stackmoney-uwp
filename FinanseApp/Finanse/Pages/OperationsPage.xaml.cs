@@ -49,8 +49,8 @@ namespace Finanse.Pages {
             DateTime dateTimeWithDays = (DateTime)e.Parameter;
             _storeData.SetMonth(dateTimeWithDays);
             _storeData.ForceUpdate();
-            RaisePropertyChanged("OperationGroups");
-            RaisePropertyChanged("ListOfMoneyAccounts");
+            RaisePropertyChanged(nameof(OperationGroups));
+            RaisePropertyChanged(nameof(ListOfMoneyAccounts));
             
             SetPrevNextIncomingButtons();
 
@@ -111,8 +111,8 @@ namespace Finanse.Pages {
                 _listOfMoneyAccounts = MAccountsDal.ListOfMoneyAccountBalances(_storeData.ActualMonth)
                            .Where(i => _storeData.VisiblePayFormList.Any(ac => ac == i.Account.GlobalId))
                            .ToList();
-                RaisePropertyChanged("InitialSum");
-                RaisePropertyChanged("FinalSum");
+                RaisePropertyChanged(nameof(InitialSum));
+                RaisePropertyChanged(nameof(FinalSum));
                 return _listOfMoneyAccounts;
             }
         }
@@ -173,7 +173,7 @@ namespace Finanse.Pages {
                 return;
 
             UpdateOperationInList(operation, editOperationContentDialog.EditedOperation());
-            RaisePropertyChanged("ListOfMoneyAccounts");
+            RaisePropertyChanged(nameof(ListOfMoneyAccounts));
         }
         
         private async void ShowDeleteOperationContentDialog(Operation operation) {
@@ -185,7 +185,7 @@ namespace Finanse.Pages {
                 return;
 
             DeleteOperation_DialogButtonClick(operation);
-            RaisePropertyChanged("ListOfMoneyAccounts");
+            RaisePropertyChanged(nameof(ListOfMoneyAccounts));
         }
 
 
@@ -263,9 +263,9 @@ namespace Finanse.Pages {
 
         private void SetListOfOperations() {
             
-            RaisePropertyChanged("OperationGroups");
-            RaisePropertyChanged("ZoomedOut_ItemsSource");
-            RaisePropertyChanged("ListOfMoneyAccounts");
+            RaisePropertyChanged(nameof(OperationGroups));
+            RaisePropertyChanged(nameof(ZoomedOut_ItemsSource));
+            RaisePropertyChanged(nameof(ListOfMoneyAccounts));
             
             SetEmptyListViewInfoVisibility();
             SetPrevNextIncomingButtons();
@@ -316,11 +316,11 @@ namespace Finanse.Pages {
             OperacjeListView.GroupStyle.Clear();
             OperacjeListView.GroupStyle.Add(ByDateGroupStyle);
 
-            RaisePropertyChanged("GroupStyle");
-            RaisePropertyChanged("ZoomedOut_ItemsSource");
-            RaisePropertyChanged("ZoomedOut_ItemsPanel");
-            RaisePropertyChanged("ZoomedOut_ItemTemplate");
-            RaisePropertyChanged("ZoomedOut_ItemTemplateSelector");
+            RaisePropertyChanged(nameof(GroupStyle));
+            RaisePropertyChanged(nameof(ZoomedOut_ItemsSource));
+            RaisePropertyChanged(nameof(ZoomedOut_ItemsPanel));
+            RaisePropertyChanged(nameof(ZoomedOut_ItemTemplate));
+            RaisePropertyChanged(nameof(ZoomedOut_ItemTemplateSelector));
             
             SemanticZoom.ViewChangeStarted -= SemanticZoom_ViewChangeStarted;
             SemanticZoom.ViewChangeStarted += SemanticZoom_ViewChangeStarted;
@@ -330,11 +330,11 @@ namespace Finanse.Pages {
             OperacjeListView.GroupStyle.Clear();
             OperacjeListView.GroupStyle.Add(ByCategoryGroupStyle);
 
-            RaisePropertyChanged("GroupStyle");
-            RaisePropertyChanged("ZoomedOut_ItemsSource");
-            RaisePropertyChanged("ZoomedOut_ItemsPanel");
-            RaisePropertyChanged("ZoomedOut_ItemTemplate");
-            RaisePropertyChanged("ZoomedOut_ItemTemplateSelector");
+            RaisePropertyChanged(nameof(GroupStyle));
+            RaisePropertyChanged(nameof(ZoomedOut_ItemsSource));
+            RaisePropertyChanged(nameof(ZoomedOut_ItemsPanel));
+            RaisePropertyChanged(nameof(ZoomedOut_ItemTemplate));
+            RaisePropertyChanged(nameof(ZoomedOut_ItemTemplateSelector));
         }
 
         private object ZoomedOut_ItemsSource => (bool)ByDateRadioButton.IsChecked ? _storeData.OperationHeaders : ContactsCVS.View.CollectionGroups as object;
@@ -351,7 +351,7 @@ namespace Finanse.Pages {
             ActivateProgressRing();
             await Task.Delay(1);
 
-            RaisePropertyChanged("OperationGroups");
+            RaisePropertyChanged(nameof(OperationGroups));
             ListViewByCategory();
 
             DeactivateProgressRing();
@@ -361,7 +361,7 @@ namespace Finanse.Pages {
             ActivateProgressRing();
             await Task.Delay(1);
             
-            RaisePropertyChanged("OperationGroups");
+            RaisePropertyChanged(nameof(OperationGroups));
             ListViewByDate();
 
             DeactivateProgressRing();

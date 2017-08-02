@@ -24,7 +24,7 @@ namespace Finanse.Pages {
             get => _incomesPercentageText;
             set {
                 _incomesPercentageText = value;
-                RaisePropertyChanged("IncomesPercentageText");
+                RaisePropertyChanged(nameof(IncomesPercentageText));
             }
         }
 
@@ -33,7 +33,7 @@ namespace Finanse.Pages {
             get => _dateRangeText;
             set {
                 _dateRangeText = value;
-                RaisePropertyChanged("DateRangeText");
+                RaisePropertyChanged(nameof(DateRangeText));
             }
         }
 
@@ -42,7 +42,7 @@ namespace Finanse.Pages {
             get => _expensesValue;
             set {
                 _expensesValue = value;
-                RaisePropertyChanged("ExpensesValue");
+                RaisePropertyChanged(nameof(ExpensesValue));
             }
         }
 
@@ -51,7 +51,7 @@ namespace Finanse.Pages {
             get => _incomesValue;
             set {
                 _incomesValue = value;
-                RaisePropertyChanged("IncomesValue");
+                RaisePropertyChanged(nameof(IncomesValue));
             }
         }
 
@@ -60,7 +60,7 @@ namespace Finanse.Pages {
             get => _expensesToIncomes;
             set {
                 _expensesToIncomes = value;
-                RaisePropertyChanged("ExpensesToIncomes");
+                RaisePropertyChanged(nameof(ExpensesToIncomes));
             }
         }
 
@@ -93,7 +93,7 @@ namespace Finanse.Pages {
             get => _lineChartTest;
             set {
                 _lineChartTest = value;
-                RaisePropertyChanged("LineChartTest");
+                RaisePropertyChanged(nameof(LineChartTest));
             }
         }
 /*
@@ -178,11 +178,11 @@ namespace Finanse.Pages {
 
                 ExpensesByCategory = _statisticsData.GetExpensesGroupedByCategoryInRange();
                 IncomesByCategory = _statisticsData.GetIncomesGroupedByCategoryInRange();
-                RaisePropertyChanged("OperationsByCategory");
+                RaisePropertyChanged(nameof(OperationsByCategory));
 
                 ExpensesFromCategoryGroupedBySubCategory = _statisticsData.GetExpensesFromCategoryGroupedBySubCategoryInRange();
                 IncomesFromCategoryGroupedBySubCategory = _statisticsData.GetIncomesFromCategoryGroupedBySubCategoryInRange();
-                RaisePropertyChanged("CategoriesGroupedBySubCategories");
+                RaisePropertyChanged(nameof(CategoriesGroupedBySubCategories));
            // }
 
             /*
@@ -196,15 +196,15 @@ namespace Finanse.Pages {
 
         private async void ExpensesRadioButton_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
             await Task.Delay(5);
-            RaisePropertyChanged("OperationsByCategory");
-            RaisePropertyChanged("CategoriesGroupedBySubCategories");
+            RaisePropertyChanged(nameof(OperationsByCategory));
+            RaisePropertyChanged(nameof(CategoriesGroupedBySubCategories));
             //   CategoriesGroupedBySubCategories = statisticsData.GetExpensesFromCategoryGroupedBySubCategoryInRange();
         }
 
         private async void IncomeRadioButton_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
             await Task.Delay(5);
-            RaisePropertyChanged("OperationsByCategory");
-            RaisePropertyChanged("CategoriesGroupedBySubCategories");
+            RaisePropertyChanged(nameof(OperationsByCategory));
+            RaisePropertyChanged(nameof(CategoriesGroupedBySubCategories));
             //   CategoriesGroupedBySubCategories = statisticsData.GetIncomesFromCategoryGroupedBySubCategoryInRange();
         }
     }

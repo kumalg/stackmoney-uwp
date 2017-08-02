@@ -32,7 +32,7 @@ namespace Finanse.Pages {
             get { return _accounts; }
             set {
                 _accounts = value;
-                RaisePropertyChanged("Accounts");
+                RaisePropertyChanged(nameof(Accounts));
             }
         }
 

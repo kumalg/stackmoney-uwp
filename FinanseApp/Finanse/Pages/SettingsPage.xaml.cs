@@ -37,7 +37,7 @@ namespace Finanse.Pages {
             LastBackup = date == DateTime.MinValue
                 ? "Brak"
                 : date.ToLocalTime().ToString();
-            RaisePropertyChanged("LastBackup");
+            RaisePropertyChanged(nameof(LastBackup));
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {

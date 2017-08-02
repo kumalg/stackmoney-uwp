@@ -137,7 +137,7 @@ namespace Finanse.Dialogs {
                 //CategoryId = GetCategoryId,
                 //SubCategoryId = GetSubCategoryId,
                 MoreInfo = MoreInfoValue.Text,
-                MoneyAccountId = ((MAccount)PayFormValue.SelectedItem).GlobalId,
+                MoneyAccountId = ((MAccount)PayFormValue.SelectedItem)?.GlobalId,
             };
         }
 
@@ -148,11 +148,11 @@ namespace Finanse.Dialogs {
         }
 
         private string GetCategoryId => CategoryValue.SelectedIndex != -1
-            ? ((ComboBoxItem) CategoryValue.SelectedItem).Tag.ToString()
+            ? ((ComboBoxItem) CategoryValue.SelectedItem)?.Tag.ToString()
             : string.Empty;
 
         private string GetSubCategoryId => SubCategoryValue.SelectedIndex != -1
-            ? (string)((ComboBoxItem)SubCategoryValue.SelectedItem).Tag
+            ? (string)((ComboBoxItem)SubCategoryValue.SelectedItem)?.Tag
             : string.Empty;
 
         private void NowaOperacja_DodajClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
@@ -164,7 +164,7 @@ namespace Finanse.Dialogs {
         }
 
         private void TypeOfOperationRadioButton_Checked(object sender, RoutedEventArgs e) {
-            RaisePropertyChanged("AccountsComboBox");
+            RaisePropertyChanged(nameof(AccountsComboBox));
 
             if (CategoryValue.SelectedIndex != -1) {
                 string idOfSelectedCategory = ((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString();

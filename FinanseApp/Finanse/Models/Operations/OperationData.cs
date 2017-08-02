@@ -24,8 +24,8 @@ namespace Finanse.Models.Operations {
             get => _actualMonth;
             private set {
                 _actualMonth = value;
-                OnPropertyChanged("ActualMonthText");
-                OnPropertyChanged("ActualOperationsSum");
+                OnPropertyChanged(nameof(ActualMonthText));
+                OnPropertyChanged(nameof(ActualOperationsSum));
                 SetNewOperationsList();
             }
         }
@@ -105,9 +105,9 @@ namespace Finanse.Models.Operations {
         private void SetNewOperationsList() {
             _allOperations?.Clear();
             AllOperations = SetOperations();
-            OnPropertyChanged("OperationsByDay");
-            OnPropertyChanged("OperationsByCategory");
-            OnPropertyChanged("ActualOperationsSum");
+            OnPropertyChanged(nameof(OperationsByDay));
+            OnPropertyChanged(nameof(OperationsByCategory));
+            OnPropertyChanged(nameof(ActualOperationsSum));
         }
 
 
@@ -172,7 +172,7 @@ namespace Finanse.Models.Operations {
                 }
             }
 
-            OnPropertyChanged("ActualOperationsSum");
+            OnPropertyChanged(nameof(ActualOperationsSum));
         }
 
 
@@ -224,7 +224,7 @@ namespace Finanse.Models.Operations {
                 }
             }
 
-            OnPropertyChanged("ActualOperationsSum");
+            OnPropertyChanged(nameof(ActualOperationsSum));
         }
 
 

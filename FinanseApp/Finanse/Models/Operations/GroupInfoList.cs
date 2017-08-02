@@ -16,13 +16,13 @@ namespace Finanse.Models.Operations {
         
         public GroupInfoList() {
             CollectionChanged += delegate {
-                OnPropertyChanged("Cost");
+                OnPropertyChanged(nameof(Cost));
             };
         }
 
         public GroupInfoList(IEnumerable<Operation> operations) : base(operations) {
             CollectionChanged += delegate {
-                OnPropertyChanged("Cost");
+                OnPropertyChanged(nameof(Cost));
             };
         }
 

@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -29,7 +30,7 @@ namespace Finanse.Pages {
 
         private IEnumerable<MAccount> _accounts;
         private IEnumerable<MAccount> Accounts {
-            get { return _accounts; }
+            get => _accounts;
             set {
                 _accounts = value;
                 RaisePropertyChanged(nameof(Accounts));
@@ -149,11 +150,11 @@ namespace Finanse.Pages {
             }
         }
 
-        private void SetCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
+        private async void SetCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
 
             CategoryValue.Items?.Clear();
 
-            foreach (Category catItem in CategoriesDal.GetAllCategories()) {
+            foreach (Category catItem in await CategoriesDal.GetAllCategoriesAsync()) {
 
                 if ((catItem.VisibleInExpenses && inExpenses)
                     || (catItem.VisibleInIncomes && inIncomes)) {
@@ -166,14 +167,14 @@ namespace Finanse.Pages {
             }
         }
 
-        private void SetSubCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
+        private async Task SetSubCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
 
             SubCategoryValue.Items?.Clear();
 
             if (CategoryValue.SelectedIndex == -1)
                 return;
 
-            foreach (var subCatItem in CategoriesDal.GetSubCategoriesByBossId(((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString())) {
+            foreach (var subCatItem in await CategoriesDal.GetSubCategoriesByBossIdAsync(((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString())) {
                 if ((!subCatItem.VisibleInExpenses || !inExpenses) && (!subCatItem.VisibleInIncomes || !inIncomes))
                     continue;
 
@@ -191,8 +192,8 @@ namespace Finanse.Pages {
             SubCategoryValue.IsEnabled = SubCategoryValue.Items.Count != 0;
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            SetSubCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
+        private async void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            await SetSubCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
         }
         
         private void SubCategoryValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {

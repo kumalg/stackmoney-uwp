@@ -7,6 +7,7 @@ using SQLite.Net;
 using SQLite.Net.Platform.WinRT;
 using Finanse.Models.Extensions;
 using Finanse.Models.Helpers;
+using SQLite.Net.Async;
 
 namespace Finanse.DataAccessLayer {
     public class CategoriesDal : DalBase {
@@ -24,9 +25,18 @@ namespace Finanse.DataAccessLayer {
                                                                                         "`GlobalId` varchar )";
 
         public static IEnumerable<Category> GetAllCategories() {
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
+            using (var db = DbConnection) {
                 db.TraceListener = new DebugTraceListener();
                 return db.Query<Category>("SELECT * FROM Categories WHERE BossCategoryId ISNULL AND IsDeleted = 0").OrderBy(i => i.Name);
+            }
+        }
+
+        public static async Task<IEnumerable<Category>> GetAllCategoriesAsync() {
+            using (var connection = DbConnectionWithLock) {
+                connection.TraceListener = new DebugTraceListener();
+                var asyncConnection = new SQLiteAsyncConnection(() => connection);
+
+                return (await asyncConnection.QueryAsync<Category>("SELECT * FROM Categories WHERE BossCategoryId ISNULL AND IsDeleted = 0")).OrderBy(i => i.Name);
             }
         }
 
@@ -37,48 +47,59 @@ namespace Finanse.DataAccessLayer {
             }
         }
 
-        public static IEnumerable<Category> GetAllCategoriesAndSubCategories() {
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                db.TraceListener = new DebugTraceListener();
-                var accounts = db.Query<Category>("SELECT * FROM Categories WHERE BossCategoryId ISNULL AND IsDeleted = 0");
-                accounts.AddRange(db.Query<SubCategory>("SELECT * FROM Categories WHERE BossCategoryId IS NOT NULL AND IsDeleted = 0"));
+        public static async Task<IEnumerable<Category>> GetAllCategoriesAndSubCategoriesAsync() {
+            using (var connection = DbConnectionWithLock) {
+                connection.TraceListener = new DebugTraceListener();
+                var asyncConnection = new SQLiteAsyncConnection(() => connection);
+
+                var accounts = await asyncConnection.QueryAsync<Category>("SELECT * FROM Categories WHERE BossCategoryId ISNULL AND IsDeleted = 0");
+                accounts.AddRange(await asyncConnection.QueryAsync<SubCategory>("SELECT * FROM Categories WHERE BossCategoryId IS NOT NULL AND IsDeleted = 0"));
                 return accounts.OrderBy(i => i.Name);
             }
         }
 
-        public static async Task<IEnumerable<CategoryWithSubCategories>> GetCategoriesWithSubCategoriesInExpenses()
-            => await GetCategoriesWithSubCategories("VisibleInExpenses");
+        public static async Task<IEnumerable<CategoryWithSubCategories>> GetCategoriesWithSubCategoriesInExpensesAsync()
+            => await GetCategoriesWithSubCategoriesAsync("VisibleInExpenses");
 
-        public static async Task<IEnumerable<CategoryWithSubCategories>> GetCategoriesWithSubCategoriesInIncomes()
-            => await GetCategoriesWithSubCategories("VisibleInIncomes");
+        public static async Task<IEnumerable<CategoryWithSubCategories>> GetCategoriesWithSubCategoriesInIncomesAsync()
+            => await GetCategoriesWithSubCategoriesAsync("VisibleInIncomes");
 
-        private static async Task<IEnumerable<CategoryWithSubCategories>> GetCategoriesWithSubCategories(string visibleIn) {
-            var db = DbAsyncConnection;
-            //db.TraceListener = new DebugTraceListener();
+        private static async Task<IEnumerable<CategoryWithSubCategories>> GetCategoriesWithSubCategoriesAsync(string visibleIn) {
+            using (var connection = DbConnectionWithLock) {
+                connection.TraceListener = new DebugTraceListener();
+                var asyncConnection = new SQLiteAsyncConnection(() => connection);
 
-            var subCategoriesGroups = from subCategory in await db.QueryAsync<SubCategory>("SELECT * FROM Categories WHERE " + visibleIn + " AND IsDeleted = 0 AND BossCategoryId IS NOT NULL ORDER BY Name")
-                group subCategory by subCategory.BossCategoryId into g
-                select new {
-                    BossCategoryId = g.Key,
-                    subCategories = g.AsEnumerable()
-                };
+                var subCategoriesGroups = from subCategory in await asyncConnection.QueryAsync<SubCategory>(
+                        "SELECT * FROM Categories WHERE " + visibleIn +
+                        " AND IsDeleted = 0 AND BossCategoryId IS NOT NULL ORDER BY Name")
+                    group subCategory by subCategory.BossCategoryId
+                    into g
+                    select new {
+                        BossCategoryId = g.Key,
+                        subCategories = g.AsEnumerable()
+                    };
 
-            return from category in await db.QueryAsync<Category>("SELECT * FROM Categories WHERE " + visibleIn + " AND IsDeleted = 0 AND BossCategoryId ISNULL ORDER BY Name")
-                join subCategories in subCategoriesGroups on category.GlobalId equals subCategories.BossCategoryId into gj
-                from secondSubCategories in gj.DefaultIfEmpty()
-                select new CategoryWithSubCategories {
-                    Category = category,
-                    SubCategories =
-                        secondSubCategories == null
-                            ? new ObservableCollection<SubCategory>()
-                            : new ObservableCollection<SubCategory>(secondSubCategories.subCategories)
-                };
+                return from category in await asyncConnection.QueryAsync<Category>(
+                        "SELECT * FROM Categories WHERE " + visibleIn +
+                        " AND IsDeleted = 0 AND BossCategoryId ISNULL ORDER BY Name")
+                    join subCategories in subCategoriesGroups on category.GlobalId equals subCategories
+                        .BossCategoryId into gj
+                    from secondSubCategories in gj.DefaultIfEmpty()
+                    select new CategoryWithSubCategories {
+                        Category = category,
+                        SubCategories =
+                            secondSubCategories == null
+                                ? new ObservableCollection<SubCategory>()
+                                : new ObservableCollection<SubCategory>(secondSubCategories.subCategories)
+                    };
+            }
         }
 
-        public static IEnumerable<SubCategory> GetSubCategoriesByBossId(string globalId) {
-            using (var db = DbConnection) {
-                db.TraceListener = new DebugTraceListener();
-                return db.Query<SubCategory>("SELECT * FROM Categories WHERE BossCategoryId == ? AND IsDeleted = 0 ORDER BY Name", globalId);
+        public static async Task<IEnumerable<SubCategory>> GetSubCategoriesByBossIdAsync(string globalId) {
+            using (var connection = DbConnectionWithLock) {
+                connection.TraceListener = new DebugTraceListener();
+                var asyncConnection = new SQLiteAsyncConnection(() => connection);
+                return await asyncConnection.QueryAsync<SubCategory>("SELECT * FROM Categories WHERE BossCategoryId == ? AND IsDeleted = 0 ORDER BY Name", globalId);
             }
         }
 
@@ -87,6 +108,14 @@ namespace Finanse.DataAccessLayer {
         public static Category GetDefaultCategory() {
             using (var db = DbConnection) {
                 return db.Query<Category>("SELECT * FROM Categories WHERE CantDelete LIMIT 1").FirstOrDefault();
+            }
+        }
+
+        public static async Task<Category> GetDefaultCategoryAsync() {
+            using (var connection = DbConnectionWithLock) {
+                connection.TraceListener = new DebugTraceListener();
+                var asyncConnection = new SQLiteAsyncConnection(() => connection);
+                return (await asyncConnection.QueryAsync<Category>("SELECT * FROM Categories WHERE CantDelete LIMIT 1")).FirstOrDefault();
             }
         }
 
@@ -157,10 +186,11 @@ namespace Finanse.DataAccessLayer {
                     ((SubCategory)category).BossCategoryId = parameters[9] as string;
             }
         }
-        
-        public static void UpdateCategory(Category category) {
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath)) {
-                db.TraceListener = new DebugTraceListener();
+
+        public static async Task UpdateCategoryAsync(Category category) {
+            using (var connection = DbConnectionWithLock) {
+                connection.TraceListener = new DebugTraceListener();
+                var asyncConnection = new SQLiteAsyncConnection(() => connection);
 
                 object[] parameters = {
                     category.Name,
@@ -169,15 +199,15 @@ namespace Finanse.DataAccessLayer {
                     category.ColorKey,
                     category.IconKey,
                     DateTimeHelper.DateTimeUtcNowString,
-                    ( category as SubCategory )?.BossCategoryId,
+                    (category as SubCategory)?.BossCategoryId,
                     category.CantDelete,
                     category.IsDeleted,
                     category.GlobalId
                 };
 
-                db.Execute(
+                await asyncConnection.ExecuteAsync(
                     "UPDATE Categories SET Name = ?, VisibleInIncomes = ?, VisibleInExpenses = ?, ColorKey = ?, IconKey = ?, LastModifed = ?, BossCategoryId = ?, CantDelete = ?, IsDeleted = ? WHERE GlobalId = ?"
-                        , parameters);
+                    , parameters);
             }
         }
 

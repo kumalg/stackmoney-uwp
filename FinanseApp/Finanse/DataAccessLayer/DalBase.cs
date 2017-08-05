@@ -29,7 +29,10 @@ namespace Finanse.DataAccessLayer {
 
         protected static SQLiteConnection DbConnection => new SQLiteConnection(new SQLitePlatformWinRT(), DbPath);
 
-        public static SQLiteAsyncConnection GetConnection(string path, ISQLitePlatform sqlitePlatform) {
+        protected static SQLiteConnectionWithLock DbConnectionWithLock => new SQLiteConnectionWithLock(
+            new SQLitePlatformWinRT(), new SQLiteConnectionString(DbPath, false));
+
+        public static SQLiteAsyncConnection GetAsyncConnection(string path, ISQLitePlatform sqlitePlatform) {
             var connectionFactory = new Func<SQLiteConnectionWithLock>(() => new SQLiteConnectionWithLock(sqlitePlatform, new SQLiteConnectionString(path, storeDateTimeAsTicks: false)));
             return new SQLiteAsyncConnection(connectionFactory);
         }

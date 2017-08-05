@@ -1,4 +1,5 @@
-﻿using Finanse.DataAccessLayer;
+﻿using System;
+using Finanse.DataAccessLayer;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace Finanse.Dialogs {
 
         private List<KeyValuePair<object, object>> _colorBase;
         private List<KeyValuePair<object, object>> ColorBase => _colorBase ??
-                                                                (_colorBase = ((ResourceDictionary) Application.Current.Resources["ColorBase"]).ToList());
+                                                                (_colorBase = ((ResourceDictionary)Application.Current.Resources["ColorBase"]).ToList());
 
         private SolidColorBrush Color => (SolidColorBrush)SelectedColor.Value;
 
@@ -47,7 +48,7 @@ namespace Finanse.Dialogs {
 
         private List<KeyValuePair<object, object>> _iconBase;
         private List<KeyValuePair<object, object>> IconBase => _iconBase ??
-                                                               (_iconBase = ((ResourceDictionary) Application.Current.Resources["IconBase"]).ToList());
+                                                               (_iconBase = ((ResourceDictionary)Application.Current.Resources["IconBase"]).ToList());
 
         private FontIcon Icon => (FontIcon)SelectedIcon.Value;
 
@@ -77,7 +78,15 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private readonly IEnumerable<Category> Categories = CategoriesDal.GetAllCategories();//.Where(i => i.GlobalId != _bossCategoryGlobalId && i.GlobalId != _editedCategoryItem.GlobalId);
+        private IEnumerable<Category> _categories = new Category[0];
+        private IEnumerable<Category> Categories {
+            get => _categories;
+            set {
+                _categories = value;
+                RaisePropertyChanged(nameof(Categories));
+                RaisePropertyChanged(nameof(CategoriesInComboBox));
+            }
+        }// = CategoriesDal.GetAllCategories();//.Where(i => i.GlobalId != _bossCategoryGlobalId && i.GlobalId != _editedCategoryItem.GlobalId);
 
         public Category NewCategoryItem { get; private set; } = new Category();
 
@@ -87,21 +96,15 @@ namespace Finanse.Dialogs {
         private List<ComboBoxItem> _categoriesInComboBox;
         private List<ComboBoxItem> CategoriesInComboBox {
             get {
-                if (_categoriesInComboBox != null)
+                if (_categoriesInComboBox?.Count() > 1)
                     return _categoriesInComboBox;
 
-                _categoriesInComboBox = new List<ComboBoxItem>();
-                _categoriesInComboBox.Add(new ComboBoxItem {
+                var brak = new ComboBoxItem {
                     Content = "Brak",
                     Tag = -1,
-                });
-
-                foreach (var categories_ComboBox in Categories) {
-                    _categoriesInComboBox.Add(new ComboBoxItem {
-                        Content = categories_ComboBox.Name,
-                        Tag = categories_ComboBox.GlobalId
-                    });
-                }
+                };
+                _categoriesInComboBox = Categories.Select(c => new ComboBoxItem { Content = c.Name, Tag = c.GlobalId }).ToList();
+                _categoriesInComboBox.Insert(0, brak);
 
                 return _categoriesInComboBox;
             }
@@ -111,6 +114,8 @@ namespace Finanse.Dialogs {
 
         public NewCategoryContentDialog(Category editedCategoryItem) {
             InitializeComponent();
+            Loaded += OnLoadedEditCat;
+
             _editedCategoryItem = editedCategoryItem.Clone();
             _editedCategoryAlwaysAsSubCategory = new SubCategory(editedCategoryItem);
             Title = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("editCategoryString");
@@ -131,13 +136,26 @@ namespace Finanse.Dialogs {
                 VisibleInExpensesToggleButton.IsEnabled = false;
                 VisibleInIncomesToggleButton.IsEnabled = false;
             }*/
+            
+        }
 
-            Categories = Categories.Where(i => i.GlobalId != editedCategoryItem.GlobalId);
+        private async void OnLoadedAddSubCat(object sender, RoutedEventArgs routedEventArgs) {
+            Categories = await CategoriesDal.GetAllCategoriesAsync();
+            SelectedCategory = CategoriesInComboBox.FirstOrDefault(i => i.Tag.ToString() == BossCategoryGlobalId);
+        }
+
+        private async void OnLoadedEditCat(object sender, RoutedEventArgs routedEventArgs) {
+            Categories = (await CategoriesDal.GetAllCategoriesAsync()).Where(i => i.GlobalId != _editedCategoryItem.GlobalId);
+            SelectedCategory = CategoriesInComboBox.FirstOrDefault(i => i.Tag.ToString() == BossCategoryGlobalId);
+        }
+        private async void OnLoaded(object sender, RoutedEventArgs routedEventArgs) {
+            Categories = await CategoriesDal.GetAllCategoriesAsync();
         }
 
         public NewCategoryContentDialog(string bossCategoryId) {
             InitializeComponent();
-            
+            Loaded += OnLoadedAddSubCat;
+
             Title = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("newCategoryString");
             PrimaryButtonText = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("add");
 
@@ -148,13 +166,12 @@ namespace Finanse.Dialogs {
             VisibleInExpensesToggleButton.IsOn = true;
             VisibleInIncomesToggleButton.IsOn = true;
             BossCategoryGlobalId = bossCategory.GlobalId;
-
-            CategoryValue.SelectedItem = Categories.FirstOrDefault(i => i.GlobalId == BossCategoryGlobalId);
-            //   Categories = Categories.Where(i => i.GlobalId != BossCategoryGlobalId);
         }
 
         public NewCategoryContentDialog() {
             InitializeComponent();
+            Loaded+= OnLoaded;
+
             Title = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("newCategoryString");
             PrimaryButtonText = new Windows.ApplicationModel.Resources.ResourceLoader().GetString("add");
 
@@ -163,8 +180,24 @@ namespace Finanse.Dialogs {
         }
 
 
+        private ComboBoxItem _selectedCategory;
 
-        private object SelectedCategory => CategoriesInComboBox.FirstOrDefault(i => i.Tag.ToString() == BossCategoryGlobalId);
+        private ComboBoxItem SelectedCategory {
+            get => _selectedCategory;
+            set {
+                _selectedCategory = value?.Tag.ToString() == "-1" 
+                    ? null 
+                    : value;
+
+                RaisePropertyChanged(nameof(SelectedCategory));
+
+                BossCategoryGlobalId = SelectedCategory == null ? string.Empty : SelectedCategory.Tag.ToString();
+                SetExpenseAndIncomeToggleButtonsEnabling();
+
+                SetPrimaryButtonEnabled();
+                NameValue.Foreground = NameValueForeground;
+            }
+        } // CategoriesInComboBox.FirstOrDefault(i => i.Tag.ToString() == BossCategoryGlobalId);
 
         private void SetPrimaryButtonEnabled() {
             IsPrimaryButtonEnabled = _editedCategoryAlwaysAsSubCategory == null
@@ -172,9 +205,9 @@ namespace Finanse.Dialogs {
                 : OperationNotTheSameAndCategoryNotInBase;
         }
 
-        private bool NameNotNullAndCategoryNotInBase => !( IsThisCategoryInBase() || string.IsNullOrEmpty(NameValue.Text) );
+        private bool NameNotNullAndCategoryNotInBase => !(IsThisCategoryInBase() || string.IsNullOrEmpty(NameValue.Text));
 
-        private bool OperationNotTheSameAndCategoryNotInBase => !( IsThisCategoryInBase() || IsNewOperationTheSame());
+        private bool OperationNotTheSameAndCategoryNotInBase => !(IsThisCategoryInBase() || IsNewOperationTheSame());
 
         private bool IsThisCategoryInBase() {
             if (_editedCategoryItem != null && _editedCategoryItem.Name.Trim() == NameValue.Text.Trim())
@@ -187,7 +220,7 @@ namespace Finanse.Dialogs {
         }
 
         private bool IsNewOperationTheSame() {
-           
+
             return
                 _editedCategoryAlwaysAsSubCategory.BossCategoryId == BossCategoryGlobalId &&
                 _editedCategoryAlwaysAsSubCategory.ColorKey == SelectedColor.Key.ToString() &&
@@ -206,8 +239,13 @@ namespace Finanse.Dialogs {
             NewCategoryItem.VisibleInExpenses = VisibleInExpensesToggleButton.IsOn;
             NewCategoryItem.VisibleInIncomes = VisibleInIncomesToggleButton.IsOn;
 
-            if (CategoryValue.SelectedIndex == -1)
+            if (SelectedCategory == null) {
+                if (NewCategoryItem is SubCategory) {
+                    var newSub = NewCategoryItem as SubCategory;
+                    NewCategoryItem = newSub.ToCategory();
+                }
                 return;
+            }
 
             SubCategory op = new SubCategory(NewCategoryItem) {
                 BossCategoryId = BossCategoryGlobalId
@@ -250,14 +288,15 @@ namespace Finanse.Dialogs {
         }
 
         private void CategoryValue_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (((ComboBox)sender).SelectedIndex == 0)
-                CategoryValue.SelectedIndex = -1;
+            //if (SelectedCategory.Tag.ToString() == "-1")
+            //    SelectedCategory = null;
+            //   // CategoryValue.SelectedIndex = -1;
 
-            BossCategoryGlobalId = (CategoryValue.SelectedIndex == -1) ? string.Empty : ((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString();
-            SetExpenseAndIncomeToggleButtonsEnabling();
+            //BossCategoryGlobalId = (SelectedCategory == null) ? string.Empty : ((ComboBoxItem)SelectedCategory).Tag.ToString();
+            //SetExpenseAndIncomeToggleButtonsEnabling();
 
-            SetPrimaryButtonEnabled();
-            NameValue.Foreground = NameValueForeground;
+            //SetPrimaryButtonEnabled();
+            //NameValue.Foreground = NameValueForeground;
         }
 
         private void SetExpenseAndIncomeToggleButtonsEnabling() {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -89,13 +90,13 @@ namespace Finanse.Dialogs {
             _acceptedCostValue = NewBalanceValue.Text;
         }
 
-        private void BalanceAccountContentDialog_OnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-            Dal.SaveOperation(MakeOperation());
+        private async void BalanceAccountContentDialog_OnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
+            Dal.SaveOperation(await MakeOperationAsync());
         }
 
         private readonly decimal _actualMoneyValue;
 
-        private Operation MakeOperation() {
+        private async Task<Operation> MakeOperationAsync() {
             var newMoneyValue = decimal.Parse(_acceptedCostValue);
             var operationCost = newMoneyValue - _actualMoneyValue;
 
@@ -105,7 +106,7 @@ namespace Finanse.Dialogs {
                 MoneyAccountId = _account.GlobalId,
                 Title = "Aktualizacja salda",
                 Date = DateTime.Today.ToString("yyyy.MM.dd"),
-                CategoryGlobalId = CategoriesDal.GetDefaultCategory().GlobalId //TODO trzeba dać warunek żeby nie updateowało tych co nie można usuwać
+                CategoryGlobalId = (await CategoriesDal.GetDefaultCategoryAsync()).GlobalId //TODO trzeba dać warunek żeby nie updateowało tych co nie można usuwać
             };
         }
     }

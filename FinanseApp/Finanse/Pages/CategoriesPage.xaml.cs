@@ -5,6 +5,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -45,18 +46,24 @@ namespace Finanse.Pages {
         }
 
         private async void CategoriesPage_Loaded(object sender, RoutedEventArgs e) {
+            await LoadCategories();
+        }
+
+        private async Task LoadCategories() {
             if (ExpenseCategories == null)
                 ExpensesProgressRingActivity(true);
 
             if (IncomeCategories == null)
                 IncomesProgressRingActivity(true);
 
-            var expenses = await CategoriesDal.GetCategoriesWithSubCategoriesInExpenses();
-            ExpenseCategories = new ObservableCollection<CategoryWithSubCategories>(expenses);
+            var expenses = await CategoriesDal.GetCategoriesWithSubCategoriesInExpensesAsync();
+            if (!ExpenseCategories?.SequenceEqual(expenses) ?? true)
+                ExpenseCategories = new ObservableCollection<CategoryWithSubCategories>(expenses);
             ExpensesProgressRingActivity(false);
 
-            var incomes = await CategoriesDal.GetCategoriesWithSubCategoriesInIncomes();
-            IncomeCategories = new ObservableCollection<CategoryWithSubCategories>(incomes);
+            var incomes = await CategoriesDal.GetCategoriesWithSubCategoriesInIncomesAsync();
+            if (!IncomeCategories?.SequenceEqual(incomes) ?? true)
+                IncomeCategories = new ObservableCollection<CategoryWithSubCategories>(incomes);
             IncomesProgressRingActivity(false);
         }
 
@@ -72,17 +79,17 @@ namespace Finanse.Pages {
 
         private async void EditCategory_Click(object sender, RoutedEventArgs e) {
             var datacontext = (e.OriginalSource as FrameworkElement)?.DataContext;
-            CategoryWithSubCategories thisCategorys = (CategoryWithSubCategories)datacontext;
+            CategoryWithSubCategories thisCategoryWithSubCategories = (CategoryWithSubCategories)datacontext;
 
-            if (thisCategorys == null)
+            if (thisCategoryWithSubCategories == null)
                 return;
 
-            if (thisCategorys.Category.CantDelete) {
+            if (thisCategoryWithSubCategories.Category.CantDelete) {
                 ShowCantEditDialog();
                 return;
             }
 
-            var contentDialogItem = new NewCategoryContentDialog(thisCategorys.Category);
+            var contentDialogItem = new NewCategoryContentDialog(thisCategoryWithSubCategories.Category);
             var result = await contentDialogItem.ShowAsync();
 
             if (result != ContentDialogResult.Primary)
@@ -91,14 +98,14 @@ namespace Finanse.Pages {
             Category cat = contentDialogItem.NewCategoryItem;
 
             if (cat is SubCategory)
-                UpdateCategory(thisCategorys, cat as SubCategory);
+                UpdateCategory(thisCategoryWithSubCategories, cat as SubCategory);
             else
-                UpdateCategory(thisCategorys, cat);
+                await UpdateCategory(thisCategoryWithSubCategories, cat);
         }
 
-        private void UpdateCategory(CategoryWithSubCategories categoryWithSubCategories, Category category) {
+        private async Task UpdateCategory(CategoryWithSubCategories categoryWithSubCategories, Category category) {
 
-            CategoryWithSubCategories newCategoryWithSubCategorie = new CategoryWithSubCategories {
+            var newCategoryWithSubCategorie = new CategoryWithSubCategories {
                 Category = category,
                 SubCategories = categoryWithSubCategories.SubCategories
             };
@@ -113,7 +120,7 @@ namespace Finanse.Pages {
             TryRemoveCategoryWithSubCategoriesInList(categoryWithSubCategories);
             TryInsertCategoryWithSubCategoriesInList(indexInExpenses, indexInIncomes, newCategoryWithSubCategorie);
 
-            CategoriesDal.UpdateCategory(category);
+            await CategoriesDal.UpdateCategoryAsync(category);
         }
 
         private void UpdateCategory(CategoryWithSubCategories categoryWithSubCategories, SubCategory subCategory) {
@@ -142,23 +149,23 @@ namespace Finanse.Pages {
             Category cat = contentDialogItem.NewCategoryItem;
 
             if (cat is SubCategory)
-                UpdateSubCategory(thisSubCategory, cat as SubCategory);
+                await UpdateSubCategory(thisSubCategory, cat as SubCategory);
             else
-                UpdateSubCategory(thisSubCategory, cat);
+                await UpdateSubCategory(thisSubCategory, cat);
         }
 
-        private void UpdateSubCategory(SubCategory oldSubCategory, Category category) {
+        private async Task UpdateSubCategory(SubCategory oldSubCategory, Category category) {
             TryRemoveSubCategoryInList(oldSubCategory);
             TryAddCategoryInList(category);
 
             CategoriesDal.RemoveSubCategoryAndSetOperationsToParentCategory(oldSubCategory);
-            CategoriesDal.AddCategory(category);
+            await CategoriesDal.UpdateCategoryAsync(category);
         }
 
-        private void UpdateSubCategory(SubCategory oldSubCategory, SubCategory subCategory) {
+        private async Task UpdateSubCategory(SubCategory oldSubCategory, SubCategory subCategory) {
             TryRemoveSubCategoryInList(oldSubCategory);
             TryAddSubCategoryInList(subCategory);
-            CategoriesDal.UpdateCategory(subCategory);
+            await CategoriesDal.UpdateCategoryAsync(subCategory);
         }
 
         private async void DeleteCategory_Click(object sender, RoutedEventArgs e) {

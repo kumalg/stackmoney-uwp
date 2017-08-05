@@ -8,6 +8,7 @@ using Finanse.Models;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Finanse.Models.Categories;
 using Finanse.Models.Helpers;
 using Finanse.Models.MAccounts;
@@ -163,7 +164,7 @@ namespace Finanse.Dialogs {
                 Dal.SaveOperationPattern(EditedOperationPattern());
         }
 
-        private void TypeOfOperationRadioButton_Checked(object sender, RoutedEventArgs e) {
+        private async void TypeOfOperationRadioButton_Checked(object sender, RoutedEventArgs e) {
             RaisePropertyChanged(nameof(AccountsComboBox));
 
             if (CategoryValue.SelectedIndex != -1) {
@@ -173,7 +174,7 @@ namespace Finanse.Dialogs {
                 if (SubCategoryValue.SelectedIndex != -1)
                     idOfSelectedSubCategory = ((ComboBoxItem)SubCategoryValue.SelectedItem).Tag.ToString();
 
-                SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
+                await SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
 
                 if (CategoryValue.Items.OfType<ComboBoxItem>().Any(i => i.Tag.ToString() == idOfSelectedCategory))
                     CategoryValue.SelectedItem = CategoryValue.Items.OfType<ComboBoxItem>().Single(i => i.Tag.ToString() == idOfSelectedCategory);
@@ -190,20 +191,20 @@ namespace Finanse.Dialogs {
             }
 
             else {
-                SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
+                await SetCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
                 SubCategoryValue.IsEnabled = false;
             }
 
             SetPrimaryButtonEnabling();
         }
 
-        private void SetCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
+        private async Task SetCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
             if (CategoryValue.Items == null)
                 return;
 
             CategoryValue.Items.Clear();
 
-            foreach (Category catItem in CategoriesDal.GetAllCategories()) {
+            foreach (Category catItem in await CategoriesDal.GetAllCategoriesAsync()) {
 
                 if ((catItem.VisibleInExpenses && inExpenses) 
                     || (catItem.VisibleInIncomes && inIncomes)) {
@@ -216,7 +217,7 @@ namespace Finanse.Dialogs {
             }
         }
 
-        private void SetSubCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
+        private async Task SetSubCategoryComboBoxItems(bool inExpenses, bool inIncomes) {
             if (SubCategoryValue.Items == null)
                 return;
 
@@ -225,7 +226,7 @@ namespace Finanse.Dialogs {
             if (CategoryValue.SelectedIndex == -1)
                 return;
 
-            foreach (var subCatItem in CategoriesDal.GetSubCategoriesByBossId(((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString())) {
+            foreach (var subCatItem in await CategoriesDal.GetSubCategoriesByBossIdAsync(((ComboBoxItem)CategoryValue.SelectedItem).Tag.ToString())) {
                 if ((!subCatItem.VisibleInExpenses || !inExpenses) && (!subCatItem.VisibleInIncomes || !inIncomes))
                     continue;
 
@@ -244,8 +245,8 @@ namespace Finanse.Dialogs {
             SubCategoryValue.IsEnabled = SubCategoryValue.Items.Count != 0;
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            SetSubCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
+        private async void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            await SetSubCategoryComboBoxItems((bool)Expense_RadioButton.IsChecked, (bool)Income_RadioButton.IsChecked);
             SetPrimaryButtonEnabling();
         }
 

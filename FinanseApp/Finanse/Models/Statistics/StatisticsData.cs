@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Finanse.Charts;
@@ -12,9 +13,7 @@ using Finanse.Models.Extensions;
 using Finanse.Models.Operations;
 
 namespace Finanse.Models.Statistics {
-    public class StatisticsData
-    {
-
+    public class StatisticsData {
         private List<Operation> _allOperations;
         public List<Operation> AllOperations {
             get {
@@ -27,15 +26,23 @@ namespace Finanse.Models.Statistics {
             }
         }
 
-        private IEnumerable<Category> _categoriesAndSubCategories = CategoriesDal.GetAllCategoriesAndSubCategories();
+        private IEnumerable<Category> _categoriesAndSubCategories;
 
         private DateTime _minDate;
         private DateTime _maxDate;
 
-        public void SetNewRangeAndData(DateTime minDate, DateTime maxDate) {
+        public StatisticsData() {
+            Loaded();
+        }
+
+        public async void Loaded() {
+            _categoriesAndSubCategories = await CategoriesDal.GetAllCategoriesAndSubCategoriesAsync();
+        }
+
+        public async Task SetNewRangeAndData(DateTime minDate, DateTime maxDate) {
             _minDate = minDate;
             _maxDate = maxDate;
-            AllOperations = Dal.GetAllOperationsFromRangeToStatistics(minDate, maxDate).LinkCategories();
+            AllOperations = await Dal.GetAllOperationsFromRangeToStatistics(minDate, maxDate).LinkCategories();
         }
 
         public string GetActualDateRangeText() {

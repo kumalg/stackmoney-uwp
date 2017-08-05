@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -65,11 +66,11 @@ namespace Finanse.Dialogs {
         }
 
         public MAccount AddedAccount;
-        private void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
+        private async void NewCategory_AddButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
             AddedAccount = MAccountsDal.AddAccount(GetNewAccount());
 
             if (!string.IsNullOrEmpty(_acceptedCostValue))
-                Dal.SaveOperation(MakeOperation(AddedAccount.GlobalId));
+                Dal.SaveOperation(await MakeOperation(AddedAccount.GlobalId));
         }
 
         public MAccount GetNewAccount() {
@@ -88,7 +89,7 @@ namespace Finanse.Dialogs {
             return newAccount;
         }
 
-        private Operation MakeOperation(string moneyAccoundId) {
+        private async Task<Operation> MakeOperation(string moneyAccoundId) {
             var charsToRemove = new[] { "+", "-"};
             string cost = _acceptedCostValue;
             foreach (var c in charsToRemove)
@@ -100,7 +101,7 @@ namespace Finanse.Dialogs {
                 MoneyAccountId = moneyAccoundId,
                 Title = NameValue.Text,
                 Date = DateTime.Today.ToString("yyyy.MM.dd"),
-                CategoryGlobalId = CategoriesDal.GetDefaultCategory().GlobalId //TODO trzeba dać warunek żeby nie updateowało tych co nie można usuwać
+                CategoryGlobalId = (await CategoriesDal.GetDefaultCategoryAsync()).GlobalId //TODO trzeba dać warunek żeby nie updateowało tych co nie można usuwać
             };
         }
 

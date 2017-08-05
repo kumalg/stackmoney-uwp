@@ -148,8 +148,8 @@
 
         <ComboBox
             Name="CategoryValue"
-            ItemsSource="{x:Bind CategoriesInComboBox, Mode=OneTime}"
-            SelectedItem="{x:Bind SelectedCategory, Mode=OneWay}"
+            ItemsSource="{x:Bind CategoriesInComboBox, Mode=OneWay}"
+            SelectedItem="{x:Bind SelectedCategory, Mode=TwoWay}"
             Style="{StaticResource ComboBoxStyle1}"
             PlaceholderText="Kategoria nadrzędna"
             x:Uid="parentCategoryPlaceholder"

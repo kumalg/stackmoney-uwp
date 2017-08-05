@@ -150,9 +150,9 @@ namespace Finanse.Pages {
         }
 
         public async Task Reload() {
-            ProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            ProgressRing.Visibility = Visibility.Visible;
 
-             await Task.Run(() => _statisticsData.SetNewRangeAndData(MinDate, MaxDate));
+            await _statisticsData.SetNewRangeAndData(MinDate, MaxDate);
            // statisticsData.SetNewRangeAndData(MinDate, MaxDate);
 
             DateRangeText = _statisticsData.GetActualDateRangeText();
